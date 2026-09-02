@@ -1,0 +1,829 @@
+<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente."><title>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante"><meta property="og:description" content="A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante"><meta name="twitter:description" content="A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
+<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
+<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</h1><hr class="cover-rule"><p class="article-summary">A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.</p><div class="article-meta"><span>Atualizado 2026-08-27</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Aerodinâmica</span><span class="tag">Rotores</span><span class="tag">Engenharia</span><span class="tag">Dinâmica-de-Voo</span></div></div></div></header><div class="prose" id="articleBody"><h2 id="introdução">Introdução</h2>
+<p>Duplicar a <a
+href="https://en.wikipedia.org/wiki/Solidity_(rotor)">solidez</a> de um
+rotor pela adição de pás, com raio e corda constantes, dobra a área de
+pá exposta ao escoamento sem alterar a geometria de cada pá. Este white
+paper propaga essa mudança pela cinemática do rotor até as forças,
+potências e torques que o caracterizam, sob tração <span
+class="math inline">\(T\)</span>, velocidade de avanço <span
+class="math inline">\(V\)</span>, ângulo de inclinação do eixo <span
+class="math inline">\(\alpha\)</span> e <a
+href="https://en.wikipedia.org/wiki/Helicopter_flight_controls#Collective_pitch_control">passo
+coletivo</a> <span class="math inline">\(\theta_0\)</span> fixos. O
+rotor é rígido, sem <a
+href="https://en.wikipedia.org/wiki/Flapping_hinge">batimento</a> (<span
+class="math inline">\(\beta=0\)</span>) e sem comandos cíclicos.</p>
+<p>O problema exige uma hipótese de fechamento. A tração e o passo
+coletivo fixos não determinam sozinhos a rotação do rotor de solidez
+dobrada. As Seções 1 a 6 adotam a hipótese padrão de análise de
+desempenho, segundo a qual o carregamento de pá <span
+class="math inline">\(C_T/\sigma\)</span> permanece constante quando
+<span class="math inline">\(\theta_0\)</span> não muda, e desenvolvem
+todos os resultados sob ela. A Seção 7 abandona essa hipótese, resolve o
+fechamento exato de <a
+href="https://en.wikipedia.org/wiki/Blade_element_theory">elemento de
+pá</a> e mostra quais resultados sobrevivem intactos e quais mudam de
+valor.</p>
+<h2 id="premissa-de-carregamento-de-pá-e-escala-da-rotação">1. Premissa
+de Carregamento de Pá e Escala da Rotação</h2>
+<p>A relação dimensional entre tração e coeficiente de tração é uma
+identidade de definição:</p>
+<p><span class="math display">\[ T = \rho A (\Omega R)^2 C_T
+\]</span></p>
+<p>Para obter como <span class="math inline">\(\Omega\)</span> deve
+variar, adota-se a hipótese de que o carregamento de pá <span
+class="math inline">\(C_T/\sigma\)</span>, proporcional ao <a
+href="https://en.wikipedia.org/wiki/Lift_coefficient">coeficiente de
+sustentação</a> médio das seções da pá, permanece constante quando o
+passo coletivo <span class="math inline">\(\theta_0\)</span> não é
+alterado:</p>
+<p><span class="math display">\[ \frac{C_{T1}}{\sigma_1} =
+\frac{C_{T2}}{\sigma_2} \implies C_{T2} = 2\,C_{T1} \]</span></p>
+<p>Esta é uma aproximação de primeira ordem, não uma consequência exata
+de <span class="math inline">\(\theta_0\)</span> constante. A formulação
+completa de elemento de pá para um rotor sem torção e sem batimento
+fornece</p>
+<p><span class="math display">\[ \frac{C_T}{\sigma} =
+\frac{a}{2}\left[\frac{\theta_0}{3}\left(1+\frac{3}{2}\mu^2\right) -
+\frac{\lambda}{2}\right] \]</span></p>
+<p>que depende de <span class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\lambda\)</span>, e não apenas de <span
+class="math inline">\(\theta_0\)</span>. Como <span
+class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\lambda\)</span> variam neste problema, a
+conservação de <span class="math inline">\(C_T/\sigma\)</span> vale como
+tendência dominante enquanto o termo em <span
+class="math inline">\(\mu^2\)</span> for secundário frente ao termo em
+<span class="math inline">\(\theta_0\)</span>. A Seção 7 mede o preço
+dessa simplificação.</p>
+<p>Impondo <span class="math inline">\(T_1=T_2\)</span> na identidade de
+definição, com <span class="math inline">\(C_{T2}=2C_{T1}\)</span>:</p>
+<p><span class="math display">\[ \rho A (\Omega_1 R)^2 C_{T1} = \rho A
+(\Omega_2 R)^2 (2 C_{T1}) \implies \Omega_2 = \frac{\Omega_1}{\sqrt{2}}
+\]</span></p>
+<p>Fisicamente, dobrar o número de pás dobra a capacidade de gerar
+sustentação. Para não exceder a tração especificada com o mesmo ângulo
+de ataque médio de pá, a rotação cai para cerca de <span
+class="math inline">\(70{,}7\%\)</span> do valor original. A pressão
+dinâmica de referência do disco, proporcional a <span
+class="math inline">\((\Omega R)^2\)</span>, cai à metade, e por isso o
+coeficiente de tração dobra para representar a mesma força
+dimensional.</p>
+<h2 id="invariância-da-esteira-macroscópica">2. Invariância da Esteira
+Macroscópica</h2>
+<p>A <a href="https://en.wikipedia.org/wiki/Actuator_disc_theory">teoria
+do disco atuador</a> determina a velocidade induzida sem qualquer
+referência ao número de pás:</p>
+<p><span class="math display">\[ T = 2\rho A U v_i, \qquad U =
+\sqrt{(V\cos\alpha)^2+(V\sin\alpha+v_i)^2} \]</span></p>
+<p>Como <span class="math inline">\(T\)</span>, <span
+class="math inline">\(V\)</span>, <span
+class="math inline">\(\alpha\)</span>, <span
+class="math inline">\(\rho\)</span> e <span
+class="math inline">\(A\)</span> permanecem inalterados, e a equação
+admite solução única em <span class="math inline">\(v_i\)</span> para
+<span class="math inline">\(v_i&gt;0\)</span>, segue que <span
+class="math inline">\(v_{i2}=v_{i1}\)</span>. A esteira macroscópica
+responde à força global aplicada sobre o escoamento e é indiferente à
+forma como essa força se reparte entre as pás.</p>
+<p>Com <span class="math inline">\(\Omega_2=\Omega_1/\sqrt{2}\)</span>,
+a <a href="https://en.wikipedia.org/wiki/Advance_ratio">razão de
+avanço</a> e a razão de influxo escalam de forma puramente
+algébrica:</p>
+<p><span class="math display">\[ \mu_2 = \frac{V\cos\alpha}{\Omega_2 R}
+= \sqrt{2}\,\mu_1, \qquad \lambda_2 = \frac{V\sin\alpha+v_{i2}}{\Omega_2
+R} = \sqrt{2}\,\lambda_1 \]</span></p>
+<p>O ângulo de esteira resulta de:</p>
+<p><span class="math display">\[ \tan\chi = \frac{\mu}{\lambda} =
+\frac{V\cos\alpha}{V\sin\alpha+v_i} \]</span></p>
+<p>expressão da qual <span class="math inline">\(\Omega\)</span> está
+ausente, porque ele se cancela na razão <span
+class="math inline">\(\mu/\lambda\)</span>. Logo <span
+class="math inline">\(\chi_2=\chi_1\)</span>. As duas velocidades que
+definem o ângulo são as mesmas nos dois rotores, e a esteira sai do
+disco com a mesma inclinação.</p>
+<p>A distinção entre o nível do disco e o nível da pá é nítida. Sob a
+ótica do disco inteiro, nada mudou. A esteira a jusante tem a mesma
+inclinação e a mesma velocidade axial induzida, porque a força líquida
+sobre o escoamento é a mesma.</p>
+<p>Sob a ótica de uma pá individual, o quadro é outro. Girando mais
+devagar, mas atravessada pelo mesmo escoamento de avanço <span
+class="math inline">\(V\)</span> e pela mesma velocidade induzida <span
+class="math inline">\(v_i\)</span>, cada pá encontra esse escoamento
+como proporcionalmente maior frente à sua própria velocidade tangencial,
+que caiu. O campo de velocidades não mudou. Mudou a razão entre
+grandezas fixas, <span class="math inline">\(V\cos\alpha\)</span> e
+<span class="math inline">\(V\sin\alpha+v_i\)</span>, e uma grandeza que
+diminuiu, <span class="math inline">\(\Omega R\)</span>. É essa razão
+que faz <span class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\lambda\)</span> crescerem por um fator <span
+class="math inline">\(\sqrt{2}\)</span>.</p>
+<h2 id="forças-longitudinais-no-plano-do-disco">3. Forças Longitudinais
+no Plano do Disco</h2>
+<p>O componente induzido da força longitudinal no plano do disco, para
+um rotor sem batimento, é dado por</p>
+<p><span class="math display">\[ C_{Hi} = \frac{\sigma
+a}{4}\,\theta_0\,\mu\lambda \]</span></p>
+<p>Substituindo <span class="math inline">\(\sigma_2=2\sigma_1\)</span>,
+<span class="math inline">\(\mu_2=\sqrt{2}\mu_1\)</span> e <span
+class="math inline">\(\lambda_2=\sqrt{2}\lambda_1\)</span>:</p>
+<p><span class="math display">\[ C_{Hi2} = \frac{2\sigma_1
+a}{4}\theta_0(\sqrt{2}\mu_1)(\sqrt{2}\lambda_1) = 4\,C_{Hi1}
+\]</span></p>
+<p>e, em termos dimensionais, com <span class="math inline">\(H_i =
+C_{Hi}\,\rho A(\Omega R)^2\)</span>:</p>
+<p><span class="math display">\[ H_{i2} = 4\,C_{Hi1}\,\rho
+A\left(\frac{\Omega_1 R}{\sqrt{2}}\right)^2 = 2\,H_{i1} \]</span></p>
+<p>A física por trás do fator quatro no coeficiente está no elemento de
+pá. A velocidade relativa vista por uma seção da pá se decompõe em uma
+componente tangencial, dominada por <span class="math inline">\(\Omega
+R\)</span>, e uma componente normal ao disco, <span
+class="math inline">\(V\sin\alpha+v_i\)</span>, praticamente
+independente do azimute nesta formulação sem batimento. O ângulo de <a
+href="https://en.wikipedia.org/wiki/Angle_of_attack">inflow</a> local,
+<span class="math inline">\(\varphi \approx (V\sin\alpha+v_i)/(\Omega
+R)\)</span> para pequenos ângulos, coincide com <span
+class="math inline">\(\lambda\)</span> e mede a inclinação do vento
+relativo em relação ao plano de rotação.</p>
+<p>Como <span class="math inline">\(\Omega\)</span> cai e <span
+class="math inline">\(V\sin\alpha+v_i\)</span> não muda, <span
+class="math inline">\(\varphi\)</span> cresce. O vento relativo passa a
+incidir sobre a pá com maior inclinação. A sustentação de cada seção é
+perpendicular ao vento relativo local, acompanha essa inclinação e se
+afasta da normal ao disco. A projeção dessa sustentação inclinada sobre
+o plano do disco, integrada ao longo da pá e da revolução, é a força
+<span class="math inline">\(H\)</span> induzida.</p>
+<p>O resultado dimensional dispensa esse percurso. Substituindo <span
+class="math inline">\(\mu(\Omega R)=V\cos\alpha\)</span> e <span
+class="math inline">\(\lambda(\Omega R)=V\sin\alpha+v_i\)</span> na
+expressão de <span class="math inline">\(H_i\)</span>:</p>
+<p><span class="math display">\[ H_i = C_{Hi}\,\rho A(\Omega R)^2 = \rho
+A\,\frac{\sigma a}{4}\theta_0\,(V\cos\alpha)(V\sin\alpha+v_i)
+\]</span></p>
+<p>As duas potências de <span class="math inline">\((\Omega R)\)</span>
+da definição de <span class="math inline">\(C_{Hi}\)</span> cancelam
+contra o produto <span class="math inline">\(\mu\lambda\)</span>, e
+<span class="math inline">\(\Omega\)</span> desaparece. Restam apenas
+grandezas fixas no problema, <span
+class="math inline">\(\sigma\)</span>, <span
+class="math inline">\(\theta_0\)</span>, <span
+class="math inline">\(V\)</span>, <span
+class="math inline">\(\alpha\)</span> e <span
+class="math inline">\(v_i\)</span>. A força <span
+class="math inline">\(H\)</span> induzida dobra porque a área de pá
+dobrou, e não porque a rotação caiu. O crescimento de <span
+class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\lambda\)</span> e a queda de <span
+class="math inline">\(\Omega\)</span> são a mesma conclusão vista de uma
+pá individual, e se cancelam entre si.</p>
+<p>O componente de perfil segue de forma análoga, mas sem esse
+cancelamento:</p>
+<p><span class="math display">\[ C_{Hp} = \frac{\sigma c_{d0}}{4}\mu
+\implies C_{Hp2} = \frac{2\sigma_1 c_{d0}}{4}(\sqrt{2}\mu_1) =
+2\sqrt{2}\,C_{Hp1} \]</span></p>
+<p><span class="math display">\[ H_{p2} = 2\sqrt{2}\,C_{Hp1}\,\rho
+A\left(\frac{\Omega_1 R}{\sqrt{2}}\right)^2 = \sqrt{2}\,H_{p1}
+\]</span></p>
+<p>Há o dobro de pás oferecendo <a
+href="https://en.wikipedia.org/wiki/Parasitic_drag">arrasto de forma</a>
+ao escoamento de avanço. A rotação menor alivia parte desse efeito, mas
+não o compensa, e resta um aumento líquido de <span
+class="math inline">\(\sqrt{2}\)</span> na força de arrasto de perfil no
+plano do disco.</p>
+<h2 id="potência-induzida-e-de-perfil">4. Potência Induzida e de
+Perfil</h2>
+<p>A potência induzida é <span class="math inline">\(P_i =
+T(V\sin\alpha+v_i)\)</span>. Nenhum dos três termos do lado direito se
+altera, logo <span class="math inline">\(P_{i2}=P_{i1}\)</span>. O rotor
+de solidez dobrada empurra a mesma massa de ar com a mesma velocidade, e
+gasta a mesma potência para isso.</p>
+<p>O coeficiente correspondente escala com <span
+class="math inline">\(\Omega\)</span> através da definição <span
+class="math inline">\(C_{Pi}=P_i/[\rho A(\Omega R)^3]\)</span>, que se
+reduz identicamente a <span class="math inline">\(C_{Pi}=\lambda
+C_T\)</span>:</p>
+<p><span class="math display">\[ C_{Pi2} = \lambda_2 C_{T2} =
+(\sqrt{2}\lambda_1)(2C_{T1}) = 2\sqrt{2}\,C_{Pi1} \]</span></p>
+<p>O crescimento de <span class="math inline">\(C_{Pi}\)</span> não
+indica mudança física alguma na potência exigida. Ele indica que a mesma
+potência está sendo dividida por um cubo da velocidade de ponta de pá,
+<span class="math inline">\((\Omega R)^3\)</span>, que diminuiu.</p>
+<p>A potência de perfil, no regime de referência sem correção de avanço,
+tem coeficiente <span class="math inline">\(C_{Pp}\approx \sigma
+c_{d0}/8\)</span>, linear em <span class="math inline">\(\sigma\)</span>
+e independente de <span class="math inline">\(\Omega\)</span>, <span
+class="math inline">\(\mu\)</span> ou <span
+class="math inline">\(\lambda\)</span>:</p>
+<p><span class="math display">\[ C_{Pp2} = \frac{2\sigma_1 c_{d0}}{8} =
+2\,C_{Pp1} \]</span></p>
+<p>Este coeficiente vem da integração do arrasto de perfil ao longo de
+uma pá em rotação pura, sem escoamento de avanço. Em voo avante, a pá
+que avança soma <span class="math inline">\(V\cos\alpha\)</span> à sua
+velocidade tangencial e a pá que recua subtrai. O arrasto de perfil
+cresce com o quadrado da velocidade local, e por isso o ganho no lado
+que avança supera a perda no lado que recua. A média azimutal da
+potência de perfil fica acima do valor em pairado, mesmo com o passo
+inalterado.</p>
+<p>Integrar esse desequilíbrio ao longo do azimute e do raio produz o
+fator de correção de avanço, tipicamente escrito como <span
+class="math inline">\((1+4{,}6\mu^2)\)</span>. A dependência quadrática
+em <span class="math inline">\(\mu\)</span> é herdada da dependência
+quadrática do arrasto na velocidade, e o coeficiente numérico sai da
+integração da distribuição de velocidade sobre o disco. Como a solidez
+dobrada eleva <span class="math inline">\(\mu\)</span> por <span
+class="math inline">\(\sqrt{2}\)</span>, esse fator cresce e a potência
+de perfil real fica acima da estimativa sem correção. A escala dominante
+continua sendo a duplicação de área, e por isso a análise segue com
+<span class="math inline">\(C_{Pp}\approx \sigma c_{d0}/8\)</span>.</p>
+<p>Em termos dimensionais, com <span
+class="math inline">\(P_p=C_{Pp}\,\rho A(\Omega R)^3\)</span>:</p>
+<p><span class="math display">\[ P_{p2} = 2\,C_{Pp1}\,\rho
+A\left(\frac{\Omega_1 R}{\sqrt{2}}\right)^3 = \frac{1}{\sqrt{2}}\,P_{p1}
+\]</span></p>
+<p>Aqui está o resultado de maior interesse prático. A potência de
+perfil cresce linearmente com a <a
+href="https://en.wikipedia.org/wiki/Wetted_area">área molhada</a> de pá,
+mas cai com o cubo da velocidade tangencial. Frear a rotação para <span
+class="math inline">\(70{,}7\%\)</span> derruba a potência de perfil
+para essa mesma fração, apesar do dobro de pás gerando <a
+href="https://en.wikipedia.org/wiki/Viscosity">atrito viscoso</a>.
+Somado à invariância de <span class="math inline">\(P_i\)</span>, isso
+significa que a potência total do rotor pode cair quando a solidez
+dobra.</p>
+<h2 id="torque">5. Torque</h2>
+<p>O torque relaciona-se à potência pela cinemática do eixo, <span
+class="math inline">\(Q=P/\Omega\)</span>, identidade da qual decorre
+também <span class="math inline">\(C_Q=C_P\)</span> sob a convenção
+usual de adimensionalização.</p>
+<p><span class="math display">\[ Q_{i2} = \frac{P_{i2}}{\Omega_2} =
+\frac{P_{i1}}{\Omega_1/\sqrt{2}} = \sqrt{2}\,Q_{i1}, \qquad
+C_{Qi2}=C_{Pi2}=2\sqrt{2}\,C_{Qi1} \]</span></p>
+<p>Sustentar a mesma potência induzida com uma rotação menor exige
+torque induzido maior no eixo, por um fator <span
+class="math inline">\(\sqrt{2}\)</span>.</p>
+<p><span class="math display">\[ Q_{p2} = \frac{P_{p2}}{\Omega_2} =
+\frac{P_{p1}/\sqrt{2}}{\Omega_1/\sqrt{2}} = Q_{p1}, \qquad
+C_{Qp2}=C_{Pp2}=2\,C_{Qp1} \]</span></p>
+<p>O torque de perfil resulta invariante. A área de pá dobrada dobra a
+alavanca de atrito viscoso, mas a rotação menor reduz a potência de
+perfil na mesma proporção em que reduz a própria rotação, e o quociente
+<span class="math inline">\(P_p/\Omega\)</span> não muda.</p>
+<h2 id="tabela-consolidada-de-escala-analítica">6. Tabela Consolidada de
+Escala Analítica</h2>
+<p>A tabela reúne os fatores multiplicadores obtidos nas Seções 1 a 5,
+todos sob a hipótese de carregamento de pá constante. Cada linha
+relaciona o rotor de solidez dobrada ao rotor de referência, com a
+equação que origina o fator.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Grandeza</th>
+<th>Variável</th>
+<th>Equação de origem</th>
+<th>Fator (Novo sobre Original)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solidez</td>
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>dado</td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>Tração</td>
+<td><span class="math inline">\(T\)</span></td>
+<td>dado</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Velocidade induzida</td>
+<td><span class="math inline">\(v_i\)</span></td>
+<td><span class="math inline">\(T=2\rho A U v_i\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Rotação</td>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td><span
+class="math inline">\(C_{T1}/\sigma_1=C_{T2}/\sigma_2\)</span></td>
+<td><span class="math inline">\(1/\sqrt{2}\approx 0{,}707\)</span></td>
+</tr>
+<tr>
+<td>Razão de avanço</td>
+<td><span class="math inline">\(\mu\)</span></td>
+<td><span class="math inline">\(\mu=V\cos\alpha/(\Omega R)\)</span></td>
+<td><span class="math inline">\(\sqrt{2}\approx 1{,}414\)</span></td>
+</tr>
+<tr>
+<td>Razão de influxo</td>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(\lambda=(V\sin\alpha+v_i)/(\Omega
+R)\)</span></td>
+<td><span class="math inline">\(\sqrt{2}\approx 1{,}414\)</span></td>
+</tr>
+<tr>
+<td>Ângulo de esteira</td>
+<td><span class="math inline">\(\chi\)</span></td>
+<td><span class="math inline">\(\tan\chi=\mu/\lambda\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Carregamento de pá</td>
+<td><span class="math inline">\(C_T/\sigma\)</span></td>
+<td>hipótese da Seção 1</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente de tração</td>
+<td><span class="math inline">\(C_T\)</span></td>
+<td><span class="math inline">\(T=\rho A(\Omega R)^2 C_T\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente <span class="math inline">\(C_H\)</span> induzido</td>
+<td><span class="math inline">\(C_{Hi}\)</span></td>
+<td><span class="math inline">\(C_{Hi}=\frac{\sigma
+a}{4}\theta_0\mu\lambda\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente <span class="math inline">\(C_H\)</span> de perfil</td>
+<td><span class="math inline">\(C_{Hp}\)</span></td>
+<td><span class="math inline">\(C_{Hp}=\frac{\sigma
+c_{d0}}{4}\mu\)</span></td>
+<td><span class="math inline">\(2\sqrt{2}\approx 2{,}828\)</span></td>
+</tr>
+<tr>
+<td>Força <span class="math inline">\(H\)</span> induzida</td>
+<td><span class="math inline">\(H_i\)</span></td>
+<td><span class="math inline">\(H_i=\rho A\frac{\sigma
+a}{4}\theta_0(V\cos\alpha)(V\sin\alpha+v_i)\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>Força <span class="math inline">\(H\)</span> de perfil</td>
+<td><span class="math inline">\(H_p\)</span></td>
+<td><span class="math inline">\(H_p=C_{Hp}\,\rho A(\Omega
+R)^2\)</span></td>
+<td><span class="math inline">\(\sqrt{2}\approx 1{,}414\)</span></td>
+</tr>
+<tr>
+<td>Potência induzida</td>
+<td><span class="math inline">\(P_i\)</span></td>
+<td><span class="math inline">\(P_i=T(V\sin\alpha+v_i)\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente de potência induzida</td>
+<td><span class="math inline">\(C_{Pi}\)</span>, <span
+class="math inline">\(C_{Qi}\)</span></td>
+<td><span class="math inline">\(C_{Pi}=\lambda C_T\)</span></td>
+<td><span class="math inline">\(2\sqrt{2}\approx 2{,}828\)</span></td>
+</tr>
+<tr>
+<td>Potência de perfil</td>
+<td><span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(P_p=C_{Pp}\,\rho A(\Omega
+R)^3\)</span></td>
+<td><span class="math inline">\(1/\sqrt{2}\approx 0{,}707\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente de potência de perfil</td>
+<td><span class="math inline">\(C_{Pp}\)</span>, <span
+class="math inline">\(C_{Qp}\)</span></td>
+<td><span class="math inline">\(C_{Pp}\approx \sigma
+c_{d0}/8\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>Torque induzido</td>
+<td><span class="math inline">\(Q_i\)</span></td>
+<td><span class="math inline">\(Q=P/\Omega\)</span></td>
+<td><span class="math inline">\(\sqrt{2}\approx 1{,}414\)</span></td>
+</tr>
+<tr>
+<td>Torque de perfil</td>
+<td><span class="math inline">\(Q_p\)</span></td>
+<td><span class="math inline">\(Q=P/\Omega\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>O rotor de solidez dobrada mantém a esteira, mantém a potência
+induzida e reduz a potência de perfil. Paga por isso com forças maiores
+no plano do disco e torque induzido maior.</p>
+<h2
+id="tratamento-exato-sem-a-hipótese-de-carregamento-de-pá-constante">7.
+Tratamento Exato sem a Hipótese de Carregamento de Pá Constante</h2>
+<h3 id="fechamento-sem-aproximação">7.1. Fechamento sem aproximação</h3>
+<p>Sem impor <span class="math inline">\(C_T/\sigma\)</span> constante,
+o fechamento do problema passa a ser a equação completa de elemento de
+pá, escrita para os dois rotores:</p>
+<p><span class="math display">\[ \frac{C_T}{\sigma} =
+\frac{a}{2}\left[\frac{\theta_0}{3}\left(1+\frac{3}{2}\mu^2\right) -
+\frac{\lambda}{2}\right] \]</span></p>
+<p>A invariância de <span class="math inline">\(v_i\)</span> obtida na
+Seção 2 vem só da teoria de momento e continua valendo. Definindo <span
+class="math inline">\(x\equiv\Omega_2/\Omega_1\)</span>, ela permite
+escrever <span class="math inline">\(\mu_2\)</span>, <span
+class="math inline">\(\lambda_2\)</span> e <span
+class="math inline">\(C_{T2}\)</span> em função de <span
+class="math inline">\(x\)</span> e das grandezas do rotor de
+referência:</p>
+<p><span class="math display">\[ \mu_2 = \frac{\mu_1}{x}, \qquad
+\lambda_2 = \frac{\lambda_1}{x}, \qquad C_{T2} = \frac{C_{T1}}{x^2}
+\]</span></p>
+<p>Substituindo essas três relações na equação de elemento de pá do
+rotor 2, com <span class="math inline">\(\sigma_2=n\sigma_1\)</span>,
+onde <span class="math inline">\(n=2\)</span> no caso de solidez
+dobrada, e eliminando <span class="math inline">\(C_{T1}\)</span> pela
+equação de elemento de pá já satisfeita pelo rotor 1, resulta uma <a
+href="https://en.wikipedia.org/wiki/Quadratic_equation">equação
+quadrática</a> exata em <span class="math inline">\(x\)</span>:</p>
+<p><span class="math display">\[ 2n\theta_0\,x^2 - 3n\lambda_1\,x +
+\left[3(n-1)\theta_0\mu_1^2 - 2\theta_0 + 3\lambda_1\right] = 0
+\]</span></p>
+<p>Para <span class="math inline">\(n=2\)</span>:</p>
+<p><span class="math display">\[ 4\theta_0\,x^2 - 6\lambda_1\,x +
+\left(3\theta_0\mu_1^2 + 3\lambda_1 - 2\theta_0\right) = 0 \]</span></p>
+<p><span class="math display">\[ x = \frac{3\lambda_1 \pm
+\sqrt{9\lambda_1^2 - 12\theta_0^2\mu_1^2 - 12\theta_0\lambda_1 +
+8\theta_0^2}}{4\theta_0} \]</span></p>
+<p>Das duas raízes, apenas a positiva, condizente com a redução física
+de <span class="math inline">\(\Omega\)</span>, é admissível. O fator
+universal <span class="math inline">\(1/\sqrt{2}\)</span> desaparece. O
+valor de <span class="math inline">\(x\)</span> depende da condição de
+voo do rotor de referência, através de <span
+class="math inline">\(\mu_1\)</span>, <span
+class="math inline">\(\lambda_1\)</span> e <span
+class="math inline">\(\theta_0\)</span>. Dois rotores com a mesma
+solidez de referência, voando em condições distintas, escalam a rotação
+de formas diferentes ao dobrar a solidez. A hipótese da Seção 1
+corresponde ao caso particular <span
+class="math inline">\(x=1/\sqrt{n}\)</span>, e a substituição direta
+mostra que essa raiz só satisfaz a quadrática quando o termo em <span
+class="math inline">\(\mu_1^2\)</span> é desprezado.</p>
+<h3 id="quais-grandezas-sobrevivem-intactas">7.2. Quais grandezas
+sobrevivem intactas</h3>
+<p>Recalculando cada grandeza a partir de identidades exatas, sem impor
+<span class="math inline">\(x=1/\sqrt{2}\)</span>, dois grupos se
+separam.</p>
+<p>O primeiro grupo não contém <span class="math inline">\(x\)</span> e
+vale para qualquer fechamento:</p>
+<p><span class="math display">\[ v_{i2}=v_{i1}, \qquad P_{i2}=P_{i1},
+\qquad \chi_2=\chi_1, \qquad H_{i2}=n\,H_{i1}, \qquad
+C_{Pp2}=C_{Qp2}=n\,C_{Pp1} \]</span></p>
+<p>As três primeiras já eram esperadas, pois saem apenas da teoria de
+momento. As duas últimas surpreendem, porque vêm de expressões de
+elemento de pá. A razão é a mesma nos dois casos: reduzidas às variáveis
+primitivas do problema, essas expressões nunca contêm <span
+class="math inline">\(\Omega\)</span> isoladamente. A força <span
+class="math inline">\(H\)</span> induzida perde <span
+class="math inline">\(\Omega\)</span> no cancelamento demonstrado na
+Seção 3. O coeficiente de potência de perfil depende só de <span
+class="math inline">\(\sigma\)</span> e <span
+class="math inline">\(c_{d0}\)</span>.</p>
+<p>O segundo grupo depende de <span
+class="math inline">\(x\)</span>:</p>
+<p><span class="math display">\[ \mu_2=\frac{\mu_1}{x}, \quad
+\lambda_2=\frac{\lambda_1}{x}, \quad C_{T2}=\frac{C_{T1}}{x^2}, \quad
+\frac{C_{T2}}{\sigma_2}=\frac{1}{nx^2}\frac{C_{T1}}{\sigma_1}
+\]</span></p>
+<p><span class="math display">\[ H_{p2}=nx\,H_{p1}, \qquad
+Q_{i2}=\frac{Q_{i1}}{x}, \qquad P_{p2}=nx^3\,P_{p1}, \qquad
+Q_{p2}=nx^2\,Q_{p1} \]</span></p>
+<p>O torque de perfil inverte a conclusão da Seção 5. Lá ele resultava
+invariante. Aqui vale <span
+class="math inline">\(Q_{p2}=nx^2Q_{p1}\)</span>, e a invariância só
+reaparece no caso particular <span
+class="math inline">\(x=1/\sqrt{n}\)</span>. Como em geral <span
+class="math inline">\(x\neq1/\sqrt{n}\)</span>, o torque de perfil muda,
+para mais ou para menos conforme <span class="math inline">\(x\)</span>
+supere ou não <span class="math inline">\(1/\sqrt{n}\)</span>.</p>
+<p>A tabela consolida a classificação para <span
+class="math inline">\(n=2\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th>Grandeza</th>
+<th>Variável</th>
+<th>Fator exato em função de <span class="math inline">\(x\)</span></th>
+<th>Depende de <span class="math inline">\(x\)</span>?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Velocidade induzida</td>
+<td><span class="math inline">\(v_i\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Potência induzida</td>
+<td><span class="math inline">\(P_i\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Ângulo de esteira</td>
+<td><span class="math inline">\(\chi\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Força <span class="math inline">\(H\)</span> induzida</td>
+<td><span class="math inline">\(H_i\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Coeficiente de potência de perfil</td>
+<td><span class="math inline">\(C_{Pp}\)</span>, <span
+class="math inline">\(C_{Qp}\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Rotação</td>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td><span class="math inline">\(x\)</span>, raiz da quadrática</td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Razão de avanço</td>
+<td><span class="math inline">\(\mu\)</span></td>
+<td><span class="math inline">\(1/x\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Razão de influxo</td>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(1/x\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Coeficiente de tração</td>
+<td><span class="math inline">\(C_T\)</span></td>
+<td><span class="math inline">\(1/x^2\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Carregamento de pá</td>
+<td><span class="math inline">\(C_T/\sigma\)</span></td>
+<td><span class="math inline">\(1/(2x^2)\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Força <span class="math inline">\(H\)</span> de perfil</td>
+<td><span class="math inline">\(H_p\)</span></td>
+<td><span class="math inline">\(2x\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Torque induzido</td>
+<td><span class="math inline">\(Q_i\)</span></td>
+<td><span class="math inline">\(1/x\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Potência de perfil</td>
+<td><span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(2x^3\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Torque de perfil</td>
+<td><span class="math inline">\(Q_p\)</span></td>
+<td><span class="math inline">\(2x^2\)</span></td>
+<td>Sim</td>
+</tr>
+</tbody>
+</table>
+<h3 id="exemplo-numérico">7.3. Exemplo numérico</h3>
+<p>Considere um rotor de referência com diâmetro <span
+class="math inline">\(D=2\,\text{m}\)</span>, portanto <span
+class="math inline">\(R=1\,\text{m}\)</span>, rotação <span
+class="math inline">\(\Omega_1=1400\,\text{rpm}\)</span> equivalente a
+<span class="math inline">\(146{,}608\,\text{rad/s}\)</span>, solidez
+<span class="math inline">\(\sigma_1=0{,}1\)</span>, voando com <span
+class="math inline">\(V=30\,\text{m/s}\)</span> e ângulo de disco <span
+class="math inline">\(\alpha=0°\)</span>, densidade ao nível do mar
+<span class="math inline">\(\rho=1{,}225\,\text{kg/m}^3\)</span>,
+inclinação de sustentação <span
+class="math inline">\(a=5{,}73\,\text{rad}^{-1}\)</span> e coeficiente
+de arrasto de perfil <span class="math inline">\(c_{d0}=0{,}01\)</span>.
+Adota-se <span class="math inline">\(C_{T1}=0{,}008\)</span>,
+correspondente a um carregamento de pá <span
+class="math inline">\(C_{T1}/\sigma_1=0{,}08\)</span>, valor moderado e
+representativo.</p>
+<p>Resolvendo a teoria de momento para <span
+class="math inline">\(v_{i1}\)</span> e, em seguida, a equação de
+elemento de pá para <span class="math inline">\(\theta_0\)</span>,
+obtêm-se os parâmetros do rotor de referência:</p>
+<p><span class="math display">\[ v_{i1}=2{,}853\,\text{m/s}, \qquad
+\mu_1=0{,}2046, \qquad \lambda_1=0{,}01946, \qquad \theta_0=6{,}09°
+\]</span></p>
+<p>Duplicando a solidez para <span
+class="math inline">\(\sigma_2=0{,}2\)</span> sob os mesmos <span
+class="math inline">\(T\)</span>, <span
+class="math inline">\(V\)</span>, <span
+class="math inline">\(\alpha\)</span> e <span
+class="math inline">\(\theta_0\)</span>, a quadrática da Seção 7.1
+fornece <span class="math inline">\(x=0{,}7290\)</span>, contra <span
+class="math inline">\(x=1/\sqrt{2}=0{,}7071\)</span> do tratamento
+aproximado. A tabela compara os dois rotores. A coluna de variação
+percentual é a resposta de projeto: quanto cada grandeza muda ao dobrar
+a solidez, segundo o fechamento exato.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 24%" />
+<col style="width: 24%" />
+<col style="width: 12%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr>
+<th>Grandeza</th>
+<th>Rotor 1, referência</th>
+<th>Rotor 2, exato</th>
+<th>Variação</th>
+<th>Rotor 2, aproximado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td><span class="math inline">\(1400\,\text{rpm}\)</span></td>
+<td><span class="math inline">\(1021\,\text{rpm}\)</span></td>
+<td><span class="math inline">\(-27{,}1\%\)</span></td>
+<td><span class="math inline">\(990\,\text{rpm}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\mu\)</span></td>
+<td><span class="math inline">\(0{,}205\)</span></td>
+<td><span class="math inline">\(0{,}281\)</span></td>
+<td><span class="math inline">\(+37{,}2\%\)</span></td>
+<td><span class="math inline">\(0{,}289\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(0{,}0195\)</span></td>
+<td><span class="math inline">\(0{,}0267\)</span></td>
+<td><span class="math inline">\(+37{,}2\%\)</span></td>
+<td><span class="math inline">\(0{,}0275\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_T\)</span></td>
+<td><span class="math inline">\(0{,}0080\)</span></td>
+<td><span class="math inline">\(0{,}0151\)</span></td>
+<td><span class="math inline">\(+88{,}1\%\)</span></td>
+<td><span class="math inline">\(0{,}0160\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_T/\sigma\)</span></td>
+<td><span class="math inline">\(0{,}0800\)</span></td>
+<td><span class="math inline">\(0{,}0753\)</span></td>
+<td><span class="math inline">\(-5{,}9\%\)</span></td>
+<td><span class="math inline">\(0{,}0800\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(P_i\)</span></td>
+<td><span class="math inline">\(1888\,\text{W}\)</span></td>
+<td><span class="math inline">\(1888\,\text{W}\)</span></td>
+<td><span class="math inline">\(0{,}0\%\)</span></td>
+<td><span class="math inline">\(1888\,\text{W}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(H_i\)</span></td>
+<td><span class="math inline">\(5{,}0\,\text{N}\)</span></td>
+<td><span class="math inline">\(10{,}0\,\text{N}\)</span></td>
+<td><span class="math inline">\(+100\%\)</span></td>
+<td><span class="math inline">\(10{,}0\,\text{N}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(H_p\)</span></td>
+<td><span class="math inline">\(4{,}2\,\text{N}\)</span></td>
+<td><span class="math inline">\(6{,}2\,\text{N}\)</span></td>
+<td><span class="math inline">\(+45{,}8\%\)</span></td>
+<td><span class="math inline">\(6{,}0\,\text{N}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(Q_i\)</span></td>
+<td><span class="math inline">\(12{,}9\,\text{Nm}\)</span></td>
+<td><span class="math inline">\(17{,}6\,\text{Nm}\)</span></td>
+<td><span class="math inline">\(+37{,}2\%\)</span></td>
+<td><span class="math inline">\(18{,}2\,\text{Nm}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(1516\,\text{W}\)</span></td>
+<td><span class="math inline">\(1175\,\text{W}\)</span></td>
+<td><span class="math inline">\(-22{,}5\%\)</span></td>
+<td><span class="math inline">\(1072\,\text{W}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(Q_p\)</span></td>
+<td><span class="math inline">\(10{,}340\,\text{Nm}\)</span></td>
+<td><span class="math inline">\(10{,}991\,\text{Nm}\)</span></td>
+<td><span class="math inline">\(+6{,}3\%\)</span></td>
+<td><span class="math inline">\(10{,}340\,\text{Nm}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>O retrato de projeto é direto. A rotação cai <span
+class="math inline">\(27\%\)</span>, a potência induzida não se move, e
+a potência de perfil cai <span class="math inline">\(22{,}5\%\)</span>,
+o que confirma o ganho energético como o efeito prático mais relevante
+da duplicação de solidez. O preço aparece nas forças no plano do disco,
+com <span class="math inline">\(H_i\)</span> dobrando e <span
+class="math inline">\(H_p\)</span> crescendo <span
+class="math inline">\(46\%\)</span>, e no torque induzido, <span
+class="math inline">\(37\%\)</span> maior. O carregamento de pá cai
+<span class="math inline">\(5{,}9\%\)</span>, o que afasta as seções do
+<a href="https://en.wikipedia.org/wiki/Stall_(fluid_dynamics)">estol</a>
+e amplia a margem de manobra.</p>
+<p>A coluna aproximada mostra onde a hipótese da Seção 1 distorce esse
+retrato. Ela prevê queda de <span
+class="math inline">\(29{,}3\%\)</span> na rotação e de <span
+class="math inline">\(29{,}3\%\)</span> na potência de perfil, contra os
+<span class="math inline">\(27{,}1\%\)</span> e <span
+class="math inline">\(22{,}5\%\)</span> do tratamento exato. O desvio
+mais grave é qualitativo e está no torque de perfil, que a aproximação
+declara invariante e que na verdade cresce <span
+class="math inline">\(6{,}3\%\)</span>. A rotação exata cai menos do que
+a aproximação previa, e isso basta para que <span
+class="math inline">\(nx^2\)</span> exceda a unidade. O carregamento de
+pá é o outro caso qualitativo. Constante por construção sob a hipótese,
+ele cai quase <span class="math inline">\(6\%\)</span> no tratamento
+exato.</p>
+<h2 id="conclusão">Conclusão</h2>
+<p>Dobrar a solidez de um rotor por adição de pás, com tração,
+velocidade de avanço e ângulo de disco fixos, obriga a rotação a cair
+cerca de <span class="math inline">\(27\%\)</span>. Essa queda é o
+mecanismo que propaga a mudança por todo o resto.</p>
+<p>A esteira não muda. A velocidade induzida, a potência induzida e o
+ângulo de esteira permanecem exatamente iguais, porque respondem à força
+global aplicada ao escoamento e não à forma como as pás a repartem. A
+força <span class="math inline">\(H\)</span> induzida dobra, na
+proporção direta da área de pá acrescentada, e o coeficiente de potência
+de perfil também.</p>
+<p>O ganho está na potência de perfil, que cai cerca de um quinto. Ela
+cresce com a área molhada, mas depende do cubo da velocidade tangencial,
+e a queda de rotação vence a duplicação de pás. Somada à potência
+induzida inalterada, a potência total do rotor diminui. O carregamento
+de pá cai junto, o que afasta as seções do estol.</p>
+<p>O custo está no plano do disco e no eixo. A força <span
+class="math inline">\(H\)</span> de perfil sobe quase a metade, e o
+torque induzido sobe mais de um terço, porque a mesma potência induzida
+precisa ser entregue a uma rotação menor. Dimensionar transmissão e
+comandos para um rotor de solidez alta exige contar com esse torque.</p>
+<p>A hipótese de carregamento de pá constante entrega esse quadro
+qualitativo corretamente e erra os números por alguns pontos
+percentuais. Falha qualitativamente em um único caso, o torque de
+perfil, que ela declara invariante e que de fato cresce. Para
+dimensionamento preliminar a hipótese basta. Para números confiáveis,
+resolva a quadrática de fechamento na condição de voo em questão.</p>
+<h2 id="referências">Referências</h2>
+<p>[1] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
+2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
+para a formulação de elemento de pá em voo de avanço, incluindo as
+expressões de <span class="math inline">\(C_T/\sigma\)</span>, <span
+class="math inline">\(C_H\)</span> e <span
+class="math inline">\(C_P\)</span> utilizadas ao longo deste white
+paper. <a href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
+<p>[2] Glauert, H., <em>The Elements of Aerofoil and Airscrew
+Theory</em>, Cambridge University Press, Cambridge, 1926. — Base da
+Teoria do Momento em escoamento oblíquo, origem da relação entre tração
+e velocidade induzida usada na Seção 2. <a
+href="https://archive.org/details/elementsofaerofo00glau">Link</a></p>
+<p>[3] Johnson, W., <em>Helicopter Theory</em>, Princeton University
+Press, Princeton, 1980. — Obra de referência abrangente em mecânica de
+voo e rotores de asas rotativas, com o desenvolvimento clássico das
+forças no plano do disco. <a
+href="https://archive.org/details/helicoptertheory0000john_y9s0">Link</a></p>
+<p>[4] Prouty, R. W., <em>Helicopter Performance, Stability, and
+Control</em>, Krieger Publishing, Malabar, 2002. — Formulações
+analíticas de desempenho, incluindo o fator de correção de avanço da
+potência de perfil discutido na Seção 4. <a
+href="https://archive.org/details/prouty-r.-w.-helicopter-performance-stability-and-control">Link</a></p>
+<p>[5] Bramwell, A. R. S., Done, G., e Balmford, D., <em>Bramwell’s
+Helicopter Dynamics</em>, 2ª ed., Butterworth-Heinemann, Oxford, 2001. —
+Tratamento detalhado da aerodinâmica do rotor em voo de avanço e das
+hipóteses de fechamento de elemento de pá. <a
+href="https://doi.org/10.1016/B978-0-7506-5075-5.X5000-1">Link</a></p>
+<p>[6] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. — Discussão moderna do acoplamento
+entre solidez, carregamento de pá e desempenho de rotor. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="parametros-adimensionais-esteira-rotores.html"><strong>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</strong><span>Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</span></a><a class="related-card" href="teorema-biplano-munk-rotores-tandem.html"><strong>O Teorema do Stagger de Munk e sua Universalidade em Sistemas Aerodinâmicos de Múltiplas Superfícies</strong><span>O Teorema do Stagger de Munk (o arrasto induzido total de múltiplas superfícies sustentadoras é invariante ao espaçamento longitudinal das superfícies) é demonstrado via Plano de Trefftz para asas fixas e estendido a rotores em tandem e coaxial em voo avançado. A equivalência no balanço de energia induzida revela a universalidade do teorema muito além do contexto histórico para o qual foi derivado.</span></a><a class="related-card" href="modelagem-teorica-efeito-solo-multirotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle.</span></a><a class="related-card" href="dinamica-de-voo-rotor-teetering.html"><strong>White Paper - Dinâmica de Voo de um Rotor _Teetering_ Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a><a class="related-card" href="rotores-e-giroscopios.html"><strong>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</strong><span>Com derivação longa e notação unificada, o white paper constrói a equivalência entre rotor e giroscópio em três casos progressivos: no vácuo, com amortecimento aerodinâmico e com rigidez por hinge offset. O resultado central é que rotor e giroscópio são o mesmo problema diferencial acoplado em referenciais diferentes, e que cada parâmetro físico de projeto desloca o polo modal de forma matematicamente transparente.</span></a></div></section></article></main>
+<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;efeito-da-solidez-em-rotores&quot;, &quot;title&quot;: &quot;Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>

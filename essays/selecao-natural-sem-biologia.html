@@ -1,0 +1,493 @@
+<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A seleção natural não é fato biológico, é teorema: bastam replicação imperfeita, variação hereditária e filtragem por sobrevivência para que ela opere, com ou sem DNA. O ensaio a rastreia em quatro territórios sem organismo à vista: xadrez evoluindo por self-play, metagames de cartas e tabuleiro, RPG selecionando lore por sobrevivência memética, e autômatos celulares que tensionam a definição de vida."><title>Seleção Natural em Sistemas de Regras — Da Evolução Sem Biologia aos Metas Competitivos e Self-Play — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="Seleção Natural em Sistemas de Regras — Da Evolução Sem Biologia aos Metas Competitivos e Self-Play"><meta property="og:description" content="A seleção natural não é fato biológico, é teorema: bastam replicação imperfeita, variação hereditária e filtragem por sobrevivência para que ela opere, com ou sem DNA. O ensaio a rastreia em quatro territórios sem organismo à vista: xadrez evoluindo por self-play, metagames de cartas e tabuleiro, RPG selecionando lore por sobrevivência memética, e autômatos celulares que tensionam a definição de vida."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Seleção Natural em Sistemas de Regras — Da Evolução Sem Biologia aos Metas Competitivos e Self-Play"><meta name="twitter:description" content="A seleção natural não é fato biológico, é teorema: bastam replicação imperfeita, variação hereditária e filtragem por sobrevivência para que ela opere, com ou sem DNA. O ensaio a rastreia em quatro territórios sem organismo à vista: xadrez evoluindo por self-play, metagames de cartas e tabuleiro, RPG selecionando lore por sobrevivência memética, e autômatos celulares que tensionam a definição de vida."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
+<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
+<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>Seleção Natural em Sistemas de Regras — Da Evolução Sem Biologia aos Metas Competitivos e Self-Play</h1><hr class="cover-rule"><p class="article-summary">A seleção natural não é fato biológico, é teorema: bastam replicação imperfeita, variação hereditária e filtragem por sobrevivência para que ela opere, com ou sem DNA. O ensaio a rastreia em quatro territórios sem organismo à vista: xadrez evoluindo por self-play, metagames de cartas e tabuleiro, RPG selecionando lore por sobrevivência memética, e autômatos celulares que tensionam a definição de vida.</p><div class="article-meta"><span>Atualizado 2026-08-29</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Biologia</span><span class="tag">Computação</span><span class="tag">Filosofia</span><span class="tag">Inteligência-Artificial</span></div></div></div></header><div class="prose" id="articleBody"><hr />
+<h2
+id="introdução-os-três-ingredientes-abstratos-da-evolução">Introdução:
+Os Três Ingredientes Abstratos da Evolução</h2>
+<p>A biologia reivindica a <a
+href="https://en.wikipedia.org/wiki/Natural_selection">seleção
+natural</a> como sua grande ideia unificadora, e o direito é legítimo.
+Mas o que Darwin descobriu não foi um fato sobre organismos: foi um
+teorema sobre sistemas. Destilado ao osso, o mecanismo exige apenas três
+ingredientes abstratos. Primeiro, replicação: entidades capazes de
+produzir cópias de si mesmas. Segundo, variação: o processo de cópia é
+imperfeito, gerando diferenças heritáveis entre as réplicas. Terceiro,
+seleção diferencial: a estrutura do ambiente faz com que algumas
+variações deixem mais descendentes que outras. Onde quer que esses três
+elementos coexistam, a seleção natural acontece inevitavelmente, com ou
+sem DNA, com ou sem carbono.</p>
+<p>Formulado assim, o argumento deixa de ser analogia e vira
+consequência lógica. A aritmética é elementar. Suponha duas variantes, A
+e B, numa população. Se A produz <span
+class="math inline">\(r_A\)</span> cópias por ciclo e B produz <span
+class="math inline">\(r_B\)</span> cópias, com <span
+class="math inline">\(r_A &gt; r_B\)</span>, então após <span
+class="math inline">\(n\)</span> ciclos a frequência relativa de A na
+população é <span class="math inline">\(f_A(n) = r_A^n / (r_A^n +
+r_B^n)\)</span>. Quando <span class="math inline">\(n\)</span> cresce,
+<span class="math inline">\(f_A(n) \to 1\)</span>: a variante com taxa
+de replicação maior domina inevitavelmente. Enquanto a razão entre as
+taxas se mantiver constante, a vantagem de A cresce exponencialmente com
+o tempo, porque a razão entre as frequências se multiplica por <span
+class="math inline">\(r_A / r_B\)</span> a cada ciclo. O tempo de
+invasão, por sua vez, escala com o inverso do logaritmo dessa razão:
+quanto mais próximas as taxas, mais ciclos até a dominação completa. Não
+há saída lógica, porque o resultado é consequência direta da aritmética
+da replicação diferencial. Qualquer sistema dinâmico que satisfaça as
+três condições evolui por seleção, exatamente como qualquer sistema que
+satisfaça as condições da segunda lei termodinâmica gera entropia.</p>
+<p><a href="https://en.wikipedia.org/wiki/Daniel_Dennett">Daniel
+Dennett</a> capturou essa universalidade em <em>Darwin’s Dangerous
+Idea</em> ao chamar a seleção natural de “algoritmo universal”: um
+procedimento que opera sobre qualquer substrato que satisfaça as
+pré-condições, independentemente de bioquímica, carbono ou consciência.
+A evolução é matemática aplicada antes de ser história natural.</p>
+<p>Resta uma qualificação que a versão forte da tese não pode ignorar.
+Os três ingredientes são condição suficiente para seleção, mas não
+garantem complexidade crescente. Em populações pequenas, o <a
+href="https://en.wikipedia.org/wiki/Genetic_drift">drift genético</a>, a
+flutuação aleatória de frequências, pode dominar a seleção e fixar
+variantes por acaso, não por aptidão. A pressão seletiva precisa ser
+forte o bastante, em relação ao tamanho da população, para que o sinal
+do filtro supere o ruído do acaso. O teorema diz que a seleção acontece,
+não que ela sempre vence o drift, e a diferença importa para não
+confundir evolução com progresso.</p>
+<p>Este ensaio percorre quatro territórios onde o teorema opera sem
+nenhum organismo à vista: motores de inteligência artificial treinados
+por <a
+href="https://en.wikipedia.org/wiki/Self-play_(reinforcement_learning)">self-play</a>,
+metas competitivos de jogos de cartas e tabuleiro cuja ponte formal com
+a biologia passa pela estratégia evolutivamente estável, narrativas
+improvisadas em campanhas de RPG e autômatos celulares que flertam com a
+própria definição de vida. A tese central acompanha cada caso: a seleção
+natural não é um privilégio biológico, mas uma propriedade emergente de
+qualquer sistema de regras que combine replicação imperfeita e filtragem
+por sobrevivência diferencial, e ela atua nesses territórios com
+velocidades que a biologia nunca poderia sonhar.</p>
+<hr />
+<h2
+id="self-play-e-inteligência-artificial-evolução-sem-programação-direta">Self-Play
+e Inteligência Artificial: Evolução Sem Programação Direta</h2>
+<p>O caso mais limpo vem dos motores de jogos treinados contra si
+mesmos. No <a
+href="https://deepmind.google/discover/blog/alphazero-shattering-chess-and-go-rules-with-reinforcement-learning/">AlphaZero</a>
+do DeepMind e no meu próprio motor de xadrez, o Zchezz, a rede neural
+começa jogando de forma aleatória e melhora exclusivamente jogando
+milhões de partidas contra versões anteriores de si mesma. Ninguém
+programa a estratégia, e ninguém fornece partidas humanas de referência.
+O sistema extrai sozinho princípios que levaram séculos para a teoria
+humana formular, como o valor do avanço temporal no xadrez ou a
+importância da influência no Go.</p>
+<p>Os três ingredientes darwinianos estão todos presentes, e vale
+mapeá-los explicitamente. Replicação: cada iteração de treinamento copia
+a política atual para gerar dados e treinar a próxima. Variação: a
+atualização estocástica dos parâmetros introduz mutações, pequenas
+alterações aleatórias no modo de jogar. Seleção diferencial: o filtro é
+a taxa de vitória contra a geração anterior. Variantes que jogam pior
+são descartadas, e as que jogam melhor tornam-se a nova linha de base. O
+resultado é seleção natural emergindo sem que tenha sido programada,
+como consequência inevitável da estrutura de incentivos do ambiente de
+treinamento.</p>
+<p>O detalhe filosoficamente rico é que o design do sistema especificou
+o mecanismo sem especificar o conteúdo. Os engenheiros escolheram a
+função de recompensa (ganhar partidas) e o algoritmo de gradiente, mas
+as estratégias concretas que emergem (sacrifícios posicionais,
+estruturas de peões específicas, teses de ataque que a teoria humana só
+formalizou décadas depois) não estão em lugar nenhum do código-fonte.
+Elas são o equivalente funcional de adaptações evolutivas: soluções
+descobertas pelo processo, não projetadas pelo autor. É a demonstração
+empírica mais direta disponível de que a seleção é um atrator
+matemático, não uma peculiaridade da vida.</p>
+<hr />
+<h2
+id="metas-competitivos-e-a-evolução-lamarckiana-de-estratégias">Metas
+Competitivos e a Evolução Lamarckiana de Estratégias</h2>
+<p>Todo jogo competitivo durável desenvolve um “meta”, abreviação de <a
+href="https://en.wikipedia.org/wiki/Metagaming">metagame</a>: a
+população de estratégias, baralhos e aberturas dominantes numa
+determinada era. Se o self-play mostra o teorema operando dentro de uma
+máquina, o jogo competitivo humano mostra ele operando numa cultura
+inteira. Em <a
+href="https://en.wikipedia.org/wiki/Magic:_The_Gathering"><em>Magic: The
+Gathering</em></a>, torneios de xadrez e campeonatos de Catan, o meta
+funciona como um ecossistema: estratégias replicam-se por imitação
+quando jogadores copiam listas vencedoras, mutam por inovação individual
+quando alguém testa uma carta fora de posição ou um movimento incomum, e
+são filtradas pelo desempenho em torneios, o ambiente seletivo
+definitivo.</p>
+<p>Há uma diferença crucial em relação à biologia, e ela explica a
+velocidade. A evolução genética é mendeliana: caracteres adquiridos não
+se transmitem, pois o genótipo do pai não é alterado pela experiência de
+vida dele. A evolução de metas é <a
+href="https://en.wikipedia.org/wiki/Lamarckism">lamarckiana</a>: a
+inovação testada por um jogador transmite-se diretamente já modificada,
+porque a estratégia aprendida é copiável por observação imediata. Um
+insight tático descoberto num sábado pode estar em metade dos baralhos
+do torneio seguinte. Essa transmissão direta de caracteres adquiridos
+comprime o ciclo evolutivo por ordens de grandeza, e é por isso que um
+meta pode transformar-se completamente em meses, enquanto adaptação
+análoga em biologia levaria milênios.</p>
+<p>A série histórica mais documentada veio do Standard de 2011. O
+arquétipo conhecido como <a
+href="https://mtg.fandom.com/wiki/Caw-Blade">Caw-Blade</a>, montado em
+torno de Stoneforge Mystic e Jace, the Mind Sculptor, chegou a responder
+por cerca de metade dos top 8 dos maiores torneios norte-americanos, uma
+concentração que nenhuma inovação local conseguia furar. Quando o comitê
+de banimentos removeu as duas cartas do formato, em meados de 2011, o
+equilíbrio perdeu o pilar e o meta inteiro se redistribuiu em poucas
+semanas. Foi um colapso de ESS por choque ambiental, exatamente como a
+teoria prevê.</p>
+<p>Resta uma questão ontológica que este ensaio registra sem pretender
+encerrar. Estratégias competitivas são memes puros, sem separação
+estrita entre genótipo e fenótipo: a lista de cartas é simultaneamente o
+código e o corpo, e a execução dela é o comportamento. Na biologia, a
+separação entre informação herdada e organismo construído é o que
+permite a estabilidade acumulativa. Em memes, a fusão dos papéis torna a
+replicação mais volátil e mais criativa. O debate sobre se essa
+diferença desqualifica a comparação ou simplesmente a qualifica é, no
+fundo, o mesmo debate que atravessa a teoria dos <a
+href="https://en.wikipedia.org/wiki/Meme">memes</a> desde Dawkins, e a
+posição aqui é pragmática: os três ingredientes estão presentes, logo o
+teorema se aplica, independentemente de quão diferente seja a
+embalagem.</p>
+<hr />
+<h2 id="estratégias-evolutivamente-estáveis-a-ponte-formal">Estratégias
+Evolutivamente Estáveis: A Ponte Formal</h2>
+<p>Seria possível que tudo isso fosse coincidência superficial, dois
+vocabulários parecidos descrevendo fenômenos distintos. Não é, e a prova
+está num conceito que une formalmente os dois domínios: a <a
+href="https://en.wikipedia.org/wiki/Evolutionarily_stable_strategy">estratégia
+evolutivamente estável</a> (ESS) de John Maynard Smith e George Price.
+Escreva E(X) para denotar o pagamento da estratégia E contra um oponente
+que joga X, e M(X) para o pagamento da mutante rara M contra esse mesmo
+oponente. Uma ESS é uma estratégia que, uma vez adotada por quase toda a
+população, resiste à invasão de qualquer variante rara, na condição
+precisa formulada por Maynard Smith e Price em 1973. O critério primário
+compara o residente contra si mesmo com a mutante contra o residente, e
+basta ele sozinho para garantir a estabilidade: E(E) &gt; M(E). Só
+quando os dois pagamentos empatam, E(E) = M(E), entra o critério de
+desempate, que compara o residente contra a mutante com a mutante contra
+si mesma: E(M) &gt; M(M). O que decide a questão, na formulação
+canônica, é sempre o desempenho contra o residente em primeiro lugar, e
+o confronto direto contra a mutante só pesa quando esse primeiro teste
+empata. A definição é puramente matemática, mas seu conteúdo é
+darwiniano puro: é a condição sob a qual a seleção não consegue mais
+progredir.</p>
+<p>A conexão profunda é que ESS é um refinamento do <a
+href="https://plato.stanford.edu/entries/game-theory/">equilíbrio de
+Nash</a>, a solução clássica da teoria dos jogos, adicionada de uma
+condição de estabilidade populacional. A equivalência pede qualificação:
+a noção de ESS só se define para jogos simétricos com interação
+aleatória pareada, e nessas condições todo ESS é um equilíbrio de Nash,
+mas nem todo Nash é ESS, pois existem equilíbrios que resistem ao desvio
+racional de um agente isolado e ainda assim são invadidos por uma
+mutante rara que se dá melhor contra os seus semelhantes do que o
+residente contra ela. Todo Nash diz “ninguém tem incentivo para desviar
+unilateralmente”. Toda ESS acrescenta “e além disso, desviantes raros
+são punidos pela própria rareza”. A consequência elegante é que a
+biologia evolutiva e a teoria econômica dos jogos convergem para o mesmo
+objeto matemático por rotas completamente distintas, Maynard Smith
+chegando por populações animais em conflito, von Neumann e Nash chegando
+por racionalidade estratégica axiomática.</p>
+<p>Para o jogador, isso explica uma experiência universal: certos metas
+cristalizam. Há eras de Magic ou posições de abertura que permanecem
+estáveis por anos, imunes a tentativas de inovação, até que algo externo
+quebra o equilíbrio (uma nova carta impressa, uma mudança de regra, um
+banimento). Isso é exatamente o que a teoria prevê: enquanto a
+configuração dominante é uma ESS, mutações locais morrem. Quando o
+ambiente muda, o antigo equilíbrio perde a estabilidade e o sistema
+corre para o próximo. O meta não é <em>como</em> um ecossistema
+evolutivo: é um ecossistema evolutivo, governado pelo mesmo objeto
+matemático que governa a proporção de sexos em populações de vespas.</p>
+<p>Há uma formalização mais geral ainda, e ela serve à tese deste ensaio
+de forma mais direta que a própria ESS. A <a
+href="https://en.wikipedia.org/wiki/Price_equation">equação de Price</a>
+comprime qualquer processo seletivo numa única identidade, e a forma
+completa importa mais que o atalho que costuma circular fora da biologia
+teórica. A identidade se escreve <span
+class="math inline">\(\bar{w}\Delta \bar{z} = \mathrm{Cov}(w, z) +
+\mathrm{E}(w\Delta z)\)</span>, em que <span
+class="math inline">\(w\)</span> mede descendência, <span
+class="math inline">\(z\)</span> mede qualquer característica herdável e
+<span class="math inline">\(\bar{w}\)</span> é a descendência média da
+população. O primeiro termo, a covariância entre o traço e o sucesso
+reprodutivo, é a seleção propriamente dita. O segundo termo, a esperança
+da mudança do traço ponderada pela descendência, é a transmissão, o
+quanto a cópia se desvia do original mesmo antes de qualquer filtro
+atuar. Reduzir a equação a <span class="math inline">\(\Delta \bar{z}
+\propto \mathrm{Cov}(w, z)\)</span>, como costuma aparecer fora do
+contexto técnico, descarta justamente o termo de transmissão, e com ele
+a variação imperfeita que este ensaio elegeu como um dos três
+ingredientes desde a introdução. A equação completa nunca menciona
+genes, organismos nem reprodução: vale para moléculas, estratégias,
+ideias e padrões num grid. Enquanto a ESS pergunta qual estratégia
+resiste à invasão, a equação de Price pergunta o que acontece
+necessariamente quando algo varia, se transmite com ruído e é filtrado.
+Seleção somada a transmissão é o enunciado mais econômico disponível do
+teorema que este ensaio percorre.</p>
+<hr />
+<h2 id="seleção-natural-narrativa-na-mesa-de-rpg">Seleção Natural
+Narrativa na Mesa de RPG</h2>
+<p>O quarto território parece, à primeira vista, o menos provável: a
+construção coletiva de histórias. Mas uma campanha longa de RPG de mesa
+é talvez o laboratório mais puro de seleção cultural existente, porque o
+ciclo de geração, teste e filtragem acontece em tempo real, diante de
+testemunhas, com métrica de sucesso objetiva: a atenção e o engajamento
+do grupo.</p>
+<p>O mecanismo reproduz fielmente os três ingredientes. Variação: cada
+sessão gera uma proliferação de elementos narrativos, ganchos de
+aventura, personagens secundários, teorias dos jogadores sobre a trama,
+a maioria improvisada na hora. Replicações com erro: elementos retomados
+semanas depois voltam sempre deformados pela memória coletiva, e as
+deformações frequentemente superam o original. Seleção: o Game Master e
+os jogadores praticam filtragem contínua, inconsciente ou não. O NPC que
+gera carisma volta, e o arco que gera tédio morre em silêncio, sem
+jamais ser oficialmente cancelado. Em poucos meses, o “lore” da
+campanha, aquela textura de histórias compartilhadas que nenhum autor
+único escreveu, emerge como adaptação acumulada ao ecossistema
+particular daquela mesa.</p>
+<p>Vale notar o que esse caso adiciona ao quadro geral: aqui o critério
+de aptidão é subjetivo e distribuído. Não existe taxa de vitória nem
+valor adaptativo mensurável. Existe a resposta emocional de cinco
+pessoas numa sala. E mesmo assim a dinâmica evolutiva opera com total
+clareza, o que reforça a tese da generalidade: o filtro não precisa ser
+objetivo, precisa apenas ser consistente o suficiente para diferenciar a
+replicação. Essa simulação social tem uma mecânica informacional
+própria: cada retomada do lore recodifica o que foi lembrado com perda e
+viés, um canal ruidoso operando sobre memória distribuída. Aqui basta
+registrar que a narrativa oral é evolução em velocidade máxima, com
+gerações completas de ideias nascendo e extinguindo-se entre duas
+sessões.</p>
+<p>A ressalva feita na introdução sobre populações pequenas encontra
+enfim o seu território. Uma mesa típica de RPG reúne quatro a seis
+pessoas, exatamente o regime em que o drift descrito pelo modelo de <a
+href="https://en.wikipedia.org/wiki/Wright%E2%80%93Fisher_model">Wright–Fisher</a>
+domina a seleção: quando a amostra é pequena, a flutuação aleatória de
+frequências supera o filtro adaptativo, e variantes se fixam por acaso,
+não por aptidão. A mesa vive esse regime na prática. Um gancho medíocre
+torna-se tradição da campanha porque apareceu na sessão certa, e um
+elemento brilhante morre porque a mesa estava cansada naquela noite.
+Nenhum outro território deste ensaio sofre esse ruído: o self-play roda
+milhões de partidas, os torneios agregam centenas de listas, o grid
+celular comporta incontáveis replicadores. Na mesa de RPG, o acaso tem
+assento cativo, e é por isso que ela é o único território aqui onde a
+versão forte do teorema precisa da ressalva para valer.</p>
+<hr />
+<h2
+id="autômatos-celulares-e-a-fronteira-entre-vida-e-não-vida">Autômatos
+Celulares e a Fronteira Entre Vida e Não-Vida</h2>
+<p>Levemos a tese ao limite provocativo. Num <a
+href="https://pt.wikipedia.org/wiki/Aut%C3%B4mato_celular">autômato
+celular</a>, como o Jogo da Vida de Conway, padrões surgem de regras
+locais triviais aplicadas a células discretas. Alguns desses padrões são
+replicadores genuínos: construções que produzem cópias de si mesmas
+propagando-se pelo grid. O problema já tinha sido resolvido, de forma
+bem mais custosa, três décadas antes de Langton. <a
+href="https://en.wikipedia.org/wiki/Von_Neumann_universal_constructor">John
+von Neumann</a> provou, num autômato de 29 estados publicado
+postumamente em 1966, que um construtor universal capaz de replicar
+qualquer configuração, inclusive a si mesmo, é logicamente possível
+dentro de um grid discreto, ainda que sua construção original exigisse
+dezenas de milhares de células. O exemplo mais estudado hoje é o loop
+autorreplicante de <a
+href="https://en.wikipedia.org/wiki/Christopher_Langton">Christopher
+Langton</a>, que em 1984 reduziu a prova de von Neumann a um padrão
+prático de 86 células num autômato de 8 estados. O loop constrói uma
+cópia de si mesmo estendendo um braço, copiando a informação genética
+codificada em seu perímetro, e separando-se da cópia ao final. A
+“genética” do loop é a sequência de estados no braço, e erros de cópia
+produzem variantes com geometrias distintas, algumas funcionais, outras
+incapazes de se reproduzir. Adicione um ambiente heterogêneo, onde
+alguns replicadores encontram recursos (espaço livre, células vizinhas
+disponíveis) e outros não, e você obtém variação entre cópias,
+competição e seleção diferencial rodando dentro de um universo
+computacional.</p>
+<p>Paralelos fora do grid celular reforçam o mesmo ponto com substratos
+diferentes. Na Tierra de <a
+href="https://en.wikipedia.org/wiki/Tierra_(computer_program)">Tom
+Ray</a>, lançada em 1991, programas de assembly competem por ciclos de
+processador e memória livre, mutam por erros de cópia e produzem
+parasitas e hospedeiros dentro de um ecossistema puramente
+informacional. Nas criaturas evoluídas de <a
+href="https://www.karlsims.com/evolved-virtual-creatures.html">Karl
+Sims</a>, de 1994, corpos e sistemas nervosos codificados em grafos são
+selecionados pela capacidade de nadar, saltar ou competir por um cubo, e
+morfologias funcionais emergem sem nenhum desenhista. O organismo
+digital <a href="https://doi.org/10.1038/nature01651">Avida</a>, usado
+por Richard Lenski e colegas para observar a evolução de funções lógicas
+complexas a partir de mutações neutras acumuladas, fecha o trio. Três
+substratos computacionais distintos, sem relação de parentesco entre si,
+produzindo a mesma assinatura evolutiva.</p>
+<p>A conclusão provocativa segue da tese central com rigor quase
+desconfortável. Se a seleção natural é um teorema geral de sistemas
+dinâmicos, então a diferença entre “vida” e “não-vida” não pode ser uma
+diferença de tipo, pois o mesmo processo opera nos dois lados. Restam
+duas alternativas honestas. Ou vida é uma questão de grau: robustez do
+mecanismo de replicação, densidade informacional do genótipo,
+profundidade da autonomia homeostática, dimensões ao longo das quais uma
+célula bacteriana pontua alto e um replicador de autômato pontua baixo,
+sem linha divisória nítida. Ou vida é uma convenção pragmática, um
+rótulo que traçamos onde é útil traçar. As duas leituras convergem na
+mesma prática científica. Por isso a astrobiologia moderna procura
+assinaturas de processos (desequilíbrios químicos, metabolismo,
+replicação) em vez de procurar “organismos”. E é por isso que a
+investigação sobre as origens da vida trata a abiogênese como continuum
+evolutivo pré-biótico, com seleção química operando antes de qualquer
+célula existir.</p>
+<p>A própria biologia, aliás, já não pratica a transmissão estritamente
+vertical que o contraste lamarckiano do capítulo anterior pressupõe. A
+<a
+href="https://en.wikipedia.org/wiki/Horizontal_gene_transfer">transferência
+horizontal de genes</a>, corrente entre bactérias por plasmídios e
+vírus, move caracteres adquiridos entre linhagens sem parentesco: uma
+bactéria incorpora um gene de resistência forjado no ambiente de outra
+espécie e o transmite já funcional. Quanto maior o peso da transferência
+horizontal na história de um grupo, menos mendeliana é a sua evolução. O
+exemplo aproxima os polos que o capítulo anterior opunha: herança
+genética e herança cultural diferem em velocidade e em proporção de
+transmissão modificada, não em natureza, e a cultura humana apenas ocupa
+o extremo horizontal do espectro.</p>
+<p>Essa fronteira contínua ecoa discussões que já fiz sobre o conceito
+de vida e seus limites, e fecha o círculo do ensaio com elegância:
+começamos destilando Darwin até um teorema e terminamos percebendo que a
+categoria “vida” talvez seja o rótulo que damos à instância mais
+sofisticada, mais persistente e mais barulhenta do teorema. O carbono
+seria detalhe de implementação.</p>
+<hr />
+<h2 id="conclusão-o-teorema-da-vida-e-dos-sistemas">Conclusão: O Teorema
+da Vida e dos Sistemas</h2>
+<p>O percurso cobriu quatro substratos radicalmente distintos. Motores
+de IA em self-play descobrem estratégias sobre-humanas porque replicação
+imperfeita e filtragem por vitória compõem um motor evolutivo. Metas
+competitivos evoluem por ordens de magnitude mais rápido que a biologia
+porque a transmissão lamarckiana elimina o gargalo genético. Narrativas
+de RPG sofrem seleção natural cujo critério de aptidão é a emoção de uma
+mesa. Autômatos celulares abrigam replicadores que borram a fronteira
+entre vivo e inanimado. Em todos, os mesmos três ingredientes
+reaparecem, e o resultado é o mesmo sempre que a seleção supera o ruído
+do acaso. A ressalva registrada logo na introdução, e vivida com todo o
+peso no capítulo do RPG, continua de pé neste fechamento: em populações
+pequenas, a deriva pode fixar uma variante por sorte antes que o filtro
+tenha tempo de agir. O teorema garante a direção da força quando ela
+opera sozinha, não o desfecho de cada instância particular, e essa é a
+única inevitabilidade que este ensaio defende.</p>
+<p>A generalidade do mecanismo é a lição que fica. A evolução não é
+sobre pássaros e tartarugas, mas sobre o que acontece necessariamente
+quando variação encontra persistência, na ausência de ruído forte o
+bastante para dominar o sinal. Reconhecer isso expande a visão de
+qualquer engenheiro de sistemas complexos: populações de estratégias,
+bases de conhecimento, mercados de ideias e repositórios de software são
+ecossistemas sujeitos às mesmas pressões, e prever seu comportamento
+exige pensar em termos de replicação, mutação e filtro antes de pensar
+em intenções e projetos.</p>
+<p>Uma objeção mais funda mira não o resultado, mas o vocabulário. <a
+href="https://en.wikipedia.org/wiki/Peter_Godfrey-Smith">Peter
+Godfrey-Smith</a>, em <em>Darwinian Populations and Natural
+Selection</em> (2009), argumenta que uma população só é genuinamente
+darwiniana na medida em que a herança entre gerações tem fidelidade
+própria. O critério exige um canal de transmissão quase independente do
+fenótipo, capaz de carregar a informação adiante com pouco ruído. Nos
+metas competitivos, a lista de cartas é ao mesmo tempo o código e o
+comportamento, sem essa separação entre genótipo e fenótipo. No lore de
+RPG, a memória distribuída de cinco pessoas é o único canal hereditário
+disponível, e ela deforma o que carrega a cada retomada. Onde esse canal
+é frágil ou inexistente, a objeção de Godfrey-Smith é que chamar o
+processo de seleção natural estica o termo além do fenômeno que Darwin
+descreveu, e o que sobra é metáfora produtiva, não o mecanismo
+propriamente dito. Este ensaio não neutraliza a objeção, apenas a
+relocaliza. Godfrey-Smith não trata a hereditariedade como binária, mas
+como uma questão de grau, e os territórios percorridos aqui ocupam
+pontos diferentes desse espectro, do self-play, com transmissão de
+parâmetros de altíssima fidelidade, até o lore de mesa, que mal passa no
+teste. Reunir todos eles sob a mesma etiqueta de seleção natural
+simplifica uma diferença real de grau, e essa simplificação é o preço
+que a tese da universalidade escolhe pagar.</p>
+<p>A própria base que sustenta este ensaio oferece um caso documentado
+em miniatura: o vocabulário de tags desta wiki especiou sob pressão
+seletiva. Variantes quase sinônimas competiram pelo uso, as dominantes
+fixaram-se nas páginas mais citadas, e as consolidações periódicas
+fundiram ou extinguiram etiquetas mal adaptadas. O vocabulário fechado
+que hoje organiza a base é produto de gerações dessa seleção, nenhuma
+delas planejada de cima. É o teorema operando sobre um substrato
+puramente informacional, sem organismo e sem carbono.</p>
+<p>Fica, para terminar, a apreciação estética que motivou o ensaio.
+Existe beleza em ver a mesma lógica operar no silêncio de uma rede
+neural treinando contra si mesma, na gritaria de um torneio de cartas,
+na voz de um mestre improvisando um mundo e nas regras triviais de um
+grid de células. Darwin procurou a origem das espécies e encontrou, sem
+saber, uma lei dos sistemas. Onde quer que a variação encontre a
+persistência, ela estará lá, selecionando.</p>
+<hr />
+<h2 id="referências">Referências</h2>
+<p>[1] Darwin, C., <em>On the Origin of Species by Means of Natural
+Selection</em>, John Murray, London, 1859. — Formulação original dos
+três ingredientes do mecanismo evolutivo. <a
+href="https://darwin-online.org.uk/contents.html">Link</a></p>
+<p>[2] Smith, J. M., e Price, G. R., <em>The Logic of Animal
+Conflict</em>, Nature, Vol. 246, 1973, pp. 15–18. — Introdução do
+conceito de Estratégia Evolutivamente Estável. <a
+href="https://doi.org/10.1038/246015a0">Link</a></p>
+<p>[3] Silver, D. et al., <em>A General Reinforcement Learning Algorithm
+that Masters Chess, Shogi, and Go through Self-Play</em>, Science, Vol.
+362, No. 6419, 2018, pp. 1140–1144. — AlphaZero: seleção emergente via
+self-play sem dados humanos. <a
+href="https://www.science.org/doi/10.1126/science.aar6404">Link</a></p>
+<p>[4] Dawkins, R., <em>The Selfish Gene</em>, Oxford University Press,
+Oxford, 1976. — Formulação do conceito de meme e da universalidade da
+replicação com variação. <a
+href="https://en.wikipedia.org/wiki/The_Selfish_Gene">Link</a></p>
+<p>[5] Langton, C., <em>Artificial Life</em>, Artificial Life, SFI
+Studies in the Sciences of Complexity, Addison-Wesley, Redwood City,
+1989, pp. 1–47. — Programa de pesquisa da vida artificial e replicadores
+computacionais. <a
+href="https://doi.org/10.4324/9780429032769">Link</a></p>
+<p>[6] Gardner, M., <em>Mathematical Games: The Fantastic Combinations
+of John Conway’s New Solitaire Game “Life</em>, Scientific American,
+Vol. 223, No. 4, 1970, pp. 120–123. — Divulgação seminal do autômato
+celular de Conway. <a
+href="https://web.archive.org/web/20090410235148/http://ddi.cs.uni-potsdam.de/HyFISCH/Produzieren/lis_projekt/proj_gamelife/ConwayScientificAmerican.htm">Link</a></p>
+<p>[7] Lenski, R., Ofria, C., Pennock, R., e Adami, C., <em>The
+Evolutionary Origin of Complex Features</em>, Nature, Vol. 423, 2003,
+pp. 139–144. — Evolução de complexidade em organismos digitais (Avida),
+evidência de seleção sem biologia. <a
+href="https://doi.org/10.1038/nature01651">Link</a></p>
+<p>[8] Dennett, D., <em>Darwin’s Dangerous Idea: Evolution and the
+Meanings of Life</em>, Simon &amp; Schuster, New York, 1995. — A tese do
+“algoritmo universal” de Darwin: a seleção natural como procedimento
+substrato-independente. <a
+href="https://en.wikipedia.org/wiki/Darwin%27s_Dangerous_Idea">Link</a></p>
+<p>[9] <em>Caw-Blade</em>, MTG Wiki, Fandom. — Documentação do arquétipo
+dominante do Standard de 2011 e dos banimentos de Stoneforge Mystic e
+Jace, the Mind Sculptor que o encerraram. (acesso em 23 Ago. 2026). <a
+href="https://mtg.fandom.com/wiki/Caw-blade">Link</a></p>
+<p>[10] Price, G. R., <em>Selection and Covariance</em>, Nature, Vol.
+227, No. 5259, 1970, pp. 520–521. — Formulação original da equação que
+reduz a seleção à covariância entre traço e sucesso reprodutivo. <a
+href="https://doi.org/10.1038/227520a0">Link</a></p>
+<p>[11] <em>Horizontal Gene Transfer</em>, Wikipedia, The Free
+Encyclopedia. — Panorama da transmissão não vertical de material
+genético via plasmídios e vetores virais. (acesso em 23 Ago. 2026). <a
+href="https://en.wikipedia.org/wiki/Horizontal_gene_transfer">Link</a></p>
+<p>[12] Godfrey-Smith, P., <em>Darwinian Populations and Natural
+Selection</em>, Oxford University Press, Oxford, 2009. — Formulação mais
+forte da objeção de que herança de baixa fidelidade torna a aplicação do
+termo “seleção natural” uma questão de grau, não um fato binário. <a
+href="https://global.oup.com/academic/product/darwinian-populations-and-natural-selection-9780199552047">Link</a></p>
+<p>[13] Ray, T. S., <em>An Approach to the Synthesis of Life</em>,
+Artificial Life II, SFI Studies in the Sciences of Complexity, Vol. XI,
+Addison-Wesley, Redwood City, 1991, pp. 371–408. — Documentação original
+de Tierra, ecossistema de programas autorreplicantes em competição por
+CPU e memória. <a
+href="http://tomray.me/pubs/alife2/Ray1991AnApproachToTheSynthesisOfLife.pdf">Link</a></p>
+<p>[14] Sims, K., <em>Evolving Virtual Creatures</em>, Proceedings of
+SIGGRAPH ’94, ACM, New York, 1994, pp. 15–22. — Evolução de morfologia e
+comportamento por seleção genética, sem desenho direto do corpo ou do
+controlador. <a
+href="https://doi.org/10.1145/192161.192167">Link</a></p>
+<p>[15] von Neumann, J., e Burks, A. W. (ed.), <em>Theory of
+Self-Reproducing Automata</em>, University of Illinois Press, Urbana,
+1966. — Prova formal, anterior a Langton, de que um construtor universal
+autorreplicante é possível num autômato celular discreto. <a
+href="https://archive.org/details/theoryofselfrepr00vonn_0">Link</a></p>
+</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="fenomenologia-dos-jogos-de-tabuleiro.html"><strong>A Fenomenologia do Tabuleiro — Teoria dos Jogos, Presença Encarnada e a Renascença Analógica</strong><span>Os jogos de tabuleiro passam pela maior expansão em meio século justamente quando as telas dominam o lazer, e o ensaio descarta a nostalgia como explicação. Do Senet egípcio aos eurogames, o ensaio reconstrói a formalização progressiva da interação humana, com a incerteza herdada dos wargames e o formalismo herdado da teoria dos jogos.</span></a><a class="related-card" href="rpg-de-mesa-e-teoria-da-informacao.html"><strong>RPG de Mesa e a Teoria da Informação — Entropia Narrativa, Simulação Cognitiva e a Linguagem sem Limites</strong><span>Entre as mídias interativas, só o RPG de mesa aceita como ação válida qualquer frase que o jogador consiga pronunciar, porque opera sobre linguagem natural, não código. O ensaio lê essa propriedade pela teoria da informação de Shannon (o dado como ruído produtivo, o mestre simulando e descartando futuros) e mostra que, nos LLMs, o que falha não é a fluência do texto — é a continuidade do mundo simulado.</span></a><a class="related-card" href="multiversos-computacionais-monte-carlo.html"><strong>Monte Carlo, Simular e Instanciar — Multiversos Computacionais e os Limites do Real</strong><span>O método de Monte Carlo calcula milhares de futuros possíveis para descartar quase todos. O ensaio toma essa rotina como teste para uma pergunta antiga da metafísica: simular é instanciar? Confronta o universo matemático de Tegmark com a leitura física da existência, examina o paralelo imperfeito com os muitos-mundos de Everett e chega ao problema ético de apagar uma simulação.</span></a><a class="related-card" href="xadrez-computacional.html"><strong>Xadrez Computacional — do Brute-Force às Redes Neurais</strong><span>O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).</span></a><a class="related-card" href="conceito-de-vida.html"><strong>O Conceito de Vida — das Definições Formais à Exobiologia</strong><span>Seis definições formais de vida (de Mayr, Schrödinger, Dawkins, Joyce/NASA, Capra e Bateson) são testadas contra contraexemplos progressivamente mais radicais. O fracasso de qualquer definição única revela que vida é um espectro de organização sem fronteira discreta, com consequências diretas para a busca de vida extraterrestre e para o debate sobre consciência artificial.</span></a><a class="related-card" href="tags-e-a-ontologia-minima.html"><strong>Tags como Ontologia Mínima — Categorias Rígidas, Taxonomia Viva e a Filosofia da Organização</strong><span>Guardar uma nota numa pasta é decidir, sem perceber, o que as ideias são: itens de endereço único numa árvore. O ensaio recusa essa metafísica da gaveta e defende o vocabulário controlado de etiquetas como a menor ontologia capaz de respeitar a natureza reticular do conhecimento, apoiando-se na taxonomia biológica e na trajetória da biblioteconomia até as folksonomias.</span></a><a class="related-card" href="paradoxo-de-fermi.html"><strong>O Grande Filtro do Antropocentrismo</strong><span>O silêncio cósmico do Paradoxo de Fermi é reinterpretado não como evidência de ausência de vida, mas como sintoma do antropocentrismo da busca: procuramos sinais que se parecem conosco, com uma definição de vida que só reconhece o que já conhecemos. O ensaio percorre Terra Rara, Grande Filtro e Floresta Escura antes de perguntar se não estaríamos procurando pelas coisas erradas.</span></a></div></section></article></main>
+<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;selecao-natural-sem-biologia&quot;, &quot;title&quot;: &quot;Seleção Natural em Sistemas de Regras — Da Evolução Sem Biologia aos Metas Competitivos e Self-Play&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>

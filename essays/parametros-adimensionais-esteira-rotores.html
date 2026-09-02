@@ -1,0 +1,332 @@
+<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco."><title>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores"><meta property="og:description" content="Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores"><meta name="twitter:description" content="Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
+<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
+<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</h1><hr class="cover-rule"><p class="article-summary">Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</p><div class="article-meta"><span>Atualizado 2026-08-27</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Aerodinâmica</span><span class="tag">Rotores</span><span class="tag">Engenharia</span><span class="tag">Dinâmica-de-Voo</span></div></div></div></header><div class="prose" id="articleBody"><h2 id="introdução">Introdução</h2>
+<p>A modelagem da <a
+href="https://en.wikipedia.org/wiki/Wake_(physics)">esteira</a> de um
+rotor é um dos problemas centrais da aerodinâmica de aeronaves de asas
+rotativas e de arquiteturas <a
+href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOL</a>.
+É a esteira que determina a interferência mútua entre rotores, o
+carregamento aerodinâmico imposto sobre superfícies de controle a
+jusante e, em última instância, a eficiência propulsiva do sistema.</p>
+<p>Uma questão de <a
+href="https://en.wikipedia.org/wiki/Similitude">similaridade</a> se
+impõe naturalmente no projeto conceitual e nos ensaios em <a
+href="https://en.wikipedia.org/wiki/Wind_tunnel">túnel de vento</a>.
+Dados dois rotores fisicamente distintos, com diâmetros, rotações,
+torções aerodinâmicas e solidezes diferentes, operando sob o mesmo
+coeficiente de tração <span class="math inline">\(T_c\)</span>, suas
+esteiras serão semelhantes no ângulo de deflexão e no campo de
+velocidades?</p>
+<p>A resposta é afirmativa sob condições precisas. Sob o mesmo <span
+class="math inline">\(T_c\)</span> e o mesmo carregamento de disco, as
+esteiras de dois rotores fisicamente distintos coincidem em geometria e
+em velocidade absoluta, com independência total dos demais parâmetros
+construtivos. Essa coincidência decorre de duas propriedades
+demonstradas adiante. A primeira é que <span
+class="math inline">\(T_c\)</span> e a razão cinemática <span
+class="math inline">\(\mu/\lambda\)</span> não são grandezas
+independentes. São funcionalmente equivalentes, ligadas por uma relação
+biunívoca, o que faz de <span class="math inline">\(T_c\)</span> o
+parâmetro que governa exclusivamente a geometria da esteira, seu ângulo
+de deflexão e a topologia de suas linhas de corrente. A segunda é que
+<span class="math inline">\(T_c\)</span> não fixa por si só a energia da
+esteira. A igualdade de velocidades absolutas, e portanto de energia
+cinética induzida no escoamento, só é garantida quando se impõe
+adicionalmente a igualdade do carregamento de disco <span
+class="math inline">\(T/A\)</span>, condição sob a qual <span
+class="math inline">\(T_c\)</span> passa a determinar também a
+velocidade induzida.</p>
+<h2 id="cinemática-do-rotor-em-voo-de-avanço">1. Cinemática do Rotor em
+Voo de Avanço</h2>
+<p>Para isolar a física da esteira sem a complexidade adicional da
+inclinação do disco, adota-se a condição <span
+class="math inline">\(\alpha = 0\)</span>. O disco do rotor permanece
+paralelo ao escoamento livre. Nessa condição, a velocidade de voo <span
+class="math inline">\(V\)</span> atua inteiramente no plano do disco, e
+toda velocidade normal ao disco provém exclusivamente do fluxo induzido
+<span class="math inline">\(v_i\)</span>.</p>
+<p>As razões adimensionais clássicas do rotor, a <a
+href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>
+<span class="math inline">\(\mu\)</span> e o influxo <span
+class="math inline">\(\lambda\)</span>, definidas em relação à
+velocidade de ponta de pá <span class="math inline">\(\Omega R\)</span>,
+tornam-se:</p>
+<p><span class="math display">\[ \mu = \frac{V}{\Omega R}, \qquad
+\lambda = \frac{v_i}{\Omega R} \]</span></p>
+<p>A razão <span class="math inline">\(\mu/\lambda\)</span> elimina
+<span class="math inline">\(\Omega R\)</span> e reduz-se à razão
+cinemática entre a corrente livre e a velocidade induzida:</p>
+<p><span class="math display">\[ \frac{\mu}{\lambda} = \frac{V}{v_i}
+\]</span></p>
+<p>Pela <a href="https://en.wikipedia.org/wiki/Momentum_theory">teoria
+de momento</a> de <a
+href="https://en.wikipedia.org/wiki/Hermann_Glauert">Glauert</a> em voo
+de avanço, a tração <span class="math inline">\(T\)</span> resulta da
+taxa de variação do momento linear da massa de ar que atravessa o disco,
+com velocidade resultante <span class="math inline">\(U = \sqrt{V^2 +
+v_i^2}\)</span>:</p>
+<p><span class="math display">\[ T = 2 \rho A v_i \sqrt{V^2 + v_i^2}
+\]</span></p>
+<p>onde <span class="math inline">\(\rho\)</span> é a densidade do ar e
+<span class="math inline">\(A\)</span> a área do disco.</p>
+<h2
+id="demonstração-da-bijeção-entre-o-coeficiente-de-tração-e-a-razão-cinemática">2.
+Demonstração da Bijeção Entre o Coeficiente de Tração e a Razão
+Cinemática</h2>
+<p>O coeficiente de tração baseado na <a
+href="https://en.wikipedia.org/wiki/Dynamic_pressure">pressão
+dinâmica</a> da corrente livre, <span class="math inline">\(q_\infty =
+\tfrac{1}{2}\rho V^2\)</span>, é definido como:</p>
+<p><span class="math display">\[ T_c = \frac{T}{\frac{1}{2} \rho V^2 A}
+\]</span></p>
+<p>Substituindo a expressão de <span class="math inline">\(T\)</span>
+obtida pela teoria de momento:</p>
+<p><span class="math display">\[ T_c = \frac{2 \rho A v_i \sqrt{V^2 +
+v_i^2}}{\frac{1}{2} \rho V^2 A} = \frac{4 v_i \sqrt{V^2 + v_i^2}}{V^2}
+\]</span></p>
+<p>Dividindo o termo sob a raiz por <span
+class="math inline">\(v_i^2\)</span> e o denominador por <span
+class="math inline">\(V^2\)</span>, isola-se a dependência exclusiva em
+<span class="math inline">\(V/v_i\)</span>:</p>
+<p><span class="math display">\[ T_c = \frac{4
+\sqrt{\left(\dfrac{V}{v_i}\right)^2 + 1}}{\left(\dfrac{V}{v_i}\right)^2}
+\]</span></p>
+<p>Como <span class="math inline">\(V/v_i = \mu/\lambda\)</span> para
+<span class="math inline">\(\alpha = 0\)</span>, obtém-se a relação
+fechada:</p>
+<p><span class="math display">\[ T_c = \frac{4
+\sqrt{\left(\dfrac{\mu}{\lambda}\right)^2 +
+1}}{\left(\dfrac{\mu}{\lambda}\right)^2} \]</span></p>
+<p>Esta é a relação central do estudo. O lado direito é <a
+href="https://en.wikipedia.org/wiki/Monotonic_function">função
+estritamente monotônica</a> e, portanto, <a
+href="https://en.wikipedia.org/wiki/Bijection">bijetora</a> de <span
+class="math inline">\(\mu/\lambda\)</span> no domínio físico de
+interesse, <span class="math inline">\(\mu/\lambda &gt; 0\)</span>. A
+cada valor de <span class="math inline">\(T_c\)</span> corresponde
+exatamente um valor de <span class="math inline">\(\mu/\lambda\)</span>,
+e vice-versa. Não há dependência residual de solidez, perfil
+aerodinâmico, torção de pá ou rotação. Dois rotores com <span
+class="math inline">\(T_c\)</span> idêntico operam necessariamente sob a
+mesma razão <span class="math inline">\(\mu/\lambda\)</span>, e portanto
+sob a mesma razão <span class="math inline">\(V/v_i\)</span>, por mais
+distintos que sejam em seus demais parâmetros de projeto. <span
+class="math inline">\(T_c\)</span> é, nesse sentido, uma medida
+adimensional da intensidade da perturbação induzida frente à energia
+cinética do escoamento livre.</p>
+<p>É essa bijeção que justifica uma prática comum em textos de
+aerodinâmica de rotores. Variáveis de esteira como o ângulo de skew, a
+distribuição de influxo e a contração do tubo de corrente são
+frequentemente apresentadas em gráficos parametrizados por <span
+class="math inline">\(\mu/\lambda\)</span>, e não por <span
+class="math inline">\(T_c\)</span> diretamente. Como as duas grandezas
+se determinam mutuamente, o eixo <span
+class="math inline">\(\mu/\lambda\)</span> carrega exatamente a mesma
+informação de estado aerodinâmico que <span
+class="math inline">\(T_c\)</span>. A vantagem é expressar diretamente a
+razão de velocidades que aparece nas equações de composição vetorial da
+esteira, como a do ângulo <span class="math inline">\(\chi\)</span> na
+Seção 4. Plotar em função de <span
+class="math inline">\(\mu/\lambda\)</span> é, portanto, equivalente a
+plotar em função de <span class="math inline">\(T_c\)</span>, apenas com
+a escala do eixo trocada.</p>
+<h2 id="relação-entre-as-duas-normalizações-do-coeficiente-de-tração">3.
+Relação Entre as Duas Normalizações do Coeficiente de Tração</h2>
+<p>A literatura de rotores emprega, além de <span
+class="math inline">\(T_c\)</span>, o coeficiente de tração <span
+class="math inline">\(C_T\)</span>, referenciado não à pressão dinâmica
+da corrente livre, mas à pressão dinâmica associada à velocidade de
+ponta de pá:</p>
+<p><span class="math display">\[ C_T = \frac{T}{\rho A (\Omega R)^2}
+\]</span></p>
+<p>Enquanto <span class="math inline">\(T_c\)</span> normaliza a tração
+por uma grandeza extrínseca ao rotor, a dinâmica do voo, <span
+class="math inline">\(C_T\)</span> a normaliza por uma grandeza
+intrínseca, a rotação do próprio disco. A razão entre as duas definições
+elimina <span class="math inline">\(T\)</span>, <span
+class="math inline">\(\rho\)</span> e <span
+class="math inline">\(A\)</span>:</p>
+<p><span class="math display">\[ \frac{T_c}{C_T} = \frac{\rho A (\Omega
+R)^2}{\frac{1}{2}\rho V^2 A} = \frac{2(\Omega R)^2}{V^2} =
+\frac{2}{\mu^2} \]</span></p>
+<p>de modo que:</p>
+<p><span class="math display">\[ T_c = \frac{2\,C_T}{\mu^2}, \qquad
+\text{ou equivalentemente} \qquad C_T = \frac{\mu^2}{2}\,T_c
+\]</span></p>
+<p>O termo de acoplamento entre os dois coeficientes é exatamente <span
+class="math inline">\(\mu^2\)</span>, a mesma razão de avanço que
+aparece na relação <span class="math inline">\(\mu/\lambda\)</span>
+estabelecida na Seção 2. Isso expõe uma distinção importante entre os
+dois parâmetros. <span class="math inline">\(C_T\)</span>, por si só,
+não determina a geometria da esteira. Dois rotores com o mesmo <span
+class="math inline">\(C_T\)</span> mas <span
+class="math inline">\(\mu\)</span> diferentes correspondem, pela relação
+acima, a <span class="math inline">\(T_c\)</span> diferentes e,
+portanto, a ângulos de esteira <span class="math inline">\(\chi\)</span>
+diferentes. <span class="math inline">\(T_c\)</span>, por já incorporar
+a velocidade de voo em sua própria definição, é o parâmetro que carrega
+diretamente a informação de similaridade cinemática. <span
+class="math inline">\(C_T\)</span> carrega a mesma informação apenas
+quando acompanhado explicitamente de <span
+class="math inline">\(\mu\)</span>. Por essa razão, <span
+class="math inline">\(T_c\)</span>, e não <span
+class="math inline">\(C_T\)</span>, é o parâmetro natural para tratar da
+similaridade de esteiras entre rotores de dimensionamento distinto.</p>
+<h2
+id="o-coeficiente-de-tração-como-controlador-da-geometria-da-esteira">4.
+O Coeficiente de Tração Como Controlador da Geometria da Esteira</h2>
+<p>A esteira não desce ao longo do eixo normal do disco. Ela é inclinada
+pela velocidade de avanço. O ângulo entre o eixo da esteira e a normal
+ao disco, o ângulo de skew <span class="math inline">\(\chi\)</span>,
+resulta da <a
+href="https://en.wikipedia.org/wiki/Euclidean_vector">composição
+vetorial</a> no centro do disco entre a componente <span
+class="math inline">\(V\)</span>, perpendicular ao eixo normal, e a
+componente <span class="math inline">\(v_i\)</span>, ao longo do eixo
+normal:</p>
+<p><span class="math display">\[ \tan \chi = \frac{V}{v_i} =
+\frac{\mu}{\lambda} \]</span></p>
+<p>Como a Seção 2 estabelece que <span
+class="math inline">\(T_c\)</span> fixa univocamente <span
+class="math inline">\(\mu/\lambda\)</span>, segue diretamente que
+<strong>rotores com o mesmo <span class="math inline">\(T_c\)</span>
+produzem esteiras com o mesmo ângulo de deflexão <span
+class="math inline">\(\chi\)</span></strong>. Em uma arquitetura eVTOL
+multirrotor, isso significa que a trajetória da esteira, e portanto sua
+propensão a incidir sobre a cauda ou a ser ingerida por um rotor
+vizinho, permanece topologicamente constante para um dado <span
+class="math inline">\(T_c\)</span>, independentemente do dimensionamento
+físico de cada rotor.</p>
+<p>O mesmo argumento estende-se ao campo de velocidades relativo. Na
+esteira distante, a velocidade axial induzida duplica, atinge <span
+class="math inline">\(2v_i\)</span> e forma o vetor <span
+class="math inline">\(\vec{V} + 2\vec{v}_i\)</span>. Como <span
+class="math inline">\(T_c\)</span> trava a razão <span
+class="math inline">\(V/v_i\)</span>, os triângulos vetoriais que
+descrevem o escoamento em qualquer estação da esteira são <a
+href="https://en.wikipedia.org/wiki/Similarity_(geometry)">semelhantes</a>
+entre os dois rotores. A similaridade geométrica adimensional, portanto,
+não se limita ao ângulo <span class="math inline">\(\chi\)</span> no
+plano do disco. Ela se estende a toda a topologia da esteira, do plano
+do rotor à esteira distante.</p>
+<h2
+id="carregamento-de-disco-como-condição-adicional-para-a-similaridade-de-energia">5.
+Carregamento de Disco Como Condição Adicional Para a Similaridade de
+Energia</h2>
+<p>A similaridade estabelecida até aqui é adimensional. Permanece em
+aberto se as velocidades absolutas, e portanto a energia cinética
+efetivamente depositada no escoamento, também coincidem entre os dois
+rotores.</p>
+<p>Isolando <span class="math inline">\(V\)</span> na definição de <span
+class="math inline">\(T_c\)</span> escrita em termos do <a
+href="https://en.wikipedia.org/wiki/Disk_loading">carregamento de
+disco</a> <span class="math inline">\(T/A\)</span>:</p>
+<p><span class="math display">\[ T_c = \frac{T/A}{\frac{1}{2}\rho V^2}
+\quad \Longrightarrow \quad V = \sqrt{\frac{T/A}{\frac{1}{2}\rho T_c}}
+\]</span></p>
+<p>Como <span class="math inline">\(v_i = V \cdot
+(\lambda/\mu)\)</span>, e <span
+class="math inline">\(\lambda/\mu\)</span> já está fixado por <span
+class="math inline">\(T_c\)</span> segundo a Seção 2:</p>
+<p><span class="math display">\[ v_i = \left(\frac{\lambda}{\mu}\right)
+\sqrt{\frac{T/A}{\frac{1}{2}\rho T_c}} \]</span></p>
+<p>Esta expressão mostra que, para <span
+class="math inline">\(T_c\)</span> e <span
+class="math inline">\(\rho\)</span> fixos, tanto <span
+class="math inline">\(V\)</span> quanto <span
+class="math inline">\(v_i\)</span> escalam com a raiz quadrada do
+carregamento de disco <span class="math inline">\(T/A\)</span>. Dois
+rotores com o mesmo <span class="math inline">\(T_c\)</span> mas
+carregamento de disco diferente têm esteiras geometricamente idênticas,
+com o mesmo ângulo <span class="math inline">\(\chi\)</span> e a mesma
+topologia de linhas de corrente, porém com velocidades absolutas
+distintas. O rotor de maior carregamento de disco precisa voar mais
+rápido e induz uma velocidade de esteira proporcionalmente maior para
+sustentar o mesmo <span class="math inline">\(T_c\)</span>. A energia
+cinética dissipada na esteira, portanto, não é determinada por <span
+class="math inline">\(T_c\)</span> isoladamente.</p>
+<p>Quando, além de <span class="math inline">\(T_c\)</span>, impõe-se
+também a igualdade de carregamento de disco <span
+class="math inline">\(T/A\)</span>, as duas equações acima forçam <span
+class="math inline">\(V\)</span> e <span
+class="math inline">\(v_i\)</span> a serem numericamente idênticos entre
+os dois rotores. Nessa condição conjunta, e somente nela, <span
+class="math inline">\(T_c\)</span> passa a determinar univocamente
+também a velocidade induzida, isto é, a energia da esteira. As esteiras
+tornam-se então idênticas não apenas em forma, mas em magnitude,
+independentemente de diferenças em rotação, número de pás ou
+distribuição de corda e torção ao longo do raio.</p>
+<h2 id="conclusão">Conclusão</h2>
+<p>A relação <span class="math inline">\(T_c =
+4\sqrt{(\mu/\lambda)^2+1}\,/\,(\mu/\lambda)^2\)</span>, deduzida a
+partir da teoria de momento sob <span
+class="math inline">\(\alpha=0\)</span>, estabelece que <span
+class="math inline">\(T_c\)</span> e <span
+class="math inline">\(\mu/\lambda\)</span> são grandezas biunivocamente
+equivalentes. Fixar uma fixa a outra, sem exceção e sem dependência de
+parâmetros internos do rotor.</p>
+<p>A relação <span class="math inline">\(T_c = 2C_T/\mu^2\)</span>
+localiza <span class="math inline">\(T_c\)</span> frente ao coeficiente
+de tração convencional <span class="math inline">\(C_T\)</span>. Os dois
+medem a mesma tração, mas referenciada a pressões dinâmicas distintas. É
+justamente por incorporar <span class="math inline">\(V\)</span>
+diretamente em sua definição que <span
+class="math inline">\(T_c\)</span>, e não <span
+class="math inline">\(C_T\)</span>, carrega por si só a informação de
+similaridade cinemática.</p>
+<p>Dessa bijeção decorre que <span class="math inline">\(T_c\)</span> é
+o parâmetro que governa integralmente a geometria da esteira. Rotores
+distintos operando sob o mesmo <span class="math inline">\(T_c\)</span>
+produzem o mesmo ângulo de deflexão <span
+class="math inline">\(\chi\)</span> e campos de velocidade relativos
+geometricamente semelhantes em toda a extensão da esteira.</p>
+<p><span class="math inline">\(T_c\)</span>, contudo, não fixa por si só
+a energia da esteira. As velocidades absolutas <span
+class="math inline">\(V\)</span> e <span
+class="math inline">\(v_i\)</span> escalam com a raiz quadrada do
+carregamento de disco <span class="math inline">\(T/A\)</span>. Somente
+quando <span class="math inline">\(T_c\)</span> e <span
+class="math inline">\(T/A\)</span> são impostos simultaneamente, <span
+class="math inline">\(T_c\)</span> passa também a determinar a
+velocidade induzida, e a similaridade se torna completa, geométrica e
+energética.</p>
+<p>Essa dualidade entre a variável de contorno adimensional <span
+class="math inline">\(T_c\)</span> e a variável de carregamento
+dimensional <span class="math inline">\(T/A\)</span> permite decompor a
+similaridade de esteiras em dois eixos independentes de projeto. A forma
+da esteira é controlada externamente pela condição de voo. A energia da
+esteira é controlada internamente pelo dimensionamento do disco. Essa
+decomposição é a base analítica para escalar interferências de esteira
+entre rotores de geometrias distintas sem recorrer a simulação completa
+de cada configuração.</p>
+<h2 id="referências">Referências</h2>
+<p>[1] Glauert, H., <em>The Elements of Aerofoil and Airscrew
+Theory</em>, Cambridge University Press, Cambridge, 1926. — Base da
+Teoria do Momento para discos atuadores em escoamento oblíquo, origem da
+relação de tração empregada na Seção 1. <a
+href="https://archive.org/details/elementsofaerofo00glau">Link</a></p>
+<p>[2] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
+2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
+em aerodinâmica de helicópteros, incluindo teoria do momento, modelos de
+influxo e geometria de esteira em voo de avanço. <a
+href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
+<p>[3] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. — Tratamento moderno da teoria do
+disco atuador e dos modelos de esteira, incluindo a parametrização pelo
+ângulo de skew. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+<p>[4] Coleman, R. P., Feingold, A. M., e Stempin, C. W., <em>Evaluation
+of the Induced-Velocity Field of an Idealized Helicopter Rotor</em>,
+NACA Wartime Report L-126 (ARR L5E10), Langley Memorial Aeronautical
+Laboratory, Hampton, 1945. — Campo de velocidades induzidas de esteira
+inclinada, referência clássica para a dependência da distribuição de
+influxo com o ângulo de skew. <a
+href="https://ntrs.nasa.gov/citations/19930093646">Link</a></p>
+<p>[5] Prouty, R. W., <em>Helicopter Performance, Stability, and
+Control</em>, Krieger Publishing, Malabar, 2002. — Formulações
+analíticas de desempenho de rotores, incluindo as definições
+alternativas de coeficiente de tração. <a
+href="https://archive.org/details/prouty-r.-w.-helicopter-performance-stability-and-control">Link</a></p>
+</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="efeito-da-solidez-em-rotores.html"><strong>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</strong><span>A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.</span></a><a class="related-card" href="modelagem-teorica-efeito-solo-multirotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle.</span></a><a class="related-card" href="ground-effect-asa-fixa-vs-rotativa.html"><strong>Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa</strong><span>A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe.</span></a><a class="related-card" href="teorema-biplano-munk-rotores-tandem.html"><strong>O Teorema do Stagger de Munk e sua Universalidade em Sistemas Aerodinâmicos de Múltiplas Superfícies</strong><span>O Teorema do Stagger de Munk (o arrasto induzido total de múltiplas superfícies sustentadoras é invariante ao espaçamento longitudinal das superfícies) é demonstrado via Plano de Trefftz para asas fixas e estendido a rotores em tandem e coaxial em voo avançado. A equivalência no balanço de energia induzida revela a universalidade do teorema muito além do contexto histórico para o qual foi derivado.</span></a><a class="related-card" href="dinamica-de-voo-rotor-teetering.html"><strong>White Paper - Dinâmica de Voo de um Rotor _Teetering_ Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a><a class="related-card" href="rotores-e-giroscopios.html"><strong>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</strong><span>Com derivação longa e notação unificada, o white paper constrói a equivalência entre rotor e giroscópio em três casos progressivos: no vácuo, com amortecimento aerodinâmico e com rigidez por hinge offset. O resultado central é que rotor e giroscópio são o mesmo problema diferencial acoplado em referenciais diferentes, e que cada parâmetro físico de projeto desloca o polo modal de forma matematicamente transparente.</span></a></div></section></article></main>
+<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;parametros-adimensionais-esteira-rotores&quot;, &quot;title&quot;: &quot;Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>

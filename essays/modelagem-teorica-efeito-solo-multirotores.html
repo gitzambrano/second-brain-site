@@ -1,0 +1,1001 @@
+<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle."><title>Modelagem Teórica do Efeito Solo em Multirotores — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="Modelagem Teórica do Efeito Solo em Multirotores"><meta property="og:description" content="A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Modelagem Teórica do Efeito Solo em Multirotores"><meta name="twitter:description" content="A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
+<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
+<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>Modelagem Teórica do Efeito Solo em Multirotores</h1><hr class="cover-rule"><p class="article-summary">A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle.</p><div class="article-meta"><span>Atualizado 2026-08-25</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Aerodinâmica</span><span class="tag">Dinâmica-de-Voo</span><span class="tag">Efeito-Solo</span><span class="tag">Engenharia</span></div></div></div></header><div class="prose" id="articleBody"><h2 id="resumo">Resumo</h2>
+<p>A predição da interação aerodinâmica com o solo (<em><a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">In-Ground
+Effect</a></em> — IGE) é um requisito crítico no desenvolvimento de leis
+de controle para aeronaves <a
+href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOL</a>.
+Este documento persegue três objetivos centrais.</p>
+<p>O <strong>primeiro objetivo</strong> é comparar o efeito solo em
+arquiteturas de asa fixa e asa rotativa, identificando os mecanismos
+físicos distintos de cada topologia de esteira e demonstrando que,
+apesar das formulações analíticas aparentemente divergentes, ambas as
+arquiteturas convergem para o mesmo resultado assintótico em alta
+velocidade: o enfraquecimento progressivo do campo induzido até a
+anulação do efeito solo.</p>
+<p>O <strong>segundo objetivo</strong> é derivar, a partir dos primeiros
+princípios do <a
+href="https://en.wikipedia.org/wiki/Potential_flow">escoamento
+potencial</a> e do modelo clássico de Cheeseman &amp; Bennett (1955),
+uma formulação generalizada para uma matriz arbitrária de <span
+class="math inline">\(N\)</span> rotores operando em voo de
+<em>hover</em> e transição com velocidade de avanço <span
+class="math inline">\(V\)</span>. A generalização é fundamentada no
+princípio de superposição de potenciais (<em>Potential Flow
+Interaction</em> — PFI), preservando coerência com a conservação de
+vazão mássica de Glauert [2].</p>
+<p>O <strong>terceiro objetivo</strong> é compreender como a velocidade
+de avanço introduz uma assimetria de tração entre os rotores dianteiros
+e traseiros quando em efeito solo, quantificando o diferencial de empuxo
+<span class="math inline">\(\Delta T\)</span> em função de <span
+class="math inline">\(V/v_i\)</span> e analisando seu impacto na
+derivada de estabilidade em velocidade <span
+class="math inline">\(C_{M_u}\)</span> — em particular, o mecanismo pelo
+qual <span class="math inline">\(C_{M_u}\)</span> pode inverter de sinal
+e gerar um momento de arfagem não comandado em aeronaves multirotores
+durante a transição próxima ao solo.</p>
+<hr />
+<h2 id="introdução">Introdução</h2>
+<p>Na década de 1950, com o amadurecimento dos <a
+href="https://en.wikipedia.org/wiki/Helicopter">helicópteros</a>,
+tornou-se imperativo quantificar o ganho de empuxo durante operações
+próximas ao solo. O solo impõe uma condição de contorno de
+não-penetração que obriga a esteira do rotor a desacelerar e expandir,
+aumentando a pressão estática sob o disco e reduzindo a <a
+href="https://en.wikipedia.org/wiki/Induced_drag">potência induzida</a>
+necessária para sustentar a aeronave.</p>
+<p>Em 1955, I. C. Cheeseman e A. S. Bennett publicaram o trabalho
+seminal <em>“The Effect of the Ground on a Helicopter Rotor in Forward
+Flight”</em>. O modelo utilizou a Teoria do <a
+href="https://en.wikipedia.org/wiki/Potential_flow">Escoamento
+Potencial</a> e o <a
+href="https://en.wikipedia.org/wiki/Method_of_images">Método das
+Imagens</a> para obter uma solução analítica fechada, eliminando a
+necessidade de integrações numéricas do campo de vórtices. O resultado
+foi uma única equação escalar que relaciona o ganho de empuxo IGE à
+altura normalizada e ao ângulo de inclinação da esteira
+(<em>skew</em>).</p>
+<p>Com o advento das arquiteturas <a
+href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOL</a>
+com <strong><a
+href="https://en.wikipedia.org/wiki/Distributed_electric_propulsion">Propulsão
+Elétrica Distribuída</a></strong> (PED), aplicar a equação de 1955
+isoladamente a cada rotor ignora as interferências cruzadas entre
+esteiras adjacentes (o <em>fountain effect</em>). O desafio moderno
+reside em generalizar a física clássica para <span
+class="math inline">\(N\)</span> rotores operando em qualquer regime de
+velocidade, mantendo o rigor das equações governantes originais.
+Adicionalmente, a presença de fileiras dianteiras e traseiras de
+rotores, com dinâmicas de esteira distintas próximas ao solo, introduz
+uma assimetria de tração com consequências para a estabilidade
+longitudinal.</p>
+<p><strong>Escopo:</strong> o modelo desenvolvido é válido em todo o
+envelope de voo próximo ao solo, desde o <em>hover</em> estático (<span
+class="math inline">\(V = 0\)</span>) até o voo de transição (<span
+class="math inline">\(V &gt; 0\)</span>). A hipótese fundamental é a
+linearidade do escoamento potencial (<a
+href="https://en.wikipedia.org/wiki/Laplace%27s_equation">Equação de
+Laplace</a>), com a esteira representada por singularidades de campo
+distante.</p>
+<hr />
+<h2 id="princípio-físico-fundamental-conservação-de-momento">Princípio
+Físico Fundamental — Conservação de Momento</h2>
+<p>A geração de força vertical obedece à <a
+href="https://en.wikipedia.org/wiki/Momentum#Conservation">conservação
+de momento linear</a> no volume de controle. Pela <a
+href="https://en.wikipedia.org/wiki/Momentum_theory">Teoria do Disco
+Atuador</a>, a velocidade induzida para baixo pelo disco é <span
+class="math inline">\(v_i\)</span> e a velocidade na esteira distante é
+<span class="math inline">\(2v_i\)</span> (a esteira acelera
+progressivamente do disco até o campo distante). A variação total de
+momento do escoamento é, portanto, <span class="math inline">\(\dot{m}
+\cdot 2v_i\)</span>:</p>
+<p><span class="math display">\[F = \dot{m} \cdot 2v_i
+\tag{1}\]</span></p>
+<p>onde <span class="math inline">\(\dot{m} = \rho A U_0\)</span> é a
+vazão mássica que atravessa a superfície sustentadora, <span
+class="math inline">\(A = \pi R^2\)</span> é a área do disco, <span
+class="math inline">\(V\)</span> é a velocidade de avanço da aeronave e
+<span class="math inline">\(U_0 = \sqrt{V^2 + v_i^2}\)</span> é a
+velocidade total resultante no disco — composta pela velocidade de
+avanço <span class="math inline">\(V\)</span> e pela velocidade induzida
+<span class="math inline">\(v_i\)</span>. No caso particular do
+<em>hover</em> estático, <span class="math inline">\(V = 0\)</span>,
+portanto <span class="math inline">\(U_0 = v_i\)</span> e <span
+class="math inline">\(\dot{m} = \rho A v_i\)</span>. Impondo <span
+class="math inline">\(F = T = W\)</span>:</p>
+<p><span class="math display">\[W = \rho A v_i \cdot 2v_i = 2\rho A
+v_i^2\]</span></p>
+<p>Isolando <span class="math inline">\(v_i\)</span>, obtém-se a
+velocidade induzida de referência em <em>hover</em> no espaço livre
+(<em>Out-of-Ground Effect</em> — OGE):</p>
+<p><span class="math display">\[v_{i,\infty} = \sqrt{\frac{T}{2\rho A}}
+\tag{1a}\]</span></p>
+<p>Esta grandeza representa a velocidade induzida de referência para o
+caso de <em>hover</em> fora do efeito solo, e aparece como denominador
+natural de adimensionalização em toda a teoria subsequente. Note que a
+grandeza adimensional correspondente é <span
+class="math inline">\(\lambda_i = v_i / v_\text{tip}\)</span>, onde
+<span class="math inline">\(v_\text{tip} = \Omega R\)</span> é a
+velocidade de ponta de pá. Qualquer redução de <span
+class="math inline">\(v_i\)</span> imposta pelo solo traduz-se
+diretamente em ganho de empuxo a potência constante. Para uma derivação
+detalhada da Teoria do Disco Atuador e das grandezas de indução
+associadas, consulte Johnson [7] e Stepniewski &amp; Keys [8].</p>
+<p>Para manter o voo nivelado sustentado (<span class="math inline">\(F
+= W\)</span>), à medida que a velocidade de avanço <span
+class="math inline">\(V\)</span> aumenta, a taxa de massa <span
+class="math inline">\(\dot{m}\)</span> que interage com a aeronave
+cresce substancialmente. Com <span class="math inline">\(W\)</span>
+constante, a superfície sustentadora deve impor uma velocidade induzida
+<span class="math inline">\(v_i\)</span> progressivamente menor ao
+fluido para manter o mesmo momento linear.</p>
+<ul>
+<li><strong>Na asa fixa:</strong> este aumento de fluxo de massa se
+reflete na necessidade de reduzir o ângulo de ataque para se manter em
+voo nivelado.</li>
+<li><strong>Na asa rotativa:</strong> este aumento de fluxo de massa se
+reflete na necessidade de reduzir o ângulo de passo das pás para se
+manter em voo nivelado.</li>
+</ul>
+<p>A modelagem analítica do efeito solo difere entre asa fixa e rotativa
+fundamentalmente por como a geometria da esteira é construída para
+refletir essa redução de indução. As seções seguintes tratam cada
+arquitetura separadamente antes de unificá-las.</p>
+<hr />
+<h2 id="asa-fixa-esteira-em-ferradura-e-efeito-solo">Asa Fixa — Esteira
+em Ferradura e Efeito Solo</h2>
+<h3 id="modelagem-da-esteira">Modelagem da Esteira</h3>
+<p>Na asa fixa, a capacidade de gerar força é adimensionalizada pela
+pressão dinâmica do escoamento livre. Adota-se a seguinte notação ao
+longo desta seção: <span class="math inline">\(S_w\)</span> é a área da
+asa, <span class="math inline">\(AR\)</span> é a razão de aspecto (<span
+class="math inline">\(AR = b^2/S_w\)</span>, com <span
+class="math inline">\(b\)</span> a envergadura), e <span
+class="math inline">\(a_0 = dC_L/d\alpha\)</span> é o coeficiente de
+sustentação por unidade de ângulo de ataque do perfil bidimensional:</p>
+<p><span class="math display">\[L = \frac{1}{2} \rho V^2 S_w \, C_L
+\tag{2}\]</span></p>
+<p>A esteira aerodinâmica de uma asa fixa é modelada topologicamente
+como um sistema de <strong><a
+href="https://en.wikipedia.org/wiki/Horseshoe_vortex">vórtices em
+ferradura</a></strong> (<em>horseshoe vortex</em>): um vórtice ligado
+coincidente com a linha elástica da asa e dois vórtices de fuga
+semi-infinitos que se estendem a jusante, com intensidade espelhando a
+distribuição de circulação <span class="math inline">\(\Gamma\)</span>
+ao longo da envergadura.</p>
+<p>O efeito solo é resolvido pelo <strong>Princípio das Imagens de
+Kelvin</strong>: um sistema de vórtices em ferradura idêntico é
+espelhado a uma distância vertical <span
+class="math inline">\(h_w\)</span> abaixo do solo (onde <span
+class="math inline">\(h_w\)</span> é a altura da linha elástica acima do
+solo). O campo de velocidades induzidas por este espelho gera um
+<em>upwash</em> no plano da asa real, reduzindo o <em>downwash</em>
+efetivo e mitigando o ângulo induzido. O incremento resultante no
+coeficiente de sustentação é:</p>
+<p><span class="math display">\[\Delta C_L = \frac{a_0 \, C_L \, (1 -
+\sigma)}{\pi \, AR} \tag{3}\]</span></p>
+<p>onde <span class="math inline">\(a_0 = dC_L/d\alpha\)</span> é a
+inclinação da curva de sustentação do perfil bidimensional, <span
+class="math inline">\(AR\)</span> é a razão de aspecto da asa e <span
+class="math inline">\(\sigma\)</span> é o <strong>fator de interferência
+do solo</strong>, que captura a redução do downwash efetivo imposta pela
+restrição de contorno. Em voo fora do efeito solo (<span
+class="math inline">\(h_w \to \infty\)</span>), tem-se <span
+class="math inline">\(\sigma \to 1\)</span> e <span
+class="math inline">\(\Delta C_L \to 0\)</span>: a presença do solo não
+altera a sustentação. À medida que a aeronave se aproxima do solo, <span
+class="math inline">\(\sigma\)</span> decresce e <span
+class="math inline">\(\Delta C_L\)</span> cresce. O fator <span
+class="math inline">\(\sigma\)</span> é função da altura normalizada
+<span class="math inline">\(h_w / b\)</span> e apresenta a seguinte
+forma funcional:</p>
+<p><span class="math display">\[\sigma =
+\sigma\!\left(\frac{h_w}{b}\right)\]</span></p>
+<p>empiricamente bem aproximada por uma expressão do tipo exponencial
+decrescente em <span class="math inline">\(h_w/b\)</span>. O incremento
+<span class="math inline">\(\Delta C_L\)</span> é proporcional a <span
+class="math inline">\(C_L\)</span> (quanto maior a circulação, maior o
+benefício do espelho) e inversamente proporcional a <span
+class="math inline">\(\pi \, AR\)</span> (asas de maior razão de aspecto
+distribuem a vorticidade ao longo de uma maior envergadura, tornando o
+campo de cada vórtice de fuga menos intenso localmente).</p>
+<h3 id="a-ausência-do-ground-vortex">A Ausência do <em>Ground
+Vortex</em></h3>
+<p>A asa fixa <strong>nunca</strong> opera em velocidades próximas de
+zero (<span class="math inline">\(V \approx 0\)</span>). Sua velocidade
+mínima operacional (<span class="math inline">\(V_\text{stall}\)</span>)
+garante que a pressão dinâmica do escoamento livre seja sempre ordens de
+grandeza superior à componente de velocidade induzida lançada à frente.
+Consequentemente, a esteira nasce e permanece sempre governada pela
+convecção a jusante, sem estagnação frontal nem acúmulo de vorticidade
+sob a aeronave.</p>
+<h3 id="colapso-em-alta-velocidade">Colapso em Alta Velocidade</h3>
+<p>Como <span class="math inline">\(V^2\)</span> cresce quadraticamente,
+a restrição <span class="math inline">\(L = W\)</span> impõe:</p>
+<p><span class="math display">\[C_L = \frac{2W}{\rho V^2 S_w}
+\xrightarrow{V \to \infty} 0\]</span></p>
+<p>Pelo <a
+href="https://en.wikipedia.org/wiki/Kutta%E2%80%93Joukowski_theorem">teorema
+de Kutta-Joukowski</a> (<span class="math inline">\(L = \rho V \Gamma
+b\)</span>), o colapso de <span class="math inline">\(C_L\)</span>
+implica <span class="math inline">\(\Gamma \to 0\)</span>. O sistema de
+ferradura perde sua intensidade e o espelho no solo passa a refletir uma
+perturbação de magnitude nula. O efeito solo desaparece pelo
+enfraquecimento progressivo da esteira.</p>
+<hr />
+<h2 id="asa-rotativa-o-modelo-de-cheeseman-bennett">Asa Rotativa — O
+Modelo de Cheeseman &amp; Bennett</h2>
+<h3
+id="singularidades-dipolos-e-a-aproximação-por-fonte-simples">Singularidades
+— Dipolos e a Aproximação por Fonte Simples</h3>
+<p>No formalismo do <a
+href="https://en.wikipedia.org/wiki/Potential_flow">escoamento
+potencial</a> irrotacional, a perturbação aerodinâmica gerada por um
+disco de rotor é classicamente representada por uma malha de <strong><a
+href="https://en.wikipedia.org/wiki/Doublet_(potential_flow)">dipolos</a></strong>.
+Um dipolo aerodinâmico é o limite matemático de uma <a
+href="https://en.wikipedia.org/wiki/Point_source_(fluid_dynamics)">fonte
+e um sumidouro</a> infinitamente próximos. Uma distribuição superficial
+de dipolos sobre um disco modela com exatidão o salto de pressão <span
+class="math inline">\(\Delta P\)</span> através do rotor, sendo
+matematicamente equivalente a uma malha de anéis de vorticidade. O
+tratamento detalhado da teoria de disco atuador e do formalismo de
+escoamento potencial aplicado a rotores pode ser encontrado em Leishman
+[5], Johnson [7] e Stepniewski &amp; Keys [8].</p>
+<p>Cheeseman &amp; Bennett aplicaram uma <strong>aproximação de campo
+distante</strong> (análoga ao Princípio de Saint-Venant): para alturas
+típicas (<span class="math inline">\(Z \geq R\)</span>), a vazão mássica
+macroscópica que o rotor impulsiona contra o solo é representada por uma
+<strong>única fonte pontual tridimensional</strong> (monopolo),
+localizada no cubo do rotor. A intensidade volumétrica dessa fonte deve
+conservar a vazão da Teoria do Momento:</p>
+<p><span class="math display">\[Q = \pi R^2 U_0 \tag{4}\]</span></p>
+<p>onde <span class="math inline">\(V\)</span> é a velocidade de avanço
+da aeronave, <span class="math inline">\(v_i\)</span> é a velocidade
+induzida para baixo pelo disco e <span class="math inline">\(U_0 =
+\sqrt{V^2 + v_i^2}\)</span> é a <strong>velocidade total resultante no
+disco</strong> — e não apenas a componente induzida <span
+class="math inline">\(v_i\)</span> — porque em voo de translação o rotor
+impulsiona o fluido na direção do vetor resultante do escoamento, e é
+essa velocidade que determina a vazão volumétrica macroscópica cruzando
+o disco. A utilização de <span class="math inline">\(U_0\)</span> em vez
+de <span class="math inline">\(v_i\)</span> é uma consequência direta da
+teoria de Glauert para discos atuadores em escoamento oblíquo e garante
+a conservação de massa para qualquer ângulo de <em>skew</em> <span
+class="math inline">\(\chi\)</span>.</p>
+<h3
+id="o-método-das-imagens-a-cinemática-do-skew-e-a-dedução-do-fator-de-interferência-s">O
+Método das Imagens, a Cinemática do Skew e a Dedução do Fator de
+Interferência S</h3>
+<p>Para impor a condição de não-penetração no plano do solo, espelha-se
+a distribuição aerodinâmica pelo método das imagens. Se o rotor (fonte)
+está a uma altura <span class="math inline">\(Z\)</span>, introduz-se
+uma fonte-imagem de intensidade idêntica <span
+class="math inline">\(Q\)</span> a uma profundidade <span
+class="math inline">\(-Z\)</span>, de modo que a distância vertical
+entre fonte real e imagem é <span class="math inline">\(2Z\)</span>.</p>
+<p><strong>No voo pairado (<span class="math inline">\(V =
+0\)</span>):</strong> a esteira desce verticalmente e a fonte-imagem
+está diretamente abaixo do rotor. A distância é puramente vertical:
+<span class="math inline">\(d = 2Z\)</span>.</p>
+<p><strong>No voo à frente (<span class="math inline">\(V &gt;
+0\)</span>):</strong> a esteira é varrida para trás com um ângulo de
+inclinação <span class="math inline">\(\chi\)</span> (<em>skew
+angle</em>), definido como o ângulo entre o eixo do disco (vertical) e o
+vetor de velocidade resultante <span class="math inline">\(U_0\)</span>.
+A velocidade resultante no disco é:</p>
+<p><span class="math display">\[U_0 = \sqrt{V^2 + v_i^2}
+\tag{5}\]</span></p>
+<p>e o ângulo de <em>skew</em> obedece a:</p>
+<p><span class="math display">\[\tan \chi = \frac{V}{v_i}
+\tag{6}\]</span></p>
+<p>O tempo para a esteira atingir o solo é <span class="math inline">\(t
+= Z/v_i\)</span>. Durante esse tempo, ela translada horizontalmente uma
+distância <span class="math inline">\(\Delta x = V \cdot t = Z(V/v_i) =
+Z \tan \chi\)</span>. Como a fonte-imagem deve refletir simetricamente o
+ponto de estagnação da esteira defletida (percurso de ida e volta), o
+deslocamento horizontal da imagem é o <strong>dobro</strong>:</p>
+<p><span class="math display">\[x_{\text{imagem}} = 2Z \tan \chi = 2Z
+\frac{V}{v_i} \tag{7}\]</span></p>
+<p>A fonte-imagem deslocada induz uma perturbação tridimensional no
+disco do rotor real. Para uma fonte pontual de intensidade <span
+class="math inline">\(Q\)</span> no espaço livre, a velocidade radial no
+campo distante decai com o quadrado da distância:</p>
+<p><span class="math display">\[u_r = \frac{Q}{4\pi d^2}
+\tag{8}\]</span></p>
+<p>O fator <span class="math inline">\(4\pi\)</span> provém da integral
+da velocidade normal sobre uma esfera de raio <span
+class="math inline">\(d\)</span> centrada na fonte (<span
+class="math inline">\(\oint u_r \, dA = Q\)</span>). A distância
+euclidiana entre o rotor real e a sua fonte-imagem deslocada é composta
+por dois termos: o deslocamento horizontal <span
+class="math inline">\(2Z\tan\chi\)</span> dado pela Eq. (7), e a
+separação vertical <span class="math inline">\(2Z\)</span> entre o rotor
+real (altura <span class="math inline">\(+Z\)</span>) e sua imagem
+(profundidade <span class="math inline">\(-Z\)</span>):</p>
+<p><span class="math display">\[d^2 = (2Z \tan \chi)^2 + (2Z)^2 = 4Z^2
+(\tan^2\chi + 1) \tag{9}\]</span></p>
+<p>Pela identidade trigonométrica fundamental <span
+class="math inline">\(\tan^2\chi + 1 = 1/\cos^2\chi\)</span>,
+obtém-se:</p>
+<p><span class="math display">\[d^2 = \frac{4Z^2}{\cos^2\chi}
+\tag{10}\]</span></p>
+<p>Definindo o fator adimensional <span class="math inline">\(S = \Delta
+U / U_0\)</span> (redução fracional da velocidade resultante no disco),
+e substituindo <span class="math inline">\(Q = \pi R^2 U_0\)</span> da
+Eq. (4) em (8):</p>
+<p><span class="math display">\[\Delta U = \frac{Q}{4\pi d^2} =
+\frac{\pi R^2 U_0}{4\pi d^2} = \frac{R^2 U_0}{4 d^2}\]</span></p>
+<p>O fator <span class="math inline">\(4\pi\)</span> cancela com <span
+class="math inline">\(\pi\)</span> de <span
+class="math inline">\(Q\)</span>, deixando:</p>
+<p><span class="math display">\[S = \frac{\Delta U}{U_0} = \frac{R^2}{4
+d^2}\]</span></p>
+<p>Substituindo <span class="math inline">\(d^2 =
+4Z^2/\cos^2\chi\)</span> de (10) e reconhecendo que <span
+class="math inline">\(\cos^2\chi = v_i^2/(V^2 + v_i^2)\)</span>,
+chega-se à equação publicada por Cheeseman &amp; Bennett:</p>
+<p><span class="math display">\[\boxed{S(V, Z) = \frac{R^2}{16Z^2}
+\cos^2\chi = \frac{R^2}{16Z^2} \cdot \frac{v_i^2}{V^2 + v_i^2}}
+\tag{11}\]</span></p>
+<p>O fator <span class="math inline">\(\cos^2\chi\)</span> surge
+puramente da geometria euclidiana do vetor de deslocamento da imagem,
+unificando a cinemática da esteira e a conservação de massa de Glauert.
+No limite <span class="math inline">\(V \to 0\)</span>, tem-se <span
+class="math inline">\(\cos \chi \to 1\)</span> e a equação reduz-se ao
+caso clássico de <em>hover</em>:</p>
+<p><span class="math display">\[S(0, Z) = \frac{R^2}{16Z^2}
+\tag{12}\]</span></p>
+<p>A razão de empuxo IGE/OGE é derivada pela Teoria do Momento em
+<em>hover</em> estático, regime no qual <span class="math inline">\(T =
+2\rho A v_i^2\)</span> (combinando Eq. (1) com <span
+class="math inline">\(\dot{m} = \rho A v_i\)</span> para <span
+class="math inline">\(V = 0\)</span>). O solo reduz a velocidade
+induzida para <span class="math inline">\(v_i&#39; = v_i(1-S)\)</span>;
+para manter <span class="math inline">\(T\)</span> constante, o rotor
+deve compensar com passo coletivo, de modo que a relação de empuxo
+é:</p>
+<p><span class="math display">\[\frac{T_g}{T_\infty} =
+\frac{v_i^2}{v_i&#39;^2} = \frac{v_i^2}{v_i^2(1-S)^2} = \frac{1}{(1 -
+S)^2} \tag{13}\]</span></p>
+<blockquote>
+<p><strong>Nota sobre a aplicação em voo de transição:</strong> o
+argumento <span class="math inline">\(T \propto v_i^2\)</span> que
+fundamenta a Eq. (13) é exato apenas no <em>hover</em> (<span
+class="math inline">\(V = 0\)</span>), onde <span
+class="math inline">\(\dot{m} = \rho A v_i\)</span>. Em voo de
+translação, a relação da Teoria do Momento torna-se <span
+class="math inline">\(T = 2\rho A U_0 v_i\)</span>, introduzindo uma
+dependência adicional em <span class="math inline">\(U_0\)</span>. No
+entanto, a estrutura da Eq. (13) permanece utilizada no modelo de
+Cheeseman &amp; Bennett para todo o envelope de <em>hover</em> e
+transição, porque o efeito do solo é capturado integralmente pelo fator
+<span class="math inline">\(S(V, Z)\)</span>, que já incorpora a
+cinemática de translação através de <span
+class="math inline">\(\cos^2\chi = v_i^2/(V^2 + v_i^2)\)</span>. A
+expressão <span class="math inline">\(1/(1-S)^2\)</span> deve portanto
+ser interpretada como o ganho de empuxo relativo induzido pelo solo,
+válido em todo o regime desde que <span class="math inline">\(S \ll
+1\)</span> (campo distante) — condição satisfeita para <span
+class="math inline">\(Z \geq R\)</span>.</p>
+</blockquote>
+<p>Combinando as Eqs. (11) e (13), e usando <span
+class="math inline">\(Z\)</span> consistentemente como altura do rotor
+acima do solo, obtém-se a formulação completa de Cheeseman &amp; Bennett
+para voo de <em>hover</em> e transição com velocidade de avanço <span
+class="math inline">\(V\)</span>:</p>
+<p><span class="math display">\[\frac{T_\text{IGE}}{T_\text{OGE}} =
+\frac{1}{\left(1 - \dfrac{R^2}{16Z^2} \cdot \dfrac{1}{1 +
+(V/v_i)^2}\right)^2} \tag{15}\]</span></p>
+<p>No <em>hover</em> (<span class="math inline">\(V = 0\)</span>), a
+fonte espelho está alinhada na vertical, representando a condição de
+estagnação. À medida que <span class="math inline">\(V/v_i\)</span>
+cresce, o modelo traduz o <em>blow-back</em> como o deslocamento
+longitudinal progressivo da fonte espelho, reduzindo seu impacto
+indutivo sobre o disco atuador.</p>
+<h3 id="adimensionalização-e-controle-do-rotor">Adimensionalização e
+Controle do Rotor</h3>
+<p>O coeficiente de empuxo <span class="math inline">\(C_T\)</span> é o
+coeficiente adimensional que relaciona a tração ao quadrado da
+velocidade tangencial das pás (<span class="math inline">\(\Omega
+R\)</span>) e à área do disco <span class="math inline">\(A = \pi
+R^2\)</span>:</p>
+<p><span class="math display">\[T = C_T \, \rho A \, (\Omega R)^2
+\tag{14}\]</span></p>
+<p>Para manter <span class="math inline">\(T = W\)</span> constante à
+medida que <span class="math inline">\(V\)</span> aumenta, o controle de
+voo impõe uma redução progressiva do passo coletivo <span
+class="math inline">\(\theta_0\)</span>, garantindo <span
+class="math inline">\(C_T\)</span> constante enquanto a velocidade
+induzida média <span class="math inline">\(v_i\)</span> diminui — em
+acordo com a relação <span class="math inline">\(v_{i,\infty} =
+\sqrt{T/(2\rho A)}\)</span> derivada na Seção 2.</p>
+<blockquote>
+<p><strong>Nota sobre controle em aeronaves de passo fixo:</strong> a
+análise acima assume que o passo coletivo <span
+class="math inline">\(\theta_0\)</span> é a variável de controle
+disponível. Em aeronaves sem controle de passo — como multirotores de
+passo fixo que regulam a tração exclusivamente pela rotação <span
+class="math inline">\(\Omega\)</span> — a compensação é feita pelo
+aumento de RPM. Nesse caso, <span class="math inline">\(C_T\)</span> não
+permanece constante com a velocidade de avanço: à medida que <span
+class="math inline">\(V\)</span> cresce e <span
+class="math inline">\(v_i\)</span> diminui, o disco atuador opera em
+condições diferentes e o <span class="math inline">\(C_T\)</span>
+efetivo aumenta. Este efeito deve ser considerado na modelagem do
+equilíbrio de forças e na síntese das leis de controle para aeronaves de
+passo fixo.</p>
+</blockquote>
+<h3 id="a-formação-do-ground-vortex-e-sua-codificação-no-modelo">A
+Formação do <em>Ground Vortex</em> e sua Codificação no Modelo</h3>
+<p>No <em>hover</em> estrito (<span class="math inline">\(V =
+0\)</span>), o <em>downwash</em> atinge o solo ortogonalmente, criando
+um ponto de estagnação de alta pressão e forçando o fluxo a se espalhar
+radialmente em um jato de parede (<em>wall jet</em>).</p>
+<p>Quando a aeronave adquire velocidade à frente (<span
+class="math inline">\(V &gt; 0\)</span>, mas reduzida), o escoamento
+livre frontal colide com a componente do jato de parede que se deslocava
+contra o vento. Essa colisão cria uma linha de separação que origina um
+<strong>vórtice em formato de ferradura</strong> — o <strong><em>Ground
+Vortex</em></strong> — à frente do disco do rotor.</p>
+<p>À medida que a aeronave acelera, a pressão dinâmica do escoamento
+livre supera o momento do jato de parede. O <em>Ground Vortex</em> é
+varrido (<em>blown back</em>) para a região de trás, desfazendo a zona
+de estagnação e dando lugar a uma esteira convectada a jusante.</p>
+<p>Diante da dificuldade de modelar analiticamente essa dinâmica
+complexa, Cheeseman &amp; Bennett adotaram a simplificação macroscópica
+via fonte espelho derivada nas seções anteriores. O modelo captura
+automaticamente a transição do estado de estagnação (<em>hover</em>)
+para a esteira varrida a jusante (transição) através do ângulo de
+<em>skew</em> <span class="math inline">\(\chi\)</span>, com <span
+class="math inline">\(\tan\chi = V/v_i\)</span>: no <em>hover</em>
+(<span class="math inline">\(V = 0\)</span>), a fonte-imagem está
+diretamente abaixo do rotor, representando a condição de estagnação; à
+medida que <span class="math inline">\(V/v_i\)</span> cresce, a imagem
+se desloca para trás segundo a Eq. (7), reduzindo progressivamente seu
+impacto indutivo sobre o disco — exatamente como o <em>blow-back</em>
+físico do <em>Ground Vortex</em> enfraquece o efeito solo com a
+velocidade. A Eq. (15) é, portanto, válida em todo o envelope de
+<em>hover</em> e transição.</p>
+<hr />
+<h2 id="generalização-para-arranjo-de-n-rotores-pfi">Generalização para
+Arranjo de N Rotores (PFI)</h2>
+<p>Uma arquitetura PED (como um eVTOL de 8 rotores) exige o mapeamento
+das interferências cruzadas entre esteiras. Sob a premissa de
+linearidade das equações de Laplace que regem o escoamento potencial,
+aplica-se o princípio de <strong>superposição de fontes</strong>
+(<em>Potential Flow Interaction</em> — PFI) [3].</p>
+<h3 id="coordenadas-e-deslocamento-das-fontes-imagem">Coordenadas e
+Deslocamento das Fontes-Imagem</h3>
+<p>Define-se um sistema de coordenadas fixo na fuselagem com o eixo
+<span class="math inline">\(x\)</span> apontando para o nariz da
+aeronave. Cada rotor <span class="math inline">\(j\)</span> está
+posicionado em <span class="math inline">\((x_j, y_j, Z)\)</span>. No
+voo à frente com velocidade <span class="math inline">\(V\)</span>, a
+esteira do rotor <span class="math inline">\(j\)</span> é varrida para
+trás: a sua fonte-imagem virtual recua horizontalmente por <span
+class="math inline">\(2Z(V/v_i)\)</span> na direção negativa de <span
+class="math inline">\(x\)</span>, ficando em:</p>
+<p><span class="math display">\[\tilde{x}_j = x_j - 2Z \frac{V}{v_i},
+\qquad \tilde{y}_j = y_j \tag{16}\]</span></p>
+<p>A distância euclidiana cruzada <span
+class="math inline">\(d_{ij}\)</span> entre a imagem do rotor <span
+class="math inline">\(j\)</span> e o disco do rotor <span
+class="math inline">\(i\)</span> é:</p>
+<p><span class="math display">\[d_{ij}^2 = (x_i - \tilde{x}_j)^2 + (y_i
+- \tilde{y}_j)^2 + (2Z)^2 \tag{17}\]</span></p>
+<p>onde o termo <span class="math inline">\((2Z)^2\)</span> é a
+separação vertical fixa entre qualquer disco real (altura <span
+class="math inline">\(+Z\)</span>) e qualquer imagem (profundidade <span
+class="math inline">\(-Z\)</span>). Expandindo explicitamente <span
+class="math inline">\((x_i - \tilde{x}_j) = (x_i - x_j +
+2ZV/v_i)\)</span>:</p>
+<p><span class="math display">\[d_{ij}^2 = \left(x_i - x_j + 2Z
+\frac{V}{v_i}\right)^2 + (y_i - y_j)^2 + 4Z^2 \tag{18}\]</span></p>
+<p>Note que o sinal do termo de deslocamento inverte entre (16) e (18):
+em (16) subtrai-se <span class="math inline">\(2ZV/v_i\)</span> de <span
+class="math inline">\(x_j\)</span>, mas em (18) aparece <span
+class="math inline">\(+2ZV/v_i\)</span> porque <span
+class="math inline">\(x_i - \tilde{x}_j = x_i - (x_j - 2ZV/v_i) = (x_i -
+x_j) + 2ZV/v_i\)</span>.</p>
+<p>Para o caso <span class="math inline">\(i = j\)</span> (contribuição
+da própria imagem), com <span class="math inline">\(x_i - x_j =
+0\)</span> e <span class="math inline">\(y_i - y_j = 0\)</span>:</p>
+<p><span class="math display">\[d_{ii}^2 = 4Z^2\left(\frac{V^2}{v_i^2} +
+1\right) = \frac{4Z^2}{\cos^2\chi}\]</span></p>
+<p>recuperando exatamente a geometria de (10).</p>
+<h3 id="o-fator-de-interação-generalizado">O Fator de Interação
+Generalizado</h3>
+<p>Aplicando a métrica de campo tridimensional de Glauert acoplada ao
+princípio de superposição, a redução fracional da velocidade induzida no
+rotor <span class="math inline">\(i\)</span> é o somatório das
+contribuições da velocidade induzida pela imagem de todos os <span
+class="math inline">\(N\)</span> rotores — cada uma decaindo como <span
+class="math inline">\(d_{ij}^{-2}\)</span> conforme a Eq. (8), com o
+fator <span class="math inline">\(R^2/4\)</span> proveniente do
+cancelamento de <span class="math inline">\(\pi\)</span> entre <span
+class="math inline">\(Q = \pi R^2 U_0\)</span> e <span
+class="math inline">\(4\pi d^2\)</span>:</p>
+<p><span class="math display">\[S_i(V) = \frac{R^2}{4} \cdot
+\sum_{j=1}^{N} \frac{1}{d_{ij}^2} \tag{19}\]</span></p>
+<p>ou, de forma compacta:</p>
+<p><span class="math display">\[\boxed{S_i(V) = \frac{R^2}{4} \cdot
+\sum_{j=1}^{N} d_{ij}^{-2}} \tag{20}\]</span></p>
+<p>A razão de empuxo IGE/OGE para o rotor <span
+class="math inline">\(i\)</span> é então:</p>
+<p><span class="math display">\[\left(\frac{T_g}{T_\infty}\right)_i =
+\frac{1}{(1 - S_i)^2} \tag{21}\]</span></p>
+<p>O empuxo total efetivo do arranjo, assumindo potência distribuída
+uniformemente entre os <span class="math inline">\(N\)</span> atuadores,
+é a média:</p>
+<p><span
+class="math display">\[\left(\frac{T_g}{T_\infty}\right)_\text{total} =
+\frac{1}{N} \sum_{i=1}^{N} \frac{1}{(1 - S_i)^2} \tag{22}\]</span></p>
+<blockquote>
+<p><strong>Limites do modelo PFI e o <em>Fountain Effect</em>:</strong>
+a Eq. (20) é construída sobre a hipótese de escoamento potencial linear
+(Equação de Laplace) com a esteira representada como perturbação de
+campo distante, em que cada contribuição decai como <span
+class="math inline">\(d_{ij}^{-2}\)</span>. Essa hipótese é válida para
+rotores suficientemente separados e alturas <span
+class="math inline">\(Z \geq R\)</span>. Em configurações de propulsão
+elétrica distribuída com espaçamento reduzido entre rotores, as esteiras
+descendentes de rotores adjacentes podem coalescer antes de atingir o
+solo, formando jatos ascendentes intensos entre os rotores — o
+<em>fountain effect</em>. Esse fenômeno envolve cisalhamento viscoso
+entre jatos adjacentes, separação de camada limite e recirculação:
+efeitos de campo próximo que <strong>não são capturados</strong> pela
+superposição de fontes de campo distante aqui utilizada. Recomendam-se
+simulações CFD ou ensaios experimentais para quantificar o <em>fountain
+effect</em> em configurações de alta interferência.</p>
+</blockquote>
+<hr />
+<h2 id="prova-de-consistência-matemática">Prova de Consistência
+Matemática</h2>
+<p>Um modelo generalizado deve recair sobre as soluções clássicas em
+seus casos-limite.</p>
+<h3 id="caso-limite-1-rotor-único-em-translação">Caso Limite 1 — Rotor
+Único em Translação</h3>
+<p>Para <span class="math inline">\(N = 1\)</span>, a somatória em (20)
+contém apenas o termo <span class="math inline">\(j = i\)</span>. Com
+<span class="math inline">\(x_i - x_j = 0\)</span> e <span
+class="math inline">\(y_i - y_j = 0\)</span>, e usando (18):</p>
+<p><span class="math display">\[d_{ii}^2 = \left(2Z
+\frac{V}{v_i}\right)^2 + 4Z^2 = 4Z^2(\tan^2\chi + 1) =
+\frac{4Z^2}{\cos^2\chi}\]</span></p>
+<p>Logo, aplicando Eq. (20):</p>
+<p><span class="math display">\[S(V, Z) = \frac{R^2}{4} \cdot
+\left(\frac{4Z^2}{\cos^2\chi}\right)^{-1} = \frac{R^2}{4} \cdot
+\frac{\cos^2\chi}{4Z^2} = \frac{R^2}{16Z^2}\cos^2\chi =
+\frac{R^2}{16Z^2} \cdot \frac{v_i^2}{V^2 + v_i^2}\]</span></p>
+<p>Substituindo em Eq. (13), recupera-se exatamente a equação completa
+de Cheeseman &amp; Bennett [1]:</p>
+<p><span class="math display">\[\boxed{\frac{T_\text{IGE}}{T_\text{OGE}}
+= \frac{1}{\left(1 - \dfrac{R^2}{16Z^2} \cdot \dfrac{v_i^2}{V^2 +
+v_i^2}\right)^2}} \quad \checkmark \tag{26}\]</span></p>
+<p>válida para qualquer razão <span class="math inline">\(V/v_i \geq
+0\)</span>, desde o <em>hover</em> estático até o voo de transição.</p>
+<h3 id="caso-limite-2-arranjo-de-n-rotores-em-hover">Caso Limite 2 —
+Arranjo de N Rotores em Hover</h3>
+<p>Com <span class="math inline">\(V = 0\)</span>, o deslocamento da
+imagem desaparece (<span class="math inline">\(\tilde{x}_j =
+x_j\)</span>). A distância cruzada reduz-se a:</p>
+<p><span class="math display">\[d_{ij}^2\big|_{V=0} = (x_i - x_j)^2 +
+(y_i - y_j)^2 + 4Z^2 = \rho_{ij}^2 + 4Z^2 \tag{23}\]</span></p>
+<p>onde <span class="math inline">\(\rho_{ij}\)</span> é a separação
+horizontal entre os rotores <span class="math inline">\(i\)</span> e
+<span class="math inline">\(j\)</span>. O fator de interação
+torna-se:</p>
+<p><span class="math display">\[S_i(0) = \frac{R^2}{4} \cdot \sum_{j}
+\left(\rho_{ij}^2 + 4Z^2\right)^{-1} \tag{24}\]</span></p>
+<p>que é idêntico ao modelo estático de superposição para
+<em>hover</em>. Para <span class="math inline">\(N = 1\)</span> e <span
+class="math inline">\(\rho_{11} = 0\)</span>, recupera-se o modelo
+escalar de Cheeseman &amp; Bennett para <em>hover</em> (<span
+class="math inline">\(V = 0\)</span>):</p>
+<p><span class="math display">\[S_1(0) = \frac{R^2}{4} \cdot (4Z^2)^{-1}
+= \frac{R^2}{16Z^2} \tag{25}\]</span></p>
+<p>e, substituindo em Eq. (13) com <span class="math inline">\(V =
+0\)</span>:</p>
+<p><span
+class="math display">\[\boxed{\frac{T_\text{IGE}}{T_\text{OGE}}\bigg|_{V=0}
+= \frac{1}{\left(1 - \dfrac{R^2}{16Z^2}\right)^2}} \quad \checkmark
+\tag{27}\]</span></p>
+<p>que é o resultado clássico de Cheeseman &amp; Bennett para o
+<em>hover</em> estático, caso particular de Eq. (26) com <span
+class="math inline">\(v_i^2/(V^2 + v_i^2) \to 1\)</span>.</p>
+<hr />
+<h2 id="estudo-de-caso-efeito-solo-estático-em-8-rotores">Estudo de Caso
+— Efeito Solo Estático em 8 Rotores</h2>
+<p>A Figura 1 apresenta a razão de empuxo <span
+class="math inline">\(T_g/T_\infty\)</span> em função da altura
+adimensional <span class="math inline">\(Z/R\)</span> para a
+configuração de 8 rotores distribuídos, comparada com as aproximações de
+rotor único equivalente e rotor único isolado. A subfigura inferior
+mostra a derivada espacial <span
+class="math inline">\(d(T_g/T_\infty)/d(Z/R)\)</span>, proporcional ao
+coeficiente de amortecimento de efeito solo no eixo vertical (<em>heave
+damping</em>).</p>
+<p>O <strong>rotor único equivalente</strong> é definido pela condição
+de conservação de área total: <span class="math inline">\(N\pi R^2 = \pi
+R_\text{eq}^2\)</span>, logo <span class="math inline">\(R_\text{eq} =
+R\sqrt{N}\)</span>. Essa representação trata toda a plataforma como uma
+única fonte de raio <span class="math inline">\(R_\text{eq}\)</span>, o
+que equivale a concentrar as <span class="math inline">\(N\)</span>
+fontes em um único ponto e ignorar sua distribuição espacial.</p>
+<p><img
+src="../assets/media/white_paper_modelagem_teorica_do_efeito_solo_em_multi_rotores_p14_img1.png"
+alt="Figura 1 — Efeito Solo Estático (V=0): razão de empuxo Tg/T∞ e derivada espacial para configuração de 8 rotores vs. aproximações por rotor único" />
+<em>Figura 1 — Efeito Solo Estático (<span class="math inline">\(V =
+0\)</span>): razão de empuxo <span
+class="math inline">\(T_g/T_\infty\)</span> e derivada espacial para
+configuração de 8 rotores vs. aproximações por rotor único. O rotor
+único equivalente superestima o ganho; o rotor isolado
+subestima.</em></p>
+<p>Três regimes distintos são observados [4]. Em alturas reduzidas
+(<span class="math inline">\(Z/R &lt; 2\)</span>), as interferências
+cruzadas entre as fontes-imagem dos 8 rotores produzem um ganho de
+efeito solo superior ao predito pelo rotor isolado, porém inferior ao
+rotor único equivalente — que, ao concentrar as fontes em um único
+ponto, superestima a intensidade do campo induzido. Em alturas
+intermediárias (<span class="math inline">\(2 &lt; Z/R &lt; 6\)</span>),
+as contribuições cruzadas dos vizinhos decaem segundo <span
+class="math inline">\(d_{ij}^{-2}\)</span> e a curva do arranjo de 8
+rotores converge progressivamente para o modelo de rotor único
+equivalente. Para <span class="math inline">\(Z/R &gt; 6\)</span>, as
+três curvas convergem e o efeito solo torna-se desprezível em todas as
+representações.</p>
+<p>A derivada espacial <span
+class="math inline">\(d(T_g/T_\infty)/d(Z/R)\)</span> é relevante para o
+projeto de leis de controle: seu valor absoluto define o <em>heave
+damping</em> aerodinâmico. O arranjo de 8 rotores apresenta um
+amortecimento de efeito solo que persiste a alturas consideravelmente
+maiores do que o predito pelo rotor isolado, indicando uma banda de
+influência do solo mais ampla do que a tipicamente assumida por modelos
+simplificados.</p>
+<hr />
+<h2
+id="convergência-física-em-alta-velocidade-asa-fixa-vs.-asa-rotativa">Convergência
+Física em Alta Velocidade — Asa Fixa vs. Asa Rotativa</h2>
+<p>A controvérsia clássica — de que um rotor em alta velocidade se
+assemelha a uma asa fixa circular e deveria reter um benefício de
+interferência geométrica contínua — resolve-se pela condição de contorno
+da dinâmica de voo. Em altas razões de avanço, ambos os modelos
+analíticos convergem para o mesmo resultado físico:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><strong>Asa Fixa (Prandtl)</strong></th>
+<th><strong>Asa Rotativa (Cheeseman)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mecanismo</strong></td>
+<td>Restrição <span class="math inline">\(L=W\)</span> força <span
+class="math inline">\(C_L \to 0\)</span></td>
+<td>Controle de voo reduz passo; <span class="math inline">\(v_i \to
+0\)</span></td>
+</tr>
+<tr>
+<td><strong>Resultado cinemático</strong></td>
+<td><span class="math inline">\(\Gamma \to 0\)</span></td>
+<td><span class="math inline">\(V/v_i \to \infty\)</span></td>
+</tr>
+<tr>
+<td><strong>Efeito no espelho</strong></td>
+<td>Reflete perturbação nula</td>
+<td>Imagem deslocada para <span class="math inline">\(-\infty\)</span> a
+jusante</td>
+</tr>
+<tr>
+<td><strong>Efeito solo</strong></td>
+<td>Desaparece</td>
+<td>Desaparece (<span class="math inline">\(T_\text{IGE}/T_\text{OGE}
+\to 1\)</span>)</td>
+</tr>
+</tbody>
+</table>
+<p>Em ambos os casos, a superfície aerodinâmica cessa de injetar momento
+vertical de grande magnitude no fluido, tornando irrelevante a
+proximidade do solo. O colapso do termo <span
+class="math inline">\(\Delta C_L\)</span> a zero na asa fixa e a
+convergência de <span class="math inline">\(T_\text{IGE}/T_\text{OGE}
+\to 1\)</span> no rotor representam a mesma realidade assintótica: o
+enfraquecimento progressivo do campo induzido até a atenuação completa
+do efeito solo.</p>
+<p>Faz todo sentido que ambas as arquiteturas convirjam para a mesma
+formulação matemática, porque esse é precisamente um resultado clássico
+da teoria de discos atuadores: <strong>em alta velocidade de avanço, uma
+asa rotativa é matematicamente análoga a uma asa fixa de envergadura
+<span class="math inline">\(b = 2R\)</span></strong>. Esse resultado,
+enraizado na análise de Glauert, pode ser compreendido fisicamente da
+seguinte forma: à medida que a razão de avanço <span
+class="math inline">\(\mu = V/(\Omega R)\)</span> cresce, a folha de
+vorticidade lançada pelo rotor — que no <em>hover</em> forma anéis
+concêntricos axissimétricos — se achata progressivamente no plano de
+simetria da aeronave. No limite <span class="math inline">\(\mu \gg
+1\)</span>, essa folha torna-se topologicamente indistinguível da
+esteira planar em ferradura de uma asa fixa de envergadura <span
+class="math inline">\(b = 2R\)</span>. A distribuição de circulação
+resultante ao longo das pás assume o perfil elíptico característico da
+asa de mínima resistência induzida de Prandtl [6], com a envergadura
+efetiva limitada pelo diâmetro do disco. É por isso que o modelo de
+Prandtl (ferradura de intensidade <span
+class="math inline">\(\Gamma\)</span>) e o modelo de Cheeseman (fonte
+espelho de intensidade <span class="math inline">\(Q \propto
+v_i\)</span>) não são apenas numericamente compatíveis no limite
+assintótico — eles <strong>descrevem o mesmo objeto físico</strong> sob
+bases de adimensionalização distintas.</p>
+<p>A aparente divergência entre os modelos de Prandtl e Cheeseman em
+velocidades intermediárias deriva exclusivamente de diferentes bases de
+adimensionalização e topologias de esteira — a ferradura de intensidade
+decrescente na asa fixa contra a fonte espelho deslocando-se a jusante
+na asa rotativa — e não de uma inconsistência física fundamental.</p>
+<hr />
+<h2
+id="assimetria-de-tração-e-estabilidade-longitudinal-em-efeito-solo">Assimetria
+de Tração e Estabilidade Longitudinal em Efeito Solo</h2>
+<p>A introdução do plano do solo altera não apenas o balanço de forças
+verticais, mas impõe perturbações significativas no equilíbrio de
+momentos longitudinais. O impacto físico manifesta-se de forma distinta
+entre uma configuração convencional de asa fixa (com empenagem) e uma
+arquitetura multi-rotor distribuída.</p>
+<h3 id="asa-fixa-mitigação-do-downwash-e-momento-picador">Asa Fixa —
+Mitigação do Downwash e Momento Picador</h3>
+<p>Na asa fixa, a estabilidade longitudinal estática é primariamente
+governada pela interação entre a asa principal e a empenagem horizontal.
+Define-se: <span class="math inline">\(V_H = l_t S_t / (\bar{c}
+S_w)\)</span> como o volume de cauda (com <span
+class="math inline">\(l_t\)</span> o braço de alavanca da empenagem,
+<span class="math inline">\(S_t\)</span> sua área e <span
+class="math inline">\(\bar{c}\)</span> a corda média aerodinâmica da
+asa); <span class="math inline">\(a_1 = dC_{L_t}/d\alpha_t\)</span> como
+a inclinação da curva de sustentação da empenagem. Fora de efeito solo
+(OGE), a asa deflete o escoamento para baixo por um ângulo induzido
+<span class="math inline">\(\epsilon\)</span> (<em>downwash angle</em>).
+A empenagem, imersa nessa esteira, enxerga um ângulo de ataque reduzido
+(convenção positivo para sustentação positiva, com <span
+class="math inline">\(i_w\)</span> e <span
+class="math inline">\(i_t\)</span> positivos para bordo de ataque acima
+da linha de referência):</p>
+<p><span class="math display">\[\alpha_t = \alpha_w - i_w + i_t -
+\epsilon \tag{28}\]</span></p>
+<p>onde <span class="math inline">\(i_w\)</span> e <span
+class="math inline">\(i_t\)</span> são os ângulos de incidência da asa e
+da cauda em relação à linha de referência da fuselagem.</p>
+<p>Ao entrar em efeito solo (IGE), a proximidade com a restrição de
+contorno restringe consideravelmente a deflexão do ar para baixo. O
+ângulo de <em>downwash</em> colapsa (<span
+class="math inline">\(\epsilon_\text{IGE} \ll
+\epsilon_\text{OGE}\)</span>). A empenagem passa a operar em um
+escoamento menos defletido, sofrendo um incremento no ângulo de ataque
+efetivo <span class="math inline">\(\alpha_t\)</span>. Este incremento
+gera um aumento de sustentação <span class="math inline">\(\Delta
+L_t\)</span> na cauda que, devido ao braço de alavanca até o centro de
+gravidade, resulta em um <strong>momento de arfagem negativo
+(picador)</strong>:</p>
+<p><span class="math display">\[\Delta C_{M_\text{IGE}} \propto -V_H \,
+\Delta C_{L_t} \tag{29}\]</span></p>
+<p><span class="math display">\[\Delta C_{M_{\alpha,\text{IGE}}} \propto
+-V_H \cdot a_1 \left(1 -
+\frac{d\epsilon}{d\alpha}\bigg|_\text{IGE}\right) \tag{30}\]</span></p>
+<p>Este momento picador induzido pelo solo representa um mecanismo de
+aumento de estabilidade estática — incremento do momento picador
+estabilizante via empenagem. A derivada <span
+class="math inline">\(C_{M_u}\)</span> permanece aproximadamente nula na
+asa fixa em efeito solo para voo nivelado estabilizado, pois a variação
+do <em>downwash</em> com a velocidade é de segunda ordem nesse
+regime.</p>
+<h3
+id="multi-rotor-dinâmica-de-tração-assimétrica-na-transição">Multi-rotor
+— Dinâmica de Tração Assimétrica na Transição</h3>
+<p>Em uma aeronave multi-rotor, o equilíbrio longitudinal é mantido pela
+modulação diferencial de tração entre os rotores. Fora de efeito solo
+(OGE) em voo à frente, a esteira do rotor dianteiro atravessa o disco do
+rotor traseiro, reduzindo sua eficiência. O rotor traseiro tipicamente
+demanda maior potência para igualar a tração do dianteiro — condição que
+contribui para a estabilidade em velocidade (<span
+class="math inline">\(C_{M_u} &gt; 0\)</span>).</p>
+<blockquote>
+<p><strong>Nota sobre instabilidade em tandem fora do efeito
+solo:</strong> mesmo fora do efeito solo, configurações de rotores em
+tandem podem apresentar uma região de instabilidade em velocidade em
+torno de <span class="math inline">\(\mu \approx 0{,}1\)</span>. O
+mecanismo físico é o seguinte: para razões de avanço muito baixas, o
+downwash do rotor dianteiro sobre o traseiro é ainda desprezível e o
+acoplamento entre as esteiras é fraco. Para razões de avanço elevadas, a
+queda de <span class="math inline">\(v_i\)</span> é pequena em valor
+absoluto, mas a esteira do dianteiro impacta progressivamente de forma
+mais direta o disco traseiro, aumentando a interferência. Na faixa
+intermediária, porém, o downwash do rotor dianteiro
+<strong>diminui</strong> com o aumento de <span
+class="math inline">\(\mu\)</span> — pois <span
+class="math inline">\(v_i\)</span> decresce à medida que a vazão mássica
+aumenta — e esse alívio de interferência sobre o rotor traseiro pode
+reduzir localmente a demanda diferencial de tração, invertendo
+temporariamente o sinal de <span class="math inline">\(C_{M_u}\)</span>.
+Esse fenômeno de instabilidade transitória em <span
+class="math inline">\(\mu \approx 0{,}1\)</span> deve ser considerado no
+projeto das leis de controle de aeronaves em tandem, mesmo em operação
+fora do efeito solo.</p>
+</blockquote>
+<p>Ao entrar em efeito solo (IGE) com velocidades de avanço reduzidas, a
+cinemática da esteira se modifica. O rotor dianteiro forma o <em>Ground
+Vortex</em>, que é progressivamente deslocado para a região de trás com
+o aumento de <span class="math inline">\(\mu\)</span> (razão de avanço
+<span class="math inline">\(\mu = V/(\Omega R)\)</span>). O rotor
+traseiro passa a operar imerso no campo de fluxo defletido e no campo de
+pressão estática suplementar gerado pelo bloqueio da esteira frontal. O
+resultado é que <strong>o rotor traseiro passa a operar com efeito solo
+superior ao do rotor dianteiro</strong>, gerando um momento de arfagem
+negativo.</p>
+<p>A Figura 2 quantifica este comportamento para a configuração de 8
+rotores, para três alturas de operação (<span class="math inline">\(Z/R
+= 1{,}0;\ 1{,}5;\ 2{,}0\)</span>):</p>
+<p><img
+src="../assets/media/white_paper_modelagem_teorica_do_efeito_solo_em_multi_rotores_p18_img2.png"
+alt="Figura 2 — Dinâmica de Efeito Solo na Transição Out-of-Hover: razão de empuxo normalizada para rotores dianteiros, traseiros e interação cruzada" />
+<em>Figura 2 — Dinâmica de Efeito Solo na Transição Out-of-Hover: razão
+de empuxo normalizada <span class="math inline">\(T_g/T_\infty\)</span>
+para rotores dianteiros, traseiros e interação cruzada, em função da
+velocidade normalizada <span
+class="math inline">\(V/v_i\)</span>.</em></p>
+<ul>
+<li><strong>Subfigura 1 — Rotores dianteiros:</strong> o ganho IGE
+decresce monotonicamente com <span class="math inline">\(V/v_i\)</span>,
+pois a imagem da própria esteira se desloca para trás.</li>
+<li><strong>Subfigura 2 — Rotores traseiros:</strong> apresentam um pico
+transiente de empuxo por volta de <span class="math inline">\(V/v_i
+\approx 1\)</span>, quando a esteira varrida dos rotores dianteiros —
+defletida para trás pelo efeito do skew — gera um campo de estagnação
+posicionado diretamente abaixo dos rotores traseiros, amplificando
+localmente o efeito solo nessa fileira.</li>
+<li><strong>Subfigura 3 — Interação cruzada longitudinal:</strong>
+sobrepõe as curvas de ambas as fileiras, evidenciando a assimetria
+crescente com <span class="math inline">\(V/v_i\)</span>.</li>
+<li><strong>Subfigura 4 — Assimetria aerodinâmica <span
+class="math inline">\(T_\text{tras}/T_\text{front}\)</span>:</strong> o
+pico desta razão corresponde ao momento de máximo desequilíbrio de
+arfagem (<em>pitch-down</em>).</li>
+</ul>
+<p>Em uma arquitetura com fileiras dianteiras e traseiras separadas por
+uma distância longitudinal <span class="math inline">\(\ell\)</span>
+(distância medida entre os eixos das fileiras), a velocidade de
+transição <span class="math inline">\(V^*\)</span> na qual a esteira
+varrida dos rotores frontais fica posicionada sob os rotores traseiros é
+dada por:</p>
+<p><span class="math display">\[2Z \frac{V^*}{v_i} = \ell \quad
+\Longrightarrow \quad V^* = \frac{\ell \, v_i}{2Z} \tag{31}\]</span></p>
+<p>Quando <span class="math inline">\(V = V^*\)</span>, o somatório
+<span class="math inline">\(S_i\)</span> nos rotores traseiros atinge o
+valor máximo, gerando o diferencial de empuxo <span
+class="math inline">\(\Delta T = T_\text{tras} - T_\text{front}\)</span>
+mais pronunciado e, consequentemente, o maior momento de arfagem
+negativo (<em>pitch-down</em>) não comandado.</p>
+<h3 id="derivada-cmu-e-o-mecanismo-de-inversão">Derivada CMu e o
+Mecanismo de Inversão</h3>
+<p>A derivada de estabilidade em velocidade <span
+class="math inline">\(C_{M_u}\)</span> é definida como:</p>
+<p><span class="math display">\[C_{M_u} = \frac{\partial C_M}{\partial
+(U/U_0)}\]</span></p>
+<p>onde <span class="math inline">\(C_M\)</span> é o coeficiente de
+momento de arfagem em torno do centro de gravidade e <span
+class="math inline">\(U_0\)</span> é a velocidade de referência. Valores
+<span class="math inline">\(C_{M_u} &lt; 0\)</span> indicam
+instabilidade em velocidade: um incremento de velocidade produz um
+momento de arfagem negativo (picador) que, sem correção, provoca
+aceleração adicional.</p>
+<p>A assimetria de tração acoplada à velocidade de avanço gera uma
+<strong>derivada de estabilidade em velocidade
+desestabilizadora</strong>: <span class="math inline">\(C_{M_u} &lt;
+0\)</span> (momento de arfagem negativo crescente com o incremento de
+<span class="math inline">\(\mu\)</span>).</p>
+<p>Considere o multi-rotor em IGE sob baixas velocidades submetido a uma
+perturbação de velocidade frontal. O mecanismo de realimentação positiva
+desdobra-se como se segue:</p>
+<ol type="1">
+<li><strong>Incremento de <span class="math inline">\(V\)</span> e <span
+class="math inline">\(\mu\)</span>:</strong> a perturbação frontal
+incrementa a velocidade aparente.</li>
+<li><strong>Deslocamento da esteira (<em>Blow back</em>):</strong> o
+incremento de <span class="math inline">\(\mu\)</span> avança o <em>wake
+skew</em> e o <em>Ground Vortex</em> para a região de trás, aumentando o
+campo de pressão sob o rotor traseiro.</li>
+<li><strong>Incremento assimétrico de tração:</strong> o rotor traseiro
+experimenta um aumento transiente de eficiência de efeito solo,
+produzindo maior tração vertical.</li>
+<li><strong>Desequilíbrio de momento:</strong> o diferencial de
+sustentação gera um momento de arfagem negativo (<span
+class="math inline">\(\Delta M &lt; 0\)</span>), alterando a atitude
+longitudinal.</li>
+<li><strong>Realimentação positiva:</strong> a atitude de nariz baixo
+inclina o vetor de tração total para a frente, produzindo aceleração
+linear. A velocidade <span class="math inline">\(V\)</span> aumenta,
+reiniciando o ciclo.</li>
+</ol>
+<p>Em contraste com o amortecimento aerodinâmico provido pela empenagem
+da asa fixa, o acoplamento diferencial de esteiras no multi-rotor
+resulta em uma redução ou inversão da estabilidade em velocidade,
+podendo induzir um processo divergente. A Eq. (31) fornece diretamente a
+velocidade de transição crítica à qual <span
+class="math inline">\(C_{M_u}\)</span> muda de sinal, permitindo que as
+leis de controle antecipem o desequilíbrio de arfagem.</p>
+<p>A assimetria de empuxo prevista pelo modelo PFI é determinística e
+computável em tempo real a partir de <span
+class="math inline">\(V\)</span>, <span class="math inline">\(Z\)</span>
+e da geometria do arranjo. Isso torna o diferencial <span
+class="math inline">\(\Delta T(V, Z)\)</span> diretamente utilizável
+como sinal de compensação em uma <strong>arquitetura de
+controle</strong> <strong><em>feed-forward</em></strong>: a lei de
+controle calcula a antecipação <span
+class="math inline">\(\Delta\theta_0 \propto \Delta T(V^*, Z)\)</span> e
+aplica o ajuste diferencial de passo coletivo ou RPM <em>antes</em> que
+o desequilíbrio de momento se manifeste na dinâmica de atitude. Em
+contraste com estratégias puramente realimentadas (<em>feedback</em>),
+que só corrigem o erro após ele ocorrer, a compensação
+<em>feed-forward</em> baseada no modelo PFI suprime o desequilíbrio na
+sua origem cinemática, reduzindo a excursão de atitude não comandada em
+velocidades próximas a <span class="math inline">\(V^*\)</span>.</p>
+<hr />
+<h2 id="referências">Referências</h2>
+<p>[1] Cheeseman, I. C., e Bennett, W. E., <em>The Effect of the Ground
+on a Helicopter Rotor in Forward Flight</em>, Aeronautical Research
+Council Reports and Memoranda, No. 3021, HMSO, London, 1955. —
+Referência seminal: derivou a equação fechada do ganho IGE em função da
+altura normalizada e do ângulo de skew da esteira. <a
+href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/3590">Link</a></p>
+<p>[2] Glauert, H., <em>The Elements of Aerofoil and Airscrew
+Theory</em>, Cambridge University Press, Cambridge, 1926. — Base da
+Teoria do Momento para discos atuadores em escoamento oblíquo. Fornece a
+relação de conservação de vazão mássica utilizada na derivação do fator
+<span class="math inline">\(\cos^2\chi\)</span>. <a
+href="https://archive.org/details/elementsofaerofo00glau">Link</a></p>
+<p>[3] Sanchez-Cuevas, P.; Heredia, G.; Ollero, A. <em>Multirotor UAS
+for Bridge Inspection by Contact Using the Ceiling Effect</em>,
+International Conference on Unmanned Aircraft Systems (ICUAS), Miami,
+IEEE, 2017. — Extensão experimental e analítica do modelo de Cheeseman
+&amp; Bennett para quadricópteros via superposição geométrica de
+potenciais — base da generalização PFI para <span
+class="math inline">\(N\)</span> rotores. <a
+href="https://doi.org/10.1109/ICUAS.2017.7991412">Link</a></p>
+<p>[4] Del Cont Bernard, D.; Giurato, M.; Riccardi, F.; Lovera, M.
+<em>Ground Effect Analysis for a Quadrotor Platform</em>, Advances in
+Aerospace Guidance, Navigation and Control, Springer, Cham, pp. 351–367,
+2018. — Campanha experimental em quadricóptero documentando o efeito
+solo para rotor isolado e plataforma completa, incluindo evidências
+experimentais das interações cruzadas entre esteiras em solo. <a
+href="https://doi.org/10.1007/978-3-319-65283-2_19">Link</a></p>
+<p>[5] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
+2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
+em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
+de batimento e teoria de esteira. <a
+href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
+<p>[6] Prandtl, L.; Tietjens, O. G., <em>Applied Hydro- and
+Aeromechanics</em>, Dover Publications, New York, 1957. — Fundamento da
+teoria da linha sustentadora e dos vórtices em ferradura aplicados à asa
+fixa. <a
+href="https://archive.org/details/in.ernet.dli.2015.205401">Link</a></p>
+<p>[7] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. — Tratamento moderno e abrangente de
+aeromecânica de rotores, incluindo teoria do disco atuador, modelos de
+esteira e dinâmica de indução. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+<p>[8] Stepniewski, W. Z.; Keys, C. N. <em>Rotary-Wing
+Aerodynamics</em>, Dover Publications, New York, 1984. — Referência
+clássica sobre aerodinâmica de aeronaves de asa rotativa, com tratamento
+sistemático da Teoria do Momento, distribuição de indução no disco e
+dinâmica de esteiras. Particularmente relevante para a modelagem do
+escoamento oblíquo e a análise do ângulo de <em>skew</em> em regimes de
+transição. <a
+href="https://archive.org/details/rotarywingaerody0000step">Link</a></p>
+</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="parametros-adimensionais-esteira-rotores.html"><strong>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</strong><span>Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</span></a><a class="related-card" href="efeito-da-solidez-em-rotores.html"><strong>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</strong><span>A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.</span></a><a class="related-card" href="ground-effect-asa-fixa-vs-rotativa.html"><strong>Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa</strong><span>A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe.</span></a></div></section></article></main>
+<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;modelagem-teorica-efeito-solo-multirotores&quot;, &quot;title&quot;: &quot;Modelagem Teórica do Efeito Solo em Multirotores&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>

@@ -1,0 +1,611 @@
+<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs."><title>White Paper - Dinâmica de Voo de um Rotor _Teetering_ Controlado por RPM — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="White Paper - Dinâmica de Voo de um Rotor _Teetering_ Controlado por RPM"><meta property="og:description" content="A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="White Paper - Dinâmica de Voo de um Rotor _Teetering_ Controlado por RPM"><meta name="twitter:description" content="A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
+<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
+<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>White Paper - Dinâmica de Voo de um Rotor _Teetering_ Controlado por RPM</h1><hr class="cover-rule"><p class="article-summary">A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</p><div class="article-meta"><span>Atualizado 2026-08-25</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Dinâmica-de-Voo</span><span class="tag">Rotores</span><span class="tag">Engenharia</span></div></div></div></header><div class="prose" id="articleBody"><p>Vamos considerar a dinâmica de malha aberta (<em>open-loop</em>) de
+um rotor <em>teetering</em> controlado exclusivamente por sua velocidade
+rotacional (<span class="math inline">\(\Omega\)</span>) em um
+escoamento livre com velocidade de avanço. Nesta arquitetura, o passo
+(<em>pitch</em>) das pás é fixo, e o mecanismo fundamental de controle
+depende inteiramente da modulação do RPM. Para compreender plenamente a
+dinâmica de voo resultante — e o acoplamento inerente entre tração
+(<em>thrust</em>), arfagem (<em>pitch</em>) e rolagem (<em>roll</em>) —
+é necessária uma análise rigorosa da interação entre as forças
+restauradoras inerciais e as assimetrias aerodinâmicas.</p>
+<p>Com base na compreensão aeromecânica desse rotor e sua influência na
+dinâmica malha aberta do veículo, poderemos extrapolar o entendimento
+para o veículo malha fechada como um todo, ou seja, compreender os
+desafios para leis de controle de uma configuração de rotores
+<em>teetering</em> de um eVTOL.</p>
+<hr />
+<h2 id="o-equilíbrio-base-inércia-versus-aerodinâmica">O Equilíbrio
+Base: Inércia versus Aerodinâmica</h2>
+<figure>
+<img src="../assets/media/pasted-image-20260418021233.png"
+alt="Teetering Forces" />
+<figcaption aria-hidden="true">Teetering Forces</figcaption>
+</figure>
+<figure>
+<img src="../assets/media/Flapping_Forces.png"
+alt="Teetering Flapping" />
+<figcaption aria-hidden="true">Teetering Flapping</figcaption>
+</figure>
+<p><strong>Visão Física:</strong></p>
+<p>Uma pá de rotor em um cubo <em>teetering</em> atua como um “pêndulo
+forçado”. À medida que gira, a massa da pá é submetida a um campo
+centrífugo. Essa tração para fora atua como uma mola inercial, tentando
+constantemente puxar a pá para que fique plana no plano de rotação.
+Opondo-se a essa mola estão as forças aerodinâmicas, que empurram a pá
+para cima ou para baixo com base no vento relativo local.</p>
+<p>Crucialmente, como a frequência da força aerodinâmica corresponde à
+frequência rotacional das pás, o rotor atua como um sistema rotativo
+operando em ressonância. Em qualquer sistema ressonante, o deslocamento
+máximo atrasa a função de força máxima em exatamente 90 graus (<em>phase
+lag</em>). Portanto, uma assimetria aerodinâmica que atinge o pico nas
+laterais do disco do rotor traduz-se fisicamente em um deslocamento
+máximo sobre o nariz e a cauda.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>A equação fundamental de movimento para o grau de liberdade de
+batimento (<em>flapping</em>) <span class="math inline">\(\beta\)</span>
+é governada pelo equilíbrio de momentos em torno da articulação
+<em>teetering</em>:</p>
+<p><span class="math display">\[I_\beta \ddot{\beta} + \Omega^2 I_\beta
+\beta = M_A\]</span></p>
+<p>A força centrífuga <span class="math inline">\(F_{CF}\)</span> em um
+elemento de massa diferencial <span class="math inline">\(dm\)</span> no
+raio <span class="math inline">\(r\)</span> é impulsionada pela
+velocidade rotacional:</p>
+<p><span class="math display">\[dF_{CF} = (\Omega^2 r) dm\]</span></p>
+<p>Quando a pá realiza o movimento de <em>flapping</em> para cima em um
+ângulo <span class="math inline">\(\beta\)</span>, essa força radial
+cria um momento restaurador <span class="math inline">\(M_{CF}\)</span>
+em torno da articulação. Integrando ao longo da envergadura obtemos o
+momento de enrijecimento centrífugo (<em>centrifugal
+stiffening</em>):</p>
+<p><span class="math display">\[M_{CF} = \int_0^R (\Omega^2 r)(\beta r)
+dm = \Omega^2 \beta \int_0^R r^2 dm = \Omega^2 I_\beta
+\beta\]</span></p>
+<p>Isso demonstra um princípio fundamental: <strong>o enrijecimento
+centrífugo é proporcional ao quadrado do RPM (<span
+class="math inline">\(\Omega^2\)</span>).</strong></p>
+<p>O momento de força aerodinâmica <span
+class="math inline">\(M_A\)</span> é impulsionado pela pressão dinâmica
+<span class="math inline">\(q = \frac{1}{2}\rho U_T^2\)</span>. A
+velocidade tangencial <span class="math inline">\(U_T\)</span> combina a
+rotação e a velocidade de avanço <span
+class="math inline">\(V\)</span>:</p>
+<p><span class="math display">\[U_T = \Omega r + V \sin\psi\]</span></p>
+<p>Portanto, a força de sustentação aerodinâmica em um elemento de pá é
+proporcional a <span class="math inline">\((\Omega r + V
+\sin\psi)^2\)</span>. A diferença na velocidade ao quadrado que
+impulsiona a assimetria entre a ponta da pá que avança (<span
+class="math inline">\(\psi = 90^\circ\)</span>) e a ponta que recua
+(<span class="math inline">\(\psi = 270^\circ\)</span>) é:</p>
+<p><span class="math display">\[\Delta U_T^2 = (\Omega R + V)^2 -
+(\Omega R - V)^2 = 4\Omega R V\]</span></p>
+<p>Isso estabelece a segunda relação fundamental: <strong>a assimetria
+aerodinâmica absoluta é proporcional ao produto do RPM e da velocidade
+de avanço (<span class="math inline">\(\Omega V\)</span>).</strong></p>
+<p>Para derivar uma relação simplificada para o ângulo de
+<em>flapping</em> em regime permanente (<em>steady-state</em>),
+equilibramos o momento aerodinâmico motriz com o momento restaurador
+centrífugo. Assumindo uma resposta de batimento harmônico <span
+class="math inline">\(\beta(\psi) = a_0 - a_1 \cos\psi - b_1
+\sin\psi\)</span>, os termos inerciais e centrífugos para o
+<em>flapping</em> cíclico se cancelam matematicamente na ressonância. A
+inclinação longitudinal <span class="math inline">\(a_1\)</span> é
+impulsionada pela assimetria aerodinâmica de <span
+class="math inline">\(1/\text{rev}\)</span>, que descobrimos ser
+proporcional a <span class="math inline">\(\Omega V\)</span>. Dividindo
+essa força aerodinâmica pela rigidez centrífuga (<span
+class="math inline">\(\Omega^2 I_\beta\)</span>), encontramos a
+proporcionalidade da amplitude do <em>flapping</em>:</p>
+<p><span class="math display">\[a_1 \propto \frac{\Omega V}{\Omega^2} =
+\frac{V}{\Omega}\]</span></p>
+<p>Esta razão é proporcional à razão de avanço (<em>advance ratio</em>)
+<span class="math inline">\(\mu = \frac{V}{\Omega R}\)</span>. A
+integração formal dos momentos aerodinâmicos ao longo da pá, assumindo
+inflow <span class="math inline">\(\lambda\)</span> constante, produz a
+equação completa do <em>flapping</em> longitudinal em regime
+permanente:</p>
+<p><span class="math display">\[a_1 = \frac{2\mu \left(
+\frac{4}{3}\theta_0 - \lambda \right)}{1 - \frac{1}{2}\mu^2}\]</span>
+onde:</p>
+<ul>
+<li><p><strong><span class="math inline">\(a_1\)</span></strong> é o
+coeficiente de batimento longitudinal. Ele representa fisicamente o
+ângulo (em radianos) em que o plano das pontas das pás (<em>tip-path
+plane</em>) se inclina para trás em relação ao eixo do mastro, fenômeno
+conhecido como <em>blowback</em>.</p></li>
+<li><p><strong><span class="math inline">\(\mu\)</span></strong> é a
+razão de avanço (<em>advance ratio</em>). É um parâmetro adimensional
+que representa a “severidade” da velocidade de avanço, calculada
+dividindo a velocidade de voo do veículo (<span
+class="math inline">\(V\)</span>) pela velocidade tangencial da ponta da
+pá girando (<span class="math inline">\(\Omega R\)</span>).</p></li>
+<li><p><strong><span class="math inline">\(\theta_0\)</span></strong> é
+o ângulo de passo (<em>pitch</em>) geométrico fixo da pá. Nesta forma
+simplificada da equação, assume-se que a pá não possui torção ao longo
+da envergadura, operando com um ângulo de incidência raiz-ponta
+constante.</p></li>
+<li><p><strong><span class="math inline">\(\lambda\)</span></strong> é a
+razão de influxo (<em>inflow ratio</em>). Trata-se de um parâmetro
+adimensional que descreve o fluxo de ar atravessando o disco do rotor de
+cima para baixo. É calculado dividindo a velocidade axial total (a
+velocidade do ar induzida pelo próprio empuxo do rotor mais qualquer
+fluxo devido à velocidade vertical do veículo) pela velocidade
+tangencial da ponta da pá (<span class="math inline">\(\Omega
+R\)</span>).</p></li>
+</ul>
+<hr />
+<h2 id="aceleração-à-frente-a-dominância-da-assimetria">Aceleração à
+Frente: A Dominância da Assimetria</h2>
+<p><strong>Visão Física:</strong></p>
+<p>Ao acelerar o veículo para a frente (aumentando <span
+class="math inline">\(V\)</span>) enquanto se mantém a velocidade
+rotacional (<span class="math inline">\(\Omega\)</span>) constante, o
+equilíbrio dinâmico se rompe. A pá que avança encontra um vento relativo
+progressivamente mais rápido, e a pá que recua encontra um vento mais
+lento. Como o RPM está travado, a mola centrífuga que mantém o disco
+plano não pode se fortalecer. A crescente assimetria aerodinâmica força
+a pá que avança a realizar um <em>flapping</em> mais alto. Devido ao
+sistema rotativo operando em ressonância, esse pico de velocidade
+ascendente na posição de 3 horas manifesta-se como um deslocamento
+máximo para cima na posição de 12 horas, resultando em um
+<em>blowback</em> longitudinal.</p>
+<p>Em uma arquitetura eVTOL <em>lift-plus-cruise</em>, essa inclinação
+para trás se opõe à direção do voo. Durante a fase de transição, o
+veículo não pode simplesmente baixar o nariz (<em>pitch down</em>) para
+compensar, porque o ângulo de arfagem da fuselagem deve ser mantido
+exatamente no ângulo de ataque aerodinâmico que fornece a margem de
+sustentação necessária acima da velocidade de estol da asa (<span
+class="math inline">\(V_s\)</span>). Consequentemente, para manter a
+aceleração à frente contra a tração do rotor inclinada para trás, o
+sistema de controle de voo deve adicionar potência às hélices
+propulsoras (<em>pusher propellers</em>) para superar este vetor
+oposto.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>Com <span class="math inline">\(\Omega\)</span> fixo, o fator de
+assimetria aerodinâmica (<span class="math inline">\(4\Omega R
+V\)</span>) cresce linearmente com <span
+class="math inline">\(V\)</span>, enquanto a rigidez restauradora (<span
+class="math inline">\(\Omega^2 I_\beta\)</span>) permanece constante.
+Observando novamente a equação de <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> derivada para o equilíbrio base:</p>
+<p><span class="math display">\[a_1 = \frac{2\mu \left(
+\frac{4}{3}\theta_0 - \lambda \right)}{1 -
+\frac{1}{2}\mu^2}\]</span></p>
+<p>À medida que <span class="math inline">\(V\)</span> aumenta, a razão
+de avanço <span class="math inline">\(\mu\)</span> aumenta.
+Matematicamente, isso força <span class="math inline">\(a_1\)</span> a
+subir: o multiplicador <span class="math inline">\(\mu\)</span> no
+numerador cresce, o termo <span class="math inline">\(1 -
+\frac{1}{2}\mu^2\)</span> no denominador encolhe, e a razão de influxo
+(<em>inflow ratio</em>) <span class="math inline">\(\lambda\)</span> cai
+devido à sustentação de translação (<em>translational lift</em>). A
+força aerodinâmica supera a inércia centrífuga, inclinando o disco para
+trás.</p>
+<p>Vide Figura 1 em referência interna.</p>
+<hr />
+<h2 id="controle-de-rpm-o-acoplamento-entre-tração-e-arfagem">Controle
+de RPM: O Acoplamento entre Tração e Arfagem</h2>
+<p><strong>Visão Física:</strong></p>
+<p>Comandar um aumento de tração girando o rotor mais rápido (aumentando
+<span class="math inline">\(\Omega\)</span>) a uma velocidade de avanço
+<span class="math inline">\(V\)</span> constante acopla a aceleração
+vertical com a dinâmica de arfagem. À medida que o RPM aumenta, a
+diferença absoluta na pressão dinâmica entre os lados esquerdo e direito
+do disco cresce (<span class="math inline">\(\propto \Omega V\)</span>).
+No entanto, a mola centrífuga endurece muito mais rápido (<span
+class="math inline">\(\propto \Omega^2\)</span>). A rigidez inercial
+domina a assimetria aerodinâmica, fazendo com que o disco
+<em>teetering</em> inerentemente se achate de volta em direção ao plano
+do cubo. Do seu estado anterior de <em>blowback</em>, o rotor inclina-se
+para a frente.</p>
+<p>Esse acoplamento dinâmico complica as leis de controle. Um requisito
+fundamental de um sistema de controle de voo (FCS) é a capacidade de
+desacoplar os comandos verticais (<em>heave</em>) dos comandos de
+atitude. Se o FCS comandar um aumento de RPM para alterar a trajetória
+de voo, os rotores inadvertidamente inclinarão o veículo para a frente,
+exigindo momentos contrários aplicados via <em>cross-feed</em>. Além do
+aumento da complexidade das leis de controle MIMO, esse acoplamento
+prejudica a manobrabilidade. Além disso, torna-se particularmente
+prejudicial em condições de voo assimétrico, como uma falha de motor,
+onde as respostas não comandadas de arfagem ou rolagem dos rotores
+remanescentes se cruzam com as correções de <em>heave</em> necessárias,
+desafiando a capacidade do sistema de manter o equilíbrio.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>Relembrando nossa derivação proporcional, a amplitude de
+<em>flapping</em> em regime permanente <span
+class="math inline">\(\beta\)</span> é a razão entre a função de força
+aerodinâmica e a rigidez:</p>
+<p><span class="math display">\[\beta \propto \frac{\Omega V}{\Omega^2}
+= \frac{V}{\Omega} \propto \mu\]</span></p>
+<p>À medida que <span class="math inline">\(\Omega\)</span> aumenta, a
+razão de avanço <span class="math inline">\(\mu\)</span> diminui
+estritamente. Voltando à equação <span
+class="math inline">\(a_1\)</span>, o termo motriz dominante é <span
+class="math inline">\(\frac{4}{3}\mu\theta_0\)</span>. Como o passo
+<span class="math inline">\(\theta_0\)</span> é fixo, a queda em <span
+class="math inline">\(\mu\)</span> impulsiona diretamente uma redução em
+<span class="math inline">\(a_1\)</span>. A força aerodinâmica absoluta
+é maior, mas sua autoridade relativa sobre a pá quadraticamente
+enrijecida diminui, achatando o disco.</p>
+<hr />
+<h2 id="mast-bumping-os-limites-da-folga-do-teetering">Mast Bumping: Os
+Limites da Folga do <em>Teetering</em></h2>
+<p><strong>Visão Física:</strong></p>
+<p>Uma articulação <em>teetering</em> depende de folga mecânica adequada
+para bater livremente. Se o plano do disco se inclinar muito em relação
+ao eixo do rotor, a estrutura do cubo entra em contato físico com o
+mastro, um evento conhecido como <em>mast bumping</em>. Como
+estabelecido, o disco sofre um <em>blowback</em> quando a velocidade de
+avanço aumenta. Por outro lado, reduzir a tração exige diminuir o RPM.
+Quando o RPM cai, a rigidez centrífuga que mantém a pá plana diminui
+muito mais rapidamente do que a assimetria aerodinâmica. Isso faz com
+que o disco se incline para trás.</p>
+<p>Se o sistema de controle de voo comandar uma rápida redução no RPM
+durante o voo à frente — talvez para iniciar uma descida ou para gerar
+um momento diferencial de rolagem ou arfagem — a queda localizada na
+rigidez centrífuga permite que as forças aerodinâmicas levem o disco do
+rotor a grandes ângulos de <em>flapping</em>. Em um eVTOL multirotor,
+uma manobra pode exigir um comando de tração diferencial que reduza o
+RPM em um rotor específico, tornando essa unidade individual
+excepcionalmente suscetível a um <em>mast bumping</em> localizado
+enquanto os outros permanecem bem dentro dos limites.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>A folga estrutural fornece um ângulo de <em>flapping</em> máximo
+permitido, <span class="math inline">\(\beta_{max}\)</span>. Como o
+coeficiente de batimento longitudinal <span
+class="math inline">\(a_1\)</span> é proporcional à razão de avanço:</p>
+<p><span class="math display">\[a_1 \propto \mu = \frac{V}{\Omega
+R}\]</span></p>
+<p>Existe uma razão de avanço crítica, <span
+class="math inline">\(\mu_{crit}\)</span>, correspondente ao limite
+mecânico <span class="math inline">\(\beta_{max}\)</span>. Para evitar a
+condição onde <span class="math inline">\(a_1 \ge \beta_{max}\)</span>,
+as leis de controle devem garantir que a razão de avanço nunca exceda
+este limite.</p>
+<p>Isso cria um limite inferior dinâmico na velocidade rotacional
+comandada. Para qualquer velocidade de avanço instantânea <span
+class="math inline">\(V\)</span>, o RPM é restrito por:</p>
+<p><span class="math display">\[\Omega_{min} = \frac{V}{\mu_{crit}
+R}\]</span></p>
+<p>Este limite matemático determina que, à medida que o veículo voa mais
+rápido, o sistema de controle de voo perde a autoridade para comandar
+baixos RPMs em qualquer rotor individual. A tração mínima permitida
+torna-se uma função da velocidade aerodinâmica, restringindo as margens
+de controle e exigindo que os algoritmos de proteção de envelope
+intervenham antes que um <em>mast bumping</em> localizado possa
+ocorrer.</p>
+<hr />
+<h2
+id="intervenção-aeroelástica-o-acoplamento-passo-batimento-pitch-flap-delta_3">Intervenção
+Aeroelástica: O Acoplamento Passo-Batimento (<em>Pitch-Flap</em>) <span
+class="math inline">\(\delta_3\)</span></h2>
+<figure>
+<img src="../assets/media/Delta-3.png" alt="Delta 3 Coupling" />
+<figcaption aria-hidden="true">Delta 3 Coupling</figcaption>
+</figure>
+<p><strong>Visão Física:</strong></p>
+<p>Para suprimir o <em>blowback</em>, uma inclinação geométrica (ângulo
+<span class="math inline">\(\delta_3\)</span>) pode ser adicionada à
+articulação <em>teetering</em>. Isso cria um acoplamento cinemático
+<em>pitch-flap</em>. À medida que as forças aerodinâmicas empurram a pá
+para cima, a geometria da articulação força mecanicamente a pá a reduzir
+o passo (<em>pitch down</em>). Isso diminui a sustentação e freia o
+movimento ascendente, atuando como uma mola aerodinâmica
+(<em>aerodynamic spring</em>).</p>
+<p>Como essa mola eleva a frequência natural efetiva da pá acima da
+frequência motriz de <span class="math inline">\(1/\text{rev}\)</span>,
+o rotor não é mais um sistema rotativo operando em perfeita ressonância.
+Consequentemente, o <em>phase lag</em> cai abaixo de 90 graus. Ao
+acelerar para a frente, o <em>blowback</em> é reduzido, mas o
+<em>flapping</em> se manifesta mais cedo na rotação, trocando o efeito
+de <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> por um efeito de <em>flapping</em>
+lateral <span class="math inline">\(b_1\)</span>.</p>
+<p>Vide Figura 2 em referência interna.</p>
+<p>Em uma configuração multirrotor padrão, o deslocamento lateral de um
+disco é matematicamente compensado por um rotor oposto contrarrotativo.
+No entanto, em situações de falha de motor, essa simetria se rompe. Os
+rotores operacionais remanescentes gerarão momentos laterais não
+cancelados, exigindo mais potência total para restaurar o
+equilíbrio.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>O fator de acoplamento é <span class="math inline">\(K =
+\tan(\delta_3)\)</span>, produzindo uma redução de passo de <span
+class="math inline">\(\Delta\theta = -K\beta\)</span>.</p>
+<p>Ao deslocar a frequência natural, o <em>phase lag</em> ressonante
+<span class="math inline">\(\phi\)</span> torna-se:</p>
+<p><span class="math display">\[\phi =
+\arctan\left(\frac{1}{K}\right)\]</span></p>
+<p>Se <span class="math inline">\(\delta_3 = 45^\circ\)</span>, <span
+class="math inline">\(K = 1\)</span>, e o <em>phase lag</em> muda para
+<span class="math inline">\(45^\circ\)</span>, movendo o deslocamento
+máximo para fora do eixo longitudinal.</p>
+<p>Criticamente, quando <span class="math inline">\(\Omega\)</span> é
+modulado, a trajetória de achatamento permanece linear. A mola
+aerodinâmica restauradora gerada pela redução de passo <span
+class="math inline">\(\delta_3\)</span> depende da pressão dinâmica, que
+escala com <span class="math inline">\(\Omega^2\)</span>. Como a mola
+centrífuga também escala com <span
+class="math inline">\(\Omega^2\)</span>, a razão dessas duas molas
+permanece constante independentemente do RPM. Portanto, o <em>phase
+lag</em> <span class="math inline">\(\phi\)</span> é invariante às
+mudanças de velocidade de rotação.</p>
+<hr />
+<h2
+id="intervenção-mecânica-a-mola-restauradora-no-cubo-hub-spring">Intervenção
+Mecânica: A Mola Restauradora no Cubo (<em>Hub Spring</em>)</h2>
+<p><strong>Visão Física e a Não Linearidade de Controle:</strong></p>
+<p>Alternativamente, uma rigidez mecânica pura — uma <em>hub spring</em>
+(mola do cubo) — pode ser aplicada para resistir ao movimento
+<em>teetering</em>. Assim como a articulação <span
+class="math inline">\(\delta_3\)</span>, esta força restauradora extra
+empurra a frequência natural para cima da frequência de forçamento,
+reduzindo o <em>phase lag</em> para menos de 90 graus e introduzindo
+rolagem lateral durante o voo à frente.</p>
+<figure>
+<img src="../assets/media/Spring.png" alt="Hub Spring" />
+<figcaption aria-hidden="true">Hub Spring</figcaption>
+</figure>
+<p>Consequentemente, a <em>hub spring</em> é, em muitos aspectos,
+equivalente à articulação <span class="math inline">\(\delta_3\)</span>
+e sofre do mesmo problema de assimetria multirrotor: uma falha de motor
+deixa o veículo lutando contra momentos laterais não compensados.</p>
+<p>Vide Figura 3 em referência interna.</p>
+<p>Além disso, a mola mecânica introduz uma não-linearidade de controle
+significativa. A rigidez física de uma mola mecânica é fixa, mas a
+rigidez centrífuga muda com o quadrado da velocidade do rotor. Isso cria
+um desequilíbrio. Em baixo RPM, a mola mecânica constante é a força
+dominante, enquanto em alto RPM, as forças centrífugas que crescem
+quadraticamente a superam. Como o acoplamento cruzado entre arfagem e
+rolagem é ditado pela proporção dessas duas molas, o <em>phase lag</em>
+do rotor não muda a uma taxa constante. Uma grande mudança no RPM em
+baixas velocidades causa um deslocamento significativo no ângulo de
+fase, enquanto a mesma mudança no RPM em altas velocidades mal o afeta.
+O <em>tip-path plane</em> varre continuamente seu vetor de inclinação em
+um arco assintótico e curvo através dos eixos de arfagem e rolagem
+conforme o comando de tração muda, tornando as derivadas de controle
+dependentes do RPM operacional instantâneo.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>A introdução de uma rigidez mecânica <span
+class="math inline">\(K_\beta\)</span> atualiza a equação de
+movimento:</p>
+<p><span class="math display">\[I_\beta \ddot{\beta} + (\Omega^2 I_\beta
++ K_\beta)\beta = M_A\]</span></p>
+<p>A frequência natural adimensional <span
+class="math inline">\(\nu\)</span> governa a dinâmica de
+ressonância:</p>
+<p><span class="math display">\[\nu = \sqrt{1 + \frac{K_\beta}{I_\beta
+\Omega^2}}\]</span></p>
+<p>O ângulo de fase <span class="math inline">\(\phi\)</span> é definido
+por:</p>
+<p><span class="math display">\[\phi = \arctan\left( \frac{\gamma /
+8}{\nu^2 - 1} \right)\]</span></p>
+<p>Substituindo a relação da frequência natural no denominador, o termo
+<span class="math inline">\(\nu^2 - 1\)</span> avalia exatamente para
+<span class="math inline">\(\frac{K_\beta}{I_\beta \Omega^2}\)</span>.
+Isso produz:</p>
+<p><span class="math display">\[\tan(\phi) = \frac{\gamma I_\beta
+\Omega^2}{8 K_\beta}\]</span></p>
+<p>Isso demonstra explicitamente a não-linearidade: a tangente do
+<em>phase lag</em> é diretamente proporcional a <span
+class="math inline">\(\Omega^2\)</span>. Como a mola mecânica <span
+class="math inline">\(K_\beta\)</span> permanece constante enquanto os
+fatores inerciais escalam quadraticamente, qualquer mudança no RPM
+altera ativamente e não-linearmente o eixo geométrico da resposta
+dinâmica do rotor, exigindo um escalonamento (<em>scheduling</em>)
+complexo e não-linear nas leis de controle de voo.</p>
+<p><strong>A Solução Não Linear:</strong></p>
+<p>Para contornar esse problema, uma escolha não linear de molas pode
+amenizar essas dificuldades relatadas. Em vez de uma rigidez constante,
+o sistema pode ser projetado de forma adaptativa. Nesse caso, a mola
+pode inibir os efeitos de <em>teetering</em> somente em alguns RPMs.
+Como demonstrado no design de rotores aplicados em eVTOLs e detalhado na
+patente norte-americana <a
+href="https://patents.google.com/patent/US11643196B1/en">US11643196B1</a>
+(<em>Teetering propulsor assembly of an electric vertical takeoff and
+landing aircraft</em>), a articulação pode atuar rigidamente em baixos
+RPMs para evitar o <em>mast bumping</em> (por exemplo, na aceleração
+inicial ou parada dos rotores) e, ao mesmo tempo, utilizar a força
+centrífuga para liberar o <em>teetering</em> em altas velocidades
+rotacionais. Isso permite que o mecanismo atue com mais liberdade para
+absorver assimetrias aerodinâmicas durante o voo à frente (quando as
+cargas aerodinâmicas forem maiores, por exemplo) e ao mesmo tempo mitiga
+o <em>blockback</em> em voo de transição quando o RPM baixar
+significativamente.</p>
+<hr />
+<h2 id="a-não-linearidade-das-derivadas-de-estabilidade">A
+Não-Linearidade das Derivadas de Estabilidade</h2>
+<p><strong>Visão Física:</strong></p>
+<p>A estabilidade natural de uma aeronave é frequentemente descrita por
+como ela reage a mudanças na velocidade em relação ao vento. Quando o
+disco do rotor se inclina (<span class="math inline">\(a_1\)</span>), o
+vetor de tração do rotor acompanha essa inclinação, gerando um momento
+de arfagem em relação ao centro de gravidade do veículo. Se a aeronave
+encontra uma rajada horizontal (<span class="math inline">\(u\)</span>)
+ou uma rajada vertical (<span class="math inline">\(w\)</span>), a
+assimetria aerodinâmica nas pás muda, alterando o ângulo de
+<em>flapping</em> e reorientando o vetor de tração.</p>
+<p>O grande desafio desta arquitetura é que a magnitude dessa reação
+depende da rigidez centrífuga do rotor. Como a rigidez é governada pelo
+RPM, a “firmeza” com que o veículo resiste a distúrbios atmosféricos
+muda dinamicamente com o comando de potência. Um rotor girando em alta
+rotação será menos afetado por uma rajada do que o mesmo rotor girando
+em baixa rotação.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>As derivadas de estabilidade de arfagem em relação à velocidade à
+frente (<span class="math inline">\(M_u\)</span>) e à velocidade
+vertical (<span class="math inline">\(M_w\)</span>) quantificam a
+variação do momento de arfagem devido a distúrbios lineares. Elas são
+fortemente dependentes da taxa de variação da inclinação do disco do
+rotor (<span class="math inline">\(\frac{\partial a_1}{\partial
+u}\)</span> e <span class="math inline">\(\frac{\partial a_1}{\partial
+w}\)</span>).</p>
+<p>Revisitando a dependência do <em>flapping</em> longitudinal com a
+razão de avanço (<span class="math inline">\(\mu = \frac{V}{\Omega
+R}\)</span>), notamos que qualquer derivada parcial de <span
+class="math inline">\(a_1\)</span> em relação à velocidade <span
+class="math inline">\(V\)</span> (ou sua perturbação <span
+class="math inline">\(u\)</span>) resultará em uma expressão onde o RPM
+(<span class="math inline">\(\Omega\)</span>) permanece no denominador.
+Por exemplo, de forma simplificada, a derivada <span
+class="math inline">\(\frac{\partial a_1}{\partial \mu}\)</span> é
+proporcional a <span class="math inline">\(\frac{1}{1 -
+\frac{1}{2}\mu^2}\)</span>.</p>
+<p>Isso estabelece que <span class="math inline">\(M_u\)</span> e <span
+class="math inline">\(M_w\)</span> não são valores constantes ou
+linearmente proporcionais à velocidade do ar. Eles são funções
+não-lineares que variam inversamente com a velocidade rotacional e são
+sensíveis ao quadrado da razão de avanço.</p>
+<p><strong>O Desafio para as Leis de Controle:</strong></p>
+<p>Na teoria clássica de controle de voo, o <em>gain scheduling</em>
+(escalonamento de ganhos) mapeia as reações do controlador geralmente
+com base em uma única variável independente, como a velocidade calibrada
+(<em>airspeed</em>) ou a pressão dinâmica. No entanto, devido à forte
+não-linearidade geométrica explicada acima, a planta da aeronave (o
+modelo matemático que o controlador tenta governar) muda de forma
+contínua e não-linear com o RPM.</p>
+<p>Para manter características de manuseio previsíveis (<em>handling
+qualities</em>), as leis de controle exigem <em>schedules</em> muito
+mais complicados. Os ganhos do sistema devem ser interpolados em tabelas
+multidimensionais que monitoram simultaneamente a velocidade e o comando
+instantâneo de RPM de cada rotor. Omitir essa não-linearidade nos
+modelos de controle pode levar a respostas lentas em regimes de baixa
+tração ou a oscilações indesejadas quando os rotores operam próximos da
+velocidade máxima nominal.</p>
+<hr />
+<h2 id="conclusão">Conclusão</h2>
+<p>A dinâmica de voo em malha aberta de um rotor <em>teetering</em> de
+passo fixo controlado por RPM é governada por um equilíbrio contínuo
+entre a rigidez inercial e as forças aerodinâmicas. Como as forças
+restauradoras centrífugas escalam com o quadrado da velocidade
+rotacional (<span class="math inline">\(\Omega^2\)</span>) enquanto as
+assimetrias aerodinâmicas escalam com o produto do RPM e a velocidade de
+avanço (<span class="math inline">\(\Omega V\)</span>), variar a
+velocidade do rotor altera fundamentalmente o estado de equilíbrio do
+disco.</p>
+<p>Em resumo, os principais desafios de dinâmica de voo introduzidos por
+esta arquitetura incluem:</p>
+<ol type="1">
+<li><p><strong>Acoplamento Tração-Atitude (<em>Thrust-Attitude
+Coupling</em>):</strong> Modular o RPM para controlar o <em>heave</em>
+induz inerentemente momentos de arfagem, exigindo <em>cross-feeding</em>
+contínuo nas leis de controle para manter uma trajetória de voo
+desacoplada.</p></li>
+<li><p><strong>Déficit de Tração na Transição:</strong> A tendência
+inerente do rotor de sofrer <em>blowback</em> durante a aceleração à
+frente inclina o vetor de tração para longe da direção do voo. Como a
+arfagem da fuselagem deve ser fixa para satisfazer o ângulo de ataque
+aerodinâmico para a asa, potência extra é exigida dos propulsores de
+cruzeiro para superar essa inclinação para trás.</p></li>
+<li><p><strong>Restrições de <em>Mast Bumping</em>:</strong> Como a
+redução do RPM aumenta a razão de avanço relativa, reduções localizadas
+na tração durante manobras em altas velocidades podem fazer com que um
+rotor individual atinja seus batentes mecânicos, necessitando de limites
+inferiores dinâmicos de RPM nas leis de controle.</p></li>
+<li><p><strong>Degradação do Voo Assimétrico:</strong> A introdução de
+acoplamentos aeroelásticos ou mecânicos lineares troca o
+<em>blowback</em> longitudinal por rolagem lateral. Embora esses
+momentos de rolagem se anulem em uma configuração multirotor simétrica e
+nominal, uma falha de motor deixa o sistema de controle lutando contra
+momentos laterais não compensados, o que drena as reservas críticas de
+potência.</p></li>
+<li><p><strong>Não-Linearidade de Controle:</strong> Ao contrário dos
+acoplamentos aeroelásticos, as molas mecânicas lineares (<em>hub
+springs</em>) criam um <em>phase lag</em> que varia quadraticamente com
+o RPM. O comportamento de acoplamento cruzado entre arfagem e rolagem
+muda continuamente com base na configuração instantânea de rotação,
+complicando fortemente o <em>scheduling</em> de controle.</p></li>
+<li><p><strong>Complexidade no Escalonamento de Ganhos (<em>Gain
+Scheduling</em>):</strong> Como a rigidez inercial do rotor frente a
+distúrbios depende do RPM, as derivadas de estabilidade geométrica da
+aeronave (como <span class="math inline">\(M_u\)</span> e <span
+class="math inline">\(M_w\)</span>) tornam-se fortemente não-lineares e
+acopladas com as próprias derivadas de controle, variando inversamente
+com a rotação e sendo sensíveis ao quadrado da razão de avanço. Isso
+impede o uso de malhas de controle lineares simples, exigindo tabelas de
+controle multidimensionais intrincadas para garantir que a aeronave
+mantenha qualidades de manuseio previsíveis em todo o envelope
+operacional.</p></li>
+</ol>
+<p>Compreender esses princípios físicos fundamentais e as tecnologias de
+mitigação não lineares é essencial para o desenvolvimento das leis de
+controle em malha fechada necessárias para estabilizar, desacoplar e
+manobrar veículos que dependem do controle de RPM em uma configuração de
+multirrotores com articulação de <em>teetering</em>.</p>
+<hr />
+<h2 id="anexo---plots">Anexo - Plots</h2>
+<p>Os plots a seguir calculam o coeficiente de tração <span
+class="math inline">\(C_T\)</span>, o inflow ratio <span
+class="math inline">\(\lambda\)</span>, o ângulo de basculamento
+longitudinal <span class="math inline">\(a_1\)</span> e lateral <span
+class="math inline">\(b_1\)</span> para um rotor genérico e típico de
+eVTOL para várias velocidades à frente e vários RPMs. Três configurações
+são analisadas:</p>
+<ul>
+<li>Sem mecanismo Delta-3 e sem mola restauradora</li>
+<li>Com mecanismo Delta-3</li>
+<li>Com mola restauradora</li>
+</ul>
+<figure>
+<img src="../assets/media/rotor_analysis1.png" alt="Rotor Analysis 1" />
+<figcaption aria-hidden="true">Rotor Analysis 1</figcaption>
+</figure>
+<p>Fig. 1 - Variação do <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> e lateral <span
+class="math inline">\(b_1\)</span> com velocidade à frente e rotação.
+Sem mecanismo Delta-3. Sem mola restauradora.</p>
+<figure>
+<img src="../assets/media/rotor_analysis2.png" alt="Rotor Analysis 2" />
+<figcaption aria-hidden="true">Rotor Analysis 2</figcaption>
+</figure>
+<p>Fig. 2 - Variação do <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> e lateral <span
+class="math inline">\(b_1\)</span> com velocidade à frente e rotação.
+Com mecanismo Delta-3 de 30deg. Sem mola restauradora.</p>
+<figure>
+<img src="../assets/media/rotor_analysis3.png" alt="Rotor Analysis 3" />
+<figcaption aria-hidden="true">Rotor Analysis 3</figcaption>
+</figure>
+<p>Fig. 3 - Variação do <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> e lateral <span
+class="math inline">\(b_1\)</span> com velocidade à frente e rotação.
+Sem mecanismo Delta-3. Com mola restauradora, <span
+class="math inline">\(\nu_\beta=1.4\)</span>.</p>
+<hr />
+<h2 id="referências">Referências</h2>
+<p>[1] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
+2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
+em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
+de batimento e teoria de esteira. <a
+href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
+<p>[2] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. — Tratamento moderno e abrangente de
+aeromecânica de rotores, incluindo teoria do disco atuador, modelos de
+esteira e dinâmica de indução. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+<p>[3] Bramwell, A. R. S., Done, G., e Balmford, D., <em>Bramwell’s
+Helicopter Dynamics</em>, 2ª ed., Butterworth-Heinemann, Oxford, 2001. —
+Referência clássica na formulação de voo e acoplamento de rotores de
+helicóptero.</p>
+<p>[4] Prouty, R. W., <em>Helicopter Performance, Stability, and
+Control</em>, Krieger Publishing, Malabar, 2002. — Referência clássica
+sobre qualidades de voo e controle de helicópteros. <a
+href="https://archive.org/details/prouty-r.-w.-helicopter-performance-stability-and-control">Link</a></p>
+<p>[5] Padfield, G. D., <em>Helicopter Flight Dynamics</em>, 2ª ed.,
+Blackwell Science, Oxford, 2007. — Referência abrangente sobre
+qualidades de voo e modelagem de dinâmica de helicópteros. <a
+href="https://en.wikipedia.org/wiki/Gareth_D._Padfield">Link</a></p>
+<p>[6] US11643196B1, <em>Teetering propulsor assembly of an electric
+vertical takeoff and landing aircraft</em>, Google Patents — Patente
+descrevendo articulação teetering não-linear para eVTOLs. <a
+href="https://patents.google.com/patent/US11643196B1/en">Link</a></p>
+<p>[7] ADS-33E-PRF, <em>Aeronautical Design Standard — Performance
+Specification: Handling Qualities Requirements for Military
+Rotorcraft</em>, United States Army Aviation and Missile Command,
+Redstone Arsenal, 2000. — Critérios de qualidades de voo para aeronaves
+de asa rotativa. <a
+href="https://en.wikipedia.org/wiki/Flying_qualities">Link</a></p>
+</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="efeito-da-solidez-em-rotores.html"><strong>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</strong><span>A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.</span></a><a class="related-card" href="dutch-roll-white-paper.html"><strong>Dinâmica Analítica e Acoplamento Físico do Modo Dutch Roll</strong><span>O modo Dutch Roll de uma aeronave é examinado com foco em quais características da aeronave o estabilizam ou desestabilizam, e por quê. O ensaio constrói a intuição física do modo, identifica com rigor matemático os parâmetros mais sensíveis, e analisa as soluções de projeto passivas e ativas que a engenharia dispõe para controlá-lo.</span></a></div></section></article></main>
+<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;dinamica-de-voo-rotor-teetering&quot;, &quot;title&quot;: &quot;White Paper - Dinâmica de Voo de um Rotor _Teetering_ Controlado por RPM&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>

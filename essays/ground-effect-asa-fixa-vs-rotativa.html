@@ -1,0 +1,258 @@
+<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe."><title>Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa"><meta property="og:description" content="A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa"><meta name="twitter:description" content="A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
+<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
+<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa</h1><hr class="cover-rule"><p class="article-summary">A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe.</p><div class="article-meta"><span>Atualizado 2026-08-25</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Aerodinâmica</span><span class="tag">Dinâmica-de-Voo</span><span class="tag">Efeito-Solo</span><span class="tag">Rotores</span></div></div></div></header><div class="prose" id="articleBody"><p>Este documento apresenta uma síntese teórica sobre a fenomenologia do
+<a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
+Solo</a> em aeronaves de asa fixa e rotores, com foco na evolução
+geométrica das modelagens de esteira em função da velocidade a frente
+(<span class="math inline">\(V_\infty\)</span>). Demonstra-se que a
+aparente divergência matemática entre os modelos clássicos deriva de
+suas diferentes bases de adimensionalização e das topologias de esteira
+dominantes em baixas velocidades.</p>
+<p>Avalia-se a formação do <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
+Vortex</a> no rotor em transição — um fenômeno ausente na asa fixa.
+Conclui-se que, para manter o equilíbrio vertical em altas velocidades,
+ambas as arquiteturas convergem para o mesmo princípio físico: a
+anulação assintótica da perturbação aerodinâmica induzida, colapsando o
+benefício do <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
+Solo</a>.</p>
+<hr />
+<h2 id="o-princípio-físico-fundamental-conservação-de-momento">1. O
+Princípio Físico Fundamental: Conservação de Momento</h2>
+<p>A geração de força vertical obedece à conservação de momento linear
+no volume de controle. A superfície aerodinâmica deflete um fluxo de
+massa de ar (<span class="math inline">\(\dot{m}\)</span>) impondo uma
+variação de velocidade (velocidade induzida, <span
+class="math inline">\(v_i\)</span> ou <span
+class="math inline">\(w\)</span>):</p>
+<p><span class="math display">\[F \approx \dot{m} \cdot
+2v_i\]</span></p>
+<p>Para manter o voo nivelado e sustentação constante, <span
+class="math inline">\(F = W\)</span>. À medida que <span
+class="math inline">\(V_\infty\)</span> aumenta, a taxa de massa (<span
+class="math inline">\(\dot{m}\)</span>) que interage com a aeronave
+cresce substancialmente. Sendo <span class="math inline">\(F\)</span>
+constante, a superfície deve operar impondo uma velocidade induzida
+(<span class="math inline">\(v_i\)</span>) progressivamente menor ao
+fluido.</p>
+<ul>
+<li>Na <strong>asa fixa</strong>: o aumento de fluxo se reflete na
+redução do ângulo de ataque para manter voo nivelado</li>
+<li>Na <strong>asa rotativa</strong>: se reflete na redução do ângulo de
+passo das pás</li>
+</ul>
+<hr />
+<h2 id="asa-fixa-esteira-em-ferradura-e-a-ausência-de-estagnação">2. Asa
+Fixa: Esteira em Ferradura e a Ausência de Estagnação</h2>
+<p>Na asa fixa, a capacidade de gerar força é adimensionalizada pela
+pressão dinâmica do fluxo livre (<span class="math inline">\(q_\infty =
+\frac{1}{2}\rho V_\infty^2\)</span>):</p>
+<p><span class="math display">\[L = \frac{1}{2}\rho V^2 S
+C_L\]</span></p>
+<p>A esteira é modelada como sistema de <a
+href="https://en.wikipedia.org/wiki/Lift_(force)">vórtices em
+ferradura</a> (<em>horseshoe vortex</em>) pela <a
+href="https://en.wikipedia.org/wiki/Lifting-line_theory">Linha
+Sustentadora de Prandtl</a>.</p>
+<p>O <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
+Solo</a> é resolvido pelo <strong>Princípio das Imagens de
+Kelvin</strong>: um sistema espelhado a uma distância vertical <span
+class="math inline">\(h\)</span> abaixo da superfície do solo gera
+<em>upwash</em> que reduz o <em>downwash</em> efetivo:</p>
+<p><span class="math display">\[\Delta C_L = a_0\frac{C_L}{\pi AR}(1 -
+\sigma)\]</span></p>
+<p><strong>A característica limitante</strong>: a asa fixa nunca opera
+em <span class="math inline">\(V_\infty \approx 0\)</span>. Sua
+velocidade mínima garante que a pressão dinâmica seja sempre superior à
+velocidade induzida, então a esteira permanece sempre convectada a
+jusante. <strong>Não há estagnação frontal nem <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
+Vortex</a></strong>.</p>
+<p><strong>Colapso em alta velocidade</strong>: como <span
+class="math inline">\(q_\infty\)</span> cresce quadraticamente, o ângulo
+de ataque é forçado a zero. Pelo <a
+href="https://en.wikipedia.org/wiki/Kutta%E2%80%93Joukowski_theorem">Teorema
+de Kutta-Joukowski</a>, a circulação total colapsa. O espelho no solo
+reflete uma perturbação nula. O <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
+Solo</a> desaparece.</p>
+<hr />
+<h2
+id="asa-rotativa-estagnação-ground-vortex-e-a-modelagem-de-cheeseman">3.
+Asa Rotativa: Estagnação, Ground Vortex e a Modelagem de Cheeseman</h2>
+<p>O rotor é adimensionalizado pela velocidade tangencial constante das
+pás (<span class="math inline">\(\Omega R\)</span>):</p>
+<p><span class="math display">\[T = C_T \rho A (\Omega R)^2\]</span></p>
+<p>Para manter tração constante com <span
+class="math inline">\(V_\infty\)</span> crescente, o controle de voo
+impõe redução progressiva do passo coletivo (<span
+class="math inline">\(\theta_0\)</span>).</p>
+<h3 id="a-formação-do-ground-vortex">3.1 A Formação do Ground
+Vortex</h3>
+<p>Diferentemente da asa fixa, o rotor opera rotineiramente em
+velocidades nulas (pairado). No pairado (<span
+class="math inline">\(V_\infty = 0\)</span>), o <em>downwash</em> maciço
+atinge o solo ortogonalmente, criando um ponto de estagnação e forçando
+o fluxo a se espalhar radialmente em <em>wall jet</em>.</p>
+<p>Quando o helicóptero adquire pequena velocidade a frente, o
+escoamento frontal colide com o <em>wall jet</em> contrário, criando uma
+<strong>linha de separação abrupta</strong> que rola sobre si mesma — o
+<a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
+Vortex</a>. À medida que a aeronave acelera, a pressão dinâmica
+eventualmente supera o momento do <em>wall jet</em>, e o <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
+Vortex</a> é varrido para trás (<em>blow back</em>).</p>
+<h3 id="o-modelo-de-cheeseman-bennett">3.2 O Modelo de Cheeseman &amp;
+Bennett</h3>
+<p>Na impossibilidade de modelar analiticamente o caos do <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
+Vortex</a> nos anos 1950, Cheeseman e Bennett modelaram a esteira como
+uma fonte isolada com espelho, introduzindo o <em>wake skew</em> (<span
+class="math inline">\(\chi\)</span>) para capturar a transição da
+estagnação para a esteira convectada:</p>
+<p><span class="math display">\[\tan(\chi) =
+\frac{V_\infty}{v_i}\]</span></p>
+<p><span class="math display">\[\frac{T_{IGE}}{T_{OGE}} = \frac{1}{1 -
+\frac{R^2}{16h^2}\left(\frac{1}{1 + (V/v_i)^2}\right)}\]</span></p>
+<p>No pairado, a fonte espelho está alinhada na vertical. À medida que
+<span class="math inline">\(V\)</span> aumenta e supera <span
+class="math inline">\(v_i\)</span>, o espelho é deslocado a jusante —
+traduzindo matematicamente o <em>blow back</em> como deslocamento
+longitudinal da fonte espelho.</p>
+<hr />
+<h2 id="a-unificação-convergência-em-alta-velocidade">4. A Unificação:
+Convergência em Alta Velocidade</h2>
+<p>A controvérsia clássica resolve-se pela condição de equilíbrio
+vertical:</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Mecanismo</th>
+<th>Resultado em alta velocidade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prandtl (asa fixa)</strong></td>
+<td><span class="math inline">\(\alpha \to 0\)</span>, <span
+class="math inline">\(\Gamma \to 0\)</span></td>
+<td>Espelho geométrico permanece, mas reflete perturbação nula</td>
+</tr>
+<tr>
+<td><strong>Cheeseman (rotor)</strong></td>
+<td><span class="math inline">\(\theta_0 \to\)</span> mínimo, <span
+class="math inline">\(\chi \to 90°\)</span></td>
+<td>Espelho varrido para <span class="math inline">\(\infty\)</span> a
+jusante</td>
+</tr>
+</tbody>
+</table>
+<p>Em ambos os casos, a superfície parou de injetar momento vertical
+significativo no fluido. O <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
+Solo</a> desaparece por inanição do campo induzido.</p>
+<hr />
+<h2 id="estabilidade-longitudinal-asa-fixa-vs.-multi-rotor">5.
+Estabilidade Longitudinal: Asa Fixa vs. Multi-rotor</h2>
+<h3 id="asa-fixa-momento-picador-via-empenagem">5.1 Asa Fixa: Momento
+Picador via Empenagem</h3>
+<p>Imersa na esteira da asa, a empenagem “enxerga” um ângulo de ataque
+reduzido:</p>
+<p><span class="math display">\[\alpha_t = \alpha_w - i_w + i_t -
+\epsilon\]</span></p>
+<p>Onde <span class="math inline">\(i_w\)</span> e <span
+class="math inline">\(i_t\)</span> são os ângulos de incidência da asa e
+da cauda.</p>
+<p>Em <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
+Solo</a>, o colapso do <em>downwash</em> (<span
+class="math inline">\(\epsilon \to 0\)</span>) faz a empenagem “ver”
+mais fluxo, aumentando sua sustentação e gerando momento picador
+estabilizante:</p>
+<p><span class="math display">\[\Delta C_{M_{IGE}} \propto -V_H (\Delta
+C_{L_t})\]</span></p>
+<p><span class="math display">\[\Delta C_{M\alpha_{IGE}} \propto -V_H
+\cdot a_1 \left(1 - \frac{d\epsilon}{d\alpha_{IGE}}\right)\]</span></p>
+<p>Onde <span class="math inline">\(V_H\)</span> é o volume de cauda. A
+empenagem providencia <a
+href="https://en.wikipedia.org/wiki/Flight_dynamics_(fixed-wing_aircraft)">estabilidade
+estática</a> em velocidade.</p>
+<h3 id="multi-rotor-a-instabilidade-da-esteira">5.2 Multi-rotor: A
+Instabilidade da Esteira</h3>
+<p>Em multi-rotores (<a
+href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOL</a>),
+o equilíbrio é mantido por modulação diferencial de tração. Em IGE com
+baixas velocidades:</p>
+<ol type="1">
+<li>O rotor dianteiro forma seu <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
+Vortex</a></li>
+<li>O <em>wake skew</em> varre a esteira para baixo do rotor
+traseiro</li>
+<li>O rotor traseiro ganha eficiência assimétrica de <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
+Solo</a></li>
+<li>O desbalanceamento gera momento picador severo (<span
+class="math inline">\(\Delta M\)</span>)</li>
+</ol>
+<h3 id="a-retroalimentação-positiva-divergente">5.3 A Retroalimentação
+Positiva Divergente</h3>
+<p>Uma rajada frontal em <a
+href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOL</a>
+IGE produz:</p>
+<ol type="1">
+<li>Aumento de <span class="math inline">\(\mu\)</span> → <em>blow
+back</em> mais severo do <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
+Vortex</a></li>
+<li>Amplificação assimétrica de tração traseira → momento picador (<span
+class="math inline">\(\theta \downarrow\)</span>)</li>
+<li>Atitude picada inclina vetor de tração → aceleração linear → <span
+class="math inline">\(\mu\)</span> aumenta mais</li>
+<li><strong>Ciclo divergente</strong>: diferente do amortecimento
+provido pela empenagem da asa fixa, o acoplamento diferencial de
+esteiras no multi-rotor resulta em <strong>inversão da estabilidade em
+velocidade</strong></li>
+</ol>
+<hr />
+<h2 id="referências">Referências</h2>
+<p>[1] Cheeseman, I. C., e Bennett, W. E., <em>The Effect of the Ground
+on a Helicopter Rotor in Forward Flight</em>, Aeronautical Research
+Council Reports and Memoranda, No. 3021, HMSO, London, 1955. —
+Referência seminal: derivou a equação fechada do ganho IGE em função da
+altura normalizada e do ângulo de skew da esteira. <a
+href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/3590">Link</a></p>
+<p>[2] Prandtl, L.; Tietjens, O. G., <em>Applied Hydro- and
+Aeromechanics</em>, Dover Publications, New York, 1957. — Fundamento da
+teoria da linha sustentadora e dos vórtices em ferradura aplicados à asa
+fixa. <a
+href="https://archive.org/details/in.ernet.dli.2015.205401">Link</a></p>
+<p>[3] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
+2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
+em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
+de batimento e teoria de esteira. <a
+href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
+<p>[4] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. — Tratamento moderno e abrangente de
+aeromecânica de rotores, incluindo teoria do disco atuador, modelos de
+esteira e dinâmica de indução. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+<p>[5] Anderson, J. D. <em>Fundamentals of Aerodynamics</em>, 6ª
+ed. McGraw-Hill, 2017. — <a
+href="https://en.wikipedia.org/wiki/Aerodynamics">Aerodinâmica</a> de
+asa fixa e <a
+href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">efeito
+solo</a>. <a
+href="https://archive.org/details/fundamentalsofae0000ande">Link</a></p>
+</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="parametros-adimensionais-esteira-rotores.html"><strong>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</strong><span>Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</span></a><a class="related-card" href="modelagem-teorica-efeito-solo-multirotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle.</span></a></div></section></article></main>
+<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;ground-effect-asa-fixa-vs-rotativa&quot;, &quot;title&quot;: &quot;Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>
