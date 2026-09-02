@@ -1,6 +1,962 @@
-<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas."><title>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="Métodos Matemáticos e Computacionais na Engenharia Aeroespacial"><meta property="og:description" content="Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Métodos Matemáticos e Computacionais na Engenharia Aeroespacial"><meta name="twitter:description" content="Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
-<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
-<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</h1><hr class="cover-rule"><p class="article-summary">Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</p><div class="article-meta"><span>Atualizado 2026-08-25</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Engenharia</span><span class="tag">Matemática</span><span class="tag">Aerodinâmica</span><span class="tag">Dinâmica-de-Voo</span><span class="tag">Estatística</span><span class="tag">Computação</span></div></div></div></header><div class="prose" id="articleBody"><h2 id="introdução-ferramentas-analíticas-de-análise">Introdução:
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="maduro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</title>
+<meta property="og:title" content="Métodos Matemáticos e Computacionais na Engenharia Aeroespacial">
+<meta property="og:description" content="Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.">
+<meta property="og:type" content="article">
+<script defer=""
+src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"
+type="text/javascript"></script>
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F6F3EC;
+  --surface2:#EDE9DE;
+  --border:#DCD5C5;
+  --text:#3A342B;
+  --text-dim:#7E7566;
+  --text-bright:#171310;
+  --gold:#8A6B33;
+  --gold-dim:#B08A2E;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F5EF;
+    --surface2:#EEEAE0;
+    --border:#D9D3C4;
+    --text:#33302B;
+    --text-dim:#7E7566;
+    --text-bright:#15120E;
+    --gold:#8A6B33;
+    --gold-dim:#A98A2E;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  /* Paleta escura fixa no escopo da capa: as variaveis abaixo vencem
+     as do tema claro/escuro para tudo DENTRO da capa. */
+  --bg:#0A0A0A;--surface:#111111;--surface2:#181818;--border:#2A2A2A;
+  --text:#D4CFC8;--text-dim:#8A857E;--text-bright:#EDE8DF;
+  --gold:#C9922A;--gold-dim:#8A6520;--rust:#A03C28;--rust-bright:#C44A30;
+  background:radial-gradient(120% 90% at 50% 0%,#16130E 0%,var(--bg) 62%);
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+.stripe{height:4px;background:linear-gradient(90deg,var(--rust) 0%,var(--gold) 50%,var(--rust) 100%);}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;text-align:center;margin:2.8rem auto;line-height:1;
+}
+.content hr::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referências usa infinito. */
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style>/* ===========================================================================
+   Site theme for an exported essay.
+   The page below this is `essay_template.html`, unchanged: boxes, verdicts,
+   pull-quotes, cards, cover, chapter rules, ornaments, justified measure. This
+   layer only restates palette, typography and background so an essay looks like
+   the rest of the Atlas, and adds the site chrome.
+   =========================================================================== */
+
+:root {
+  --sb-bg: #f7f9fc;
+  --sb-surface: #ffffff;
+  --sb-text: #101c2e;
+  --sb-muted: #5a6b83;
+  --sb-faint: #8493a8;
+  --sb-line: rgba(16, 28, 46, 0.12);
+  --sb-line-strong: rgba(16, 28, 46, 0.24);
+  --sb-accent: #2f5fb0;
+  --sb-shadow: 0 20px 56px rgba(23, 42, 71, 0.12);
+  --sb-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --sb-bg: #060d18;
+  --sb-surface: #0d1a2c;
+  --sb-text: #f2f6fb;
+  --sb-muted: #90a3bb;
+  --sb-faint: #64748b;
+  --sb-line: rgba(144, 163, 187, 0.16);
+  --sb-line-strong: rgba(144, 163, 187, 0.32);
+  --sb-accent: #7aabff;
+  --sb-shadow: 0 24px 64px rgba(0, 0, 0, 0.36);
+}
+
+/* --- Palette handover ----------------------------------------------------- */
+
+html, body {
+  background: var(--sb-bg) !important;
+  color: var(--sb-text) !important;
+}
+
+body { padding-top: 60px; }
+
+/* The template's own surfaces follow the site, in both themes. */
+.masthead, .content, .box, .card, .pull-quote, .box-verdict,
+figure, table, pre, blockquote {
+  color: var(--sb-text);
+}
+
+:root[data-theme="dark"] .box,
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .box-verdict,
+:root[data-theme="dark"] pre,
+:root[data-theme="dark"] table {
+  background: color-mix(in srgb, var(--sb-surface) 88%, transparent) !important;
+  border-color: var(--sb-line) !important;
+}
+
+:root[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead-rule,
+:root[data-theme="dark"] hr {
+  border-color: var(--sb-line) !important;
+}
+
+:root[data-theme="dark"] a { color: var(--sb-accent); }
+
+/* Headings and UI text take the site's sans; the body keeps the essay serif. */
+.hero-title, h1, h2, h3, h4, .byline, .kicker, .box-badge, .box-title,
+figcaption, .pq-cite, table th {
+  font-family: var(--sb-sans) !important;
+}
+
+/* --- Site bar ------------------------------------------------------------- */
+
+.sb-bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 clamp(16px, 4vw, 40px);
+  border-bottom: 1px solid var(--sb-line);
+  background: color-mix(in srgb, var(--sb-bg) 86%, transparent);
+  backdrop-filter: blur(14px);
+  font-family: var(--sb-sans);
+}
+.sb-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--sb-text);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+.sb-mark {
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  border: 1px solid var(--sb-line-strong);
+  border-radius: 8px;
+  color: var(--sb-accent);
+  font-size: 10px;
+  font-weight: 800;
+}
+.sb-nav { display: flex; align-items: center; gap: 16px; }
+.sb-nav a {
+  color: var(--sb-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.sb-nav a:hover { color: var(--sb-text); }
+.sb-nav button {
+  width: 32px; height: 32px;
+  border: 1px solid var(--sb-line);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--sb-text);
+  cursor: pointer;
+}
+
+/* Reading progress, pinned under the bar. */
+.sb-progress {
+  position: fixed;
+  top: 56px; left: 0; right: 0;
+  height: 2px;
+  z-index: 60;
+}
+.sb-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--sb-accent);
+}
+
+/* --- Floating summary ----------------------------------------------------- */
+
+.sb-toc-fab {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 61;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid var(--sb-line-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sb-surface) 94%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--sb-shadow);
+  color: var(--sb-text);
+  font-family: var(--sb-sans);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.sb-toc-fab:hover { border-color: var(--sb-accent); }
+
+.sb-toc {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: calc(clamp(16px, 3vw, 32px) + 54px);
+  z-index: 62;
+  width: min(360px, calc(100vw - 32px));
+  max-height: min(64vh, 620px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--sb-line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--sb-surface) 97%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--sb-shadow);
+  font-family: var(--sb-sans);
+  overflow: hidden;
+}
+.sb-toc[hidden] { display: none !important; }
+.sb-toc header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--sb-line);
+  font-size: 13px;
+}
+.sb-toc header button {
+  border: 0;
+  background: transparent;
+  color: var(--sb-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.sb-toc nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.sb-toc a {
+  padding: 7px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 0 8px 8px 0;
+  color: var(--sb-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.sb-toc a:hover { background: color-mix(in srgb, var(--sb-accent) 10%, transparent); }
+.sb-toc a.h3 { padding-left: 26px; font-size: 12px; }
+.sb-toc a.active {
+  color: var(--sb-text);
+  border-left-color: var(--sb-accent);
+}
+
+/* --- Tags and related ----------------------------------------------------- */
+
+.sb-tags, .sb-related {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+  font-family: var(--sb-sans);
+}
+.sb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 28px;
+}
+.sb-tag {
+  padding: 4px 11px;
+  border: 1px solid var(--sb-line);
+  border-radius: 999px;
+  color: var(--sb-muted);
+  font-size: 11px;
+}
+.sb-related {
+  margin-top: 40px;
+  margin-bottom: 72px;
+  padding-top: 28px;
+  border-top: 1px solid var(--sb-line);
+}
+.sb-related h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: var(--sb-text);
+}
+.sb-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.sb-related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--sb-line);
+  border-radius: 14px;
+  color: var(--sb-text);
+  text-decoration: none;
+}
+.sb-related-card:hover { border-color: var(--sb-line-strong); }
+.sb-related-card span {
+  color: var(--sb-muted);
+  font-size: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+@media print {
+  .sb-bar, .sb-progress, .sb-toc, .sb-toc-fab, .sb-related { display: none !important; }
+  body { padding-top: 0; }
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Julho de 2026</p>
+  </div>
+</header>
+
+<main class="content">
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a href="#introdução-ferramentas-analíticas-de-análise">Introdução:
+Ferramentas Analíticas de Análise</a></li>
+<li><a
+href="#1-geometria-de-controle-cinemática-e-álgebras-de-rotação">1.
+Geometria de Controle, Cinemática e Álgebras de Rotação</a></li>
+<li><a
+href="#2-modelagem-probabilística-processos-estocásticos-e-otimização-sob-incerteza">2.
+Modelagem Probabilística, Processos Estocásticos e Otimização Sob
+Incerteza</a></li>
+<li><a
+href="#3-amostragem-avançada-sequências-estocásticas-e-otimização-heurística">3.
+Amostragem Avançada, Sequências Estocásticas e Otimização
+Heurística</a></li>
+<li><a
+href="#4-estimativa-de-estado-filtragem-não-linear-e-teoria-da-informação">4.
+Estimativa de Estado, Filtragem Não-Linear e Teoria da
+Informação</a></li>
+<li><a
+href="#5-decomposição-de-ordem-reduzida-operadores-dinâmicos-e-caos">5.
+Decomposição de Ordem Reduzida, Operadores Dinâmicos e Caos</a></li>
+<li><a
+href="#6-processamento-multiescala-de-sinais-análise-espectral-e-homologia">6.
+Processamento Multiescala de Sinais, Análise Espectral e
+Homologia</a></li>
+<li><a
+href="#7-arquitetura-de-dados-integrada-e-fluxos-aeroespaciais">7.
+Arquitetura de Dados Integrada e Fluxos Aeroespaciais</a></li>
+</ul>
+<hr />
+<h2 id="introdução-ferramentas-analíticas-de-análise">Introdução:
 Ferramentas Analíticas de Análise</h2>
 <p>A engenharia aeroespacial contemporânea vivencia uma transformação
 paradigmática em suas ferramentas analíticas. O incremento de
@@ -24,7 +980,7 @@ interpretação física direta de fenômenos de voo/aerodinâmica, aplicações
 computacionais concretas com trechos de código e análise crítica dos
 limites de validade.</p>
 <hr />
-<h2 id="geometria-de-controle-cinemática-e-álgebras-de-rotação">1.
+<h2 id="1-geometria-de-controle-cinemática-e-álgebras-de-rotação">1.
 Geometria de Controle, Cinemática e Álgebras de Rotação</h2>
 <h3 id="álgebra-geométrica-quaternions-e-cinemática-rígida">Álgebra
 Geométrica, Quaternions e Cinemática Rígida</h3>
@@ -125,13 +1081,9 @@ singularidade é da parametrização, não do voo.</p>
 <p>A figura abaixo compara as duas propagações numa cabragem quase pura
 de 30 graus por segundo, com uma guinada residual de meio grau por
 segundo, cruzando a vertical em três segundos.</p>
-<figure>
-<img src="../assets/media/metodos_quaternion_vs_euler.png"
-alt="Comparação entre propagação de atitude por quaternion e por ângulos de Euler numa passagem pela vertical" />
-<figcaption aria-hidden="true">Comparação entre propagação de atitude
-por quaternion e por ângulos de Euler numa passagem pela
-vertical</figcaption>
-</figure>
+<p><img
+src="C:\Users\gusta\AppData\Local\Temp\assets\media\metodos_quaternion_vs_euler.png"
+alt="Comparação entre propagação de atitude por quaternion e por ângulos de Euler numa passagem pela vertical" /></p>
 <p>À esquerda, o ângulo de rolamento calculado por Euler salta de zero a
 cento e oitenta graus em poucos milissegundos, enquanto as quatro
 componentes do quaternion atravessam o mesmo instante como senoides
@@ -316,13 +1268,9 @@ são avançar e girar. Ainda assim, todo mundo estaciona em paralelo. A
 manobra de estacionar é literalmente o colchete de Lie: avançar, girar,
 recuar, desgirar, uma sequência cujo resultado líquido é um deslocamento
 lateral que nenhum comando isolado produz.</p>
-<figure>
-<img src="../assets/media/metodos_colchete_de_lie.png"
-alt="Duas ordens da mesma sequência de comandos levando a estados finais diferentes, com a lacuna medindo o colchete de Lie" />
-<figcaption aria-hidden="true">Duas ordens da mesma sequência de
-comandos levando a estados finais diferentes, com a lacuna medindo o
-colchete de Lie</figcaption>
-</figure>
+<p><img
+src="C:\Users\gusta\AppData\Local\Temp\assets\media\metodos_colchete_de_lie.png"
+alt="Duas ordens da mesma sequência de comandos levando a estados finais diferentes, com a lacuna medindo o colchete de Lie" /></p>
 <p>A figura mostra as duas ordens da mesma sequência de quatro comandos,
 partindo do mesmo estado. A separação entre os pontos finais é lateral,
 exatamente a direção que o colchete prevê e exatamente a direção que os
@@ -432,7 +1380,7 @@ para dizer quando essa parametrização é adequada e quando ela esconde
 restrições não holonômicas do veículo.</p>
 <hr />
 <h2
-id="modelagem-probabilística-processos-estocásticos-e-otimização-sob-incerteza">2.
+id="2-modelagem-probabilística-processos-estocásticos-e-otimização-sob-incerteza">2.
 Modelagem Probabilística, Processos Estocásticos e Otimização Sob
 Incerteza</h2>
 <p>Representar a atitude sem singularidades é metade do problema de voar
@@ -525,13 +1473,9 @@ kernel anisotrópico, com comprimento próprio para cada entrada, diz algo
 ainda mais específico: que a resposta varia rápido em Mach na região
 transônica e devagar em Reynolds, que é exatamente o que a física do
 escoamento compressível prevê.</p>
-<figure>
-<img src="../assets/media/metodos_gp_polar_incerteza.png"
-alt="Processo gaussiano ajustado a cinco pontos de uma polar, com banda de incerteza que se alarga na região de estol" />
-<figcaption aria-hidden="true">Processo gaussiano ajustado a cinco
-pontos de uma polar, com banda de incerteza que se alarga na região de
-estol</figcaption>
-</figure>
+<p><img
+src="C:\Users\gusta\AppData\Local\Temp\assets\media\metodos_gp_polar_incerteza.png"
+alt="Processo gaussiano ajustado a cinco pontos de uma polar, com banda de incerteza que se alarga na região de estol" /></p>
 <p>A figura mostra o comportamento que torna o método útil. Cinco pontos
 de túnel, colocados em menos quatro, zero, quatro, oito e dezesseis
 graus, definem uma média posterior que segue a parte linear da polar com
@@ -670,13 +1614,9 @@ conceitualmente mais direto e computacionalmente mais caro.</p>
 o que um projetista experiente faz por intuição: não gastar a próxima
 simulação onde já se sabe a resposta, nem onde a resposta é claramente
 ruim, mas onde há chance real de descobrir algo que mude a decisão.</p>
-<figure>
-<img src="../assets/media/metodos_bo_expected_improvement.png"
-alt="Surrogate gaussiano e função de aquisição indicando o próximo ponto a simular na otimização do twist de uma pá" />
-<figcaption aria-hidden="true">Surrogate gaussiano e função de aquisição
-indicando o próximo ponto a simular na otimização do twist de uma
-pá</figcaption>
-</figure>
+<p><img
+src="C:\Users\gusta\AppData\Local\Temp\assets\media\metodos_bo_expected_improvement.png"
+alt="Surrogate gaussiano e função de aquisição indicando o próximo ponto a simular na otimização do twist de uma pá" /></p>
 <p>A figura mostra o estado do algoritmo depois de quatro avaliações de
 CFD na otimização do twist de uma pá de rotor. O painel superior traz o
 surrogate com sua banda, e o inferior a melhoria esperada. As quatro
@@ -821,13 +1761,9 @@ uma sucessão de picos. Um <span
 class="math inline">\(\varepsilon\)</span> pequeno produz bases largas e
 quase colineares entre si, o interpolador fica suave e a matriz <span
 class="math inline">\(A\)</span> fica mal condicionada.</p>
-<figure>
-<img src="../assets/media/metodos_rbf_forma_condicionamento.png"
-alt="Efeito da base e do parâmetro de forma na interpolação de uma polar, com o número de condição da matriz de interpolação" />
-<figcaption aria-hidden="true">Efeito da base e do parâmetro de forma na
-interpolação de uma polar, com o número de condição da matriz de
-interpolação</figcaption>
-</figure>
+<p><img
+src="C:\Users\gusta\AppData\Local\Temp\assets\media\metodos_rbf_forma_condicionamento.png"
+alt="Efeito da base e do parâmetro de forma na interpolação de uma polar, com o número de condição da matriz de interpolação" /></p>
 <p>A figura mostra os dois lados dessa moeda. À esquerda, a mesma
 amostra de oito pontos interpolada por três bases distintas: a thin
 plate spline e a gaussiana com <span
@@ -914,7 +1850,7 @@ class="math inline">\(A\)</span>, o que transforma a interpolação em
 suavização e reintroduz um parâmetro que precisa ser escolhido,
 tipicamente por validação cruzada.</p>
 <hr />
-<h3 id="redes-neurais-gps-e-deep-kernel-learning">Redes Neurais + GPs e
+<h3 id="redes-neurais--gps-e-deep-kernel-learning">Redes Neurais + GPs e
 Deep Kernel Learning</h3>
 <p>O problema que o <a href="https://arxiv.org/abs/1511.02222">deep
 kernel learning</a> [13] (DKL) resolve é o de construir um <a
@@ -1244,7 +2180,7 @@ priori, aceitando o risco de subestimar uma interação que, na prática,
 seja relevante.</p>
 <hr />
 <h2
-id="amostragem-avançada-sequências-estocásticas-e-otimização-heurística">3.
+id="3-amostragem-avançada-sequências-estocásticas-e-otimização-heurística">3.
 Amostragem Avançada, Sequências Estocásticas e Otimização
 Heurística</h2>
 <p>O capítulo anterior mostrou como modelar uma resposta cara e decidir
@@ -1759,7 +2695,7 @@ sucessivos e filtrar por viabilidade mecânica, não travar na primeira
 aproximação boa que a teoria dos números oferece.</p>
 <hr />
 <h2
-id="estimativa-de-estado-filtragem-não-linear-e-teoria-da-informação">4.
+id="4-estimativa-de-estado-filtragem-não-linear-e-teoria-da-informação">4.
 Estimativa de Estado, Filtragem Não-Linear e Teoria da Informação</h2>
 <p>Amostrar bem o espaço de projeto é metade do esforço. A outra metade
 acontece em voo, quando a aeronave precisa saber seu próprio estado a
@@ -2002,20 +2938,19 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a h
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    h_xy <span class="op">=</span> entropia(p_xy.ravel())</span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> h_x <span class="op">+</span> h_y <span class="op">-</span> h_xy                          <span class="co"># I(X;Y) = H(X)+H(Y)-H(X,Y)</span></span>
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># tres regimes de alfa efetivo (linear, pre-estol, estol) x leitura discretizada</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>p_vane   <span class="op">=</span> np.array([[<span class="fl">.30</span>,<span class="fl">.05</span>,<span class="fl">.00</span>],[<span class="fl">.04</span>,<span class="fl">.28</span>,<span class="fl">.03</span>],[<span class="fl">.00</span>,<span class="fl">.02</span>,<span class="fl">.28</span>]])</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>p_strain <span class="op">=</span> np.array([[<span class="fl">.20</span>,<span class="fl">.13</span>,<span class="fl">.05</span>],[<span class="fl">.10</span>,<span class="fl">.18</span>,<span class="fl">.10</span>],[<span class="fl">.05</span>,<span class="fl">.10</span>,<span class="fl">.09</span>]])</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>h_alfa <span class="op">=</span> entropia(p_vane.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>))</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>i_vane, i_strain <span class="op">=</span> info_mutua(p_vane), info_mutua(p_strain)</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;H(alfa)=</span><span class="sc">{</span>h_alfa<span class="sc">:.2f}</span><span class="ss"> bits | I(vane)=</span><span class="sc">{</span>i_vane<span class="sc">:.2f}</span><span class="ss"> (</span><span class="sc">{</span>i_vane<span class="op">/</span>h_alfa<span class="sc">:.0%}</span><span class="ss">) | &quot;</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f&quot;I(strain)=</span><span class="sc">{</span>i_strain<span class="sc">:.2f}</span><span class="ss"> (</span><span class="sc">{</span>i_strain<span class="op">/</span>h_alfa<span class="sc">:.0%}</span><span class="ss">)&quot;</span>)</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kl_gauss(mu1, s1, mu0, s0):                       <span class="co"># KL entre duas gaussianas</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.log(s0 <span class="op">/</span> s1) <span class="op">+</span> (s1<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> (mu1 <span class="op">-</span> mu0)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> s0<span class="op">**</span><span class="dv">2</span>) <span class="op">-</span> <span class="fl">0.5</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>kl_normal <span class="op">=</span> kl_gauss(mu1<span class="op">=</span><span class="fl">0.102</span>, s1<span class="op">=</span><span class="fl">0.004</span>, mu0<span class="op">=</span><span class="fl">0.100</span>, s0<span class="op">=</span><span class="fl">0.004</span>)   <span class="co"># asa limpa</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>kl_gelo   <span class="op">=</span> kl_gauss(mu1<span class="op">=</span><span class="fl">0.086</span>, s1<span class="op">=</span><span class="fl">0.006</span>, mu0<span class="op">=</span><span class="fl">0.100</span>, s0<span class="op">=</span><span class="fl">0.004</span>)   <span class="co"># suspeita de gelo</span></span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;D_KL normal=</span><span class="sc">{</span>kl_normal<span class="sc">:.3f}</span><span class="ss"> nats | D_KL com gelo=</span><span class="sc">{</span>kl_gelo<span class="sc">:.3f}</span><span class="ss"> nats&quot;</span>)</span></code></pre></div>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>p_vane   <span class="op">=</span> np.array([[<span class="fl">.30</span>,<span class="fl">.05</span>,<span class="fl">.00</span>],[<span class="fl">.04</span>,<span class="fl">.28</span>,<span class="fl">.03</span>],[<span class="fl">.00</span>,<span class="fl">.02</span>,<span class="fl">.28</span>]])</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>p_strain <span class="op">=</span> np.array([[<span class="fl">.20</span>,<span class="fl">.13</span>,<span class="fl">.05</span>],[<span class="fl">.10</span>,<span class="fl">.18</span>,<span class="fl">.10</span>],[<span class="fl">.05</span>,<span class="fl">.10</span>,<span class="fl">.09</span>]])</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>h_alfa <span class="op">=</span> entropia(p_vane.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>i_vane, i_strain <span class="op">=</span> info_mutua(p_vane), info_mutua(p_strain)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;H(alfa)=</span><span class="sc">{</span>h_alfa<span class="sc">:.2f}</span><span class="ss"> bits | I(vane)=</span><span class="sc">{</span>i_vane<span class="sc">:.2f}</span><span class="ss"> (</span><span class="sc">{</span>i_vane<span class="op">/</span>h_alfa<span class="sc">:.0%}</span><span class="ss">) | &quot;</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f&quot;I(strain)=</span><span class="sc">{</span>i_strain<span class="sc">:.2f}</span><span class="ss"> (</span><span class="sc">{</span>i_strain<span class="op">/</span>h_alfa<span class="sc">:.0%}</span><span class="ss">)&quot;</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kl_gauss(mu1, s1, mu0, s0):                       <span class="co"># KL entre duas gaussianas</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.log(s0 <span class="op">/</span> s1) <span class="op">+</span> (s1<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> (mu1 <span class="op">-</span> mu0)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> s0<span class="op">**</span><span class="dv">2</span>) <span class="op">-</span> <span class="fl">0.5</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>kl_normal <span class="op">=</span> kl_gauss(mu1<span class="op">=</span><span class="fl">0.102</span>, s1<span class="op">=</span><span class="fl">0.004</span>, mu0<span class="op">=</span><span class="fl">0.100</span>, s0<span class="op">=</span><span class="fl">0.004</span>)   <span class="co"># asa limpa</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>kl_gelo   <span class="op">=</span> kl_gauss(mu1<span class="op">=</span><span class="fl">0.086</span>, s1<span class="op">=</span><span class="fl">0.006</span>, mu0<span class="op">=</span><span class="fl">0.100</span>, s0<span class="op">=</span><span class="fl">0.004</span>)   <span class="co"># suspeita de gelo</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;D_KL normal=</span><span class="sc">{</span>kl_normal<span class="sc">:.3f}</span><span class="ss"> nats | D_KL com gelo=</span><span class="sc">{</span>kl_gelo<span class="sc">:.3f}</span><span class="ss"> nats&quot;</span>)</span></code></pre></div>
 <p>O alfa-vane resolve 60% da entropia total de 1,58 bit sobre o regime
 de voo, contra apenas 5% do strain gauge, uma diferença grande demais
 para justificar substituir o vane pelo sinal que já existe de graça: o
@@ -2222,7 +3157,7 @@ precisa, que nenhuma lei de controle linear entrega a robustez pedida
 contra aquela classe de perturbação, e que a solução está em mudar a
 planta, o sensor ou a especificação, não em insistir no controlador.</p>
 <hr />
-<h2 id="decomposição-de-ordem-reduzida-operadores-dinâmicos-e-caos">5.
+<h2 id="5-decomposição-de-ordem-reduzida-operadores-dinâmicos-e-caos">5.
 Decomposição de Ordem Reduzida, Operadores Dinâmicos e Caos</h2>
 <p>Quando o modelo completo é grande demais para caber no laço de
 projeto, a resposta não é abrir mão da física, e sim reduzi-la
@@ -2916,7 +3851,7 @@ essa maldição residual da dimensionalidade é o motivo prático de
 preferir tensor train a Tucker puro.</p>
 <hr />
 <h2
-id="processamento-multiescala-de-sinais-análise-espectral-e-homologia">6.
+id="6-processamento-multiescala-de-sinais-análise-espectral-e-homologia">6.
 Processamento Multiescala de Sinais, Análise Espectral e Homologia</h2>
 <p>O dado bruto de um ensaio raramente chega pronto para os métodos dos
 capítulos anteriores: antes de modelar, reduzir e decidir, é preciso
@@ -3607,7 +4542,7 @@ e o método correto passa a ser segmentar os dados por regime antes de
 aplicar a redução de dimensão, em vez de forçar uma única parametrização
 global sobre um fenômeno que é, na prática, descontínuo.</p>
 <hr />
-<h2 id="arquitetura-de-dados-integrada-e-fluxos-aeroespaciais">7.
+<h2 id="7-arquitetura-de-dados-integrada-e-fluxos-aeroespaciais">7.
 Arquitetura de Dados Integrada e Fluxos Aeroespaciais</h2>
 <h3
 id="workflow-integrado-do-dado-bruto-ao-second-brain-aeronáutico">Workflow
@@ -3709,33 +4644,30 @@ para decidir o próximo ponto (a lógica de otimização bayesiana).</p>
 <div class="sourceCode" id="cb22"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) extracao de sinal (wavelet/SSA): energia por janela de um traco de acelerometro</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> <span class="fl">200.0</span>  <span class="co"># Hz</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">20.0</span>, <span class="fl">1.0</span> <span class="op">/</span> fs)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>sinal <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="fl">0.5</span> <span class="op">*</span> t) <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> np.random.default_rng(<span class="dv">3</span>).standard_normal(t.size)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>janela <span class="op">=</span> <span class="dv">80</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>energia <span class="op">=</span> np.array([np.mean(sinal[i:i <span class="op">+</span> janela] <span class="op">**</span> <span class="dv">2</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(sinal) <span class="op">-</span> janela, janela)])</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>pontos_x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">16</span>, <span class="bu">len</span>(energia))  <span class="co"># eixo de projeto, ex.: angulo de ataque</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) modelo substituto com incerteza (processo gaussiano)</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kernel(a, b, ell<span class="op">=</span><span class="fl">2.5</span>, sf2<span class="op">=</span><span class="fl">0.05</span>):</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    d2 <span class="op">=</span> (a[:, <span class="va">None</span>] <span class="op">-</span> b[<span class="va">None</span>, :]) <span class="op">**</span> <span class="dv">2</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sf2 <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> d2 <span class="op">/</span> ell <span class="op">**</span> <span class="dv">2</span>)</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>amostrados <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="bu">len</span>(pontos_x), <span class="dv">7</span>)  <span class="co"># poucos pontos ja ensaiados</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>Xs, ys <span class="op">=</span> pontos_x[amostrados], energia[amostrados]</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> kernel(Xs, Xs) <span class="op">+</span> <span class="fl">1e-6</span> <span class="op">*</span> np.eye(<span class="bu">len</span>(Xs))</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(K)</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>alpha_ <span class="op">=</span> np.linalg.solve(L.T, np.linalg.solve(L, ys))</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>Kx <span class="op">=</span> kernel(Xs, pontos_x)</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.linalg.solve(L, Kx)</span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> np.diag(kernel(pontos_x, pontos_x)) <span class="op">-</span> np.<span class="bu">sum</span>(v <span class="op">*</span> v, axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) decisao (otimizacao bayesiana): proximo ponto de maior incerteza</span></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>proximo_idx <span class="op">=</span> np.argmax(var)</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;pontos ja ensaiados: </span><span class="sc">{</span><span class="bu">len</span>(Xs)<span class="sc">}</span><span class="ss"> de </span><span class="sc">{</span><span class="bu">len</span>(pontos_x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;proximo ponto de ensaio sugerido em x = </span><span class="sc">{</span>pontos_x[proximo_idx]<span class="sc">:.2f}</span><span class="ss">, &quot;</span></span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f&quot;incerteza local = </span><span class="sc">{</span>np<span class="sc">.</span>sqrt(var[proximo_idx])<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> <span class="fl">200.0</span>  <span class="co"># Hz</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">20.0</span>, <span class="fl">1.0</span> <span class="op">/</span> fs)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>sinal <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="fl">0.5</span> <span class="op">*</span> t) <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> np.random.default_rng(<span class="dv">3</span>).standard_normal(t.size)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>janela <span class="op">=</span> <span class="dv">80</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>energia <span class="op">=</span> np.array([np.mean(sinal[i:i <span class="op">+</span> janela] <span class="op">**</span> <span class="dv">2</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(sinal) <span class="op">-</span> janela, janela)])</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>pontos_x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">16</span>, <span class="bu">len</span>(energia))  <span class="co"># eixo de projeto, ex.: angulo de ataque</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kernel(a, b, ell<span class="op">=</span><span class="fl">2.5</span>, sf2<span class="op">=</span><span class="fl">0.05</span>):</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    d2 <span class="op">=</span> (a[:, <span class="va">None</span>] <span class="op">-</span> b[<span class="va">None</span>, :]) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sf2 <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> d2 <span class="op">/</span> ell <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>amostrados <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="bu">len</span>(pontos_x), <span class="dv">7</span>)  <span class="co"># poucos pontos ja ensaiados</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>Xs, ys <span class="op">=</span> pontos_x[amostrados], energia[amostrados]</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> kernel(Xs, Xs) <span class="op">+</span> <span class="fl">1e-6</span> <span class="op">*</span> np.eye(<span class="bu">len</span>(Xs))</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(K)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>alpha_ <span class="op">=</span> np.linalg.solve(L.T, np.linalg.solve(L, ys))</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>Kx <span class="op">=</span> kernel(Xs, pontos_x)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.linalg.solve(L, Kx)</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> np.diag(kernel(pontos_x, pontos_x)) <span class="op">-</span> np.<span class="bu">sum</span>(v <span class="op">*</span> v, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>proximo_idx <span class="op">=</span> np.argmax(var)</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;pontos ja ensaiados: </span><span class="sc">{</span><span class="bu">len</span>(Xs)<span class="sc">}</span><span class="ss"> de </span><span class="sc">{</span><span class="bu">len</span>(pontos_x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;proximo ponto de ensaio sugerido em x = </span><span class="sc">{</span>pontos_x[proximo_idx]<span class="sc">:.2f}</span><span class="ss">, &quot;</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f&quot;incerteza local = </span><span class="sc">{</span>np<span class="sc">.</span>sqrt(var[proximo_idx])<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <p>Com apenas <span class="math inline">\(7\)</span> dos <span
 class="math inline">\(49\)</span> pontos possíveis já ensaiados, o
 modelo aponta o próximo ensaio em <span class="math inline">\(x =
@@ -3993,5 +4925,173 @@ Data Sets</em>, Physica D, Vol. 65, Nos. 1–2, 1993, pp. 117–134. —
 Método de Rosenstein para expoentes de Lyapunov a partir de séries
 curtas. <a
 href="https://doi.org/10.1016/0167-2789(93)90009-P">Link</a></p>
-</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="modelagem-teorica-efeito-solo-multirotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle.</span></a><a class="related-card" href="validacao-estocastica-dinamica-de-voo.html"><strong>Validação Estocástica de Dinâmica de Voo</strong><span>O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.</span></a><a class="related-card" href="rotores-e-giroscopios.html"><strong>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</strong><span>Com derivação longa e notação unificada, o white paper constrói a equivalência entre rotor e giroscópio em três casos progressivos: no vácuo, com amortecimento aerodinâmico e com rigidez por hinge offset. O resultado central é que rotor e giroscópio são o mesmo problema diferencial acoplado em referenciais diferentes, e que cada parâmetro físico de projeto desloca o polo modal de forma matematicamente transparente.</span></a><a class="related-card" href="dinamica-acoplada-corpos-girantes.html"><strong>Dinâmica Acoplada de Corpos Girantes e Rotores de Asas Rotativas</strong><span>O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.</span></a></div></section></article></main>
-<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;metodos-matematicos-engenharia-aeroespacial&quot;, &quot;title&quot;: &quot;Métodos Matemáticos e Computacionais na Engenharia Aeroespacial&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Julho de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <a href="../sphere.html">Globo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Engenharia</span><span class="sb-tag">Matemática</span><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Dinâmica-de-Voo</span><span class="sb-tag">Estatística</span><span class="sb-tag">Computação</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="modelagem-teorica-efeito-solo-multirotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle.</span></a><a class="sb-related-card" href="validacao-estocastica-dinamica-de-voo.html"><strong>Validação Estocástica de Dinâmica de Voo</strong><span>O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.</span></a><a class="sb-related-card" href="rotores-e-giroscopios.html"><strong>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</strong><span>Com derivação longa e notação unificada, o white paper constrói a equivalência entre rotor e giroscópio em três casos progressivos: no vácuo, com amortecimento aerodinâmico e com rigidez por hinge offset. O resultado central é que rotor e giroscópio são o mesmo problema diferencial acoplado em referenciais diferentes, e que cada parâmetro físico de projeto desloca o polo modal de forma matematicamente transparente.</span></a><a class="sb-related-card" href="dinamica-acoplada-corpos-girantes.html"><strong>Dinâmica Acoplada de Corpos Girantes e Rotores de Asas Rotativas</strong><span>O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false" aria-controls="sbToc">
+  <span aria-hidden="true">☰</span> Sumário
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=de060cf9"></script>
+<script src="../assets/essay.js?v=ad885ea1"></script>
+</body>
+</html>

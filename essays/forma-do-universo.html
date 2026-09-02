@@ -1,6 +1,864 @@
-<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Uma travessia pela geometria e topologia do cosmos (das três arquiteturas clássicas às topologias compactas e às quatro classes de multiverso de Tegmark) que deságua nas questões que nenhuma cosmologia resolve sozinha: identidade pessoal em mundos ramificados, Cérebros de Boltzmann e por que existe algo em vez de nada."><title>A Arquitetura do Ilimitado — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="A Arquitetura do Ilimitado"><meta property="og:description" content="Uma travessia pela geometria e topologia do cosmos (das três arquiteturas clássicas às topologias compactas e às quatro classes de multiverso de Tegmark) que deságua nas questões que nenhuma cosmologia resolve sozinha: identidade pessoal em mundos ramificados, Cérebros de Boltzmann e por que existe algo em vez de nada."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="A Arquitetura do Ilimitado"><meta name="twitter:description" content="Uma travessia pela geometria e topologia do cosmos (das três arquiteturas clássicas às topologias compactas e às quatro classes de multiverso de Tegmark) que deságua nas questões que nenhuma cosmologia resolve sozinha: identidade pessoal em mundos ramificados, Cérebros de Boltzmann e por que existe algo em vez de nada."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
-<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
-<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>A Arquitetura do Ilimitado</h1><hr class="cover-rule"><p class="article-summary">Uma travessia pela geometria e topologia do cosmos (das três arquiteturas clássicas às topologias compactas e às quatro classes de multiverso de Tegmark) que deságua nas questões que nenhuma cosmologia resolve sozinha: identidade pessoal em mundos ramificados, Cérebros de Boltzmann e por que existe algo em vez de nada.</p><div class="article-meta"><span>Atualizado 2026-08-25</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Física</span><span class="tag">Cosmologia</span><span class="tag">Filosofia</span><span class="tag">Matemática</span></div></div></div></header><div class="prose" id="articleBody"><p>Toda cosmologia é, no fundo, uma forma de autobiografia. A pergunta
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="finalizado">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Arquitetura do Ilimitado</title>
+<meta property="og:title" content="A Arquitetura do Ilimitado">
+<meta property="og:description" content="Uma travessia pela geometria e topologia do cosmos (das três arquiteturas clássicas às topologias compactas e às quatro classes de multiverso de Tegmark) que deságua nas questões que nenhuma cosmologia resolve sozinha: identidade pessoal em mundos ramificados, Cérebros de Boltzmann e por que existe algo em vez de nada.">
+<meta property="og:type" content="article">
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F6F3EC;
+  --surface2:#EDE9DE;
+  --border:#DCD5C5;
+  --text:#3A342B;
+  --text-dim:#7E7566;
+  --text-bright:#171310;
+  --gold:#8A6B33;
+  --gold-dim:#B08A2E;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F5EF;
+    --surface2:#EEEAE0;
+    --border:#D9D3C4;
+    --text:#33302B;
+    --text-dim:#7E7566;
+    --text-bright:#15120E;
+    --gold:#8A6B33;
+    --gold-dim:#A98A2E;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  /* Paleta escura fixa no escopo da capa: as variaveis abaixo vencem
+     as do tema claro/escuro para tudo DENTRO da capa. */
+  --bg:#0A0A0A;--surface:#111111;--surface2:#181818;--border:#2A2A2A;
+  --text:#D4CFC8;--text-dim:#8A857E;--text-bright:#EDE8DF;
+  --gold:#C9922A;--gold-dim:#8A6520;--rust:#A03C28;--rust-bright:#C44A30;
+  background:radial-gradient(120% 90% at 50% 0%,#16130E 0%,var(--bg) 62%);
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+.stripe{height:4px;background:linear-gradient(90deg,var(--rust) 0%,var(--gold) 50%,var(--rust) 100%);}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;text-align:center;margin:2.8rem auto;line-height:1;
+}
+.content hr::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referências usa infinito. */
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<style>/* ===========================================================================
+   Site theme for an exported essay.
+   The page below this is `essay_template.html`, unchanged: boxes, verdicts,
+   pull-quotes, cards, cover, chapter rules, ornaments, justified measure. This
+   layer only restates palette, typography and background so an essay looks like
+   the rest of the Atlas, and adds the site chrome.
+   =========================================================================== */
+
+:root {
+  --sb-bg: #f7f9fc;
+  --sb-surface: #ffffff;
+  --sb-text: #101c2e;
+  --sb-muted: #5a6b83;
+  --sb-faint: #8493a8;
+  --sb-line: rgba(16, 28, 46, 0.12);
+  --sb-line-strong: rgba(16, 28, 46, 0.24);
+  --sb-accent: #2f5fb0;
+  --sb-shadow: 0 20px 56px rgba(23, 42, 71, 0.12);
+  --sb-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --sb-bg: #060d18;
+  --sb-surface: #0d1a2c;
+  --sb-text: #f2f6fb;
+  --sb-muted: #90a3bb;
+  --sb-faint: #64748b;
+  --sb-line: rgba(144, 163, 187, 0.16);
+  --sb-line-strong: rgba(144, 163, 187, 0.32);
+  --sb-accent: #7aabff;
+  --sb-shadow: 0 24px 64px rgba(0, 0, 0, 0.36);
+}
+
+/* --- Palette handover ----------------------------------------------------- */
+
+html, body {
+  background: var(--sb-bg) !important;
+  color: var(--sb-text) !important;
+}
+
+body { padding-top: 60px; }
+
+/* The template's own surfaces follow the site, in both themes. */
+.masthead, .content, .box, .card, .pull-quote, .box-verdict,
+figure, table, pre, blockquote {
+  color: var(--sb-text);
+}
+
+:root[data-theme="dark"] .box,
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .box-verdict,
+:root[data-theme="dark"] pre,
+:root[data-theme="dark"] table {
+  background: color-mix(in srgb, var(--sb-surface) 88%, transparent) !important;
+  border-color: var(--sb-line) !important;
+}
+
+:root[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead-rule,
+:root[data-theme="dark"] hr {
+  border-color: var(--sb-line) !important;
+}
+
+:root[data-theme="dark"] a { color: var(--sb-accent); }
+
+/* Headings and UI text take the site's sans; the body keeps the essay serif. */
+.hero-title, h1, h2, h3, h4, .byline, .kicker, .box-badge, .box-title,
+figcaption, .pq-cite, table th {
+  font-family: var(--sb-sans) !important;
+}
+
+/* --- Site bar ------------------------------------------------------------- */
+
+.sb-bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 clamp(16px, 4vw, 40px);
+  border-bottom: 1px solid var(--sb-line);
+  background: color-mix(in srgb, var(--sb-bg) 86%, transparent);
+  backdrop-filter: blur(14px);
+  font-family: var(--sb-sans);
+}
+.sb-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--sb-text);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+.sb-mark {
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  border: 1px solid var(--sb-line-strong);
+  border-radius: 8px;
+  color: var(--sb-accent);
+  font-size: 10px;
+  font-weight: 800;
+}
+.sb-nav { display: flex; align-items: center; gap: 16px; }
+.sb-nav a {
+  color: var(--sb-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.sb-nav a:hover { color: var(--sb-text); }
+.sb-nav button {
+  width: 32px; height: 32px;
+  border: 1px solid var(--sb-line);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--sb-text);
+  cursor: pointer;
+}
+
+/* Reading progress, pinned under the bar. */
+.sb-progress {
+  position: fixed;
+  top: 56px; left: 0; right: 0;
+  height: 2px;
+  z-index: 60;
+}
+.sb-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--sb-accent);
+}
+
+/* --- Floating summary ----------------------------------------------------- */
+
+.sb-toc-fab {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 61;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid var(--sb-line-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sb-surface) 94%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--sb-shadow);
+  color: var(--sb-text);
+  font-family: var(--sb-sans);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.sb-toc-fab:hover { border-color: var(--sb-accent); }
+
+.sb-toc {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: calc(clamp(16px, 3vw, 32px) + 54px);
+  z-index: 62;
+  width: min(360px, calc(100vw - 32px));
+  max-height: min(64vh, 620px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--sb-line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--sb-surface) 97%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--sb-shadow);
+  font-family: var(--sb-sans);
+  overflow: hidden;
+}
+.sb-toc[hidden] { display: none !important; }
+.sb-toc header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--sb-line);
+  font-size: 13px;
+}
+.sb-toc header button {
+  border: 0;
+  background: transparent;
+  color: var(--sb-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.sb-toc nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.sb-toc a {
+  padding: 7px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 0 8px 8px 0;
+  color: var(--sb-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.sb-toc a:hover { background: color-mix(in srgb, var(--sb-accent) 10%, transparent); }
+.sb-toc a.h3 { padding-left: 26px; font-size: 12px; }
+.sb-toc a.active {
+  color: var(--sb-text);
+  border-left-color: var(--sb-accent);
+}
+
+/* --- Tags and related ----------------------------------------------------- */
+
+.sb-tags, .sb-related {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+  font-family: var(--sb-sans);
+}
+.sb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 28px;
+}
+.sb-tag {
+  padding: 4px 11px;
+  border: 1px solid var(--sb-line);
+  border-radius: 999px;
+  color: var(--sb-muted);
+  font-size: 11px;
+}
+.sb-related {
+  margin-top: 40px;
+  margin-bottom: 72px;
+  padding-top: 28px;
+  border-top: 1px solid var(--sb-line);
+}
+.sb-related h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: var(--sb-text);
+}
+.sb-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.sb-related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--sb-line);
+  border-radius: 14px;
+  color: var(--sb-text);
+  text-decoration: none;
+}
+.sb-related-card:hover { border-color: var(--sb-line-strong); }
+.sb-related-card span {
+  color: var(--sb-muted);
+  font-size: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+@media print {
+  .sb-bar, .sb-progress, .sb-toc, .sb-toc-fab, .sb-related { display: none !important; }
+  body { padding-top: 0; }
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">A Arquitetura do Ilimitado</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Maio de 2026</p>
+  </div>
+</header>
+
+<main class="content">
+<p>Toda cosmologia é, no fundo, uma forma de autobiografia. A pergunta
 sobre a forma do universo é, também, uma pergunta sobre o lugar da mente
 que a formula.</p>
 <p>Durante a maior parte da história humana, o cosmos foi pequeno. Não
@@ -29,6 +887,39 @@ estranho fato de que existe algo em vez de nada.</p>
 <p>Não prometemos respostas. Prometemos que as perguntas, quando
 formuladas com precisão, são mais perturbadoras do que qualquer resposta
 poderia ser.</p>
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a href="#as-três-arquiteturas-do-cosmos">As Três Arquiteturas do
+<em>Cosmos</em></a></li>
+<li><a href="#a-topologia-da-realidade">A Topologia da
+<em>Realidade</em></a></li>
+<li><a href="#formas-possíveis-do-universo">Formas Possíveis do
+<em>Universo</em></a></li>
+<li><a href="#por-que-o-toro-é-plano--e-a-esfera-4d-não">Por Que o Toro
+é Plano — e a <em>Esfera 4D</em> Não</a></li>
+<li><a href="#nível-i--o-horizonte-além-do-horizonte">Nível I — O
+Horizonte Além do <em>Horizonte</em></a></li>
+<li><a href="#nível-ii--bolhas-no-vácuo-eterno">Nível II — Bolhas no
+Vácuo <em>Eterno</em></a></li>
+<li><a href="#nível-iii--a-bifurcação-quântica">Nível III — A Bifurcação
+<em>Quântica</em></a></li>
+<li><a href="#nível-iv--o-platonismo-extremo">Nível IV — O Platonismo
+<em>Extremo</em></a></li>
+<li><a href="#quantas-ontologias-existem">Quantas <em>Ontologias</em>
+Existem?</a></li>
+<li><a href="#os-limites-do-conhecimento">Os Limites do
+<em>Conhecimento</em></a></li>
+<li><a href="#cérebros-de-boltzmann">Cérebros de
+<em>Boltzmann</em></a></li>
+<li><a
+href="#identidade-livre-arbítrio-e-o-doppelgänger-cósmico">Identidade,
+Livre-Arbítrio e o <em>Doppelgänger</em> Cósmico</a></li>
+<li><a href="#o-observador-como-arquiteto">O Observador como
+<em>Arquiteto</em></a></li>
+<li><a href="#o-observador-que-sonha-o-cosmos">O Observador que
+<em>Sonha</em> o Cosmos</a></li>
+</ul>
+<hr />
 <h2 id="as-três-arquiteturas-do-cosmos">As Três Arquiteturas do
 <em>Cosmos</em></h2>
 <p>Universo com fronteira, universo infinito, universo fechado — e por
@@ -110,11 +1001,13 @@ mesma forma, responde que a pergunta está malformulada, porque o
 espaço-tempo começa no Big Bang e não há “antes” para referenciar. A
 Relatividade Geral rejeita universalmente o universo com fronteira
 literal. Essa opção está, em termos de física conhecida, encerrada.
-Descartada. Não é uma candidata. &gt; “Um universo com fronteira não é
-apenas contraintuitivo — é incoerente dentro da física padrão, da mesma
-forma que perguntar qual cor é mais rápida que o azul é incoerente
-dentro da linguagem padrão. A pergunta parece gramatical, mas não tem
-referente.”</p>
+Descartada. Não é uma candidata.</p>
+<div class="quote">
+<p>“Um universo com fronteira não é apenas contraintuitivo — é
+incoerente dentro da física padrão, da mesma forma que perguntar qual
+cor é mais rápida que o azul é incoerente dentro da linguagem padrão. A
+pergunta parece gramatical, mas não tem referente.”</p>
+</div>
 <p>Passemos ao <strong>universo infinito</strong>. Esta opção parece a
 mais generosa — simplesmente deixamos o espaço se estender para sempre,
 sem precisar explicar nenhuma borda. E há, de fato, um sentido em que
@@ -222,7 +1115,7 @@ incluindo o raciocínio que nos levou a concluir que vivemos num universo
 infinito — é provavelmente ilusório. A conclusão se autodestrói. O
 universo infinito, levado a sério, é uma cosmologia que mina a própria
 capacidade de fazer cosmologia.</p>
-<blockquote>
+<div class="quote">
 <p><strong>Por que descartamos o universo infinito:</strong> Um universo
 genuinamente infinito em extensão espacial gera três problemas
 irresolvidos: (1) torna as equações da cosmologia padrão mal definidas
@@ -234,7 +1127,7 @@ modelo que chega a essa conclusão. Nenhum desses problemas é
 superficial. O universo infinito não é uma hipótese proibida — mas vem
 acompanhada de um preço filosófico tão alto que exige uma seriedade
 raramente concedida nas apresentações populares de cosmologia.</p>
-</blockquote>
+</div>
 <p>Chegamos, então, à <strong>terceira opção</strong> — a única que a
 física moderna considera seriamente plausível: um universo <em>finito
 sem fronteira</em>. A ideia pode parecer paradoxal à primeira leitura:
@@ -258,7 +1151,7 @@ geometria, topologia e consequências filosóficas.</p>
 esse debate possível: as Equações de Friedmann. Pois sem elas, não há
 como articular rigorosamente nem a curvatura, nem o destino, nem a
 geometria do cosmos.</p>
-<h3 id="as-equações-de-friedmann-o-que-são-e-por-que-importam">As
+<h3 id="as-equações-de-friedmann--o-que-são-e-por-que-importam">As
 Equações de Friedmann — o que são e por que importam</h3>
 <p>Em 1922, o matemático russo <a
 href="https://en.wikipedia.org/wiki/Alexander_Friedmann">Alexander
@@ -509,15 +1402,18 @@ diferentes. As missões WMAP e Planck buscaram esses padrões e não os
 encontraram de forma conclusiva, o que impõe limites inferiores ao
 tamanho de qualquer topologia compacta: se existe, é maior que o
 horizonte observável.</p>
-<blockquote>
+<div class="pull-quote">
 <p>“Existe algo profundamente perturbador na ideia de um universo
 toroidal: você olharia para o céu e, com telescópios suficientemente
 poderosos, veria a Via Láctea pela frente e por trás, pela direita e
 pela esquerda, acima e abaixo — uma galeria de espelhos cósmicos
 estendendo-se em todas as direções, cada imagem mais antiga que a
-anterior, camadas sobrepostas de tempo-espaço dobrado sobre si mesmo.” —
-Implicação observacional do universo toroidal compacto</p>
-</blockquote>
+anterior, camadas sobrepostas de tempo-espaço dobrado sobre si
+mesmo.”</p>
+<div class="pq-cite">
+<p>Implicação observacional do universo toroidal compacto</p>
+</div>
+</div>
 <p>Além das topologias derivadas de curvatura constante, há também
 especulações sobre topologias mais radicais: universos com <strong>alças
 de mão</strong> (handle bodies), com <strong>buracos de minhoca
@@ -527,8 +1423,8 @@ onde uma viagem suficientemente longa retornaria você ao ponto de
 partida, mas com a paridade invertida — seu coração à direita, sua
 escrita espelhada).</p>
 <hr />
-<h2 id="por-que-o-toro-é-plano-e-a-esfera-4d-não">Por Que o Toro é Plano
-— e a <em>Esfera 4D</em> Não</h2>
+<h2 id="por-que-o-toro-é-plano--e-a-esfera-4d-não">Por Que o Toro é
+Plano — e a <em>Esfera 4D</em> Não</h2>
 <p>A distinção crucial entre curvatura intrínseca e extrínseca, e o que
 ela significa cosmologicamente.</p>
 <p>Há uma distinção que confunde quase todo leitor não especializado — e
@@ -590,19 +1486,20 @@ têm ângulos que somam mais de 180°, e que a área de uma “esfera” nesse
 espaço (o conjunto de pontos a distância r de um dado ponto) cresce mais
 lentamente que 4πr² para r grandes. A curvatura é real, intrínseca, e
 detectável sem referenciar nenhuma quarta dimensão.</p>
-<blockquote>
+<div class="quote">
 <p>A <strong>inflação cósmica</strong> resolve o problema da planura de
-forma elegante: um período de expansão exponencial no início do universo
-esticaria qualquer curvatura original para além do horizonte observável,
-tornando o cosmos local inevitavelmente plano independentemente de qual
-fosse a topologia inicial. É uma das predições mais elegantes da teoria
-inflacionária — e uma das que mais suporte observacional possui. Mas ela
-também “aplaina” o debate: se a inflação necessariamente produz um
-cosmos local plano, a questão da topologia global fica permanentemente
-fora de alcance observacional.</p>
-</blockquote>
+forma elegante: um período<br />
+de expansão exponencial no início do universo esticaria qualquer
+curvatura original para além do horizonte observável, tornando o cosmos
+local inevitavelmente plano independentemente de qual fosse a topologia
+inicial. É uma das predições mais elegantes da teoria inflacionária — e
+uma das que mais suporte observacional possui. Mas ela também “aplaina”
+o debate: se a inflação necessariamente produz um cosmos local plano, a
+questão da topologia global fica permanentemente fora de alcance
+observacional.</p>
+</div>
 <hr />
-<h2 id="nível-i-o-horizonte-além-do-horizonte">Nível I — O Horizonte
+<h2 id="nível-i--o-horizonte-além-do-horizonte">Nível I — O Horizonte
 Além do <em>Horizonte</em></h2>
 <p>Cópias estatísticas em um universo plano e infinito.</p>
 <p>O multiverso de Nível I é o mais discreto — e talvez o mais
@@ -617,11 +1514,11 @@ finito (embora enorme) de estados quânticos relevantes. Isso significa
 que o número de configurações distinguíveis de matéria dentro de um
 volume do tamanho do nosso horizonte observável é finito — embora
 grotescamente grande, da ordem de 10<sup>(10</sup>118).</p>
-<blockquote>
+<div class="quote">
 <p>“Em um universo espacialmente infinito, qualquer configuração finita
 de matéria e energia que possa existir, existe — e existe infinitas
 vezes. A questão não é se existe um duplo seu: é quantos existem.”</p>
-</blockquote>
+</div>
 <p>A distância estimada até o doppelgänger mais próximo — um volume
 idêntico ao nosso, com a mesma história cósmica, as mesmas galáxias, o
 mesmo planeta, a mesma pessoa lendo estas palavras — é da ordem de
@@ -650,7 +1547,7 @@ que substancial quando seus componentes nunca se influenciaram. É um
 universo uno ou uma coleção de universos co-habitantes com física
 idêntica mas histórias causalmente separadas?</p>
 <hr />
-<h2 id="nível-ii-bolhas-no-vácuo-eterno">Nível II — Bolhas no Vácuo
+<h2 id="nível-ii--bolhas-no-vácuo-eterno">Nível II — Bolhas no Vácuo
 Eterno</h2>
 <p>Inflação eterna, constantes variáveis e universos com física
 diferente</p>
@@ -709,7 +1606,7 @@ para fazer a pergunta. Esse é o argumento antrópico em sua formulação
 mais forte — e é simultaneamente poderoso e insatisfatório, porque troca
 uma explicação por um fato estatístico sem medida.</p>
 <hr />
-<h2 id="nível-iii-a-bifurcação-quântica">Nível III — A Bifurcação
+<h2 id="nível-iii--a-bifurcação-quântica">Nível III — A Bifurcação
 Quântica</h2>
 <p>Os Muitos Mundos de Everett e a ramificação da função de onda.</p>
 <p>A mecânica quântica é, em seus fundamentos, uma teoria sobre
@@ -723,12 +1620,12 @@ realizamos uma observação, vemos apenas um resultado. A superposição
 “colapsa” para um estado definido. Mas as equações da mecânica quântica,
 em si, não descrevem nenhum colapso. A equação de Schrödinger é linear e
 determinística: nunca produz uma redução da função de onda.</p>
-<blockquote>
+<div class="quote">
 <p><a href="https://en.wikipedia.org/wiki/Hugh_Everett_III">Hugh Everett
 III</a> propôs, em 1957, a solução mais radical: o colapso não existe. A
 função de onda nunca colapsa. Todos os resultados ocorrem — em ramos
 diferentes de uma realidade que se bifurca continuamente.</p>
-</blockquote>
+</div>
 <p>Na interpretação de <a
 href="https://en.wikipedia.org/wiki/Many-worlds_interpretation">Muitos
 Mundos</a>, cada vez que um sistema quântico encontra uma bifurcação —
@@ -810,7 +1707,7 @@ ocorrem, e a questão de por que você “provavelmente” verá resultados de
 alta amplitude é uma das questões mais abertas e debatidas da
 fundamentos da mecânica quântica.</p>
 <hr />
-<h2 id="nível-iv-o-platonismo-extremo">Nível IV — O Platonismo
+<h2 id="nível-iv--o-platonismo-extremo">Nível IV — O Platonismo
 Extremo</h2>
 <p>A hipótese matemática de Tegmark e a existência de todas as
 estruturas.</p>
@@ -829,14 +1726,14 @@ matemática autocontraditória tem existência física objetiva, então
 existem universos governados por geometrias completamente distintas,
 universos com mais dimensões compactas, universos onde a própria noção
 de “lei física” é irreconhecível para nós.</p>
-<blockquote>
+<div class="quote">
 <p>“A questão ‘por que essas equações e não outras?’ dissolve-se no
 Nível IV: não há ‘essas equações’. Há todas as equações, simultânea e
 igualmente reais. A pergunta não é por que vivemos neste universo, mas
 por que esta estrutura matemática particular gera observadores que se
 perguntam por que vivem aqui.” — Consequência da Hipótese do Universo
 Matemático (Tegmark, 2007)</p>
-</blockquote>
+</div>
 <p>O Nível IV reacende o debate filosófico do <strong>platonismo
 matemático</strong>. Platão argumentava que as formas matemáticas
 existem em um domínio não-físico, independente de qualquer mente.
@@ -872,49 +1769,57 @@ rastros no CMB, que puxa galáxias gravitacionalmente. Essa é a
 existência no sentido mais comum — existência como participação numa
 rede causal.</p>
 <p><strong>Ontologias dos quatro níveis de multiverso</strong></p>
-<blockquote>
-<p>🌍 <strong>Nível I — Monismo Espacial Expandido</strong> Uma única
-ontologia física, estendida além do horizonte. Os “outros universos” são
-partes do mesmo universo — diferentes apenas no sentido geográfico. A
-pergunta “mas eles existem de verdade?” tem a mesma resposta que “a
-Galáxia de Andrômeda existe de verdade?”: sim, causalmente, mesmo que
-você nunca chegue lá. O Nível I não pluraliza a ontologia: apenas a
-expande. É o multiverso mais parcimonioso — mas que ainda assim requer
-aceitar que o universo é fisicamente infinito, o que não é parcimonioso
-em absoluto.</p>
-</blockquote>
-<blockquote>
-<p>🫧 <strong>Nível II — Pluralismo de Leis</strong> Aqui a ontologia se
-fragmenta: há uma pluralidade de “regiões causalmente fechadas” com leis
-físicas diferentes. Ainda há um substrato comum — o campo inflacionário,
-o “mega-universo” em inflação eterna — mas as “leis” são propriedades
-locais de cada bolha. A pergunta filosófica central é: as leis da física
-são necessárias ou contingentes? O Nível II responde: completamente
-contingentes. Poderiam ter sido outras. E, em outras bolhas, são
-outras.</p>
-</blockquote>
-<blockquote>
-<p>⑂ <strong>Nível III — Realismo da Função de Onda</strong> A ontologia
-fundamental é o espaço de Hilbert — um objeto matemático de dimensão
-prodigiosamente alta (ou infinita). O “universo clássico” que habitamos
-é uma aproximação emergente, resultado da decoerência. A realidade
-fundamental não é feita de partículas ou campos num espaço-tempo, mas de
-amplitudes num espaço abstrato. É uma ontologia radicalmente
-não-clássica: o que existe fundamentalmente é a função de onda
-universal, e tudo o mais — incluindo você, este planeta e essa galáxia —
-é uma estrutura que emerge da sua evolução.</p>
-</blockquote>
-<blockquote>
-<p>∞ <strong>Nível IV — Platonismo Radical</strong> A ontologia não é
-física mas matemática. Existência não significa “participar de uma rede
-causal”; significa “ser uma estrutura matemática consistente”. Isso
-dissolve a distinção entre existência matemática e existência física. A
-pergunta “por que existe algo em vez de nada?” torna-se sem sentido: as
-estruturas matemáticas não “existem” em um momento determinado — elas
-existem atemporalmente, necessariamente, como o número 7 existe. O
-universo físico é um subconjunto do que “existe” nesse sentido
-amplo.</p>
-</blockquote>
+<div class="box generico">
+<div class="box-title">
+<p>🌍 <strong>Nível I — Monismo Espacial Expandido</strong></p>
+</div>
+<p>Uma única ontologia física, estendida além do horizonte. Os “outros
+universos” são partes do mesmo universo — diferentes apenas no sentido
+geográfico. A pergunta “mas eles existem de verdade?” tem a mesma
+resposta que “a Galáxia de Andrômeda existe de verdade?”: sim,
+causalmente, mesmo que você nunca chegue lá. O Nível I não pluraliza a
+ontologia: apenas a expande. É o multiverso mais parcimonioso — mas que
+ainda assim requer aceitar que o universo é fisicamente infinito, o que
+não é parcimonioso em absoluto.</p>
+</div>
+<div class="box generico">
+<div class="box-title">
+<p>🫧 <strong>Nível II — Pluralismo de Leis</strong></p>
+</div>
+<p>Aqui a ontologia se fragmenta: há uma pluralidade de “regiões
+causalmente fechadas” com leis físicas diferentes. Ainda há um substrato
+comum — o campo inflacionário, o “mega-universo” em inflação eterna —
+mas as “leis” são propriedades locais de cada bolha. A pergunta
+filosófica central é: as leis da física são necessárias ou contingentes?
+O Nível II responde: completamente contingentes. Poderiam ter sido
+outras. E, em outras bolhas, são outras.</p>
+</div>
+<div class="box generico">
+<div class="box-title">
+<p>∴ <strong>Nível III — Realismo da Função de Onda</strong></p>
+</div>
+<p>A ontologia fundamental é o espaço de Hilbert — um objeto matemático
+de dimensão prodigiosamente alta (ou infinita). O “universo clássico”
+que habitamos é uma aproximação emergente, resultado da decoerência. A
+realidade fundamental não é feita de partículas ou campos num
+espaço-tempo, mas de amplitudes num espaço abstrato. É uma ontologia
+radicalmente não-clássica: o que existe fundamentalmente é a função de
+onda universal, e tudo o mais — incluindo você, este planeta e essa
+galáxia — é uma estrutura que emerge da sua evolução.</p>
+</div>
+<div class="box generico">
+<div class="box-title">
+<p>∞ <strong>Nível IV — Platonismo Radical</strong></p>
+</div>
+<p>A ontologia não é física mas matemática. Existência não significa
+“participar de uma rede causal”; significa “ser uma estrutura matemática
+consistente”. Isso dissolve a distinção entre existência matemática e
+existência física. A pergunta “por que existe algo em vez de nada?”
+torna-se sem sentido: as estruturas matemáticas não “existem” em um
+momento determinado — elas existem atemporalmente, necessariamente, como
+o número 7 existe. O universo físico é um subconjunto do que “existe”
+nesse sentido amplo.</p>
+</div>
 <p>A tensão central entre esses quadros pode ser formulada assim: os
 Níveis I e II preservam um conceito causal de existência — o que existe
 é o que causa e é causado. Os Níveis III e IV expandem esse conceito até
@@ -937,7 +1842,7 @@ padrão de fundo é o nada, e a existência requer justificativa. No Nível
 IV, o padrão de fundo é a existência de tudo que é matematicamente
 possível. O que precisaria de explicação seria o silêncio, a ausência —
 e ela não tem explicação, porque não ocorre.</p>
-<blockquote>
+<div class="quote">
 <p>“Há uma linha divisória filosófica entre os multiversos que preservam
 unicidade ontológica — uma realidade, muito maior do que vemos — e os
 que a fragmentam em irredutivelmente muitas realidades. No primeiro
@@ -947,7 +1852,7 @@ universos sem denominador ontológico comum. É a diferença entre
 descobrir que a Terra tem mais continentes do que se pensava, e
 descobrir que ‘Terra’ é apenas o nome que damos à perspectiva local de
 uma estrutura que não tem perspectiva global privilegiada.”</p>
-</blockquote>
+</div>
 <hr />
 <h2 id="os-limites-do-conhecimento">Os Limites do
 <em>Conhecimento</em></h2>
@@ -963,12 +1868,12 @@ que ela exclui, e que podemos verificar se esse algo ocorre.</p>
 os outros universos são, por definição, causalmente desconectados do
 nosso, como qualquer observação poderia, mesmo em princípio, refutar sua
 existência?</p>
-<blockquote>
+<div class="quote">
 <p>“A ciência que não pode errar não é ciência — é metafísica elegante.
 Mas rejeitar uma teoria por ser infalsificável é diferente de demonstrar
 que ela é falsa. A questão real é: que tipo de razão epistêmica temos
 para acreditar em algo inobservável?”</p>
-</blockquote>
+</div>
 <p>Os defensores do multiverso respondem em múltiplas frentes. Primeiro:
 a <em>elegância matemática</em> de uma teoria que unifica e simplifica
 tem valor epistêmico independente da testabilidade direta. Segundo:
@@ -1044,7 +1949,7 @@ são considerados problemáticos. O desafio é construir uma cosmologia que
 seja <em>Boltzmann-safe</em> — que prediga um universo onde a maioria
 dos observadores surge por processos ordinários, e não por flutuação
 caótica.</p>
-<h3 id="a-dimensão-filosófica-solipsismo-cosmológico">A dimensão
+<h3 id="a-dimensão-filosófica--solipsismo-cosmológico">A dimensão
 filosófica — solipsismo cosmológico</h3>
 <p>O Cérebro de Boltzmann é uma versão cosmológica do demônio
 cartesiano. <a
@@ -1116,9 +2021,9 @@ inflacionário de Nível II. Em cada caso, as cópias existem por razões
 diferentes, com graus distintos de similaridade, e as implicações
 filosóficas para a identidade pessoal diferem de forma sutil mas
 importante.</p>
-<blockquote>
+<div class="quote">
 <p>Três tipos de doppelgänger, três origens distintas</p>
-</blockquote>
+</div>
 <p><strong>No Nível I (universo infinito):</strong> o doppelgänger surge
 por pura combinatória. Se o espaço é infinito e a matéria está
 distribuída de forma homogênea, toda configuração finita de partículas
@@ -1191,7 +2096,7 @@ extremo.</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
+<div class="quote">
 <p>“Talvez o problema não seja que o multiverso torna a identidade
 impossível, mas que ele revela que a identidade sempre foi uma convenção
 — uma narrativa de continuidade que a mente constrói sobre um substrato
@@ -1206,7 +2111,7 @@ descobre em qual ramo está — não o processo pelo qual você cria o ramo.
 A sensação de deliberação é real, mas seu estatuto ontológico é ambíguo:
 ela é a experiência subjetiva de uma bifurcação que já ocorreu na
 física, não a causa da bifurcação.</p>
-</blockquote>
+</div>
 <p>O problema se agrava quando consideramos o doppelgänger do Nível I
 sob a ótica do livre-arbítrio. Se existe um duplo seu que tomou as
 mesmas decisões que você — porque emergiu das mesmas condições iniciais
@@ -1229,12 +2134,12 @@ uma propriedade do ponto de vista. É um dos experimentos mentais mais
 vertiginosos da cosmologia moderna — e, como todo experimento mental
 sobre consciência, revela mais sobre as limitações de nossas categorias
 conceituais do que sobre a estrutura da realidade.</p>
-<blockquote>
+<div class="quote">
 <p>Talvez o problema não seja que o multiverso torna a identidade
 impossível, mas que ele revela que a identidade sempre foi uma convenção
 — uma narrativa de continuidade que a mente constrói sobre um substrato
 que, em si mesmo, não conhece sujeitos.</p>
-</blockquote>
+</div>
 <p>Derek Parfit, em seu monumental <em>Reasons and Persons</em>,
 argumentou que a identidade pessoal não é o que importa — o que importa
 é a <em>relação de continuidade psicológica</em>, que admite graus e não
@@ -1244,8 +2149,11 @@ Parfit já havia apontado: a pergunta “quem é o verdadeiro eu?” pode não
 ter resposta, porque a premissa que a anima — que existe um único “eu”
 ontologicamente privilegiado — pode ser simplesmente falsa. O multiverso
 não cria o problema da identidade pessoal: ele o exacerba ao ponto de
-não poder mais ser ignorado. &gt; O problema do valor moral em mundos
-múltiplos</p>
+não poder mais ser ignorado.</p>
+<div class="box generico">
+<div class="box-badge">
+<p>O problema do valor moral em mundos múltiplos</p>
+</div>
 <p>A ética em multiversos levanta questões que a filosofia moral
 ordinária não antecipou. Se toda decisão se bifurca em ramos, e se todos
 os ramos são igualmente reais, então a distinção entre “a decisão que
@@ -1259,7 +2167,8 @@ filósofo David Lewis lidou com problemas adjacentes na sua análise dos
 contrafactuais em mundos possíveis, mas o Nível III é mais radical: os
 outros ramos não são meros mundos “possíveis” em sentido modal — são
 mundos atuais com o mesmo status ontológico que este.</p>
-<blockquote>
+</div>
+<div class="quote">
 <p>“Há ainda a questão da escala moral. Em um universo de Nível I com
 infinitas cópias de cada pessoa, o valor moral de um ato afeta — em
 teoria — um número infinito de seres. A ética consequencialista, que
@@ -1268,7 +2177,7 @@ matematicamente indeterminada: somar infinitos bens e infinitos
 malefícios produz, novamente, ∞ − ∞, que é indeterminado. O multiverso
 obriga a ética a reformular suas bases de uma forma que a filosofia
 moral ainda não enfrentou com seriedade suficiente.”</p>
-</blockquote>
+</div>
 <hr />
 <h2 id="o-observador-como-arquiteto">O Observador como
 <em>Arquiteto</em></h2>
@@ -1287,9 +2196,9 @@ precisa enfrentar diretamente.</p>
 de lidar com essa tensão. Mas sua aplicação difere significativamente
 conforme o nível de multiverso que se considera — e essa diferença é
 filosófica, não apenas técnica. Vale examinar cada caso com cuidado.</p>
-<blockquote>
+<div class="quote">
 <p>O Princípio Antrópico em cada nível de multiverso</p>
-</blockquote>
+</div>
 <p><strong>No Nível I (universo espacialmente infinito):</strong> o
 princípio antrópico opera de forma trivial. Existe apenas um conjunto de
 leis físicas — as leis que conhecemos — e observadores surgem onde as
@@ -1345,10 +2254,10 @@ existência de observadores. Por si só, ele não explica por que o
 universo existe, por que tem as leis que tem, ou por que há observadores
 em vez de nenhum. Ele apenas filtra os cenários em que observadores
 podem surgir — o que é útil, mas não suficiente.</p>
-<blockquote>
+<div class="quote">
 <p>O argumento do ajuste fino — e por que o princípio antrópico não é a
 última palavra</p>
-</blockquote>
+</div>
 <p>O ajuste fino das constantes físicas é real. A constante cosmológica
 Λ é 120 ordens de grandeza menor do que o valor previsto pela teoria
 quântica de campos — uma discrepância que Leonard Susskind chamou de “o
@@ -1359,7 +2268,7 @@ ou planetas. A constante de estrutura fina (α ≈ 1/137) determina a força
 com que elétrons e prótons se ligam: se fosse apenas alguns por cento
 diferente, a química orgânica — e portanto a vida — seria
 impossível.</p>
-<blockquote>
+<div class="quote">
 <p>O Princípio Antrópico fraco, na versão de Brandon Carter (1974), é
 uma tautologia útil: simplesmente notamos que observamos condições
 compatíveis com observadores, porque se não fossem, não estaríamos aqui
@@ -1370,8 +2279,8 @@ Princípio Antrópico forte, proposto por Barrow e Tipler, afirma que o
 universo deve ter as propriedades que permitem observadores — o que é
 uma afirmação cosmológica substantiva que a maior parte dos físicos
 rejeita por sua circularidade e por sua dificuldade de falsificação.</p>
-</blockquote>
-<blockquote>
+</div>
+<div class="quote">
 <p>A versão mais interessante — e mais filosófica — é o Princípio
 Antrópico Participativo de Wheeler. Não apenas observadores são
 selecionados pelo universo: observadores participam da definição do
@@ -1386,7 +2295,7 @@ através das mentes que gera, e essa observação participa de sua
 definição. A ideia tem base matemática genuína na mecânica quântica, e é
 precisamente o tipo de relação circular que uma cosmologia completa
 precisa enfrentar — mesmo que ainda não saibamos como.</p>
-</blockquote>
+</div>
 <p>O <strong>Princípio Antrópico</strong> tenta lidar com a tensão entre
 a vastidão do cosmos e a particularidade do observador. Mas há uma
 pergunta mais profunda que ele não resolve: não a pergunta de por que o
@@ -1406,14 +2315,14 @@ com o ambiente “recorta” do espaço de Hilbert global. Nossas observações
 não apenas revelam a realidade: elas contribuem para definir qual
 aspecto da realidade quântica se cristaliza como experiência
 clássica.</p>
-<blockquote>
+<div class="quote">
 <p>“O cosmos não é uma sala de teatro onde a plateia assiste
 passivamente a uma peça já encenada. É um texto que existe em
 potencialidade e que se atualiza no ato da leitura. Não porque a leitura
 crie o texto — o texto preexiste — mas porque a leitura é o único modo
 pelo qual o texto se torna algo além de tinta sobre papel.”</p>
-</blockquote>
-<blockquote>
+</div>
+<div class="quote">
 <p>“A mente não está no universo como um peixe está no oceano. Ela está
 no universo como o significado está na linguagem: não como objeto
 separado, mas como uma dimensão adicional que emerge da interação entre
@@ -1421,7 +2330,7 @@ estrutura e interpretação.” — Reflexão sobre o participatory universe
 (<a
 href="https://en.wikipedia.org/wiki/Participatory_anthropic_principle">Wheeler,
 1990</a>)</p>
-</blockquote>
+</div>
 <p>O filósofo Thomas Nagel, em <em>Mind and Cosmos</em>, argumentou que
 o reducionismo materialista é incapaz de explicar a existência de pontos
 de vista subjetivos — o que ele chama de “o que é ser” algo. Não porque
@@ -1601,5 +2510,173 @@ href="https://en.wikipedia.org/wiki/Cosmology">cosmologia</a> e <a
 href="https://en.wikipedia.org/wiki/Topology">topologia</a> do
 espaço-tempo. <a
 href="https://en.wikipedia.org/wiki/The_Road_to_Reality">Link</a></p>
-</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="principio-antropico-v7.html"><strong>O Princípio Antrópico</strong><span>O ensaio refuta sistematicamente o argumento do ajuste fino como evidência de design cosmológico, sem recorrer ao conforto do multiverso físico. Cada pressuposto é destruído (a centralidade dos observadores, a especificidade de universos com vida), substituído por análise rigorosa do viés antrópico, do biocentrismo e do cognocentrismo que estruturam nossa intuição de espanto.</span></a><a class="related-card" href="definicoes-de-vida.html"><strong>O Que É Vida? Um Ensaio nas Fronteiras da Existência</strong><span>Catorze perspectivas sobre vida (da bioquímica ao princípio da energia livre de Friston, da autopoiese ao panpsiquismo e à ficção científica de Lem) são tratadas como estratégias complementares, não rivais. Cada fronteira traçada inclui ou exclui candidatos à consideração moral, do vírus ao LLM.</span></a><a class="related-card" href="paradoxo-de-fermi.html"><strong>O Grande Filtro do Antropocentrismo</strong><span>O silêncio cósmico do Paradoxo de Fermi é reinterpretado não como evidência de ausência de vida, mas como sintoma do antropocentrismo da busca: procuramos sinais que se parecem conosco, com uma definição de vida que só reconhece o que já conhecemos. O ensaio percorre Terra Rara, Grande Filtro e Floresta Escura antes de perguntar se não estaríamos procurando pelas coisas erradas.</span></a></div></section></article></main>
-<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;forma-do-universo&quot;, &quot;title&quot;: &quot;A Arquitetura do Ilimitado&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Maio de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <a href="../sphere.html">Globo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Física</span><span class="sb-tag">Cosmologia</span><span class="sb-tag">Filosofia</span><span class="sb-tag">Matemática</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="principio-antropico-v7.html"><strong>O Princípio Antrópico</strong><span>O ensaio refuta sistematicamente o argumento do ajuste fino como evidência de design cosmológico, sem recorrer ao conforto do multiverso físico. Cada pressuposto é destruído (a centralidade dos observadores, a especificidade de universos com vida), substituído por análise rigorosa do viés antrópico, do biocentrismo e do cognocentrismo que estruturam nossa intuição de espanto.</span></a><a class="sb-related-card" href="definicoes-de-vida.html"><strong>O Que É Vida? Um Ensaio nas Fronteiras da Existência</strong><span>Catorze perspectivas sobre vida (da bioquímica ao princípio da energia livre de Friston, da autopoiese ao panpsiquismo e à ficção científica de Lem) são tratadas como estratégias complementares, não rivais. Cada fronteira traçada inclui ou exclui candidatos à consideração moral, do vírus ao LLM.</span></a><a class="sb-related-card" href="paradoxo-de-fermi.html"><strong>O Grande Filtro do Antropocentrismo</strong><span>O silêncio cósmico do Paradoxo de Fermi é reinterpretado não como evidência de ausência de vida, mas como sintoma do antropocentrismo da busca: procuramos sinais que se parecem conosco, com uma definição de vida que só reconhece o que já conhecemos. O ensaio percorre Terra Rara, Grande Filtro e Floresta Escura antes de perguntar se não estaríamos procurando pelas coisas erradas.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false" aria-controls="sbToc">
+  <span aria-hidden="true">☰</span> Sumário
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=de060cf9"></script>
+<script src="../assets/essay.js?v=ad885ea1"></script>
+</body>
+</html>

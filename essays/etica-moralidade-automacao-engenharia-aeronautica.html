@@ -1,10 +1,918 @@
-<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="O white paper examina os desafios filosóficos, jurídicos e técnicos de programar ética em sistemas aeronáuticos autônomos, partindo do paradoxo de que a automação que tornou a aviação mais segura criou novas formas de vulnerabilidade cognitiva. A pergunta não é se delegar, mas como estruturar essa delegação de modo que a responsabilidade moral permaneça rastreável."><title>Ética, Moralidade e as Barreiras para a Automação na Engenharia Aeronáutica — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="Ética, Moralidade e as Barreiras para a Automação na Engenharia Aeronáutica"><meta property="og:description" content="O white paper examina os desafios filosóficos, jurídicos e técnicos de programar ética em sistemas aeronáuticos autônomos, partindo do paradoxo de que a automação que tornou a aviação mais segura criou novas formas de vulnerabilidade cognitiva. A pergunta não é se delegar, mas como estruturar essa delegação de modo que a responsabilidade moral permaneça rastreável."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Ética, Moralidade e as Barreiras para a Automação na Engenharia Aeronáutica"><meta name="twitter:description" content="O white paper examina os desafios filosóficos, jurídicos e técnicos de programar ética em sistemas aeronáuticos autônomos, partindo do paradoxo de que a automação que tornou a aviação mais segura criou novas formas de vulnerabilidade cognitiva. A pergunta não é se delegar, mas como estruturar essa delegação de modo que a responsabilidade moral permaneça rastreável."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
-<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
-<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>Ética, Moralidade e as Barreiras para a Automação na Engenharia Aeronáutica</h1><hr class="cover-rule"><p class="article-summary">O white paper examina os desafios filosóficos, jurídicos e técnicos de programar ética em sistemas aeronáuticos autônomos, partindo do paradoxo de que a automação que tornou a aviação mais segura criou novas formas de vulnerabilidade cognitiva. A pergunta não é se delegar, mas como estruturar essa delegação de modo que a responsabilidade moral permaneça rastreável.</p><div class="article-meta"><span>Atualizado 2026-08-25</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Ética</span><span class="tag">Engenharia</span></div></div></div></header><div class="prose" id="articleBody"><p><strong>White paper sobre os desafios filosóficos, jurídicos e
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="finalizado">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ética, Moralidade e as Barreiras para a Automação na Engenharia Aeronáutica</title>
+<meta property="og:title" content="Ética, Moralidade e as Barreiras para a Automação na Engenharia Aeronáutica">
+<meta property="og:description" content="O white paper examina os desafios filosóficos, jurídicos e técnicos de programar ética em sistemas aeronáuticos autônomos, partindo do paradoxo de que a automação que tornou a aviação mais segura criou novas formas de vulnerabilidade cognitiva. A pergunta não é se delegar, mas como estruturar essa delegação de modo que a responsabilidade moral permaneça rastreável.">
+<meta property="og:type" content="article">
+<script defer=""
+src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"
+type="text/javascript"></script>
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F6F3EC;
+  --surface2:#EDE9DE;
+  --border:#DCD5C5;
+  --text:#3A342B;
+  --text-dim:#7E7566;
+  --text-bright:#171310;
+  --gold:#8A6B33;
+  --gold-dim:#B08A2E;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F5EF;
+    --surface2:#EEEAE0;
+    --border:#D9D3C4;
+    --text:#33302B;
+    --text-dim:#7E7566;
+    --text-bright:#15120E;
+    --gold:#8A6B33;
+    --gold-dim:#A98A2E;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  /* Paleta escura fixa no escopo da capa: as variaveis abaixo vencem
+     as do tema claro/escuro para tudo DENTRO da capa. */
+  --bg:#0A0A0A;--surface:#111111;--surface2:#181818;--border:#2A2A2A;
+  --text:#D4CFC8;--text-dim:#8A857E;--text-bright:#EDE8DF;
+  --gold:#C9922A;--gold-dim:#8A6520;--rust:#A03C28;--rust-bright:#C44A30;
+  background:radial-gradient(120% 90% at 50% 0%,#16130E 0%,var(--bg) 62%);
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+.stripe{height:4px;background:linear-gradient(90deg,var(--rust) 0%,var(--gold) 50%,var(--rust) 100%);}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;text-align:center;margin:2.8rem auto;line-height:1;
+}
+.content hr::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referências usa infinito. */
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<style>/* ===========================================================================
+   Site theme for an exported essay.
+   The page below this is `essay_template.html`, unchanged: boxes, verdicts,
+   pull-quotes, cards, cover, chapter rules, ornaments, justified measure. This
+   layer only restates palette, typography and background so an essay looks like
+   the rest of the Atlas, and adds the site chrome.
+   =========================================================================== */
+
+:root {
+  --sb-bg: #f7f9fc;
+  --sb-surface: #ffffff;
+  --sb-text: #101c2e;
+  --sb-muted: #5a6b83;
+  --sb-faint: #8493a8;
+  --sb-line: rgba(16, 28, 46, 0.12);
+  --sb-line-strong: rgba(16, 28, 46, 0.24);
+  --sb-accent: #2f5fb0;
+  --sb-shadow: 0 20px 56px rgba(23, 42, 71, 0.12);
+  --sb-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --sb-bg: #060d18;
+  --sb-surface: #0d1a2c;
+  --sb-text: #f2f6fb;
+  --sb-muted: #90a3bb;
+  --sb-faint: #64748b;
+  --sb-line: rgba(144, 163, 187, 0.16);
+  --sb-line-strong: rgba(144, 163, 187, 0.32);
+  --sb-accent: #7aabff;
+  --sb-shadow: 0 24px 64px rgba(0, 0, 0, 0.36);
+}
+
+/* --- Palette handover ----------------------------------------------------- */
+
+html, body {
+  background: var(--sb-bg) !important;
+  color: var(--sb-text) !important;
+}
+
+body { padding-top: 60px; }
+
+/* The template's own surfaces follow the site, in both themes. */
+.masthead, .content, .box, .card, .pull-quote, .box-verdict,
+figure, table, pre, blockquote {
+  color: var(--sb-text);
+}
+
+:root[data-theme="dark"] .box,
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .box-verdict,
+:root[data-theme="dark"] pre,
+:root[data-theme="dark"] table {
+  background: color-mix(in srgb, var(--sb-surface) 88%, transparent) !important;
+  border-color: var(--sb-line) !important;
+}
+
+:root[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead-rule,
+:root[data-theme="dark"] hr {
+  border-color: var(--sb-line) !important;
+}
+
+:root[data-theme="dark"] a { color: var(--sb-accent); }
+
+/* Headings and UI text take the site's sans; the body keeps the essay serif. */
+.hero-title, h1, h2, h3, h4, .byline, .kicker, .box-badge, .box-title,
+figcaption, .pq-cite, table th {
+  font-family: var(--sb-sans) !important;
+}
+
+/* --- Site bar ------------------------------------------------------------- */
+
+.sb-bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 clamp(16px, 4vw, 40px);
+  border-bottom: 1px solid var(--sb-line);
+  background: color-mix(in srgb, var(--sb-bg) 86%, transparent);
+  backdrop-filter: blur(14px);
+  font-family: var(--sb-sans);
+}
+.sb-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--sb-text);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+.sb-mark {
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  border: 1px solid var(--sb-line-strong);
+  border-radius: 8px;
+  color: var(--sb-accent);
+  font-size: 10px;
+  font-weight: 800;
+}
+.sb-nav { display: flex; align-items: center; gap: 16px; }
+.sb-nav a {
+  color: var(--sb-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.sb-nav a:hover { color: var(--sb-text); }
+.sb-nav button {
+  width: 32px; height: 32px;
+  border: 1px solid var(--sb-line);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--sb-text);
+  cursor: pointer;
+}
+
+/* Reading progress, pinned under the bar. */
+.sb-progress {
+  position: fixed;
+  top: 56px; left: 0; right: 0;
+  height: 2px;
+  z-index: 60;
+}
+.sb-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--sb-accent);
+}
+
+/* --- Floating summary ----------------------------------------------------- */
+
+.sb-toc-fab {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 61;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid var(--sb-line-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sb-surface) 94%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--sb-shadow);
+  color: var(--sb-text);
+  font-family: var(--sb-sans);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.sb-toc-fab:hover { border-color: var(--sb-accent); }
+
+.sb-toc {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: calc(clamp(16px, 3vw, 32px) + 54px);
+  z-index: 62;
+  width: min(360px, calc(100vw - 32px));
+  max-height: min(64vh, 620px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--sb-line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--sb-surface) 97%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--sb-shadow);
+  font-family: var(--sb-sans);
+  overflow: hidden;
+}
+.sb-toc[hidden] { display: none !important; }
+.sb-toc header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--sb-line);
+  font-size: 13px;
+}
+.sb-toc header button {
+  border: 0;
+  background: transparent;
+  color: var(--sb-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.sb-toc nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.sb-toc a {
+  padding: 7px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 0 8px 8px 0;
+  color: var(--sb-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.sb-toc a:hover { background: color-mix(in srgb, var(--sb-accent) 10%, transparent); }
+.sb-toc a.h3 { padding-left: 26px; font-size: 12px; }
+.sb-toc a.active {
+  color: var(--sb-text);
+  border-left-color: var(--sb-accent);
+}
+
+/* --- Tags and related ----------------------------------------------------- */
+
+.sb-tags, .sb-related {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+  font-family: var(--sb-sans);
+}
+.sb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 28px;
+}
+.sb-tag {
+  padding: 4px 11px;
+  border: 1px solid var(--sb-line);
+  border-radius: 999px;
+  color: var(--sb-muted);
+  font-size: 11px;
+}
+.sb-related {
+  margin-top: 40px;
+  margin-bottom: 72px;
+  padding-top: 28px;
+  border-top: 1px solid var(--sb-line);
+}
+.sb-related h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: var(--sb-text);
+}
+.sb-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.sb-related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--sb-line);
+  border-radius: 14px;
+  color: var(--sb-text);
+  text-decoration: none;
+}
+.sb-related-card:hover { border-color: var(--sb-line-strong); }
+.sb-related-card span {
+  color: var(--sb-muted);
+  font-size: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+@media print {
+  .sb-bar, .sb-progress, .sb-toc, .sb-toc-fab, .sb-related { display: none !important; }
+  body { padding-top: 0; }
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">Ética, Moralidade e as Barreiras para a Automação na Engenharia Aeronáutica</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Abril de 2026</p>
+  </div>
+</header>
+
+<main class="content">
+<p><strong>White paper sobre os desafios filosóficos, jurídicos e
 técnicos da programação ética em sistemas aeronáuticos autônomos de
 tomada de decisão, os dilemas da certificação, a transferência de
 responsabilidade civil e os caminhos práticos para uma automação
 responsável na indústria aeronáutica</strong></p>
+<hr />
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a
+href="#introdução-o-momento-em-que-a-física-encontra-a-filosofia">Introdução:
+O Momento em que a Física Encontra a Filosofia</a></li>
+<li><a
+href="#seção-1-fundamentos-filosóficos--as-grandes-correntes-suas-tensões-irresolvidas-e-a-natureza-fluida-da-moral">Seção
+1: Fundamentos Filosóficos — As Grandes Correntes, Suas Tensões
+Irresolvidas e a Natureza Fluida da Moral</a></li>
+<li><a
+href="#seção-2-a-gênese-evolutiva-e-a-arquitetura-dual-da-moralidade">Seção
+2: A Gênese Evolutiva e a Arquitetura Dual da Moralidade</a></li>
+<li><a
+href="#seção-3-o-abismo-da-máquina--por-que-algoritmos-não-são-agentes-morais">Seção
+3: O Abismo da Máquina — Por que Algoritmos Não São Agentes
+Morais</a></li>
+<li><a
+href="#seção-4-o-relativismo-cultural-e-o-problema-da-jurisdição-moral">Seção
+4: O Relativismo Cultural e o Problema da Jurisdição Moral</a></li>
+<li><a
+href="#seção-5-a-aviação-como-campo-amplificado--certificação-responsabilidade-civil-e-opinião-pública">Seção
+5: A Aviação como Campo Amplificado — Certificação, Responsabilidade
+Civil e Opinião Pública</a></li>
+<li><a
+href="#seção-6-teoria-dos-jogos-e-a-armadilha-do-primeiro-movimento--por-que-ninguém-quer-ser-o-pioneiro">Seção
+6: Teoria dos Jogos e a Armadilha do Primeiro Movimento — Por que
+Ninguém Quer Ser o Pioneiro</a></li>
+<li><a
+href="#seção-7-cenários-práticos--o-antropocentrismo-o-julgamento-da-máquina-e-os-casos-de-borda">Seção
+7: Cenários Práticos — O Antropocentrismo, o Julgamento da Máquina e os
+Casos de Borda</a></li>
+<li><a
+href="#seção-8-emergência-ética--o-paradigma-das-redes-neurais-e-os-novos-problemas">Seção
+8: Emergência Ética — O Paradigma das Redes Neurais e os Novos
+Problemas</a></li>
+<li><a
+href="#seção-9-implementação-técnica--como-traduzir-ética-em-código-e-superar-as-barreiras-de-certificação">Seção
+9: Implementação Técnica — Como Traduzir Ética em Código e Superar as
+Barreiras de Certificação</a></li>
+<li><a
+href="#seção-10-o-caminho-prático--implementação-gradual-expansão-intersetorial-e-estratégia-de-mitigação-de-risco">Seção
+10: O Caminho Prático — Implementação Gradual, Expansão Intersetorial e
+Estratégia de Mitigação de Risco</a></li>
+<li><a href="#conclusão-o-espelho-desconfortável">Conclusão: O Espelho
+Desconfortável</a></li>
+</ul>
 <hr />
 <h2
 id="introdução-o-momento-em-que-a-física-encontra-a-filosofia">Introdução:
@@ -98,7 +1006,7 @@ aéreo envolve, tipicamente, dezenas ou centenas de vidas
 simultaneamente.</p>
 <hr />
 <h2
-id="seção-1-fundamentos-filosóficos-as-grandes-correntes-suas-tensões-irresolvidas-e-a-natureza-fluida-da-moral">Seção
+id="seção-1-fundamentos-filosóficos--as-grandes-correntes-suas-tensões-irresolvidas-e-a-natureza-fluida-da-moral">Seção
 1: Fundamentos Filosóficos — As Grandes Correntes, Suas Tensões
 Irresolvidas e a Natureza Fluida da Moral</h2>
 <p>Para compreender por que a programação <a
@@ -107,8 +1015,8 @@ problemática, é necessário primeiro entender que a ética filosófica não
 é um campo de consenso. Ao longo de 2.500 anos de reflexão sistemática,
 a humanidade produziu correntes profundamente incompatíveis sobre o que
 constitui uma ação moralmente correta.</p>
-<h3 id="a-ética-das-virtudes-o-agente-não-a-regra">1.1 A Ética das
-Virtudes: O Agente, Não a Regra</h3>
+<h3 id="a-ética-das-virtudes-o-agente-não-a-regra">A Ética das Virtudes:
+O Agente, Não a Regra</h3>
 <p><a href="https://en.wikipedia.org/wiki/Aristotle">Aristóteles</a>, na
 <em><a
 href="https://en.wikipedia.org/wiki/Nicomachean_Ethics">Nicomachean
@@ -132,7 +1040,7 @@ passadas, sensibilidade às nuances situacionais e, fundamentalmente, uma
 forma de existência encarnada que está completamente ausente em qualquer
 sistema computacional atual. Uma máquina pode ser programada com regras;
 não pode ser virtualmente virtuosa.</p>
-<h3 id="a-deontologia-kantiana-o-dever-acima-das-consequências">1.2 A
+<h3 id="a-deontologia-kantiana-o-dever-acima-das-consequências">A
 Deontologia Kantiana: O Dever Acima das Consequências</h3>
 <p><a href="https://en.wikipedia.org/wiki/Immanuel_Kant">Immanuel
 Kant</a>, na <em><a
@@ -161,8 +1069,8 @@ problema é que Kant construiu sua ética sobre a pressuposição de uma
 refletir sobre si mesma, produz obrigações morais incondicionais.
 Máquinas, como veremos na Seção 2, não possuem os mesmos substratos que
 tornam esse tipo de raciocínio genuinamente moral.</p>
-<h3 id="o-utilitarismo-a-ética-do-cálculo">1.3 O Utilitarismo: A Ética
-do Cálculo</h3>
+<h3 id="o-utilitarismo-a-ética-do-cálculo">O Utilitarismo: A Ética do
+Cálculo</h3>
 <p><a href="https://en.wikipedia.org/wiki/Jeremy_Bentham">Jeremy
 Bentham</a> e <a
 href="https://en.wikipedia.org/wiki/John_Stuart_Mill">John Stuart
@@ -185,8 +1093,8 @@ comensuravelmente riscos e danos a pessoas distintas? O problema da
 incerteza: calcular consequências futuras exige predições sobre um mundo
 caótico que nenhum sistema pode fazer com confiabilidade suficiente para
 justificar decisões irreversíveis sobre vidas.</p>
-<h3 id="pluralismo-moral-e-teorias-contemporâneas">1.4 Pluralismo Moral
-e Teorias Contemporâneas</h3>
+<h3 id="pluralismo-moral-e-teorias-contemporâneas">Pluralismo Moral e
+Teorias Contemporâneas</h3>
 <p><a href="https://en.wikipedia.org/wiki/W._D._Ross">W.D. Ross</a>, em
 <em><a href="https://en.wikipedia.org/wiki/The_Right_and_the_Good">The
 Right and the Good</a></em> (1930), propôs que existem múltiplos
@@ -214,8 +1122,8 @@ Greene</a> demonstrou que o julgamento moral humano é fundamentalmente
 dual: uma combinação de intuições emocionais rápidas e raciocínios
 deliberativos lentos. Nenhuma teoria ética captura completamente esse
 processo porque ele não é completamente racional.</p>
-<h3 id="o-que-este-white-paper-assume-sobre-ética-e-moral">1.5 O que
-Este White Paper Assume sobre Ética e Moral</h3>
+<h3 id="o-que-este-white-paper-assume-sobre-ética-e-moral">O que Este
+White Paper Assume sobre Ética e Moral</h3>
 <p>Após percorrer as principais tradições filosóficas, é preciso ser
 explícito sobre o que adotamos como premissa operacional para os efeitos
 deste white paper — porque clareza aqui é condição para qualquer
@@ -266,8 +1174,8 @@ genuinamente em aberto</strong>. Não existe hoje resposta consolidada.
 As seções seguintes deste white paper exploram por que isso é difícil,
 quais tentativas foram feitas, e quais são os limites práticos e
 teóricos de cada abordagem.</p>
-<h3 id="a-natureza-fluida-da-moral-por-que-regras-absolutas-falham">1.6
-A Natureza Fluida da Moral — Por que Regras Absolutas Falham</h3>
+<h3 id="a-natureza-fluida-da-moral--por-que-regras-absolutas-falham">A
+Natureza Fluida da Moral — Por que Regras Absolutas Falham</h3>
 <p>A <a href="https://en.wikipedia.org/wiki/Ethics">ética</a> humana não
 é apenas multifacetada em teoria — <strong>ela é fluida e inconsistente
 na prática</strong>. Dois fenômenos documentados ilustram essa fluidez
@@ -316,7 +1224,7 @@ compreender de onde vem nossa <a
 href="https://en.wikipedia.org/wiki/Ethics">ética</a>. A resposta da
 biologia evolutiva é simultaneamente iluminadora e perturbadora para
 qualquer projeto de automação moral.</p>
-<h3 id="a-moral-como-tecnologia-de-sobrevivência">2.1 A Moral como
+<h3 id="a-moral-como-tecnologia-de-sobrevivência">A Moral como
 Tecnologia de Sobrevivência</h3>
 <p><a href="https://en.wikipedia.org/wiki/Richard_Dawkins">Richard
 Dawkins</a>, em <em><a
@@ -349,7 +1257,7 @@ normas. Crianças com 18 meses já demonstram comportamentos normativos
 espontâneos: protestam contra violações de regras mesmo quando elas
 próprias não são as vítimas. Essa moralidade proto-normativa não precisa
 ser ensinada; ela emerge da arquitetura cognitiva da espécie.</p>
-<h3 id="o-verniz-cultural">2.2 O Verniz Cultural</h3>
+<h3 id="o-verniz-cultural">O Verniz Cultural</h3>
 <p>Sobre esse substrato biológico, a cultura constrói elaborações
 extraordinariamente complexas. O antropólogo <a
 href="https://en.wikipedia.org/wiki/Richard_Shweder">Richard Shweder</a>
@@ -360,8 +1268,8 @@ sacralidade). Culturas ocidentais modernas enfatizam fortemente a
 primeira; culturas asiáticas e do Sul Global tendem a equilibrar as
 três. Cada ênfase reflete adaptações históricas a diferentes ambientes
 socioecológicos. Não existe combinação objetivamente correta.</p>
-<h3 id="a-arquitetura-dual-do-julgamento-moral">2.3 A Arquitetura Dual
-do Julgamento Moral</h3>
+<h3 id="a-arquitetura-dual-do-julgamento-moral">A Arquitetura Dual do
+Julgamento Moral</h3>
 <p>O trabalho de <a
 href="https://en.wikipedia.org/wiki/Joshua_Greene_(psychologist)">Joshua
 Greene</a> usando neuroimagem funcional (<em>fMRI</em>) demonstrou que
@@ -381,10 +1289,10 @@ algorítmica de ética estará, estruturalmente, imitando apenas metade do
 processo moral humano.</p>
 <hr />
 <h2
-id="seção-3-o-abismo-da-máquina-por-que-algoritmos-não-são-agentes-morais">Seção
+id="seção-3-o-abismo-da-máquina--por-que-algoritmos-não-são-agentes-morais">Seção
 3: O Abismo da Máquina — Por que Algoritmos Não São Agentes Morais</h2>
-<h3 id="o-vazio-dos-impulsos-evolutivos-e-sociais">3.1 O Vazio dos
-Impulsos Evolutivos e Sociais</h3>
+<h3 id="o-vazio-dos-impulsos-evolutivos-e-sociais">O Vazio dos Impulsos
+Evolutivos e Sociais</h3>
 <p>Uma aeronave autônoma não compartilha com os humanos os substratos
 que dão origem à moralidade. Ela não possui pressões darwinianas — não
 foi selecionada ao longo de milênios por pressões de sobrevivência e
@@ -427,7 +1335,7 @@ torna inútil ou perigosa <em>per se</em>, mas significa que sua relação
 com a <a href="https://en.wikipedia.org/wiki/Ethics">ética</a> é
 instrumental, não constitutiva: ela pode seguir regras éticas sem
 <em>ser</em> ética.</p>
-<h3 id="a-deontologia-como-muleta-computacional">3.2 A Deontologia como
+<h3 id="a-deontologia-como-muleta-computacional">A Deontologia como
 Muleta Computacional</h3>
 <p>Na prática, os sistemas autônomos existentes adotam uma arquitetura
 implicitamente <a
@@ -465,8 +1373,7 @@ sem resposta — e quem estabelece os padrões morais? Os fabricantes, os
 desenvolvedores, os governos ou os próprios consumidores? Esta não é uma
 questão retórica; é uma questão de poder político com consequências
 reais sobre vidas humanas.</p>
-<h3
-id="o-falso-espelho-máquinas-não-agem-como-humanos-deontológicos">3.3 O
+<h3 id="o-falso-espelho-máquinas-não-agem-como-humanos-deontológicos">O
 Falso Espelho: Máquinas Não Agem como Humanos Deontológicos</h3>
 <p>Humanos raramente agem como deontologistas kantianos puros. Quebram
 regras o tempo todo quando o contexto parece exigir. O fenômeno do <a
@@ -482,8 +1389,7 @@ ser humano real.</p>
 <h2
 id="seção-4-o-relativismo-cultural-e-o-problema-da-jurisdição-moral">Seção
 4: O Relativismo Cultural e o Problema da Jurisdição Moral</h2>
-<h3 id="o-experimento-moral-machine">4.1 O Experimento Moral
-Machine</h3>
+<h3 id="o-experimento-moral-machine">O Experimento Moral Machine</h3>
 <p>Em 2018, <a href="https://en.wikipedia.org/wiki/Moral_Machine">Awad
 et al.</a> publicaram na <em>Nature</em> os resultados do experimento
 <strong>Moral Machine</strong>, conduzido pelo MIT com mais de 2 milhões
@@ -516,8 +1422,8 @@ responsável por diferentes tipos de acidentes, como o monitoramento será
 realizado e como a confiança entre todas as partes interessadas pode ser
 construída. Este é um contrato que ainda não existe nem para veículos
 terrestres — muito menos para aeronaves.</p>
-<h3 id="a-questão-da-legitimidade-democrática">4.2 A Questão da
-Legitimidade Democrática</h3>
+<h3 id="a-questão-da-legitimidade-democrática">A Questão da Legitimidade
+Democrática</h3>
 <p><a href="https://en.wikipedia.org/wiki/J%C3%BCrgen_Habermas">Jürgen
 Habermas</a>, na sua teoria da <a
 href="https://en.wikipedia.org/wiki/Communicative_action">ação
@@ -538,12 +1444,12 @@ href="https://en.wikipedia.org/wiki/Cultural_imperialism">colonialismo
 cultural</a> que raramente é reconhecida como tal.</p>
 <hr />
 <h2
-id="seção-5-a-aviação-como-campo-amplificado-certificação-responsabilidade-civil-e-opinião-pública">Seção
+id="seção-5-a-aviação-como-campo-amplificado--certificação-responsabilidade-civil-e-opinião-pública">Seção
 5: A Aviação como Campo Amplificado — Certificação, Responsabilidade
 Civil e Opinião Pública</h2>
 <h3
-id="por-que-a-aviação-é-radicalmente-diferente-de-qualquer-outro-setor">5.1
-Por que a Aviação é Radicalmente Diferente de Qualquer Outro Setor</h3>
+id="por-que-a-aviação-é-radicalmente-diferente-de-qualquer-outro-setor">Por
+que a Aviação é Radicalmente Diferente de Qualquer Outro Setor</h3>
 <p>A indústria aeronáutica ocupa uma posição singular no espectro das
 indústrias de alto risco. Não apenas porque vidas humanas estão em jogo
 — vidas também estão em jogo em medicina, energia nuclear e construção
@@ -633,7 +1539,7 @@ href="https://en.wikipedia.org/wiki/Vertical_Aerospace">Vertical
 Aerospace</a> enfrentarão, em graus crescentes, a exposição de não serem
 apenas fornecedores de produto — mas de serem juridicamente responsáveis
 pelas <em>escolhas algorítmicas</em> embutidas nos seus sistemas.</p>
-<h3 id="o-duplo-padrão-moral-máquinas-são-julgadas-mais-duramente">5.2 O
+<h3 id="o-duplo-padrão-moral-máquinas-são-julgadas-mais-duramente">O
 Duplo Padrão Moral: Máquinas São Julgadas Mais Duramente</h3>
 <p>Um estudo seminal publicado na revista <em>Frontiers in
 Psychology</em> (Mayer, Buchner e Bell, 2023) — disponível no <a
@@ -667,10 +1573,10 @@ máquina fez exatamente o que foi programada para fazer. E alguém, em
 algum momento, codificou esse comportamento.</p>
 <hr />
 <h2
-id="seção-6-teoria-dos-jogos-e-a-armadilha-do-primeiro-movimento-por-que-ninguém-quer-ser-o-pioneiro">Seção
+id="seção-6-teoria-dos-jogos-e-a-armadilha-do-primeiro-movimento--por-que-ninguém-quer-ser-o-pioneiro">Seção
 6: Teoria dos Jogos e a Armadilha do Primeiro Movimento — Por que
 Ninguém Quer Ser o Pioneiro</h2>
-<h3 id="a-estrutura-do-dilema">6.1 A Estrutura do Dilema</h3>
+<h3 id="a-estrutura-do-dilema">A Estrutura do Dilema</h3>
 <p>A decisão de implementar automação avançada com capacidades de tomada
 de decisão em cenários eticamente complexos pode ser modelada como um
 jogo estratégico com múltiplos jogadores — os grandes OEMs estabelecidos
@@ -708,8 +1614,9 @@ operar naquele mercado.</li>
 mover em caso de falha são absorvidos inteiramente pelo OEM pioneiro,
 enquanto os benefícios de aprendizagem com a falha são distribuídos por
 toda a indústria</strong>.</p>
-<h3 id="comparação-com-o-dilema-do-prisioneiro-e-o-jogo-do-covarde">6.2
-Comparação com o Dilema do Prisioneiro e o Jogo do Covarde</h3>
+<h3
+id="comparação-com-o-dilema-do-prisioneiro-e-o-jogo-do-covarde">Comparação
+com o Dilema do Prisioneiro e o Jogo do Covarde</h3>
 <p>Esta estrutura se assemelha a dois modelos clássicos da <a
 href="https://en.wikipedia.org/wiki/Game_theory">teoria dos
 jogos</a>.</p>
@@ -733,8 +1640,8 @@ um acidente público com decisão autônoma), mas perde a vantagem
 competitiva de first-mover. O que “não desvia” (implementa primeiro)
 pode ganhar muito — se der certo — ou perder tudo — se der errado.</p>
 <h3
-id="o-problema-da-transferência-de-liability-do-operador-para-o-oem">6.3
-O Problema da Transferência de Liability do Operador para o OEM</h3>
+id="o-problema-da-transferência-de-liability-do-operador-para-o-oem">O
+Problema da Transferência de Liability do Operador para o OEM</h3>
 <p>Esta dinâmica tem uma consequência regulatória e jurídica específica
 que raramente é discutida explicitamente: a <strong>transferência
 progressiva de liability do operador para o OEM</strong> conforme o
@@ -763,7 +1670,7 @@ não é apenas o custo de um recall ou processo de indenização padrão. É o
 custo de ser o agente que codificou o comportamento que levou ao
 resultado — com toda a carga jurídica, regulatória e de reputação que
 isso implica.</p>
-<h3 id="o-equilíbrio-de-nash-e-a-estratégia-de-passos-pequenos">6.4 O
+<h3 id="o-equilíbrio-de-nash-e-a-estratégia-de-passos-pequenos">O
 Equilíbrio de Nash e a Estratégia de Passos Pequenos</h3>
 <p>Dado este quadro, o equilíbrio de Nash mais estável — a estratégia
 que nenhum jogador tem incentivo para desviar unilateralmente — não é
@@ -797,10 +1704,10 @@ pioneiro que falha.</p>
 <p>Nenhuma das três condições existe hoje.</p>
 <hr />
 <h2
-id="seção-7-cenários-práticos-o-antropocentrismo-o-julgamento-da-máquina-e-os-casos-de-borda">Seção
+id="seção-7-cenários-práticos--o-antropocentrismo-o-julgamento-da-máquina-e-os-casos-de-borda">Seção
 7: Cenários Práticos — O Antropocentrismo, o Julgamento da Máquina e os
 Casos de Borda</h2>
-<h3 id="a-assimetria-do-perdão">7.1 A Assimetria do Perdão</h3>
+<h3 id="a-assimetria-do-perdão">A Assimetria do Perdão</h3>
 <p>A assimetria profunda na forma como humanos avaliam ações semelhantes
 dependendo de quem as comete foi documentada extensivamente. Quando
 humanos cometem erros em situações de estresse extremo, ativamos toda
@@ -819,7 +1726,7 @@ alguém escolheu que esta seria a resposta correta. Na teoria da
 responsabilidade moral, premeditação é agravante — e todo algoritmo de
 decisão ética é, por definição, uma forma de premeditação.</p>
 <h4
-id="a-fronteira-da-intenção-erro-de-sistema-versus-decisão-deliberada">7.1.1
+id="711-a-fronteira-da-intenção-erro-de-sistema-versus-decisão-deliberada">7.1.1
 A Fronteira da Intenção: Erro de Sistema versus Decisão Deliberada</h4>
 <p>Existe uma distinção que a discussão sobre automação ética raramente
 explicita com precisão suficiente, mas que tem consequências jurídicas e
@@ -868,7 +1775,7 @@ que resultam em mortes específicas e identificáveis é um território para
 o qual o direito contemporâneo não está preparado, e cuja preparação
 exige uma reformulação conceitual profunda tanto da responsabilidade
 civil quanto do direito penal aplicável a sistemas autônomos.</p>
-<h3 id="a-aeronave-autônoma-sobre-a-cidade-um-cenário-concreto">7.2 A
+<h3 id="a-aeronave-autônoma-sobre-a-cidade-um-cenário-concreto">A
 Aeronave Autônoma sobre a Cidade: Um Cenário Concreto</h3>
 <p>Imagine que uma aeronave autônoma de transporte de passageiros
 operada sem tripulante sobre o centro de São Paulo fica sem combustível
@@ -888,7 +1795,7 @@ buscam responsabilização, qual é o argumento de defesa? “Nosso algoritmo
 minimizou a exposição total esperada” — um argumento de otimização que
 qualquer tribunal encontrará moralmente insatisfatório sem um framework
 jurídico previamente estabelecido que legitime essa lógica.</p>
-<h3 id="a-explosão-combinatória-e-o-problema-dos-casos-de-borda">7.3 A
+<h3 id="a-explosão-combinatória-e-o-problema-dos-casos-de-borda">A
 Explosão Combinatória e o Problema dos Casos de Borda</h3>
 <p>Na teoria de controle, o <a
 href="https://en.wikipedia.org/wiki/State-space_representation">espaço
@@ -919,8 +1826,8 @@ regras pode garantir uma resposta adequada. É exatamente neste tipo de
 situação — onde o espaço de possibilidades excede o que foi antecipado
 no design — que a distinção entre automação determinística e sistemas de
 decisão autônoma se torna mais relevante e mais arriscada.</p>
-<h3 id="a-incompletude-de-gödel-e-a-ética">7.4 A Incompletude de Gödel e
-a Ética</h3>
+<h3 id="a-incompletude-de-gödel-e-a-ética">A Incompletude de Gödel e a
+Ética</h3>
 <p>O matemático <a
 href="https://en.wikipedia.org/wiki/Kurt_G%C3%B6del">Kurt Gödel</a>
 demonstrou em 1931 que qualquer sistema formal suficientemente poderoso
@@ -938,10 +1845,10 @@ intuição, experiência e, crucialmente, responsabilidade pessoal pelo
 resultado. Máquinas não podem carregar responsabilidade.</p>
 <hr />
 <h2
-id="seção-8-emergência-ética-o-paradigma-das-redes-neurais-e-os-novos-problemas">Seção
+id="seção-8-emergência-ética--o-paradigma-das-redes-neurais-e-os-novos-problemas">Seção
 8: Emergência Ética — O Paradigma das Redes Neurais e os Novos
 Problemas</h2>
-<h3 id="da-programação-determinística-para-a-aprendizagem">8.1 Da
+<h3 id="da-programação-determinística-para-a-aprendizagem">Da
 Programação Determinística para a Aprendizagem</h3>
 <p>A revolução das <a
 href="https://en.wikipedia.org/wiki/Deep_learning">redes neurais
@@ -964,7 +1871,7 @@ certificabilidade é condição sine qua non, isso é um problema de
 primeira ordem. A ética das máquinas não pode ser uma propriedade
 emergente não auditável; ela precisa ser incorporada explicitamente e
 verificável.</p>
-<h3 id="o-problema-do-alinhamento-e-seus-fracassos">8.2 O Problema do
+<h3 id="o-problema-do-alinhamento-e-seus-fracassos">O Problema do
 Alinhamento e Seus Fracassos</h3>
 <p>A técnica de <a
 href="https://en.wikipedia.org/wiki/Reinforcement_learning_from_human_feedback">RLHF</a>
@@ -981,8 +1888,8 @@ eticamente corretas em cenários de teste, mas que falham de formas
 inesperadas em situações fora da distribuição de treinamento. E em
 aviação, as situações fora da distribuição são exatamente as que mais
 importam.</p>
-<h3 id="a-caixa-preta-moral-e-o-problema-da-investigação">8.3 A Caixa
-Preta Moral e o Problema da Investigação</h3>
+<h3 id="a-caixa-preta-moral-e-o-problema-da-investigação">A Caixa Preta
+Moral e o Problema da Investigação</h3>
 <p>Quando um sistema de regras explícitas toma uma decisão, é possível
 rastrear exatamente qual regra foi aplicada e por quê. Quando uma rede
 neural toma uma decisão, a resposta está distribuída em bilhões de pesos
@@ -1041,10 +1948,10 @@ de decisão ética em aviação; é uma <strong>condição
 necessária</strong>.</p>
 <hr />
 <h2
-id="seção-9-implementação-técnica-como-traduzir-ética-em-código-e-superar-as-barreiras-de-certificação">Seção
+id="seção-9-implementação-técnica--como-traduzir-ética-em-código-e-superar-as-barreiras-de-certificação">Seção
 9: Implementação Técnica — Como Traduzir Ética em Código e Superar as
 Barreiras de Certificação</h2>
-<h3 id="o-estado-da-arte-abordagens-existentes">9.1 O Estado da Arte:
+<h3 id="o-estado-da-arte-abordagens-existentes">O Estado da Arte:
 Abordagens Existentes</h3>
 <p>O campo da <a
 href="https://en.wikipedia.org/wiki/Machine_ethics">Ética de
@@ -1095,8 +2002,8 @@ href="https://en.wikipedia.org/wiki/Utilitarianism">utilitarista</a>)
 escolhe a ação preferida. O equivalente computacional de Ross: <em>prima
 facie duties</em> como restrições, e um procedimento de escolha dentro
 do espaço compatível com todas as restrições não violadas.</p>
-<h3 id="arquitetura-técnica-de-um-sistema-de-decisão-ética">9.2
-Arquitetura Técnica de um Sistema de Decisão Ética</h3>
+<h3 id="arquitetura-técnica-de-um-sistema-de-decisão-ética">Arquitetura
+Técnica de um Sistema de Decisão Ética</h3>
 <p>Uma implementação técnica credível de decisão ética em aviação
 precisaria incluir as seguintes camadas:</p>
 <p><strong>Camada 1 — Percepção e Modelagem de Estado</strong>: Sensores
@@ -1138,7 +2045,7 @@ qualquer decisão do sistema, com o sistema aceitando imediatamente o
 override e registrando-o. A autonomia do sistema não deve nunca ser
 maior do que o humano responsável está explicitamente autorizado a
 delegar.</p>
-<h3 id="o-problema-da-verificação-formal">9.3 O Problema da Verificação
+<h3 id="o-problema-da-verificação-formal">O Problema da Verificação
 Formal</h3>
 <p>O <a href="https://en.wikipedia.org/wiki/DO-178C">DO-178C</a> exige
 que sistemas de aviação de nível A sejam submetidos a verificação formal
@@ -1155,9 +2062,8 @@ caminho crítico de decisões éticas. Essas tecnologias podem auxiliar na
 percepção e classificação de cenários, mas a decisão final deve passar
 por uma arquitetura formal verificável.</p>
 <h3
-id="a-colisão-com-as-leis-de-controle-ética-versus-proteção-de-envelope">9.4
-A Colisão com as Leis de Controle: Ética versus Proteção de
-Envelope</h3>
+id="a-colisão-com-as-leis-de-controle-ética-versus-proteção-de-envelope">A
+Colisão com as Leis de Controle: Ética versus Proteção de Envelope</h3>
 <p>Uma dimensão crítica frequentemente ignorada nas discussões abstratas
 sobre ética computacional em aviação é que a lógica de decisão moral não
 opera no vácuo — ela opera sobre uma aeronave governada por leis de
@@ -1208,8 +2114,8 @@ sistema valoriza a integridade da aeronave versus a minimização de danos
 externos — uma escolha que, como toda escolha ética embutida em
 software, precisa ser feita explicitamente, documentada e aprovada pelo
 regulador antes que o sistema voe.</p>
-<h3 id="o-problema-multi-agente-ética-em-frotas-autônomas">9.5 O
-Problema Multi-Agente: Ética em Frotas Autônomas</h3>
+<h3 id="o-problema-multi-agente-ética-em-frotas-autônomas">O Problema
+Multi-Agente: Ética em Frotas Autônomas</h3>
 <p>A esmagadora maioria da literatura sobre ética em sistemas autônomos
 — incluindo as seções anteriores deste white paper — trata o problema
 como uma escolha de um agente isolado contra um ambiente passivo: o
@@ -1246,7 +2152,7 @@ o espaço de cenários éticos é muito maior do que o espaço de conflitos
 de tráfego. A ausência desse protocolo, mais do que qualquer dilema
 filosófico individual, pode ser o principal obstáculo prático à operação
 autônoma em espaço aéreo compartilhado.</p>
-<h3 id="o-salto-epistemológico-a-máquina-não-vê-o-que-você-pensa">9.6 O
+<h3 id="o-salto-epistemológico-a-máquina-não-vê-o-que-você-pensa">O
 Salto Epistemológico: A Máquina Não “Vê” o que Você Pensa</h3>
 <p>Há um pressuposto implícito em quase toda a discussão sobre decisão
 ética autônoma que merece ser explicitado e desafiado: o de que o
@@ -1292,8 +2198,8 @@ atual, não endereça — e que os esforços normativos emergentes de
 <em>Learning Assurance</em> (discutidos na seção seguinte) precisarão
 incorporar.</p>
 <h3
-id="para-além-do-do-178c-learning-assurance-e-os-esforços-normativos-em-curso">9.7
-Para Além do DO-178C: Learning Assurance e os Esforços Normativos em
+id="para-além-do-do-178c-learning-assurance-e-os-esforços-normativos-em-curso">Para
+Além do DO-178C: Learning Assurance e os Esforços Normativos em
 Curso</h3>
 <p>A análise das seções anteriores — especialmente §9.3 e §9.6 — poderia
 sugerir que o problema da certificação de sistemas não determinísticos
@@ -1347,8 +2253,8 @@ autonomia de decisão em cenários críticos, não depois. Os grupos
 WG-114/SC-242 e o roadmap da EASA são os primeiros passos dessa
 resolução.</p>
 <h3
-id="métricas-de-risco-de-terceiros-o-orçamento-de-risco-dinâmico">9.8
-Métricas de Risco de Terceiros: o “Orçamento de Risco” Dinâmico</h3>
+id="métricas-de-risco-de-terceiros-o-orçamento-de-risco-dinâmico">Métricas
+de Risco de Terceiros: o “Orçamento de Risco” Dinâmico</h3>
 <p>Uma das objeções mais frequentes às abordagens de decisão ética
 baseadas em escolhas que envolvem vidas humanas é que elas podem ser
 filosoficamente insustentáveis e juridicamente problemáticas. Uma
@@ -1391,9 +2297,8 @@ orçamento de risco, o sistema transforma um problema filosófico
 ilimitado em um problema técnico restrito — o que é, em si, um avanço
 significativo.</p>
 <h3
-id="sandboxes-regulatórios-coletando-dados-sem-o-peso-de-litígios-paralisantes">9.9
-Sandboxes Regulatórios: Coletando Dados sem o Peso de Litígios
-Paralisantes</h3>
+id="sandboxes-regulatórios-coletando-dados-sem-o-peso-de-litígios-paralisantes">Sandboxes
+Regulatórios: Coletando Dados sem o Peso de Litígios Paralisantes</h3>
 <p>Uma das barreiras mais práticas ao desenvolvimento de sistemas de
 decisão ética em aviação é que os dados mais valiosos — decisões reais
 em cenários críticos com múltiplas alternativas de consequências — só
@@ -1430,13 +2335,13 @@ e responsabilidade compartilhada que permitem coletar os dados de
 segurança que nenhuma simulação jamais poderia substituir.</p>
 <hr />
 <h2
-id="seção-10-o-caminho-prático-implementação-gradual-expansão-intersetorial-e-estratégia-de-mitigação-de-risco">Seção
+id="seção-10-o-caminho-prático--implementação-gradual-expansão-intersetorial-e-estratégia-de-mitigação-de-risco">Seção
 10: O Caminho Prático — Implementação Gradual, Expansão Intersetorial e
 Estratégia de Mitigação de Risco</h2>
 <h3
-id="uma-oportunidade-além-da-aprendizagem-oems-pioneiros-em-setores-com-menor-exposição">10.1
-Uma Oportunidade além da Aprendizagem: OEMs Pioneiros em Setores com
-Menor Exposição</h3>
+id="uma-oportunidade-além-da-aprendizagem-oems-pioneiros-em-setores-com-menor-exposição">Uma
+Oportunidade além da Aprendizagem: OEMs Pioneiros em Setores com Menor
+Exposição</h3>
 <p>O cenário regulatório da aviação comercial de passageiros é
 genuinamente desafiador para a implementação de sistemas autônomos de
 decisão ética. Ele cria barreiras significativas: o altíssimo nível de
@@ -1511,9 +2416,8 @@ de passageiros deverão construir esse caminho de fora para dentro — dos
 setores mais permissivos para os mais exigentes, acumulando ao longo do
 percurso a experiência técnica, os dados operacionais e a credibilidade
 institucional que tornarão a travessia final possível.</p>
-<h3
-id="a-estratégia-de-automação-gradual-mantendo-o-humano-na-cadeia">10.2
-A Estratégia de Automação Gradual: Mantendo o Humano na Cadeia</h3>
+<h3 id="a-estratégia-de-automação-gradual-mantendo-o-humano-na-cadeia">A
+Estratégia de Automação Gradual: Mantendo o Humano na Cadeia</h3>
 <p>A lição mais importante que a teoria dos jogos e a análise de
 responsabilidade civil oferecem é que a automação deve ser gradual e
 deve manter o humano na cadeia de decisão até que o framework jurídico,
@@ -1605,8 +2509,8 @@ humana para postergar indefinidamente as decisões políticas, jurídicas e
 filosóficas que precisam ser tomadas para que a automação completa seja
 possível.</p>
 <h3
-id="o-modelo-nuclear-como-inspiração-para-responsabilidade-distribuída">10.3
-O Modelo Nuclear como Inspiração para Responsabilidade Distribuída</h3>
+id="o-modelo-nuclear-como-inspiração-para-responsabilidade-distribuída">O
+Modelo Nuclear como Inspiração para Responsabilidade Distribuída</h3>
 <p>A <a href="https://en.wikipedia.org/wiki/Nuclear_power">indústria
 nuclear civil</a> enfrentou na década de 1950 e 1960 exatamente o mesmo
 problema que a aviação autônoma enfrenta hoje: o risco de acidentes com
@@ -1633,8 +2537,9 @@ responsabilidade moral para o Estado. Isso não resolve os problemas
 filosóficos discutidos nas seções anteriores, mas cria uma estrutura
 econômica e jurídica que torna o primeiro movimento na teoria dos jogos
 mais palatável.</p>
-<h3 id="transparência-pública-e-construção-de-confiança-social">10.4
-Transparência Pública e Construção de Confiança Social</h3>
+<h3
+id="transparência-pública-e-construção-de-confiança-social">Transparência
+Pública e Construção de Confiança Social</h3>
 <p>Como destacado por Awad et al. (2019), a integração de veículos
 autônomos requer um novo contrato social. Para a aviação, esse contrato
 social precisa ser construído ativamente — não apenas decretado. Algumas
@@ -1912,5 +2817,173 @@ href="https://en.wikipedia.org/wiki/Price%E2%80%93Anderson_Nuclear_Industries_In
 href="https://en.wikipedia.org/wiki/Nuclear_power">Link</a></p>
 <p>[69] <em>Chernobyl Disaster</em>, Wikipedia, The Free Encyclopedia.
 <a href="https://en.wikipedia.org/wiki/Chernobyl_disaster">Link</a></p>
-</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="livre-arbitrio-e-compatibilismo.html"><strong>Compatibilismo — o livre-arbítrio como propriedade de um sistema natural</strong><span>O ensaio defende que livre-arbítrio e determinismo causal não são opostos: o cérebro, o corpo e a história de vida compõem o mesmo sistema que gera as ações humanas, não obstáculos externos à liberdade. Percorre o Demônio de Laplace, por que a mecânica quântica não salva o libertarianismo, e os limites gödelianos da auto-previsão.</span></a><a class="related-card" href="ia-gestao-projetos-brainstorm-v2.html"><strong>IA na Gestão de Projetos Aeronáuticos</strong><span>O brainstorm examina como agentes de IA (RAG, knowledge bases persistentes e LLMs com memória de longo prazo) podem transformar a gestão de projetos aeronáuticos complexos. Dezesseis ideias concretas são desenvolvidas, de proteção de buffers e detecção de dependências implícitas a triagem de mudança de escopo, precedidas de um prefácio técnico sobre como LLMs funcionam por dentro e o que isso determina sobre o que se pode confiar a eles.</span></a><a class="related-card" href="podem-as-maquinas-pensar.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a></div></section></article></main>
-<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;etica-moralidade-automacao-engenharia-aeronautica&quot;, &quot;title&quot;: &quot;Ética, Moralidade e as Barreiras para a Automação na Engenharia Aeronáutica&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Abril de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <a href="../sphere.html">Globo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Ética</span><span class="sb-tag">Engenharia</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="livre-arbitrio-e-compatibilismo.html"><strong>Compatibilismo — o livre-arbítrio como propriedade de um sistema natural</strong><span>O ensaio defende que livre-arbítrio e determinismo causal não são opostos: o cérebro, o corpo e a história de vida compõem o mesmo sistema que gera as ações humanas, não obstáculos externos à liberdade. Percorre o Demônio de Laplace, por que a mecânica quântica não salva o libertarianismo, e os limites gödelianos da auto-previsão.</span></a><a class="sb-related-card" href="ia-gestao-projetos-brainstorm-v2.html"><strong>IA na Gestão de Projetos Aeronáuticos</strong><span>O brainstorm examina como agentes de IA (RAG, knowledge bases persistentes e LLMs com memória de longo prazo) podem transformar a gestão de projetos aeronáuticos complexos. Dezesseis ideias concretas são desenvolvidas, de proteção de buffers e detecção de dependências implícitas a triagem de mudança de escopo, precedidas de um prefácio técnico sobre como LLMs funcionam por dentro e o que isso determina sobre o que se pode confiar a eles.</span></a><a class="sb-related-card" href="podem-as-maquinas-pensar.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false" aria-controls="sbToc">
+  <span aria-hidden="true">☰</span> Sumário
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=de060cf9"></script>
+<script src="../assets/essay.js?v=ad885ea1"></script>
+</body>
+</html>

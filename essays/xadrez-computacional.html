@@ -1,6 +1,984 @@
-<!doctype html><html lang="pt-BR" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900)."><title>Xadrez Computacional — do Brute-Force às Redes Neurais — Second Brain</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#07101d"><meta property="og:type" content="article"><meta property="og:site_name" content="Second Brain"><meta property="og:title" content="Xadrez Computacional — do Brute-Force às Redes Neurais"><meta property="og:description" content="O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900)."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Xadrez Computacional — do Brute-Force às Redes Neurais"><meta name="twitter:description" content="O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900)."><link rel="stylesheet" href="../assets/site.css"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.dataset.theme=t})();</script><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script defer src="../assets/mathjax/tex-svg.js"></script></head>
-<body class="essay-page"><a class="skip-link" href="#articleBody">Pular para o texto</a><div class="reading-progress" role="presentation"><span id="readingProgress"></span></div><header class="topbar shell wide"><a class="brand" href="../index.html"><span class="brand-mark">SB</span><span>Second Brain</span></a><nav><a class="nav-link" href="../index.html">Essays</a><a class="nav-link" href="../graph.html">Grafo</a><button class="icon-button" type="button" id="themeToggle" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button></nav></header>
-<main class="article-shell"><aside class="toc-pane" id="tocPane" aria-label="Sumário do essay"><div class="toc-sticky"><div class="toc-head"><span class="toc-label">Sumário</span><button class="toc-toggle" type="button" id="tocToggle" aria-expanded="true" aria-controls="toc" aria-label="Recolher o sumário"><span aria-hidden="true">−</span></button></div><nav id="toc"></nav></div></aside><article class="article"><header class="article-header"><a class="back-link" href="../index.html">← Biblioteca</a><div class="cover"><p class="cover-kicker">Second Brain</p><h1>Xadrez Computacional — do Brute-Force às Redes Neurais</h1><hr class="cover-rule"><p class="article-summary">O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).</p><div class="article-meta"><span>Atualizado 2026-08-30</span><span class="dot" aria-hidden="true">·</span><span><span id="readingTime">—</span> min de leitura</span><div class="tags"><span class="tag">Computação</span><span class="tag">Inteligência-Artificial</span></div></div></div></header><div class="prose" id="articleBody"><hr />
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="maduro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xadrez Computacional — do Brute-Force às Redes Neurais</title>
+<meta property="og:title" content="Xadrez Computacional — do Brute-Force às Redes Neurais">
+<meta property="og:description" content="O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).">
+<meta property="og:type" content="article">
+<script defer=""
+src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"
+type="text/javascript"></script>
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F6F3EC;
+  --surface2:#EDE9DE;
+  --border:#DCD5C5;
+  --text:#3A342B;
+  --text-dim:#7E7566;
+  --text-bright:#171310;
+  --gold:#8A6B33;
+  --gold-dim:#B08A2E;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F5EF;
+    --surface2:#EEEAE0;
+    --border:#D9D3C4;
+    --text:#33302B;
+    --text-dim:#7E7566;
+    --text-bright:#15120E;
+    --gold:#8A6B33;
+    --gold-dim:#A98A2E;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  /* Paleta escura fixa no escopo da capa: as variaveis abaixo vencem
+     as do tema claro/escuro para tudo DENTRO da capa. */
+  --bg:#0A0A0A;--surface:#111111;--surface2:#181818;--border:#2A2A2A;
+  --text:#D4CFC8;--text-dim:#8A857E;--text-bright:#EDE8DF;
+  --gold:#C9922A;--gold-dim:#8A6520;--rust:#A03C28;--rust-bright:#C44A30;
+  background:radial-gradient(120% 90% at 50% 0%,#16130E 0%,var(--bg) 62%);
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+.stripe{height:4px;background:linear-gradient(90deg,var(--rust) 0%,var(--gold) 50%,var(--rust) 100%);}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;text-align:center;margin:2.8rem auto;line-height:1;
+}
+.content hr::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referências usa infinito. */
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style>/* ===========================================================================
+   Site theme for an exported essay.
+   The page below this is `essay_template.html`, unchanged: boxes, verdicts,
+   pull-quotes, cards, cover, chapter rules, ornaments, justified measure. This
+   layer only restates palette, typography and background so an essay looks like
+   the rest of the Atlas, and adds the site chrome.
+   =========================================================================== */
+
+:root {
+  --sb-bg: #f7f9fc;
+  --sb-surface: #ffffff;
+  --sb-text: #101c2e;
+  --sb-muted: #5a6b83;
+  --sb-faint: #8493a8;
+  --sb-line: rgba(16, 28, 46, 0.12);
+  --sb-line-strong: rgba(16, 28, 46, 0.24);
+  --sb-accent: #2f5fb0;
+  --sb-shadow: 0 20px 56px rgba(23, 42, 71, 0.12);
+  --sb-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --sb-bg: #060d18;
+  --sb-surface: #0d1a2c;
+  --sb-text: #f2f6fb;
+  --sb-muted: #90a3bb;
+  --sb-faint: #64748b;
+  --sb-line: rgba(144, 163, 187, 0.16);
+  --sb-line-strong: rgba(144, 163, 187, 0.32);
+  --sb-accent: #7aabff;
+  --sb-shadow: 0 24px 64px rgba(0, 0, 0, 0.36);
+}
+
+/* --- Palette handover ----------------------------------------------------- */
+
+html, body {
+  background: var(--sb-bg) !important;
+  color: var(--sb-text) !important;
+}
+
+body { padding-top: 60px; }
+
+/* The template's own surfaces follow the site, in both themes. */
+.masthead, .content, .box, .card, .pull-quote, .box-verdict,
+figure, table, pre, blockquote {
+  color: var(--sb-text);
+}
+
+:root[data-theme="dark"] .box,
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .box-verdict,
+:root[data-theme="dark"] pre,
+:root[data-theme="dark"] table {
+  background: color-mix(in srgb, var(--sb-surface) 88%, transparent) !important;
+  border-color: var(--sb-line) !important;
+}
+
+:root[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead-rule,
+:root[data-theme="dark"] hr {
+  border-color: var(--sb-line) !important;
+}
+
+:root[data-theme="dark"] a { color: var(--sb-accent); }
+
+/* Headings and UI text take the site's sans; the body keeps the essay serif. */
+.hero-title, h1, h2, h3, h4, .byline, .kicker, .box-badge, .box-title,
+figcaption, .pq-cite, table th {
+  font-family: var(--sb-sans) !important;
+}
+
+/* --- Site bar ------------------------------------------------------------- */
+
+.sb-bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 clamp(16px, 4vw, 40px);
+  border-bottom: 1px solid var(--sb-line);
+  background: color-mix(in srgb, var(--sb-bg) 86%, transparent);
+  backdrop-filter: blur(14px);
+  font-family: var(--sb-sans);
+}
+.sb-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--sb-text);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+.sb-mark {
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  border: 1px solid var(--sb-line-strong);
+  border-radius: 8px;
+  color: var(--sb-accent);
+  font-size: 10px;
+  font-weight: 800;
+}
+.sb-nav { display: flex; align-items: center; gap: 16px; }
+.sb-nav a {
+  color: var(--sb-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.sb-nav a:hover { color: var(--sb-text); }
+.sb-nav button {
+  width: 32px; height: 32px;
+  border: 1px solid var(--sb-line);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--sb-text);
+  cursor: pointer;
+}
+
+/* Reading progress, pinned under the bar. */
+.sb-progress {
+  position: fixed;
+  top: 56px; left: 0; right: 0;
+  height: 2px;
+  z-index: 60;
+}
+.sb-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--sb-accent);
+}
+
+/* --- Floating summary ----------------------------------------------------- */
+
+.sb-toc-fab {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 61;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid var(--sb-line-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sb-surface) 94%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--sb-shadow);
+  color: var(--sb-text);
+  font-family: var(--sb-sans);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.sb-toc-fab:hover { border-color: var(--sb-accent); }
+
+.sb-toc {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: calc(clamp(16px, 3vw, 32px) + 54px);
+  z-index: 62;
+  width: min(360px, calc(100vw - 32px));
+  max-height: min(64vh, 620px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--sb-line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--sb-surface) 97%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--sb-shadow);
+  font-family: var(--sb-sans);
+  overflow: hidden;
+}
+.sb-toc[hidden] { display: none !important; }
+.sb-toc header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--sb-line);
+  font-size: 13px;
+}
+.sb-toc header button {
+  border: 0;
+  background: transparent;
+  color: var(--sb-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.sb-toc nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.sb-toc a {
+  padding: 7px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 0 8px 8px 0;
+  color: var(--sb-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.sb-toc a:hover { background: color-mix(in srgb, var(--sb-accent) 10%, transparent); }
+.sb-toc a.h3 { padding-left: 26px; font-size: 12px; }
+.sb-toc a.active {
+  color: var(--sb-text);
+  border-left-color: var(--sb-accent);
+}
+
+/* --- Tags and related ----------------------------------------------------- */
+
+.sb-tags, .sb-related {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+  font-family: var(--sb-sans);
+}
+.sb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 28px;
+}
+.sb-tag {
+  padding: 4px 11px;
+  border: 1px solid var(--sb-line);
+  border-radius: 999px;
+  color: var(--sb-muted);
+  font-size: 11px;
+}
+.sb-related {
+  margin-top: 40px;
+  margin-bottom: 72px;
+  padding-top: 28px;
+  border-top: 1px solid var(--sb-line);
+}
+.sb-related h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: var(--sb-text);
+}
+.sb-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.sb-related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--sb-line);
+  border-radius: 14px;
+  color: var(--sb-text);
+  text-decoration: none;
+}
+.sb-related-card:hover { border-color: var(--sb-line-strong); }
+.sb-related-card span {
+  color: var(--sb-muted);
+  font-size: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+@media print {
+  .sb-bar, .sb-progress, .sb-toc, .sb-toc-fab, .sb-related { display: none !important; }
+  body { padding-top: 0; }
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">Xadrez Computacional — do Brute-Force às Redes Neurais</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Junho de 2026</p>
+  </div>
+</header>
+
+<main class="content">
+<div class="pull-quote epigraph">
+<p>“O xadrez é a <em>Drosophila</em> da inteligência artificial.”</p>
+<div class="pq-cite">
+<p>Alexander Kronrod (1965)</p>
+</div>
+</div>
+<hr />
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a
+href="#introdução-o-xadrez-como-laboratório-da-inteligência">Introdução:
+O Xadrez como Laboratório da Inteligência</a></li>
+<li><a href="#i-breve-história-dos-engines-de-xadrez">I. Breve História
+dos Engines de Xadrez</a></li>
+<li><a href="#ii-o-espaço-de-busca-a-maldição-da-combinatória">II. O
+Espaço de Busca: A Maldição da Combinatória</a></li>
+<li><a
+href="#iii-representação-do-tabuleiro-bitboards-e-números-mágicos">III.
+Representação do Tabuleiro: Bitboards e Números Mágicos</a></li>
+<li><a href="#iv-minimax-negamax-e-poda-alfa-beta">IV. Minimax, Negamax
+e Poda Alfa-Beta</a></li>
+<li><a href="#v-a-tabela-de-transposição-e-as-tablebases">V. A Tabela de
+Transposição e as Tablebases</a></li>
+<li><a href="#vi-iterative-deepening-e-aspiration-windows">VI. Iterative
+Deepening e Aspiration Windows</a></li>
+<li><a href="#vii-a-arte-da-poda-cortando-o-impossível">VII. A Arte da
+Poda: Cortando o Impossível</a></li>
+<li><a href="#viii-busca-de-quiescência">VIII. Busca de
+Quiescência</a></li>
+<li><a href="#ix-static-exchange-evaluation-see">IX. Static Exchange
+Evaluation (SEE)</a></li>
+<li><a href="#x-ordenação-de-movimentos-e-heurísticas-de-história">X.
+Ordenação de Movimentos e Heurísticas de História</a></li>
+<li><a href="#xi-avaliação-do-artesanato-à-rede-neural">XI. Avaliação:
+Do Artesanato à Rede Neural</a></li>
+<li><a href="#xii-nnue-no-zchezz-arquitetura-completa">XII. NNUE no
+Zchezz: Arquitetura Completa</a></li>
+<li><a href="#xiii-quantização-e-inferência-inteira">XIII. Quantização e
+Inferência Inteira</a></li>
+<li><a href="#xiv-treinamento-auto-jogo-qat-e-gerações">XIV.
+Treinamento: Auto-Jogo, QAT e Gerações</a></li>
+<li><a href="#xv-alphazero-e-a-revolução-do-reinforcement-learning">XV.
+AlphaZero e a Revolução do Reinforcement Learning</a></li>
+<li><a href="#xvi-otimizações-de-performance-e-busca-paralela">XVI.
+Otimizações de Performance e Busca Paralela</a></li>
+<li><a href="#xvii-o-xadrez-no-navegador-webassembly">XVII. O Xadrez no
+Navegador: WebAssembly</a></li>
+<li><a
+href="#xviii-a-fronteira-para-onde-vai-o-xadrez-computacional">XVIII. A
+Fronteira: Para Onde Vai o Xadrez Computacional?</a></li>
+<li><a href="#xix-o-que-o-xadrez-ensina-sobre-a-inteligência">XIX. O Que
+o Xadrez Ensina Sobre a Inteligência</a></li>
+</ul>
+<hr />
 <h2
 id="introdução-o-xadrez-como-laboratório-da-inteligência">Introdução: O
 Xadrez como Laboratório da Inteligência</h2>
@@ -287,16 +1265,16 @@ API REST para xadrez)</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
+<div class="quote">
 <p>Em termos de programação: um engine de xadrez é um sistema de
 <strong>busca em árvore de estados</strong> com <strong>avaliação
 heurística</strong> das folhas, otimizado ao extremo para explorar <span
 class="math inline">\(10^{9}\)</span>–<span
 class="math inline">\(10^{10}\)</span> estados por segundo em hardware
 comum.</p>
-</blockquote>
+</div>
 <hr />
-<h2 id="i.-breve-história-dos-engines-de-xadrez">I. Breve História dos
+<h2 id="i-breve-história-dos-engines-de-xadrez">I. Breve História dos
 Engines de Xadrez</h2>
 <h3 id="a-intuição">A Intuição</h3>
 <p>Toda disciplina técnica tem seu marco simbólico: o momento em que a
@@ -450,8 +1428,8 @@ corretamente só para chegar perto do que hoje é considerado
 “competitivo”. Os capítulos seguintes desmontam, peça por peça, cada uma
 dessas técnicas.</p>
 <hr />
-<h2 id="ii.-o-espaço-de-busca-a-maldição-da-combinatória">II. O Espaço
-de Busca: A Maldição da Combinatória</h2>
+<h2 id="ii-o-espaço-de-busca-a-maldição-da-combinatória">II. O Espaço de
+Busca: A Maldição da Combinatória</h2>
 <h3 id="a-intuição-1">A Intuição</h3>
 <p>Na fila 4 10 2 3, existem exatamente duas jogadas possíveis na
 primeira rodada (pegar o 4 ou pegar o 3), depois duas de novo na rodada
@@ -527,8 +1505,7 @@ outra, mas uma combinação sofisticada onde a <strong>busca ampla é
 guiada por heurísticas inteligentes</strong> que descartam o irrelevante
 sem perder o essencial.</p>
 <hr />
-<h2
-id="iii.-representação-do-tabuleiro-bitboards-e-números-mágicos">III.
+<h2 id="iii-representação-do-tabuleiro-bitboards-e-números-mágicos">III.
 Representação do Tabuleiro: Bitboards e Números Mágicos</h2>
 <h3 id="a-intuição-2">A Intuição</h3>
 <p>Imagine uma parede com 64 interruptores de luz, um para cada casa do
@@ -571,7 +1548,7 @@ forma que operações fundamentais (gerar movimentos, verificar ataques,
 atualizar posições) sejam extremamente rápidas. A escolha da
 representação é a decisão arquitetural mais consequente de um
 engine.</p>
-<h3 id="representação-dual-mailbox-bitboards">Representação Dual:
+<h3 id="representação-dual-mailbox--bitboards">Representação Dual:
 Mailbox + Bitboards</h3>
 <p>O Zchezz mantém simultaneamente <strong>duas representações</strong>
 em sincronia perfeita:</p>
@@ -651,7 +1628,7 @@ partida</li>
 href="https://www.chessprogramming.org/Polyglot">Polyglot</a> (que usam
 Zobrist nativo)</li>
 </ul>
-<h3 id="make-unmake-pilha-de-undo">Make / Unmake: Pilha de Undo</h3>
+<h3 id="make--unmake-pilha-de-undo">Make / Unmake: Pilha de Undo</h3>
 <p>O Zchezz usa uma <strong>pilha explícita de undo</strong>
 (<code>UndoFrame g_undo[512]</code>) em vez de copy-make. Cada
 <code>board_make</code> empilha um snapshot completo de: direitos de
@@ -666,8 +1643,8 @@ dama/torre/bispo/cavalo. Cada caso especial é tratado corretamente tanto
 no gerador de movimentos quanto no caminho de atualização do acumulador
 NNUE.</p>
 <hr />
-<h2 id="iv.-minimax-negamax-e-poda-alfa-beta">IV. Minimax, Negamax e
-Poda Alfa-Beta</h2>
+<h2 id="iv-minimax-negamax-e-poda-alfa-beta">IV. Minimax, Negamax e Poda
+Alfa-Beta</h2>
 <h3 id="a-intuição-3">A Intuição</h3>
 <p>O raciocínio que decidiu a fila de moedas já era, sem nome, o
 algoritmo deste capítulo. Pegar o 3 em vez do 4 exigiu simular o
@@ -821,7 +1798,7 @@ class="math inline">\(\beta - \alpha &gt; 1\)</span>) recebem uma
 redução a menos no LMR, garantindo que a variação principal é buscada
 com precisão.</p>
 <hr />
-<h2 id="v.-a-tabela-de-transposição-e-as-tablebases">V. A Tabela de
+<h2 id="v-a-tabela-de-transposição-e-as-tablebases">V. A Tabela de
 Transposição e as Tablebases</h2>
 <h3 id="a-intuição-4">A Intuição</h3>
 <p>Volte à fila 4 10 2 3 e siga dois caminhos diferentes. No primeiro,
@@ -942,7 +1919,7 @@ navegador) as excluem por completo, já que o conjunto de 3 a 5 peças
 ocupa vários gigabytes em disco, inviável de embutir num arquivo
 HTML.</p>
 <hr />
-<h2 id="vi.-iterative-deepening-e-aspiration-windows">VI. Iterative
+<h2 id="vi-iterative-deepening-e-aspiration-windows">VI. Iterative
 Deepening e Aspiration Windows</h2>
 <h3 id="a-intuição-5">A Intuição</h3>
 <p>Há duas formas de resolver a fila 4 10 2 3. Uma é sentar e calcular a
@@ -986,11 +1963,14 @@ transposição</a>: a iteração <span class="math inline">\(d-1\)</span>
 preenche a TT com movimentos e scores que tornam a iteração <span
 class="math inline">\(d\)</span> dramaticamente mais eficiente pela
 melhor ordenação de movimentos.</p>
-<p>Vantagens cruciais: - <strong>Controle de tempo</strong>: se o
-orçamento de tempo acabar, o engine retorna o melhor resultado da última
-iteração completada - <strong>Melhor ordenação</strong>: cada iteração
-melhora a ordenação de movimentos para a próxima, aproximando-se da
-“ordem perfeita” que maximiza a eficiência alfa-beta</p>
+<p>Vantagens cruciais:</p>
+<ul>
+<li><strong>Controle de tempo</strong>: se o orçamento de tempo acabar,
+o engine retorna o melhor resultado da última iteração completada</li>
+<li><strong>Melhor ordenação</strong>: cada iteração melhora a ordenação
+de movimentos para a próxima, aproximando-se da “ordem perfeita” que
+maximiza a eficiência alfa-beta</li>
+</ul>
 <h3 id="aspiration-windows">Aspiration Windows</h3>
 <p>A partir da profundidade 3, o Zchezz abre cada iteração com uma
 <strong>janela assimétrica</strong> de ±25 centipawns ao redor da
@@ -1017,7 +1997,7 @@ chega aos 30-40% dos nós; a escada inteira até a janela completa é rara,
 porque a avaliação raramente salta tanto de uma iteração para a
 seguinte.</p>
 <hr />
-<h2 id="vii.-a-arte-da-poda-cortando-o-impossível">VII. A Arte da Poda:
+<h2 id="vii-a-arte-da-poda-cortando-o-impossível">VII. A Arte da Poda:
 Cortando o Impossível</h2>
 <h3 id="a-intuição-6">A Intuição</h3>
 <p>Na fila de moedas, olhar duas jogadas à frente já bastou para
@@ -1130,7 +2110,8 @@ mudar o material o suficiente para justificar a dúvida.</p>
 profundidade 1–4. Margem = 150–600 centipawns conforme profundidade.</p>
 <h3 id="razoring">Razoring</h3>
 <p><strong>Ideia</strong>: em profundidade 1, se a avaliação está muito
-abaixo de alpha, cai diretamente para a busca de quiescência com janela
+abaixo de alpha, cai diretamente para a <a
+href="#viii-busca-de-quiescência">busca de quiescência</a> com janela
 estreita: se capturas não salvam a posição, nada salvará.</p>
 <p><strong>Exemplo concreto</strong>: profundidade restante 1, alpha =
 200, avaliação estática = -400. A distância até alpha é de 600
@@ -1262,7 +2243,7 @@ geração de movimentos. A lógica: sem informação da TT, a ordenação de
 movimentos será ruim, e a busca seria ineficiente na profundidade
 completa.</p>
 <hr />
-<h2 id="viii.-busca-de-quiescência">VIII. Busca de Quiescência</h2>
+<h2 id="viii-busca-de-quiescência">VIII. Busca de Quiescência</h2>
 <h3 id="a-intuição-7">A Intuição</h3>
 <p>Volte à fila de moedas, mas jogue de um jeito peculiar: pare de
 contar o dinheiro assim que pegar o 10, sem esperar pelo lance seguinte
@@ -1324,9 +2305,10 @@ onde <code>stand_pat + valor_da_peça_capturada + 50 &lt; alpha</code>
 são descartadas; o ganho não é suficiente para mudar o resultado.</p>
 <h3 id="see-pruning">SEE Pruning</h3>
 <p>Capturas com <strong>SEE negativo</strong> (Static Exchange
-Evaluation; ver seção dedicada) são descartadas inteiramente. Uma
-captura perdedora (por exemplo, dama captura peão defendido por cavalo)
-nunca vale a pena em qsearch.</p>
+Evaluation; ver <a href="#ix-static-exchange-evaluation-see">seção
+dedicada</a>) são descartadas inteiramente. Uma captura perdedora (por
+exemplo, dama captura peão defendido por cavalo) nunca vale a pena em
+qsearch.</p>
 <h3 id="pick-best-selection-sort">Pick-Best (Selection Sort)</h3>
 <p>Em vez de ordenar <em>todos</em> os movimentos de captura
 antecipadamente, o qsearch usa <strong>selection sort</strong>: encontra
@@ -1334,7 +2316,7 @@ o melhor, busca-o; se houver cutoff, os demais nunca são ordenados. Isso
 evita o custo de ordenar movimentos que serão podados antes de serem
 buscados.</p>
 <hr />
-<h2 id="ix.-static-exchange-evaluation-see">IX. Static Exchange
+<h2 id="ix-static-exchange-evaluation-see">IX. Static Exchange
 Evaluation (SEE)</h2>
 <h3 id="a-intuição-8">A Intuição</h3>
 <p>Imagine uma casa do tabuleiro como um cruzamento movimentado, onde
@@ -1436,14 +2418,18 @@ para −500 e recaptura. Cada decisão de trás para frente assume que o
 adversário responderá do próprio melhor interesse, que é justamente a
 definição de um minimax, resolvido aqui em miniatura dentro de uma única
 casa do tabuleiro.</p>
-<p>A SEE é usada em múltiplos contextos: - <strong>Ordenação de
-movimentos</strong>: capturas com SEE <span class="math inline">\(\geq
-0\)</span> são priorizadas sobre capturas perdedoras - <strong>Pruning
-no qsearch</strong>: capturas com SEE <span class="math inline">\(&lt;
-0\)</span> são descartadas - <strong>LMR</strong>: capturas perdedoras
-podem receber reduções adicionais</p>
+<p>A SEE é usada em múltiplos contextos:</p>
+<ul>
+<li><strong>Ordenação de movimentos</strong>: capturas com SEE <span
+class="math inline">\(\geq 0\)</span> são priorizadas sobre capturas
+perdedoras</li>
+<li><strong>Pruning no qsearch</strong>: capturas com SEE <span
+class="math inline">\(&lt; 0\)</span> são descartadas</li>
+<li><strong>LMR</strong>: capturas perdedoras podem receber reduções
+adicionais</li>
+</ul>
 <hr />
-<h2 id="x.-ordenação-de-movimentos-e-heurísticas-de-história">X.
+<h2 id="x-ordenação-de-movimentos-e-heurísticas-de-história">X.
 Ordenação de Movimentos e Heurísticas de História</h2>
 <h3 id="a-intuição-9">A Intuição</h3>
 <p>Toda a eficiência da poda dos capítulos anteriores depende de uma
@@ -1628,7 +2614,7 @@ significativamente a eficiência em <a
 href="https://en.wikipedia.org/wiki/Chess_middlegame">middlegames</a>
 posicionais.</p>
 <hr />
-<h2 id="xi.-avaliação-do-artesanato-à-rede-neural">XI. Avaliação: Do
+<h2 id="xi-avaliação-do-artesanato-à-rede-neural">XI. Avaliação: Do
 Artesanato à Rede Neural</h2>
 <h3 id="a-intuição-10">A Intuição</h3>
 <p>Há duas formas bem diferentes de ensinar alguém a avaliar se uma
@@ -1710,7 +2696,7 @@ segundo. Como exatamente esse acumulador é organizado, o que ele guarda
 e quanto custa mantê-lo atualizado lance a lance é o assunto inteiro do
 capítulo seguinte.</p>
 <hr />
-<h2 id="xii.-nnue-no-zchezz-arquitetura-completa">XII. NNUE no Zchezz:
+<h2 id="xii-nnue-no-zchezz-arquitetura-completa">XII. NNUE no Zchezz:
 Arquitetura Completa</h2>
 <h3 id="a-intuição-11">A Intuição</h3>
 <p>Pense num caixa de supermercado eficiente. Um caixa ruim, a cada item
@@ -1980,7 +2966,7 @@ buckets, mas aplicada à rede inteira em vez de só à camada de entrada:
 em vez de uma feature explícita dizendo “estamos em final”, a própria
 escolha de qual rede rodar já carrega essa informação.</p>
 <hr />
-<h2 id="xiii.-quantização-e-inferência-inteira">XIII. Quantização e
+<h2 id="xiii-quantização-e-inferência-inteira">XIII. Quantização e
 Inferência Inteira</h2>
 <h3 id="a-intuição-12">A Intuição</h3>
 <p>Para erguer uma parede de tijolos, ninguém mede cada tijolo com um
@@ -2122,7 +3108,7 @@ versus 8 elementos <code>float32</code>.</p>
 <p>Tamanho total: <strong>~426 KB</strong> (versus ~860 KB do formato
 float32 NNU2, redução de 50%).</p>
 <hr />
-<h2 id="xiv.-treinamento-auto-jogo-qat-e-gerações">XIV. Treinamento:
+<h2 id="xiv-treinamento-auto-jogo-qat-e-gerações">XIV. Treinamento:
 Auto-Jogo, QAT e Gerações</h2>
 <h3 id="a-intuição-13">A Intuição</h3>
 <p>Uma criança que só treina xadrez contra si mesma parece condenada a
@@ -2157,12 +3143,15 @@ instantâneo borrado.</p>
 <h3 id="geração-de-dados-por-auto-jogo">Geração de Dados por
 Auto-Jogo</h3>
 <p>Os engines modernos geram seus próprios dados de treinamento pelo
-ciclo: 1. <strong>Auto-jogo (self-play)</strong>: o engine joga contra
-si mesmo, gerando milhões de posições com avaliações 2.
-<strong>Filtragem</strong>: apenas posições “quiet” (sem capturas
-pendentes) são usadas; posições táticas produzem labels ruidosos 3.
-<strong>Iteração</strong>: redes mais fortes geram dados melhores, que
-treinam redes ainda mais fortes</p>
+ciclo:</p>
+<ol type="1">
+<li><strong>Auto-jogo (self-play)</strong>: o engine joga contra si
+mesmo, gerando milhões de posições com avaliações</li>
+<li><strong>Filtragem</strong>: apenas posições “quiet” (sem capturas
+pendentes) são usadas; posições táticas produzem labels ruidosos</li>
+<li><strong>Iteração</strong>: redes mais fortes geram dados melhores,
+que treinam redes ainda mais fortes</li>
+</ol>
 <h3 id="o-label-wdl-windrawloss">O Label: WDL (Win/Draw/Loss)</h3>
 <p>Em vez de treinar com a avaliação em centipawns (um número contínuo
 cuja escala é arbitrária), engines modernos treinam com
@@ -2173,16 +3162,25 @@ tem significado diferente de +1.5 em um endgame estável.</p>
 <h3 id="gerações-iterativas-do-zchezz">Gerações Iterativas do
 Zchezz</h3>
 <p>O treinamento do Zchezz seguiu um processo iterativo:</p>
-<p><strong>Primeira geração</strong>: - Dataset do <a
-href="https://lichess.org/">Lichess</a> [18] (partidas humanas) -
-Dataset do <a href="https://github.com/AndyGrant/Ethereal">Ethereal</a>
-(auto-jogo de engine) - Dataset de posições quiet - Auto-jogo de versões
-antigas com avaliação tradicional (hand-crafted)</p>
-<p><strong>Gerações subsequentes (4 iterações)</strong>: - Cada geração
-treinada em auto-jogo da geração anterior - Posições de endgame geradas
-artificialmente para reforçar padrões finais - Cada geração descobre
-padrões que a anterior não via - Convergência quando o ganho cai abaixo
-de ~5 Elo por geração</p>
+<p><strong>Primeira geração</strong>:</p>
+<ul>
+<li>Dataset do <a href="https://lichess.org/">Lichess</a> [18] (partidas
+humanas)</li>
+<li>Dataset do <a
+href="https://github.com/AndyGrant/Ethereal">Ethereal</a> (auto-jogo de
+engine)</li>
+<li>Dataset de posições quiet</li>
+<li>Auto-jogo de versões antigas com avaliação tradicional
+(hand-crafted)</li>
+</ul>
+<p><strong>Gerações subsequentes (4 iterações)</strong>:</p>
+<ul>
+<li>Cada geração treinada em auto-jogo da geração anterior</li>
+<li>Posições de endgame geradas artificialmente para reforçar padrões
+finais</li>
+<li>Cada geração descobre padrões que a anterior não via</li>
+<li>Convergência quando o ganho cai abaixo de ~5 Elo por geração</li>
+</ul>
 <h3 id="quantization-aware-training-qat">Quantization-Aware Training
 (QAT)</h3>
 <p>A pós-quantização padrão (quantizar <em>depois</em> de treinar)
@@ -2209,11 +3207,9 @@ com Straight-Through Estimator (STE)</h4>
 e depois divididos de volta para float, simulando o arredondamento que
 ocorrerá no deployment:</p>
 <div class="sourceCode" id="cb5"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulação int16 (pesos L1, escala QA=255)</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>limit <span class="op">=</span> <span class="dv">32767</span> <span class="op">/</span> QA                         <span class="co"># ≈ 128.5</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>x_clamped <span class="op">=</span> clamp(w, −limit, <span class="op">+</span>limit)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>x_quantized <span class="op">=</span> <span class="bu">round</span>(x_clamped × QA) <span class="op">/</span> QA   <span class="co"># snapped para grid inteiro</span></span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>limit <span class="op">=</span> <span class="dv">32767</span> <span class="op">/</span> QA                         <span class="co"># ≈ 128.5</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x_clamped <span class="op">=</span> clamp(w, −limit, <span class="op">+</span>limit)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x_quantized <span class="op">=</span> <span class="bu">round</span>(x_clamped × QA) <span class="op">/</span> QA   <span class="co"># snapped para grid inteiro</span></span></code></pre></div>
 <p>Para o backward pass, gradientes fluem pelo arredondamento como se
 fosse uma identidade: o <strong><a
 href="https://arxiv.org/abs/1308.3432">Straight-Through
@@ -2262,7 +3258,7 @@ clipped.</p>
 </tbody>
 </table>
 <hr />
-<h2 id="xv.-alphazero-e-a-revolução-do-reinforcement-learning">XV.
+<h2 id="xv-alphazero-e-a-revolução-do-reinforcement-learning">XV.
 AlphaZero e a Revolução do Reinforcement Learning</h2>
 <h3 id="a-intuição-14">A Intuição</h3>
 <p>Imagine chegar numa cidade desconhecida com fome e sem guia. Uma
@@ -2321,8 +3317,8 @@ AlphaZero atingiu nível sobre-humano. Em 9 horas, derrotou Stockfish
 28-0 com 72 empates (embora as condições do match tenham sido
 criticadas: Stockfish jogou sem livro de abertura e com configuração de
 tempo subótima).</p>
-<h3 id="o-debate-mcts-deep-nn-vs.-alpha-beta-nnue">O Debate: MCTS + Deep
-NN vs. Alpha-Beta + NNUE</h3>
+<h3 id="o-debate-mcts--deep-nn-vs-alpha-beta--nnue">O Debate: MCTS +
+Deep NN vs. Alpha-Beta + NNUE</h3>
 <p>A competição moderna revela uma verdade sutil: <strong>ambas as
 abordagens convergem em força</strong>. A Stockfish com NNUE (alfa-beta
 + rede neural rasa) e o <a href="https://lczero.org/">Leela Chess
@@ -2397,7 +3393,7 @@ href="https://en.wikipedia.org/wiki/Chinese_room">Quarto Chinês</a>,
 insistiria que execução de regras sem <em>entendimento</em> genuíno não
 é cognição real.</p>
 <hr />
-<h2 id="xvi.-otimizações-de-performance-e-busca-paralela">XVI.
+<h2 id="xvi-otimizações-de-performance-e-busca-paralela">XVI.
 Otimizações de Performance e Busca Paralela</h2>
 <h3 id="a-intuição-15">A Intuição</h3>
 <p>Um motor de xadrez que pensa duas vezes mais rápido que outro, com a
@@ -2484,7 +3480,7 @@ pontos de Elo sobre uma única thread, um ganho considerável para uma
 técnica sem nenhuma ideia nova sobre avaliação ou poda, só mais gente
 pensando ao mesmo tempo sobre o mesmo problema.</p>
 <hr />
-<h2 id="xvii.-o-xadrez-no-navegador-webassembly">XVII. O Xadrez no
+<h2 id="xvii-o-xadrez-no-navegador-webassembly">XVII. O Xadrez no
 Navegador: WebAssembly</h2>
 <h3 id="a-intuição-16">A Intuição</h3>
 <p>A maioria dos programas modernos depende de uma cadeia de coisas
@@ -2520,31 +3516,44 @@ de <code>python-chess</code> e injetadas para funcionar sem requisição
 de rede. O resultado: <strong>um único arquivo HTML com zero
 dependências externas</strong>.</p>
 <h3 id="funcionalidades">Funcionalidades</h3>
-<p><strong>Painel de jogo</strong>: - Seleção de lado (Brancas/Pretas) a
-qualquer momento - Profundidade configurável (d5 a d15) - Move log em
-notação SAN com navegação por clique - Animação suave de peças -
-Detecção de aberturas (<a
+<p><strong>Painel de jogo</strong>:</p>
+<ul>
+<li>Seleção de lado (Brancas/Pretas) a qualquer momento</li>
+<li>Profundidade configurável (d5 a d15)</li>
+<li>Move log em notação SAN com navegação por clique</li>
+<li>Animação suave de peças</li>
+<li>Detecção de aberturas (<a
 href="https://en.wikipedia.org/wiki/Encyclopaedia_of_Chess_Openings">ECO</a>)
 em tempo real (<a href="https://en.wikipedia.org/wiki/Ruy_Lopez">Ruy
 Lopez</a>, <a
 href="https://en.wikipedia.org/wiki/Sicilian_Defence">Defesa
 Siciliana</a>, <a
 href="https://en.wikipedia.org/wiki/Queen%27s_Gambit">Gambito da Dama
-Declinado</a>, e muitas outras) - Suporte a livro de abertura <a
+Declinado</a>, e muitas outras)</li>
+<li>Suporte a livro de abertura <a
 href="https://www.chessprogramming.org/Polyglot">Polyglot</a> (formato
-de arquivo <a href="https://en.wikipedia.org/wiki/Binary_file">.bin</a>)
-- Efeitos sonoros para movimentos, capturas, xeques e fim de jogo</p>
-<p><strong>Painel de análise</strong>: - Análise contínua com barra de
-avaliação animada - Variação principal exibida com score - Gráfico de
-avaliação ao longo da partida com navegação por clique - <strong>Blunder
-check</strong> automático: anotação completa de erros, imprecisões e
-blunders - Import/export de <a
+de arquivo <a
+href="https://en.wikipedia.org/wiki/Binary_file">.bin</a>)</li>
+<li>Efeitos sonoros para movimentos, capturas, xeques e fim de jogo</li>
+</ul>
+<p><strong>Painel de análise</strong>:</p>
+<ul>
+<li>Análise contínua com barra de avaliação animada</li>
+<li>Variação principal exibida com score</li>
+<li>Gráfico de avaliação ao longo da partida com navegação por
+clique</li>
+<li><strong>Blunder check</strong> automático: anotação completa de
+erros, imprecisões e blunders</li>
+<li>Import/export de <a
 href="https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation">FEN</a>
 e <a
-href="https://en.wikipedia.org/wiki/Portable_Game_Notation">PGN</a></p>
-<p><strong>Personalização</strong>: - 4 estilos de peça (Outline, Solid,
-Letters, Merida SVG) - 6 temas de cor (Classic, Green, Blue, Coral,
-Walnut, Night)</p>
+href="https://en.wikipedia.org/wiki/Portable_Game_Notation">PGN</a></li>
+</ul>
+<p><strong>Personalização</strong>:</p>
+<ul>
+<li>4 estilos de peça (Outline, Solid, Letters, Merida SVG)</li>
+<li>6 temas de cor (Classic, Green, Blue, Coral, Walnut, Night)</li>
+</ul>
 <h3 id="multi-pv-mais-de-uma-resposta-ao-mesmo-tempo">Multi-PV: Mais de
 Uma Resposta ao Mesmo Tempo</h3>
 <p>Até aqui, a busca inteira foi descrita como uma máquina de produzir
@@ -2573,8 +3582,8 @@ vencedoras enquanto ainda aceita empate quando genuinamente perdendo.
 Repetição de 3 tempos e a regra dos 50 movimentos sempre retornam 0
 exato.</p>
 <hr />
-<h2 id="xviii.-a-fronteira-para-onde-vai-o-xadrez-computacional">XVIII.
-A Fronteira: Para Onde Vai o Xadrez Computacional?</h2>
+<h2 id="xviii-a-fronteira-para-onde-vai-o-xadrez-computacional">XVIII. A
+Fronteira: Para Onde Vai o Xadrez Computacional?</h2>
 <h3 id="a-intuição-17">A Intuição</h3>
 <p>Fora das ilhas de certeza absoluta que as tablebases do capítulo V
 representam, o resto do jogo segue sendo terreno de estimativa cada vez
@@ -2624,7 +3633,7 @@ como palpite de qual será o próximo lance real</li>
 porque o essencial, o arsenal de setenta anos resumido no capítulo I, já
 está todo implementado. O que resta é refinamento, não fundação.</p>
 <hr />
-<h2 id="xix.-o-que-o-xadrez-ensina-sobre-a-inteligência">XIX. O Que o
+<h2 id="xix-o-que-o-xadrez-ensina-sobre-a-inteligência">XIX. O Que o
 Xadrez Ensina Sobre a Inteligência</h2>
 <h3 id="a-intuição-18">A Intuição</h3>
 <p>Há uma pergunta simples que qualquer pessoa consegue formular sobre
@@ -2667,7 +3676,7 @@ riscos, e por isso engines sérios são julgados em milhares de partidas,
 com margens de erro explícitas, antes de qualquer veredito.</p>
 <p>A trajetória do xadrez computacional destila lições profundas sobre a
 natureza da cognição:</p>
-<h3 id="busca-e-avaliação-são-complementares-não-rivais">1. Busca e
+<h3 id="1-busca-e-avaliação-são-complementares-não-rivais">1. Busca e
 Avaliação São Complementares, Não Rivais</h3>
 <p>Os engines mais fortes combinam ambas. AlphaZero usa MCTS (busca) +
 rede neural profunda (avaliação). Stockfish NNUE usa alfa-beta (busca) +
@@ -2676,7 +3685,7 @@ cega; avaliação sem busca é ingênua. Isso ecoa a <a
 href="https://en.wikipedia.org/wiki/Critique_of_Pure_Reason">máxima de
 Kant</a>: “conceitos sem intuições são vazios; intuições sem conceitos
 são cegas.”</p>
-<h3 id="o-conhecimento-artesanal-tem-limites">2. O Conhecimento
+<h3 id="2-o-conhecimento-artesanal-tem-limites">2. O Conhecimento
 Artesanal Tem Limites</h3>
 <p>Décadas de ajuste manual de funções de avaliação foram superadas por
 horas de auto-aprendizado. Os padrões que a rede descobre são
@@ -2693,7 +3702,7 @@ href="https://en.wikipedia.org/wiki/Michael_Polanyi">Michael Polanyi</a>
 [24] (“sabemos mais do que podemos dizer”) encontra na rede NNUE um
 exemplo quantificável: a rede <em>demonstravelmente sabe</em> coisas que
 nenhuma descrição explícita captura.</p>
-<h3 id="a-otimização-não-é-compreensão-ou-é">3. A Otimização Não É
+<h3 id="3-a-otimização-não-é-compreensão--ou-é">3. A Otimização Não É
 Compreensão — Ou É?</h3>
 <p>Como visto no fecho do capítulo XV, <a
 href="https://en.wikipedia.org/wiki/Daniel_Dennett">Daniel Dennett</a>
@@ -2735,7 +3744,7 @@ que pergunta o que resta de compreensão quando o comportamento fluente
 surge sem deliberação, e de <em>Neo-chauvinismo da Cognição
 Antropocêntrica</em>, que recusa medir inteligência apenas pela régua do
 que humanos fazem devagar e verbalmente.</p>
-<h3 id="compressão-é-inteligência">4. Compressão É Inteligência?</h3>
+<h3 id="4-compressão-é-inteligência">4. Compressão É Inteligência?</h3>
 <p>Há uma quarta lição, mais técnica que as anteriores, escondida num
 número que já apareceu duas vezes neste ensaio sem chamar atenção para
 si: os pesos treinados da rede NNUE do Zchezz, depois de quantizados,
@@ -2909,5 +3918,173 @@ href="https://en.wikipedia.org/wiki/Hutter_Prize">Link</a></p>
 programação de xadrez, referência canônica das técnicas de poda,
 extensão, quiescência e ordenação de movimentos descritas neste ensaio.
 <a href="https://www.chessprogramming.org/">Link</a></p>
-</div><section class="related"><div class="eyebrow">CONEXÕES PÚBLICAS</div><h2>Continue explorando</h2><div class="related-grid"><a class="related-card" href="godel-turing-limites-da-computacao.html"><strong>Gödel, Turing e os Limites da Computação</strong><span>Gödel mostrou que qualquer sistema aritmético consistente contém verdades indemonstráveis; Turing mostrou que existem problemas bem-definidos que nenhuma máquina pode resolver. O ensaio conecta esses resultados à complexidade de Kolmogorov, a P vs. NP e às implicações para IA, argumentando que a modéstia epistêmica que eles impõem é uma virtude, não uma derrota.</span></a><a class="related-card" href="podem-as-maquinas-pensar.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a><a class="related-card" href="chatgpts-e-zumbis-filosoficos.html"><strong>ChatGPTs e Zumbis Filosóficos — Uma Reflexão Sobre Consciência e Inteligência Artificial</strong><span>O experimento mental do zumbi filosófico é aplicado aos modelos de linguagem para revelar por que o Teste de Turing é epistemicamente insuficiente como critério de consciência. Percorrendo Chalmers, Searle, Tononi e Dennett, o ensaio conclui que essa insuficiência é simétrica: vale para as máquinas exatamente como vale para humanos ao observarem outros humanos.</span></a><a class="related-card" href="mente-aumentada.html"><strong>Mente Aumentada — Agentes LLM, Second Brain e a Fronteira da Cognição</strong><span>Da visão do Memex de Bush em 1945 aos agentes LLM modernos, o ensaio argumenta que wikis alimentadas por agentes não são apenas ferramentas de armazenamento: são instâncias reais da Extended Mind de Clark e Chalmers. O engenheiro que mantém uma base de conhecimento estruturada não está armazenando informação, está literalmente pensando fora do crânio.</span></a><a class="related-card" href="epistemologia-e-limites-do-conhecimento.html"><strong>Epistemologia e os Limites do Conhecimento — de Platão à Mecânica Quântica</strong><span>O arco completo da epistemologia ocidental (de Platão a Hume, Popper, Quine, Gödel e às implicações da mecânica quântica) é percorrido para mostrar que os limites do conhecimento não são curiosidades acadêmicas: são restrições ativas sobre o tipo de ciência que podemos fazer e o tipo de universo que podemos conhecer.</span></a><a class="related-card" href="campeoes-por-acaso.html"><strong>Campeões por Acaso — Por Que Atletas de Elite São Anomalias Estatísticas</strong><span>O status de atleta de elite obedece às mesmas leis que governam fenômenos aleatórios: o ensaio sustenta, com evidências de Efeito da Idade Relativa, herdabilidade genética, viés de sobrevivência e falácia do atirador de elite, que campeões são outliers estruturais de uma distribuição probabilística, não produtos de um método replicável. A indústria de palestras motivacionais vende ao público uma causalidade que a estatística não sustenta.</span></a><a class="related-card" href="simular-e-instanciar-sobre-as-leis-da-natureza.html"><strong>Instanciar e Simular — uma investigação sobre a natureza das leis naturais</strong><span>O ensaio investiga a &quot;portabilidade estrutural&quot; das leis naturais (a propriedade que permite que a lei da gravidade funcione igualmente em simulações e na realidade), percorrendo dezesseis posições de Aristóteles a Bostrom. Apenas leis genuínas suportam contrafactuais e são portáveis para substratos alternativos, com implicações diretas para a hipótese da simulação e a filosofia da mente.</span></a><a class="related-card" href="validacao-estocastica-dinamica-de-voo.html"><strong>Validação Estocástica de Dinâmica de Voo</strong><span>O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.</span></a></div></section></article></main>
-<footer class="footer shell"><span>Second Brain</span><span>Essay público selecionado.</span></footer><script type="application/json" id="essayMeta">{&quot;slug&quot;: &quot;xadrez-computacional&quot;, &quot;title&quot;: &quot;Xadrez Computacional — do Brute-Force às Redes Neurais&quot;}</script><button class="toc-fab" type="button" id="tocFab" aria-expanded="false" aria-controls="tocPane">Sumário</button><script src="../assets/theme.js"></script><script src="../assets/essay.js"></script></body></html>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Junho de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <a href="../sphere.html">Globo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Computação</span><span class="sb-tag">Inteligência-Artificial</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="godel-turing-limites-da-computacao.html"><strong>Gödel, Turing e os Limites da Computação</strong><span>Gödel mostrou que qualquer sistema aritmético consistente contém verdades indemonstráveis; Turing mostrou que existem problemas bem-definidos que nenhuma máquina pode resolver. O ensaio conecta esses resultados à complexidade de Kolmogorov, a P vs. NP e às implicações para IA, argumentando que a modéstia epistêmica que eles impõem é uma virtude, não uma derrota.</span></a><a class="sb-related-card" href="podem-as-maquinas-pensar.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a><a class="sb-related-card" href="chatgpts-e-zumbis-filosoficos.html"><strong>ChatGPTs e Zumbis Filosóficos — Uma Reflexão Sobre Consciência e Inteligência Artificial</strong><span>O experimento mental do zumbi filosófico é aplicado aos modelos de linguagem para revelar por que o Teste de Turing é epistemicamente insuficiente como critério de consciência. Percorrendo Chalmers, Searle, Tononi e Dennett, o ensaio conclui que essa insuficiência é simétrica: vale para as máquinas exatamente como vale para humanos ao observarem outros humanos.</span></a><a class="sb-related-card" href="mente-aumentada.html"><strong>Mente Aumentada — Agentes LLM, Second Brain e a Fronteira da Cognição</strong><span>Da visão do Memex de Bush em 1945 aos agentes LLM modernos, o ensaio argumenta que wikis alimentadas por agentes não são apenas ferramentas de armazenamento: são instâncias reais da Extended Mind de Clark e Chalmers. O engenheiro que mantém uma base de conhecimento estruturada não está armazenando informação, está literalmente pensando fora do crânio.</span></a><a class="sb-related-card" href="epistemologia-e-limites-do-conhecimento.html"><strong>Epistemologia e os Limites do Conhecimento — de Platão à Mecânica Quântica</strong><span>O arco completo da epistemologia ocidental (de Platão a Hume, Popper, Quine, Gödel e às implicações da mecânica quântica) é percorrido para mostrar que os limites do conhecimento não são curiosidades acadêmicas: são restrições ativas sobre o tipo de ciência que podemos fazer e o tipo de universo que podemos conhecer.</span></a><a class="sb-related-card" href="campeoes-por-acaso.html"><strong>Campeões por Acaso — Por Que Atletas de Elite São Anomalias Estatísticas</strong><span>O status de atleta de elite obedece às mesmas leis que governam fenômenos aleatórios: o ensaio sustenta, com evidências de Efeito da Idade Relativa, herdabilidade genética, viés de sobrevivência e falácia do atirador de elite, que campeões são outliers estruturais de uma distribuição probabilística, não produtos de um método replicável. A indústria de palestras motivacionais vende ao público uma causalidade que a estatística não sustenta.</span></a><a class="sb-related-card" href="simular-e-instanciar-sobre-as-leis-da-natureza.html"><strong>Instanciar e Simular — uma investigação sobre a natureza das leis naturais</strong><span>O ensaio investiga a &quot;portabilidade estrutural&quot; das leis naturais (a propriedade que permite que a lei da gravidade funcione igualmente em simulações e na realidade), percorrendo dezesseis posições de Aristóteles a Bostrom. Apenas leis genuínas suportam contrafactuais e são portáveis para substratos alternativos, com implicações diretas para a hipótese da simulação e a filosofia da mente.</span></a><a class="sb-related-card" href="validacao-estocastica-dinamica-de-voo.html"><strong>Validação Estocástica de Dinâmica de Voo</strong><span>O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false" aria-controls="sbToc">
+  <span aria-hidden="true">☰</span> Sumário
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=de060cf9"></script>
+<script src="../assets/essay.js?v=ad885ea1"></script>
+</body>
+</html>
