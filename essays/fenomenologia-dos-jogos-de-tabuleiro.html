@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="revisao">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Fenomenologia do Tabuleiro — Teoria dos Jogos, Presença Encarnada e a Renascença Analógica</title>
+<meta property="og:title" content="A Fenomenologia do Tabuleiro — Teoria dos Jogos, Presença Encarnada e a Renascença Analógica">
+<meta property="og:description" content="Os jogos de tabuleiro passam pela maior expansão em meio século justamente quando as telas dominam o lazer, e o ensaio descarta a nostalgia como explicação. Do Senet egípcio aos eurogames, o ensaio reconstrói a formalização progressiva da interação humana, com a incerteza herdada dos wargames e o formalismo herdado da teoria dos jogos.">
+<meta property="og:type" content="article">
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F7F9FC;
+  --surface2:#EDF2F8;
+  --border:#D6DEE9;
+  --text:#2B3645;
+  --text-dim:#66758A;
+  --text-bright:#0E1928;
+  --gold:#2F5FB0;
+  --gold-dim:#234A86;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F9FC;
+    --surface2:#EDF2F8;
+    --border:#D6DEE9;
+    --text:#2B3645;
+    --text-dim:#66758A;
+    --text-bright:#0E1928;
+    --gold:#2F5FB0;
+    --gold-dim:#234A86;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  position:relative;
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+  transition:background .25s ease,color .25s ease;
+}
+/* Tema claro: capa branca nobre com brilho suave dourado */
+[data-theme="light"] .masthead,
+:root:not([data-theme="dark"]) .masthead{
+  background:#F3F5F7;
+  color:#171310;
+}
+[data-theme="light"] .masthead .hero-title,
+:root:not([data-theme="dark"]) .masthead .hero-title{
+  color:#15120E;
+}
+/* Tema escuro: capa preta editorial */
+[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead{
+  background:#0A0A0A;
+  color:#EDE8DF;
+}
+[data-theme="dark"] .masthead .hero-title,
+:root[data-theme="dark"] .masthead .hero-title{
+  color:#EDE8DF;
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+/* O filete é a borda superior da capa, não um ornamento do título. Como a
+   capa centraliza os filhos verticalmente, deixá-lo no fluxo o empurrava para
+   encostar no título; ancorado no topo ele volta a ser moldura. */
+.stripe{
+  position:absolute;top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold-dim) 0%,var(--gold) 50%,var(--gold-dim) 100%);
+}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+.cover-summary{
+  max-width:min(760px,92%);
+  margin:1.45rem auto 0;
+  color:color-mix(in srgb,var(--text) 88%,var(--text-dim));
+  font-size:clamp(.96rem,2vw,1.08rem);
+  line-height:1.58;
+  text-wrap:balance;
+}
+[data-theme="light"] .cover-summary,
+:root:not([data-theme="dark"]) .cover-summary{color:#435166;}
+[data-theme="dark"] .cover-summary,
+:root[data-theme="dark"] .cover-summary{color:#C8C2B8;}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;border-top:1px solid var(--border);
+  text-align:center;margin:2.8rem auto;line-height:1;opacity:0.35;
+}
+/* Losango (✦) apenas estritamente entre capitulos (## que nao seja sumario nem referencias) */
+.content hr.sb-hr-chapter,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias)){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-chapter::before,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias))::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referencias usa infinito */
+.content hr.sb-hr-references,
+.content hr:has(+ h2#referências),
+.content hr:has(+ h2#referencias){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-references::before,
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+/* Oculta divisores adjacentes ao sumario (o sumario ja possui bordas proprias) */
+.content hr:has(+ h2#sumário),
+.content hr:has(+ h2#sumario),
+.content #sumário + ul + hr,
+.content #sumário + ol + hr,
+.content #sumario + ul + hr,
+.content #sumario + ol + hr{
+  display:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+  /* Numa equacao numerada o MathJax escreve `min-width` inline no proprio
+     container (o SVG interno usa width:100% e depende disso). `min-width`
+     ganha de `max-width`, entao o container ficava mais largo que a tela e
+     empurrava a pagina inteira no celular em vez de rolar por dentro. Zerar
+     so o do container, nunca o do SVG: o SVG guarda a largura real da formula,
+     que e justamente o que deve rolar aqui dentro. */
+  min-width:0 !important;
+}
+/* Formula no meio de uma frase: cabe na coluna ou rola dentro de si mesma.
+   Sem isto, uma equacao inline longa nao quebra e empurra o paragrafo — e com
+   ele a pagina inteira — alguns pixels para fora da tela no celular. */
+mjx-container:not([display="true"]){
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  vertical-align:-.25em;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+/* MathML assistivo: existe so para leitor de tela e ja vem `clip`ado pelo
+   MathJax — mas `clip` esconde sem encolher. A caixa continuava com a largura
+   real da formula (376px numa coluna de 356) e, absoluta dentro do container,
+   somava essa largura ao overflow rolavel de <p>, de .content e do documento:
+   era ela, e nao a equacao visivel, que empurrava a pagina no celular.
+   Reduzir a caixa a 1px e o padrao "visually hidden"; o conteudo continua na
+   arvore de acessibilidade e continua sendo lido. */
+/* Seletor com especificidade maior que `mjx-assistive-mml` sozinho: a folha do
+   MathJax entra no <head> DEPOIS desta e, com a mesma especificidade e o mesmo
+   `!important`, ganhava por ordem. */
+mjx-container > mjx-assistive-mml{
+  position:absolute !important;
+  width:1px !important;height:1px !important;
+  overflow:hidden !important;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+/* Uma imagem solta num paragrafo e um bloco, nao uma palavra: como inline-block
+   ela ainda somava o espaco em branco vizinho e estourava a coluna por alguns
+   pixels. */
+.content p > img{display:block;margin-inline:auto;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t="light";document.documentElement.dataset.theme=t})();</script><style>/* ==========================================================================
+   Second Brain Atlas — public essay overlay
+
+   Contract:
+   - scripts/essay_template.html owns the essay body and components.
+   - This file only maps theme tokens and styles Atlas-only chrome.
+   - Light = white + Atlas blue.
+   - Dark = near-black + restrained gold.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]),
+:root[data-theme="light"] {
+  --bg:#ffffff;
+  --surface:#f7f9fc;
+  --surface2:#edf2f8;
+  --border:#d6dee9;
+  --text:#2b3645;
+  --text-dim:#66758a;
+  --text-bright:#0e1928;
+  --gold:#2f5fb0;
+  --gold-dim:#234a86;
+  --rust:#8e4636;
+  --rust-bright:#a04030;
+  --accent:#35708a;
+  --amber:#7a5a18;
+
+  --sb-bg:#ffffff;
+  --sb-surface:#ffffff;
+  --sb-surface-soft:#f7f9fc;
+  --sb-text:#172235;
+  --sb-muted:#607087;
+  --sb-line:rgba(23,34,53,.14);
+  --sb-line-strong:rgba(23,34,53,.26);
+  --sb-primary:#2f5fb0;
+  --sb-primary-soft:rgba(47,95,176,.09);
+  --sb-shadow:0 18px 54px rgba(24,45,78,.12);
+}
+
+:root[data-theme="dark"] {
+  --bg:#090909;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#303030;
+  --text:#d8d4cd;
+  --text-dim:#979187;
+  --text-bright:#f2eee7;
+  --gold:#c9a45c;
+  --gold-dim:#8a6b33;
+  --rust:#9a4938;
+  --rust-bright:#bd5a42;
+  --accent:#5b95ac;
+  --amber:#a77a2e;
+
+  --sb-bg:#090909;
+  --sb-surface:#121212;
+  --sb-surface-soft:#181818;
+  --sb-text:#f0ede7;
+  --sb-muted:#aaa39a;
+  --sb-line:rgba(240,237,231,.14);
+  --sb-line-strong:rgba(240,237,231,.25);
+  --sb-primary:#c9a45c;
+  --sb-primary-soft:rgba(201,164,92,.10);
+  --sb-shadow:0 24px 70px rgba(0,0,0,.46);
+}
+
+html,body{background:var(--bg);}
+body{padding-top:56px;}
+
+/* Public cover: the only intentional visual departure from standalone export. */
+:root:not([data-theme="dark"]) .masthead,
+:root[data-theme="light"] .masthead{
+  background:#ffffff !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="dark"] .masthead{
+  background:#090909 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+.masthead .hero-title{color:var(--text-bright) !important;}
+.masthead-rule{border-top-color:var(--gold) !important;}
+.stripe{
+  height:3px !important;
+  background:linear-gradient(90deg,
+    color-mix(in srgb,var(--gold) 20%,transparent),
+    var(--gold),
+    color-mix(in srgb,var(--gold) 20%,transparent)) !important;
+}
+
+/* Atlas owns these controls on public pages. */
+#sbThemeToggle,#sbToTop,body > .sb-progress > .sb-progress-fill{display:none !important;}
+
+.sb-bar{
+  position:fixed;inset:0 0 auto 0;z-index:60;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 clamp(16px,4vw,40px);
+  border-bottom:1px solid var(--sb-line);
+  background:color-mix(in srgb,var(--sb-bg) 90%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.sb-brand{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--sb-text) !important;font-weight:700;font-size:14px;
+  text-decoration:none !important;
+}
+.sb-mark{
+  display:grid;place-items:center;width:27px;height:27px;
+  border:1px solid color-mix(in srgb,var(--sb-primary) 42%,transparent);
+  border-radius:8px;color:var(--sb-primary);background:var(--sb-primary-soft);
+  font-size:10px;font-weight:800;
+}
+.sb-nav{display:flex;align-items:center;gap:16px;}
+.sb-nav a{color:var(--sb-muted) !important;font-size:13px;text-decoration:none !important;}
+.sb-nav a:hover{color:var(--sb-primary) !important;}
+.sb-nav button{
+  width:32px;height:32px;border:1px solid var(--sb-line);border-radius:9px;
+  background:transparent;color:var(--sb-primary);cursor:pointer;
+}
+.sb-nav button:hover{border-color:var(--sb-primary);}
+
+/* Public progress bar injected by render_public_essay.py. */
+body > .sb-progress:not(:has(.sb-progress-fill)){
+  position:fixed;top:56px;left:0;right:0;z-index:61;height:2px;background:transparent;
+}
+body > .sb-progress:not(:has(.sb-progress-fill)) span{
+  display:block;width:0;height:100%;background:var(--sb-primary);
+}
+
+.sb-toc-fab{
+  position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:61;
+  display:inline-flex;align-items:center;gap:8px;padding:10px 17px;
+  border:1px solid var(--sb-line-strong);border-radius:999px;
+  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);
+  color:var(--sb-text);box-shadow:var(--sb-shadow);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font:650 13px/1 Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer;
+}
+.sb-toc-fab:hover{border-color:var(--sb-primary);}
+.sb-toc-icon{color:var(--sb-primary);}
+
+.sb-toc{
+  position:fixed;right:clamp(16px,3vw,32px);
+  bottom:calc(clamp(16px,3vw,32px) + 54px);z-index:62;
+  width:min(380px,calc(100vw - 32px));max-height:min(65vh,600px);
+  display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--sb-line-strong);border-radius:16px;
+  background:color-mix(in srgb,var(--sb-surface) 98%,transparent);
+  box-shadow:var(--sb-shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-toc[hidden]{display:none !important;}
+.sb-toc header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 17px;border-bottom:1px solid var(--sb-line);color:var(--sb-text);font-size:13px;
+}
+.sb-toc header strong{color:inherit;}
+.sb-toc header button{border:0;background:transparent;color:var(--sb-muted);font-size:20px;cursor:pointer;}
+.sb-toc nav{display:flex;flex-direction:column;padding:9px 8px;overflow-y:auto;}
+.sb-toc a{
+  padding:8px 11px;border-left:2px solid transparent;border-radius:0 8px 8px 0;
+  color:var(--sb-muted) !important;font-size:12.5px;line-height:1.4;text-decoration:none !important;
+}
+.sb-toc a:hover{color:var(--sb-text) !important;background:var(--sb-primary-soft);}
+.sb-toc a.h3{padding-left:23px;font-size:11.5px;}
+.sb-toc a.active{
+  color:var(--sb-primary) !important;border-left-color:var(--sb-primary);background:var(--sb-primary-soft);
+}
+
+.sb-tags,.sb-related{
+  width:min(var(--max-width,760px),calc(100% - 48px));margin-inline:auto;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px;}
+.sb-tag{padding:4px 10px;border:1px solid var(--sb-line);border-radius:999px;color:var(--sb-muted);font-size:11px;}
+.sb-related{margin-top:42px;margin-bottom:76px;padding-top:28px;border-top:1px solid var(--sb-line);}
+.sb-related h2{
+  margin:0 0 16px;color:var(--sb-text);
+  font:700 18px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.sb-related-card{
+  display:flex;flex-direction:column;gap:7px;padding:15px 16px;
+  border:1px solid var(--sb-line);border-radius:13px;background:var(--sb-surface-soft);
+  color:var(--sb-text) !important;text-decoration:none !important;
+}
+.sb-related-card:hover{
+  border-color:color-mix(in srgb,var(--sb-primary) 55%,var(--sb-line));
+  background:var(--sb-primary-soft);
+}
+.sb-related-card strong{color:var(--sb-text);font-size:13px;}
+.sb-related-card span{color:var(--sb-muted);font-size:12px;line-height:1.45;}
+
+@media(max-width:720px){
+  .sb-bar{padding-inline:14px;}
+  .sb-nav{gap:10px;}
+  .sb-nav a{font-size:12px;}
+  .sb-brand{font-size:13px;}
+  .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
+  .sb-toc-text{display:none;}
+  .sb-related-grid{grid-template-columns:1fr;}
+}
+/* Duas palavras curtas cabem em qualquer telefone. Esconder a segunda tirava
+   o unico caminho para o mapa na tela onde ele mais importa. */
+@media(max-width:520px){
+  .sb-brand{gap:7px;font-size:0;}
+  .sb-nav{gap:14px;}
+  .sb-nav a{font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">A Fenomenologia do Tabuleiro — Teoria dos Jogos, Presença Encarnada e a Renascença Analógica</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Agosto de 2026</p>
+    <p class="cover-summary">Os jogos de tabuleiro passam pela maior expansão em meio século justamente quando as telas dominam o lazer, e o ensaio descarta a nostalgia como explicação. Do Senet egípcio aos eurogames, o ensaio reconstrói a formalização progressiva da interação humana, com a incerteza herdada dos wargames e o formalismo herdado da teoria dos jogos.</p>
+  </div>
+</header>
+
+<main class="content">
+<hr />
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a
+href="#introdução-o-objeto-analógico-na-era-da-desincorporação">Introdução:
+O Objeto Analógico na Era da Desincorporação</a></li>
+<li><a
+href="#a-grande-historiografia-da-antiguidade-ritual-ao-século-xix">A
+Grande Historiografia: Da Antiguidade Ritual ao Século XIX</a></li>
+<li><a href="#a-revolução-dos-wargames-e-a-gênese-dos-eurogames">A
+Revolução dos Wargames e a Gênese dos Eurogames</a></li>
+<li><a href="#teoria-dos-jogos-como-coração-do-design">Teoria dos Jogos
+Como Coração do Design</a></li>
+<li><a href="#o-mapeamento-dos-dilemas-sociais">O Mapeamento dos Dilemas
+Sociais</a></li>
+<li><a href="#leilões-escassez-e-a-economia-do-tabuleiro">Leilões,
+Escassez e a Economia do Tabuleiro</a></li>
+<li><a href="#o-espectro-da-rigidez-do-algoritmo-à-conversa">O Espectro
+da Rigidez: Do Algoritmo à Conversa</a></li>
+<li><a href="#metas-ess-e-o-aprendizado-das-máquinas">Metas, ESS e o
+Aprendizado das Máquinas</a></li>
+<li><a href="#a-ilusão-do-círculo-mágico-e-a-transferência-epistêmica">A
+Ilusão do Círculo Mágico e a Transferência Epistêmica</a></li>
+<li><a href="#a-simbiose-tecnológica-e-o-futuro-do-analógico">A Simbiose
+Tecnológica e o Futuro do Analógico</a></li>
+<li><a href="#conclusão-o-reencontro-no-círculo-mágico">Conclusão: O
+Reencontro no Círculo Mágico</a></li>
+</ul>
+<hr />
+<h2
+id="introdução-o-objeto-analógico-na-era-da-desincorporação">Introdução:
+O Objeto Analógico na Era da Desincorporação</h2>
+<p>Vivemos o paradoxo mais subestimado da cultura contemporânea. Nunca a
+humanidade teve acesso a tanto entretenimento digital instantâneo,
+gratuito e infinitamente variado, e nunca, simultaneamente, os jogos de
+tabuleiro venderam tanto. O mercado global de board games cresce ano
+após ano há duas décadas: levantamentos do setor registram receita
+mundial na faixa das dezenas de bilhões de dólares e projetam
+crescimento sustentado para os próximos anos (<a
+href="https://www.statista.com/forecasts/1490346/board-games-market-revenue-worldwide/">Statista</a>),
+cafés de tabuleiro proliferam nas grandes cidades, campanhas de
+financiamento coletivo arrecadam milhões por jogos de caixas pesando
+quilos. Papelão, madeira e plástico vencendo espaço justamente quando a
+tela prometia engolir tudo.</p>
+<p>A explicação fácil é nostalgia, e está errada. Nostalgia não sustenta
+um mercado em expansão entre pessoas que nasceram depois do smartphone.
+A explicação que este ensaio defende tem duas camadas entrelaçadas. Na
+superfície, o tabuleiro oferece o que nenhuma mídia digital consegue:
+atenção compartilhada num mesmo espaço físico, rostos ao redor de uma
+mesa, o que <a href="https://en.wikipedia.org/wiki/Johan_Huizinga">Johan
+Huizinga</a> chamou de <a
+href="https://en.wikipedia.org/wiki/Magic_circle_(games)">círculo
+mágico</a>, o espaço consagrado onde as regras do jogo substituem
+temporariamente as regras do mundo. No fundo, porém, algo mais
+interessante aconteceu: o design de jogos moderno absorveu a teoria dos
+jogos como sua gramática fundamental, transformando cada caixa nova num
+pequeno laboratório de dilemas de decisão encarnados.</p>
+<p>A tese central, portanto: a história dos jogos de tabuleiro é a
+história da formalização progressiva da interação humana, do
+determinismo místico das origens até a teoria dos jogos como linguagem
+oculta do design contemporâneo. A explicação mais completa para a
+renascença atual do analógico combina os dois termos, rigor formal
+matemático e presença física irredutível. O efeito Kickstarter, a fadiga
+de tela do pós-pandemia e o amadurecimento do ofício de design de jogos
+são fatores reais. Nenhum deles, isolado, explica por que o crescimento
+persiste entre gerações que nunca conheceram lazer sem tela, nem por que
+a categoria que mais avança combina justamente regras rigorosas com mesa
+física. Esses fatores complementam a explicação estrutural que este
+ensaio defende, sem substituí-la.</p>
+<p>Os dois termos se exigem mutuamente, mas o espectro entre eles tem
+mais de dois extremos. O rigor formal sem a presença é um videogame, que
+resolve os equilíbrios dentro de código opaco e retira do jogador o
+poder de negociar. A presença sem qualquer estrutura de regras é uma
+conversa de bar, rica em socialização mas indiferente a qualquer decisão
+formalizada. Entre esses dois polos há uma terceira ponta que o próprio
+boom evidencia: jogos de festa como <a
+href="https://en.wikipedia.org/wiki/Codenames_(board_game)">Codenames</a>,
+<a href="https://en.wikipedia.org/wiki/Mafia_(party_game)">Mafia</a> e
+<a href="https://en.wikipedia.org/wiki/Just_One">Just One</a>, presença
+física plena, rigor formal quase nulo, sustentados quase inteiramente
+pela leitura mútua e pela linguagem compartilhada. O tabuleiro moderno
+de que este ensaio trata ocupa o ponto que combina rigor e presença, um
+entre vários pontos favoráveis de um espectro mais amplo de sistemas
+lúdicos, ordenados segundo o grau de formalização das regras, espectro
+cuja ontologia comparativa este ensaio propõe adiante. Não é
+entretenimento retrógrado: é uma conquista cultural que faz conviver, na
+mesma mesa, equilíbrios de Nash e apertos de mão.</p>
+<p><a href="https://en.wikipedia.org/wiki/Roger_Caillois">Roger
+Caillois</a>, em <em>Man, Play and Games</em>, classificou os jogos em
+quatro impulsos: agon (competição), alea (acaso), mimicry (simulação de
+papel) e ilinx (vertigem). O tabuleiro moderno é notável por combinar os
+três primeiros num único objeto, e a presença física é a condição que
+permite a mimicry social (blefar, negociar, ler rostos) conviver com o
+agon e a alea formalizados nas regras.</p>
+<hr />
+<h2 id="a-grande-historiografia-da-antiguidade-ritual-ao-século-xix">A
+Grande Historiografia: Da Antiguidade Ritual ao Século XIX</h2>
+<p>Os jogos mais antigos que conhecemos não eram entretenimento: eram
+tecnologia espiritual. O <a
+href="https://en.wikipedia.org/wiki/Senet">Senet</a>, praticado no Egito
+há cinco mil anos, representava a jornada da alma pelo submundo, com
+casas nomeadas que marcavam provas póstumas. Jogar era ensaiar a própria
+travessia funerária. O <a
+href="https://en.wikipedia.org/wiki/Royal_Game_of_Ur">Jogo Real de
+Ur</a>, da Mesopotâmia, combinava corrida de peças com elementos de
+sorte que os próprios jogadores liam como mensagens divinas sobre o
+futuro da viagem. O <a
+href="https://en.wikipedia.org/wiki/Mancala">mancala</a>, família
+africana e asiática de jogos de semear sementes, codificava fluxo de
+recursos e contagem numa mecânica espelhada nas economias agrícolas que
+o geraram. Em todos eles, o padrão é o mesmo: jogo como simulação ritual
+do destino, determinismo combinatório vestido de cosmologia.</p>
+<p>A antiguidade clássica produziu então os primeiros jogos de
+estratégia pura, informação perfeita e zero acaso, e a diferença
+cultural entre eles é instrutiva. O <a
+href="https://en.wikipedia.org/wiki/Go_(game)">Go</a>, nascido na China,
+modela território e cerco com regras minimalistas e profundidade
+estratégica que nenhum computador domou antes das redes neurais. Sua
+estética reflete o ideal confuciano do general sábio que vence por
+posicionamento, não por batalha. O <a
+href="https://en.wikipedia.org/wiki/Chess">xadrez</a>, cristalizado na
+Índia e persianizado antes de chegar à Europa, codifica hierarquia
+feudal: rei vulnerável cercado de corporações especializadas, vitória
+pela captura simbólica do soberano. O <a
+href="https://en.wikipedia.org/wiki/Backgammon">gamão</a> mistura
+corrida, dado e decisão sob risco, o ancestral direto de toda a teoria
+moderna da probabilidade aplicada a jogos. Três civilizações, três
+ontologias da competição, todas abstratas, todas completas em si
+mesmas.</p>
+<p>O século XIX industrializou o formato e moralizou o conteúdo. Jogos
+comerciais americanos como <a
+href="https://en.wikipedia.org/wiki/The_Mansion_of_Happiness"><em>The
+Mansion of Happiness</em></a> eram trilhas de dados com doutrina
+vitoriana embutida: cair na casa da virtude avança, cair na casa do
+vício recua, o protestantismo transformado em mecânica de corrida. E o
+caso mais revelante do período é o do jogo que virou o ícone oposto do
+próprio espírito de origem: <a
+href="https://en.wikipedia.org/wiki/The_Landlord%27s_Game"><em>The
+Landlord’s Game</em></a>, patenteado em 1904 por Lizzie Magie, foi
+desenhado como crítica econômica demonstrando os males do monopólio
+fundiário georgista. Os jogadores, porém, preferiram o prazer de
+arruinar uns aos outros ao sermão anti-especulação, e o jogo, rebatizado
+<a href="https://en.wikipedia.org/wiki/Monopoly_(game)">Monopoly</a> e
+comercializado pela Parker Brothers, converteu-se no modelo canônico do
+capitalismo competitivo de eliminação. A ironia é perfeita: o primeiro
+grande jogo de massa americano nasceu como crítica e triunfou como
+celebração daquilo que criticava.</p>
+<hr />
+<h2 id="a-revolução-dos-wargames-e-a-gênese-dos-eurogames">A Revolução
+dos Wargames e a Gênese dos Eurogames</h2>
+<p>A transição decisiva para o design moderno veio da instituição menos
+lúdica possível: o <a
+href="https://en.wikipedia.org/wiki/Prussian_General_Staff">Estado-Maior
+prussiano</a>. O <a
+href="https://en.wikipedia.org/wiki/Kriegspiel_(chess)">Kriegspiel</a>
+militar do século XIX, sistematizado por <a
+href="https://en.wikipedia.org/wiki/Georg_von_Reisswitz">Georg von
+Reisswitz</a>, introduziu na simulação de combate os três elementos que
+faltavam aos jogos abstratos: informação incompleta entre os lados, um
+árbitro com acesso à posição total das forças, que processava em segredo
+cada ordem enviada e devolvia a cada comandante apenas o relato daquilo
+que seus batedores efetivamente perceberiam, e dados para modelar o
+atrito que Clausewitz teorizava. Pela primeira vez, um jogo formalizava
+explicitamente a incerteza epistêmica como componente central da
+competição, não como ruído acidental. Todo o design posterior de névoa
+de guerra, ordens ocultas e dedução desce dessa inovação burocrática
+prussiana.</p>
+<p>No século XX americano, essa tradição civilizou-se em hobby. A <a
+href="https://en.wikipedia.org/wiki/Avalon_Hill">Avalon Hill</a>
+popularizou wargames de simulação pesada (<em>Tactics</em>, as séries
+históricas de campanha), jogos de complexidade mecânica brutal, longas
+horas de atrito e eliminação frontal de jogadores, enquanto títulos como
+<a href="https://en.wikipedia.org/wiki/Diplomacy_(game)">Diplomacy</a>
+de Allan Calhamer eliminavam o dado inteiro para deixar só a negociação
+humana, traindo aliados em cartas secretas escritas à mão. Essa linhagem
+produziu gênio mecânico e um problema social evidente: quem é eliminado
+no minuto vinte fica vinte minutos assistindo, e quem perde o amigo que
+traiu perde também o parceiro de domingo.</p>
+<p>A resposta veio da Alemanha do pós-guerra, e ela foi conscientemente
+política. Uma cultura que associava conflito militar direto ao próprio
+trauma nacional rejeitou o formato: nada de eliminação de jogadores
+(todo mundo participa até o fim), nada de guerra como tema central,
+ênfase em economia, produção e competição indireta, com duração
+calibrada para uma noite familiar. O resultado, batizado <a
+href="https://en.wikipedia.org/wiki/Eurogame">Eurogame</a>, explodiu nos
+anos 1990 com <a
+href="https://en.wikipedia.org/wiki/Catan_(game)"><em>Catan</em></a> de
+Klaus Teuber, seguido de <em>El Grande</em>, <a
+href="https://en.wikipedia.org/wiki/Carcassonne_(game)"><em>Carcassonne</em></a>
+e <em>Puerto Rico</em>: assimetria elegante, gestão de recursos,
+interação negociável sem aniquilação. As duas escolas acabaram
+convergindo: o design contemporâneo híbrido, de <em>Twilight
+Imperium</em> a <em>Brass: Birmingham</em> e <em>Gloomhaven</em>, casa
+imersão narrativa temática com o rigor de engenharia de sistemas herdado
+dos wargames, e é dessa síntese que emerge o objeto deste ensaio:
+sistemas formais complexos operados por humanos sentados face a
+face.</p>
+<hr />
+<h2 id="teoria-dos-jogos-como-coração-do-design">Teoria dos Jogos Como
+Coração do Design</h2>
+<p>Aqui está a camada profunda da tese. Os jogos antigos tinham regras
+arbitrárias no sentido técnico: funcionavam, mas nada garantia que
+produzissem decisões interessantes, e a prova é quantos morreram no
+esquecimento. O design moderno inverte a lógica: parte de modelos
+matemáticos da interação estratégica e deriva as mecânicas deles. O
+vocabulário vem da <a
+href="https://plato.stanford.edu/entries/game-theory/">teoria dos
+jogos</a> formalizada por <a
+href="https://en.wikipedia.org/wiki/John_von_Neumann">von Neumann</a> e
+Morgenstern em 1944 e completada pelo <a
+href="https://pt.wikipedia.org/wiki/Equil%C3%ADbrio_de_Nash">equilíbrio
+de Nash</a>: situações onde o melhor movimento de cada jogador depende
+do que ele prevê que os outros vão fazer, exatamente a definição
+operacional de uma partida.</p>
+<p>As aplicações concretas são ubíquas no design atual. Matrizes de
+payoff e ações simultâneas estruturam os combates de <em>Scythe</em> e
+as batalhas navais secretas de <em>Game of Thrones</em>: escolher tipo
+de ação e ordem oculta ao mesmo tempo que os adversários é literalmente
+jogar um jogo em forma normal, e a pergunta “existe estratégia dominante
+aqui?” é a pergunta matemática sobre a matriz. Informação imperfeita e
+assimétrica alimenta a névoa de guerra de <em>Twilight Struggle</em>,
+onde cada lado sabe coisas que o outro precisa inferir, e os jogos de
+dedução social. Sinalização e custo de transmissão de informação são a
+essência do blefe: no poker analógico de <em>Skull</em> ou na negociação
+de <em>Coup</em>, enviar um sinal confiável custa caro precisamente
+porque mentir seria barato, a definição econômica de sinal honesto
+aplicada a papelão.</p>
+<p><em>Skull</em> merece pausa própria porque comprime parte dessa
+teoria num punhado de discos ilustrados. O problema biológico que <a
+href="https://en.wikipedia.org/wiki/Amotz_Zahavi">Amotz Zahavi</a>
+formulou como <a
+href="https://en.wikipedia.org/wiki/Handicap_principle">princípio do
+handicap</a>, e que <a
+href="https://en.wikipedia.org/wiki/Alan_Grafen">Alan Grafen</a> depois
+provou ser equilíbrio estável, explica como um sinal permanece confiável
+quando o emissor lucra com o engano. A resposta de Zahavi é que sinais
+honestos são sinais custosos, e o custo recai sobre o emissor
+independentemente do resultado. A cauda do pavão pesa e atrai predador
+todo dia da vida do animal, mesmo nos dias em que nenhuma fêmea a nota.
+O blefe de <em>Skull</em> segue uma lógica parecida, mas não idêntica.
+Declarar “não há crânio nesta pilha” não custa nada por palavra, e é aí
+que a analogia com o handicap clássico se rompe. O custo só recai sobre
+quem blefou se o blefe for desafiado e desmentido, nunca antes disso. É
+sinalização condicional com punição contingente, mais próxima do que a
+teoria dos jogos chama de <a
+href="https://en.wikipedia.org/wiki/Cheap_talk">cheap talk</a> com custo
+dependente do desfecho do que do handicap de Zahavi propriamente dito.
+Quem aposta alto sem lastro paga o preço da fraude só quando é chamado a
+provar o blefe. Quem nunca é desafiado não paga nada, ao contrário do
+pavão, que carrega a cauda cara todos os dias de sua vida
+independentemente de cortejar alguém. O mecanismo do jogo ainda
+disciplina a mentira, mas por punição depois do fato, não por custo pago
+de antemão.</p>
+<p>O ofício do designer, nesse quadro, é quase todo negativo: seu
+trabalho não é criar boas estratégias, é garantir que não exista
+estratégia dominante trivial. Um jogo cuja linha ótima é descoberta na
+segunda partida morreu. Um bom jogo mantém os jogadores navegando entre
+equilíbrios locais, respondendo às escolhas alheias, num estado
+permanente de dilema resolúvel mas não resolvido. É engenharia reversa
+de tensão: o designer projeta a estrutura de incentivos e torce para que
+o ponto fixo do sistema seja interessante, e os grandes projetos são
+aqueles onde o equilíbrio fica deliberadamente fora de alcance.</p>
+<p>A tese da gramática oculta enfrenta aqui sua objeção mais imediata.
+Se a teoria dos jogos explica o boom, é preciso explicar por que vários
+dos títulos mais vendidos da última década, <a
+href="https://en.wikipedia.org/wiki/Wingspan_(board_game)">Wingspan</a>
+e <a href="https://en.wikipedia.org/wiki/Dixit_(card_game)">Dixit</a>
+entre eles, carregam densidade game-teórica relativamente baixa. Esses
+jogos têm pouca matriz de payoff, pouco equilíbrio calculável e decisões
+simples sob informação quase completa. A resposta mais honesta reconhece
+duas populações distintas dentro do mesmo mercado. A gramática oculta da
+teoria dos jogos explica melhor o núcleo do hobby avançado, o jogador
+que compra dezenas de caixas por ano e persegue profundidade decisória.
+A cauda comercial mais larga, que compra uma caixa para o Natal,
+responde antes à presença e à narrativa social do que à otimização
+formal. As duas populações sustentam a mesma renascença por razões
+parcialmente diferentes, e a tese deste ensaio descreve com mais
+precisão a primeira que a segunda.</p>
+<hr />
+<h2 id="o-mapeamento-dos-dilemas-sociais">O Mapeamento dos Dilemas
+Sociais</h2>
+<p>Se a teoria dos jogos fornece a gramática, os grandes problemas da
+economia política fornecem o dicionário. O design contemporâneo mapeou,
+mecânica por mecânica, os dilemas sociais clássicos, e a mesa funciona
+como versão encarnada e segura deles. Comece pelo mais famoso: o <a
+href="https://plato.stanford.edu/entries/prisoner-dilemma/">dilema do
+prisioneiro</a>, a situação onde cooperar beneficia o grupo e trair
+beneficia o indivíduo. Os jogos semi-cooperativos o implementam como
+mecânica central: em <em>Battlestar Galactica</em>, <em>Dead of
+Winter</em> e <em>Nemesis</em>, um ou mais jogadores podem ser traidores
+secretos, e a dúvida sobre a lealdade de cada um corrói a cooperação
+pública mesmo quando todos são inocentes. A suspeita, não a traição
+efetiva, é o mecanismo: o jogo transforma o problema do incentivo em
+drama humano medido em olhares desconfiados.</p>
+<p>A <a
+href="https://en.wikipedia.org/wiki/Tragedy_of_the_commons">tragédia dos
+comuns</a> aparece sempre que um recurso coletivo pode ser explorado
+individualmente. Em <em>Terraforming Mars</em> e em variantes de
+<em>Catan</em>, o jogador pode maximizar ganho próprio drenando o pool
+compartilhado, e o grupo aprende na prática por que Hardin previu
+colapso: a punição do free-rider raramente é automática, exigindo
+acordos tácitos ou explícitos que o jogo não fornece. Títulos
+intencionalmente didáticos como <em>CO2</em> e <em>Spirit Island</em>
+invertem a moldura, fazendo da gestão do comum a própria condição de
+vitória, e o resultado pedagógico é mais eficaz que qualquer aula: quem
+já perdeu uma partida porque alguém esgotou o recurso compartilhado
+internaliza o argumento econômico permanentemente.</p>
+<p>Mais sofisticado ainda é o tratamento do <a
+href="https://en.wikipedia.org/wiki/Public_goods_game">problema dos bens
+públicos</a> e da seleção de valor cooperativo. Negociação aberta com
+divisão de excedentes, como em <em>Sidereal Confluence</em> e
+<em>Chinatown</em>, opera no terreno da <a
+href="https://en.wikipedia.org/wiki/Cooperative_game_theory">teoria dos
+jogos cooperativos</a>: quanto vale minha contribuição para esta
+coalizão, e qual fração do excedente conjunto consigo capturar? A
+intuição que os jogadores treinam à mesa é, sem exagero, a intuição por
+trás do <a href="https://en.wikipedia.org/wiki/Shapley_value">valor de
+Shapley</a>, o conceito da teoria cooperativa que define o pagamento
+justo a cada jogador como a média da sua contribuição marginal a todas
+as coalizões possíveis. Na prática, é estimar quanto a sua presença no
+acordo vale para cada combinação de parceiros, e é exatamente isso que o
+jogador de <em>Chinatown</em> faz ao decidir quanto cobrar para ceder
+uma localização. E quando o jogo adiciona governança interna, quem
+controla o recurso comum decide também sobre punição, surge o risco
+moral puro, o agente protegido das consequências dos próprios atos.
+Cinquenta anos de economia política condensados numa tarde de domingo
+com pizza. O mecanismo pelo qual esse aprendizado acontece tem nome na
+teoria do design: <a href="https://en.wikipedia.org/wiki/Ian_Bogost">Ian
+Bogost</a> chama-o de <a
+href="https://en.wikipedia.org/wiki/Procedural_rhetoric">retórica
+procedural</a>, a capacidade de um sistema de regras fazer um argumento
+sobre o mundo através dos processos que ele executa, não através de
+texto ou imagem. O tabuleiro que implementa a tragédia dos comuns não
+conta ao jogador que free-riding é destrutivo: demonstra-o
+proceduralmente, e a demonstração é mais persuasiva que qualquer
+argumento verbal porque o jogador a viveu como consequência da própria
+escolha.</p>
+<hr />
+<h2 id="leilões-escassez-e-a-economia-do-tabuleiro">Leilões, Escassez e
+a Economia do Tabuleiro</h2>
+<p>Nenhum mecanismo concentra tanta teoria econômica por grama de
+papelão quanto o leilão. O design moderno implementa todas as formas
+canônicas: o <a
+href="https://en.wikipedia.org/wiki/English_auction">leilão inglês</a>
+de lances crescentes, o holandês decrescente, os lances fechados
+simultâneos de <em>Modern Art</em> e <em>Ra</em>, e o refinamento de
+Vickrey, segundo preço selado, onde o vencedor paga o segundo maior
+lance, formato projetado teoricamente para induzir lances verdadeiros.
+Em <em>Power Grid</em> e <em>Amun-Re</em>, o leilão não é minijogo
+decorativo: é o mecanismo de precificação que distribui os recursos
+escassos do jogo, e quem o joga mal descobre pessoalmente a diferença
+entre valor e preço.</p>
+<p>Esses sistemas reproduzem com precisão perturbadora as patologias dos
+mercados reais. A <a
+href="https://en.wikipedia.org/wiki/Winner%27s_curse">maldição do
+vencedor</a>, documentada empiricamente em leilões de petróleo e
+espectro, acontece à mesa toda semana: sob incerteza comum sobre o valor
+real de um item, vencer significa ter superestimado mais que todos, e o
+triunfo carrega a derrota dentro de si. Jogadores experientes
+desenvolvem a disciplina de descontar a própria euforia, exatamente a
+heurística que economistas comportamentais passaram décadas medindo
+falhar em licitações reais.</p>
+<p>Do lado da produção, o worker placement de <em>Agricola</em>,
+<em>Caylus</em> e <em>Tzolk’in</em> modela escassez e custo de
+oportunidade com crueldade elegante: poucos espaços de ação, ocupados
+por quem chegou primeiro, forçando a pergunta econômica fundamental, o
+que eu abro mão de fazer para fazer isto? Cada turno é um exercício de
+custo de oportunidade estrito. E o engine-building de <em>Dominion</em>
+e <em>Brass</em> adiciona a camada temporal: investimentos presentes
+(cartas que sozinhas não fazem nada) compram taxas de retorno compostas
+futuras, otimização estocástica sob incerteza de compra. O jogador
+aprende, sem nunca ver uma fórmula, por que juros compostos dominam e
+por que timing de investimento separa bons jogadores de ótimos.</p>
+<hr />
+<h2 id="o-espectro-da-rigidez-do-algoritmo-à-conversa">O Espectro da
+Rigidez: Do Algoritmo à Conversa</h2>
+<p>Organizando o mapa, propõe-se aqui uma ontologia comparativa dos
+sistemas lúdicos segundo um único eixo: o grau de formalização das
+regras. Num extremo, os jogos abstratos puros, xadrez e Go acima de
+todos: sistemas fechados, determinísticos, cujas regras dispensam
+qualquer interpretação semântica, executáveis por máquina desde 1997 no
+xadrez e 2016 no Go, autômatos sociais que funcionariam idênticos num
+universo sem consciência. No outro extremo, o RPG de mesa, onde as
+regras migram para a linguagem natural e o juiz final é o julgamento
+humano do mestre, sistema aberto por construção, impossível de
+compilar.</p>
+<p>Os board games modernos habitam o meio do espectro, e essa posição é
+o seu segredo estrutural. Eles herdam do extremo formal a maquinaria
+matemática: matrizes de payoff, equilíbrios, curvas de custo. Mas
+reservam ao redor dessa maquinaria um espaço deliberadamente
+não-formalizado: a diplomacia, o blefe, a leitura de rostos, o acordo
+informal quebrado na rodada seguinte. As regras escritas cobrem o
+comércio. As consequências de trair o acordo de mesa ficam fora delas,
+administradas por reputação, memória e afeto entre pessoas que
+continuarão se encontrando. É exatamente essa lacuna entre o formalizado
+e o social que torna o tabuleiro tão rico: o sistema define os
+incentivos, e a sociedade improvisada da mesa define as sanções
+informais sobre explorá-los demais.</p>
+<p>A tipologia de Caillois lançada na introdução encontra aqui sua
+aplicação mais fina: ela organiza a diferença interna entre as duas
+linhagens que dividem o meio do espectro. O Eurogame é uma máquina de
+agon e alea contidos: competição indireta sob dose calibrada de acaso,
+mimicry reduzida a tema decorativo, ilinx praticamente ausente, porque
+eliminação frontal e reviravolta caótica foram projetadas para fora do
+sistema. O jogo à americana intensifica o par complementar: mimicry
+encarnada nos papéis densos de <em>Twilight Imperium</em> e <em>Dead of
+Winter</em>, ilinx alimentada por dados explosivos e cartas de evento
+capazes de demolir um plano em minutos. Os híbridos contemporâneos ficam
+então legíveis como ajuste fino dessas proporções, misturas deliberadas
+dos mesmos quatro impulsos, e não mera moda editorial.</p>
+<p>A comparação com o videogame é inevitável e esclarece por analogia. O
+videogame também é formal, mas sua formalização é <em>oculta</em>:
+código compilado, invisível, interpretável apenas por comportamento
+observado. O board game exibe suas regras inteiras na mesa, tornadas
+objeto comum de discussão, disputa e interpretação negociada entre
+iguais. No videogame, a regra é autoritária e opaca. No tabuleiro, ela é
+legislativa e transparente. A diferença fenomenológica entre jogar
+dentro de um sistema que não se pode ler e governar colegialmente um
+sistema totalmente legível é, talvez, o coração da distinção entre as
+duas mídias.</p>
+<hr />
+<h2 id="metas-ess-e-o-aprendizado-das-máquinas">Metas, ESS e o
+Aprendizado das Máquinas</h2>
+<p>Nenhuma análise do tabuleiro moderno pode ignorar o meta, o jogo
+acima do jogo: a população de estratégias conhecidas, contras e
+contras-de-contra que circula numa comunidade competitiva. O meta evolui
+por seleção natural cultural, imitação de listas vencedoras, mutação por
+inovação individual, filtragem por desempenho, e cristaliza em
+configurações resistentes a invasão que <a
+href="https://en.wikipedia.org/wiki/John_Maynard_Smith">John Maynard
+Smith</a> e George R. Price cunharam em 1973 como <a
+href="https://en.wikipedia.org/wiki/Evolutionarily_stable_strategy">estratégias
+evolutivamente estáveis</a>. Drafts de <em>Magic: The Gathering</em> e
+metas de <em>Netrunner</em> são ecossistemas populacionais completos, e
+a dinâmica reproduz, em miniatura, os três ingredientes clássicos da
+seleção natural: variação de estratégias, replicação por imitação e
+filtragem por desempenho competitivo.</p>
+<p>As máquinas entraram nesse ecossistema como aceleradores
+experimentais. O <a
+href="https://deepmind.google/discover/blog/alphazero-shattering-chess-and-go-rules-with-reinforcement-learning/">AlphaZero</a>
+descobriu em horas, por self-play, princípios que a teoria enxadrística
+levou séculos para formular, e sistemas como o Pluribus de poker
+alcançaram nível superior humano em jogos de informação imperfeita, o
+santo graal da teoria dos jogos aplicada. Milhões de partidas simuladas
+equivalem a busca aceleradíssima por ESS nos espaços estratégicos
+gigantescos que o papelão abstrato abre.</p>
+<p>Mas o limite dessas máquinas é tão instrutivo quanto seus triunfos.
+Motores treinados num meta fechado dominam a distribuição que conheceram
+e degradam diante de estratégias fora dela, o equivalente algorítmico do
+enxadrista surpreendido por preparação caseira. O meta humano permanece
+vivo justamente porque seus mutantes criativos reinjetam novidade fora
+da distribuição, coisa que o self-play puro tende a extinguir. O
+tabuleiro físico, com sua comunidade de humanos inventando baralhos
+absurdos, continua sendo o gerador de hipóteses, e a máquina, o
+verificador de alto rendimento. A divisão do trabalho diz muito sobre
+ambos. Resta uma pergunta técnica aberta que merece registro: o
+self-play converge para algo reconhecível como equilíbrio de Nash do
+jogo completo, ou para um ótimo local específico da população de treino,
+vulnerável a estratégias fora da distribuição que um humano inventaria?
+O problema é conhecido em aprendizado por reforço mas raramente
+formulado nos termos da teoria dos jogos clássica, e a resposta
+provavelmente depende da topologia do espaço de estratégias do jogo
+específico.</p>
+<hr />
+<h2 id="a-ilusão-do-círculo-mágico-e-a-transferência-epistêmica">A
+Ilusão do Círculo Mágico e a Transferência Epistêmica</h2>
+<p>Voltemos agora à fenomenologia, armados do aparato formal. O círculo
+mágico de Huizinga, refinado por Bernard Suits em <a
+href="https://en.wikipedia.org/wiki/The_Grasshopper:_Games,_Life_and_Utopia"><em>The
+Grasshopper</em></a>, define o jogo pela aceitação voluntária de
+obstáculos desnecessários e pela suspensão temporária das consequências
+mundanas. Essa suspensão não é detalhe psicológico: é pré-condição da
+liberdade estratégica. Só posso apostar tudo numa manobra arriscada
+porque perder não me arruína, e só posso trair meu aliado porque a
+traição custa reputação fictícia, não emprego. O círculo mágico é um
+laboratório de risco moral invertido, onde as consequências foram
+removidas precisamente para que a ousadia cognitiva seja gratuita.</p>
+<p>Daí a pergunta que ameaça todo o edifício educacional: o que se
+aprende à mesa se transfere para fora dela? A psicologia cognitiva
+responde com severidade. A literatura sobre transferência distante (<a
+href="https://en.wikipedia.org/wiki/Learning_transfer">far transfer</a>)
+mostra consistentemente que maestria num domínio formal raramente migra
+automaticamente para outros: treinar xadrez não melhora notas de
+matemática além do esperado, e a revisão sistemática de Sala e Gobet
+encontra efeitos distantes próximos de zero para xadrez, música e treino
+de memória. O jogador de Eurogames que calcula curvas de investimento
+brilhantes à mesa continua sujeito, na vida financeira real, aos mesmos
+vieses que todo mundo, porque o contexto mudou, e o contexto é a maior
+parte do que a habilidade usa.</p>
+<p>Uma objeção mais funda atinge o próprio formato. Há conceitos da
+teoria dos jogos que o tabuleiro, por limitação de sessão, parece
+estruturalmente incapaz de embutir: jogos infinitamente repetidos,
+estratégias que só fazem sentido sob expectativa de reputação de
+longuíssimo prazo e equilíbrios que dependem de desconto temporal
+calibrado ao longo de centenas de rodadas. Se isso for verdade, existe
+uma classe inteira de fenômenos estratégicos que nenhuma mecânica de
+duas horas consegue ensinar de forma encarnada, não importa quão bem
+desenhada seja, e o círculo mágico tem, nesse sentido, um horizonte
+temporal intransponível.</p>
+<p>A objeção ganha corpo matemático no caso mais estudado da teoria da
+cooperação. <a
+href="https://en.wikipedia.org/wiki/Robert_Axelrod">Robert Axelrod</a>
+demonstrou que a cooperação emerge no dilema do prisioneiro iterado
+quando a sombra do futuro pesa sobre o presente: sua estratégia
+vencedora nos torneios computacionais, o <a
+href="https://en.wikipedia.org/wiki/Tit_for_tat">tit-for-tat</a>,
+coopera até a primeira traição e depois espelha o adversário, enquanto o
+<a href="https://en.wikipedia.org/wiki/Grim_trigger">grim trigger</a>
+responde a qualquer deserção com deserção eterna. Ambas sustentam
+acordos que nenhum contrato escreve, mas apenas sob expectativa de
+centenas de rodadas futuras, porque é o valor descontado desse futuro
+longo que torna a traição cara hoje. Uma sessão de mesa oferece meia
+dúzia de interações e um horizonte que se fecha à meia-noite. Dá para
+encenar uma traição e assistir à retaliação. Não dá para encarnar a
+reputação acumulada que faria a traição nem sequer parecer lucrativa. O
+fenômeno completo pertence a escalas temporais que o formato
+simplesmente não comporta.</p>
+<p>A defesa honesta do valor do tabuleiro é, portanto, mais modesta e
+mais sólida. O que transfere não são habilidades, são heurísticas
+expostas: a experiência visceral de custo de oportunidade, a sensação
+física da maldição do vencedor, o reconhecimento do free-rider no grupo.
+Conceitos vividos deixam âncoras intuitivas que a exposição verbal não
+deixa, mesmo sem automatizar a decisão. E resta uma função que nenhuma
+objeção alcança: o jogo como teste seguro de caráter. Observar como
+alguém negocia, mente e aceita derrota dentro do círculo mágico informa
+sobre disposição ética de um modo que currículo nenhum informa, e o
+laboratório interpessoal, ao contrário das heurísticas, parece
+transferir bem: as pessoas são, à mesa e fora dela, quem são.</p>
+<hr />
+<h2 id="a-simbiose-tecnológica-e-o-futuro-do-analógico">A Simbiose
+Tecnológica e o Futuro do Analógico</h2>
+<p>Falta desconstruir a falsa oposição que dá moldura ao título desta
+renascença. O analógico contemporâneo não é resistência à tecnologia: é
+seu produto mais intensivo. A prototipagem 3D abaratou o desenvolvimento
+de componentes físicos, plataformas como <a
+href="https://www.kickstarter.com/">Kickstarter</a> e Gamefound
+financiaram jogos independentes de complexidade que nenhuma editora
+tradicional arriscaria, e o canal de distribuição digital de arte,
+regras e errata sustenta ecossistemas globais de design. O papelão da
+era atual é fabricado, financiado e coordenado por ferramentas digitais
+de ponta: ele é, tecnicamente, um produto da mesma revolução que
+supostamente ameaça.</p>
+<p>Plataformas de jogo online como Board Game Arena e Tabletop Simulator
+dividem hoje o papel de porta de entrada: para muitos, a primeira
+partida de um Eurogame pesado acontece numa tela, e a experiência
+digital funciona menos como substituto do físico que como funil de
+descoberta que impulsiona a venda da cópia impressa. Os jogos híbridos
+completam o movimento, integrando companion apps que administram IA de
+masmorra e estados ocultos, usando o digital para remover microgestão
+entediante e devolver à mesa o que só a mesa tem: a presença. A divisão
+racional do trabalho entre os dois meios está sendo descoberta
+empiricamente, mercado a mercado.</p>
+<p>E fica registrada a hipótese de longo prazo que este ensaio defende.
+Quanto mais a vida cotidiana migrar para mediações algorítmicas,
+trabalho, relações, lazer filtrados por tela e recomendação, mais
+valioso se torna o encontro não mediado, e o tabuleiro é a forma mais
+sofisticada já inventada desse encontro: interação social densa,
+estruturada por um sistema formal justo, com consequências contidas.
+Numa era de inteligências artificiais e realidades virtuais, sentar-se
+ao redor de uma mesa com pessoas físicas para negociar a ordem de um
+mundo imaginário pode virar gesto de resistência ontológica, a afirmação
+de que finitude e presença não são limitações a superar, mas as
+condições do que faz valer a pena estar presente. Essa mesma presença
+ganha um contorno mais específico à medida que a vida cotidiana passa a
+incluir interlocutores artificiais. Conversar com sistemas de linguagem
+também exige inferir intenção sem certeza sobre o que existe do outro
+lado, e a mesa de tabuleiro guarda uma resposta a essa incerteza
+específica que vale a pena examinar antes de fechar o argumento.</p>
+<hr />
+<h2 id="conclusão-o-reencontro-no-círculo-mágico">Conclusão: O
+Reencontro no Círculo Mágico</h2>
+<p>Recapitulando o arco completo. Começamos com jogos rituais que
+simulavam o destino dos mortos e terminamos com sistemas formais que
+simulam mercados, coalizões e tragédias dos comuns. A constante em toda
+a jornada é a formalização progressiva da interação humana. Os wargames
+prussianos introduziram a incerteza epistêmica, a teoria dos jogos
+forneceu a gramática matemática, os Eurogames alemães calibraram o
+formato social, e o design híbrido contemporâneo fundiu tudo isso em
+objetos de engenharia fina que cabem numa mesa de jantar.</p>
+<p>A tese central sobreviveu ao percurso reforçada: o tabuleiro moderno
+não é nem entretenimento banal nem saudosismo retrógrado, mas uma
+conquista cultural dupla, rigor formal e conexão humana tátil, que
+nenhuma outra mídia consegue reunir.</p>
+<p>A promessa pedagógica, porém, exige a modéstia que o capítulo sobre
+transferência epistêmica impôs. O tabuleiro não ensina teoria dos jogos
+nem economia política no sentido forte de transferir maestria formal,
+porque transferência distante desse porte raramente acontece. O que ele
+faz é outra coisa, mais modesta e mais sólida: opera como gerador de
+âncoras intuitivas e vocabulário experiencial. Quem viveu a maldição do
+vencedor numa tarde de domingo reconhece o fenômeno quando o encontra
+num tratado de leilões. Quem traiu e foi punido pela mesa carrega
+intuição de reputação que diagrama nenhum transmite. O valor pedagógico
+real é a exposição encarnada aos mecanismos, que prepara a intuição sem
+substituir o estudo, e tudo isso acontece na única sala de aula onde o
+professor, os alunos e o material de estudo são as mesmas pessoas
+olhando umas para as outras nos olhos.</p>
+<p>Vale notar uma ponte com a discussão mais ampla sobre consciência
+artificial. Quando conversar com modelos de linguagem virou rotina
+diária, inferir intenção passou a treinar teoria da mente contra
+simulacros estatísticos, parceiros cuja interioridade é justamente a
+questão em aberto. A mesa resiste por construção: ali o adversário tem
+rosto, respiração e consequência compartilhada, e ler esse rosto é
+exercício de teoria da mente sem mediação algorítmica, contra uma mente
+cuja existência ninguém à mesa duvida. Um dos últimos espaços onde isso
+ainda acontece com regularidade, e talvez por isso, não apesar disso,
+que o papelão voltou a vender.</p>
+<p>Por isso a renascença do papelão não vai passar, e não deveria.
+Enquanto houver decisões sob incerteza para entender e pessoas para
+entendê-las juntas, o círculo mágico continuará se abrindo sobre mesas
+de jantar, oferecendo o que nenhuma tela replica: o peso da madeira na
+mão, o silêncio antes do lance decisivo e a risada coletiva quando o
+plano perfeito desmorona. O reencontro que o título anuncia já
+aconteceu. Falta apenas reconhecê-lo como o que é, uma das conquistas
+culturais mais discretas e mais profundas do nosso tempo.</p>
+<hr />
+<h2 id="referências">Referências</h2>
+<p>[1] Huizinga, J., <em>Homo Ludens: A Study of the Play-Element in
+Culture</em>, Routledge &amp; Kegan Paul, London, 1949. — Formulação
+original do conceito de círculo mágico. <a
+href="https://en.wikipedia.org/wiki/Homo_Ludens_(book)">Link</a></p>
+<p>[2] Suits, B., <em>The Grasshopper: Games, Life and Utopia</em>,
+University of Toronto Press, Toronto, 1978. — Definição filosófica de
+jogo como aceitação de obstáculos desnecessários. <a
+href="https://en.wikipedia.org/wiki/The_Grasshopper:_Games,_Life_and_Utopia">Link</a></p>
+<p>[3] Von Neumann, J., and Morgenstern, O., <em>Theory of Games and
+Economic Behavior</em>, Princeton University Press, Princeton, NJ, 1944.
+— Fundamento matemático da teoria dos jogos aplicada no capítulo 4. <a
+href="https://press.princeton.edu/books/paperback/9780691130613/theory-of-games-and-economic-behavior">Link</a></p>
+<p>[4] Nash, J., <em>Non-Cooperative Games</em>, Annals of Mathematics,
+1951. — Formalização do equilíbrio que dá nome ao capítulo central. <a
+href="https://www.jstor.org/stable/1969529">Link</a></p>
+<p>[5] Hardin, G., <em>The Tragedy of the Commons</em>, Science, Vol.
+162, No. 3859, 1968, pp. 1243–1248. — O dilema dos comuns mapeado nas
+mecânicas do capítulo 5. <a
+href="https://doi.org/10.1126/science.162.3859.1243">Link</a></p>
+<p>[6] Shapley, L., <em>A Value for n-Person Games</em>, Contributions
+to the Theory of Games II, Princeton University Press, Princeton, 1953,
+pp. 307–317. — Base da teoria cooperativa citada na negociação de
+excedentes. <a
+href="https://en.wikipedia.org/wiki/Shapley_value">Link</a></p>
+<p>[7] Capen, E., Clapp, R., e Campbell, W., <em>Competitive Bidding in
+High-Risk Situations</em>, Journal of Petroleum Technology, Vol. 23,
+1971, pp. 641–653. — Documentação original da maldição do vencedor. <a
+href="https://doi.org/10.2118/2993-PA">Link</a></p>
+<p>[8] Silver, D. et al., <em>A General Reinforcement Learning Algorithm
+that Masters Chess, Shogi, and Go through Self-Play</em>, Science, Vol.
+362, No. 6419, 2018, pp. 1140–1144. — AlphaZero e a busca acelerada por
+equilíbrios no capítulo 8. <a
+href="https://www.science.org/doi/10.1126/science.aar6404">Link</a></p>
+<p>[9] Sala, G., e Gobet, F., <em>Does Far Transfer Exist? Negative
+Evidence From Chess, Music, and Working Memory Training</em>, Current
+Directions in Psychological Science, Vol. 26, No. 6, 2017, pp. 515–520.
+— Evidência contra transferência distante, base crítica do capítulo 9.
+<a href="https://doi.org/10.1177/0963721417712760">Link</a></p>
+<p>[10] Caillois, R., <em>Man, Play and Games</em>, University of
+Illinois Press, Urbana, 1961. — Tipologia sociológica do jogo (agon,
+alea, mimicry, ilinx) complementar a Huizinga. <a
+href="https://en.wikipedia.org/wiki/Man,_Play_and_Games">Link</a></p>
+<p>[11] Bogost, I., <em>Persuasive Games: The Expressive Power of
+Videogames</em>, MIT Press, Cambridge, 2007. — Formulação da retórica
+procedural: sistemas de regras como veículo de argumentação. <a
+href="https://mitpress.mit.edu/9780262514880/persuasive-games/">Link</a></p>
+<p>[12] Statista Research Department, <em>Board Games Market Revenue
+Worldwide From 2018 to 2024, With a Forecast to 2029</em>, Statista,
+Hamburg, 2025. — Série de receita global e projeção de crescimento
+contínuo do mercado de board games, base do dado de abertura (acesso em
+23 Ago. 2026). <a
+href="https://www.statista.com/forecasts/1490346/board-games-market-revenue-worldwide/">Link</a></p>
+<p>[13] Zahavi, A., <em>Mate Selection: A Selection for a Handicap</em>,
+Journal of Theoretical Biology, Vol. 53, No. 1, 1975, pp. 205–214. —
+Formulação original do princípio do handicap, aplicado aqui à leitura do
+blefe em <em>Skull</em>. <a
+href="https://doi.org/10.1016/0022-5193%2875%2990111-3">Link</a></p>
+<p>[14] Grafen, A., <em>Biological Signals as Handicaps</em>, Journal of
+Theoretical Biology, Vol. 144, No. 4, 1990, pp. 517–546. — Demonstração
+formal de que a sinalização honesta custosa é equilíbrio evolutivamente
+estável. <a
+href="https://doi.org/10.1016/S0022-5193%2805%2980088-8">Link</a></p>
+<p>[15] Axelrod, R., <em>The Evolution of Cooperation</em>, Basic Books,
+New York, 1984. — Torneios computacionais do dilema do prisioneiro
+iterado, tit-for-tat e a sombra do futuro, base da resposta à objeção
+dos jogos repetidos. <a
+href="https://en.wikipedia.org/wiki/The_Evolution_of_Cooperation">Link</a></p>
+<p>[16] <em>Georg von Reisswitz</em>, Wikipedia, The Free Encyclopedia.
+— Oficial prussiano que sistematizou o Kriegsspiel apresentado ao
+Estado-Maior em 1824, origem da linhagem de wargames com informação
+incompleta e árbitro descrita no capítulo 2 (acesso em 29 Ago. 2026). <a
+href="https://en.wikipedia.org/wiki/Georg_von_Reisswitz">Link</a></p>
+<p>[17] Maynard Smith, J., e Price, G. R., <em>The Logic of Animal
+Conflict</em>, Nature, Vol. 246, No. 5427, 1973, pp. 15–18. — Artigo que
+cunhou o conceito de estratégia evolutivamente estável, citado no
+capítulo sobre meta e aprendizado de máquinas. <a
+href="https://doi.org/10.1038/246015a0">Link</a></p>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Agosto de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  if(toTop){toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Identifica e classifica divisores de capitulo: o losango so aparece onde ha capitulo real */
+  document.querySelectorAll(".content hr").forEach(function(hr){
+    var next=hr.nextElementSibling;
+    while(next&&next.nodeType===1&&next.tagName==="P"&&!next.textContent.trim()){
+      next=next.nextElementSibling;
+    }
+    if(next&&next.tagName==="H2"){
+      var id=(next.id||"").toLowerCase();
+      if(id.indexOf("sum")===0){
+        hr.style.display="none";
+      }else if(id.indexOf("ref")===0){
+        hr.classList.add("sb-hr-references");
+      }else{
+        hr.classList.add("sb-hr-chapter");
+      }
+    }
+  });
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Filosofia</span><span class="sb-tag">Jogos</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="rpg-de-mesa-e-teoria-da-informacao.html"><strong>RPG de Mesa e a Teoria da Informação — Entropia Narrativa, Simulação Cognitiva e a Linguagem sem Limites</strong><span>Entre as mídias interativas, só o RPG de mesa aceita como ação válida qualquer frase que o jogador consiga pronunciar, porque opera sobre linguagem natural, não código. O ensaio lê essa propriedade pela teoria da informação de Shannon (o dado como ruído produtivo, o mestre simulando e descartando futuros) e mostra que, nos LLMs, o que falha não é a fluência do texto — é a continuidade do mundo simulado.</span></a><a class="sb-related-card" href="chatgpts-e-zumbis-filosoficos.html"><strong>ChatGPTs e Zumbis Filosóficos — Uma Reflexão Sobre Consciência e Inteligência Artificial</strong><span>O experimento mental do zumbi filosófico é aplicado aos modelos de linguagem para revelar por que o Teste de Turing é epistemicamente insuficiente como critério de consciência. Percorrendo Chalmers, Searle, Tononi e Dennett, o ensaio conclui que essa insuficiência é simétrica: vale para as máquinas exatamente como vale para humanos ao observarem outros humanos.</span></a><a class="sb-related-card" href="selecao-natural-sem-biologia.html"><strong>Seleção Natural em Sistemas de Regras — Da Evolução Sem Biologia aos Metas Competitivos e Self-Play</strong><span>A seleção natural não é fato biológico, é teorema: bastam replicação imperfeita, variação hereditária e filtragem por sobrevivência para que ela opere, com ou sem DNA. O ensaio a rastreia em quatro territórios sem organismo à vista: xadrez evoluindo por self-play, metagames de cartas e tabuleiro, RPG selecionando lore por sobrevivência memética, e autômatos celulares que tensionam a definição de vida.</span></a><a class="sb-related-card" href="multiversos-computacionais-monte-carlo.html"><strong>Monte Carlo, Simular e Instanciar — Multiversos Computacionais e os Limites do Real</strong><span>O método de Monte Carlo calcula milhares de futuros possíveis para descartar quase todos. O ensaio toma essa rotina como teste para uma pergunta antiga da metafísica: simular é instanciar? Confronta o universo matemático de Tegmark com a leitura física da existência, examina o paralelo imperfeito com os muitos-mundos de Everett e chega ao problema ético de apagar uma simulação.</span></a><a class="sb-related-card" href="xadrez-computacional.html"><strong>Xadrez Computacional — do Brute-Force às Redes Neurais</strong><span>O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).</span></a><a class="sb-related-card" href="simular-e-instanciar-sobre-as-leis-da-natureza.html"><strong>Instanciar e Simular — uma investigação sobre a natureza das leis naturais</strong><span>O ensaio investiga a &quot;portabilidade estrutural&quot; das leis naturais (a propriedade que permite que a lei da gravidade funcione igualmente em simulações e na realidade), percorrendo dezesseis posições de Aristóteles a Bostrom. Apenas leis genuínas suportam contrafactuais e são portáveis para substratos alternativos, com implicações diretas para a hipótese da simulação e a filosofia da mente.</span></a><a class="sb-related-card" href="livre-arbitrio-e-compatibilismo.html"><strong>Compatibilismo — o livre-arbítrio como propriedade de um sistema natural</strong><span>O ensaio defende que livre-arbítrio e determinismo causal não são opostos: o cérebro, o corpo e a história de vida compõem o mesmo sistema que gera as ações humanas, não obstáculos externos à liberdade. Percorre o Demônio de Laplace, por que a mecânica quântica não salva o libertarianismo, e os limites gödelianos da auto-previsão.</span></a><a class="sb-related-card" href="podem-as-maquinas-pensar.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a><a class="sb-related-card" href="autopoiese-consciencia-limites-do-vivo.html"><strong>Autopoiese, Consciência e os Limites do Vivo</strong><span>A autopoiese (a auto-produção contínua dos próprios componentes como marca definitória da vida) é examinada em profundidade e projetada sobre o debate da consciência artificial. Se a vida é um processo e não uma substância, o que isso exige de um sistema artificial para ser considerado cognoscente?</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
+        aria-controls="sbToc" title="Sumário do essay">
+  <span class="sb-toc-icon" aria-hidden="true">☰</span>
+  <span class="sb-toc-text">Sumário</span>
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=00d79791"></script>
+</body>
+</html>

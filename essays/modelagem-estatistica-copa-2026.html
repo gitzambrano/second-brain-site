@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="finalizado">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>White Paper - Modelagem Estatística para a Copa do Mundo FIFA 2026</title>
+<meta property="og:title" content="White Paper - Modelagem Estatística para a Copa do Mundo FIFA 2026">
+<meta property="og:description" content="A previsão do vencedor de uma Copa é formulada em três camadas: estimação de força relativa via ELO, modelagem de placares por Dixon-Coles sobre Poisson, e propagação de incerteza pelo torneio via Monte Carlo. O white paper documenta cada etapa com equações, apresenta os resultados para 2026 e discute as limitações do modelo ante a alta variância intrínseca do futebol.">
+<meta property="og:type" content="article">
+<script defer="" src="../assets/mathjax/tex-svg.js"
+type="text/javascript"></script>
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F7F9FC;
+  --surface2:#EDF2F8;
+  --border:#D6DEE9;
+  --text:#2B3645;
+  --text-dim:#66758A;
+  --text-bright:#0E1928;
+  --gold:#2F5FB0;
+  --gold-dim:#234A86;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F9FC;
+    --surface2:#EDF2F8;
+    --border:#D6DEE9;
+    --text:#2B3645;
+    --text-dim:#66758A;
+    --text-bright:#0E1928;
+    --gold:#2F5FB0;
+    --gold-dim:#234A86;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  position:relative;
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+  transition:background .25s ease,color .25s ease;
+}
+/* Tema claro: capa branca nobre com brilho suave dourado */
+[data-theme="light"] .masthead,
+:root:not([data-theme="dark"]) .masthead{
+  background:#F3F5F7;
+  color:#171310;
+}
+[data-theme="light"] .masthead .hero-title,
+:root:not([data-theme="dark"]) .masthead .hero-title{
+  color:#15120E;
+}
+/* Tema escuro: capa preta editorial */
+[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead{
+  background:#0A0A0A;
+  color:#EDE8DF;
+}
+[data-theme="dark"] .masthead .hero-title,
+:root[data-theme="dark"] .masthead .hero-title{
+  color:#EDE8DF;
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+/* O filete é a borda superior da capa, não um ornamento do título. Como a
+   capa centraliza os filhos verticalmente, deixá-lo no fluxo o empurrava para
+   encostar no título; ancorado no topo ele volta a ser moldura. */
+.stripe{
+  position:absolute;top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold-dim) 0%,var(--gold) 50%,var(--gold-dim) 100%);
+}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+.cover-summary{
+  max-width:min(760px,92%);
+  margin:1.45rem auto 0;
+  color:color-mix(in srgb,var(--text) 88%,var(--text-dim));
+  font-size:clamp(.96rem,2vw,1.08rem);
+  line-height:1.58;
+  text-wrap:balance;
+}
+[data-theme="light"] .cover-summary,
+:root:not([data-theme="dark"]) .cover-summary{color:#435166;}
+[data-theme="dark"] .cover-summary,
+:root[data-theme="dark"] .cover-summary{color:#C8C2B8;}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;border-top:1px solid var(--border);
+  text-align:center;margin:2.8rem auto;line-height:1;opacity:0.35;
+}
+/* Losango (✦) apenas estritamente entre capitulos (## que nao seja sumario nem referencias) */
+.content hr.sb-hr-chapter,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias)){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-chapter::before,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias))::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referencias usa infinito */
+.content hr.sb-hr-references,
+.content hr:has(+ h2#referências),
+.content hr:has(+ h2#referencias){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-references::before,
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+/* Oculta divisores adjacentes ao sumario (o sumario ja possui bordas proprias) */
+.content hr:has(+ h2#sumário),
+.content hr:has(+ h2#sumario),
+.content #sumário + ul + hr,
+.content #sumário + ol + hr,
+.content #sumario + ul + hr,
+.content #sumario + ol + hr{
+  display:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+  /* Numa equacao numerada o MathJax escreve `min-width` inline no proprio
+     container (o SVG interno usa width:100% e depende disso). `min-width`
+     ganha de `max-width`, entao o container ficava mais largo que a tela e
+     empurrava a pagina inteira no celular em vez de rolar por dentro. Zerar
+     so o do container, nunca o do SVG: o SVG guarda a largura real da formula,
+     que e justamente o que deve rolar aqui dentro. */
+  min-width:0 !important;
+}
+/* Formula no meio de uma frase: cabe na coluna ou rola dentro de si mesma.
+   Sem isto, uma equacao inline longa nao quebra e empurra o paragrafo — e com
+   ele a pagina inteira — alguns pixels para fora da tela no celular. */
+mjx-container:not([display="true"]){
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  vertical-align:-.25em;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+/* MathML assistivo: existe so para leitor de tela e ja vem `clip`ado pelo
+   MathJax — mas `clip` esconde sem encolher. A caixa continuava com a largura
+   real da formula (376px numa coluna de 356) e, absoluta dentro do container,
+   somava essa largura ao overflow rolavel de <p>, de .content e do documento:
+   era ela, e nao a equacao visivel, que empurrava a pagina no celular.
+   Reduzir a caixa a 1px e o padrao "visually hidden"; o conteudo continua na
+   arvore de acessibilidade e continua sendo lido. */
+/* Seletor com especificidade maior que `mjx-assistive-mml` sozinho: a folha do
+   MathJax entra no <head> DEPOIS desta e, com a mesma especificidade e o mesmo
+   `!important`, ganhava por ordem. */
+mjx-container > mjx-assistive-mml{
+  position:absolute !important;
+  width:1px !important;height:1px !important;
+  overflow:hidden !important;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+/* Uma imagem solta num paragrafo e um bloco, nao uma palavra: como inline-block
+   ela ainda somava o espaco em branco vizinho e estourava a coluna por alguns
+   pixels. */
+.content p > img{display:block;margin-inline:auto;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t="light";document.documentElement.dataset.theme=t})();</script><style>/* ==========================================================================
+   Second Brain Atlas — public essay overlay
+
+   Contract:
+   - scripts/essay_template.html owns the essay body and components.
+   - This file only maps theme tokens and styles Atlas-only chrome.
+   - Light = white + Atlas blue.
+   - Dark = near-black + restrained gold.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]),
+:root[data-theme="light"] {
+  --bg:#ffffff;
+  --surface:#f7f9fc;
+  --surface2:#edf2f8;
+  --border:#d6dee9;
+  --text:#2b3645;
+  --text-dim:#66758a;
+  --text-bright:#0e1928;
+  --gold:#2f5fb0;
+  --gold-dim:#234a86;
+  --rust:#8e4636;
+  --rust-bright:#a04030;
+  --accent:#35708a;
+  --amber:#7a5a18;
+
+  --sb-bg:#ffffff;
+  --sb-surface:#ffffff;
+  --sb-surface-soft:#f7f9fc;
+  --sb-text:#172235;
+  --sb-muted:#607087;
+  --sb-line:rgba(23,34,53,.14);
+  --sb-line-strong:rgba(23,34,53,.26);
+  --sb-primary:#2f5fb0;
+  --sb-primary-soft:rgba(47,95,176,.09);
+  --sb-shadow:0 18px 54px rgba(24,45,78,.12);
+}
+
+:root[data-theme="dark"] {
+  --bg:#090909;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#303030;
+  --text:#d8d4cd;
+  --text-dim:#979187;
+  --text-bright:#f2eee7;
+  --gold:#c9a45c;
+  --gold-dim:#8a6b33;
+  --rust:#9a4938;
+  --rust-bright:#bd5a42;
+  --accent:#5b95ac;
+  --amber:#a77a2e;
+
+  --sb-bg:#090909;
+  --sb-surface:#121212;
+  --sb-surface-soft:#181818;
+  --sb-text:#f0ede7;
+  --sb-muted:#aaa39a;
+  --sb-line:rgba(240,237,231,.14);
+  --sb-line-strong:rgba(240,237,231,.25);
+  --sb-primary:#c9a45c;
+  --sb-primary-soft:rgba(201,164,92,.10);
+  --sb-shadow:0 24px 70px rgba(0,0,0,.46);
+}
+
+html,body{background:var(--bg);}
+body{padding-top:56px;}
+
+/* Public cover: the only intentional visual departure from standalone export. */
+:root:not([data-theme="dark"]) .masthead,
+:root[data-theme="light"] .masthead{
+  background:#ffffff !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="dark"] .masthead{
+  background:#090909 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+.masthead .hero-title{color:var(--text-bright) !important;}
+.masthead-rule{border-top-color:var(--gold) !important;}
+.stripe{
+  height:3px !important;
+  background:linear-gradient(90deg,
+    color-mix(in srgb,var(--gold) 20%,transparent),
+    var(--gold),
+    color-mix(in srgb,var(--gold) 20%,transparent)) !important;
+}
+
+/* Atlas owns these controls on public pages. */
+#sbThemeToggle,#sbToTop,body > .sb-progress > .sb-progress-fill{display:none !important;}
+
+.sb-bar{
+  position:fixed;inset:0 0 auto 0;z-index:60;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 clamp(16px,4vw,40px);
+  border-bottom:1px solid var(--sb-line);
+  background:color-mix(in srgb,var(--sb-bg) 90%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.sb-brand{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--sb-text) !important;font-weight:700;font-size:14px;
+  text-decoration:none !important;
+}
+.sb-mark{
+  display:grid;place-items:center;width:27px;height:27px;
+  border:1px solid color-mix(in srgb,var(--sb-primary) 42%,transparent);
+  border-radius:8px;color:var(--sb-primary);background:var(--sb-primary-soft);
+  font-size:10px;font-weight:800;
+}
+.sb-nav{display:flex;align-items:center;gap:16px;}
+.sb-nav a{color:var(--sb-muted) !important;font-size:13px;text-decoration:none !important;}
+.sb-nav a:hover{color:var(--sb-primary) !important;}
+.sb-nav button{
+  width:32px;height:32px;border:1px solid var(--sb-line);border-radius:9px;
+  background:transparent;color:var(--sb-primary);cursor:pointer;
+}
+.sb-nav button:hover{border-color:var(--sb-primary);}
+
+/* Public progress bar injected by render_public_essay.py. */
+body > .sb-progress:not(:has(.sb-progress-fill)){
+  position:fixed;top:56px;left:0;right:0;z-index:61;height:2px;background:transparent;
+}
+body > .sb-progress:not(:has(.sb-progress-fill)) span{
+  display:block;width:0;height:100%;background:var(--sb-primary);
+}
+
+.sb-toc-fab{
+  position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:61;
+  display:inline-flex;align-items:center;gap:8px;padding:10px 17px;
+  border:1px solid var(--sb-line-strong);border-radius:999px;
+  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);
+  color:var(--sb-text);box-shadow:var(--sb-shadow);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font:650 13px/1 Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer;
+}
+.sb-toc-fab:hover{border-color:var(--sb-primary);}
+.sb-toc-icon{color:var(--sb-primary);}
+
+.sb-toc{
+  position:fixed;right:clamp(16px,3vw,32px);
+  bottom:calc(clamp(16px,3vw,32px) + 54px);z-index:62;
+  width:min(380px,calc(100vw - 32px));max-height:min(65vh,600px);
+  display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--sb-line-strong);border-radius:16px;
+  background:color-mix(in srgb,var(--sb-surface) 98%,transparent);
+  box-shadow:var(--sb-shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-toc[hidden]{display:none !important;}
+.sb-toc header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 17px;border-bottom:1px solid var(--sb-line);color:var(--sb-text);font-size:13px;
+}
+.sb-toc header strong{color:inherit;}
+.sb-toc header button{border:0;background:transparent;color:var(--sb-muted);font-size:20px;cursor:pointer;}
+.sb-toc nav{display:flex;flex-direction:column;padding:9px 8px;overflow-y:auto;}
+.sb-toc a{
+  padding:8px 11px;border-left:2px solid transparent;border-radius:0 8px 8px 0;
+  color:var(--sb-muted) !important;font-size:12.5px;line-height:1.4;text-decoration:none !important;
+}
+.sb-toc a:hover{color:var(--sb-text) !important;background:var(--sb-primary-soft);}
+.sb-toc a.h3{padding-left:23px;font-size:11.5px;}
+.sb-toc a.active{
+  color:var(--sb-primary) !important;border-left-color:var(--sb-primary);background:var(--sb-primary-soft);
+}
+
+.sb-tags,.sb-related{
+  width:min(var(--max-width,760px),calc(100% - 48px));margin-inline:auto;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px;}
+.sb-tag{padding:4px 10px;border:1px solid var(--sb-line);border-radius:999px;color:var(--sb-muted);font-size:11px;}
+.sb-related{margin-top:42px;margin-bottom:76px;padding-top:28px;border-top:1px solid var(--sb-line);}
+.sb-related h2{
+  margin:0 0 16px;color:var(--sb-text);
+  font:700 18px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.sb-related-card{
+  display:flex;flex-direction:column;gap:7px;padding:15px 16px;
+  border:1px solid var(--sb-line);border-radius:13px;background:var(--sb-surface-soft);
+  color:var(--sb-text) !important;text-decoration:none !important;
+}
+.sb-related-card:hover{
+  border-color:color-mix(in srgb,var(--sb-primary) 55%,var(--sb-line));
+  background:var(--sb-primary-soft);
+}
+.sb-related-card strong{color:var(--sb-text);font-size:13px;}
+.sb-related-card span{color:var(--sb-muted);font-size:12px;line-height:1.45;}
+
+@media(max-width:720px){
+  .sb-bar{padding-inline:14px;}
+  .sb-nav{gap:10px;}
+  .sb-nav a{font-size:12px;}
+  .sb-brand{font-size:13px;}
+  .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
+  .sb-toc-text{display:none;}
+  .sb-related-grid{grid-template-columns:1fr;}
+}
+/* Duas palavras curtas cabem em qualquer telefone. Esconder a segunda tirava
+   o unico caminho para o mapa na tela onde ele mais importa. */
+@media(max-width:520px){
+  .sb-brand{gap:7px;font-size:0;}
+  .sb-nav{gap:14px;}
+  .sb-nav a{font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">White Paper - Modelagem Estatística para a Copa do Mundo FIFA 2026</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Maio de 2026</p>
+    <p class="cover-summary">A previsão do vencedor de uma Copa é formulada em três camadas: estimação de força relativa via ELO, modelagem de placares por Dixon-Coles sobre Poisson, e propagação de incerteza pelo torneio via Monte Carlo. O white paper documenta cada etapa com equações, apresenta os resultados para 2026 e discute as limitações do modelo ante a alta variância intrínseca do futebol.</p>
+  </div>
+</header>
+
+<main class="content">
+<p><strong>Previsão Probabilística via ELO, Redes Neurais Recorrentes e
+Simulação Monte Carlo</strong></p>
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a href="#1-visão-geral-e-processo-de-inferência-estatística">1.
+Visão Geral e Processo de Inferência Estatística</a></li>
+<li><a href="#2-o-sistema-elo-como-proxy-de-força-relativa">2. O Sistema
+ELO como Proxy de Força Relativa</a></li>
+<li><a href="#3-das-diferenças-elo-às-taxas-esperadas-de-gols">3. Das
+Diferenças ELO às Taxas Esperadas de Gols</a></li>
+<li><a href="#4-os-fatores-de-correção-k_att-e-k_def">4. Os Fatores de
+Correção <span class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span></a></li>
+<li><a href="#5-o-modelo-de-placares-dixon-coles-sobre-poisson">5. O
+Modelo de Placares — Dixon-Coles sobre Poisson</a></li>
+<li><a href="#6-simulação-monte-carlo-do-torneio">6. Simulação Monte
+Carlo do Torneio</a></li>
+<li><a href="#7-resultados">7. Resultados</a></li>
+<li><a href="#8-conclusão">8. Conclusão</a></li>
+</ul>
+<hr />
+<h2 id="1-visão-geral-e-processo-de-inferência-estatística">1. Visão
+Geral e Processo de Inferência Estatística</h2>
+<h3 id="o-problema">O Problema</h3>
+<p>Prever o vencedor de uma Copa do Mundo é essencialmente um problema
+de <strong>inferência probabilística sobre um sistema estocástico com
+estrutura hierárquica</strong>. O torneio é composto de dezenas de
+partidas interdependentes — o resultado de um jogo determina quem
+participa dos seguintes — e cada partida é, por si só, um evento de alta
+variância: equipes inferiores vencem equipes superiores com frequência
+não negligenciável. Modelar esse sistema corretamente exige responder a
+três perguntas distintas:</p>
+<ol type="1">
+<li><strong>Qual é a força relativa de cada seleção?</strong> — pergunta
+de <em>estimação de parâmetros</em></li>
+<li><strong>Dado o par de times, qual é a distribuição de probabilidade
+sobre os possíveis placares?</strong> — pergunta de <em>modelagem
+probabilística</em></li>
+<li><strong>Dada a distribuição sobre placares individuais, qual é a
+probabilidade de cada time vencer o torneio inteiro?</strong> — pergunta
+de <em>propagação de incerteza</em> por uma estrutura combinatória
+complexa</li>
+</ol>
+<p>O modelo desenvolvido neste trabalho responde a cada uma dessas
+perguntas com uma abordagem específica e fundamentada na literatura
+estatística.</p>
+<h3 id="arquitetura-geral-do-modelo">Arquitetura Geral do Modelo</h3>
+<p>O pipeline de inferência opera em três etapas sequenciais:</p>
+<p><strong>Etapa 1 — Estimação da força relativa via ELO.</strong> A
+força de cada seleção é representada por seu rating ELO, calculado
+cronologicamente sobre todo o histórico de partidas internacionais desde
+1872. A diferença de rating entre dois times (<span
+class="math inline">\(\Delta_{eff}\)</span>) serve como variável
+explicativa fundamental: é a partir dela que se derivam as taxas
+esperadas de gols (<span class="math inline">\(\lambda\)</span>) via uma
+função exponencial quadrática cujos parâmetros são estimados por máxima
+verossimilhança (MLE) sobre partidas desde 1990. O ELO captura a
+<strong>força estrutural e histórica</strong> de cada seleção.</p>
+<p><strong>Etapa 2 — Correção pela forma recente e pelo perfil de
+jogo.</strong> As taxas esperadas de gols derivadas do ELO representam a
+expectativa de longo prazo, mas o ELO não observa o <em>volume</em> de
+gols — apenas o resultado final (vitória, empate, derrota). Para
+incorporar tanto o <strong>desempenho ofensivo e defensivo
+recente</strong> quanto o <strong>perfil de jogo estrutural</strong> de
+cada seleção, dois fatores adimensionais são estimados por time: <span
+class="math inline">\(K_{att}\)</span> (multiplicador de ataque) e <span
+class="math inline">\(K_{def}\)</span> (multiplicador de defesa). Esses
+fatores são produzidos por uma rede neural recorrente do tipo GRU (<a
+href="https://arxiv.org/abs/1406.1078">Cho et al., 2014</a>) treinada
+sobre os últimos <span class="math inline">\(T = 20\)</span> jogos de
+cada seleção, com decaimento exponencial por posição na sequência
+(meia-vida de 7 jogos). A taxa final é <span
+class="math inline">\(\lambda_A = \lambda^{home} \cdot K_{att}^A \cdot
+K_{def}^B\)</span>, integrando força histórica, identidade ofensiva
+própria e vulnerabilidade defensiva do adversário.</p>
+<p><strong>Etapa 3 — Distribuição de placares e propagação de
+incerteza.</strong> As taxas finais esperadas de gols <span
+class="math inline">\(\lambda_A\)</span> e <span
+class="math inline">\(\lambda_B\)</span> alimentam o modelo de <a
+href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles, 1997</a>,
+que constrói uma distribuição de probabilidade conjunta sobre todos os
+placares possíveis (até 8 gols por time). O torneio completo é então
+simulado <span class="math inline">\(N = 1.000.000\)</span> de vezes via
+Monte Carlo, e as frequências observadas em cada fase constituem as
+estimativas finais de probabilidade.</p>
+<p>O fluxo completo pode ser resumido em:</p>
+<ul>
+<li><strong>Cálculo do Rating ELO</strong> através do histórico de todas
+as partidas de todas as seleções.</li>
+<li><strong>Taxa esperada de gols <span
+class="math inline">\(\lambda\)</span></strong> como função da diferença
+de rating ELO entre as duas equipes (utilizando MLE sobre todos os jogos
+desde 1990).</li>
+<li><strong>Correção por <span
+class="math inline">\(K_{\mathrm{att}}\)</span> e <span
+class="math inline">\(K_{\mathrm{def}}\)</span>:</strong> forma recente
+e estilo de jogo calculados utilizando uma rede neural GRU treinada
+sobre dados recentes.</li>
+<li><strong>Distribuição de placares via Poisson modificada por
+Dixon-Coles.</strong></li>
+<li><strong>Simulação Monte Carlo: propagação de incerteza pelo
+torneio.</strong> `</li>
+</ul>
+<h3 id="o-processo-de-inferência-estatística-em-detalhe">O Processo de
+Inferência Estatística em Detalhe</h3>
+<p>Formalmente, o modelo define dois conjuntos de parâmetros:</p>
+<p><strong>Parâmetros dos priors</strong> <span
+class="math inline">\(\theta = \{a, b, c, h, \rho_0, \rho_1\}\)</span>:
+governam como a diferença ELO se traduz em taxas esperadas de gols e
+correlação. São estimados por <strong>máxima verossimilhança
+(MLE)</strong> sobre partidas internacionais desde 1990, com ponderação
+temporal por recência (meia-vida de 4 anos) e por importância do
+torneio. A função de log-verossimilhança maximizada é:</p>
+<p><span class="math display">\[
+\hat{\theta} = \arg\max_{\theta} \sum_{i=1}^{N_{hist}} w_i^{temp} \cdot
+\log P_{\theta}(X_i, Y_i \mid \Delta_{eff,i})
+\]</span></p>
+<p>onde <span class="math inline">\(w_i^{temp} =
+\exp\!\left(-\frac{t_{ref} - t_i}{t_{1/2}}\right)\)</span> é o peso
+temporal e <span class="math inline">\((X_i, Y_i)\)</span> é o placar
+observado.</p>
+<p><strong>Parâmetros da rede neural</strong> <span
+class="math inline">\(\phi\)</span>: pesos da GRU que mapeiam sequências
+de resultados recentes em fatores <span
+class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span>. São estimados por
+<strong>descida de gradiente</strong> (otimizador AdamW, <span
+class="math inline">\(\eta = 2 \times 10^{-4}\)</span>) minimizando a
+log-verossimilhança negativa (NLL) Dixon-Coles ponderada, com
+regularização L2 sobre <span class="math inline">\(\log K\)</span>:</p>
+<p><span class="math display">\[
+\hat{\phi} = \arg\min_{\phi} \left[ -\sum_{i} w_i \cdot \log P_{\theta,
+\phi}(X_i, Y_i) \;+\; \lambda_{reg} \cdot \mathbb{E}\!\left[(\log
+K_{att})^2 + (\log K_{def})^2\right] \right]
+\]</span></p>
+<p>com <span class="math inline">\(\lambda_{reg} = 0.5\)</span> e
+critério de parada antecipada com paciência de 25 épocas.</p>
+<p>A separação entre os dois conjuntos de parâmetros é deliberada: <span
+class="math inline">\(\theta\)</span> captura regularidades de longo
+prazo no futebol, enquanto <span class="math inline">\(\phi\)</span>
+captura padrões recentes por seleção. Ambos são estimados a partir dos
+dados, sem imposição de valores a priori além da estrutura
+funcional.</p>
+<hr />
+<h2 id="2-o-sistema-elo-como-proxy-de-força-relativa">2. O Sistema ELO
+como Proxy de Força Relativa</h2>
+<h3 id="origem-e-princípio">Origem e Princípio</h3>
+<p>O sistema ELO foi proposto pelo físico húngaro-americano Arpad Elo
+como método de rating para xadrez (<a
+href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo, 1978</a>).
+Sua ideia central é que a força de um competidor pode ser representada
+por um único número real, e que a diferença entre dois números codifica
+diretamente a probabilidade de vitória de um sobre o outro. A
+atualização do rating após cada partida segue a regra:</p>
+<p><span class="math display">\[
+\text{ELO}_i^{\,novo} = \text{ELO}_i^{\,antigo} + K_w \cdot G \cdot
+\bigl(S_i - \hat{p}_i\bigr)
+\]</span></p>
+<p>onde <span class="math inline">\(S_i \in \{0, 0.5, 1\}\)</span> é o
+resultado real (derrota, empate, vitória), <span
+class="math inline">\(\hat{p}_i\)</span> é a probabilidade de vitória
+prevista antes da partida, <span class="math inline">\(K_w &gt;
+0\)</span> é o fator de importância do torneio e <span
+class="math inline">\(G\)</span> é um fator de margem de gols que
+amplifica o sinal de partidas com grandes diferenciais de placar:</p>
+<p><span class="math display">\[
+G = \begin{cases} 1{,}0 &amp; \text{se } |S_{home} - S_{away}| \leq 1 \\
+1{,}5 &amp; \text{se } |S_{home} - S_{away}| = 2 \\ \frac{11 + |S_{home}
+- S_{away}|}{8} &amp; \text{caso contrário} \end{cases}
+\]</span></p>
+<p>A probabilidade de vitória prevista é dada pela função logística:</p>
+<p><span class="math display">\[
+\hat{p}_A = \frac{1}{1 + 10^{-\Delta_{eff}/400}}
+\]</span></p>
+<p>onde <span class="math inline">\(\Delta_{eff} = \text{ELO}_A -
+\text{ELO}_B + h_{fit}\)</span></p>
+<p>Para o modelo Dixon-Coles, o efeito do mando de jogo é <span
+class="math inline">\(h_{fit} = 100\)</span> pontos (estimado por
+MLE).</p>
+<h3 id="o-elo-como-proxy-estatístico-no-futebol">O ELO como Proxy
+Estatístico no Futebol</h3>
+<p>A questão de saber se o ELO é um bom proxy para a força relativa de
+seleções de futebol tem sido extensivamente estudada. É importante,
+contudo, contextualizar tanto as virtudes quanto as limitações do
+sistema no ambiente específico do futebol.</p>
+<p>Em sistemas onde o ruído estocástico é nulo ou próximo de zero — como
+no xadrez, onde o resultado depende quase inteiramente da habilidade
+relativa dos jogadores — a diferença de ELO possui poder preditivo quase
+absoluto e imediato. No futebol, porém, a alta estocasticidade
+intrínseca ao esporte (gols acidentais, desvios de trajetória, decisões
+de arbitragem, variância nos pênaltis) faz com que o ELO opere
+estritamente como uma referência assintótica: ele se aproxima do
+“verdadeiro” nível de cada seleção apenas ao longo de muitas partidas.
+Esse ruído de curto prazo não pode ser eliminado pelo ELO por
+construção, o que torna indispensáveis as etapas posteriores do modelo —
+a correção pela GRU e a correção de Dixon-Coles — para mitigar esses
+efeitos em escala de partida individual.</p>
+<p><a href="https://doi.org/10.1016/j.ijforecast.2009.10.002">Hvattum e
+Arntzen (2010)</a> compararam o ELO com seis métodos alternativos de
+previsão em futebol associativo e concluíram que o sistema ELO produz
+previsões competitivas — e em vários cenários superiores — quando usado
+como covariável em modelos de regressão. A principal virtude do ELO é
+sua capacidade de comparar times de diferentes confederações e épocas a
+partir de um histórico unificado de resultados.</p>
+<p><a href="https://doi.org/10.1177/1471082X18817650">Ley, Van de Wiele
+e Van Eetvelde (2019)</a> apresentaram uma comparação sistemática de dez
+modelos estatísticos para ranking de seleções, incluindo variantes do
+ELO e modelos Poisson bivariados. Os autores demonstram que modelos
+baseados em ELO têm desempenho preditivo comparável aos modelos
+estruturais mais complexos, especialmente quando combinados com
+ponderação temporal e por importância do torneio — exatamente as
+características incorporadas ao nosso pipeline.</p>
+<p><a href="https://arxiv.org/pdf/1806.01930">Gilch e Müller (2018)</a>
+aplicaram modelos de regressão Poisson com covariáveis ELO para prever a
+Copa do Mundo de 2018, utilizando simulação Monte Carlo para estimar
+probabilidades de classificação em cada fase. Esse trabalho é
+metodologicamente análogo ao nosso e serve como referência de validação
+da abordagem.</p>
+<p>Em síntese, o ELO não é uma medida perfeita — ignora escalação,
+lesões e características táticas específicas — mas é um <strong>proxy
+estatisticamente bem fundamentado</strong> para a força relativa de
+seleções, robusto a variações de base de dados e computacionalmente
+eficiente. Essas propriedades justificam seu uso como âncora do modelo,
+desde que complementado pelas correções descritas nas seções
+seguintes.</p>
+<h3 id="pesos-por-importância-de-torneio">Pesos por Importância de
+Torneio</h3>
+<p>Nem todas as partidas têm o mesmo valor informativo. Um amistoso
+jogado com escalação experimental diz muito menos sobre a real
+capacidade de uma seleção do que uma semifinal de Copa do Mundo. Para
+refletir isso, cada jogo recebe um fator <span
+class="math inline">\(K_w\)</span> proporcional à sua relevância
+competitiva, usado tanto na atualização do ELO quanto na ponderação da
+função de verossimilhança:</p>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 58%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Categoria</th>
+<th style="text-align: left;">Torneios</th>
+<th style="text-align: center;"><span
+class="math inline">\(K_w\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Copa do Mundo (FIFA)</td>
+<td style="text-align: left;">Copa do Mundo FIFA</td>
+<td style="text-align: center;">40</td>
+</tr>
+<tr>
+<td style="text-align: left;">Campeonatos continentais e grandes
+torneios</td>
+<td style="text-align: left;">Copa das Confederações, Eliminatórias
+Mundiais, Olimpíadas, etc.</td>
+<td style="text-align: center;">35</td>
+</tr>
+<tr>
+<td style="text-align: left;">Qualificatórias e ligas nacionais</td>
+<td style="text-align: left;">UEFA Euro, CONCACAF Nations League, Copa
+América, AFC Asian Cup, etc.</td>
+<td style="text-align: center;">30</td>
+</tr>
+<tr>
+<td style="text-align: left;">Amistosos</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr>
+<td style="text-align: left;">Torneios não mapeados</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: center;">28</td>
+</tr>
+</tbody>
+</table>
+<p>Para a estimação dos priors por MLE, existe ainda um peso temporal
+adicional independente: <span class="math inline">\(w_i^{temp} =
+\exp\!\left(-\frac{t_{ref} - t_i}{t_{1/2}}\right)\)</span>, com
+meia-vida de <span class="math inline">\(t_{1/2} = 4\)</span> anos
+(1.460 dias). Jogos mais antigos têm influência decrescente na
+calibração dos parâmetros, refletindo a evolução do futebol ao longo do
+tempo. O ELO, por sua vez, é calculado desde 1872 sem corte — ele
+“aquece” nos dados antigos — e a MLE usa apenas partidas a partir de
+1990 com o ELO já estabilizado.</p>
+<p>Para amistosos, aplica-se ainda um peso de torneio adicional de <span
+class="math inline">\(w_{friendly} = 0.7\)</span>, multiplicado ao peso
+temporal. Para todos os demais torneios, <span
+class="math inline">\(w_{torneio} = 1.0\)</span>.</p>
+<h3 id="vantagem-de-sede">Vantagem de Sede</h3>
+<p>Para a Copa 2026, os países sede — EUA, México e Canadá — jogam com
+uma vantagem estrutural documentada: familiaridade com o ambiente, apoio
+da torcida, menor desgaste de viagem e ausência de adaptação climática e
+de altitude. Essa vantagem é modelada como um deslocamento aditivo no
+delta ELO efetivo utilizado no cálculo das taxas esperadas de gols:</p>
+<p><span class="math display">\[
+\Delta_{eff} = (\text{ELO}_A - \text{ELO}_B) + h_{fit}
+\]</span></p>
+<p>O parâmetro <span class="math inline">\(h_{fit}\)</span> é estimado
+por MLE conjuntamente com os demais priors. O valor calibrado foi <span
+class="math inline">\(h_{fit} = 100{,}0\)</span> pontos ELO, equivalente
+a dizer que jogar como país sede aumenta a taxa esperada de gols do time
+anfitrião por um fator de <span class="math inline">\(e^{b \cdot
+h_{fit}} \approx e^{0{,}002 \times 100} \approx 1{,}22\)</span> — ou
+seja, aproximadamente 22% mais gols esperados do que em campo neutro,
+tudo o mais constante.</p>
+<hr />
+<h2 id="3-das-diferenças-elo-às-taxas-esperadas-de-gols">3. Das
+Diferenças ELO às Taxas Esperadas de Gols</h2>
+<h3 id="por-que-modelar-gols-como-poisson">Por que Modelar Gols como
+Poisson?</h3>
+<p>A distribuição de Poisson descreve o número de ocorrências de um
+evento raro em um intervalo fixo de tempo ou espaço, sob a hipótese de
+que os eventos ocorrem a uma taxa média constante <span
+class="math inline">\(\lambda\)</span> e de forma (aproximadamente)
+independente entre si. A probabilidade de observar exatamente <span
+class="math inline">\(k\)</span> eventos é:</p>
+<p><span class="math display">\[
+P(X = k \mid \lambda) = \frac{\lambda^k \, e^{-\lambda}}{k!}, \quad k =
+0, 1, 2, \ldots
+\]</span></p>
+<p>A adequação do modelo de Poisson para gols no futebol foi
+estabelecida empiricamente por <a
+href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">Maher
+(1982)</a>. Maher incorporou parâmetros de ataque e defesa por equipe e
+mostrou, por meio de testes de aderência (<span
+class="math inline">\(\chi^2\)</span>), que o modelo de Poisson
+independente descreve adequadamente as frequências de placares no
+futebol inglês, embora com pequenos desvios sistemáticos nos placares
+baixos — um problema que Dixon e Coles resolveriam quinze anos depois. O
+modelo de Poisson para gols tornou-se, desde então, o ponto de partida
+padrão na literatura de estatística esportiva (<a
+href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles, 1997</a>;
+<a href="https://doi.org/10.1111/1467-9884.00366">Karlis e Ntzoufras,
+2003</a>).</p>
+<h3 id="da-diferença-elo-à-taxa-esperada-de-gols">Da Diferença ELO à
+Taxa Esperada de Gols</h3>
+<p>Para converter <span class="math inline">\(\Delta_{eff}\)</span> em
+taxas esperadas de gols <span class="math inline">\(\lambda\)</span>,
+adotamos uma função exponencial quadrática:</p>
+<p><span class="math display">\[
+\lambda^{home}(\Delta_{eff}) = \exp\!\bigl(a + b\,\Delta_{eff} +
+c\,\Delta_{eff}^2\bigr)
+\]</span></p>
+<p><span class="math display">\[
+\lambda^{away}(\Delta_{eff}) = \exp\!\bigl(a - b\,\Delta_{eff} +
+c\,\Delta_{eff}^2\bigr)
+\]</span></p>
+<p>Os parâmetros <span class="math inline">\(\{a, b, c\}\)</span> são
+estimados conjuntamente com os demais priors por MLE. Os valores
+calibrados e suas interpretações são apresentados na Seção 7.1.</p>
+<p><strong>Interpretação do parâmetro <span
+class="math inline">\(a\)</span>:</strong> O intercepto determina a taxa
+esperada de gols quando os dois times têm ELO idêntico (<span
+class="math inline">\(\Delta_{eff} = 0\)</span>). Nesse caso, <span
+class="math inline">\(\lambda = e^a\)</span> para ambos. O valor
+calibrado foi <span class="math inline">\(a = 0{,}2394\)</span>,
+correspondendo a <span class="math inline">\(\lambda = e^{0{,}2394}
+\approx 1{,}270\)</span> gols por time por jogo em campo neutro com
+times de igual força — coerente com a média histórica do futebol
+internacional de alto nível.</p>
+<p><strong>Interpretação do parâmetro <span
+class="math inline">\(b\)</span>:</strong> O coeficiente linear captura
+a assimetria induzida pela diferença de qualidade. O valor calibrado foi
+<span class="math inline">\(b = 0{,}002074\)</span>: para cada 100
+pontos ELO de vantagem, a taxa esperada de gols do time superior aumenta
+por <span class="math inline">\(e^{0{,}002074 \times 100} \approx
+1{,}231\)</span> (23% mais gols esperados), enquanto a do inferior
+diminui simetricamente.</p>
+<p><strong>Interpretação do parâmetro <span
+class="math inline">\(c\)</span>:</strong> O coeficiente quadrático
+captura a saturação para grandes diferenciais. O valor calibrado foi
+<span class="math inline">\(c = -6{,}31 \times 10^{-7}\)</span>,
+ligeiramente negativo, indicando que o efeito marginal de cada ponto ELO
+adicional decresce para diferenciais muito elevados — o que é
+empiricamente razoável, pois não se pode marcar infinitos gols
+independentemente de quão superior se é.</p>
+<h3 id="verificação-de-consistência">Verificação de Consistência</h3>
+<p>Por construção, as duas funções são simétricas: inverter os papéis
+dos times (<span class="math inline">\(\Delta_{eff} \to
+-\Delta_{eff}\)</span>) troca <span
+class="math inline">\(\lambda^{home}\)</span> por <span
+class="math inline">\(\lambda^{away}\)</span>:</p>
+<p><span class="math display">\[
+\lambda^{home}(+\Delta) = \lambda^{away}(-\Delta)
+\]</span></p>
+<p>Essa simetria garante que o modelo seja internamente consistente: a
+taxa esperada de gols de <span class="math inline">\(A\)</span> contra
+<span class="math inline">\(B\)</span> em campo de <span
+class="math inline">\(A\)</span> é exatamente o que o modelo preveria
+para <span class="math inline">\(B\)</span> se o jogo fosse
+espelhado.</p>
+<h3 id="o-parâmetro-rho--correlação-de-dixon-coles">O Parâmetro <span
+class="math inline">\(\rho\)</span> — Correlação de Dixon-Coles</h3>
+<p>O parâmetro <span class="math inline">\(\rho\)</span> captura a
+dependência estatística entre os gols das duas equipes em uma mesma
+partida. Sua dependência de <span
+class="math inline">\(|\Delta_{eff}|\)</span> é modelada por:</p>
+<p><span class="math display">\[
+\rho(\Delta_{eff}) = \rho_{max} \cdot \tanh\!\left(\rho_0 - \rho_1^{neg}
+\cdot \frac{|\Delta_{eff}|}{400}\right)
+\]</span></p>
+<p>com <span class="math inline">\(\rho_{max} = 0{,}2\)</span>. Os
+parâmetros <span class="math inline">\(\rho_0\)</span> e <span
+class="math inline">\(\rho_1^{neg}\)</span> são parâmetros da curva de
+decaimento — não confundir com o próprio <span
+class="math inline">\(\rho\)</span>, que é o valor de correlação
+resultante para um dado <span
+class="math inline">\(\Delta_{eff}\)</span>. O valor de <span
+class="math inline">\(\rho_1^{neg}\)</span> é forçado a ser não-negativo
+via <span class="math inline">\(\rho_1^{neg} =
+\text{softplus}(\rho_1^{raw})\)</span>, garantindo que <span
+class="math inline">\(\rho\)</span> seja monotonamente decrescente em
+<span class="math inline">\(|\Delta_{eff}|\)</span> — partidas mais
+desequilibradas têm menor dependência entre os gols.</p>
+<p>Os valores calibrados foram <span class="math inline">\(\rho_0^{raw}
+= 0{,}6724\)</span> e <span class="math inline">\(\rho_1^{neg} =
+0{,}4769\)</span>, resultando em:</p>
+<ul>
+<li><span class="math inline">\(\rho(\Delta_{eff} = 0) =
+0{,}117\)</span> — correlação em jogo equilibrado</li>
+<li><span class="math inline">\(\rho(\Delta_{eff} = 400) =
+0{,}039\)</span> — correlação em jogo com 400 pts de diferença</li>
+</ul>
+<p>Esses valores são coerentes com a estimativa original de <a
+href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles (1997)</a>,
+que obtiveram <span class="math inline">\(\rho \approx -0{,}13\)</span>
+(com sinal oposto por diferença de convenção) para o futebol inglês.</p>
+<hr />
+<h2 id="4-os-fatores-de-correção-k_att-e-k_def">4. Os Fatores de
+Correção <span class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span></h2>
+<h3 id="motivação-as-duas-limitações-do-elo">Motivação: As Duas
+Limitações do ELO</h3>
+<p>O rating ELO é, por construção, uma medida de longo prazo: ele se
+atualiza incrementalmente a cada partida e converge lentamente para o
+“verdadeiro” nível de uma seleção. Isso gera duas limitações importantes
+quando o objetivo é modelar o volume de gols de uma partida
+específica.</p>
+<p><strong>Primeira limitação — forma recente.</strong> Um time pode ter
+ELO historicamente elevado mas estar em crise de resultados: mudança de
+treinador, lesões em jogadores-chave, período de adaptação tática. Outro
+pode ter ELO modesto mas estar em ascensão acelerada. O ELO não
+refletirá essas divergências de forma imediata.</p>
+<p><strong>Segunda limitação — estilo de jogo e identidade
+ofensiva.</strong> O ELO é cego ao <em>como</em> uma equipe vence ou
+perde: ele registra apenas o resultado (vitória, empate, derrota), não o
+placar. Dois times com ELO idêntico podem ter perfis de jogo
+radicalmente diferentes. Uma seleção de estilo ofensivo pode vencer por
+4–2 e perder por 1–3, acumulando muitos gols nos dois lados; outra, de
+estilo defensivo e pragmático, pode vencer por 1–0 e empatar por 0–0,
+com poucos gols em ambos os sentidos. Para o ELO, os dois comportamentos
+são indistinguíveis. Contudo, para a modelagem de placares via Poisson,
+a diferença é fundamental: a taxa esperada de gols <span
+class="math inline">\(\lambda\)</span> de cada time é muito diferente
+entre os dois perfis, mesmo com força igual.</p>
+<p>Os fatores <span class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span> corrigem ambas as limitações
+simultaneamente, pois são estimados a partir dos gols marcados e
+sofridos nos jogos recentes de cada seleção — informação que o ELO
+descarta completamente.</p>
+<p>Formalmente: <span class="math inline">\(K_{att} &gt; 1\)</span>
+significa que o time marca mais gols do que seu ELO preveria; <span
+class="math inline">\(K_{att} &lt; 1\)</span>, o contrário. <span
+class="math inline">\(K_{def} &lt; 1\)</span> indica que o time sofre
+menos gols do que o esperado para seu nível ELO (defesa sólida ou estilo
+defensivo); <span class="math inline">\(K_{def} &gt; 1\)</span>, maior
+vulnerabilidade relativa. Ambos são adimensionais e centrados em 1:
+quando não há evidência de desvio, a rede retorna <span
+class="math inline">\(K \approx 1\)</span>.</p>
+<h3 id="a-combinação-com-a-taxa-esperada-de-gols">A Combinação com a
+Taxa Esperada de Gols</h3>
+<p>As taxas finais esperadas de gols que alimentam a distribuição de
+placares são:</p>
+<p><span class="math display">\[
+\lambda_A = \lambda^{home}(\Delta_{eff}) \cdot K_{att}^A \cdot K_{def}^B
+\]</span></p>
+<p><span class="math display">\[
+\lambda_B = \lambda^{away}(\Delta_{eff}) \cdot K_{att}^B \cdot K_{def}^A
+\]</span></p>
+<p>O número esperado de gols de <span class="math inline">\(A\)</span>
+é, portanto, o produto de três componentes: o referencial do diferencial
+ELO, a correção pelo perfil ofensivo e forma recente do próprio time
+<span class="math inline">\(A\)</span> (<span
+class="math inline">\(K_{att}^A\)</span>), e a correção pela
+vulnerabilidade defensiva e forma recente do adversário <span
+class="math inline">\(B\)</span> (<span
+class="math inline">\(K_{def}^B\)</span>). O ataque de <span
+class="math inline">\(A\)</span> encontra a defesa de <span
+class="math inline">\(B\)</span>; cada um entra com seu fator
+multiplicativo.</p>
+<p>Se todos os fatores forem iguais a 1, <span
+class="math inline">\(\lambda_A = \lambda^{home}\)</span> — o modelo
+reduz ao prior puro, baseado apenas no diferencial ELO.</p>
+<h3 id="a-rede-neural-gru">A Rede Neural GRU</h3>
+<p>Os fatores <span class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span> são produzidos por uma
+<strong>rede neural recorrente do tipo GRU</strong> (<em>Gated Recurrent
+Unit</em>), introduzida por <a
+href="https://arxiv.org/abs/1406.1078">Cho et al. (2014)</a> e
+empiricamente avaliada por <a
+href="https://arxiv.org/abs/1412.3555">Chung et al. (2014)</a>. A GRU
+processa a sequência dos últimos <span class="math inline">\(T =
+20\)</span> jogos de cada seleção. Para cada jogo <span
+class="math inline">\(t\)</span> da sequência, são extraídas seis
+variáveis (<span class="math inline">\(F = 6\)</span>):</p>
+<ol type="1">
+<li>Diferença ELO normalizada: <span class="math inline">\(\Delta_{elo}
+/ 400\)</span></li>
+<li>Gols marcados pela seleção naquele jogo (normalizados por 3)</li>
+<li>Gols sofridos pela seleção naquele jogo (normalizados por 3)</li>
+<li>Peso do torneio <span class="math inline">\(w_i\)</span>
+(importância competitiva da partida)</li>
+<li>Resultado codificado: <span class="math inline">\(+1\)</span>
+(vitória), <span class="math inline">\(0\)</span> (empate), <span
+class="math inline">\(-1\)</span> (derrota)</li>
+<li>Decaimento por posição: <span
+class="math inline">\(e^{-\lambda_{decay} \cdot pos}\)</span>, com <span
+class="math inline">\(\lambda_{decay} = \ln 2 / 7 \approx
+0{,}099\)</span> (meia-vida de 7 jogos)</li>
+</ol>
+<p>Essas variáveis formam um tensor de entrada de dimensão <span
+class="math inline">\(T \times 6\)</span>. Times com menos de <span
+class="math inline">\(T\)</span> jogos são completados com zeros
+(<em>zero-padding</em>).</p>
+<h4 id="a-mecânica-da-gru">A Mecânica da GRU</h4>
+<p>A GRU mantém um vetor de estado oculto <span
+class="math inline">\(h_t \in \mathbb{R}^{H}\)</span> (com <span
+class="math inline">\(H = 48\)</span>) atualizado a cada passo por:</p>
+<p><span class="math display">\[
+z_t = \sigma(W_z x_t + U_z h_{t-1} + b_z) \quad \text{(gate de
+atualização)}
+\]</span></p>
+<p><span class="math display">\[
+r_t = \sigma(W_r x_t + U_r h_{t-1} + b_r) \quad \text{(gate de reset)}
+\]</span></p>
+<p><span class="math display">\[
+\tilde{h}_t = \tanh\!\bigl(W_h x_t + U_h (r_t \odot h_{t-1}) + b_h\bigr)
+\quad \text{(estado candidato)}
+\]</span></p>
+<p><span class="math display">\[
+h_t = (1 - z_t) \odot h_{t-1} + z_t \odot \tilde{h}_t \quad
+\text{(estado atualizado)}
+\]</span></p>
+<p>O <strong>gate de atualização</strong> <span
+class="math inline">\(z_t\)</span> atua como uma <em>constante de
+inércia</em> do sistema: quando <span class="math inline">\(z_t \approx
+0\)</span>, o estado oculto é mantido essencialmente inalterado, o que
+equivale a dizer que o novo jogo é pouco informativo — o modelo filtra
+variações ruidosas do desempenho recente e não as incorpora ao perfil da
+seleção. Quando <span class="math inline">\(z_t \approx 1\)</span>, o
+estado é completamente substituído pelo candidato, refletindo uma
+atualização decisiva na visão do modelo sobre a equipe.</p>
+<p>O <strong>gate de reset</strong> <span
+class="math inline">\(r_t\)</span> funciona como um <em>gatilho de
+detecção de ruptura</em>: quando <span class="math inline">\(r_t \approx
+0\)</span>, o candidato <span class="math inline">\(\tilde{h}_t\)</span>
+é computado ignorando quase inteiramente o histórico acumulado,
+permitindo que o modelo descarte o estado anterior frente a uma mudança
+estrutural abrupta — como uma troca súbita de comando tático ou uma
+série atípica de resultados que rompe com o padrão estabelecido.
+Combinados, os dois gates permitem à GRU distinguir entre flutuação
+normal de desempenho (que deve ser suavizada) e ruptura estrutural (que
+exige reinicialização do estado), produzindo estimativas de <span
+class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span> que refletem o perfil corrente da
+seleção sem se deixar enganar por ruído.</p>
+<p>O estado oculto final <span class="math inline">\(h_T\)</span> é
+projetado por uma rede <em>feedforward</em> com uma camada oculta de 32
+neurônios com ativação ReLU:</p>
+<p><span class="math display">\[
+k^{raw} = W_2 \cdot \text{ReLU}(W_1 h_T + b_1) + b_2 \in \mathbb{R}^2
+\]</span></p>
+<p>Os escalares brutos são então mapeados para os fatores <span
+class="math inline">\(K\)</span> positivos pela função
+<strong>softplus</strong>:</p>
+<p><span class="math display">\[
+K_{att} = \ln(1 + e^{k_{att}^{raw}}) + \varepsilon, \quad K_{def} =
+\ln(1 + e^{k_{def}^{raw}}) + \varepsilon
+\]</span></p>
+<p>com <span class="math inline">\(\varepsilon = 10^{-2}\)</span>
+garantindo <span class="math inline">\(K &gt; 0\)</span> para todo
+input.</p>
+<h3 id="compartilhamento-de-pesos-e-regularização">Compartilhamento de
+Pesos e Regularização</h3>
+<p>A mesma GRU é utilizada para processar a sequência de qualquer
+seleção. Esse <strong>compartilhamento de parâmetros</strong> força o
+modelo a aprender uma representação universal de “forma recente” que
+seja interpretável da mesma forma para qualquer time, e age como
+regularização implícita: com 48 seleções e 20 jogos cada, o dataset é
+modesto, e parâmetros compartilhados reduzem o risco de sobreajuste.</p>
+<p>A regularização explícita é feita por um termo L2 sobre <span
+class="math inline">\(\log K\)</span>:</p>
+<p><span class="math display">\[
+\mathcal{L}_{reg} = \lambda_{reg} \cdot \mathbb{E}\!\left[(\log
+K_{att})^2 + (\log K_{def})^2\right]
+\]</span></p>
+<p>com <span class="math inline">\(\lambda_{reg} = 0{,}5\)</span>. Como
+<span class="math inline">\(\log(1) = 0\)</span>, essa regularização
+penaliza desvios de <span class="math inline">\(K = 1\)</span> de forma
+quadrática na escala logarítmica — equivalente a um prior log-normal
+centrado em 1. Times com histórico recente pouco informativo regridem ao
+referencial do ELO (<span class="math inline">\(K \approx
+1\)</span>).</p>
+<hr />
+<h2 id="5-o-modelo-de-placares-dixon-coles-sobre-poisson">5. O Modelo de
+Placares: Dixon-Coles sobre Poisson</h2>
+<h3 id="o-problema-da-independência">O Problema da Independência</h3>
+<p>O modelo de Poisson independente — gols de <span
+class="math inline">\(A\)</span> e <span
+class="math inline">\(B\)</span> como variáveis independentes com
+parâmetros <span class="math inline">\(\lambda_A\)</span> e <span
+class="math inline">\(\lambda_B\)</span> — seria a escolha mais simples.
+Contudo, <a href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles
+(1997)</a> observaram empiricamente que esse modelo subestima
+sistematicamente a frequência dos placares 0-0, 1-0, 0-1 e 1-1, e
+superestima outros placares próximos. A causa é a dependência tática
+entre os times: o estado do placar influencia as escolhas de jogo de
+ambas as equipes, quebrando a hipótese de independência dos gols,
+especialmente em placares baixos.</p>
+<h3 id="a-correção-de-dixon-coles">A Correção de Dixon-Coles</h3>
+<p>Dixon e Coles propuseram uma correção multiplicativa aplicada
+exclusivamente aos quatro placares baixos:</p>
+<p><span class="math display">\[
+P(X{=}x, Y{=}y) = \tau(x, y, \lambda_A, \lambda_B, \rho) \cdot
+\text{Pois}(x;\, \lambda_A) \cdot \text{Pois}(y;\, \lambda_B)
+\]</span></p>
+<p>onde:</p>
+<p><span class="math display">\[
+\tau(x, y) = \begin{cases}
+1 - \lambda_A \lambda_B \rho &amp; \text{se } x = 0,\; y = 0 \\[6pt]
+1 + \lambda_A \rho &amp; \text{se } x = 1,\; y = 0 \\[6pt]
+1 + \lambda_B \rho &amp; \text{se } x = 0,\; y = 1 \\[6pt]
+1 - \rho &amp; \text{se } x = 1,\; y = 1 \\[6pt]
+1 &amp; \text{caso contrário}
+\end{cases}
+\]</span></p>
+<p>Para <span class="math inline">\(\rho &gt; 0\)</span>, os fatores
+<span class="math inline">\(\tau\)</span> reduzem a probabilidade dos
+placares 1-0 e 0-1 (fatores <span class="math inline">\(1 + \lambda_A
+\rho &gt; 1\)</span> e <span class="math inline">\(1 + \lambda_B \rho
+&gt; 1\)</span> atuam como denominadores da redistribuição) e aumentam
+relativamente o 0-0 e o 1-1. O efeito líquido, para os valores típicos
+de <span class="math inline">\(\lambda\)</span> e <span
+class="math inline">\(\rho\)</span> calibrados, é um aumento da massa
+probabilística nos empates de placar baixo, consistente com o padrão
+histórico.</p>
+<p><strong>Validade matemática:</strong> Para que <span
+class="math inline">\(\tau(0,0) = 1 - \lambda_A \lambda_B \rho &gt;
+0\)</span>, é necessário <span class="math inline">\(\rho &lt;
+1/(\lambda_A \lambda_B)\)</span>. Com <span
+class="math inline">\(\rho_{max} = 0{,}2\)</span> e <span
+class="math inline">\(\lambda \approx 1{,}27\)</span>, temos <span
+class="math inline">\(1/(\lambda_A \lambda_B) \approx 0{,}62 \gg
+0{,}2\)</span>, garantindo validade em todo o espaço de parâmetros
+utilizados. O valor <span class="math inline">\(\rho = 0\)</span>
+recupera o modelo de Poisson independente como caso especial.</p>
+<h3 id="a-distribuição-sobre-resultados-e-pênaltis">A Distribuição sobre
+Resultados e Pênaltis</h3>
+<p>A partir da matriz de placares <span class="math inline">\(M[x][y] =
+P(X=x, Y=y)\)</span>, as probabilidades de resultado são obtidas
+por:</p>
+<p><span class="math display">\[
+P(\text{vitória } A) = \sum_{x &gt; y} M[x][y], \quad P(\text{empate}) =
+\sum_{x = y} M[x][x], \quad P(\text{vitória } B) = \sum_{y &gt; x}
+M[x][y]
+\]</span></p>
+<p>Em partidas eliminatórias, empates levam à disputa de pênaltis. A
+probabilidade de vitória nos pênaltis é modelada proporcionalmente às
+taxas esperadas de gols:</p>
+<p><span class="math display">\[
+P(A \text{ vence nos pênaltis}) = \frac{\lambda_A}{\lambda_A +
+\lambda_B}
+\]</span></p>
+<h3 id="a-função-de-verossimilhança">A Função de Verossimilhança</h3>
+<p>O modelo é estimado por minimização da NLL ponderada:</p>
+<p><span class="math display">\[
+\mathcal{L}_{NLL} = -\sum_{i=1}^{N} w_i \cdot \log P_{\theta,\phi}(X_i,
+Y_i)
+\]</span></p>
+<p>onde o log da probabilidade Dixon-Coles de um placar <span
+class="math inline">\((X, Y)\)</span> é:</p>
+<p><span class="math display">\[
+\log P(X, Y) = \log \tau(X, Y) + X \log \lambda_A - \lambda_A - \log(X!)
++ Y \log \lambda_B - \lambda_B - \log(Y!)
+\]</span></p>
+<hr />
+<h2 id="6-simulação-monte-carlo-do-torneio">6. Simulação Monte Carlo do
+Torneio</h2>
+<h3 id="por-que-monte-carlo">Por que Monte Carlo?</h3>
+<p>A Copa 2026 tem 48 seleções distribuídas em 12 grupos de 4 times. Os
+dois primeiros colocados de cada grupo mais os 8 melhores terceiros
+avançam para uma fase de 32 equipes, seguida de oitavas, quartas,
+semifinais e final. Calcular analiticamente <span
+class="math inline">\(P(\text{time } A \text{ vence a Copa})\)</span>
+exigiria somar as probabilidades de todas as trajetórias possíveis pelo
+chaveamento — um espaço combinatório intratável. A simulação Monte Carlo
+resolve isso pela amostragem estocástica: em vez de enumerar, simula-se
+o torneio completo <span class="math inline">\(N\)</span> vezes, e as
+frequências convergem às probabilidades verdadeiras pela Lei dos Grandes
+Números.</p>
+<h3 id="pré-computação-das-matrizes-de-placar">Pré-Computação das
+Matrizes de Placar</h3>
+<p>Para cada par ordenado de seleções <span class="math inline">\((i,
+j)\)</span>, a matriz de probabilidades de placar <span
+class="math inline">\(M_{ij}\)</span> de dimensão <span
+class="math inline">\(9 \times 9\)</span> (placares 0–8 por time) é
+calculada uma única vez antes do início das simulações. Com 48 times, há
+<span class="math inline">\(48 \times 47 = 2.256\)</span> matrizes a
+pré-computar. Esse investimento inicial torna cada simulação individual
+muito rápida: sorteia-se apenas um inteiro de uma distribuição discreta
+com 81 massas pré-computadas.</p>
+<h3 id="o-procedimento-de-simulação">O Procedimento de Simulação</h3>
+<p>Cada uma das <span class="math inline">\(N = 1.000.000\)</span> de
+simulações executa o torneio completo:</p>
+<p><strong>Fase de grupos:</strong> Para cada um dos 12 grupos, os 6
+confrontos (<span class="math inline">\(\binom{4}{2} = 6\)</span>) são
+simulados sorteando um placar da distribuição <span
+class="math inline">\(M_{ij}\)</span>. A classificação final é
+determinada pela seguinte hierarquia:</p>
+<ol type="1">
+<li>Pontos totais (3 por vitória, 1 por empate)</li>
+<li>Confronto direto (pontos, saldo e gols no(s) jogo(s) direto(s))</li>
+<li>Saldo de gols geral</li>
+<li>Gols marcados no total</li>
+<li>Sorteio (em caso de empate absoluto)</li>
+</ol>
+<p><strong>Melhores terceiros:</strong> Os 12 terceiros colocados são
+ordenados por pontos, saldo de gols e gols marcados. Os 8 melhores
+avançam, completando os 32 classificados.</p>
+<p><strong>Fase eliminatória:</strong> Em cada confronto, sorteia-se um
+placar de <span class="math inline">\(M_{ij}\)</span>. Em caso de
+empate, decide-se nos pênaltis por uma Bernoulli com <span
+class="math inline">\(p = \lambda_A / (\lambda_A +
+\lambda_B)\)</span>.</p>
+<h3
+id="estimativa-das-probabilidades-e-intervalos-de-confiança">Estimativa
+das Probabilidades e Intervalos de Confiança</h3>
+<p>Após <span class="math inline">\(N = 1.000.000\)</span> de
+simulações, a estimativa da probabilidade de cada time atingir uma fase
+<span class="math inline">\(f\)</span> é:</p>
+<p><span class="math display">\[
+\hat{p}_{i,f} = \frac{\text{número de simulações em que o time } i
+\text{ atingiu a fase } f}{N}
+\]</span></p>
+<p>O intervalo de confiança binomial de 95% é:</p>
+<p><span class="math display">\[
+IC_{95\%} = \hat{p}_{i,f} \pm 1{,}96 \cdot \sqrt{\frac{\hat{p}_{i,f}(1 -
+\hat{p}_{i,f})}{N}}
+\]</span></p>
+<p>Com <span class="math inline">\(N = 1.000.000\)</span>, a margem de
+erro máxima (95é <span class="math inline">\(\pm 0{,}098\%\)</span>.</p>
+<hr />
+<h2 id="7-resultados">7. Resultados</h2>
+<h3 id="parâmetros-do-modelo-calibrado">Parâmetros do Modelo
+Calibrado</h3>
+<p>A tabela abaixo apresenta os seis parâmetros dos priors estimados por
+MLE, juntamente com sua interpretação e os valores derivados mais
+relevantes.</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 20%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Parâmetro</th>
+<th style="text-align: right;">Valor</th>
+<th style="text-align: left;">Interpretação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(a\)</span></td>
+<td style="text-align: right;">0,2394</td>
+<td style="text-align: left;"><span class="math inline">\(\lambda = e^a
+= 1{,}270\)</span> gols esperados por time em campo neutro com times
+iguais</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(b\)</span></td>
+<td style="text-align: right;">0,002074</td>
+<td style="text-align: left;">Sensibilidade linear: +100 pts ELO<span
+class="math inline">\(\Rightarrow\)</span> +23% gols esperados</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(c\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(-6{,}31
+\times 10^{-7}\)</span></td>
+<td style="text-align: left;">Curvatura quadrática (saturação para
+grandes diferenciais)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(h_{fit}\)</span></td>
+<td style="text-align: right;">100 pts ELO</td>
+<td style="text-align: left;">Vantagem de sede equivalente em pontos
+ELO</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\rho_0^{raw}\)</span></td>
+<td style="text-align: right;">0,6724</td>
+<td style="text-align: left;"><span class="math inline">\(\rho(\Delta=0)
+= 0{,}117\)</span> (correlação em jogo equilibrado)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\rho_1^{neg}\)</span></td>
+<td style="text-align: right;">0,4769</td>
+<td style="text-align: left;">Decaimento:<span
+class="math inline">\(\rho(\Delta=400) = 0{,}039\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>O painel de diagnóstico do modelo de priors é apresentado na figura
+abaixo:</p>
+<p><img
+src="../assets/media/white_paper_modelagem_estatistica_copa_2026_p14_img1.png"
+alt="Diagnóstico Dixon-Coles — Curvas de calibração, distribuições de placar observadas vs. modeladas, e parâmetros fitados" /></p>
+<p>O painel contém doze sub-gráficos: (i) a curva <span
+class="math inline">\(\lambda \times \Delta\text{ELO}\)</span>,
+mostrando a relação exponencial simétrica entre diferencial e taxa
+esperada de gols; (ii) gols observados vs. modelados por bin de <span
+class="math inline">\(\Delta\text{ELO}\)</span>, confirmando boa
+aderência; (iii) taxa de vitória do mandante por diferencial, com e sem
+vantagem de sede; (iv–vi) distribuições de placar observadas, modeladas
+e resíduos; (vii) distribuição total de gols por jogo; (viii) a curva
+<span class="math inline">\(\rho(|\Delta\text{ELO}|)\)</span>; (ix)
+calibração de vitórias previstas vs. observadas; (x) pesos temporais;
+(xi) gols esperados em confrontos típicos; (xii) tabela de parâmetros
+fitados.</p>
+<h3 id="elo-e-fatores-k-por-seleção">ELO e Fatores K por Seleção</h3>
+<p>A tabela abaixo apresenta, para cada seleção participante da Copa
+2026, o rating ELO pré-torneio, os fatores <span
+class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span> estimados pela GRU e o grupo de
+origem. As seleções estão ordenadas por ELO decrescente.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Seleção</th>
+<th>Gr</th>
+<th>Sede</th>
+<th style="text-align: right;">ELO</th>
+<th style="text-align: right;"><span
+class="math inline">\(K_{att}\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(K_{def}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Espanha</td>
+<td>H</td>
+<td></td>
+<td style="text-align: right;">2182</td>
+<td style="text-align: right;">0,9598</td>
+<td style="text-align: right;">1,0897</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Argentina</td>
+<td>J</td>
+<td></td>
+<td style="text-align: right;">2169</td>
+<td style="text-align: right;">0,9626</td>
+<td style="text-align: right;">1,0120</td>
+</tr>
+<tr>
+<td>3</td>
+<td>França</td>
+<td>I</td>
+<td></td>
+<td style="text-align: right;">2120</td>
+<td style="text-align: right;">0,9634</td>
+<td style="text-align: right;">1,0338</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Brasil</td>
+<td>C</td>
+<td></td>
+<td style="text-align: right;">2061</td>
+<td style="text-align: right;">0,9773</td>
+<td style="text-align: right;">0,9607</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Inglaterra</td>
+<td>L</td>
+<td></td>
+<td style="text-align: right;">2045</td>
+<td style="text-align: right;">0,9554</td>
+<td style="text-align: right;">0,9755</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Colômbia</td>
+<td>K</td>
+<td></td>
+<td style="text-align: right;">2042</td>
+<td style="text-align: right;">1,0070</td>
+<td style="text-align: right;">0,9672</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Portugal</td>
+<td>K</td>
+<td></td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">0,9861</td>
+<td style="text-align: right;">0,9831</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Holanda</td>
+<td>F</td>
+<td></td>
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">0,9863</td>
+<td style="text-align: right;">1,0112</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Equador</td>
+<td>E</td>
+<td></td>
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">0,9001</td>
+<td style="text-align: right;">0,8951</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Alemanha</td>
+<td>E</td>
+<td></td>
+<td style="text-align: right;">1985</td>
+<td style="text-align: right;">1,0084</td>
+<td style="text-align: right;">1,0281</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Japão</td>
+<td>F</td>
+<td></td>
+<td style="text-align: right;">1983</td>
+<td style="text-align: right;">0,9566</td>
+<td style="text-align: right;">0,9683</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Croácia</td>
+<td>L</td>
+<td></td>
+<td style="text-align: right;">1981</td>
+<td style="text-align: right;">0,9696</td>
+<td style="text-align: right;">1,0125</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Marrocos</td>
+<td>C</td>
+<td></td>
+<td style="text-align: right;">1968</td>
+<td style="text-align: right;">0,8865</td>
+<td style="text-align: right;">0,9876</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Uruguai</td>
+<td>H</td>
+<td></td>
+<td style="text-align: right;">1961</td>
+<td style="text-align: right;">0,9248</td>
+<td style="text-align: right;">0,9291</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Suíça</td>
+<td>B</td>
+<td></td>
+<td style="text-align: right;">1944</td>
+<td style="text-align: right;">1,0140</td>
+<td style="text-align: right;">1,0088</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Bélgica</td>
+<td>G</td>
+<td></td>
+<td style="text-align: right;">1944</td>
+<td style="text-align: right;">1,0133</td>
+<td style="text-align: right;">0,9968</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Noruega</td>
+<td>I</td>
+<td></td>
+<td style="text-align: right;">1932</td>
+<td style="text-align: right;">1,0454</td>
+<td style="text-align: right;">1,0505</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Turquia</td>
+<td>D</td>
+<td></td>
+<td style="text-align: right;">1928</td>
+<td style="text-align: right;">0,9629</td>
+<td style="text-align: right;">1,0212</td>
+</tr>
+<tr>
+<td>19</td>
+<td>México</td>
+<td>A</td>
+<td>✓</td>
+<td style="text-align: right;">1927</td>
+<td style="text-align: right;">0,9580</td>
+<td style="text-align: right;">0,9360</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Senegal</td>
+<td>I</td>
+<td></td>
+<td style="text-align: right;">1922</td>
+<td style="text-align: right;">0,9626</td>
+<td style="text-align: right;">0,9840</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Paraguai</td>
+<td>D</td>
+<td></td>
+<td style="text-align: right;">1893</td>
+<td style="text-align: right;">0,9604</td>
+<td style="text-align: right;">0,9399</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Áustria</td>
+<td>J</td>
+<td></td>
+<td style="text-align: right;">1888</td>
+<td style="text-align: right;">0,9704</td>
+<td style="text-align: right;">0,9822</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Austrália</td>
+<td>D</td>
+<td></td>
+<td style="text-align: right;">1886</td>
+<td style="text-align: right;">0,9659</td>
+<td style="text-align: right;">0,9670</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Canadá</td>
+<td>B</td>
+<td>✓</td>
+<td style="text-align: right;">1884</td>
+<td style="text-align: right;">0,9474</td>
+<td style="text-align: right;">0,9273</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Irã</td>
+<td>G</td>
+<td></td>
+<td style="text-align: right;">1880</td>
+<td style="text-align: right;">0,9669</td>
+<td style="text-align: right;">0,9610</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Coreia do Sul</td>
+<td>A</td>
+<td></td>
+<td style="text-align: right;">1861</td>
+<td style="text-align: right;">0,9664</td>
+<td style="text-align: right;">0,9854</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Argélia</td>
+<td>J</td>
+<td></td>
+<td style="text-align: right;">1861</td>
+<td style="text-align: right;">0,9643</td>
+<td style="text-align: right;">0,9846</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Panamá</td>
+<td>L</td>
+<td></td>
+<td style="text-align: right;">1822</td>
+<td style="text-align: right;">0,9573</td>
+<td style="text-align: right;">0,9954</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Uzbequistão</td>
+<td>K</td>
+<td></td>
+<td style="text-align: right;">1817</td>
+<td style="text-align: right;">0,9286</td>
+<td style="text-align: right;">0,9393</td>
+</tr>
+<tr>
+<td>30</td>
+<td>EUA</td>
+<td>D</td>
+<td>✓</td>
+<td style="text-align: right;">1809</td>
+<td style="text-align: right;">1,0980</td>
+<td style="text-align: right;">1,0510</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Costa do Marfim</td>
+<td>E</td>
+<td></td>
+<td style="text-align: right;">1798</td>
+<td style="text-align: right;">0,9496</td>
+<td style="text-align: right;">0,9357</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Egito</td>
+<td>G</td>
+<td></td>
+<td style="text-align: right;">1791</td>
+<td style="text-align: right;">0,9102</td>
+<td style="text-align: right;">0,9484</td>
+</tr>
+<tr>
+<td>33</td>
+<td>Escócia</td>
+<td>C</td>
+<td></td>
+<td style="text-align: right;">1791</td>
+<td style="text-align: right;">0,9927</td>
+<td style="text-align: right;">0,9502</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Suécia</td>
+<td>F</td>
+<td></td>
+<td style="text-align: right;">1783</td>
+<td style="text-align: right;">1,0876</td>
+<td style="text-align: right;">1,0779</td>
+</tr>
+<tr>
+<td>35</td>
+<td>Rep. Tcheca</td>
+<td>A</td>
+<td></td>
+<td style="text-align: right;">1782</td>
+<td style="text-align: right;">0,9809</td>
+<td style="text-align: right;">0,9980</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Tunísia</td>
+<td>F</td>
+<td></td>
+<td style="text-align: right;">1763</td>
+<td style="text-align: right;">0,9623</td>
+<td style="text-align: right;">0,9526</td>
+</tr>
+<tr>
+<td>37</td>
+<td>Jordânia</td>
+<td>J</td>
+<td></td>
+<td style="text-align: right;">1763</td>
+<td style="text-align: right;">1,0615</td>
+<td style="text-align: right;">1,0077</td>
+</tr>
+<tr>
+<td>38</td>
+<td>DR Congo</td>
+<td>K</td>
+<td></td>
+<td style="text-align: right;">1750</td>
+<td style="text-align: right;">0,9123</td>
+<td style="text-align: right;">0,9559</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Nova Zelândia</td>
+<td>G</td>
+<td></td>
+<td style="text-align: right;">1730</td>
+<td style="text-align: right;">1,1262</td>
+<td style="text-align: right;">0,9742</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Iraque</td>
+<td>I</td>
+<td></td>
+<td style="text-align: right;">1723</td>
+<td style="text-align: right;">0,9046</td>
+<td style="text-align: right;">0,9792</td>
+</tr>
+<tr>
+<td>41</td>
+<td>Haiti</td>
+<td>C</td>
+<td></td>
+<td style="text-align: right;">1676</td>
+<td style="text-align: right;">1,0296</td>
+<td style="text-align: right;">0,9933</td>
+</tr>
+<tr>
+<td>42</td>
+<td>Arábia Saudita</td>
+<td>H</td>
+<td></td>
+<td style="text-align: right;">1670</td>
+<td style="text-align: right;">0,9797</td>
+<td style="text-align: right;">0,9607</td>
+</tr>
+<tr>
+<td>43</td>
+<td>Cabo Verde</td>
+<td>H</td>
+<td></td>
+<td style="text-align: right;">1662</td>
+<td style="text-align: right;">0,9560</td>
+<td style="text-align: right;">0,9648</td>
+</tr>
+<tr>
+<td>44</td>
+<td>Bósnia-Herz.</td>
+<td>B</td>
+<td></td>
+<td style="text-align: right;">1651</td>
+<td style="text-align: right;">0,9969</td>
+<td style="text-align: right;">0,9442</td>
+</tr>
+<tr>
+<td>45</td>
+<td>África do Sul</td>
+<td>A</td>
+<td></td>
+<td style="text-align: right;">1645</td>
+<td style="text-align: right;">0,9919</td>
+<td style="text-align: right;">0,9906</td>
+</tr>
+<tr>
+<td>46</td>
+<td>Gana</td>
+<td>L</td>
+<td></td>
+<td style="text-align: right;">1626</td>
+<td style="text-align: right;">1,0234</td>
+<td style="text-align: right;">0,9977</td>
+</tr>
+<tr>
+<td>47</td>
+<td>Curaçao</td>
+<td>E</td>
+<td></td>
+<td style="text-align: right;">1586</td>
+<td style="text-align: right;">1,0269</td>
+<td style="text-align: right;">1,0280</td>
+</tr>
+<tr>
+<td>48</td>
+<td>Catar</td>
+<td>B</td>
+<td></td>
+<td style="text-align: right;">1553</td>
+<td style="text-align: right;">1,0263</td>
+<td style="text-align: right;">1,0561</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Leituras notáveis da tabela:</strong></p>
+<ul>
+<li><strong>Espanha e Argentina</strong> lideram o ELO com vantagem
+clara sobre o campo. A Espanha apresenta <span
+class="math inline">\(K_{def} = 1{,}090\)</span>, indicando que seu
+estilo de posse e pressão alta gera mais gols sofridos do que o esperado
+para uma equipe de seu nível — o ELO puro subestimaria sua
+vulnerabilidade defensiva. A Argentina tem <span
+class="math inline">\(K_{def} = 1{,}012\)</span>, próximo ao
+neutro.</li>
+<li><strong>Colômbia</strong> (<span class="math inline">\(K_{att} =
+1{,}007\)</span>, <span class="math inline">\(K_{def} =
+0{,}967\)</span>) e <strong>Brasil</strong> (<span
+class="math inline">\(K_{def} = 0{,}961\)</span>) apresentam perfis
+defensivos sólidos, marcando menos e sofrendo menos do que o ELO
+preveria.</li>
+<li><strong>EUA</strong> (<span class="math inline">\(K_{att} =
+1{,}098\)</span>, <span class="math inline">\(K_{def} =
+1{,}051\)</span>) têm perfil de alta intensidade em ambos os sentidos,
+com os dois fatores acima de 1 — combinação que, em campo próprio com a
+vantagem de sede, produz jogos de alto volume de gols.</li>
+<li><strong>Marrocos</strong> (<span class="math inline">\(K_{att} =
+0{,}887\)</span>) e <strong>Equador</strong> (<span
+class="math inline">\(K_{att} = 0{,}900\)</span>) têm os menores
+multiplicadores de ataque entre os times de ELO mais alto, indicando
+estilo mais cauteloso ofensivamente.</li>
+<li><strong>Nova Zelândia</strong> (<span class="math inline">\(K_{att}
+= 1{,}126\)</span>) tem o maior multiplicador de ataque entre todas as
+seleções, mas com ELO baixo (1.730), o efeito na taxa esperada de gols
+final é limitado.</li>
+</ul>
+<h3 id="probabilidades-de-título-e-progressão-por-fase">Probabilidades
+de Título e Progressão por Fase</h3>
+<p>O gráfico abaixo apresenta as probabilidades de título para as 32
+seleções mais favoritas, derivadas de 1.000.000 de simulações Monte
+Carlo:</p>
+<p><img
+src="../assets/media/white_paper_modelagem_estatistica_copa_2026_p17_img2.png"
+alt="Probabilidade de ganhar a Copa 2026 (%) — Top 32" /></p>
+<p>O heatmap a seguir mostra as probabilidades de avançar a cada fase
+para todas as 48 seleções:</p>
+<p><img
+src="../assets/media/white_paper_modelagem_estatistica_copa_2026_p18_img3.png"
+alt="Heatmap de probabilidade de avanço por fase" /></p>
+<hr />
+<h2 id="8-conclusão">8. Conclusão</h2>
+<p>A equação central que resume o modelo é:</p>
+<p><span class="math display">\[
+\lambda_A = \underbrace{\exp(a + b\,\Delta_{eff} +
+c\,\Delta_{eff}^2)}_{\text{força histórica (ELO)}} \;\cdot\;
+\underbrace{K_{att}^A}_{\substack{\text{ataque recente} \\ \text{+
+perfil ofensivo}}} \;\cdot\;
+\underbrace{K_{def}^B}_{\substack{\text{defesa do adversário} \\ \text{+
+perfil defensivo}}}
+\]</span></p>
+<p>Este trabalho apresenta um modelo probabilístico para previsão de
+resultados na Copa do Mundo FIFA 2026, combinando três componentes que
+se complementam de forma coerente.</p>
+<p>O <strong>sistema ELO</strong> fornece a base estrutural. A diferença
+de rating entre dois times, calculada cronologicamente sobre décadas de
+futebol internacional, é convertida em taxas esperadas de gols por uma
+função exponencial quadrática estimada por MLE sobre partidas desde
+1990. Os parâmetros calibrados (<span class="math inline">\(a =
+0{,}239\)</span>, <span class="math inline">\(b = 0{,}00207\)</span>,
+<span class="math inline">\(c = -6{,}3 \times 10^{-7}\)</span>) são
+estatisticamente fundamentados e interpretáveis: a taxa esperada de 1,27
+gols por time por jogo em campo neutro, o efeito de +23% de gols para
+cada 100 pontos ELO de vantagem e a vantagem de sede de 100 pontos ELO
+equivalente são todos consistentes com a literatura empírica.</p>
+<p>Os <strong>fatores <span class="math inline">\(K_{att}\)</span> e
+<span class="math inline">\(K_{def}\)</span></strong>, estimados por uma
+rede neural GRU sobre os 20 jogos mais recentes de cada seleção,
+corrigem as duas limitações estruturais do ELO na modelagem de placares:
+a lentidão de adaptação à forma recente e a cegueira ao volume de gols.
+Os valores estimados revelam perfis de jogo distintos e empiricamente
+plausíveis: Espanha com defesa mais exposta do que seu ELO sugere (<span
+class="math inline">\(K_{def} = 1{,}09\)</span>), Brasil com defesa
+compacta (<span class="math inline">\(K_{def} = 0{,}96\)</span>), EUA
+com estilo de alta intensidade em ambos os sentidos, Marrocos e Equador
+com identidade ofensiva abaixo do ELO.</p>
+<p>O <strong>modelo de Dixon-Coles</strong> traduz as taxas esperadas de
+gols <span class="math inline">\(\lambda\)</span> em distribuições de
+probabilidade sobre placares, corrigindo o viés da dupla-Poisson
+independente nos placares baixos. A <strong>simulação Monte
+Carlo</strong> com <span class="math inline">\(N = 1.000.000\)</span> de
+iterações propaga essa distribuição por toda a estrutura do torneio com
+margem de erro inferior a <span class="math inline">\(\pm
+0{,}1\%\)</span>.</p>
+<p>O resultado central das simulações é a concentração de probabilidade
+entre Espanha e Argentina, cada uma com aproximadamente 20% de chance de
+título — reflexo de sua superioridade clara em ELO sobre o restante do
+campo. A França é a terceira favorita com 11,6%, seguida por Brasil
+(6,7%) e Colômbia (6,0%).</p>
+<hr />
+<h2 id="referências">Referências</h2>
+<p>[1] Cho, K., van Merrienboer, B., Gulcehre, C., Bahdanau, D.,
+Bougares, F., Schwenk, H., &amp; Bengio, Y. (2014). <em>Learning Phrase
+Representations using RNN Encoder-Decoder for Statistical Machine
+Translation</em>, Proceedings of EMNLP 2014. arXiv:1406.1078. <a
+href="https://arxiv.org/abs/1406.1078">Link</a></p>
+<p>[2] Chung, J., Gulcehre, C., Cho, K., &amp; Bengio, Y. (2014).
+<em>Empirical Evaluation of Gated Recurrent Neural Networks on Sequence
+Modeling</em>, arXiv:1412.3555. <a
+href="https://arxiv.org/abs/1412.3555">Link</a></p>
+<p>[3] Dixon, M. J., &amp; Coles, S. G. (1997). <em>Modelling
+Association Football Scores and Inefficiencies in the Football Betting
+Market</em>, Journal of the Royal Statistical Society: Series C (Applied
+Statistics), 46(2), 265–280. doi:10.1111/1467-9876.00065. <a
+href="https://doi.org/10.1111/1467-9876.00065">Link</a></p>
+<p>[4] Elo, A. E. (1978). <em>The Rating of Chessplayers, Past and
+Present</em>, Arco Publishing, New York. <a
+href="https://archive.org/details/ratingofchesspla00unse">Link</a></p>
+<p>[5] Gilch, L. A., &amp; Müller, S. (2018). <em>On Elo Based
+Prediction Models for the FIFA Worldcup 2018</em>, arXiv:1806.01930. <a
+href="https://arxiv.org/pdf/1806.01930">Link</a></p>
+<p>[6] Groll, A., Schauberger, G., &amp; Tutz, G. (2015). <em>Prediction
+of Major International Soccer Tournaments Based on Team-Specific
+Regularized Poisson Regression: An Application to the FIFA World Cup
+2014</em>, Journal of Quantitative Analysis in Sports, 11(2), 97–115. <a
+href="https://epub.ub.uni-muenchen.de/31579/1/Groll_Prediction.pdf">Link</a></p>
+<p>[7] Hvattum, L. M., &amp; Arntzen, H. (2010). <em>Using ELO Ratings
+for Match Result Prediction in Association Football</em>, International
+Journal of Forecasting, 26(3), 460–470.
+doi:10.1016/j.ijforecast.2009.10.002. <a
+href="https://doi.org/10.1016/j.ijforecast.2009.10.002">Link</a></p>
+<p>[8] Karlis, D., &amp; Ntzoufras, I. (2003). <em>Analysis of Sports
+Data by Using Bivariate Poisson Models</em>, Journal of the Royal
+Statistical Society: Series D (The Statistician), 52(3), 381–393.
+doi:10.1111/1467-9884.00366. <a
+href="https://doi.org/10.1111/1467-9884.00366">Link</a></p>
+<p>[9] Ley, C., Van de Wiele, T., &amp; Van Eetvelde, H. (2019).
+<em>Ranking Soccer Teams on the Basis of Their Current Strength: A
+Comparison of Maximum Likelihood Approaches</em>, Statistical Modelling,
+19(1), 55–73. doi:10.1177/1471082X18817650. <a
+href="https://doi.org/10.1177/1471082X18817650">Link</a></p>
+<p>[10] Maher, M. J. (1982). <em>Modelling Association Football
+Scores</em>, Statistica Neerlandica, 36(3), 109–118.
+doi:10.1111/j.1467-9574.1982.tb00782.x. <a
+href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">Link</a></p>
+<p>[11] McHale, I., &amp; Scarf, P. (2011). <em>Modelling the Dependence
+of Goals Scored by Opposing Teams in International Soccer Matches</em>,
+Statistical Modelling, 11(3), 219–236. doi:10.1177/1471082X1001100303.
+<a href="https://doi.org/10.1177/1471082X1001100303">Link</a></p>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Maio de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  if(toTop){toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Identifica e classifica divisores de capitulo: o losango so aparece onde ha capitulo real */
+  document.querySelectorAll(".content hr").forEach(function(hr){
+    var next=hr.nextElementSibling;
+    while(next&&next.nodeType===1&&next.tagName==="P"&&!next.textContent.trim()){
+      next=next.nextElementSibling;
+    }
+    if(next&&next.tagName==="H2"){
+      var id=(next.id||"").toLowerCase();
+      if(id.indexOf("sum")===0){
+        hr.style.display="none";
+      }else if(id.indexOf("ref")===0){
+        hr.classList.add("sb-hr-references");
+      }else{
+        hr.classList.add("sb-hr-chapter");
+      }
+    }
+  });
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Estatística</span><span class="sb-tag">Futebol</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="campeoes-por-acaso.html"><strong>Campeões por Acaso — Por Que Atletas de Elite São Anomalias Estatísticas</strong><span>O status de atleta de elite obedece às mesmas leis que governam fenômenos aleatórios: o ensaio sustenta, com evidências de Efeito da Idade Relativa, herdabilidade genética, viés de sobrevivência e falácia do atirador de elite, que campeões são outliers estruturais de uma distribuição probabilística, não produtos de um método replicável. A indústria de palestras motivacionais vende ao público uma causalidade que a estatística não sustenta.</span></a><a class="sb-related-card" href="validacao-estocastica-dinamica-de-voo.html"><strong>Validação Estocástica de Dinâmica de Voo — De Hume ao p-value</strong><span>O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
+        aria-controls="sbToc" title="Sumário do essay">
+  <span class="sb-toc-icon" aria-hidden="true">☰</span>
+  <span class="sb-toc-text">Sumário</span>
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=00d79791"></script>
+</body>
+</html>

@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="finalizado">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</title>
+<meta property="og:title" content="Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante">
+<meta property="og:description" content="A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.">
+<meta property="og:type" content="article">
+<script defer="" src="../assets/mathjax/tex-svg.js"
+type="text/javascript"></script>
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F7F9FC;
+  --surface2:#EDF2F8;
+  --border:#D6DEE9;
+  --text:#2B3645;
+  --text-dim:#66758A;
+  --text-bright:#0E1928;
+  --gold:#2F5FB0;
+  --gold-dim:#234A86;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F9FC;
+    --surface2:#EDF2F8;
+    --border:#D6DEE9;
+    --text:#2B3645;
+    --text-dim:#66758A;
+    --text-bright:#0E1928;
+    --gold:#2F5FB0;
+    --gold-dim:#234A86;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  position:relative;
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+  transition:background .25s ease,color .25s ease;
+}
+/* Tema claro: capa branca nobre com brilho suave dourado */
+[data-theme="light"] .masthead,
+:root:not([data-theme="dark"]) .masthead{
+  background:#F3F5F7;
+  color:#171310;
+}
+[data-theme="light"] .masthead .hero-title,
+:root:not([data-theme="dark"]) .masthead .hero-title{
+  color:#15120E;
+}
+/* Tema escuro: capa preta editorial */
+[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead{
+  background:#0A0A0A;
+  color:#EDE8DF;
+}
+[data-theme="dark"] .masthead .hero-title,
+:root[data-theme="dark"] .masthead .hero-title{
+  color:#EDE8DF;
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+/* O filete é a borda superior da capa, não um ornamento do título. Como a
+   capa centraliza os filhos verticalmente, deixá-lo no fluxo o empurrava para
+   encostar no título; ancorado no topo ele volta a ser moldura. */
+.stripe{
+  position:absolute;top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold-dim) 0%,var(--gold) 50%,var(--gold-dim) 100%);
+}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+.cover-summary{
+  max-width:min(760px,92%);
+  margin:1.45rem auto 0;
+  color:color-mix(in srgb,var(--text) 88%,var(--text-dim));
+  font-size:clamp(.96rem,2vw,1.08rem);
+  line-height:1.58;
+  text-wrap:balance;
+}
+[data-theme="light"] .cover-summary,
+:root:not([data-theme="dark"]) .cover-summary{color:#435166;}
+[data-theme="dark"] .cover-summary,
+:root[data-theme="dark"] .cover-summary{color:#C8C2B8;}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;border-top:1px solid var(--border);
+  text-align:center;margin:2.8rem auto;line-height:1;opacity:0.35;
+}
+/* Losango (✦) apenas estritamente entre capitulos (## que nao seja sumario nem referencias) */
+.content hr.sb-hr-chapter,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias)){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-chapter::before,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias))::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referencias usa infinito */
+.content hr.sb-hr-references,
+.content hr:has(+ h2#referências),
+.content hr:has(+ h2#referencias){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-references::before,
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+/* Oculta divisores adjacentes ao sumario (o sumario ja possui bordas proprias) */
+.content hr:has(+ h2#sumário),
+.content hr:has(+ h2#sumario),
+.content #sumário + ul + hr,
+.content #sumário + ol + hr,
+.content #sumario + ul + hr,
+.content #sumario + ol + hr{
+  display:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+  /* Numa equacao numerada o MathJax escreve `min-width` inline no proprio
+     container (o SVG interno usa width:100% e depende disso). `min-width`
+     ganha de `max-width`, entao o container ficava mais largo que a tela e
+     empurrava a pagina inteira no celular em vez de rolar por dentro. Zerar
+     so o do container, nunca o do SVG: o SVG guarda a largura real da formula,
+     que e justamente o que deve rolar aqui dentro. */
+  min-width:0 !important;
+}
+/* Formula no meio de uma frase: cabe na coluna ou rola dentro de si mesma.
+   Sem isto, uma equacao inline longa nao quebra e empurra o paragrafo — e com
+   ele a pagina inteira — alguns pixels para fora da tela no celular. */
+mjx-container:not([display="true"]){
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  vertical-align:-.25em;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+/* MathML assistivo: existe so para leitor de tela e ja vem `clip`ado pelo
+   MathJax — mas `clip` esconde sem encolher. A caixa continuava com a largura
+   real da formula (376px numa coluna de 356) e, absoluta dentro do container,
+   somava essa largura ao overflow rolavel de <p>, de .content e do documento:
+   era ela, e nao a equacao visivel, que empurrava a pagina no celular.
+   Reduzir a caixa a 1px e o padrao "visually hidden"; o conteudo continua na
+   arvore de acessibilidade e continua sendo lido. */
+/* Seletor com especificidade maior que `mjx-assistive-mml` sozinho: a folha do
+   MathJax entra no <head> DEPOIS desta e, com a mesma especificidade e o mesmo
+   `!important`, ganhava por ordem. */
+mjx-container > mjx-assistive-mml{
+  position:absolute !important;
+  width:1px !important;height:1px !important;
+  overflow:hidden !important;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+/* Uma imagem solta num paragrafo e um bloco, nao uma palavra: como inline-block
+   ela ainda somava o espaco em branco vizinho e estourava a coluna por alguns
+   pixels. */
+.content p > img{display:block;margin-inline:auto;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t="light";document.documentElement.dataset.theme=t})();</script><style>/* ==========================================================================
+   Second Brain Atlas — public essay overlay
+
+   Contract:
+   - scripts/essay_template.html owns the essay body and components.
+   - This file only maps theme tokens and styles Atlas-only chrome.
+   - Light = white + Atlas blue.
+   - Dark = near-black + restrained gold.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]),
+:root[data-theme="light"] {
+  --bg:#ffffff;
+  --surface:#f7f9fc;
+  --surface2:#edf2f8;
+  --border:#d6dee9;
+  --text:#2b3645;
+  --text-dim:#66758a;
+  --text-bright:#0e1928;
+  --gold:#2f5fb0;
+  --gold-dim:#234a86;
+  --rust:#8e4636;
+  --rust-bright:#a04030;
+  --accent:#35708a;
+  --amber:#7a5a18;
+
+  --sb-bg:#ffffff;
+  --sb-surface:#ffffff;
+  --sb-surface-soft:#f7f9fc;
+  --sb-text:#172235;
+  --sb-muted:#607087;
+  --sb-line:rgba(23,34,53,.14);
+  --sb-line-strong:rgba(23,34,53,.26);
+  --sb-primary:#2f5fb0;
+  --sb-primary-soft:rgba(47,95,176,.09);
+  --sb-shadow:0 18px 54px rgba(24,45,78,.12);
+}
+
+:root[data-theme="dark"] {
+  --bg:#090909;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#303030;
+  --text:#d8d4cd;
+  --text-dim:#979187;
+  --text-bright:#f2eee7;
+  --gold:#c9a45c;
+  --gold-dim:#8a6b33;
+  --rust:#9a4938;
+  --rust-bright:#bd5a42;
+  --accent:#5b95ac;
+  --amber:#a77a2e;
+
+  --sb-bg:#090909;
+  --sb-surface:#121212;
+  --sb-surface-soft:#181818;
+  --sb-text:#f0ede7;
+  --sb-muted:#aaa39a;
+  --sb-line:rgba(240,237,231,.14);
+  --sb-line-strong:rgba(240,237,231,.25);
+  --sb-primary:#c9a45c;
+  --sb-primary-soft:rgba(201,164,92,.10);
+  --sb-shadow:0 24px 70px rgba(0,0,0,.46);
+}
+
+html,body{background:var(--bg);}
+body{padding-top:56px;}
+
+/* Public cover: the only intentional visual departure from standalone export. */
+:root:not([data-theme="dark"]) .masthead,
+:root[data-theme="light"] .masthead{
+  background:#ffffff !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="dark"] .masthead{
+  background:#090909 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+.masthead .hero-title{color:var(--text-bright) !important;}
+.masthead-rule{border-top-color:var(--gold) !important;}
+.stripe{
+  height:3px !important;
+  background:linear-gradient(90deg,
+    color-mix(in srgb,var(--gold) 20%,transparent),
+    var(--gold),
+    color-mix(in srgb,var(--gold) 20%,transparent)) !important;
+}
+
+/* Atlas owns these controls on public pages. */
+#sbThemeToggle,#sbToTop,body > .sb-progress > .sb-progress-fill{display:none !important;}
+
+.sb-bar{
+  position:fixed;inset:0 0 auto 0;z-index:60;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 clamp(16px,4vw,40px);
+  border-bottom:1px solid var(--sb-line);
+  background:color-mix(in srgb,var(--sb-bg) 90%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.sb-brand{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--sb-text) !important;font-weight:700;font-size:14px;
+  text-decoration:none !important;
+}
+.sb-mark{
+  display:grid;place-items:center;width:27px;height:27px;
+  border:1px solid color-mix(in srgb,var(--sb-primary) 42%,transparent);
+  border-radius:8px;color:var(--sb-primary);background:var(--sb-primary-soft);
+  font-size:10px;font-weight:800;
+}
+.sb-nav{display:flex;align-items:center;gap:16px;}
+.sb-nav a{color:var(--sb-muted) !important;font-size:13px;text-decoration:none !important;}
+.sb-nav a:hover{color:var(--sb-primary) !important;}
+.sb-nav button{
+  width:32px;height:32px;border:1px solid var(--sb-line);border-radius:9px;
+  background:transparent;color:var(--sb-primary);cursor:pointer;
+}
+.sb-nav button:hover{border-color:var(--sb-primary);}
+
+/* Public progress bar injected by render_public_essay.py. */
+body > .sb-progress:not(:has(.sb-progress-fill)){
+  position:fixed;top:56px;left:0;right:0;z-index:61;height:2px;background:transparent;
+}
+body > .sb-progress:not(:has(.sb-progress-fill)) span{
+  display:block;width:0;height:100%;background:var(--sb-primary);
+}
+
+.sb-toc-fab{
+  position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:61;
+  display:inline-flex;align-items:center;gap:8px;padding:10px 17px;
+  border:1px solid var(--sb-line-strong);border-radius:999px;
+  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);
+  color:var(--sb-text);box-shadow:var(--sb-shadow);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font:650 13px/1 Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer;
+}
+.sb-toc-fab:hover{border-color:var(--sb-primary);}
+.sb-toc-icon{color:var(--sb-primary);}
+
+.sb-toc{
+  position:fixed;right:clamp(16px,3vw,32px);
+  bottom:calc(clamp(16px,3vw,32px) + 54px);z-index:62;
+  width:min(380px,calc(100vw - 32px));max-height:min(65vh,600px);
+  display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--sb-line-strong);border-radius:16px;
+  background:color-mix(in srgb,var(--sb-surface) 98%,transparent);
+  box-shadow:var(--sb-shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-toc[hidden]{display:none !important;}
+.sb-toc header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 17px;border-bottom:1px solid var(--sb-line);color:var(--sb-text);font-size:13px;
+}
+.sb-toc header strong{color:inherit;}
+.sb-toc header button{border:0;background:transparent;color:var(--sb-muted);font-size:20px;cursor:pointer;}
+.sb-toc nav{display:flex;flex-direction:column;padding:9px 8px;overflow-y:auto;}
+.sb-toc a{
+  padding:8px 11px;border-left:2px solid transparent;border-radius:0 8px 8px 0;
+  color:var(--sb-muted) !important;font-size:12.5px;line-height:1.4;text-decoration:none !important;
+}
+.sb-toc a:hover{color:var(--sb-text) !important;background:var(--sb-primary-soft);}
+.sb-toc a.h3{padding-left:23px;font-size:11.5px;}
+.sb-toc a.active{
+  color:var(--sb-primary) !important;border-left-color:var(--sb-primary);background:var(--sb-primary-soft);
+}
+
+.sb-tags,.sb-related{
+  width:min(var(--max-width,760px),calc(100% - 48px));margin-inline:auto;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px;}
+.sb-tag{padding:4px 10px;border:1px solid var(--sb-line);border-radius:999px;color:var(--sb-muted);font-size:11px;}
+.sb-related{margin-top:42px;margin-bottom:76px;padding-top:28px;border-top:1px solid var(--sb-line);}
+.sb-related h2{
+  margin:0 0 16px;color:var(--sb-text);
+  font:700 18px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.sb-related-card{
+  display:flex;flex-direction:column;gap:7px;padding:15px 16px;
+  border:1px solid var(--sb-line);border-radius:13px;background:var(--sb-surface-soft);
+  color:var(--sb-text) !important;text-decoration:none !important;
+}
+.sb-related-card:hover{
+  border-color:color-mix(in srgb,var(--sb-primary) 55%,var(--sb-line));
+  background:var(--sb-primary-soft);
+}
+.sb-related-card strong{color:var(--sb-text);font-size:13px;}
+.sb-related-card span{color:var(--sb-muted);font-size:12px;line-height:1.45;}
+
+@media(max-width:720px){
+  .sb-bar{padding-inline:14px;}
+  .sb-nav{gap:10px;}
+  .sb-nav a{font-size:12px;}
+  .sb-brand{font-size:13px;}
+  .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
+  .sb-toc-text{display:none;}
+  .sb-related-grid{grid-template-columns:1fr;}
+}
+/* Duas palavras curtas cabem em qualquer telefone. Esconder a segunda tirava
+   o unico caminho para o mapa na tela onde ele mais importa. */
+@media(max-width:520px){
+  .sb-brand{gap:7px;font-size:0;}
+  .sb-nav{gap:14px;}
+  .sb-nav a{font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Agosto de 2026</p>
+    <p class="cover-summary">A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.</p>
+  </div>
+</header>
+
+<main class="content">
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a href="#introdução">Introdução</a></li>
+<li><a href="#1-premissa-de-carregamento-de-pá-e-escala-da-rotação">1.
+Premissa de Carregamento de Pá e Escala da Rotação</a></li>
+<li><a href="#2-invariância-da-esteira-macroscópica">2. Invariância da
+Esteira Macroscópica</a></li>
+<li><a href="#3-forças-longitudinais-no-plano-do-disco">3. Forças
+Longitudinais no Plano do Disco</a></li>
+<li><a href="#4-potência-induzida-e-de-perfil">4. Potência Induzida e de
+Perfil</a></li>
+<li><a href="#5-torque">5. Torque</a></li>
+<li><a href="#6-tabela-consolidada-de-escala-analítica">6. Tabela
+Consolidada de Escala Analítica</a></li>
+<li><a
+href="#7-tratamento-exato-sem-a-hipótese-de-carregamento-de-pá-constante">7.
+Tratamento Exato sem a Hipótese de Carregamento de Pá Constante</a></li>
+<li><a href="#conclusão">Conclusão</a></li>
+</ul>
+<hr />
+<h2 id="introdução">Introdução</h2>
+<p>Duplicar a <a
+href="https://en.wikipedia.org/wiki/Solidity_(rotor)">solidez</a> de um
+rotor pela adição de pás, com raio e corda constantes, dobra a área de
+pá exposta ao escoamento sem alterar a geometria de cada pá. Este white
+paper propaga essa mudança pela cinemática do rotor até as forças,
+potências e torques que o caracterizam, sob tração <span
+class="math inline">\(T\)</span>, velocidade de avanço <span
+class="math inline">\(V\)</span>, ângulo de inclinação do eixo <span
+class="math inline">\(\alpha\)</span> e <a
+href="https://en.wikipedia.org/wiki/Helicopter_flight_controls#Collective_pitch_control">passo
+coletivo</a> <span class="math inline">\(\theta_0\)</span> fixos. O
+rotor é rígido, sem <a
+href="https://en.wikipedia.org/wiki/Flapping_hinge">batimento</a> (<span
+class="math inline">\(\beta=0\)</span>) e sem comandos cíclicos.</p>
+<p>O problema exige uma hipótese de fechamento. A tração e o passo
+coletivo fixos não determinam sozinhos a rotação do rotor de solidez
+dobrada. As Seções 1 a 6 adotam a hipótese padrão de análise de
+desempenho, segundo a qual o carregamento de pá <span
+class="math inline">\(C_T/\sigma\)</span> permanece constante quando
+<span class="math inline">\(\theta_0\)</span> não muda, e desenvolvem
+todos os resultados sob ela. A Seção 7 abandona essa hipótese, resolve o
+fechamento exato de <a
+href="https://en.wikipedia.org/wiki/Blade_element_theory">elemento de
+pá</a> e mostra quais resultados sobrevivem intactos e quais mudam de
+valor.</p>
+<h2 id="1-premissa-de-carregamento-de-pá-e-escala-da-rotação">1.
+Premissa de Carregamento de Pá e Escala da Rotação</h2>
+<p>A relação dimensional entre tração e coeficiente de tração é uma
+identidade de definição:</p>
+<p><span class="math display">\[ T = \rho A (\Omega R)^2 C_T
+\]</span></p>
+<p>Para obter como <span class="math inline">\(\Omega\)</span> deve
+variar, adota-se a hipótese de que o carregamento de pá <span
+class="math inline">\(C_T/\sigma\)</span>, proporcional ao <a
+href="https://en.wikipedia.org/wiki/Lift_coefficient">coeficiente de
+sustentação</a> médio das seções da pá, permanece constante quando o
+passo coletivo <span class="math inline">\(\theta_0\)</span> não é
+alterado:</p>
+<p><span class="math display">\[ \frac{C_{T1}}{\sigma_1} =
+\frac{C_{T2}}{\sigma_2} \implies C_{T2} = 2\,C_{T1} \]</span></p>
+<p>Esta é uma aproximação de primeira ordem, não uma consequência exata
+de <span class="math inline">\(\theta_0\)</span> constante. A formulação
+completa de elemento de pá para um rotor sem torção e sem batimento
+fornece</p>
+<p><span class="math display">\[ \frac{C_T}{\sigma} =
+\frac{a}{2}\left[\frac{\theta_0}{3}\left(1+\frac{3}{2}\mu^2\right) -
+\frac{\lambda}{2}\right] \]</span></p>
+<p>que depende de <span class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\lambda\)</span>, e não apenas de <span
+class="math inline">\(\theta_0\)</span>. Como <span
+class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\lambda\)</span> variam neste problema, a
+conservação de <span class="math inline">\(C_T/\sigma\)</span> vale como
+tendência dominante enquanto o termo em <span
+class="math inline">\(\mu^2\)</span> for secundário frente ao termo em
+<span class="math inline">\(\theta_0\)</span>. A Seção 7 mede o preço
+dessa simplificação.</p>
+<p>Impondo <span class="math inline">\(T_1=T_2\)</span> na identidade de
+definição, com <span class="math inline">\(C_{T2}=2C_{T1}\)</span>:</p>
+<p><span class="math display">\[ \rho A (\Omega_1 R)^2 C_{T1} = \rho A
+(\Omega_2 R)^2 (2 C_{T1}) \implies \Omega_2 = \frac{\Omega_1}{\sqrt{2}}
+\]</span></p>
+<p>Fisicamente, dobrar o número de pás dobra a capacidade de gerar
+sustentação. Para não exceder a tração especificada com o mesmo ângulo
+de ataque médio de pá, a rotação cai para cerca de <span
+class="math inline">\(70{,}7\%\)</span> do valor original. A pressão
+dinâmica de referência do disco, proporcional a <span
+class="math inline">\((\Omega R)^2\)</span>, cai à metade, e por isso o
+coeficiente de tração dobra para representar a mesma força
+dimensional.</p>
+<h2 id="2-invariância-da-esteira-macroscópica">2. Invariância da Esteira
+Macroscópica</h2>
+<p>A <a href="https://en.wikipedia.org/wiki/Actuator_disc_theory">teoria
+do disco atuador</a> determina a velocidade induzida sem qualquer
+referência ao número de pás:</p>
+<p><span class="math display">\[ T = 2\rho A U v_i, \qquad U =
+\sqrt{(V\cos\alpha)^2+(V\sin\alpha+v_i)^2} \]</span></p>
+<p>Como <span class="math inline">\(T\)</span>, <span
+class="math inline">\(V\)</span>, <span
+class="math inline">\(\alpha\)</span>, <span
+class="math inline">\(\rho\)</span> e <span
+class="math inline">\(A\)</span> permanecem inalterados, e a equação
+admite solução única em <span class="math inline">\(v_i\)</span> para
+<span class="math inline">\(v_i&gt;0\)</span>, segue que <span
+class="math inline">\(v_{i2}=v_{i1}\)</span>. A esteira macroscópica
+responde à força global aplicada sobre o escoamento e é indiferente à
+forma como essa força se reparte entre as pás.</p>
+<p>Com <span class="math inline">\(\Omega_2=\Omega_1/\sqrt{2}\)</span>,
+a <a href="https://en.wikipedia.org/wiki/Advance_ratio">razão de
+avanço</a> e a razão de influxo escalam de forma puramente
+algébrica:</p>
+<p><span class="math display">\[ \mu_2 = \frac{V\cos\alpha}{\Omega_2 R}
+= \sqrt{2}\,\mu_1, \qquad \lambda_2 = \frac{V\sin\alpha+v_{i2}}{\Omega_2
+R} = \sqrt{2}\,\lambda_1 \]</span></p>
+<p>O ângulo de esteira resulta de:</p>
+<p><span class="math display">\[ \tan\chi = \frac{\mu}{\lambda} =
+\frac{V\cos\alpha}{V\sin\alpha+v_i} \]</span></p>
+<p>expressão da qual <span class="math inline">\(\Omega\)</span> está
+ausente, porque ele se cancela na razão <span
+class="math inline">\(\mu/\lambda\)</span>. Logo <span
+class="math inline">\(\chi_2=\chi_1\)</span>. As duas velocidades que
+definem o ângulo são as mesmas nos dois rotores, e a esteira sai do
+disco com a mesma inclinação.</p>
+<p>A distinção entre o nível do disco e o nível da pá é nítida. Sob a
+ótica do disco inteiro, nada mudou. A esteira a jusante tem a mesma
+inclinação e a mesma velocidade axial induzida, porque a força líquida
+sobre o escoamento é a mesma.</p>
+<p>Sob a ótica de uma pá individual, o quadro é outro. Girando mais
+devagar, mas atravessada pelo mesmo escoamento de avanço <span
+class="math inline">\(V\)</span> e pela mesma velocidade induzida <span
+class="math inline">\(v_i\)</span>, cada pá encontra esse escoamento
+como proporcionalmente maior frente à sua própria velocidade tangencial,
+que caiu. O campo de velocidades não mudou. Mudou a razão entre
+grandezas fixas, <span class="math inline">\(V\cos\alpha\)</span> e
+<span class="math inline">\(V\sin\alpha+v_i\)</span>, e uma grandeza que
+diminuiu, <span class="math inline">\(\Omega R\)</span>. É essa razão
+que faz <span class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\lambda\)</span> crescerem por um fator <span
+class="math inline">\(\sqrt{2}\)</span>.</p>
+<h2 id="3-forças-longitudinais-no-plano-do-disco">3. Forças
+Longitudinais no Plano do Disco</h2>
+<p>O componente induzido da força longitudinal no plano do disco, para
+um rotor sem batimento, é dado por</p>
+<p><span class="math display">\[ C_{Hi} = \frac{\sigma
+a}{4}\,\theta_0\,\mu\lambda \]</span></p>
+<p>Substituindo <span class="math inline">\(\sigma_2=2\sigma_1\)</span>,
+<span class="math inline">\(\mu_2=\sqrt{2}\mu_1\)</span> e <span
+class="math inline">\(\lambda_2=\sqrt{2}\lambda_1\)</span>:</p>
+<p><span class="math display">\[ C_{Hi2} = \frac{2\sigma_1
+a}{4}\theta_0(\sqrt{2}\mu_1)(\sqrt{2}\lambda_1) = 4\,C_{Hi1}
+\]</span></p>
+<p>e, em termos dimensionais, com <span class="math inline">\(H_i =
+C_{Hi}\,\rho A(\Omega R)^2\)</span>:</p>
+<p><span class="math display">\[ H_{i2} = 4\,C_{Hi1}\,\rho
+A\left(\frac{\Omega_1 R}{\sqrt{2}}\right)^2 = 2\,H_{i1} \]</span></p>
+<p>A física por trás do fator quatro no coeficiente está no elemento de
+pá. A velocidade relativa vista por uma seção da pá se decompõe em uma
+componente tangencial, dominada por <span class="math inline">\(\Omega
+R\)</span>, e uma componente normal ao disco, <span
+class="math inline">\(V\sin\alpha+v_i\)</span>, praticamente
+independente do azimute nesta formulação sem batimento. O ângulo de <a
+href="https://en.wikipedia.org/wiki/Angle_of_attack">inflow</a> local,
+<span class="math inline">\(\varphi \approx (V\sin\alpha+v_i)/(\Omega
+R)\)</span> para pequenos ângulos, coincide com <span
+class="math inline">\(\lambda\)</span> e mede a inclinação do vento
+relativo em relação ao plano de rotação.</p>
+<p>Como <span class="math inline">\(\Omega\)</span> cai e <span
+class="math inline">\(V\sin\alpha+v_i\)</span> não muda, <span
+class="math inline">\(\varphi\)</span> cresce. O vento relativo passa a
+incidir sobre a pá com maior inclinação. A sustentação de cada seção é
+perpendicular ao vento relativo local, acompanha essa inclinação e se
+afasta da normal ao disco. A projeção dessa sustentação inclinada sobre
+o plano do disco, integrada ao longo da pá e da revolução, é a força
+<span class="math inline">\(H\)</span> induzida.</p>
+<p>O resultado dimensional dispensa esse percurso. Substituindo <span
+class="math inline">\(\mu(\Omega R)=V\cos\alpha\)</span> e <span
+class="math inline">\(\lambda(\Omega R)=V\sin\alpha+v_i\)</span> na
+expressão de <span class="math inline">\(H_i\)</span>:</p>
+<p><span class="math display">\[ H_i = C_{Hi}\,\rho A(\Omega R)^2 = \rho
+A\,\frac{\sigma a}{4}\theta_0\,(V\cos\alpha)(V\sin\alpha+v_i)
+\]</span></p>
+<p>As duas potências de <span class="math inline">\((\Omega R)\)</span>
+da definição de <span class="math inline">\(C_{Hi}\)</span> cancelam
+contra o produto <span class="math inline">\(\mu\lambda\)</span>, e
+<span class="math inline">\(\Omega\)</span> desaparece. Restam apenas
+grandezas fixas no problema, <span
+class="math inline">\(\sigma\)</span>, <span
+class="math inline">\(\theta_0\)</span>, <span
+class="math inline">\(V\)</span>, <span
+class="math inline">\(\alpha\)</span> e <span
+class="math inline">\(v_i\)</span>. A força <span
+class="math inline">\(H\)</span> induzida dobra porque a área de pá
+dobrou, e não porque a rotação caiu. O crescimento de <span
+class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\lambda\)</span> e a queda de <span
+class="math inline">\(\Omega\)</span> são a mesma conclusão vista de uma
+pá individual, e se cancelam entre si.</p>
+<p>O componente de perfil segue de forma análoga, mas sem esse
+cancelamento:</p>
+<p><span class="math display">\[ C_{Hp} = \frac{\sigma c_{d0}}{4}\mu
+\implies C_{Hp2} = \frac{2\sigma_1 c_{d0}}{4}(\sqrt{2}\mu_1) =
+2\sqrt{2}\,C_{Hp1} \]</span></p>
+<p><span class="math display">\[ H_{p2} = 2\sqrt{2}\,C_{Hp1}\,\rho
+A\left(\frac{\Omega_1 R}{\sqrt{2}}\right)^2 = \sqrt{2}\,H_{p1}
+\]</span></p>
+<p>Há o dobro de pás oferecendo <a
+href="https://en.wikipedia.org/wiki/Parasitic_drag">arrasto de forma</a>
+ao escoamento de avanço. A rotação menor alivia parte desse efeito, mas
+não o compensa, e resta um aumento líquido de <span
+class="math inline">\(\sqrt{2}\)</span> na força de arrasto de perfil no
+plano do disco.</p>
+<h2 id="4-potência-induzida-e-de-perfil">4. Potência Induzida e de
+Perfil</h2>
+<p>A potência induzida é <span class="math inline">\(P_i =
+T(V\sin\alpha+v_i)\)</span>. Nenhum dos três termos do lado direito se
+altera, logo <span class="math inline">\(P_{i2}=P_{i1}\)</span>. O rotor
+de solidez dobrada empurra a mesma massa de ar com a mesma velocidade, e
+gasta a mesma potência para isso.</p>
+<p>O coeficiente correspondente escala com <span
+class="math inline">\(\Omega\)</span> através da definição <span
+class="math inline">\(C_{Pi}=P_i/[\rho A(\Omega R)^3]\)</span>, que se
+reduz identicamente a <span class="math inline">\(C_{Pi}=\lambda
+C_T\)</span>:</p>
+<p><span class="math display">\[ C_{Pi2} = \lambda_2 C_{T2} =
+(\sqrt{2}\lambda_1)(2C_{T1}) = 2\sqrt{2}\,C_{Pi1} \]</span></p>
+<p>O crescimento de <span class="math inline">\(C_{Pi}\)</span> não
+indica mudança física alguma na potência exigida. Ele indica que a mesma
+potência está sendo dividida por um cubo da velocidade de ponta de pá,
+<span class="math inline">\((\Omega R)^3\)</span>, que diminuiu.</p>
+<p>A potência de perfil, no regime de referência sem correção de avanço,
+tem coeficiente <span class="math inline">\(C_{Pp}\approx \sigma
+c_{d0}/8\)</span>, linear em <span class="math inline">\(\sigma\)</span>
+e independente de <span class="math inline">\(\Omega\)</span>, <span
+class="math inline">\(\mu\)</span> ou <span
+class="math inline">\(\lambda\)</span>:</p>
+<p><span class="math display">\[ C_{Pp2} = \frac{2\sigma_1 c_{d0}}{8} =
+2\,C_{Pp1} \]</span></p>
+<p>Este coeficiente vem da integração do arrasto de perfil ao longo de
+uma pá em rotação pura, sem escoamento de avanço. Em voo avante, a pá
+que avança soma <span class="math inline">\(V\cos\alpha\)</span> à sua
+velocidade tangencial e a pá que recua subtrai. O arrasto de perfil
+cresce com o quadrado da velocidade local, e por isso o ganho no lado
+que avança supera a perda no lado que recua. A média azimutal da
+potência de perfil fica acima do valor em pairado, mesmo com o passo
+inalterado.</p>
+<p>Integrar esse desequilíbrio ao longo do azimute e do raio produz o
+fator de correção de avanço, tipicamente escrito como <span
+class="math inline">\((1+4{,}6\mu^2)\)</span>. A dependência quadrática
+em <span class="math inline">\(\mu\)</span> é herdada da dependência
+quadrática do arrasto na velocidade, e o coeficiente numérico sai da
+integração da distribuição de velocidade sobre o disco. Como a solidez
+dobrada eleva <span class="math inline">\(\mu\)</span> por <span
+class="math inline">\(\sqrt{2}\)</span>, esse fator cresce e a potência
+de perfil real fica acima da estimativa sem correção. A escala dominante
+continua sendo a duplicação de área, e por isso a análise segue com
+<span class="math inline">\(C_{Pp}\approx \sigma c_{d0}/8\)</span>.</p>
+<p>Em termos dimensionais, com <span
+class="math inline">\(P_p=C_{Pp}\,\rho A(\Omega R)^3\)</span>:</p>
+<p><span class="math display">\[ P_{p2} = 2\,C_{Pp1}\,\rho
+A\left(\frac{\Omega_1 R}{\sqrt{2}}\right)^3 = \frac{1}{\sqrt{2}}\,P_{p1}
+\]</span></p>
+<p>Aqui está o resultado de maior interesse prático. A potência de
+perfil cresce linearmente com a <a
+href="https://en.wikipedia.org/wiki/Wetted_area">área molhada</a> de pá,
+mas cai com o cubo da velocidade tangencial. Frear a rotação para <span
+class="math inline">\(70{,}7\%\)</span> derruba a potência de perfil
+para essa mesma fração, apesar do dobro de pás gerando <a
+href="https://en.wikipedia.org/wiki/Viscosity">atrito viscoso</a>.
+Somado à invariância de <span class="math inline">\(P_i\)</span>, isso
+significa que a potência total do rotor pode cair quando a solidez
+dobra.</p>
+<h2 id="5-torque">5. Torque</h2>
+<p>O torque relaciona-se à potência pela cinemática do eixo, <span
+class="math inline">\(Q=P/\Omega\)</span>, identidade da qual decorre
+também <span class="math inline">\(C_Q=C_P\)</span> sob a convenção
+usual de adimensionalização.</p>
+<p><span class="math display">\[ Q_{i2} = \frac{P_{i2}}{\Omega_2} =
+\frac{P_{i1}}{\Omega_1/\sqrt{2}} = \sqrt{2}\,Q_{i1}, \qquad
+C_{Qi2}=C_{Pi2}=2\sqrt{2}\,C_{Qi1} \]</span></p>
+<p>Sustentar a mesma potência induzida com uma rotação menor exige
+torque induzido maior no eixo, por um fator <span
+class="math inline">\(\sqrt{2}\)</span>.</p>
+<p><span class="math display">\[ Q_{p2} = \frac{P_{p2}}{\Omega_2} =
+\frac{P_{p1}/\sqrt{2}}{\Omega_1/\sqrt{2}} = Q_{p1}, \qquad
+C_{Qp2}=C_{Pp2}=2\,C_{Qp1} \]</span></p>
+<p>O torque de perfil resulta invariante. A área de pá dobrada dobra a
+alavanca de atrito viscoso, mas a rotação menor reduz a potência de
+perfil na mesma proporção em que reduz a própria rotação, e o quociente
+<span class="math inline">\(P_p/\Omega\)</span> não muda.</p>
+<h2 id="6-tabela-consolidada-de-escala-analítica">6. Tabela Consolidada
+de Escala Analítica</h2>
+<p>A tabela reúne os fatores multiplicadores obtidos nas Seções 1 a 5,
+todos sob a hipótese de carregamento de pá constante. Cada linha
+relaciona o rotor de solidez dobrada ao rotor de referência, com a
+equação que origina o fator.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Grandeza</th>
+<th>Variável</th>
+<th>Equação de origem</th>
+<th>Fator (Novo sobre Original)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solidez</td>
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>dado</td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>Tração</td>
+<td><span class="math inline">\(T\)</span></td>
+<td>dado</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Velocidade induzida</td>
+<td><span class="math inline">\(v_i\)</span></td>
+<td><span class="math inline">\(T=2\rho A U v_i\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Rotação</td>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td><span
+class="math inline">\(C_{T1}/\sigma_1=C_{T2}/\sigma_2\)</span></td>
+<td><span class="math inline">\(1/\sqrt{2}\approx 0{,}707\)</span></td>
+</tr>
+<tr>
+<td>Razão de avanço</td>
+<td><span class="math inline">\(\mu\)</span></td>
+<td><span class="math inline">\(\mu=V\cos\alpha/(\Omega R)\)</span></td>
+<td><span class="math inline">\(\sqrt{2}\approx 1{,}414\)</span></td>
+</tr>
+<tr>
+<td>Razão de influxo</td>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(\lambda=(V\sin\alpha+v_i)/(\Omega
+R)\)</span></td>
+<td><span class="math inline">\(\sqrt{2}\approx 1{,}414\)</span></td>
+</tr>
+<tr>
+<td>Ângulo de esteira</td>
+<td><span class="math inline">\(\chi\)</span></td>
+<td><span class="math inline">\(\tan\chi=\mu/\lambda\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Carregamento de pá</td>
+<td><span class="math inline">\(C_T/\sigma\)</span></td>
+<td>hipótese da Seção 1</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente de tração</td>
+<td><span class="math inline">\(C_T\)</span></td>
+<td><span class="math inline">\(T=\rho A(\Omega R)^2 C_T\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente <span class="math inline">\(C_H\)</span> induzido</td>
+<td><span class="math inline">\(C_{Hi}\)</span></td>
+<td><span class="math inline">\(C_{Hi}=\frac{\sigma
+a}{4}\theta_0\mu\lambda\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente <span class="math inline">\(C_H\)</span> de perfil</td>
+<td><span class="math inline">\(C_{Hp}\)</span></td>
+<td><span class="math inline">\(C_{Hp}=\frac{\sigma
+c_{d0}}{4}\mu\)</span></td>
+<td><span class="math inline">\(2\sqrt{2}\approx 2{,}828\)</span></td>
+</tr>
+<tr>
+<td>Força <span class="math inline">\(H\)</span> induzida</td>
+<td><span class="math inline">\(H_i\)</span></td>
+<td><span class="math inline">\(H_i=\rho A\frac{\sigma
+a}{4}\theta_0(V\cos\alpha)(V\sin\alpha+v_i)\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>Força <span class="math inline">\(H\)</span> de perfil</td>
+<td><span class="math inline">\(H_p\)</span></td>
+<td><span class="math inline">\(H_p=C_{Hp}\,\rho A(\Omega
+R)^2\)</span></td>
+<td><span class="math inline">\(\sqrt{2}\approx 1{,}414\)</span></td>
+</tr>
+<tr>
+<td>Potência induzida</td>
+<td><span class="math inline">\(P_i\)</span></td>
+<td><span class="math inline">\(P_i=T(V\sin\alpha+v_i)\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente de potência induzida</td>
+<td><span class="math inline">\(C_{Pi}\)</span>, <span
+class="math inline">\(C_{Qi}\)</span></td>
+<td><span class="math inline">\(C_{Pi}=\lambda C_T\)</span></td>
+<td><span class="math inline">\(2\sqrt{2}\approx 2{,}828\)</span></td>
+</tr>
+<tr>
+<td>Potência de perfil</td>
+<td><span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(P_p=C_{Pp}\,\rho A(\Omega
+R)^3\)</span></td>
+<td><span class="math inline">\(1/\sqrt{2}\approx 0{,}707\)</span></td>
+</tr>
+<tr>
+<td>Coeficiente de potência de perfil</td>
+<td><span class="math inline">\(C_{Pp}\)</span>, <span
+class="math inline">\(C_{Qp}\)</span></td>
+<td><span class="math inline">\(C_{Pp}\approx \sigma
+c_{d0}/8\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td>Torque induzido</td>
+<td><span class="math inline">\(Q_i\)</span></td>
+<td><span class="math inline">\(Q=P/\Omega\)</span></td>
+<td><span class="math inline">\(\sqrt{2}\approx 1{,}414\)</span></td>
+</tr>
+<tr>
+<td>Torque de perfil</td>
+<td><span class="math inline">\(Q_p\)</span></td>
+<td><span class="math inline">\(Q=P/\Omega\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>O rotor de solidez dobrada mantém a esteira, mantém a potência
+induzida e reduz a potência de perfil. Paga por isso com forças maiores
+no plano do disco e torque induzido maior.</p>
+<h2
+id="7-tratamento-exato-sem-a-hipótese-de-carregamento-de-pá-constante">7.
+Tratamento Exato sem a Hipótese de Carregamento de Pá Constante</h2>
+<h3 id="fechamento-sem-aproximação">Fechamento sem aproximação</h3>
+<p>Sem impor <span class="math inline">\(C_T/\sigma\)</span> constante,
+o fechamento do problema passa a ser a equação completa de elemento de
+pá, escrita para os dois rotores:</p>
+<p><span class="math display">\[ \frac{C_T}{\sigma} =
+\frac{a}{2}\left[\frac{\theta_0}{3}\left(1+\frac{3}{2}\mu^2\right) -
+\frac{\lambda}{2}\right] \]</span></p>
+<p>A invariância de <span class="math inline">\(v_i\)</span> obtida na
+Seção 2 vem só da teoria de momento e continua valendo. Definindo <span
+class="math inline">\(x\equiv\Omega_2/\Omega_1\)</span>, ela permite
+escrever <span class="math inline">\(\mu_2\)</span>, <span
+class="math inline">\(\lambda_2\)</span> e <span
+class="math inline">\(C_{T2}\)</span> em função de <span
+class="math inline">\(x\)</span> e das grandezas do rotor de
+referência:</p>
+<p><span class="math display">\[ \mu_2 = \frac{\mu_1}{x}, \qquad
+\lambda_2 = \frac{\lambda_1}{x}, \qquad C_{T2} = \frac{C_{T1}}{x^2}
+\]</span></p>
+<p>Substituindo essas três relações na equação de elemento de pá do
+rotor 2, com <span class="math inline">\(\sigma_2=n\sigma_1\)</span>,
+onde <span class="math inline">\(n=2\)</span> no caso de solidez
+dobrada, e eliminando <span class="math inline">\(C_{T1}\)</span> pela
+equação de elemento de pá já satisfeita pelo rotor 1, resulta uma <a
+href="https://en.wikipedia.org/wiki/Quadratic_equation">equação
+quadrática</a> exata em <span class="math inline">\(x\)</span>:</p>
+<p><span class="math display">\[ 2n\theta_0\,x^2 - 3n\lambda_1\,x +
+\left[3(n-1)\theta_0\mu_1^2 - 2\theta_0 + 3\lambda_1\right] = 0
+\]</span></p>
+<p>Para <span class="math inline">\(n=2\)</span>:</p>
+<p><span class="math display">\[ 4\theta_0\,x^2 - 6\lambda_1\,x +
+\left(3\theta_0\mu_1^2 + 3\lambda_1 - 2\theta_0\right) = 0 \]</span></p>
+<p><span class="math display">\[ x = \frac{3\lambda_1 \pm
+\sqrt{9\lambda_1^2 - 12\theta_0^2\mu_1^2 - 12\theta_0\lambda_1 +
+8\theta_0^2}}{4\theta_0} \]</span></p>
+<p>Das duas raízes, apenas a positiva, condizente com a redução física
+de <span class="math inline">\(\Omega\)</span>, é admissível. O fator
+universal <span class="math inline">\(1/\sqrt{2}\)</span> desaparece. O
+valor de <span class="math inline">\(x\)</span> depende da condição de
+voo do rotor de referência, através de <span
+class="math inline">\(\mu_1\)</span>, <span
+class="math inline">\(\lambda_1\)</span> e <span
+class="math inline">\(\theta_0\)</span>. Dois rotores com a mesma
+solidez de referência, voando em condições distintas, escalam a rotação
+de formas diferentes ao dobrar a solidez. A hipótese da Seção 1
+corresponde ao caso particular <span
+class="math inline">\(x=1/\sqrt{n}\)</span>, e a substituição direta
+mostra que essa raiz só satisfaz a quadrática quando o termo em <span
+class="math inline">\(\mu_1^2\)</span> é desprezado.</p>
+<h3 id="quais-grandezas-sobrevivem-intactas">Quais grandezas sobrevivem
+intactas</h3>
+<p>Recalculando cada grandeza a partir de identidades exatas, sem impor
+<span class="math inline">\(x=1/\sqrt{2}\)</span>, dois grupos se
+separam.</p>
+<p>O primeiro grupo não contém <span class="math inline">\(x\)</span> e
+vale para qualquer fechamento:</p>
+<p><span class="math display">\[ v_{i2}=v_{i1}, \qquad P_{i2}=P_{i1},
+\qquad \chi_2=\chi_1, \qquad H_{i2}=n\,H_{i1}, \qquad
+C_{Pp2}=C_{Qp2}=n\,C_{Pp1} \]</span></p>
+<p>As três primeiras já eram esperadas, pois saem apenas da teoria de
+momento. As duas últimas surpreendem, porque vêm de expressões de
+elemento de pá. A razão é a mesma nos dois casos: reduzidas às variáveis
+primitivas do problema, essas expressões nunca contêm <span
+class="math inline">\(\Omega\)</span> isoladamente. A força <span
+class="math inline">\(H\)</span> induzida perde <span
+class="math inline">\(\Omega\)</span> no cancelamento demonstrado na
+Seção 3. O coeficiente de potência de perfil depende só de <span
+class="math inline">\(\sigma\)</span> e <span
+class="math inline">\(c_{d0}\)</span>.</p>
+<p>O segundo grupo depende de <span
+class="math inline">\(x\)</span>:</p>
+<p><span class="math display">\[ \mu_2=\frac{\mu_1}{x}, \quad
+\lambda_2=\frac{\lambda_1}{x}, \quad C_{T2}=\frac{C_{T1}}{x^2}, \quad
+\frac{C_{T2}}{\sigma_2}=\frac{1}{nx^2}\frac{C_{T1}}{\sigma_1}
+\]</span></p>
+<p><span class="math display">\[ H_{p2}=nx\,H_{p1}, \qquad
+Q_{i2}=\frac{Q_{i1}}{x}, \qquad P_{p2}=nx^3\,P_{p1}, \qquad
+Q_{p2}=nx^2\,Q_{p1} \]</span></p>
+<p>O torque de perfil inverte a conclusão da Seção 5. Lá ele resultava
+invariante. Aqui vale <span
+class="math inline">\(Q_{p2}=nx^2Q_{p1}\)</span>, e a invariância só
+reaparece no caso particular <span
+class="math inline">\(x=1/\sqrt{n}\)</span>. Como em geral <span
+class="math inline">\(x\neq1/\sqrt{n}\)</span>, o torque de perfil muda,
+para mais ou para menos conforme <span class="math inline">\(x\)</span>
+supere ou não <span class="math inline">\(1/\sqrt{n}\)</span>.</p>
+<p>A tabela consolida a classificação para <span
+class="math inline">\(n=2\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th>Grandeza</th>
+<th>Variável</th>
+<th>Fator exato em função de <span class="math inline">\(x\)</span></th>
+<th>Depende de <span class="math inline">\(x\)</span>?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Velocidade induzida</td>
+<td><span class="math inline">\(v_i\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Potência induzida</td>
+<td><span class="math inline">\(P_i\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Ângulo de esteira</td>
+<td><span class="math inline">\(\chi\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Força <span class="math inline">\(H\)</span> induzida</td>
+<td><span class="math inline">\(H_i\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Coeficiente de potência de perfil</td>
+<td><span class="math inline">\(C_{Pp}\)</span>, <span
+class="math inline">\(C_{Qp}\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td>Não</td>
+</tr>
+<tr>
+<td>Rotação</td>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td><span class="math inline">\(x\)</span>, raiz da quadrática</td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Razão de avanço</td>
+<td><span class="math inline">\(\mu\)</span></td>
+<td><span class="math inline">\(1/x\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Razão de influxo</td>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(1/x\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Coeficiente de tração</td>
+<td><span class="math inline">\(C_T\)</span></td>
+<td><span class="math inline">\(1/x^2\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Carregamento de pá</td>
+<td><span class="math inline">\(C_T/\sigma\)</span></td>
+<td><span class="math inline">\(1/(2x^2)\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Força <span class="math inline">\(H\)</span> de perfil</td>
+<td><span class="math inline">\(H_p\)</span></td>
+<td><span class="math inline">\(2x\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Torque induzido</td>
+<td><span class="math inline">\(Q_i\)</span></td>
+<td><span class="math inline">\(1/x\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Potência de perfil</td>
+<td><span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(2x^3\)</span></td>
+<td>Sim</td>
+</tr>
+<tr>
+<td>Torque de perfil</td>
+<td><span class="math inline">\(Q_p\)</span></td>
+<td><span class="math inline">\(2x^2\)</span></td>
+<td>Sim</td>
+</tr>
+</tbody>
+</table>
+<h3 id="exemplo-numérico">Exemplo numérico</h3>
+<p>Considere um rotor de referência com diâmetro <span
+class="math inline">\(D=2\,\text{m}\)</span>, portanto <span
+class="math inline">\(R=1\,\text{m}\)</span>, rotação <span
+class="math inline">\(\Omega_1=1400\,\text{rpm}\)</span> equivalente a
+<span class="math inline">\(146{,}608\,\text{rad/s}\)</span>, solidez
+<span class="math inline">\(\sigma_1=0{,}1\)</span>, voando com <span
+class="math inline">\(V=30\,\text{m/s}\)</span> e ângulo de disco <span
+class="math inline">\(\alpha=0°\)</span>, densidade ao nível do mar
+<span class="math inline">\(\rho=1{,}225\,\text{kg/m}^3\)</span>,
+inclinação de sustentação <span
+class="math inline">\(a=5{,}73\,\text{rad}^{-1}\)</span> e coeficiente
+de arrasto de perfil <span class="math inline">\(c_{d0}=0{,}01\)</span>.
+Adota-se <span class="math inline">\(C_{T1}=0{,}008\)</span>,
+correspondente a um carregamento de pá <span
+class="math inline">\(C_{T1}/\sigma_1=0{,}08\)</span>, valor moderado e
+representativo.</p>
+<p>Resolvendo a teoria de momento para <span
+class="math inline">\(v_{i1}\)</span> e, em seguida, a equação de
+elemento de pá para <span class="math inline">\(\theta_0\)</span>,
+obtêm-se os parâmetros do rotor de referência:</p>
+<p><span class="math display">\[ v_{i1}=2{,}853\,\text{m/s}, \qquad
+\mu_1=0{,}2046, \qquad \lambda_1=0{,}01946, \qquad \theta_0=6{,}09°
+\]</span></p>
+<p>Duplicando a solidez para <span
+class="math inline">\(\sigma_2=0{,}2\)</span> sob os mesmos <span
+class="math inline">\(T\)</span>, <span
+class="math inline">\(V\)</span>, <span
+class="math inline">\(\alpha\)</span> e <span
+class="math inline">\(\theta_0\)</span>, a quadrática da Seção 7.1
+fornece <span class="math inline">\(x=0{,}7290\)</span>, contra <span
+class="math inline">\(x=1/\sqrt{2}=0{,}7071\)</span> do tratamento
+aproximado. A tabela compara os dois rotores. A coluna de variação
+percentual é a resposta de projeto: quanto cada grandeza muda ao dobrar
+a solidez, segundo o fechamento exato.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 24%" />
+<col style="width: 24%" />
+<col style="width: 12%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr>
+<th>Grandeza</th>
+<th>Rotor 1, referência</th>
+<th>Rotor 2, exato</th>
+<th>Variação</th>
+<th>Rotor 2, aproximado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td><span class="math inline">\(1400\,\text{rpm}\)</span></td>
+<td><span class="math inline">\(1021\,\text{rpm}\)</span></td>
+<td><span class="math inline">\(-27{,}1\%\)</span></td>
+<td><span class="math inline">\(990\,\text{rpm}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\mu\)</span></td>
+<td><span class="math inline">\(0{,}205\)</span></td>
+<td><span class="math inline">\(0{,}281\)</span></td>
+<td><span class="math inline">\(+37{,}2\%\)</span></td>
+<td><span class="math inline">\(0{,}289\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(0{,}0195\)</span></td>
+<td><span class="math inline">\(0{,}0267\)</span></td>
+<td><span class="math inline">\(+37{,}2\%\)</span></td>
+<td><span class="math inline">\(0{,}0275\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_T\)</span></td>
+<td><span class="math inline">\(0{,}0080\)</span></td>
+<td><span class="math inline">\(0{,}0151\)</span></td>
+<td><span class="math inline">\(+88{,}1\%\)</span></td>
+<td><span class="math inline">\(0{,}0160\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_T/\sigma\)</span></td>
+<td><span class="math inline">\(0{,}0800\)</span></td>
+<td><span class="math inline">\(0{,}0753\)</span></td>
+<td><span class="math inline">\(-5{,}9\%\)</span></td>
+<td><span class="math inline">\(0{,}0800\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(P_i\)</span></td>
+<td><span class="math inline">\(1888\,\text{W}\)</span></td>
+<td><span class="math inline">\(1888\,\text{W}\)</span></td>
+<td><span class="math inline">\(0{,}0\%\)</span></td>
+<td><span class="math inline">\(1888\,\text{W}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(H_i\)</span></td>
+<td><span class="math inline">\(5{,}0\,\text{N}\)</span></td>
+<td><span class="math inline">\(10{,}0\,\text{N}\)</span></td>
+<td><span class="math inline">\(+100\%\)</span></td>
+<td><span class="math inline">\(10{,}0\,\text{N}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(H_p\)</span></td>
+<td><span class="math inline">\(4{,}2\,\text{N}\)</span></td>
+<td><span class="math inline">\(6{,}2\,\text{N}\)</span></td>
+<td><span class="math inline">\(+45{,}8\%\)</span></td>
+<td><span class="math inline">\(6{,}0\,\text{N}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(Q_i\)</span></td>
+<td><span class="math inline">\(12{,}9\,\text{Nm}\)</span></td>
+<td><span class="math inline">\(17{,}6\,\text{Nm}\)</span></td>
+<td><span class="math inline">\(+37{,}2\%\)</span></td>
+<td><span class="math inline">\(18{,}2\,\text{Nm}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(1516\,\text{W}\)</span></td>
+<td><span class="math inline">\(1175\,\text{W}\)</span></td>
+<td><span class="math inline">\(-22{,}5\%\)</span></td>
+<td><span class="math inline">\(1072\,\text{W}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(Q_p\)</span></td>
+<td><span class="math inline">\(10{,}340\,\text{Nm}\)</span></td>
+<td><span class="math inline">\(10{,}991\,\text{Nm}\)</span></td>
+<td><span class="math inline">\(+6{,}3\%\)</span></td>
+<td><span class="math inline">\(10{,}340\,\text{Nm}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>O retrato de projeto é direto. A rotação cai <span
+class="math inline">\(27\%\)</span>, a potência induzida não se move, e
+a potência de perfil cai <span class="math inline">\(22{,}5\%\)</span>,
+o que confirma o ganho energético como o efeito prático mais relevante
+da duplicação de solidez. O preço aparece nas forças no plano do disco,
+com <span class="math inline">\(H_i\)</span> dobrando e <span
+class="math inline">\(H_p\)</span> crescendo <span
+class="math inline">\(46\%\)</span>, e no torque induzido, <span
+class="math inline">\(37\%\)</span> maior. O carregamento de pá cai
+<span class="math inline">\(5{,}9\%\)</span>, o que afasta as seções do
+<a href="https://en.wikipedia.org/wiki/Stall_(fluid_dynamics)">estol</a>
+e amplia a margem de manobra.</p>
+<p>A coluna aproximada mostra onde a hipótese da Seção 1 distorce esse
+retrato. Ela prevê queda de <span
+class="math inline">\(29{,}3\%\)</span> na rotação e de <span
+class="math inline">\(29{,}3\%\)</span> na potência de perfil, contra os
+<span class="math inline">\(27{,}1\%\)</span> e <span
+class="math inline">\(22{,}5\%\)</span> do tratamento exato. O desvio
+mais grave é qualitativo e está no torque de perfil, que a aproximação
+declara invariante e que na verdade cresce <span
+class="math inline">\(6{,}3\%\)</span>. A rotação exata cai menos do que
+a aproximação previa, e isso basta para que <span
+class="math inline">\(nx^2\)</span> exceda a unidade. O carregamento de
+pá é o outro caso qualitativo. Constante por construção sob a hipótese,
+ele cai quase <span class="math inline">\(6\%\)</span> no tratamento
+exato.</p>
+<h2 id="conclusão">Conclusão</h2>
+<p>Dobrar a solidez de um rotor por adição de pás, com tração,
+velocidade de avanço e ângulo de disco fixos, obriga a rotação a cair
+cerca de <span class="math inline">\(27\%\)</span>. Essa queda é o
+mecanismo que propaga a mudança por todo o resto.</p>
+<p>A esteira não muda. A velocidade induzida, a potência induzida e o
+ângulo de esteira permanecem exatamente iguais, porque respondem à força
+global aplicada ao escoamento e não à forma como as pás a repartem. A
+força <span class="math inline">\(H\)</span> induzida dobra, na
+proporção direta da área de pá acrescentada, e o coeficiente de potência
+de perfil também.</p>
+<p>O ganho está na potência de perfil, que cai cerca de um quinto. Ela
+cresce com a área molhada, mas depende do cubo da velocidade tangencial,
+e a queda de rotação vence a duplicação de pás. Somada à potência
+induzida inalterada, a potência total do rotor diminui. O carregamento
+de pá cai junto, o que afasta as seções do estol.</p>
+<p>O custo está no plano do disco e no eixo. A força <span
+class="math inline">\(H\)</span> de perfil sobe quase a metade, e o
+torque induzido sobe mais de um terço, porque a mesma potência induzida
+precisa ser entregue a uma rotação menor. Dimensionar transmissão e
+comandos para um rotor de solidez alta exige contar com esse torque.</p>
+<p>A hipótese de carregamento de pá constante entrega esse quadro
+qualitativo corretamente e erra os números por alguns pontos
+percentuais. Falha qualitativamente em um único caso, o torque de
+perfil, que ela declara invariante e que de fato cresce. Para
+dimensionamento preliminar a hipótese basta. Para números confiáveis,
+resolva a quadrática de fechamento na condição de voo em questão.</p>
+<h2 id="referências">Referências</h2>
+<p>[1] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
+2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
+para a formulação de elemento de pá em voo de avanço, incluindo as
+expressões de <span class="math inline">\(C_T/\sigma\)</span>, <span
+class="math inline">\(C_H\)</span> e <span
+class="math inline">\(C_P\)</span> utilizadas ao longo deste white
+paper. <a href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
+<p>[2] Glauert, H., <em>The Elements of Aerofoil and Airscrew
+Theory</em>, Cambridge University Press, Cambridge, 1926. — Base da
+Teoria do Momento em escoamento oblíquo, origem da relação entre tração
+e velocidade induzida usada na Seção 2. <a
+href="https://archive.org/details/elementsofaerofo00glau">Link</a></p>
+<p>[3] Johnson, W., <em>Helicopter Theory</em>, Princeton University
+Press, Princeton, 1980. — Obra de referência abrangente em mecânica de
+voo e rotores de asas rotativas, com o desenvolvimento clássico das
+forças no plano do disco. <a
+href="https://archive.org/details/helicoptertheory0000john_y9s0">Link</a></p>
+<p>[4] Prouty, R. W., <em>Helicopter Performance, Stability, and
+Control</em>, Krieger Publishing, Malabar, 2002. — Formulações
+analíticas de desempenho, incluindo o fator de correção de avanço da
+potência de perfil discutido na Seção 4. <a
+href="https://archive.org/details/prouty-r.-w.-helicopter-performance-stability-and-control">Link</a></p>
+<p>[5] Bramwell, A. R. S., Done, G., e Balmford, D., <em>Bramwell’s
+Helicopter Dynamics</em>, 2ª ed., Butterworth-Heinemann, Oxford, 2001. —
+Tratamento detalhado da aerodinâmica do rotor em voo de avanço e das
+hipóteses de fechamento de elemento de pá. <a
+href="https://doi.org/10.1016/B978-0-7506-5075-5.X5000-1">Link</a></p>
+<p>[6] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. — Discussão moderna do acoplamento
+entre solidez, carregamento de pá e desempenho de rotor. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Agosto de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  if(toTop){toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Identifica e classifica divisores de capitulo: o losango so aparece onde ha capitulo real */
+  document.querySelectorAll(".content hr").forEach(function(hr){
+    var next=hr.nextElementSibling;
+    while(next&&next.nodeType===1&&next.tagName==="P"&&!next.textContent.trim()){
+      next=next.nextElementSibling;
+    }
+    if(next&&next.tagName==="H2"){
+      var id=(next.id||"").toLowerCase();
+      if(id.indexOf("sum")===0){
+        hr.style.display="none";
+      }else if(id.indexOf("ref")===0){
+        hr.classList.add("sb-hr-references");
+      }else{
+        hr.classList.add("sb-hr-chapter");
+      }
+    }
+  });
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Rotores</span><span class="sb-tag">Engenharia</span><span class="sb-tag">Dinâmica-de-Voo</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="parametros-adimensionais-esteira-rotores.html"><strong>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</strong><span>Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</span></a><a class="sb-related-card" href="teorema-biplano-munk-rotores-tandem.html"><strong>O Teorema do Stagger de Munk e sua Universalidade em Sistemas Aerodinâmicos de Múltiplas Superfícies</strong><span>O Teorema do Stagger de Munk (o arrasto induzido total de múltiplas superfícies sustentadoras é invariante ao espaçamento longitudinal das superfícies) é demonstrado via Plano de Trefftz para asas fixas e estendido a rotores em tandem e coaxial em voo avançado. A equivalência no balanço de energia induzida revela a universalidade do teorema muito além do contexto histórico para o qual foi derivado.</span></a><a class="sb-related-card" href="modelagem-teorica-efeito-solo-multirotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem não comandados em eVTOLs durante a transição próxima ao solo, uma instabilidade crítica no projeto de leis de controle.</span></a><a class="sb-related-card" href="dinamica-de-voo-rotor-teetering.html"><strong>Dinâmica de Voo de um Rotor Teetering Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a><a class="sb-related-card" href="rotores-e-giroscopios.html"><strong>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</strong><span>O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
+        aria-controls="sbToc" title="Sumário do essay">
+  <span class="sb-toc-icon" aria-hidden="true">☰</span>
+  <span class="sb-toc-text">Sumário</span>
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=00d79791"></script>
+</body>
+</html>

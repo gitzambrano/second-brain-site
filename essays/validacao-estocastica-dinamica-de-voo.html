@@ -1,0 +1,2517 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="finalizado">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validação Estocástica de Dinâmica de Voo — De Hume ao p-value</title>
+<meta property="og:title" content="Validação Estocástica de Dinâmica de Voo — De Hume ao p-value">
+<meta property="og:description" content="O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.">
+<meta property="og:type" content="article">
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F7F9FC;
+  --surface2:#EDF2F8;
+  --border:#D6DEE9;
+  --text:#2B3645;
+  --text-dim:#66758A;
+  --text-bright:#0E1928;
+  --gold:#2F5FB0;
+  --gold-dim:#234A86;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F9FC;
+    --surface2:#EDF2F8;
+    --border:#D6DEE9;
+    --text:#2B3645;
+    --text-dim:#66758A;
+    --text-bright:#0E1928;
+    --gold:#2F5FB0;
+    --gold-dim:#234A86;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  position:relative;
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+  transition:background .25s ease,color .25s ease;
+}
+/* Tema claro: capa branca nobre com brilho suave dourado */
+[data-theme="light"] .masthead,
+:root:not([data-theme="dark"]) .masthead{
+  background:#F3F5F7;
+  color:#171310;
+}
+[data-theme="light"] .masthead .hero-title,
+:root:not([data-theme="dark"]) .masthead .hero-title{
+  color:#15120E;
+}
+/* Tema escuro: capa preta editorial */
+[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead{
+  background:#0A0A0A;
+  color:#EDE8DF;
+}
+[data-theme="dark"] .masthead .hero-title,
+:root[data-theme="dark"] .masthead .hero-title{
+  color:#EDE8DF;
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+/* O filete é a borda superior da capa, não um ornamento do título. Como a
+   capa centraliza os filhos verticalmente, deixá-lo no fluxo o empurrava para
+   encostar no título; ancorado no topo ele volta a ser moldura. */
+.stripe{
+  position:absolute;top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold-dim) 0%,var(--gold) 50%,var(--gold-dim) 100%);
+}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+.cover-summary{
+  max-width:min(760px,92%);
+  margin:1.45rem auto 0;
+  color:color-mix(in srgb,var(--text) 88%,var(--text-dim));
+  font-size:clamp(.96rem,2vw,1.08rem);
+  line-height:1.58;
+  text-wrap:balance;
+}
+[data-theme="light"] .cover-summary,
+:root:not([data-theme="dark"]) .cover-summary{color:#435166;}
+[data-theme="dark"] .cover-summary,
+:root[data-theme="dark"] .cover-summary{color:#C8C2B8;}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;border-top:1px solid var(--border);
+  text-align:center;margin:2.8rem auto;line-height:1;opacity:0.35;
+}
+/* Losango (✦) apenas estritamente entre capitulos (## que nao seja sumario nem referencias) */
+.content hr.sb-hr-chapter,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias)){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-chapter::before,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias))::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referencias usa infinito */
+.content hr.sb-hr-references,
+.content hr:has(+ h2#referências),
+.content hr:has(+ h2#referencias){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-references::before,
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+/* Oculta divisores adjacentes ao sumario (o sumario ja possui bordas proprias) */
+.content hr:has(+ h2#sumário),
+.content hr:has(+ h2#sumario),
+.content #sumário + ul + hr,
+.content #sumário + ol + hr,
+.content #sumario + ul + hr,
+.content #sumario + ol + hr{
+  display:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+  /* Numa equacao numerada o MathJax escreve `min-width` inline no proprio
+     container (o SVG interno usa width:100% e depende disso). `min-width`
+     ganha de `max-width`, entao o container ficava mais largo que a tela e
+     empurrava a pagina inteira no celular em vez de rolar por dentro. Zerar
+     so o do container, nunca o do SVG: o SVG guarda a largura real da formula,
+     que e justamente o que deve rolar aqui dentro. */
+  min-width:0 !important;
+}
+/* Formula no meio de uma frase: cabe na coluna ou rola dentro de si mesma.
+   Sem isto, uma equacao inline longa nao quebra e empurra o paragrafo — e com
+   ele a pagina inteira — alguns pixels para fora da tela no celular. */
+mjx-container:not([display="true"]){
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  vertical-align:-.25em;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+/* MathML assistivo: existe so para leitor de tela e ja vem `clip`ado pelo
+   MathJax — mas `clip` esconde sem encolher. A caixa continuava com a largura
+   real da formula (376px numa coluna de 356) e, absoluta dentro do container,
+   somava essa largura ao overflow rolavel de <p>, de .content e do documento:
+   era ela, e nao a equacao visivel, que empurrava a pagina no celular.
+   Reduzir a caixa a 1px e o padrao "visually hidden"; o conteudo continua na
+   arvore de acessibilidade e continua sendo lido. */
+/* Seletor com especificidade maior que `mjx-assistive-mml` sozinho: a folha do
+   MathJax entra no <head> DEPOIS desta e, com a mesma especificidade e o mesmo
+   `!important`, ganhava por ordem. */
+mjx-container > mjx-assistive-mml{
+  position:absolute !important;
+  width:1px !important;height:1px !important;
+  overflow:hidden !important;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+/* Uma imagem solta num paragrafo e um bloco, nao uma palavra: como inline-block
+   ela ainda somava o espaco em branco vizinho e estourava a coluna por alguns
+   pixels. */
+.content p > img{display:block;margin-inline:auto;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t="light";document.documentElement.dataset.theme=t})();</script><style>/* ==========================================================================
+   Second Brain Atlas — public essay overlay
+
+   Contract:
+   - scripts/essay_template.html owns the essay body and components.
+   - This file only maps theme tokens and styles Atlas-only chrome.
+   - Light = white + Atlas blue.
+   - Dark = near-black + restrained gold.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]),
+:root[data-theme="light"] {
+  --bg:#ffffff;
+  --surface:#f7f9fc;
+  --surface2:#edf2f8;
+  --border:#d6dee9;
+  --text:#2b3645;
+  --text-dim:#66758a;
+  --text-bright:#0e1928;
+  --gold:#2f5fb0;
+  --gold-dim:#234a86;
+  --rust:#8e4636;
+  --rust-bright:#a04030;
+  --accent:#35708a;
+  --amber:#7a5a18;
+
+  --sb-bg:#ffffff;
+  --sb-surface:#ffffff;
+  --sb-surface-soft:#f7f9fc;
+  --sb-text:#172235;
+  --sb-muted:#607087;
+  --sb-line:rgba(23,34,53,.14);
+  --sb-line-strong:rgba(23,34,53,.26);
+  --sb-primary:#2f5fb0;
+  --sb-primary-soft:rgba(47,95,176,.09);
+  --sb-shadow:0 18px 54px rgba(24,45,78,.12);
+}
+
+:root[data-theme="dark"] {
+  --bg:#090909;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#303030;
+  --text:#d8d4cd;
+  --text-dim:#979187;
+  --text-bright:#f2eee7;
+  --gold:#c9a45c;
+  --gold-dim:#8a6b33;
+  --rust:#9a4938;
+  --rust-bright:#bd5a42;
+  --accent:#5b95ac;
+  --amber:#a77a2e;
+
+  --sb-bg:#090909;
+  --sb-surface:#121212;
+  --sb-surface-soft:#181818;
+  --sb-text:#f0ede7;
+  --sb-muted:#aaa39a;
+  --sb-line:rgba(240,237,231,.14);
+  --sb-line-strong:rgba(240,237,231,.25);
+  --sb-primary:#c9a45c;
+  --sb-primary-soft:rgba(201,164,92,.10);
+  --sb-shadow:0 24px 70px rgba(0,0,0,.46);
+}
+
+html,body{background:var(--bg);}
+body{padding-top:56px;}
+
+/* Public cover: the only intentional visual departure from standalone export. */
+:root:not([data-theme="dark"]) .masthead,
+:root[data-theme="light"] .masthead{
+  background:#ffffff !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="dark"] .masthead{
+  background:#090909 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+.masthead .hero-title{color:var(--text-bright) !important;}
+.masthead-rule{border-top-color:var(--gold) !important;}
+.stripe{
+  height:3px !important;
+  background:linear-gradient(90deg,
+    color-mix(in srgb,var(--gold) 20%,transparent),
+    var(--gold),
+    color-mix(in srgb,var(--gold) 20%,transparent)) !important;
+}
+
+/* Atlas owns these controls on public pages. */
+#sbThemeToggle,#sbToTop,body > .sb-progress > .sb-progress-fill{display:none !important;}
+
+.sb-bar{
+  position:fixed;inset:0 0 auto 0;z-index:60;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 clamp(16px,4vw,40px);
+  border-bottom:1px solid var(--sb-line);
+  background:color-mix(in srgb,var(--sb-bg) 90%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.sb-brand{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--sb-text) !important;font-weight:700;font-size:14px;
+  text-decoration:none !important;
+}
+.sb-mark{
+  display:grid;place-items:center;width:27px;height:27px;
+  border:1px solid color-mix(in srgb,var(--sb-primary) 42%,transparent);
+  border-radius:8px;color:var(--sb-primary);background:var(--sb-primary-soft);
+  font-size:10px;font-weight:800;
+}
+.sb-nav{display:flex;align-items:center;gap:16px;}
+.sb-nav a{color:var(--sb-muted) !important;font-size:13px;text-decoration:none !important;}
+.sb-nav a:hover{color:var(--sb-primary) !important;}
+.sb-nav button{
+  width:32px;height:32px;border:1px solid var(--sb-line);border-radius:9px;
+  background:transparent;color:var(--sb-primary);cursor:pointer;
+}
+.sb-nav button:hover{border-color:var(--sb-primary);}
+
+/* Public progress bar injected by render_public_essay.py. */
+body > .sb-progress:not(:has(.sb-progress-fill)){
+  position:fixed;top:56px;left:0;right:0;z-index:61;height:2px;background:transparent;
+}
+body > .sb-progress:not(:has(.sb-progress-fill)) span{
+  display:block;width:0;height:100%;background:var(--sb-primary);
+}
+
+.sb-toc-fab{
+  position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:61;
+  display:inline-flex;align-items:center;gap:8px;padding:10px 17px;
+  border:1px solid var(--sb-line-strong);border-radius:999px;
+  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);
+  color:var(--sb-text);box-shadow:var(--sb-shadow);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font:650 13px/1 Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer;
+}
+.sb-toc-fab:hover{border-color:var(--sb-primary);}
+.sb-toc-icon{color:var(--sb-primary);}
+
+.sb-toc{
+  position:fixed;right:clamp(16px,3vw,32px);
+  bottom:calc(clamp(16px,3vw,32px) + 54px);z-index:62;
+  width:min(380px,calc(100vw - 32px));max-height:min(65vh,600px);
+  display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--sb-line-strong);border-radius:16px;
+  background:color-mix(in srgb,var(--sb-surface) 98%,transparent);
+  box-shadow:var(--sb-shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-toc[hidden]{display:none !important;}
+.sb-toc header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 17px;border-bottom:1px solid var(--sb-line);color:var(--sb-text);font-size:13px;
+}
+.sb-toc header strong{color:inherit;}
+.sb-toc header button{border:0;background:transparent;color:var(--sb-muted);font-size:20px;cursor:pointer;}
+.sb-toc nav{display:flex;flex-direction:column;padding:9px 8px;overflow-y:auto;}
+.sb-toc a{
+  padding:8px 11px;border-left:2px solid transparent;border-radius:0 8px 8px 0;
+  color:var(--sb-muted) !important;font-size:12.5px;line-height:1.4;text-decoration:none !important;
+}
+.sb-toc a:hover{color:var(--sb-text) !important;background:var(--sb-primary-soft);}
+.sb-toc a.h3{padding-left:23px;font-size:11.5px;}
+.sb-toc a.active{
+  color:var(--sb-primary) !important;border-left-color:var(--sb-primary);background:var(--sb-primary-soft);
+}
+
+.sb-tags,.sb-related{
+  width:min(var(--max-width,760px),calc(100% - 48px));margin-inline:auto;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px;}
+.sb-tag{padding:4px 10px;border:1px solid var(--sb-line);border-radius:999px;color:var(--sb-muted);font-size:11px;}
+.sb-related{margin-top:42px;margin-bottom:76px;padding-top:28px;border-top:1px solid var(--sb-line);}
+.sb-related h2{
+  margin:0 0 16px;color:var(--sb-text);
+  font:700 18px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.sb-related-card{
+  display:flex;flex-direction:column;gap:7px;padding:15px 16px;
+  border:1px solid var(--sb-line);border-radius:13px;background:var(--sb-surface-soft);
+  color:var(--sb-text) !important;text-decoration:none !important;
+}
+.sb-related-card:hover{
+  border-color:color-mix(in srgb,var(--sb-primary) 55%,var(--sb-line));
+  background:var(--sb-primary-soft);
+}
+.sb-related-card strong{color:var(--sb-text);font-size:13px;}
+.sb-related-card span{color:var(--sb-muted);font-size:12px;line-height:1.45;}
+
+@media(max-width:720px){
+  .sb-bar{padding-inline:14px;}
+  .sb-nav{gap:10px;}
+  .sb-nav a{font-size:12px;}
+  .sb-brand{font-size:13px;}
+  .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
+  .sb-toc-text{display:none;}
+  .sb-related-grid{grid-template-columns:1fr;}
+}
+/* Duas palavras curtas cabem em qualquer telefone. Esconder a segunda tirava
+   o unico caminho para o mapa na tela onde ele mais importa. */
+@media(max-width:520px){
+  .sb-brand{gap:7px;font-size:0;}
+  .sb-nav{gap:14px;}
+  .sb-nav a{font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">Validação Estocástica de Dinâmica de Voo — De Hume ao p-value</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Maio de 2026</p>
+    <p class="cover-summary">O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.</p>
+  </div>
+</header>
+
+<main class="content">
+<p><strong>Uma Abordagem <a
+href="https://en.wikipedia.org/wiki/Epistemology">Epistemológica</a> e
+Estatística — da <a
+href="https://en.wikipedia.org/wiki/Philosophy_of_science">Filosofia da
+Ciência</a> aos <a
+href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing">Testes
+de Hipótese</a> na Comparação Simulação vs. Voo Real</strong></p>
+<hr />
+<h2 id="sumário">Sumário</h2>
+<ol type="1">
+<li><a
+href="#seção-1--fundamentos-filosóficos-epistemologia-hume-e-popper">Fundamentos
+Filosóficos — Epistemologia, Hume e Popper</a></li>
+<li><a href="#seção-2--anatomia-do-teste-de-hipótese-h₀-e-h₁">Anatomia
+do Teste de Hipótese — H₀ e H₁</a></li>
+<li><a href="#seção-3--o-p-value-desconstrução-total">O p-value —
+Desconstrução Total</a></li>
+<li><a href="#seção-4--erros-tipo-i-e-tipo-ii-alpha-e-p-value">Erros
+Tipo I e Tipo II, Alpha e p-value</a></li>
+<li><a
+href="#seção-5--significância-estatística-vs-relevância-prática">Significância
+Estatística vs. Relevância Prática</a></li>
+<li><a
+href="#seção-6--os-problemas-do-p-value-multiplicidade-e-p-hacking">Os
+Problemas do p-value — Multiplicidade e p-Hacking</a></li>
+<li><a
+href="#seção-7--testes-estatísticos-para-comparação-de-distribuições-em-dinâmica-de-voo">Testes
+Estatísticos para Dinâmica de Voo</a></li>
+<li><a
+href="#seção-8--roteiro-prático-comparação-voo-vs-simulação">Roteiro
+Prático — Comparação Voo vs. Simulação</a></li>
+<li><a
+href="#seção-9--conclusão-validação-como-corroboração-provisória">Conclusão
+— Validação Como Corroboração Provisória</a></li>
+</ol>
+<hr />
+<h2
+id="seção-1--fundamentos-filosóficos-epistemologia-hume-e-popper">Seção
+1 — Fundamentos Filosóficos: Epistemologia, Hume e Popper</h2>
+<p>Antes de discutir p-values e distribuições acumuladas, é preciso
+perguntar uma questão mais profunda: <em>o que significa saber alguma
+coisa?</em> A <a
+href="https://pt.wikipedia.org/wiki/Infer%C3%AAncia_estat%C3%ADstica">inferência
+estatística</a> não é um mero procedimento computacional — ela é uma
+resposta concreta e operacionalizável a um dos problemas mais antigos da
+filosofia ocidental.</p>
+<h3 id="o-problema-da-indução-e-david-hume">O Problema da Indução e
+David Hume</h3>
+<p>O filósofo escocês <a
+href="https://pt.wikipedia.org/wiki/David_Hume">David Hume</a>
+(1711–1776) abalou os alicerces do pensamento científico com uma
+pergunta deceptivamente simples: <strong>o que justifica nossa crença de
+que o futuro se parecerá com o passado?</strong></p>
+<p>Hume notou que a ciência empírica baseia-se no <a
+href="https://pt.wikipedia.org/wiki/Problema_da_indu%C3%A7%C3%A3o">raciocínio
+indutivo</a>: observamos que o sol nasce todos os dias e concluímos que
+sempre nascerá. Observamos que 100 pousos de aeronaves com determinada
+configuração resultaram em certos valores de <em>sink rate</em> e
+construímos um modelo. Mas quantas observações justificam a
+generalização? Mil? Um milhão? Hume mostrou que nenhum número finito de
+observações pode logicamente garantir uma lei universal. A <a
+href="https://pt.wikipedia.org/wiki/Problema_da_indu%C3%A7%C3%A3o">indução</a>,
+por mais robusta que pareça, é sempre um salto de fé.</p>
+<div class="pull-quote">
+<p>“Even after observing the constant conjunction of objects, we have no
+reason to draw any inference concerning any object beyond those of which
+we have had experience.”</p>
+<div class="pq-cite">
+<p>— David Hume, <em>An Enquiry Concerning Human Understanding</em>
+(1748)</p>
+</div>
+</div>
+<p>Para a validação de um simulador de voo, o problema humiano é
+profundamente real. Você realizou 100 voos de teste. Eles produzem dados
+que se alinham com o modelo computacional. Mas como saber se essa
+concordância não é mera coincidência ou produto de condições
+atmosféricas específicas daquela semana de ensaios? A indução pura não
+resolve o problema.</p>
+<h3 id="karl-popper-e-a-falsificabilidade">Karl Popper e a
+Falsificabilidade</h3>
+<p>O filósofo austríaco <a
+href="https://pt.wikipedia.org/wiki/Karl_Popper">Karl Popper</a>
+(1902–1994) propôs a solução mais influente para o <a
+href="https://pt.wikipedia.org/wiki/Problema_da_indu%C3%A7%C3%A3o">problema
+humiano</a> na filosofia da ciência moderna. Em vez de tentar
+<em>confirmar</em> teorias através de evidências acumuladas, Popper
+inverteu a lógica: o que distingue uma teoria científica de uma
+não-científica é sua capacidade de ser <strong><a
+href="https://pt.wikipedia.org/wiki/Falseabilidade">falsificada</a></strong>.</p>
+<p>Uma boa teoria científica deve fazer previsões tão precisas e
+arriscadas que a natureza possa potencialmente contradizê-la. “Todos os
+pousos desta aeronave com ângulo de aproximação de 3° e velocidade de 60
+kt resultarão em <em>sink rate</em> entre 3 e 7 ft/s” — essa afirmação é
+científica porque pode ser refutada por um único pouso que resulte em 10
+ft/s.</p>
+<div class="quote">
+<p>“It is easy to obtain confirmations, or verifications, for nearly
+every theory — if we look for confirmations. The criterion of the
+scientific status of a theory is its falsifiability, or refutability, or
+testability.”<br />
+— <a href="https://pt.wikipedia.org/wiki/Karl_Popper">Karl Popper</a>,
+<em><a
+href="https://en.wikipedia.org/wiki/Conjectures_and_Refutations">Conjectures
+and Refutations</a></em> (1963)</p>
+</div>
+<p>A <a
+href="https://pt.wikipedia.org/wiki/Falseabilidade">epistemologia
+popperiana</a> tem várias implicações cruciais para a engenharia
+aeronáutica:</p>
+<ul>
+<li><strong>Assimetria lógica entre confirmação e refutação:</strong>
+mil voos bem-sucedidos não provam que o simulador é correto, mas um
+único resultado aberrante pode demonstrar que ele está errado.</li>
+<li><strong>O papel central das hipóteses audazes:</strong> um modelo
+que só faz previsões vagas (“o <em>sink rate</em> será um valor
+positivo”) não é científico no sentido popperiano. Modelos úteis fazem
+apostas precisas.</li>
+<li><strong>O progresso como corroboração provisória:</strong> dizer que
+o simulador é “validado” não significa que ele é verdadeiro — significa
+que resistiu às tentativas mais rigorosas de falsificação até o
+momento.</li>
+</ul>
+<h3
+id="o-teste-de-hipótese-como-análogo-estrutural-ao-método-popperiano">O
+Teste de Hipótese como Análogo Estrutural ao Método Popperiano</h3>
+<p>A estrutura do <a
+href="https://pt.wikipedia.org/wiki/Teste_de_hip%C3%B3tese">teste de
+hipótese estatístico</a> atua como um análogo metodológico do método
+popperiano para o mundo probabilístico — mas com uma ressalva
+importante: o próprio Popper era cético em relação à probabilidade como
+fundamento epistêmico (ver nota abaixo). A analogia é estrutural, não
+filosófica completa. Como observações extremas ainda são logicamente
+possíveis sob H₀ (a probabilidade nunca é zero), adotamos uma <a
+href="https://pt.wikipedia.org/wiki/Falseabilidade">falsificação
+metodológica</a>: estabelecemos um limiar (α) e, se os dados divergirem
+fortemente (p &lt; α), decidimos empiricamente refutar a teoria.
+Considere a correspondência ponto a ponto:</p>
+<table>
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr>
+<th>Filosofia de Popper</th>
+<th>Teste de Hipótese</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Toda teoria científica deve ser falsificável.</td>
+<td>H₀ é a afirmação precisa que tentaremos refutar com dados
+empíricos.</td>
+</tr>
+<tr>
+<td>Coletamos evidências que possam contradizer a teoria.</td>
+<td>Calculamos a estatística de teste a partir das amostras.</td>
+</tr>
+<tr>
+<td>Se a evidência for incompatível o suficiente, rejeitamos a
+teoria.</td>
+<td>Se p &lt; α, rejeitamos H₀ — os dados são incompatíveis com
+ela.</td>
+</tr>
+<tr>
+<td>Não rejeitada ≠ confirmada. A teoria sobreviveu, não foi
+provada.</td>
+<td>“Falhar em rejeitar H₀” ≠ “aceitar H₀” como verdadeira.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nota Epistemológica</strong></p>
+<p>Existe uma tensão legítima: <a
+href="https://pt.wikipedia.org/wiki/Karl_Popper">Popper</a> era crítico
+da probabilidade como fundamento epistêmico (ele preferia uma
+interpretação de propensão de frequência). O debate entre o <a
+href="https://pt.wikipedia.org/wiki/Falibilismo">falibilismo
+popperiano</a> e a <a
+href="https://pt.wikipedia.org/wiki/Estat%C3%ADstica_bayesiana">estatística
+bayesiana</a> — que atribui probabilidades diretamente a hipóteses — é
+um dos mais ricos da <a
+href="https://pt.wikipedia.org/wiki/Filosofia_da_ci%C3%AAncia">filosofia
+da ciência</a> contemporânea. Retomaremos o fio bayesiano na Seção
+3.3.</p>
+<hr />
+<h2 id="seção-2--anatomia-do-teste-de-hipótese-h₀-e-h₁">Seção 2 —
+Anatomia do Teste de Hipótese: H₀ e H₁</h2>
+<h3 id="o-que-são-h₀-e-h₁--definição-e-exemplos">O Que São H₀ e H₁ —
+Definição e Exemplos</h3>
+<p>Antes de qualquer discussão filosófica, é necessário definir com
+precisão o que são as hipóteses de um teste estatístico. Todo <a
+href="https://pt.wikipedia.org/wiki/Teste_de_hip%C3%B3tese">teste de
+hipótese</a> parte de uma pergunta sobre o mundo — e essa pergunta é
+dividida em duas afirmações concorrentes e exaustivas: a <strong><a
+href="https://pt.wikipedia.org/wiki/Hip%C3%B3tese_nula">hipótese
+nula</a></strong> (H₀) e a <strong><a
+href="https://pt.wikipedia.org/wiki/Hip%C3%B3tese_alternativa">hipótese
+alternativa</a></strong> (H₁).</p>
+<p><strong>H₀ — Hipótese Nula</strong> é a afirmação do <em>status
+quo</em>, da ausência de efeito, da igualdade. É sempre uma afirmação
+conservadora e precisa, que inclui um sinal de igualdade. É a hipótese
+que o experimento tentará refutar.</p>
+<p><strong>H₁ — Hipótese Alternativa</strong> é a afirmação que o
+pesquisador deseja demonstrar — que existe um efeito, uma diferença, uma
+relação. É a conclusão que só será aceita se os dados fornecerem
+evidência suficiente contra H₀.</p>
+<p>O raciocínio é deliberadamente assimétrico: começamos assumindo que
+H₀ é verdadeira e só a abandonamos se os dados tornarem essa premissa
+implausível. Essa assimetria tem raízes tanto filosóficas (<a
+href="https://pt.wikipedia.org/wiki/Navalha_de_Occam">o princípio da
+parcimônia</a>) quanto matemáticas (precisamos de uma <a
+href="https://pt.wikipedia.org/wiki/Distribui%C3%A7%C3%A3o_amostral">distribuição
+de referência</a> exata para calcular probabilidades).</p>
+<div class="quote">
+<p><strong>Analogia Jurídica</strong></p>
+<p>H₀ é o equivalente à presunção de inocência no tribunal. O réu (o
+modelo, o medicamento, a hipótese) é presumido inocente até que se prove
+o contrário além de dúvida razoável. O nível de significância α é o
+“limiar da dúvida razoável” que o sistema aceita.</p>
+</div>
+<h4 id="exemplos-nas-áreas-médica-e-aeronáutica">Exemplos nas Áreas
+Médica e Aeronáutica</h4>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 46%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Área Médica</th>
+<th>Área Aeronáutica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pergunta</strong></td>
+<td>Este novo anticoagulante reduz trombose em comparação ao
+placebo?</td>
+<td>O simulador de voo produz o mesmo <em>sink rate</em> que os voos
+reais?</td>
+</tr>
+<tr>
+<td><strong>H₀</strong></td>
+<td>A taxa de trombose no grupo tratado é igual à do grupo controle.
+<em>H₀: μ_droga − μ_placebo = 0</em></td>
+<td>A média do <em>sink rate</em> simulado é igual à média do voo real.
+<em>H₀: μ_sim − μ_voo = 0</em></td>
+</tr>
+<tr>
+<td><strong>H₁</strong></td>
+<td>A taxa de trombose no grupo tratado é diferente (menor) da do grupo
+controle. <em>H₁: μ_droga − μ_placebo ≠ 0</em></td>
+<td>Existe uma diferença sistemática entre simulação e voo real. <em>H₁:
+μ_sim − μ_voo ≠ 0</em></td>
+</tr>
+<tr>
+<td><strong>Se rejeitamos H₀</strong></td>
+<td>Concluímos que a droga tem efeito e avançamos para aprovação
+regulatória.</td>
+<td>Concluímos que o modelo tem viés sistemático e requeremos revisão
+antes da certificação.</td>
+</tr>
+<tr>
+<td><strong>Risco de Erro Tipo I (α)</strong></td>
+<td>Aprovar uma droga ineficaz — pacientes sofrem efeitos colaterais sem
+benefício.</td>
+<td>Rejeitar um modelo correto — retrabalho desnecessário, atraso de
+certificação.</td>
+</tr>
+<tr>
+<td><strong>Risco de Erro Tipo II (β)</strong></td>
+<td>Não detectar o efeito real da droga — pacientes perdem acesso a
+tratamento eficaz.</td>
+<td>Não detectar o viés do modelo — estrutura dimensionada
+incorretamente.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="por-que-h₀-deve-abrigar-o-sinal-de-igualdade">Por Que H₀ Deve
+Abrigar o Sinal de Igualdade</h3>
+<p>Esta é uma exigência matemática, não uma convenção arbitrária. Para
+calcular a probabilidade de um resultado, precisamos de uma <em><a
+href="https://pt.wikipedia.org/wiki/Distribui%C3%A7%C3%A3o_amostral">distribuição
+de referência</a></em> — uma curva que nos diga o quão provável cada
+resultado possível seria. Para construir essa curva, precisamos de um
+parâmetro central exato.</p>
+<p>Se H₀ fosse “os modelos são diferentes” (H₀: μ_sim ≠ μ_voo), o
+parâmetro central seria indefinido — a diferença poderia ser de 0,001
+ft/s ou de 50 ft/s. Infinitas curvas seriam compatíveis com essa
+hipótese, e o cálculo de probabilidade colapsaria. O sinal de igualdade
+fornece o valor exato (zero) necessário para ancorar a distribuição
+nula.</p>
+<div class="quote">
+<p><strong>Atenção Técnica</strong></p>
+<p>A conclusão correta ao não rejeitar H₀ é “não há evidência suficiente
+contra H₀ com este tamanho de amostra e nível de significância”,
+<strong>não</strong> “provamos que o simulador é perfeito”. A
+impossibilidade de provar H₀ — e não apenas deixar de rejeitá-la — é um
+corolário direto da epistemologia popperiana.</p>
+</div>
+<h3
+id="analogia-com-o-ensaio-clínico-de-drogas--e-seus-limites">Analogia
+com o Ensaio Clínico de Drogas — e Seus Limites</h3>
+<p>A analogia farmacológica é poderosa porque o risco em jogo é
+imediatamente intuitivo. Imagine que um laboratório desenvolve um novo
+anticoagulante para pacientes pós-cirúrgicos. Antes de qualquer ensaio,
+o médico não “acredita” na droga — o <em>status quo</em> é que ela não
+tem efeito diferente do placebo.</p>
+<p>Em termos práticos: o grupo tratado recebeu a droga e apresentou 3
+casos de trombose em 100 pacientes. O grupo controle apresentou 11 casos
+em 100. A diferença é de 8 pontos percentuais. Poderia isso ter ocorrido
+por acaso, mesmo que a droga fosse inerte? O teste estatístico responde
+exatamente essa pergunta — calculando a probabilidade de observar uma
+diferença tão grande ou maior em um mundo onde a droga não tem efeito
+algum.</p>
+<p>Na medicina, a assimetria moral favorece a segurança do paciente: é
+pior aprovar uma droga nociva do que rejeitar uma potencialmente útil.
+H₀ (“a droga é inerte”) é exatamente o status quo conservador que se
+quer derrubar com evidência. <strong>O teste estatístico trabalha a
+favor da segurança</strong>: para declarar que a droga funciona, é
+preciso evidência forte contra H₀.</p>
+<div class="quote">
+<p><strong>⚠️ A Armadilha Aeronáutica</strong></p>
+<p>Na validação de simuladores, a estrutura lógica é oposta. H₀ é “o
+modelo é correto” — o <em>status quo</em> conservador é <strong>aprovar
+o modelo</strong>, não rejeitá-lo. Isso significa que, no teste
+clássico, a matemática joga <em>contra</em> a segurança: um modelo ruim
+com amostras pequenas produz p alto e não é rejeitado. A analogia com o
+ensaio clínico quebra aqui. A solução rigorosa — inverter as hipóteses
+com o <strong><a
+href="https://en.wikipedia.org/wiki/Equivalence_test">TOST</a></strong>,
+de modo que H₀ passe a ser “o modelo é perigoso” — é discutida na Seção
+4.</p>
+</div>
+<h3 id="conexão-com-a-epistemologia-popperiana">Conexão com a
+Epistemologia Popperiana</h3>
+<p>Agora que H₀ e H₁ estão definidas com clareza, a ligação filosófica
+se torna evidente. O <a
+href="https://pt.wikipedia.org/wiki/Teste_de_hip%C3%B3tese">teste de
+hipótese</a> é a operacionalização matemática da <a
+href="https://pt.wikipedia.org/wiki/Falseabilidade">falsificação
+popperiana</a>: H₀ é a teoria científica que colocamos à prova.
+Coletamos dados que poderiam contraditá-la. Se os dados forem
+suficientemente incompatíveis com H₀ (p &lt; α), rejeitamos a hipótese —
+não porque provamos H₁, mas porque tornamos H₀ insustentável.</p>
+<p>Da mesma forma que Popper insistia que “não rejeitar” uma teoria não
+significa confirmá-la, “não rejeitar H₀” não significa provar que o
+simulador é perfeito. O modelo simplesmente sobreviveu ao teste — até
+que dados mais abundantes ou mais rigorosos possam refutá-lo.</p>
+<hr />
+<h2 id="seção-3--o-p-value-desconstrução-total">Seção 3 — O p-value:
+Desconstrução Total</h2>
+<h3 id="definição-rigorosa-e-erros-comuns">Definição Rigorosa e Erros
+Comuns</h3>
+<p>O <a href="https://pt.wikipedia.org/wiki/Valor_p">p-value</a> é
+talvez a estatística mais citada e mais mal compreendida de toda a
+ciência empírica. A <a
+href="https://pt.wikipedia.org/wiki/Associa%C3%A7%C3%A3o_Americana_de_Estat%C3%ADstica">American
+Statistical Association</a> emitiu em 2016 uma declaração formal sobre
+seu uso — um fato notável, indicativo de quão profundo o problema de
+interpretação se tornou.</p>
+<div class="box aviso">
+<div class="box-badge">
+<p>🚫 O que o p-value NÃO é</p>
+</div>
+<ul>
+<li><strong>Não é</strong> a probabilidade de H₀ ser verdadeira.<br />
+</li>
+<li><strong>Não é</strong> a probabilidade de os resultados terem
+ocorrido “por acaso”.<br />
+</li>
+<li><strong>Não é</strong> a probabilidade de H₁ ser verdadeira.<br />
+</li>
+<li><strong>Não é</strong> uma medida da magnitude prática do erro do
+modelo.<br />
+</li>
+<li><strong>Não é</strong> uma medida de importância ou relevância
+científica.</li>
+</ul>
+<p>A definição correta, estrita e irrefutável:</p>
+</div>
+<div class="quote">
+<p><strong>O p-value é a probabilidade de se observar uma estatística de
+teste tão extrema quanto a obtida, ou mais extrema, <em>assumindo que a
+hipótese nula é absolutamente verdadeira</em>.</strong></p>
+</div>
+<p><strong>Definição Formal:</strong></p>
+<pre><code>p = P(|T| ≥ |t_obs| | H₀ verdadeira)
+
+Onde:
+T = estatística de teste (variável aleatória)
+t_obs = valor observado da estatística nos seus dados
+H₀ = hipótese nula (assume-se 100% verdadeira para o cálculo)</code></pre>
+<p>Dissecando cada componente com o exemplo do simulador (média Monte
+Carlo = 5,0 ft/s; média voo = 6,1 ft/s):</p>
+<ol type="1">
+<li><strong>“Assumindo que H₀ é absolutamente verdadeira”:</strong>
+Construímos um universo mental contrafactual onde o modelo é perfeito.
+Nesse universo, a diferença real entre simulação e voo é zero.</li>
+<li><strong>“A probabilidade de se observar os dados…”:</strong> Nesse
+universo perfeito, realizamos o ensaio imaginariamente um número enorme
+de vezes. Cada repetição produzirá uma diferença ligeiramente diferente
+por pura variabilidade amostral.</li>
+<li><strong>“…tão extrema ou mais extrema”:</strong> Perguntamos: em
+quantas dessas repetições imaginárias a diferença acidentalmente seria
+de 1,1 ft/s ou mais? Se essa proporção for pequena, os dados reais são
+incompatíveis com a hipótese de modelo perfeito.</li>
+</ol>
+<h3 id="interpretação-frequentista">Interpretação Frequentista</h3>
+<p>A escola <a
+href="https://en.wikipedia.org/wiki/Frequentist_probability">frequentista</a>
+— que inclui <a
+href="https://pt.wikipedia.org/wiki/Ronald_Fisher">Fisher</a>, <a
+href="https://pt.wikipedia.org/wiki/Jerzy_Neyman">Neyman</a> e <a
+href="https://en.wikipedia.org/wiki/Egon_Pearson">Pearson</a> —
+interpreta probabilidade como <strong>frequência relativa em uma longa
+sequência de repetições idênticas</strong>. Nessa tradição, o <a
+href="https://pt.wikipedia.org/wiki/Valor_p">p-value</a> tem uma
+interpretação operacional precisa:</p>
+<p>Se o mesmo experimento fosse repetido 1.000 vezes em um mundo onde H₀
+fosse verdadeira, esperaríamos que em aproximadamente <em>p × 1000</em>
+dessas repetições a estatística de teste fosse tão extrema quanto a
+observada.</p>
+<p>Para p = 0,02: em 1.000 repetições hipotéticas do ensaio em voo com
+um simulador perfeito, esperaríamos que em apenas ~20 dessas repetições
+a diferença das médias fosse tão grande (ou maior) que a diferença
+observada de 1,1 ft/s. Como observamos exatamente esse resultado, ou o
+mundo escolheu um evento de 2% de probabilidade para acontecer
+(improvável), ou nossa premissa (modelo perfeito) está errada.</p>
+<p>A interpretação frequentista tem implicações práticas
+importantes:</p>
+<ul>
+<li><strong>O p-value não é fixo:</strong> ele depende do tamanho da
+amostra. Com 10.000 voos (em vez de 100), uma diferença de 0,01 ft/s
+pode produzir p &lt; 0,001. Com 5 voos, uma diferença de 3 ft/s pode
+produzir p = 0,4. O p-value confunde efeito e precisão da
+estimativa.</li>
+<li><strong>Ausência de probabilidade para hipóteses:</strong> na visão
+frequentista, H₀ é verdadeira ou falsa — não tem probabilidade. O
+p-value é uma propriedade do procedimento, não da hipótese.</li>
+</ul>
+<h3 id="a-perspectiva-bayesiana">A Perspectiva Bayesiana</h3>
+<p>Os <a
+href="https://pt.wikipedia.org/wiki/Estat%C3%ADstica_bayesiana">bayesianos</a>
+partem de um ponto radicalmente diferente: probabilidade é uma
+<strong>medida de grau de crença</strong>, não de frequência. Isso
+permite uma coisa que o <a
+href="https://en.wikipedia.org/wiki/Frequentist_probability">frequentismo</a>
+proíbe: atribuir probabilidade diretamente a hipóteses.</p>
+<p>O <a href="https://pt.wikipedia.org/wiki/Teorema_de_Bayes">teorema de
+Bayes</a>, aplicado à validação do simulador:</p>
+<pre><code>P(H₀ | dados) = P(dados | H₀) × P(H₀) / P(dados)
+
+Onde:
+P(H₀) = probabilidade a priori de que o modelo seja correto
+P(dados | H₀) = likelihood (verossimilhança) — relacionado ao p-value
+P(H₀ | dados) = probabilidade a posteriori — o que queremos saber</code></pre>
+<p>A diferença fundamental: no framework bayesiano, podemos dizer “dada
+a evidência dos 100 voos, a probabilidade de que o modelo seja correto é
+de 15%”. No framework frequentista, essa afirmação é semanticamente
+proibida.</p>
+<div class="box generico">
+<div class="box-badge">
+<p>Tensão Filosófica</p>
+</div>
+<p>O <a
+href="https://pt.wikipedia.org/wiki/Estat%C3%ADstica_bayesiana">bayesianismo</a>
+oferece uma das respostas mais influentes ao <a
+href="https://pt.wikipedia.org/wiki/Problema_da_indu%C3%A7%C3%A3o">problema
+humiano</a>: a crença se atualiza continuamente com novas evidências, o
+que muitos filósofos consideram mais natural do que o frequentismo —
+embora o próprio Popper contestasse essa visão. Mas o bayesianismo
+introduz uma controvérsia prática: como determinar a <a
+href="https://en.wikipedia.org/wiki/Prior_probability">probabilidade a
+priori</a> P(H₀)? Se dois engenheiros têm diferentes <a
+href="https://en.wikipedia.org/wiki/Prior_probability">prioris</a> — um
+altamente confiante no modelo, outro cético — chegam a conclusões
+diferentes com os mesmos dados. Para a certificação aeronáutica, onde a
+objetividade é mandatória, isso é problemático. Por isso o framework <a
+href="https://en.wikipedia.org/wiki/Frequentist_probability">frequentista</a>
+(com toda sua imperfeição filosófica) domina a prática regulatória. Essa
+objeção aos priors, registre-se, não invalida o insight bayesiano:
+apenas transfere o conservadorismo exigido pela certificação para outro
+lugar, e é precisamente lá que os critérios de equivalência da Seção 4 o
+recuperam, substituindo a opinião a priori sobre o modelo pela prova
+ativa de equivalência.</p>
+<h3 id="exemplos-numéricos-concretos">Exemplos Numéricos Concretos</h3>
+<p>Considere os quatro cenários abaixo, todos referentes à mesma
+comparação (simulação vs. voo) mas com resultados diferentes:</p>
+<p><strong>Cenário A — p = 0,02</strong><br />
+<strong>Rejeita H₀</strong> com α = 0,05. Em um mundo de modelo
+perfeito, esta diferença ocorreria por acaso em apenas 2% das
+repetições. Evidência forte de divergência sistemática. O engenheiro
+deve investigar a física do modelo.</p>
+<p><strong>Cenário B — p = 0,06</strong><br />
+<strong>Não rejeita H₀</strong> com α = 0,05, mas muito próximo. A
+diferença poderia ocorrer em 6% das repetições. Tecnicamente não
+significativo, mas <em>borderline</em>: prudência aconselha investigação
+adicional antes da certificação.</p>
+<p><strong>Cenário C — p = 0,40</strong><br />
+<strong>Não rejeita H₀</strong>. A diferença observada ocorreria em 40%
+das repetições por pura sorte. Boa concordância estatística. O modelo
+<em>não foi refutado</em> pelos dados disponíveis — embora isso não
+prove que seja perfeito.</p>
+<p><strong>Cenário D — p = 0,80</strong><br />
+<strong>Excelente concordância.</strong> A diferença entre simulação e
+voo é completamente consistente com variabilidade aleatória normal. Em
+80% das repetições hipotéticas, obteríamos uma discrepância tão grande
+ou maior. O modelo passa este teste com folga.</p>
+</div>
+<hr />
+<h2 id="seção-4--erros-tipo-i-e-tipo-ii-alpha-e-p-value">Seção 4 — Erros
+Tipo I e Tipo II, Alpha e p-value</h2>
+<h3 id="a-aritmética-do-risco-epistêmico">A Aritmética do Risco
+Epistêmico</h3>
+<p>Quando tomamos uma decisão binária — rejeitar ou não rejeitar H₀ — a
+realidade subjacente é também binária: H₀ é verdadeira ou falsa. Isso
+cria quatro resultados possíveis, dois dos quais são erros.</p>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 38%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>H₀ Verdadeira (modelo correto)</th>
+<th>H₀ Falsa (modelo com viés)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Não rejeitamos H₀</strong></td>
+<td>✓<strong>Decisão Correta</strong> — Probabilidade: 1 − α</td>
+<td>✗<strong>Erro Tipo II (β)</strong> — Aprovamos modelo
+defeituoso</td>
+</tr>
+<tr>
+<td><strong>Rejeitamos H₀</strong></td>
+<td>✗<strong>Erro Tipo I (α)</strong> — Rejeitamos modelo correto</td>
+<td>✓<strong>Decisão Correta</strong> — Probabilidade: 1 − β
+(Poder)</td>
+</tr>
+</tbody>
+</table>
+<p>Para garantir que a tabela acima seja legível: as linhas representam
+nossa decisão (o que concluímos); as colunas representam a realidade (o
+que é verdadeiro). Os dois quadrantes diagonais são acertos; os dois
+fora da diagonal são erros com nomes distintos e consequências
+distintas.</p>
+<h4 id="erro-tipo-i-α--o-falso-alarme">Erro Tipo I (α) — O Falso
+Alarme</h4>
+<p>Ocorre quando rejeitamos H₀ sendo que ela era verdadeira. No contexto
+aeronáutico: concluímos que o simulador tem um viés sistemático, geramos
+um ciclo de retrabalho de engenharia, atrasamos a certificação e
+gastamos recursos — mas o modelo estava correto desde o início. O <a
+href="https://pt.wikipedia.org/wiki/Signific%C3%A2ncia_estat%C3%ADstica">nível
+de significância α</a> é, literalmente, a probabilidade que estamos
+dispostos a aceitar de cometer esse erro.</p>
+<h4 id="erro-tipo-ii-β--o-falso-negativo">Erro Tipo II (β) — O Falso
+Negativo</h4>
+<p>Ocorre quando não rejeitamos H₀ sendo que ela era falsa. No contexto
+aeronáutico: aprovamos um modelo com viés sistemático, o trem de pouso é
+dimensionado com base em cargas incorretas e portanto pode ocorrer falha
+estrutural. A probabilidade β depende da magnitude do viés real, do
+tamanho da amostra e do nível α escolhido.</p>
+<div class="quote">
+<p><strong>O Trade-off Fundamental</strong></p>
+<p>α e β são antagônicos: reduzir α (exigir mais evidência para rejeitar
+H₀) aumenta β (torna mais fácil deixar passar um modelo defeituoso).
+Isso é análogo ao sistema jurídico: para reduzir a probabilidade de
+condenar um inocente (α), aceita-se uma probabilidade maior de absolver
+culpados (β). Na aviação, onde o Erro Tipo II tem consequência
+“catastrófica”, mantemos α razoável (0,05) mas investimos em amostras
+maiores para reduzir β via aumento do poder estatístico.</p>
+</div>
+<h3 id="a-tensão-entre-alpha-erro-tipo-i-e-p-value">A Tensão entre
+Alpha, Erro Tipo I e p-value</h3>
+<p>Esta é uma das confusões mais comuns — e mais perigosas — em
+estatística aplicada. Os três conceitos (α, Erro Tipo I e p-value) estão
+intimamente relacionados, mas operam em registros lógicos distintos.
+Entendê-los juntos é fundamental para não cometer o erro de
+interpretação mais frequente na literatura científica.</p>
+<h4 id="o-que-é-alpha-nível-de-significância">O que é Alpha (nível de
+significância)?</h4>
+<p>Alpha é um <strong>limiar de decisão pré-definido</strong>, escolhido
+<em>antes</em> de ver os dados. Ele representa a taxa máxima de falsos
+alarmes que o pesquisador ou organismo regulatório está disposto a
+tolerar em um procedimento de decisão repetido ao longo do tempo. Ao
+definir α = 0,05, você está dizendo: “se este experimento for repetido
+infinitas vezes em mundos onde H₀ é verdadeira, eu estou disposto a
+rejeitar H₀ incorretamente em no máximo 5% das vezes.”</p>
+<p>Há uma propriedade crucial aqui: <strong>alpha é uma propriedade do
+procedimento de decisão, não do experimento em si.</strong> É como a
+taxa de defeitos tolerável em uma linha de produção. Não diz nada sobre
+se esta peça específica é defeituosa — diz que o sistema de inspeção foi
+calibrado para rejeitar 5% das peças boas.</p>
+<h4 id="o-que-é-erro-tipo-i">O que é Erro Tipo I?</h4>
+<p>O Erro Tipo I é o <strong>evento</strong> de rejeitar H₀ quando ela é
+verdadeira em uma realização específica do experimento. É o erro em si —
+não a sua taxa. α é a taxa de ocorrência desse erro no longo prazo. A
+relação é:</p>
+<pre><code>P(Erro Tipo I) = α
+
+Ou seja:
+P(Rejeitar H₀ | H₀ verdadeira) = α
+
+Esta probabilidade é avaliada sobre a distribuição amostral de T,
+não sobre este experimento específico.</code></pre>
+<h4 id="o-que-é-o-p-value-e-como-se-relaciona-com-alpha">O que é o
+p-value e como se relaciona com alpha?</h4>
+<p>O p-value é calculado <em>após</em> ver os dados. Ele é a
+probabilidade — assumindo H₀ verdadeira — de obter uma estatística de
+teste tão extrema ou mais extrema do que a observada. É uma medida de
+compatibilidade entre os dados e H₀.</p>
+<p>A regra de decisão é simples: <strong>se p &lt; α, rejeitar
+H₀</strong>. Mas o insight profundo é que essa comparação só tem sentido
+porque α foi definido antes de ver os dados. Se você define α depois de
+ver o p-value — por exemplo, se o resultado foi p = 0,03 e então você
+declara α = 0,05 — o procedimento perde seu fundamento lógico e a taxa
+de Erro Tipo I já não é controlada.</p>
+<div class="box aviso">
+<div class="box-badge">
+<p>🚫 A Confusão Fatal</p>
+</div>
+<p>Quando dizemos “p &lt; α, rejeitamos H₀”, <strong>não</strong>
+estamos dizendo que H₀ tem probabilidade α de ser verdadeira. Não
+estamos dizendo que a probabilidade de estarmos errados é α. Estamos
+dizendo que usamos um procedimento de decisão que, repetido no longo
+prazo em mundos onde H₀ é verdadeira, erraria em α × 100% das vezes. A
+probabilidade que α quantifica é sobre o <em>procedimento ao longo do
+tempo</em>, não sobre esta hipótese neste experimento.</p>
+<h4 id="exemplo-concreto-por-que-isso-importa">Exemplo Concreto: Por que
+Isso Importa</h4>
+<p>Um engenheiro entrega o relatório: “o teste K-S produziu p = 0,03,
+rejeitamos H₀ com α = 0,05.” Qual é a probabilidade de que o simulador
+seja, na verdade, válido — e estejamos cometendo um Erro Tipo I?</p>
+<p>A resposta que o framework frequentista permite é apenas: “se o
+simulador fosse válido, a probabilidade de obter p ≤ 0,03 seria de 3%.”
+Não podemos dizer “há 3% de chance de estarmos errados neste caso”. Para
+isso, precisaríamos de probabilidade a priori sobre H₀ — e entramos no
+território bayesiano.</p>
+<p>Agora, invertamos o cenário empírico. O engenheiro entrega o
+relatório: “O teste K-S da taxa de afundamento retornou p = 0,40; logo,
+falhamos em rejeitar H₀.” O paradigma frequentista diz-nos estritamente
+o seguinte: “Se o modelo teórico fosse absolutamente exato,
+observaríamos desvios desta magnitude (ou maiores) em 40% das campanhas
+de ensaio, puramente devido ao ruído dos sensores, turbulência ou
+variabilidade inerente.”</p>
+<p>A interpretação que frequentemente (e perigosamente) ocorre é a
+ilusão da corroboração. A tentação cognitiva é ler p = 0,40 como “o
+modelo é excelente, os dados confirmam a teoria” ou, pior, “há 40% de
+probabilidade de o simulador ser perfeito”.</p>
+<p>Este é um salto lógico fatal. A ausência de evidência de erro não é
+evidência de perfeição. Um p-valor de 0,40 pode surgir não porque o
+modelo aerodinâmico é perfeito, mas sim porque as amostras são pequenas
+ou porque existem erros na medição das variáveis de ensaio.</p>
+<p>Como a falha em identificar um modelo ruim repousa no <a
+href="https://pt.wikipedia.org/wiki/Erro_do_tipo_II">Erro Tipo II
+(β)</a>, testes estatísticos padrão premiam amostras pequenas. A solução
+mais rigorosa é o procedimento <strong><a
+href="https://en.wikipedia.org/wiki/Equivalence_test">TOST (Two
+One-Sided Tests)</a></strong>, que inverte as hipóteses: H₀ passa a
+declarar que “o erro do simulador é inaceitavelmente grande”. Com isso,
+a amostra precisa ser grande o suficiente para comprovar (com confiança
+1-α) que o modelo é estatisticamente aceitável e equivalente aos dados
+de ensaio em voo.</p>
+<p><strong>Estrutura de Hipóteses do TOST (Schuirmann,
+1987):</strong></p>
+<pre><code>H₀₁: O erro do modelo é ≤ −Δ  (Subestimação inaceitável)  
+H₀₂: O erro do modelo é ≥ +Δ  (Superestimação inaceitável)  
+H₁ (Equivalência): O erro está contido no intervalo aberto (−Δ, +Δ)  
+Nota: os sinais de ≤ e ≥ são essenciais — H₀ deve abrigar o sinal de  
+igualdade (ver §2.2) para que a distribuição de referência seja ancorada  
+num valor exato.  </code></pre>
+<p>Antes do mecanismo, a calibração. O valor de Δ é decisão de
+engenharia, nunca estatística, e o exemplo de 0,5 ft/s no <em>sink
+rate</em> de toque ajuda a fixar a intuição. Um trem de pouso
+dimensionado para a condição nominal de 8 ft/s e certificado com margem
+de 1,5× suporta até 12 ft/s; um viés sistemático do simulador não gasta
+essa margem de uma vez, ele a subtrai silenciosamente em todos os
+cenários, sempre na mesma direção, porque desloca junto todas as cargas
+previstas. Em componentes regidos por <a
+href="https://pt.wikipedia.org/wiki/Fadiga_do_material">fadiga</a>, o
+efeito se amplifica: a vida útil cai com a tensão elevada a expoentes
+tipicamente entre 3 e 5, e pequenos deslocamentos sistemáticos de carga
+se acumulam ao longo de milhares de ciclos de pouso. Declarar Δ no
+protocolo é, portanto, traduzir a folga estrutural remanescente em um
+número verificável antes que dado algum exista.</p>
+<p>Para que o simulador seja validado, os dados empíricos precisam ter
+<em>poder estatístico suficiente</em> para <strong>rejeitar ambas as
+hipóteses nulas simultaneamente</strong>. O ônus da prova passa a ser do
+engenheiro: assumimos que o modelo é inaceitável até que se prove o
+contrário com alta confiança empírica (1-α).</p>
+<p>O mecanismo de decisão merece exposição explícita, porque a hipótese
+composta H₀: |θ| ≥ Δ não é testada diretamente. Ela se decompõe em dois
+testes unilaterais executados sobre o mesmo dado: um afasta o erro do
+limite inferior, o outro o afasta do superior, e a equivalência só é
+declarada quando ambos rejeitam suas nulas simultaneamente. Com θ
+denotando a diferença média simulador menos voo e SE o erro padrão dessa
+estimativa:</p>
+<pre><code>H₀: |θ| ≥ Δ        (erro fora da zona aceitável)  
+H₁: |θ| &lt; Δ        (equivalência)  
+Decomposição (dois testes unilaterais, nível α):  
+  H₀₁: θ ≤ −Δ   vs. H₁₁: θ &gt; −Δ     t₁ = (θ_obs + Δ) / SE  
+  H₀₂: θ ≥ +Δ   vs. H₁₂: θ &lt; +Δ     t₂ = (Δ − θ_obs) / SE  
+Equivalência declarada somente se t₁ e t₂ superarem  
+simultaneamente o valor crítico t de Student.  </code></pre>
+<p>Um exemplo numérico completo mostra a máquina funcionando. Sejam Δ =
+0,5 ft/s no <em>sink rate</em>, diferença observada θ_obs = 0,12 ft/s,
+desvio-padrão amostral s = 1,5 ft/s e n = 100 voos. O erro padrão vale
+SE ≈ s/√n = 1,5/10 = 0,15 ft/s, e as estatísticas saem:</p>
+<pre><code>t₁ = (0,12 + 0,50) / 0,15 ≈ 4,1  
+t₂ = (0,50 − 0,12) / 0,15 ≈ 2,5  
+Os dois p-values unilaterais ficam abaixo de 0,025, portanto  
+rejeitamos H₀₁ e H₀₂: o viés do simulador está confinado em  
+(−0,5, +0,5) ft/s com confiança de 95%.  </code></pre>
+<p>Existe uma identidade que comprime o procedimento em uma única
+checagem: o TOST com nível α equivale a exigir que o intervalo de
+confiança de (1 − 2α) da diferença esteja inteiramente contido em (−Δ,
++Δ). Com α = 0,05, basta verificar se o IC 90% cai dentro da zona de
+equivalência. No exemplo, o IC 90% vale 0,12 ± 1,66 × 0,15 ≈ (−0,13,
++0,37) ft/s, contido com folga em (−0,5, +0,5), e a conclusão coincide
+com a dos dois testes, como a teoria garante.</p>
+</div>
+<div class="quote">
+<p><strong>Validação Epistemológica: O TOST Fere Karl
+Popper?</strong></p>
+<p>À primeira vista, o TOST parece cometer o pecado epistemológico do
+<em><a
+href="https://en.wikipedia.org/wiki/Verificationism">verificacionismo</a></em>
+ao tentar “comprovar” a equivalência em H₁. No entanto, ele preserva e
+refina o rigor popperiano através do conceito de <strong><a
+href="https://en.wikipedia.org/wiki/Verisimilitude">versimilitude</a></strong>.</p>
+<p>O TOST reconhece a máxima de que todo modelo matemático é <a
+href="https://pt.wikipedia.org/wiki/Ontologia">ontologicamente</a>
+falso. Ele não tenta provar a premissa impossível de que “o simulador é
+idêntico à realidade”. Em vez disso, o TOST usa o <a
+href="https://pt.wikipedia.org/wiki/Falseabilidade">falsificacionismo
+metodológico</a> para <strong>falsificar o perigo</strong>.</p>
+<p>Ao rejeitarmos ativamente a hipótese de que o modelo é pior que o
+limite inferior, e rejeitarmos que é pior que o limite superior, a
+equivalência não se torna uma “verdade absoluta provada”, mas sim a
+constatação de que a teoria (o modelo) <strong>sobreviveu a tentativas
+severas de demonstrar que o seu erro excede o aceitável</strong>. A
+filosofia falsificacionista permanece intacta, mas a segurança
+estrutural ganha o rigor necessário para a aviação.</p>
+</div>
+<div class="quote">
+<p><strong>⚠️ IMPORTANTE</strong></p>
+<p>O rigor do TOST tem preço, e convém declará-lo abertamente: provar
+equivalência exige amostras bem maiores do que falhar em detectar
+diferenças, e cada ensaio em voo adicional custa caro, de modo que o
+orçamento de uma campanha limita até onde essa prova pode ser levada.
+Esse custo prático é real, mas não absolve os testes tradicionais do
+defeito diagnosticado nesta seção. Um p &gt; 0,05 ou um intervalo de
+confiança contendo zero continua demonstrando apenas insuficiência de
+evidência, e lê-lo como aprovação reintroduz a ilusão da corroboração
+com outra grafia. Compatibilizar o método com o orçamento não pede que
+se relaxe a lógica, e sim que se calibre Δ com honestidade: com 100
+voos, número razoável na prática, comprova-se equivalência apenas para
+margens relativamente largas. Cabe ao julgamento de engenharia decidir
+se a margem comprovável é estreita o suficiente para o componente em
+análise. Onde não é, a resposta correta do protocolo é “ainda não
+validado”, e não o passe automático que a fraqueza do teste tradicional
+costuma conceder.</p>
+</div>
+<hr />
+<h2 id="seção-5--significância-estatística-vs-relevância-prática">Seção
+5 — Significância Estatística vs. Relevância Prática</h2>
+<p>Um dos erros mais disseminados na aplicação de testes estatísticos é
+confundir <strong><a
+href="https://pt.wikipedia.org/wiki/Signific%C3%A2ncia_estat%C3%ADstica">significância
+estatística</a></strong> com <strong>relevância prática</strong>. São
+conceitos completamente distintos. Um resultado pode ser altamente
+significativo estatisticamente e ser irrelevante na prática. E pode ser
+irrelevante estatisticamente por falta de poder, mas ter enorme
+importância operacional.</p>
+<h3 id="o-papel-do-tamanho-de-amostra">O Papel do Tamanho de
+Amostra</h3>
+<p>O p-value não mede a magnitude de um efeito — ele mede a <em>precisão
+com que detectamos</em> qualquer efeito. Com amostras pequenas,
+diferenças grandes podem ser invisíveis (p alto). Com amostras imensas,
+diferenças ínfimas se tornam “estatisticamente significativas” (p
+baixo). O tamanho da amostra é o amplificador do sinal estatístico.</p>
+<p><strong>A Dependência do p-value com N:</strong></p>
+<pre><code>Para o [teste t de Welch](https://pt.wikipedia.org/wiki/Teste_t_de_Welch), a estatística de teste é:
+t = (X̄₁ − X̄₂) / SE
+
+Onde SE (erro padrão da diferença de duas médias) = √(σ₁²/n₁ + σ₂²/n₂)
+
+No caso assimétrico (ex: n₁ = 100 voos, n₂ = 5.000 Monte Carlo, σ₁ ≈ σ₂ = σ):
+SE ≈ √(σ²/100 + σ²/5000) ≈ σ/√100 = σ/10   [o termo 5000 é negligenciável]
+
+Portanto: t ≈ (X̄₁ − X̄₂) × √n_min / σ   [limitado pela amostra menor]
+
+Conclusão: para uma diferença física δ = X̄₁ − X̄₂ FIXA,
+a estatística t — e portanto o p-value — depende de √n_min.
+Aumente n suficientemente e qualquer δ &gt; 0 se tornará &quot;significativo&quot;.</code></pre>
+<h3 id="exemplo-detalhado-100-voos-vs-1000-voos">Exemplo Detalhado: 100
+Voos vs. 1.000 Voos</h3>
+<p>Considere o mesmo viés real do simulador — digamos, uma diferença
+média de 0,12 ft/s no <em>sink rate</em>. O simulador superestima
+sistematicamente o <em>sink rate</em> em 0,12 ft/s. É uma diferença
+real, mensurável, física. A questão é: essa diferença importa?</p>
+<p><strong>Cenário A — 100 pontos de voo:</strong> Com n = 100 e
+desvio-padrão típico de 1,5 ft/s, o erro padrão da diferença das médias
+é aproximadamente 1,5/√100 = 0,15 ft/s. A diferença de 0,12 ft/s é menor
+que o próprio erro padrão. O teste produz p ≈ 0,42 — não rejeitamos H₀.
+O simulador “passa no teste”.</p>
+<p><strong>Cenário B — 1.000 pontos de voo:</strong> O mesmo
+desvio-padrão de 1,5 ft/s, mas agora o erro padrão é 1,5/√1.000 ≈ 0,047
+ft/s. A diferença de 0,12 ft/s é agora 2,5 vezes maior que o erro
+padrão. O teste produz p ≈ 0,011 — rejeitamos H₀. O simulador “falha no
+teste”.</p>
+<p>Fizemos o mesmo experimento físico, com o mesmo simulador, com o
+mesmo viés de 0,12 ft/s. O resultado estatístico mudou completamente —
+não porque o simulador mudou, mas porque nosso poder de detecção
+aumentou. Isso ilustra que o p-value é uma função do tamanho amostral
+tanto quanto do efeito real.</p>
+<div class="quote">
+<p><strong>⚠️ Mas 0,12 ft/s Importa Engenheiramente?</strong></p>
+<p>Depende do contexto. Em um trem de pouso certificado para suportar
+<em>sink rates</em> de até 12 ft/s com margem de segurança de 1,5x, um
+viés sistemático de 0,12 ft/s representa 1% do valor de projeto. Isso é
+provavelmente desprezível — o modelo é <em>estatisticamente diferente da
+realidade</em>, mas <em>praticamente equivalente</em> para fins de
+dimensionamento estrutural. Por outro lado, para algum componente
+dimensionado com tolerâncias de fadiga extremamente apertadas, um viés
+sistemático de 0,12 ft/s pode representar uma redução significativa na
+vida útil projetada. A mesma diferença pode ser irrelevante em um
+contexto e relevante em outro.</p>
+</div>
+<h3 id="o-conceito-de-tamanho-de-efeito">O Conceito de Tamanho de
+Efeito</h3>
+<p>A solução para essa ambiguidade é separar dois relatórios distintos
+no protocolo de validação:</p>
+<ol type="1">
+<li><strong>Teste de hipótese:</strong> “Existe alguma diferença
+detectável com nossa amostra?” → respondido pelo <a
+href="https://pt.wikipedia.org/wiki/Valor_p">p-value</a> e pela decisão
+de rejeitar/não rejeitar H₀.</li>
+<li><strong>Estimativa do efeito:</strong> “Qual é a magnitude da
+diferença e qual é nossa incerteza sobre ela?” → respondido pelo <a
+href="https://pt.wikipedia.org/wiki/Intervalo_de_confian%C3%A7a">intervalo
+de confiança</a> da diferença e pelo <a
+href="https://pt.wikipedia.org/wiki/Tamanho_do_efeito">tamanho de
+efeito</a> padronizado.</li>
+</ol>
+<p>O <a
+href="https://pt.wikipedia.org/wiki/Intervalo_de_confian%C3%A7a">intervalo
+de confiança</a> tem uma vantagem decisiva sobre o p-value: ele comunica
+simultaneamente a direção, a magnitude e a incerteza do efeito. No
+Cenário A acima, o IC 95% da diferença seria aproximadamente (−0,18
+ft/s, +0,42 ft/s) — inclui zero, então não rejeitamos H₀, mas também
+vemos que a diferença real poderia ser tão grande quanto 0,42 ft/s, o
+que pode ser engenheiramente relevante. No Cenário B, o IC 95% seria
+(0,028 ft/s, 0,212 ft/s) — exclui zero (p &lt; 0,05) e toda a faixa
+plausível de viés é pequena, confirmando que a diferença, embora real, é
+modesta.</p>
+<div class="quote">
+<p><strong>Recomendação de Prática</strong></p>
+<p>Todo relatório de validação deve reportar: (1) a decisão binária do
+teste (p-value e comparação com α), (2) o intervalo de confiança da
+diferença, e (3) uma avaliação explícita da relevância prática à luz dos
+critérios de aceitação de projeto. O p-value sem o contexto de magnitude
+é insuficiente.</p>
+</div>
+<hr />
+<h2
+id="seção-6--os-problemas-do-p-value-multiplicidade-e-p-hacking">Seção 6
+— Os Problemas do p-value: Multiplicidade e p-Hacking</h2>
+<p>O p-value, quando usado com rigor metodológico, é uma ferramenta
+legítima. Mas a prática científica está repleta de armadilhas que
+distorcem sistematicamente os resultados — às vezes de forma
+inconsciente. Esta seção aborda o problema mais fundamental: <strong>o
+que acontece quando você repete o mesmo experimento muitas
+vezes?</strong></p>
+<h3 id="o-problema-da-comparações-múltiplas">O Problema da Comparações
+Múltiplas</h3>
+<p>Suponha que você define α = 0,05 e executa um único teste. A
+probabilidade de um Erro Tipo I (falso alarme) é 5% — aceitável. Mas e
+se você executar 20 testes independentes sobre o mesmo conjunto de
+dados? A probabilidade de que <em>pelo menos um</em> deles produza p
+&lt; 0,05 puramente por acaso é:</p>
+<pre><code>P(pelo menos 1 falso alarme em k testes) = 1 − (1 − α)^k
+
+Para α = 0,05 e k = 20 testes:
+P = 1 − (0,95)^20 ≈ 1 − 0,358 = 0,642
+
+Ou seja: 64,2% de chance de encontrar pelo menos um resultado
+&quot;significativo&quot; mesmo se nenhum efeito real existir.</code></pre>
+<p>Isso não é uma falha moral — é matemática pura. Cada teste
+individualmente tem 5% de chance de falso positivo. Ao empilhar 20
+testes, a taxa de erro acumulada sobe dramaticamente. Este é o problema
+da <strong><a
+href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">multiplicidade
+de testes</a></strong>, também chamado de <em>inflação do <a
+href="https://pt.wikipedia.org/wiki/Erro_do_tipo_I">Erro Tipo
+I</a></em>.</p>
+<h3 id="o-xkcd-que-resume-tudo">O xkcd que Resume Tudo</h3>
+<p>A tira do webcomic xkcd (#882 — “Significant”) ilustra este problema
+com precisão cirúrgica — e humor. Cientistas testam 20 cores de jujubas
+separadamente, encontram que as jujubas <em>verdes</em> causam acne com
+p &lt; 0,05, e um jornal publica a manchete como se fosse uma
+descoberta. A faixa de rodapé de cada painel diz, repetidamente, “não
+encontramos ligação (p &gt; 0,05)” — mas o resultado positivo inevitável
+em 20 tentativas vira a notícia.</p>
+<p><img src="../assets/media/xkcd_882_significant.png"
+alt="Tira xkcd #882, “Significant”: 20 testes de cores de jujubas, um positivo vira manchete" /></p>
+<p><em>Tira xkcd #882 — “Significant” (Randall Munroe) · Licença
+Creative Commons BY-NC 2.5.</em></p>
+<p>O que a tira captura é o seguinte: quando α = 0,05, esperamos que 1
+em cada 20 testes produza um resultado “significativo” por puro acaso.
+Se você testar 20 hipóteses (20 cores de jujuba, 20 subgrupos de
+pacientes, 20 parâmetros de voo), encontrará aproximadamente 1 resultado
+positivo — mesmo que nenhum efeito real exista. Se você reportar apenas
+o resultado positivo e ignorar os 19 negativos, estará enganando o
+leitor.</p>
+<h3 id="p-hacking-a-busca-involuntária-por-significância">p-Hacking: A
+Busca Involuntária por Significância</h3>
+<p><em>p-Hacking</em> é o termo para um conjunto de práticas —
+frequentemente inconscientes — que aumentam artificialmente a
+probabilidade de obter p &lt; 0,05. As formas mais comuns incluem:</p>
+<ul>
+<li><strong>Teste sequencial sem correção:</strong> coletar dados em
+lotes e testar após cada lote, parando quando p &lt; 0,05. Isso infla
+massivamente o Erro Tipo I.</li>
+<li><strong>Seleção de variáveis:</strong> testar múltiplas medidas e
+reportar apenas a que “deu significativa”.</li>
+<li><strong>Exclusão post-hoc de outliers:</strong> remover pontos
+discrepantes até que o p-value cruze o limiar.</li>
+<li><strong>Análise de subgrupos:</strong> segmentar os dados (por faixa
+etária, condição de vento, piloto) e reportar apenas o subgrupo onde p
+&lt; 0,05.</li>
+</ul>
+<h3 id="o-problema-da-reprodutibilidade">O Problema da
+Reprodutibilidade</h3>
+<p>A combinação de testes múltiplos, <a
+href="https://en.wikipedia.org/wiki/Data_dredging">p-hacking</a> e viés
+de publicação (revistas publicam resultados positivos) gerou a
+<strong><a
+href="https://pt.wikipedia.org/wiki/Crise_de_replica%C3%A7%C3%A3o">crise
+de reprodutibilidade</a></strong> nas ciências. Um estudo publicado em
+2015 na revista <em>Science</em> — o “<a
+href="https://en.wikipedia.org/wiki/Reproducibility_Project">Reproducibility
+Project</a>” — tentou replicar 100 estudos de psicologia publicados com
+p &lt; 0,05. Apenas 39 replicaram com p &lt; 0,05 no mesmo sentido do
+estudo original. Isso não significa que 61% eram fraudulentos —
+significa que o sistema de inferência estava mal calibrado.</p>
+<p>Para a engenharia aeronáutica, a lição é direta: um protocolo de
+validação preciso deve especificar, <em>antes de ver os dados</em>,
+quais testes serão aplicados, com quais limiares, e qual critério de
+aceitação final. Esse pré-registro do protocolo é o equivalente da
+hipótese popperiana audaciosa — ela existe antes da evidência, e não é
+modificada depois de ver o resultado.</p>
+<div class="box generico">
+<div class="box-badge">
+<p>Correções para Comparações Múltiplas</p>
+</div>
+<p>As correções mais usadas são: <strong><a
+href="https://pt.wikipedia.org/wiki/Corre%C3%A7%C3%A3o_de_Bonferroni">Bonferroni</a></strong>
+(dividir α pelo número de testes — conservadora), <strong><a
+href="https://en.wikipedia.org/wiki/Benjamini%E2%80%93Hochberg_procedure">Benjamini-Hochberg</a></strong>
+(controla a <a
+href="https://en.wikipedia.org/wiki/False_discovery_rate">taxa de
+descobertas falsas</a> — menos conservadora, mais poderosa), e
+<strong><a
+href="https://en.wikipedia.org/wiki/Holm%E2%80%93Bonferroni_method">Holm-Bonferroni</a></strong>
+(sequencial, equilíbrio entre conservadorismo e poder). Em contextos
+regulatórios aeronáuticos, a abordagem mais segura é declarar
+explicitamente o conjunto completo de testes e o critério de aceitação
+antecipadamente — como na Seção 8 deste documento.</p>
+</div>
+<hr />
+<h2
+id="seção-7--testes-estatísticos-para-comparação-de-distribuições-em-dinâmica-de-voo">Seção
+7 — Testes Estatísticos para Comparação de Distribuições em Dinâmica de
+Voo</h2>
+<p>A crise de reprodutibilidade termina, para o validador de
+simuladores, em uma prescrição concreta: escolher testes adequados ao
+formato físico dos dados e declará-los antes da coleta. Este catálogo
+reúne os candidatos para a comparação de distribuições em dinâmica de
+voo. Parâmetros como <em>sink rate</em> são fisicamente limitados (não
+negativos), assimétricos (caudas pesadas à direita), e multivariados — a
+assunção <a
+href="https://pt.wikipedia.org/wiki/Distribui%C3%A7%C3%A3o_normal">gaussiana</a>
+falha. Precisamos de testes robustos ao formato real da
+distribuição.</p>
+<h3 id="kolmogorovsmirnov-k-s-de-duas-amostras">Kolmogorov–Smirnov (K-S
+de Duas Amostras)</h3>
+<p>Compara as <a
+href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_de_distribui%C3%A7%C3%A3o_emp%C3%ADrica">ECDFs</a>
+das duas populações. A estatística D é a máxima diferença vertical entre
+as curvas acumuladas. Sensível ao centro da distribuição; menos sensível
+às caudas. Ideal para detectar desvios sistemáticos globais de
+localização e forma.</p>
+<p><em>Não-paramétrico · Global</em></p>
+<h3 id="andersondarling-a-d-de-duas-amostras">Anderson–Darling (A-D de
+Duas Amostras)</h3>
+<p>Evolução do <a
+href="https://pt.wikipedia.org/wiki/Teste_de_Kolmogorov%E2%80%93Smirnov">K-S</a>
+com função de peso que amplifica discrepâncias nas caudas. A estatística
+A² integra o erro quadrático ponderado ao longo de toda a <a
+href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_de_distribui%C3%A7%C3%A3o_emp%C3%ADrica">ECDF</a>.
+Útil para parâmetros estruturais, por exemplo, onde as caudas extremas
+dimensionam componentes.</p>
+<p><em>Não-paramétrico · Sensível às caudas</em></p>
+<h3 id="mannwhitney-u-rank-sum-de-wilcoxon">Mann–Whitney U (Rank-Sum de
+Wilcoxon)</h3>
+<p>Baseado em <a
+href="https://pt.wikipedia.org/wiki/Ordena%C3%A7%C3%A3o_(estat%C3%ADstica)">ranks</a>
+ordinais. Imune a outliers absurdos (erro de telemetria de 1000 ft/s
+ganha apenas o rank máximo). Avalia se uma amostra tende
+sistematicamente a produzir valores maiores ou menores. Excelente para
+comparar tendências medianas.</p>
+<p><em>Não-paramétrico · Robusto a outliers</em></p>
+<h3 id="brownforsythe-teste-de-igualdade-de-variâncias">Brown–Forsythe
+(Teste de Igualdade de Variâncias)</h3>
+<p>Avalia se as duas populações têm a mesma dispersão (σ²). Usa
+distâncias absolutas à mediana — robusto à não-normalidade. Detecta
+modelos excessivamente “comportados” que subestimam a variabilidade
+natural do sistema físico.</p>
+<p><em>Não-paramétrico · Variância</em></p>
+<h3 id="teste-t-de-welch-comparação-de-médias">Teste t de Welch
+(Comparação de Médias)</h3>
+<p>Versão do <a
+href="https://pt.wikipedia.org/wiki/Teste_t_de_Student">teste t</a> que
+não assume variâncias iguais. Adequado quando as amostras são grandes o
+suficiente para o <a
+href="https://pt.wikipedia.org/wiki/Teorema_central_do_limite">Teorema
+Central do Limite</a> garantir normalidade das médias (n &gt; 30).
+Simples, mas insensível a diferenças de forma.</p>
+<p><em>Paramétrico · Localização</em></p>
+<h3 id="q-q-plot-quantilequantile-plot">Q-Q Plot (Quantile–Quantile
+Plot)</h3>
+<p>Diagnóstico visual: plota os <a
+href="https://pt.wikipedia.org/wiki/Quantil">quantis</a> de uma
+distribuição contra os da outra. Se as distribuições forem idênticas, os
+pontos se alinham na diagonal 45°. Desvios sistemáticos (curvatura,
+inclinação diferente) revelam divergências de localização, dispersão e
+assimetria de forma intuitiva.</p>
+<p><em>Visual · Diagnóstico</em></p>
+<h3 id="a-matemática-por-trás-do-q-q-plot">A Matemática por Trás do Q-Q
+Plot</h3>
+<p>O <a href="https://pt.wikipedia.org/wiki/Gr%C3%A1fico_Q-Q">Q-Q
+Plot</a> merece tratamento especial por sua capacidade diagnóstica
+insubstituível. Para construí-lo entre a simulação S e o voo V:</p>
+<pre><code>Para cada quantil p ∈ {1/n, 2/n, ..., (n-1)/n}:
+Plot: (Q_S(p), Q_V(p))
+
+Interpretação dos padrões:
+— Linha diagonal 45°: distribuições idênticas
+— Linha acima da diagonal: sim. subestima os valores reais
+— Linha abaixo da diagonal: sim. superestima os valores reais
+— Curvatura em S: diferença de assimetria
+— Extremidades fora da reta: caudas mais pesadas ou leves no voo real</code></pre>
+<p><img src="../assets/media/qq_plot_demonstrativo.svg"
+style="width:100.0%"
+alt="Q-Q Plot demonstrativo: curva observada abaixo da diagonal de referência" /></p>
+<p>O gráfico acima representa um Q-Q Plot onde a curva observada
+(vermelho) está sistematicamente abaixo da diagonal de referência
+(ouro), indicando que os quantis do voo excedem os quantis do simulador
+— o modelo subestima o <em>sink rate</em> principalmente na cauda.</p>
+<h3 id="além-das-marginais-o-desafio-multivariado">Além das Marginais: O
+Desafio Multivariado</h3>
+<p>Todo o arsenal anterior compara uma grandeza de cada vez, mas a
+promessa multivariada feita na abertura da seção segue em aberto.
+<em>Sink rate</em>, atitude de aproximação e velocidade verdadeira
+formam um vetor, e é a superfície conjunta dessas variáveis que
+dimensiona estrutura, não cada marginal isolada. Um simulador pode
+reproduzir as três distribuições individuais com perfeição e ainda errar
+a <a
+href="https://pt.wikipedia.org/wiki/Covari%C3%A2ncia">covariância</a>
+entre elas, aprovando combinações de atitude e velocidade em que o
+<em>sink rate</em> previsto diverge justamente no regime que mais gera
+carga.</p>
+<p>O tratamento formal parte da <a
+href="https://en.wikipedia.org/wiki/Mahalanobis_distance">distância de
+Mahalanobis</a>: cada vetor de parâmetros observado é avaliado na
+métrica da matriz de covariância combinada das duas populações, e a
+distância entre os centroides pondera cada desvio pela dispersão natural
+da direção em que ocorre. Um desvio de 0,5 ft/s no <em>sink rate</em>
+pesa mais se a grandeza varia pouco entre voos, e menos se ela já oscila
+3 ft/s naturalmente. Para confrontar as nuvens de pontos completas, sem
+reduzi-las a centroides, recorre-se ao <a
+href="https://en.wikipedia.org/wiki/Energy_distance">teste de duas
+amostras multivariado</a> baseado em distância energética. Na rotina de
+validação, o exame direto das correlações pareadas (<em>sink rate</em> ×
+atitude, <em>sink rate</em> × velocidade, atitude × velocidade), por
+exemplo com <a href="https://pt.wikipedia.org/wiki/Gr%C3%A1fico_Q-Q">Q-Q
+Plots</a> condicionais por faixa de velocidade, revela a maior parte dos
+descasamentos conjuntos antes de qualquer formalismo e serve de triagem
+para os testes multivariados.</p>
+<hr />
+<h2 id="seção-8--roteiro-prático-comparação-voo-vs-simulação">Seção 8 —
+Roteiro Prático: Comparação Voo vs. Simulação</h2>
+<p>Esta seção consolida os conceitos anteriores em um protocolo
+operacional para a validação de um simulador de voo com 5.000 pontos de
+Monte Carlo e 100 pontos de ensaio em voo.</p>
+<h3 id="passo-1--análise-exploratória-visual">Passo 1 — Análise
+Exploratória Visual</h3>
+<p>Antes de qualquer teste formal, visualize os dados. Histogramas
+sobrepostos com densidades kernel (<a
+href="https://pt.wikipedia.org/wiki/Estimativa_de_densidade_kernel">KDE</a>),
+boxplots e — criticamente — o <a
+href="https://pt.wikipedia.org/wiki/Gr%C3%A1fico_Q-Q">Q-Q Plot</a>. A
+análise visual frequentemente revela problemas estruturais
+(bimodalidade, outliers sistemáticos, diferenças de cauda) que nenhum
+número único captura.</p>
+<h3 id="passo-2--verificação-de-pré-condições">Passo 2 — Verificação de
+Pré-condições</h3>
+<p>Embora seja impossível assegurar completa independência e ausência de
+vieses nos dados de voo, o engenheiro deve perseguir o máximo de
+independência alcançável. Uma medida concreta é não concentrar condições
+extremas simultâneas (vento cruzado forte, peso elevado, turbulência) em
+um único voo de ensaio: cada realização composta extrema carrega pouca
+informação representativa e influencia desproporcionalmente as
+estatísticas de cauda.</p>
+<p>Outra ameaça silenciosa à independência é a <a
+href="https://pt.wikipedia.org/wiki/Autocorrela%C3%A7%C3%A3o">autocorrelação</a>
+serial. Campanhas reais concentram vários voos na mesma semana, com
+padrão de vento parecido, massas semelhantes e, frequentemente, o mesmo
+piloto de prova; voos consecutivos herdam perturbações atmosféricas
+lentas e idiossincrasias de configuração, e cada novo voo entrega menos
+informação nova do que a contagem sugere. O tamanho efetivo da amostra
+cai abaixo de n, os erros padrão saem subestimados e o protocolo passa a
+reclamar de uma precisão que não existe. Quando a cronologia dos voos
+está registrada, examine os resíduos contra ela em busca de
+autocorrelação. Encontrando-a, agregue os dados em blocos de coleta (dia
+ou semana) e trate cada bloco como a unidade independente, mesmo que
+isso reduza o número de observações formais.</p>
+<p>O engenheiro também deve garantir que os ensaios em voo exploraram
+distribuições parecidas com os dados do Monte Carlo. Vieses sistemáticos
+nas entradas resultam em vieses sistemáticos nos resultados,
+contaminando a comparação.</p>
+<h3 id="passo-3--bateria-de-testes-hierárquicos">Passo 3 — Bateria de
+Testes Hierárquicos</h3>
+<table>
+<colgroup>
+<col style="width: 2%" />
+<col style="width: 48%" />
+<col style="width: 28%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Ordem</th>
+<th>Teste</th>
+<th>O Que Avalia</th>
+<th>Critério de Aceitação (Equivalência)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="https://pt.wikipedia.org/wiki/Gr%C3%A1fico_Q-Q">Q-Q
+Plot</a></td>
+<td>Concordância global visual + diagnóstico de caudas</td>
+<td>Sem divergência estrutural (inspeção qualitativa)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a
+href="https://pt.wikipedia.org/wiki/Teste_de_Kolmogorov%E2%80%93Smirnov">Kolmogorov–Smirnov</a></td>
+<td>Diferença máxima entre ECDFs (global)</td>
+<td>Triagem: p ≤ 0,05 revela divergência global e reprova; p &gt; 0,05
+não aprova, apenas libera a etapa seguinte</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a
+href="https://pt.wikipedia.org/wiki/Teste_de_Anderson%E2%80%93Darling">Anderson–Darling</a></td>
+<td>Concordância nas caudas</td>
+<td>Triagem: mesmo papel do K-S, focada nas caudas</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a
+href="https://pt.wikipedia.org/wiki/Teste_de_Mann%E2%80%93Whitney">Mann–Whitney
+U</a></td>
+<td>Diferença de localização (mediana)</td>
+<td>Equivalência: IC 90% da diferença de medianas contido em (−Δ_loc,
++Δ_loc), na forma do TOST</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a
+href="https://en.wikipedia.org/wiki/Brown%E2%80%93Forsythe_test">Brown–Forsythe</a></td>
+<td>Igualdade de dispersão (variância)</td>
+<td>Equivalência: razão dos desvios-padrão contida na banda declarada a
+priori</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a
+href="https://pt.wikipedia.org/wiki/Intervalo_de_confian%C3%A7a">IC da
+Diferença</a></td>
+<td>Magnitude prática do viés</td>
+<td>Equivalência: IC 90% da diferença de médias contido em (−Δ, +Δ)</td>
+</tr>
+</tbody>
+</table>
+<p>A coluna de aceitação materializa a lição da Seção 4.2: nenhum
+critério deste roteiro aprova um modelo por não-rejeição. Os itens de
+triagem operam apenas no sentido popperiano: são capazes de reprovar,
+jamais de validar, e um p alto neles significa que aquele tipo de
+divergência não foi encontrado, não que o modelo esteja apto. A
+aprovação nasce exclusivamente dos critérios de equivalência, todos na
+arquitetura do TOST: a diferença observada precisa caber, com
+significância estatística, dentro da margem declarada antes dos dados, o
+que se verifica de forma idêntica checando se o IC 90% está contido em
+(−Δ, +Δ). As margens Δ_loc e Δ não são escolhas estatísticas: seguem das
+margens físicas de projeto, na linha discutida na Seção 4.2, e devem
+constar do protocolo pré-registrado defendido na Seção 6.</p>
+<h3 id="passo-4--análise-de-poder-estatístico">Passo 4 — Análise de
+Poder Estatístico</h3>
+<p>Com apenas 100 pontos de voo versus 5.000 do <a
+href="https://pt.wikipedia.org/wiki/M%C3%A9todo_de_Monte_Carlo">Monte
+Carlo</a>, o <a
+href="https://pt.wikipedia.org/wiki/Pot%C3%AAncia_estat%C3%ADstica">poder
+estatístico</a> é limitado pela amostra menor. Calcule o poder post-hoc:
+qual a probabilidade de que estes 100 voos detectassem um viés de,
+digamos, 0,5 ft/s (engenheiramente significativo)? Se o poder for baixo
+(&lt; 80%), os testes negativos devem ser interpretados com cautela —
+não como confirmação do modelo, mas como insuficiência de evidência.</p>
+<pre><code>Poder = P(rejeitar H₀ | H₁ verdadeira com δ = efeito mínimo relevante)
+
+Parâmetros necessários:
+α = nível de significância (ex: 0,05)
+δ = diferença mínima engenheiramente relevante (ex: 0,5 ft/s)
+σ = desvio-padrão estimado (do Monte Carlo)
+n = tamanho da amostra de voo (100)
+
+n necessário para Poder = 0,80, α = 0,05:
+n ≈ 2 × (z_α/2 + z_β)² × σ² / δ²</code></pre>
+<p>Executando a fórmula com os parâmetros deste roteiro (δ = 0,5 ft/s, σ
+= 1,5 ft/s, n = 100 voos, α = 0,05):</p>
+<pre><code>Isolando o termo de potência em n:
+(z_α/2 + z_β)² = n·δ² / (2σ²) = 100 × 0,25 / (2 × 2,25) ≈ 5,56
+z_α/2 + z_β ≈ 2,36   →   z_β ≈ 2,36 − 1,96 = 0,40
+Poder = Φ(z_β) ≈ Φ(0,40) ≈ 0,65
+
+Efeito mínimo relevante reduzido à metade (δ = 0,25 ft/s):
+n ≈ 2 × (1,96 + 0,84)² × 1,5² / 0,25² ≈ 564 voos</code></pre>
+<p>Com 100 voos, a probabilidade de detectar um viés de 0,5 ft/s gira em
+torno de 65%, abaixo da referência usual de 80%. Vale notar que a
+fórmula pressupõe os dois grupos com o mesmo tamanho; neste roteiro, os
+5.000 pontos de Monte Carlo contribuem de forma desprezível para o erro
+padrão (como derivado na Seção 5), de modo que a estimativa acima
+funciona como piso conservador e o poder efetivo fica acima dela. A
+mensagem estrutural independe desse detalhe: o poder varia com o inverso
+do quadrado do efeito procurado. Reduzir à metade a diferença mínima que
+importa quadruplica os voos exigidos, e um critério de equivalência com
+Δ estreito paga essa conta integralmente. É o custo prático que a Seção
+4.2 reconhece sem abrir mão da lógica.</p>
+<h3 id="passo-5--interpretação-integrada-e-relatório">Passo 5 —
+Interpretação Integrada e Relatório</h3>
+<p>Nenhum teste isolado valida um modelo. A bateria de testes deve ser
+interpretada conjuntamente:</p>
+<ul>
+<li><strong>K-S passa, A-D reprova:</strong> o modelo acerta o centro da
+distribuição, mas erra as caudas extremas — isso é aceitável para o que
+está sendo comparado?</li>
+<li><strong>Mann-Whitney passa, Brown-Forsythe reprova:</strong> a
+mediana está alinhada, mas o modelo é artificialmente suave — subestima
+eventos extremos por menor variabilidade.</li>
+<li><strong>Todos passam, mas Q-Q Plot mostra curvatura em S:</strong>
+as medianas e os extremos batem, mas há uma diferença de assimetria que
+nenhum teste escalar capturou — investigue a física dos casos
+intermediários.</li>
+</ul>
+<p><strong>Recomendação Final:</strong> A validação estatística é
+necessária, mas não suficiente. Ela deve ser combinada com: (1) análise
+de dados e estatística estruturada (o modelo erra sistematicamente em
+determinada configuração de vento ou massa?), (2) validação de
+conservadorismo (em quais percentis o modelo é conservador
+vs. não-conservador?) e (3) análise de sensibilidade dos parâmetros do
+Monte Carlo. A estatística diz “os dados são consistentes (ou não) com o
+modelo” — a física diz “por quê”.</p>
+<hr />
+<h2 id="seção-9--conclusão-validação-como-corroboração-provisória">Seção
+9 — Conclusão: Validação Como Corroboração Provisória</h2>
+<p>Vale retomar o ponto de partida. Hume mostrou que nenhuma quantidade
+finita de observações deduz uma lei universal, e cem voos de ensaio não
+são a exceção aguardada: por mais alinhados que estejam com o modelo
+computacional, eles não provam que o simulador representa a aeronave.
+Mostram apenas que ele ainda não falhou em demonstrar o contrário. Todo
+o aparato construído nas seções anteriores não dissolve o problema da
+indução: administra-o. O protocolo da Seção 8 converte a pergunta
+filosófica irrespondível (“o modelo é verdadeiro?”) em perguntas
+respondíveis (“os dados permitem rejeitar que o erro exceda a margem
+declarada?”), com taxas de erro controladas e critérios fixados antes da
+coleta.</p>
+<p>É aqui que Popper fecha a arquitetura. Um simulador aprovado por
+critérios de equivalência com Δ engenheiramente justificado não se
+tornou verdadeiro: acumulou corroboração. Na epistemologia popperiana,
+corroboração é registro de desempenho passado sob exame severo, não
+licença sobre o futuro. Ela vale para os pontos de voo ensaiados, nas
+condições ensaiadas, com os sensores disponíveis. Extrapolá-la para
+regiões nunca voadas do envelope é exatamente o salto indutivo que a
+Seção 1 declarou irredutível. Daí a disciplina de linguagem que separa o
+relatório profissional do entusiasmo: não “o modelo está validado”, e
+sim “o modelo foi corroborado dentro de ±0,5 ft/s no <em>sink rate</em>
+pelas evidências disponíveis até esta campanha”.</p>
+<p>Essa leitura explica também por que validação não é evento com data
+de término, e sim processo que acompanha o modelo pela vida útil. Cada
+nova campanha de ensaio, cada extensão de envelope, cada sensor mais
+preciso constitui uma tentativa nova de falsificação, e a posição
+epistêmica do modelo muda com cada uma delas. Os critérios de
+equivalência tornam essas tentativas genuinamente severas: aprovar custa
+evidência abundante, não benevolência estatística, e reprovar continua
+bastando um único conjunto de dados convincente.</p>
+<p>A tese da Seção 1 encontra aqui sua forma final. A inferência
+estatística é a resposta operacionalizável que a engenharia oferece a
+uma pergunta formulada pela filosofia há quase três séculos. O teste de
+hipótese traduz a assimetria popperiana entre refutar e confirmar em
+procedimento com erro controlado. Os critérios de equivalência decidem
+quem carrega o ônus da prova, e o julgamento de engenharia fixa o que
+conta como perigo inaceitável. Entre Hume e o relatório de validação
+estende-se um continuum de ideias, e este white paper sustentou que
+percorrê-lo não é ornamento erudito: é o que separa executar um teste
+estatístico de compreender o que ele pode dizer, e o que jamais poderá
+dizer.</p>
+<hr />
+<h2 id="referências">Referências</h2>
+<p>[1] Sasaki, K., de Paula, L. C., de Carvalho, B. J., Marcatto, I. B.
+T., Siqueira, D., e Zambrano, G. J., <em>Auto-Landing Function Analysis
+- A Statistical Approach for Flight Mechanics Evaluations</em>, AIAA
+SciTech 2021 Forum, AIAA Paper 2021-0115, January 2021. DOI:
+10.2514/6.2021-0115. <a
+href="https://arc.aiaa.org/doi/10.2514/6.2021-0115">Link</a></p>
+<p>[2] Fisher, R.A. <em>Statistical Methods for Research Workers</em>,
+Oliver &amp; Boyd, 1925. — A obra seminal que introduziu o p-value como
+ferramenta de inferência. Disponível via <a
+href="https://en.wikipedia.org/wiki/Statistical_Methods_for_Research_Workers">Wikipedia
+(EN)</a>. <a
+href="https://psychclassics.yorku.ca/Fisher/Methods/">Link</a></p>
+<p>[3] Neyman, J. &amp; Pearson, E.S. <em>On the Problem of the Most
+Efficient Tests of Statistical Hypotheses</em>, Philosophical
+Transactions of the Royal Society, vol. 231, pp. 289–337, 1933. DOI:
+10.1098/rsta.1933.0009 — Artigo fundador do framework H₀/H₁ e dos Erros
+Tipo I e II. <a
+href="https://doi.org/10.1098/rsta.1933.0009">Link</a></p>
+<p>[4] Wasserstein, R.L. &amp; Lazar, N.A. <em>The ASA’s Statement on
+p-Values: Context, Process, and Purpose</em>, The American Statistician,
+70(2), 129–133, 2016. DOI: 10.1080/00031305.2016.1154108 — Declaração
+oficial da Associação Americana de Estatística sobre uso e interpretação
+do p-value. <a
+href="https://doi.org/10.1080/00031305.2016.1154108">Link</a></p>
+<p>[5] Wasserstein, R.L., Schirm, A.L. &amp; Lazar, N.A. <em>Moving to a
+World Beyond ’p &lt; 0.05</em>, The American Statistician, 73(sup1),
+1–19, 2019. DOI: 10.1080/00031305.2019.1583913 — Extensão da declaração
+de 2016; aborda o problema da dicotomização do p-value. <a
+href="https://doi.org/10.1080/00031305.2019.1583913">Link</a></p>
+<p>[6] Cohen, J. <em>The Earth Is Round (p &lt;.05)</em>, American
+Psychologist, 49(12), 997–1003, 1994. DOI: 10.1037/0003-066X.49.12.997 —
+Análise clássica e crítica das limitações do p-value e da significância
+estatística. <a
+href="https://doi.org/10.1037/0003-066X.49.12.997">Link</a></p>
+<p>[7] Lehmann, E.L. &amp; Romano, J.P. <em>Testing Statistical
+Hypotheses</em>, 3ª ed. Springer, 2005. — Tratamento matemático rigoroso
+da teoria de testes de hipótese, incluindo poder, tamanho de efeito e
+comparações múltiplas. <a
+href="https://doi.org/10.1007/0-387-27605-X">Link</a></p>
+<p>[8] Gelman, A. &amp; Loken, E. <em>The Statistical Crisis in
+Science</em>, American Scientist, 102(6), 460–465, 2014.
+americanscientist.org — Análise do p-hacking, garden of forking paths e
+a crise de reprodutibilidade. <a
+href="https://www.americanscientist.org/article/the-statistical-crisis-in-science">Link</a></p>
+<p>[9] Popper, K. R., <em>The Logic of Scientific Discovery</em>,
+Routledge, 1959 (original alemão: 1934). — Obra fundadora da
+falsificabilidade como critério de demarcação científica. <a
+href="https://en.wikipedia.org/wiki/The_Logic_of_Scientific_Discovery">Link</a></p>
+<p>[10] Popper, K.R. <em>Conjectures and Refutations</em>, Routledge,
+1963. — Desenvolvimento da epistemologia popperiana com ênfase na
+corroboração provisória e na versimilitude. <a
+href="https://en.wikipedia.org/wiki/Conjectures_and_Refutations">Link</a></p>
+<p>[11] Hume, D. <em>An Enquiry Concerning Human Understanding</em>,
+1748. — O problema da indução em sua formulação clássica. <a
+href="https://en.wikipedia.org/wiki/An_Enquiry_Concerning_Human_Understanding">Wikipedia
+(EN)</a>. <a
+href="https://en.wikipedia.org/wiki/An_Enquiry_Concerning_Human_Understanding">Link</a></p>
+<p>[12] Kolmogorov, A.N. <em>Sulla determinazione empirica di una legge
+di distribuzione</em>, Giornale dell’Istituto Italiano degli Attuari, 4,
+83–91, 1933. — Artigo original do teste K-S. Sem DOI (pré-digital); ver
+<a
+href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test">Kolmogorov–Smirnov
+test (Wikipedia EN)</a>. <a
+href="http://digitale.bnc.roma.sbn.it/tecadigitale/giornale/CFI0353791/1933/unico">Link</a></p>
+<p>[13] Anderson, T.W. &amp; Darling, D.A. <em>A Test of Goodness of
+Fit</em>, Journal of the American Statistical Association, 49(268),
+765–769, 1954. tandfonline.com (abstract livre) — Artigo original do
+teste A-D com ênfase nas caudas. <a
+href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1954.10501232">Link</a></p>
+<p>[14] Mann, H.B. &amp; Whitney, D.R. <em>On a Test of Whether One of
+Two Random Variables Is Stochastically Larger than the Other</em>,
+Annals of Mathematical Statistics, 18(1), 50–60, 1947. projecteuclid.org
+(acesso aberto). <a
+href="https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-18/issue-1/On-a-Test-of-Whether-One-of-Two-Random-Variables/10.1214/aoms/1177730491.full">Link</a></p>
+<p>[15] Brown, M.B. &amp; Forsythe, A.B. <em>Robust Tests for the
+Equality of Variances</em>, Journal of the American Statistical
+Association, 69(346), 364–367, 1974. DOI:
+10.1080/01621459.1974.10482955. <a
+href="https://doi.org/10.1080/01621459.1974.10482955">Link</a></p>
+<p>[16] <em>Teste de Hipótese</em>, Wikipédia, a enciclopédia livre. —
+Wikipédia PT. <a
+href="https://pt.wikipedia.org/wiki/Teste_de_hip%C3%B3tese">Link</a></p>
+<p>[17] <em>Valor-p</em>, Wikipédia, a enciclopédia livre. — Wikipédia
+PT. <a href="https://pt.wikipedia.org/wiki/Valor_p">Link</a></p>
+<p>[18] <em>Significância Estatística</em>, Wikipédia, a enciclopédia
+livre. — Wikipédia PT. <a
+href="https://pt.wikipedia.org/wiki/Signific%C3%A2ncia_estat%C3%ADstica">Link</a></p>
+<p>[19] <em>Potência Estatística</em>, Wikipédia, a enciclopédia livre.
+— Wikipédia PT. <a
+href="https://pt.wikipedia.org/wiki/Pot%C3%AAncia_estat%C3%ADstica">Link</a></p>
+<p>[20] <em>Tamanho do Efeito</em>, Wikipédia, a enciclopédia livre. —
+Wikipédia PT. <a
+href="https://pt.wikipedia.org/wiki/Tamanho_do_efeito">Link</a></p>
+<p>[21] <em>Multiple Comparisons Problem</em>, Wikipedia, The Free
+Encyclopedia. — Wikipedia EN. <a
+href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">Link</a></p>
+<p>[22] <em>Data Dredging (p-Hacking)</em>, Wikipedia, The Free
+Encyclopedia. — Wikipedia EN. <a
+href="https://en.wikipedia.org/wiki/Data_dredging">Link</a></p>
+<p>[23] <em>Frequentist Probability</em>, Wikipedia, The Free
+Encyclopedia. — Wikipedia EN. <a
+href="https://en.wikipedia.org/wiki/Frequentist_probability">Link</a></p>
+<p>[24] Schuirmann, D. J. <em>A Comparison of the Two One-Sided Tests
+Procedure and the Power Approach for Assessing the Equivalence of
+Average Bioavailability</em>, Journal of Pharmacokinetics and
+Biopharmaceutics, Vol. 15, No. 6, pp. 657–680, 1987. DOI:
+10.1007/BF01068419 — Artigo original do TOST, base dos critérios de
+equivalência das Seções 4.2 e 8. <a
+href="https://doi.org/10.1007/BF01068419">Link</a></p>
+<p>[25] Open Science Collaboration, <em>Estimating the Reproducibility
+of Psychological Science</em>, Science, Vol. 349, No. 6251, aac4716,
+2015. DOI: 10.1126/science.aac4716 — O Reproducibility Project:
+Psychology: replicação coordenada de 100 estudos; apenas 39 mantiveram
+significância no mesmo sentido do original. <a
+href="https://doi.org/10.1126/science.aac4716">Link</a></p>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Maio de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  if(toTop){toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Identifica e classifica divisores de capitulo: o losango so aparece onde ha capitulo real */
+  document.querySelectorAll(".content hr").forEach(function(hr){
+    var next=hr.nextElementSibling;
+    while(next&&next.nodeType===1&&next.tagName==="P"&&!next.textContent.trim()){
+      next=next.nextElementSibling;
+    }
+    if(next&&next.tagName==="H2"){
+      var id=(next.id||"").toLowerCase();
+      if(id.indexOf("sum")===0){
+        hr.style.display="none";
+      }else if(id.indexOf("ref")===0){
+        hr.classList.add("sb-hr-references");
+      }else{
+        hr.classList.add("sb-hr-chapter");
+      }
+    }
+  });
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Estatística</span><span class="sb-tag">Epistemologia</span><span class="sb-tag">Engenharia</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="metodos-matematicos-engenharia-aeroespacial.html"><strong>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</strong><span>Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</span></a><a class="sb-related-card" href="dutch-roll-white-paper.html"><strong>Dinâmica Analítica e Acoplamento Físico do Modo Dutch Roll</strong><span>O modo Dutch Roll de uma aeronave é examinado com foco em quais características da aeronave o estabilizam ou desestabilizam, e por quê. O ensaio constrói a intuição física do modo, identifica com rigor matemático os parâmetros mais sensíveis, e analisa as soluções de projeto passivas e ativas que a engenharia dispõe para controlá-lo.</span></a><a class="sb-related-card" href="campeoes-por-acaso.html"><strong>Campeões por Acaso — Por Que Atletas de Elite São Anomalias Estatísticas</strong><span>O status de atleta de elite obedece às mesmas leis que governam fenômenos aleatórios: o ensaio sustenta, com evidências de Efeito da Idade Relativa, herdabilidade genética, viés de sobrevivência e falácia do atirador de elite, que campeões são outliers estruturais de uma distribuição probabilística, não produtos de um método replicável. A indústria de palestras motivacionais vende ao público uma causalidade que a estatística não sustenta.</span></a><a class="sb-related-card" href="epistemologia-e-limites-do-conhecimento.html"><strong>Epistemologia e os Limites do Conhecimento — de Platão à Mecânica Quântica</strong><span>O arco completo da epistemologia ocidental (de Platão a Hume, Popper, Quine, Gödel e às implicações da mecânica quântica) é percorrido para mostrar que os limites do conhecimento não são curiosidades acadêmicas: são restrições ativas sobre o tipo de ciência que podemos fazer e o tipo de universo que podemos conhecer.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
+        aria-controls="sbToc" title="Sumário do essay">
+  <span class="sb-toc-icon" aria-hidden="true">☰</span>
+  <span class="sb-toc-text">Sumário</span>
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=00d79791"></script>
+</body>
+</html>

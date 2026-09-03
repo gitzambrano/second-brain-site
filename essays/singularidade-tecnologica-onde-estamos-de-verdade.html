@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="revisao">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Singularidade Tecnológica — A Derivada que Engana Toda Geração</title>
+<meta property="og:title" content="Singularidade Tecnológica — A Derivada que Engana Toda Geração">
+<meta property="og:description" content="A derivada de uma exponencial é ela própria exponencial, e cada época situada sobre a curva carrega a mesma certeza de viver a explosão decisiva. O ensaio fixa uma nomenclatura própria para ANI, AGI e ASI, defende que já estamos na faixa emergente-competente de AGI geral, uma revolução por si só, e separa essa pergunta da questão sobre se o auto-aperfeiçoamento recursivo de Bostrom já foi cruzado.">
+<meta property="og:type" content="article">
+<script defer="" src="../assets/mathjax/tex-svg.js"
+type="text/javascript"></script>
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F7F9FC;
+  --surface2:#EDF2F8;
+  --border:#D6DEE9;
+  --text:#2B3645;
+  --text-dim:#66758A;
+  --text-bright:#0E1928;
+  --gold:#2F5FB0;
+  --gold-dim:#234A86;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  :root{
+    --max-width:75vw;
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F9FC;
+    --surface2:#EDF2F8;
+    --border:#D6DEE9;
+    --text:#2B3645;
+    --text-dim:#66758A;
+    --text-bright:#0E1928;
+    --gold:#2F5FB0;
+    --gold-dim:#234A86;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  position:relative;
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+  transition:background .25s ease,color .25s ease;
+}
+/* Tema claro: capa branca nobre com brilho suave dourado */
+[data-theme="light"] .masthead,
+:root:not([data-theme="dark"]) .masthead{
+  background:#F3F5F7;
+  color:#171310;
+}
+[data-theme="light"] .masthead .hero-title,
+:root:not([data-theme="dark"]) .masthead .hero-title{
+  color:#15120E;
+}
+/* Tema escuro: capa preta editorial */
+[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead{
+  background:#0A0A0A;
+  color:#EDE8DF;
+}
+[data-theme="dark"] .masthead .hero-title,
+:root[data-theme="dark"] .masthead .hero-title{
+  color:#EDE8DF;
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+/* O filete é a borda superior da capa, não um ornamento do título. Como a
+   capa centraliza os filhos verticalmente, deixá-lo no fluxo o empurrava para
+   encostar no título; ancorado no topo ele volta a ser moldura. */
+.stripe{
+  position:absolute;top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold-dim) 0%,var(--gold) 50%,var(--gold-dim) 100%);
+}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+.cover-summary{
+  max-width:min(760px,92%);
+  margin:1.45rem auto 0;
+  color:color-mix(in srgb,var(--text) 88%,var(--text-dim));
+  font-size:clamp(.96rem,2vw,1.08rem);
+  line-height:1.58;
+  text-wrap:balance;
+}
+[data-theme="light"] .cover-summary,
+:root:not([data-theme="dark"]) .cover-summary{color:#435166;}
+[data-theme="dark"] .cover-summary,
+:root[data-theme="dark"] .cover-summary{color:#C8C2B8;}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;border-top:1px solid var(--border);
+  text-align:center;margin:2.8rem auto;line-height:1;opacity:0.35;
+}
+/* Losango (✦) apenas estritamente entre capitulos (## que nao seja sumario nem referencias) */
+.content hr.sb-hr-chapter,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias)){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-chapter::before,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias))::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referencias usa infinito */
+.content hr.sb-hr-references,
+.content hr:has(+ h2#referências),
+.content hr:has(+ h2#referencias){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-references::before,
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+/* Oculta divisores adjacentes ao sumario (o sumario ja possui bordas proprias) */
+.content hr:has(+ h2#sumário),
+.content hr:has(+ h2#sumario),
+.content #sumário + ul + hr,
+.content #sumário + ol + hr,
+.content #sumario + ul + hr,
+.content #sumario + ol + hr{
+  display:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--surface2);border-left:2px solid var(--gold-dim);
+}
+.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--surface);border-left:3px solid var(--gold);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+}
+.box.experimento{--boxc:var(--rust);}
+.box.evidencia{--boxc:var(--accent);}
+.box.mapa{--boxc:var(--gold);}
+.box.ataque{--boxc:var(--rust);}
+.box.aviso{--boxc:var(--amber);}
+.box.nivel{--boxc:var(--accent);}
+.box.ideia{--boxc:var(--gold-dim);}
+/* generico: filete cinza discreto — sem cor de destaque */
+.box.generico{--boxc:var(--border);}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+.box-verdict{
+  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--surface2);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  font-size:.8em;line-height:1.55;
+}
+pre code{background:none;padding:0;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+  /* Numa equacao numerada o MathJax escreve `min-width` inline no proprio
+     container (o SVG interno usa width:100% e depende disso). `min-width`
+     ganha de `max-width`, entao o container ficava mais largo que a tela e
+     empurrava a pagina inteira no celular em vez de rolar por dentro. Zerar
+     so o do container, nunca o do SVG: o SVG guarda a largura real da formula,
+     que e justamente o que deve rolar aqui dentro. */
+  min-width:0 !important;
+}
+/* Formula no meio de uma frase: cabe na coluna ou rola dentro de si mesma.
+   Sem isto, uma equacao inline longa nao quebra e empurra o paragrafo — e com
+   ele a pagina inteira — alguns pixels para fora da tela no celular. */
+mjx-container:not([display="true"]){
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  vertical-align:-.25em;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+/* MathML assistivo: existe so para leitor de tela e ja vem `clip`ado pelo
+   MathJax — mas `clip` esconde sem encolher. A caixa continuava com a largura
+   real da formula (376px numa coluna de 356) e, absoluta dentro do container,
+   somava essa largura ao overflow rolavel de <p>, de .content e do documento:
+   era ela, e nao a equacao visivel, que empurrava a pagina no celular.
+   Reduzir a caixa a 1px e o padrao "visually hidden"; o conteudo continua na
+   arvore de acessibilidade e continua sendo lido. */
+/* Seletor com especificidade maior que `mjx-assistive-mml` sozinho: a folha do
+   MathJax entra no <head> DEPOIS desta e, com a mesma especificidade e o mesmo
+   `!important`, ganhava por ordem. */
+mjx-container > mjx-assistive-mml{
+  position:absolute !important;
+  width:1px !important;height:1px !important;
+  overflow:hidden !important;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+/* Uma imagem solta num paragrafo e um bloco, nao uma palavra: como inline-block
+   ela ainda somava o espaco em branco vizinho e estourava a coluna por alguns
+   pixels. */
+.content p > img{display:block;margin-inline:auto;}
+img{max-width:100%;height:auto;}
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda: parágrafo em itálico logo após uma figura. */
+.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
+  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  pre{font-size:.72em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230b1627%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27sans-serif%27 font-size=%2713%27 font-weight=%27700%27 fill=%27%2376a8ff%27 text-anchor=%27middle%27%3ESB%3C/text%3E%3C/svg%3E"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t="light";document.documentElement.dataset.theme=t})();</script><style>/* ==========================================================================
+   Second Brain Atlas — public essay overlay
+
+   Contract:
+   - scripts/essay_template.html owns the essay body and components.
+   - This file only maps theme tokens and styles Atlas-only chrome.
+   - Light = white + Atlas blue.
+   - Dark = near-black + restrained gold.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]),
+:root[data-theme="light"] {
+  --bg:#ffffff;
+  --surface:#f7f9fc;
+  --surface2:#edf2f8;
+  --border:#d6dee9;
+  --text:#2b3645;
+  --text-dim:#66758a;
+  --text-bright:#0e1928;
+  --gold:#2f5fb0;
+  --gold-dim:#234a86;
+  --rust:#8e4636;
+  --rust-bright:#a04030;
+  --accent:#35708a;
+  --amber:#7a5a18;
+
+  --sb-bg:#ffffff;
+  --sb-surface:#ffffff;
+  --sb-surface-soft:#f7f9fc;
+  --sb-text:#172235;
+  --sb-muted:#607087;
+  --sb-line:rgba(23,34,53,.14);
+  --sb-line-strong:rgba(23,34,53,.26);
+  --sb-primary:#2f5fb0;
+  --sb-primary-soft:rgba(47,95,176,.09);
+  --sb-shadow:0 18px 54px rgba(24,45,78,.12);
+}
+
+:root[data-theme="dark"] {
+  --bg:#090909;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#303030;
+  --text:#d8d4cd;
+  --text-dim:#979187;
+  --text-bright:#f2eee7;
+  --gold:#c9a45c;
+  --gold-dim:#8a6b33;
+  --rust:#9a4938;
+  --rust-bright:#bd5a42;
+  --accent:#5b95ac;
+  --amber:#a77a2e;
+
+  --sb-bg:#090909;
+  --sb-surface:#121212;
+  --sb-surface-soft:#181818;
+  --sb-text:#f0ede7;
+  --sb-muted:#aaa39a;
+  --sb-line:rgba(240,237,231,.14);
+  --sb-line-strong:rgba(240,237,231,.25);
+  --sb-primary:#c9a45c;
+  --sb-primary-soft:rgba(201,164,92,.10);
+  --sb-shadow:0 24px 70px rgba(0,0,0,.46);
+}
+
+html,body{background:var(--bg);}
+body{padding-top:56px;}
+
+/* Public cover: the only intentional visual departure from standalone export. */
+:root:not([data-theme="dark"]) .masthead,
+:root[data-theme="light"] .masthead{
+  background:#ffffff !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="dark"] .masthead{
+  background:#090909 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+.masthead .hero-title{color:var(--text-bright) !important;}
+.masthead-rule{border-top-color:var(--gold) !important;}
+.stripe{
+  height:3px !important;
+  background:linear-gradient(90deg,
+    color-mix(in srgb,var(--gold) 20%,transparent),
+    var(--gold),
+    color-mix(in srgb,var(--gold) 20%,transparent)) !important;
+}
+
+/* Atlas owns these controls on public pages. */
+#sbThemeToggle,#sbToTop,body > .sb-progress > .sb-progress-fill{display:none !important;}
+
+.sb-bar{
+  position:fixed;inset:0 0 auto 0;z-index:60;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 clamp(16px,4vw,40px);
+  border-bottom:1px solid var(--sb-line);
+  background:color-mix(in srgb,var(--sb-bg) 90%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.sb-brand{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--sb-text) !important;font-weight:700;font-size:14px;
+  text-decoration:none !important;
+}
+.sb-mark{
+  display:grid;place-items:center;width:27px;height:27px;
+  border:1px solid color-mix(in srgb,var(--sb-primary) 42%,transparent);
+  border-radius:8px;color:var(--sb-primary);background:var(--sb-primary-soft);
+  font-size:10px;font-weight:800;
+}
+.sb-nav{display:flex;align-items:center;gap:16px;}
+.sb-nav a{color:var(--sb-muted) !important;font-size:13px;text-decoration:none !important;}
+.sb-nav a:hover{color:var(--sb-primary) !important;}
+.sb-nav button{
+  width:32px;height:32px;border:1px solid var(--sb-line);border-radius:9px;
+  background:transparent;color:var(--sb-primary);cursor:pointer;
+}
+.sb-nav button:hover{border-color:var(--sb-primary);}
+
+/* Public progress bar injected by render_public_essay.py. */
+body > .sb-progress:not(:has(.sb-progress-fill)){
+  position:fixed;top:56px;left:0;right:0;z-index:61;height:2px;background:transparent;
+}
+body > .sb-progress:not(:has(.sb-progress-fill)) span{
+  display:block;width:0;height:100%;background:var(--sb-primary);
+}
+
+.sb-toc-fab{
+  position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:61;
+  display:inline-flex;align-items:center;gap:8px;padding:10px 17px;
+  border:1px solid var(--sb-line-strong);border-radius:999px;
+  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);
+  color:var(--sb-text);box-shadow:var(--sb-shadow);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font:650 13px/1 Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer;
+}
+.sb-toc-fab:hover{border-color:var(--sb-primary);}
+.sb-toc-icon{color:var(--sb-primary);}
+
+.sb-toc{
+  position:fixed;right:clamp(16px,3vw,32px);
+  bottom:calc(clamp(16px,3vw,32px) + 54px);z-index:62;
+  width:min(380px,calc(100vw - 32px));max-height:min(65vh,600px);
+  display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--sb-line-strong);border-radius:16px;
+  background:color-mix(in srgb,var(--sb-surface) 98%,transparent);
+  box-shadow:var(--sb-shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-toc[hidden]{display:none !important;}
+.sb-toc header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 17px;border-bottom:1px solid var(--sb-line);color:var(--sb-text);font-size:13px;
+}
+.sb-toc header strong{color:inherit;}
+.sb-toc header button{border:0;background:transparent;color:var(--sb-muted);font-size:20px;cursor:pointer;}
+.sb-toc nav{display:flex;flex-direction:column;padding:9px 8px;overflow-y:auto;}
+.sb-toc a{
+  padding:8px 11px;border-left:2px solid transparent;border-radius:0 8px 8px 0;
+  color:var(--sb-muted) !important;font-size:12.5px;line-height:1.4;text-decoration:none !important;
+}
+.sb-toc a:hover{color:var(--sb-text) !important;background:var(--sb-primary-soft);}
+.sb-toc a.h3{padding-left:23px;font-size:11.5px;}
+.sb-toc a.active{
+  color:var(--sb-primary) !important;border-left-color:var(--sb-primary);background:var(--sb-primary-soft);
+}
+
+.sb-tags,.sb-related{
+  width:min(var(--max-width,760px),calc(100% - 48px));margin-inline:auto;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px;}
+.sb-tag{padding:4px 10px;border:1px solid var(--sb-line);border-radius:999px;color:var(--sb-muted);font-size:11px;}
+.sb-related{margin-top:42px;margin-bottom:76px;padding-top:28px;border-top:1px solid var(--sb-line);}
+.sb-related h2{
+  margin:0 0 16px;color:var(--sb-text);
+  font:700 18px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.sb-related-card{
+  display:flex;flex-direction:column;gap:7px;padding:15px 16px;
+  border:1px solid var(--sb-line);border-radius:13px;background:var(--sb-surface-soft);
+  color:var(--sb-text) !important;text-decoration:none !important;
+}
+.sb-related-card:hover{
+  border-color:color-mix(in srgb,var(--sb-primary) 55%,var(--sb-line));
+  background:var(--sb-primary-soft);
+}
+.sb-related-card strong{color:var(--sb-text);font-size:13px;}
+.sb-related-card span{color:var(--sb-muted);font-size:12px;line-height:1.45;}
+
+@media(max-width:720px){
+  .sb-bar{padding-inline:14px;}
+  .sb-nav{gap:10px;}
+  .sb-nav a{font-size:12px;}
+  .sb-brand{font-size:13px;}
+  .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
+  .sb-toc-text{display:none;}
+  .sb-related-grid{grid-template-columns:1fr;}
+}
+/* Duas palavras curtas cabem em qualquer telefone. Esconder a segunda tirava
+   o unico caminho para o mapa na tela onde ele mais importa. */
+@media(max-width:520px){
+  .sb-brand{gap:7px;font-size:0;}
+  .sb-nav{gap:14px;}
+  .sb-nav a{font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">Singularidade Tecnológica — A Derivada que Engana Toda Geração</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Agosto de 2026</p>
+    <p class="cover-summary">A derivada de uma exponencial é ela própria exponencial, e cada época situada sobre a curva carrega a mesma certeza de viver a explosão decisiva. O ensaio fixa uma nomenclatura própria para ANI, AGI e ASI, defende que já estamos na faixa emergente-competente de AGI geral, uma revolução por si só, e separa essa pergunta da questão sobre se o auto-aperfeiçoamento recursivo de Bostrom já foi cruzado.</p>
+  </div>
+</header>
+
+<main class="content">
+<hr />
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a
+href="#introdução-a-pergunta-que-todo-mundo-faz-errado">Introdução: A
+Pergunta Que Todo Mundo Faz Errado</a></li>
+<li><a href="#ani-agi-asi--genealogia-e-uma-posição">ANI, AGI, ASI —
+Genealogia e uma Posição</a></li>
+<li><a href="#kurzweil-e-a-lei-dos-retornos-acelerados">Kurzweil e a Lei
+dos Retornos Acelerados</a></li>
+<li><a href="#bostrom-e-o-problema-do-fast-takeoff">Bostrom e o Problema
+do Fast Takeoff</a></li>
+<li><a
+href="#transhumanismo-como-programa-não-só-previsão">Transhumanismo Como
+Programa, Não Só Previsão</a></li>
+<li><a href="#os-dados-onde-os-benchmarks-apontam-hoje">Os Dados: Onde
+os Benchmarks Apontam Hoje</a></li>
+<li><a href="#sinais-reais-mas-parciais-de-auto-aperfeiçoamento">Sinais
+Reais, Mas Parciais, de Auto-Aperfeiçoamento</a></li>
+<li><a href="#o-que-ainda-está-muito-longe">O Que Ainda Está Muito
+Longe</a></li>
+<li><a href="#a-indistinguibilidade-estrutural">A Indistinguibilidade
+Estrutural</a></li>
+<li><a href="#conclusão-o-que-observar-daqui-pra-frente">Conclusão: O
+Que Observar Daqui Pra Frente</a></li>
+</ul>
+<hr />
+<h2 id="introdução-a-pergunta-que-todo-mundo-faz-errado">Introdução: A
+Pergunta Que Todo Mundo Faz Errado</h2>
+<p>Pergunte a um colega de engenharia se “já estamos na singularidade” e
+ele responderá em trinta segundos. Pergunte o que exatamente ele estaria
+afirmando com um sim ou um não, e a resposta demora muito mais. O
+problema é que a pergunta popular colapsa duas afirmações completamente
+distintas sob a mesma palavra. A primeira é empírica e quantitativa: a
+capacidade dos sistemas de inteligência artificial está crescendo numa
+taxa anormalmente alta? A segunda é qualitativa e estrutural: já
+cruzamos algum limiar além do qual o próprio desenvolvimento tecnológico
+passa a ser conduzido pelas máquinas, num regime que escapa ao controle
+humano? Um “sim” à primeira pergunta não implica nada sobre a segunda, e
+vice-versa.</p>
+<p>Quase toda a discussão pública sobre <a
+href="https://en.wikipedia.org/wiki/Artificial_general_intelligence">inteligência
+artificial geral</a> tropeça nessa confusão. De um lado, os entusiastas
+apontam para gráficos de benchmarks subindo e declaram que a <a
+href="https://en.wikipedia.org/wiki/Technological_singularity">singularidade
+tecnológica</a> chegou. Do outro, os céticos apontam para as limitações
+óbvias dos modelos atuais e declaram que tudo não passa de hype. Os dois
+grupos frequentemente têm razão nos dados que citam e erram na conclusão
+que extraem deles, porque estão respondendo perguntas diferentes sem
+perceber.</p>
+<p>Este ensaio separa as duas perguntas e testa cada uma contra os nomes
+que estruturaram o debate. <a
+href="https://en.wikipedia.org/wiki/Vernor_Vinge">Vernor Vinge</a>,
+cientista da computação e autor de ficção científica, cunhou o termo
+“singularidade tecnológica” em 1993 ao argumentar que a criação de
+inteligência sobre-humana marcaria o fim da era humana tal como a
+conhecemos. <a href="https://en.wikipedia.org/wiki/Ray_Kurzweil">Ray
+Kurzweil</a> apostou na curva, <a
+href="https://en.wikipedia.org/wiki/Nick_Bostrom">Nick Bostrom</a>
+teorizou o mecanismo do salto, e o <a
+href="https://en.wikipedia.org/wiki/Transhumanism">transumanismo</a>
+converteu a previsão em postura prática. A tese que defendo aqui tem
+duas metades. A curva é real, com a ressalva que as próprias métricas
+carregam: os dados de 2026 sustentam a parte empírica do argumento de
+Kurzweil, ainda que com a precisão que os benchmarks permitem, e esses
+benchmarks têm limitações conhecidas, do risco de Goodhart à saturação
+das suítes de tarefa quando o horizonte sobe demais para elas o medirem.
+O limiar, porém, não aparece em lugar nenhum: nada nos dados indica que
+tenhamos cruzado, ou estejamos perto de cruzar, o ponto de
+auto-aperfeiçoamento recursivo sem humano no circuito. E há um problema
+mais fundo: a própria definição de singularidade torna as duas
+hipóteses, início de rampa e platô disfarçado, indistinguíveis sob uma
+janela de observação limitada. O fio que costura essas duas metades é
+uma propriedade elementar das exponenciais, enunciada já aqui e retomada
+em cada capítulo: a derivada de uma exponencial é ela própria
+exponencial, e por isso cada ponto da curva jura estar no meio da
+explosão.</p>
+<hr />
+<h2 id="ani-agi-asi--genealogia-e-uma-posição">ANI, AGI, ASI —
+Genealogia e uma Posição</h2>
+<p>Antes de seguir, vale fixar um vocabulário que o debate público
+maneja com descuido. Três siglas circulam como se fossem categorias
+nítidas e datadas, ANI, AGI e ASI, mas cada uma carrega uma origem e um
+grau de consenso muito diferentes das outras duas, e confundi-las é
+outra fonte do mesmo ruído que a introdução acabou de denunciar.</p>
+<p>ANI, <a href="https://en.wikipedia.org/wiki/Weak_AI">inteligência
+artificial estreita</a>, nunca foi cunhada por ninguém em particular.
+Nasceu como antônimo de conveniência, o rótulo que a própria comunidade
+de pesquisa aplicou retroativamente a tudo que resolve uma tarefa fixa
+sem generalizar, do motor de xadrez ao classificador de imagens. É a
+categoria menos contestada das três porque descreve o que já existe, não
+o que se antecipa.</p>
+<p>AGI tem uma genealogia mais precisa e mais disputada. Mark Gubrud
+cunhou “artificial general intelligence” em 1997, no resumo de um artigo
+sobre segurança internacional apresentado na Fifth Foresight Conference
+on Molecular Nanotechnology, precisamente para distinguir a inteligência
+de nível humano dos sistemas especialistas estreitos da época e para
+sinalizar o risco de criar mentes que não se consegue controlar [12]. O
+termo não pegou então. Por volta de 2002, Peter Voss, <a
+href="https://en.wikipedia.org/wiki/Shane_Legg">Shane Legg</a> e <a
+href="https://en.wikipedia.org/wiki/Ben_Goertzel">Ben Goertzel</a>
+chegaram independentemente à mesma combinação de palavras, sem conhecer
+o precedente de Gubrud, buscando um substituto menos carregado que “IA
+forte” ou “IA real”. A consolidação veio com o volume que Goertzel e
+Pennachin editaram em 2007, que deu ao termo comunidade, conferência
+própria e literatura acumulada [13]. A sigla nasceu, portanto, duas
+vezes, de motivações diferentes, aviso de risco numa e programa de
+pesquisa positivo na outra, e as duas leituras ainda coexistem sem se
+resolver.</p>
+<p>ASI não tem uma cunhagem tão datável quanto história de consolidação.
+O termo que fixou o conceito foi “superinteligência”, de Bostrom:
+qualquer intelecto que exceda substancialmente o desempenho cognitivo
+humano em praticamente todos os domínios de interesse. O capítulo
+seguinte desenvolve o mecanismo que Bostrom associa a esse patamar. Por
+ora, basta reter que ASI descreve um limiar qualitativo, não um nível de
+desempenho lido em benchmark, e é exatamente essa diferença de natureza
+entre AGI, amplitude de competência, e ASI, mecanismo de
+auto-aperfeiçoamento recursivo sem humano decidindo no circuito, que a
+discussão pública mais atropela.</p>
+<p>Nenhuma das três siglas nomeia diretamente o que dá título a este
+ensaio, e seria erro de omissão não voltar a Vinge aqui. “Singularidade”
+é termo mais antigo que AGI e mais amplo que ASI. Em 1993, Vinge não
+apostava só em inteligência artificial: listava quatro caminhos
+possíveis até a inteligência sobre-humana, o desenvolvimento de IA
+propriamente dito, redes de computadores e seus usuários “acordando”
+como entidade superinteligente distribuída, interfaces homem-máquina que
+amplificassem diretamente a inteligência humana, e a biotecnologia
+melhorando o intelecto biológico [10]. A ênfase de Vinge não estava no
+mecanismo, como a de Bostrom duas décadas depois, mas na consequência
+epistêmica do limiar em si: além dele, escreveu Vinge, os modelos
+preditivos correntes deixam de funcionar, e é dele, não de Bostrom, o
+empréstimo da física que o capítulo 9 deste ensaio explora. O próprio
+Vinge já chamava o fenômeno de horizonte de eventos. ASI herda de Vinge
+o limiar, mas estreita a origem a um único mecanismo, o
+auto-aperfeiçoamento recursivo de máquinas. A formulação original de
+1993 era agnóstica quanto à via.</p>
+<p>O uso corrente do vocabulário só piorou a confusão. A carta
+fundacional da OpenAI define AGI como “sistemas altamente autônomos que
+superam humanos na maior parte do trabalho economicamente valioso” [15],
+um critério econômico, não cognitivo. Em 2026, os próprios laboratórios
+de fronteira usam o termo com pesos diferentes entre si: Sam Altman
+prometeu AGI “ainda este ano”, Mark Chen declarou a empresa “80% do
+caminho”, e Greg Brockman sugeriu que o público olhará para trás e
+reconhecerá este período como o momento em que ela nasceu [17]. Do outro
+lado, Jensen Huang declarou publicamente que “já alcançamos AGI”, usando
+como critério a capacidade de um sistema fundar e escalar sozinho uma
+empresa de tecnologia, e a declaração gerou desconforto entre
+pesquisadores do próprio campo, incluindo Shane Legg, coautor original
+do termo, que publicara dias antes um framework de medição justamente
+para conter esse tipo de anúncio informal [19]. Gary Marcus segue do
+lado cético, argumentando desde 2022 que escala pura de modelos de
+linguagem não chega a AGI e que a aposta coletiva no contrário é
+desproporcional à evidência disponível [16].</p>
+<p>Diante desse caos terminológico, este ensaio adota uma posição, não
+apenas relata o desacordo alheio. Uso o framework de níveis proposto
+pela DeepMind [14], que separa amplitude, estreita ou geral, de
+desempenho, emergente, competente, especialista, virtuoso, sobre-humano,
+em vez do salto binário ANI-AGI-ASI. Chamo de AGI, sem qualificador, um
+sistema geral no nível competente ou acima: desempenho igual ou superior
+ao de um adulto humano qualificado na maioria das tarefas cognitivas
+relevantes, sem engenharia dedicada por tarefa. Reservo ASI
+exclusivamente para o mecanismo de Bostrom, porque é esse mecanismo, não
+o nível de competência isolado, que sustenta o restante da tese deste
+ensaio.</p>
+<p>E defendo, com essa nomenclatura fixada, uma posição sobre onde
+estamos: os sistemas de fronteira de agosto de 2026, pelos dados do
+capítulo seguinte, já operam entre os níveis emergente e competente de
+AGI geral, com competência de especialista em fatias amplas de tarefas
+cognitivas e ainda irregular fora delas. Isso não é hype corporativo, é
+uma leitura conservadora da mesma série de benchmarks que o restante do
+ensaio examina com ceticismo quanto ao limiar de Bostrom. E é, por si
+só, uma revolução: um sistema com competência geral de nível
+especialista numa fração crescente do trabalho cognitivo humano muda a
+economia, a pesquisa e a engenharia, independentemente de algum dia
+cruzar o limiar do auto-aperfeiçoamento recursivo. A tese das duas
+metades que abre este ensaio permanece de pé, e ganha um terceiro termo:
+a curva é real, o limiar de Bostrom não foi cruzado, e a proximidade de
+uma AGI ampla é, ela mesma, o evento que já está acontecendo enquanto
+adiamos o veredito sobre o outro.</p>
+<hr />
+<h2 id="kurzweil-e-a-lei-dos-retornos-acelerados">Kurzweil e a Lei dos
+Retornos Acelerados</h2>
+<p>Em <a
+href="https://en.wikipedia.org/wiki/The_Singularity_Is_Near"><em>The
+Singularity Is Near</em></a>, publicado em 2005, Kurzweil propôs o que
+chamou de <a
+href="https://en.wikipedia.org/wiki/Accelerating_change">lei dos
+retornos acelerados</a>: cada paradigma tecnológico cria as ferramentas
+que viabilizam o próximo, e a velocidade de inovação cresce de forma
+composta. O resultado é uma <a
+href="https://pt.wikipedia.org/wiki/Crescimento_exponencial">curva
+exponencial</a> dupla, uma exponencial de exponenciais, no poder
+computacional disponível por dólar. A <a
+href="https://en.wikipedia.org/wiki/Moore%27s_law">lei de Moore</a>
+seria apenas o paradigma corrente de uma sequência que vem desde os
+cartões perfurados e continuaria por outros substratos depois do
+silício.</p>
+<p>Há nisso uma propriedade matemática que fará trabalho pesado no resto
+do ensaio, e vale enunciá-la agora com a equação que a sustenta. Se a
+capacidade computacional cresce como exponencial pura, <span
+class="math inline">\(C(t) = C_0\, e^{\lambda t}\)</span>, então a
+derivada é <span class="math inline">\(C&#39;(t) = \lambda\, C_0\,
+e^{\lambda t} = \lambda\, C(t)\)</span>. A taxa de crescimento absoluta
+é proporcional ao valor já alcançado, o que significa que a inclinação
+local sempre parece explodir. A taxa de crescimento relativa, porém, é
+constante: <span class="math inline">\(C&#39;(t)/C(t) =
+\lambda\)</span>, idêntica em todo ponto da curva. O observador situado
+em qualquer ponto vê a mesma proporção entre o que já existe e o que
+está chegando. É por isso que a vertigem é invariante: a sensação de
+aceleração é propriedade da curva, não do momento.</p>
+<p>Essa invariância tem uma consequência epistêmica que o resto do
+ensaio explora. Se a taxa relativa é constante, nenhuma medição local de
+“quanto acelerou nos últimos anos” distingue um ponto intermediário da
+curva de um ponto próximo ao joelho de uma sigmoide, porque ambos exibem
+a mesma aceleração relativa enquanto a fase exponencial dura. Qualquer
+época situada sobre a curva vive a mesma vertigem. O engenheiro das
+grandes navegações, por volta de 1500, sentia nos astrolábios, nas
+caravelas e nas rotas recém-abertas a mesma certeza de estar no ápice da
+história técnica que sentimos hoje diante dos benchmarks de inteligência
+artificial. O historiador econômico <a
+href="https://en.wikipedia.org/wiki/Joel_Mokyr">Joel Mokyr</a> documenta
+em <em>The Lever of Riches</em> como cada era tecnológica produziu em
+seus contemporâneos a convicção de viver o ponto de inflexão definitivo,
+da revolução agrícola neolítica à máquina a vapor. Sobre a própria
+derivada, ele não se enganava: em termos relativos, a dela era tão
+explosiva quanto a nossa. Sentir que se vive uma explosão não é
+evidência de nada além de estar numa exponencial, e esse detalhe vai
+importar muito quando perguntarmos o que os dados atuais podem
+provar.</p>
+<p>Sobre essa base, Kurzweil fez previsões específicas e datadas:
+computadores alcançariam a capacidade computacional do cérebro humano
+por volta de 2029, e a singularidade propriamente dita, o momento em que
+a inteligência das máquinas se dispararia fora de controle, chegaria por
+volta de 2045. As datas são importantes porque tornam o argumento
+falsificável. Um autor que prevê apenas “em algum momento no futuro” não
+pode ser testado. Kurzweil escolheu anos e pagou o preço metodológico de
+se comprometer com eles.</p>
+<p>A crítica padrão ao método também precisa ser enunciada com precisão,
+porque ela será decisiva mais adiante. Extrapolar uma curva não é provar
+que ela continua. Toda tecnologia real segue uma <a
+href="https://en.wikipedia.org/wiki/S-curve">curva em S</a>: crescimento
+exponencial durante a fase inicial e saturação quando os ganhos fáceis
+se esgotam. Quem observasse o progresso da aviação comercial entre 1945
+e 1970 extrapolaria aviões supersônicos intercontinentais para todos até
+1990. Essa extrapolação estava errada, e o erro é instrutivo: o <a
+href="https://en.wikipedia.org/wiki/Concorde">Concorde</a> nunca passou
+de uma curiosidade de elite, e a aviação subsônica estabilizou onde está
+até hoje. A questão empírica aberta em 2005 era se o poder computacional
+estava na fase exponencial da sua curva em S ou perto do joelho da
+saturação. Vinte anos depois, a resposta começa a existir.</p>
+<hr />
+<h2 id="bostrom-e-o-problema-do-fast-takeoff">Bostrom e o Problema do
+Fast Takeoff</h2>
+<p>Em <a
+href="https://en.wikipedia.org/wiki/Superintelligence:_Paths,_Dangers,_Strategies"><em>Superintelligence:
+Paths, Dangers, Strategies</em></a>, de 2014, Bostrom deslocou o debate.
+Sua pergunta não era <em>quando</em> a inteligência artificial
+ultrapassaria a humana, mas <em>o que aconteceria</em> no instante
+seguinte. O mecanismo central do livro é o <a
+href="https://en.wikipedia.org/wiki/Recursive_self-improvement">auto-aperfeiçoamento
+recursivo</a>: uma máquina suficientemente capaz de engenharia de
+inteligência artificial poderia melhorar a própria arquitetura,
+tornando-se melhor ainda em se melhorar, num ciclo de retroalimentação
+positiva que Bostrom chamou de explosão de inteligência.</p>
+<p>O detalhe crucial do argumento é a velocidade. Bostrom distinguia
+cenários de takeoff lento, moderado e rápido. Num fast takeoff, o
+intervalo entre “máquina um pouco mais inteligente que os humanos” e
+“máquina drasticamente mais capaz que todos os humanos juntos” é medido
+em dias ou horas, tempo insuficiente para qualquer resposta
+institucional. É esse cenário que gera o <a
+href="https://en.wikipedia.org/wiki/AI_alignment">problema do
+alinhamento</a> na forma dura: um sistema que se autopromove mais rápido
+do que humanos conseguem supervisionar não dá tempo para correção de
+rota. O alinhamento, portanto, não é um tópico separado da tese central,
+é a consequência direta dela.</p>
+<p>Repare na diferença estrutural entre os dois autores. Kurzweil aposta
+uma data e uma curva. Bostrom aposta um mecanismo e um risco. Isso
+significa que eles são testáveis por evidências diferentes. A tese de
+Kurzweil se testa contra séries temporais de capacidade, exatamente o
+tipo de dado que benchmarks produzem. A tese de Bostrom se testa contra
+um padrão organizacional muito mais difícil de medir: a existência ou
+ausência de um loop fechado de auto-aperfeiçoamento sem decisão humana
+no circuito. Confundir os dois testes é a origem da maior parte do
+barulho no debate público.</p>
+<hr />
+<h2 id="transhumanismo-como-programa-não-só-previsão">Transhumanismo
+Como Programa, Não Só Previsão</h2>
+<p>O terceiro ingrediente do quadro não é uma previsão, é uma postura. O
+<a href="https://en.wikipedia.org/wiki/Transhumanism">transumanismo</a>
+parte da mesma trajetória descrita por Kurzweil e Bostrom, mas em vez de
+perguntar o que vai acontecer, pergunta como nos posicionar diante
+disso: aumento cognitivo, integração humano-máquina, delegação
+progressiva de tarefas mentais a sistemas artificiais. Numa wiki pessoal
+mantida por um engenheiro, essa não é especulação distante. É a
+descrição operacional da própria prática de trabalho.</p>
+<p>A ponte com a tese da mente aumentada merece ser explicitada. Se a
+tese de <a href="https://en.wikipedia.org/wiki/Andy_Clark">Andy
+Clark</a> e David Chalmers sobre a <a
+href="https://plato.stanford.edu/entries/extended-mind/">mente
+estendida</a> está certa, e a cognição não termina no crânio mas se
+distribui pelo ambiente que o agente estrutura, então agentes LLM
+acoplados a bases de conhecimento persistentes são candidatos legítimos
+a componentes de mente aumentada. Note que isso é fusão funcional, não
+física. A ficção científica clássica imaginava implantes neurais e
+interfaces diretas. O transumanismo real, o que já acontece, é mais
+banal e mais profundo: o profissional que pensa <em>com</em> seus
+documentos, seus índices semânticos e seus agentes de busca não está
+usando ferramenta, estende sua cognição para fora do próprio crânio.</p>
+<p>Fica registrada, porém, uma tensão que este ensaio não resolve. O
+programa transumano prescreve: quem se posicionar bem na rampa
+exponencial sai na frente. Mas o critério de “se posicionar bem”
+pressupõe que a rampa existe e continua. Se a curva satura, todo o
+investimento de posicionamento foi feito contra uma hipótese falsa. A
+aposta prática herda toda a incerteza da previsão que a fundamenta, e é
+por isso que os capítulos seguintes se recusam a decidir a questão por
+intuição.</p>
+<hr />
+<h2 id="os-dados-onde-os-benchmarks-apontam-hoje">Os Dados: Onde os
+Benchmarks Apontam Hoje</h2>
+<p>Chega de estrutura conceitual. Hora de olhar os números. A medição
+mais citada do campo é o <a href="https://metr.org/time-horizons/">time
+horizon do METR</a>, que mede a duração da tarefa, expressa em tempo de
+um especialista humano, que um modelo de ponta completa com determinada
+taxa de sucesso. No estudo fundador, <a
+href="https://arxiv.org/abs/2503.14499">Measuring AI Ability to Complete
+Long Tasks</a>, a série histórica mostrou duplicação regular desse
+horizonte: cerca de sete meses por duplicação entre 2019 e 2024,
+acelerando para algo entre três e quatro meses e meio nos anos
+seguintes. Quem acompanha esses números de dentro vive a única
+experiência que um ponto de uma exponencial pode proporcionar: a certeza
+local de que desta vez a inclinação é a definitiva. A lente da derivada
+lê esses números sem decidir o que eles provam. O que a série mostra é
+taxa relativa alta e ainda encurtando, perfil idêntico ao que rampa
+genuína e joelho de sigmoide compartilham enquanto a fase exponencial
+dura.</p>
+<p>Entre essa série histórica e o presente há uma troca de fonte e de
+método que vale marcar explicitamente. Os números seguintes vêm do
+relatório de risco que o METR construiu com laboratórios de fronteira,
+cobrindo fevereiro e março de 2026 (<a
+href="https://metr.org/blog/2026-05-19-frontier-risk-report/">Frontier
+Risk Report</a>), e não da suíte original do time horizon. Confirmam a
+tendência e a qualificam: estimam o sistema avaliado mais forte em torno
+de 16 a 20 horas de tarefa autônoma ao nível de 50% de sucesso, e
+próximo de 3 a 4 horas ao nível de 80% de sucesso. O próprio METR
+adverte que estimativas acima de 16 horas já saturam a suíte de tarefas,
+então o número exato é incerto. A direção, não. Em paralelo, o custo de
+inferência por unidade de capacidade caiu ordens de magnitude na mesma
+janela, cumprindo a segunda condição que Kurzweil sempre considerou
+pré-requisito de impacto social: capacidade e acessibilidade subindo
+juntas. Para a leitura completa da metodologia e suas limitações
+declaradas, vale consultar a nota oficial do <a
+href="https://metr.org/blog/2026-1-29-time-horizon-1-1/">Time Horizon
+1.1</a>. Uma ressalva metodológica final não pode ficar de fora: uma
+métrica que vira alvo direto de otimização pelos próprios laboratórios
+avaliados corre o risco clássico de <a
+href="https://en.wikipedia.org/wiki/Goodhart%27s_law">Goodhart</a>, o
+índice sobe sem que a capacidade subjacente suba na mesma proporção. O
+METR mitiga o risco mantendo parte da suíte fora do conhecimento público
+dos laboratórios, mas a ressalva nunca desaparece de todo, e vale
+lembrá-la antes de tratar a curva como fato bruto.</p>
+<p>O que esses números sustentam é a metade kurzweiliana da tese: a
+curva exponencial de capacidade é factual, mensurável e segue sem sinal
+de estagnação apesar das previsões recorrentes de platô. Já o mercado de
+previsões conta uma história mais dividida, mas sobre uma pergunta
+diferente da que a curva responde. Agregados de superforecasters, cujo
+histórico de calibração é bem documentado [18], em plataformas como <a
+href="https://www.metaculus.com/">Metaculus</a> atribuem algo em torno
+de 10% de chance a uma inteligência artificial geral “pura”, no sentido
+mais forte e menos operacional do termo, ainda nesta década, e algo
+próximo de 50% até meados da década de 2040. Essa cifra baixa não
+contradiz a curva de capacidade nem a AGI de nível competente defendida
+no capítulo 2: mede uma barra mais alta, mais próxima da generalidade
+irrestrita que a hipótese A do capítulo 9 associa à singularidade, não
+da amplitude de competência já em jogo hoje. A curva é consenso. O que
+existe do outro lado dela, quão alto é o degrau que falta, é
+disputa.</p>
+<hr />
+<h2 id="sinais-reais-mas-parciais-de-auto-aperfeiçoamento">Sinais Reais,
+Mas Parciais, de Auto-Aperfeiçoamento</h2>
+<p>E o mecanismo de Bostrom? Aqui os dados exigem mais cuidado, porque o
+que existe hoje é o precursor do fenômeno, não o fenômeno. Laboratórios
+de fronteira já usam IA para acelerar pesquisa em IA de formas
+documentadas: geração de dados sintéticos de treinamento, busca
+automatizada de arquiteturas, agentes que escrevem, executam e depuram
+código uns dos outros. Cada um desses usos comprime parte do ciclo de
+desenvolvimento que antes consumia semanas de trabalho humano
+especializado.</p>
+<p>Apostas datadas servem de contraponto, e uma delas merece registro
+nominal. Em <a href="https://ai-2027.com/"><em>AI 2027</em></a>,
+Kokotajlo e colegas descreveram um cenário detalhado de fast takeoff com
+cronograma mês a mês: agentes automatizando fatias crescentes do
+trabalho de código ao longo de 2026, pesquisa algorítmica em IA
+majoritariamente automatizada no início de 2027 e codificadores
+super-humanos pouco depois. Até agosto de 2026, o placar do trecho já
+vencido é misto, e informativo justamente por isso. As previsões de
+ritmo acertaram por alto. Agentes escrevem, executam e depuram código em
+escala industrial, e os horizontes de tarefa subiram na velocidade
+prevista ou acima dela. O conteúdo estrutural da previsão, porém, não se
+materializou: nenhuma fatia relevante do ciclo de desenvolvimento roda
+sem decisão humana, e os pesquisadores seguem no centro do processo. O
+teste decisivo, codificador super-humano operando sem supervisão e loop
+fechado de pesquisa, vence nos trimestres seguintes, e a aposta fica
+registrada aqui para ser cobrada depois.</p>
+<p>O fast takeoff no sentido forte de Bostrom exige mais do que
+aceleração assistida. Exige um loop fechado: um sistema que decide a
+própria arquitetura, gera o próprio currículo de dados, define o próprio
+critério de sucesso e itera sem humano decidindo nada relevante no
+caminho. Entre “pesquisadores humanos 30% mais produtivos porque usam
+agentes” e “sistema que se autopromove sem supervisão” há uma diferença
+categórica, não gradual. A primeira situação é produtividade ampliada
+dentro de instituições humanas. A segunda é transferência do centro de
+decisão do processo. Os dados de 2026 mostram inequivocamente a primeira
+e não mostram a segunda. Na lente da derivada que percorre este ensaio,
+cresce depressa a taxa de produção de capacidade, enquanto a fração de
+decisão transferida ao sistema, a que definiria a explosão, permanece
+perto de zero.</p>
+<p>Essa distinção importa mais do que a velocidade bruta, e vale
+insistir no motivo. Se o gargalo do alinhamento é a janela de supervisão
+humana, então o que transforma uma curva de capacidade benigna num
+problema estrutural não é o número de FLOPs, é o momento em que ninguém
+mais consegue acompanhar as decisões que o sistema toma sobre si mesmo.
+Medir a velocidade sem medir quem controla o ciclo é ler metade do
+termômetro.</p>
+<hr />
+<h2 id="o-que-ainda-está-muito-longe">O Que Ainda Está Muito Longe</h2>
+<p>O contrapeso honesto ao capítulo anterior é listar o que a
+arquitetura atual estruturalmente não faz. O primeiro item é
+continuidade cognitiva: modelos de linguagem não mantêm um modelo de
+mundo persistente e atualizável em tempo real. As soluções práticas, <a
+href="https://en.wikipedia.org/wiki/Retrieval-augmented_generation">retrieval-augmented
+generation</a> e fine-tuning contínuo, são colagens externas ao modelo,
+não memória integrada. Entre duas sessões, o sistema não
+<em>lembra</em>, apenas pode <em>consultar</em>. A limitação é
+arquitetural: a janela de contexto é finita e os pesos do modelo
+permanecem congelados entre chamadas, de modo que qualquer continuidade
+observada é reconstruída a cada sessão, nunca preservada
+internamente.</p>
+<p>Essa crítica tampouco nasce só da engenharia de modelos: reaparece,
+estruturalmente idêntica, sempre que um sistema estatístico precisa
+sustentar um mundo persistente ao longo do tempo, por exemplo ao
+conduzir uma narrativa interativa de longo prazo. O gargalo é sempre o
+mesmo, manutenção de estado: quem guarda o que aconteceu, com que
+fidelidade, e o que sobra da coerência causal quando o registro diverge
+do vivido. O diagnóstico geral separa fluência de continuidade, e
+modelos de linguagem produzem a primeira com folga sem sustentar a
+segunda sem colagem externa. É exatamente o limite deste parágrafo visto
+pela teoria da informação em vez da arquitetura, e a convergência entre
+frentes tão distintas sugere restrição fundante, não detalhe de
+implementação.</p>
+<p>O segundo limite é generalização fora da distribuição de treino.
+Dentro do domínio que se parece com os dados de treinamento, o
+desempenho é impressionante e crescente. Fora dele, a degradação é
+visível, sobretudo em raciocínio causal genuíno e planejamento de longo
+horizonte com consequências irreversíveis. O terceiro limite é correção
+de erro autônoma sustentada: nenhum sistema atual demonstra detectar,
+diagnosticar e corrigir os próprios erros por muitas etapas consecutivas
+sem intervenção humana. Agentes modernos progrediram muito justamente em
+<em>não descarrilar</em>, o que é engenharia de confiabilidade, não
+salto de inteligência.</p>
+<p>Há um teste discriminante que a própria série do METR pode vir a
+entregar, e ele sai direto do enunciado matemático do capítulo de
+Kurzweil. Rampa e joelho de sigmoide só divergem quando a taxa relativa
+inflexiona: numa sigmoide, cada duplicação passa a demorar mais que a
+anterior na aproximação do platô, enquanto numa rampa genuína o
+intervalo entre duplicações se mantém ou encurta. A série hoje realiza o
+segundo caso, com o intervalo encolhendo de sete meses para algo entre
+três e quatro meses e meio. O observável antecipado, portanto, é a
+desaceleração da própria duplicação. Dois ciclos consecutivos com
+intervalo crescente dariam a primeira evidência séria de saturação
+próxima, e vários anos de encurtamento contínuo sustentam,
+retroativamente, a leitura de rampa pura.</p>
+<p>Nenhuma dessas limitações refuta a curva exponencial do capítulo
+anterior. Elas a contextualizam. Pela lente da derivada que este ensaio
+persegue, são restrições sobre o valor já alcançado, não sobre a taxa
+com que ele cresce: a curva pode continuar dobrando em termos relativos
+com todas elas intactas. A leitura equilibrada é que estamos vendo
+capacidade crescer depressa dentro de restrições arquitetônicas reais, e
+a questão científica aberta é se essas restrições são muros ou portas:
+obstáculos permanentes da abordagem atual ou problemas de engenharia que
+a própria curva vai engolir. As implicações filosóficas dessa segunda
+possibilidade, inclusive a pergunta da consciência em sistemas
+sintéticos, ficam fora do escopo deste ensaio.</p>
+<hr />
+<h2 id="a-indistinguibilidade-estrutural">A Indistinguibilidade
+Estrutural</h2>
+<p>Resta o argumento central deste ensaio, e ele é sobre os limites do
+que os dados podem provar. Considere duas hipóteses compatíveis com
+exatamente as mesmas séries do capítulo dos benchmarks. Hipótese A:
+estamos nos primeiros metros de uma rampa exponencial genuína, e a
+singularidade de Bostrom chega em anos ou décadas. Hipótese B: estamos
+no trecho visivelmente exponencial de uma <a
+href="https://en.wikipedia.org/wiki/Sigmoid_function">curva sigmoide</a>
+cujo platô fica a uma década de distância, e o trecho atual não revela
+nada sobre o topo. Ambas preveem crescimento forte agora. Divergem
+apenas no futuro que ninguém observou.</p>
+<p>O precedente histórico pesa a favor de levar B a sério. A aviação
+civil supersônica parecia inevitável em 1968 e morreu com o Concorde. A
+energia nuclear prometia eletricidade “too cheap to meter” e estagnou
+por meio século. As ondas anteriores de IA simbólica produziram
+exatamente o padrão de exponencial-que-satura que deu nome aos <a
+href="https://en.wikipedia.org/wiki/AI_winter">invernos da IA</a>. Em
+nenhum desses casos os contemporâneos do trecho exponencial conseguiram
+distinguir rampa de joelho de sigmoide pelos dados disponíveis na
+época.</p>
+<p>Volte agora ao experimento mental do engenheiro de 1500, desenvolvido
+no capítulo de Kurzweil, porque é dele que sai o fechamento pela frente
+subjetiva. Ele vivia convencido de pilotar uma rampa sem precedente, e a
+convicção não o enganava quanto à derivada relativa, idêntica à nossa
+por propriedade da curva. O desdobramento novo consiste em aplicar a
+esse ponto os dois cenários deste capítulo. Se a rampa tivesse
+continuado para sempre, ele teria se sentido exatamente como se sentiu.
+Como ela saturou nos séculos seguintes, ele também teria se sentido
+exatamente assim. A sensação de viver a explosão decisiva é idêntica sob
+as duas hipóteses, logo ela não é evidência de nenhuma das duas. Nossa
+vertigem diante dos benchmarks de 2026 tem exatamente esse estatuto
+epistêmico: real como experiência, vazia como prova.</p>
+<p>Vale dar ordem de grandeza ao exemplo, sem fingir precisão que os
+registros de época não permitem. Entre 1490 e 1520, os impressos
+acumulados na Europa chegaram à casa das dezenas de milhões de
+exemplares, a frota atlântica ibérica cresceu várias vezes de tamanho e
+as rotas oceânicas comerciais se multiplicaram, taxas de crescimento
+relativo que nenhum século anterior havia aproximado. Entre 2020 e 2026,
+o horizonte de tarefa dos modelos de ponta cresceu ao menos três ordens
+de magnitude, derivada relativa bem maior, porém concentrada num único
+vetor técnico. A explosão dele era larga e mais lenta, a nossa é
+estreita e mais íngreme, e os dois pontos juram, com igual sinceridade,
+estar no meio dela.</p>
+<p>Há ainda um argumento mais profundo, quase irônico. A própria
+definição de singularidade, o próprio Vinge já a emprestava da física, é
+a de um <a href="https://en.wikipedia.org/wiki/Event_horizon">horizonte
+de eventos</a>: um ponto além do qual a previsão não funciona. Se a
+definição está correta, então a proximidade de uma singularidade genuína
+é <em>constitutivamente</em> invisível de dentro, pois ver a
+singularidade chegando exigiria já estar sujeita às dinâmicas
+imprevisíveis que ela instala. É uma analogia, não uma prova: tomada ao
+pé da letra, arrisca importar do domínio físico uma necessidade que a
+tecnologia não precisa herdar. Mas ela ilustra o ponto lógico que os
+parágrafos anteriores já estabeleceram por outra via, e é por isso que
+aparece aqui como fecho, não como fundamento. A incerteza que este
+ensaio mantém até o fim não é covardia epistêmica nem agnosticismo de
+conveniência. É uma tese sobre a estrutura do problema: extrapolação de
+tendência não pode, em princípio, decidir entre as hipóteses A e B no
+momento presente. Quem afirma ter certeza do platô comete exatamente o
+mesmo erro metodológico de quem afirma ter certeza da rampa.</p>
+<p>A indistinguibilidade, convém sublinhar, é de perspectiva, não de
+princípio. Fora da janela estreita do presente, os dois cenários
+divergiriam em observáveis que não dependem de profecia: uma
+descontinuidade verdadeira de capacidade marcaria o joelho da rampa onde
+a sigmoide inflectiria; um auto-aperfeiçoamento recursivo que acelera
+sem humano no circuito seria o registro observável da transferência do
+centro de decisão; e uma mudança sustentada na própria taxa de
+crescimento separaria rampa de platô melhor do que a inclinação
+instantânea. O que impede hoje esse veredito não é nenhuma proibição
+lógica, é a escassez de observação: a janela de dados é curta, e as
+métricas saturam, como o próprio METR adverte quando o horizonte de
+tarefa sobe demais para a suíte medi-lo, e como o risco de Goodhart
+recomenda cautela ao reificar um número que os laboratórios avaliados
+passaram a otimizar.</p>
+<hr />
+<h2 id="conclusão-o-que-observar-daqui-pra-frente">Conclusão: O Que
+Observar Daqui Pra Frente</h2>
+<p>Recapitulando as duas metades da tese. A parte empírica do programa
+de Kurzweil está validada pelos dados: capacidade dobrando em algo entre
+três e quatro meses e meio, custo despencando, sem estagnação visível. A
+parte central do programa de Bostrom permanece sem confirmação: não há
+loop fechado de auto-aperfeiçoamento sem humano no circuito, e as
+limitações arquiteturais listadas são reais. Estar numa exponencial não
+é estar na singularidade, e a diferença entre as duas afirmações é
+precisamente o que a discussão pública mais confunde. Que a curva pareça
+explosiva de dentro é garantia matemática da derivada exponencial, não
+evidência adicional de nada. O engenheiro de 1500 dispunha da mesma
+sensação, com a mesma justificação e o mesmo valor probatório, que é
+nenhum.</p>
+<p>Fica de pé, porém, a posição que o capítulo 2 defendeu, e ela não
+depende de resolver a indistinguibilidade estrutural do capítulo 9.
+Pelos critérios de amplitude e desempenho ali adotados, já estamos na
+faixa emergente-competente de AGI geral, e isso é evento suficiente para
+reorganizar trabalho cognitivo, pesquisa e economia, com ou sem
+singularidade. Confundir a pergunta “chegamos a AGI” com a pergunta
+“cruzamos o limiar de Bostrom” é o mesmo erro de categoria que abriu
+este ensaio, agora resolvido: a resposta à primeira pode ser sim
+enquanto a resposta à segunda continua indeterminada.</p>
+<p>Em vez de prever datas, proponho critérios observáveis que, se
+aparecessem, me fariam revisar esta conclusão. Primeiro,
+auto-aperfeiçoamento em loop fechado: um sistema melhorando
+sistematicamente a própria arquitetura ou currículo com humanos fora do
+ciclo de decisão. Segundo, generalização robusta fora da distribuição:
+desempenho que não despenca quando o domínio muda. Terceiro,
+planejamento de longo horizonte confiável: tarefas de semanas executadas
+com taxa de sucesso alta, fechando a lacuna entre os horizontes de 50% e
+de 80%. Qualquer um desses sinais mudaria o quadro mais do que qualquer
+gráfico de benchmark a mais. Vale operacionalizar o primeiro critério, o
+mais exigente dos três, para que humano fora do circuito deixe de ser
+frase de efeito. Três métricas bastam: a fração de decisões
+arquiteturais aceitas sem revisão humana por ciclo de treinamento, a
+duração da janela de supervisão que cada ciclo ainda exige e a taxa de
+rollback, a frequência com que humanos revertem escolhas do sistema
+depois do fato. Hoje a primeira vale próximo de zero, a segunda se mede
+em semanas de revisão humana e a terceira é alta o suficiente para
+tornar o humano indispensável. Quando as três se moverem juntas, fração
+subindo, janela encolhendo, rollback rareando, o loop fechado terá
+deixado de ser hipótese para virar leitura de painel.</p>
+<p>O transumanismo, nesse quadro, deixa de ser aposta na data e vira
+postura diante da incerteza: construir as extensões cognitivas, manter o
+julgamento humano no circuito enquanto ele ainda vale alguma coisa,
+vigiar os critérios acima com a disciplina de quem sabe que não verá o
+horizonte chegar, apenas, eventualmente, notar que já o cruzou. E
+desconfiar da própria vertigem, que a matemática das exponenciais
+garante a toda geração situada sobre a curva. A pergunta certa nunca foi
+“quando”. A pergunta certa é “quais sinais eu aceito como prova”, e, em
+agosto de 2026, ainda não vi nenhum deles.</p>
+<hr />
+<h2 id="referências">Referências</h2>
+<p>[1] Kurzweil, R., <em>The Singularity Is Near: When Humans Transcend
+Biology</em>, Viking Press, New York, 2005. — Formulação original da lei
+dos retornos acelerados e das datas de 2029/2045. <a
+href="https://en.wikipedia.org/wiki/The_Singularity_Is_Near">Link</a></p>
+<p>[2] Bostrom, N., <em>Superintelligence: Paths, Dangers,
+Strategies</em>, Oxford University Press, Oxford, 2014. — Teoria do fast
+takeoff, auto-aperfeiçoamento recursivo e o problema do alinhamento. <a
+href="https://en.wikipedia.org/wiki/Superintelligence:_Paths,_Dangers,_Strategies">Link</a></p>
+<p>[3] Kwa, T., Westers, N., et al., <em>Measuring AI Ability to
+Complete Long Tasks</em>, arXiv preprint, arXiv:2503.14499, 2025. —
+Estudo fundador do benchmark time horizon do METR, com a série histórica
+de duplicação. <a href="https://arxiv.org/abs/2503.14499">Link</a></p>
+<p>[4] <em>Time Horizons</em>, METR (Model Evaluation &amp; Threat
+Research). — Dashboard vivo com as medições atualizadas de horizonte de
+tarefa. (acesso em 21 Ago. 2026). <a
+href="https://metr.org/time-horizons/">Link</a></p>
+<p>[5] <em>Frontier Risk Report (February to March 2026)</em>, METR,
+2026. — Avaliação piloto com laboratórios de fronteira; horizonte de
+~16-20h a 50% e ~3-4h a 80% de sucesso. <a
+href="https://metr.org/blog/2026-05-19-frontier-risk-report/">Link</a></p>
+<p>[6] <em>Time Horizon 1.1</em>, METR, 2026. — Atualização metodológica
+da suíte de tarefas e limitações declaradas da métrica. (acesso em 21
+Ago. 2026). <a
+href="https://metr.org/blog/2026-1-29-time-horizon-1-1/">Link</a></p>
+<p>[7] Clark, A., e Chalmers, D., <em>The Extended Mind</em>, Analysis,
+Vol. 58, No. 1, 1998, pp. 7–19. — Base filosófica da tese da mente
+estendida aplicada no capítulo 5. <a
+href="https://academic.oup.com/analysis/article-abstract/58/1/7/153111">Link</a></p>
+<p>[8] Kokotajlo, D., Alexander, S., et al., <em>AI 2027</em>, AI
+Futures Project, 2025. — Cenário detalhado de fast takeoff cujas
+previsões de ritmo servem de contraponto testável. <a
+href="https://ai-2027.com/">Link</a></p>
+<p>[9] <em>AI Winter</em>, Wikipedia, The Free Encyclopedia. — Histórico
+das ondas anteriores de otimismo em IA seguidas de saturação. (acesso em
+21 Ago. 2026). <a
+href="https://en.wikipedia.org/wiki/AI_winter">Link</a></p>
+<p>[10] Vinge, V., <em>The Coming Technological Singularity: How to
+Survive in the Post-Human Era</em>, NASA Conference Publication, 1993. —
+Paper seminal que cunhou o termo “singularidade tecnológica” e
+argumentou que a criação de inteligência sobre-humana encerraria a era
+humana. Texto original da keynote VISION-21 (NASA); republicado na
+<em>Whole Earth Review</em>, Winter 1993. <a
+href="https://edoras.sdsu.edu/~vinge/misc/singularity.html">Link</a></p>
+<p>[11] Mokyr, J., <em>The Lever of Riches: Technological Creativity and
+Economic Progress</em>, Oxford University Press, New York, 1990. —
+Documentação histórica de como cada era tecnológica produziu a convicção
+de viver o ponto de inflexão definitivo. <a
+href="https://global.oup.com/academic/product/the-lever-of-riches-9780195074772">Link</a></p>
+<p>[12] Gubrud, M. A., <em>Nanotechnology and International
+Security</em>, artigo apresentado na Fifth Foresight Conference on
+Molecular Nanotechnology, Palo Alto, CA, 1997. — Cunhagem original do
+termo “artificial general intelligence”.</p>
+<p>[13] Goertzel, B., e Pennachin, C. (eds.), <em>Artificial General
+Intelligence</em>, Springer, Berlin, 2007. — Volume que consolidou e
+popularizou o termo AGI, cunhado independentemente por Peter Voss, Shane
+Legg e Ben Goertzel por volta de 2002.</p>
+<p>[14] Morris, M. R., et al., <em>Levels of AGI: Operationalizing
+Progress on the Path to AGI</em>, arXiv preprint, arXiv:2311.02462,
+Google DeepMind, 2023. — Framework de níveis de desempenho cruzados com
+amplitude de generalidade, adotado como nomenclatura de referência neste
+ensaio. <a href="https://arxiv.org/abs/2311.02462">Link</a></p>
+<p>[15] <em>OpenAI Charter</em>, OpenAI, 2018. — Define AGI como
+“sistemas altamente autônomos que superam humanos na maior parte do
+trabalho economicamente valioso”. <a
+href="https://openai.com/charter/">Link</a></p>
+<p>[16] Marcus, G., <em>Deep Learning Is Hitting a Wall</em>, Nautilus,
+10 mar. 2022. — Posição cética de referência contra a suficiência de
+escala pura de modelos de linguagem para alcançar AGI. <a
+href="https://nautil.us/deep-learning-is-hitting-a-wall-238440">Link</a></p>
+<p>[17] Sircar, A., <em>OpenAI Says AGI Is Coming By Year-End. It Also
+Just Had The Worst Safety Crisis In Its History</em>, Forbes, 28 ago.
+2026. — Declarações de Altman, Chen e Brockman sobre o prazo de AGI e o
+incidente de fuga de sandbox de julho de 2026. <a
+href="https://www.forbes.com/sites/anishasircar/2026/08/28/openai-says-agi-is-coming-by-year-end-it-also-just-had-the-worst-safety-crisis-in-its-history/">Link</a></p>
+<p>[18] Tetlock, P. E., e Gardner, D., <em>Superforecasting: The Art and
+Science of Prediction</em>, Crown, New York, 2015. — Base metodológica
+dos agregados de previsão citados no capítulo dos benchmarks.</p>
+<p>[19] <em>Nvidia’s Jensen Huang Says ‘We’ve Achieved AGI.’ But No One
+Can Agree on What That Means</em>, Fortune, 30 mar. 2026. — Ilustra o
+uso corporativo contestado do termo e o desacordo mesmo entre
+pesquisadores de fronteira, incluindo Shane Legg, sobre critérios de
+avaliação. <a
+href="https://fortune.com/2026/03/30/agi-definition-jensen-huang-lex-fridman-deepmind-turing-text-cognitive-taxonomy/">Link</a></p>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Agosto de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  if(toTop){toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Identifica e classifica divisores de capitulo: o losango so aparece onde ha capitulo real */
+  document.querySelectorAll(".content hr").forEach(function(hr){
+    var next=hr.nextElementSibling;
+    while(next&&next.nodeType===1&&next.tagName==="P"&&!next.textContent.trim()){
+      next=next.nextElementSibling;
+    }
+    if(next&&next.tagName==="H2"){
+      var id=(next.id||"").toLowerCase();
+      if(id.indexOf("sum")===0){
+        hr.style.display="none";
+      }else if(id.indexOf("ref")===0){
+        hr.classList.add("sb-hr-references");
+      }else{
+        hr.classList.add("sb-hr-chapter");
+      }
+    }
+  });
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        var words=(content.innerText||"").trim().split(/\s+/).length;
+        var mins=Math.max(1,Math.round(words/200));
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark">SB</span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Inteligência-Artificial</span><span class="sb-tag">Filosofia</span><span class="sb-tag">Epistemologia</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="mente-aumentada.html"><strong>Mente Aumentada — Agentes LLM, Second Brain e a Fronteira da Cognição</strong><span>Da visão do Memex de Bush em 1945 aos agentes LLM modernos, o ensaio argumenta que wikis alimentadas por agentes não são apenas ferramentas de armazenamento: são instâncias reais da Extended Mind de Clark e Chalmers. O engenheiro que mantém uma base de conhecimento estruturada não está armazenando informação, está literalmente pensando fora do crânio.</span></a><a class="sb-related-card" href="rpg-de-mesa-e-teoria-da-informacao.html"><strong>RPG de Mesa e a Teoria da Informação — Entropia Narrativa, Simulação Cognitiva e a Linguagem sem Limites</strong><span>Entre as mídias interativas, só o RPG de mesa aceita como ação válida qualquer frase que o jogador consiga pronunciar, porque opera sobre linguagem natural, não código. O ensaio lê essa propriedade pela teoria da informação de Shannon (o dado como ruído produtivo, o mestre simulando e descartando futuros) e mostra que, nos LLMs, o que falha não é a fluência do texto — é a continuidade do mundo simulado.</span></a><a class="sb-related-card" href="ficcao-cientifica-como-incubadora-teorica.html"><strong>Ficção Científica como Incubadora Teórica — Sci-Fi Prototyping, Monte Carlo Narrativo e a Imaginação Hipotética</strong><span>A ficção científica não é profecia nem subliteratura: funciona como incubadora teórica, um modo barato de exercitar tecnologias e dilemas dentro da narrativa antes que alguém os teste num laboratório. O ensaio documenta a troca histórica entre autores e cientistas, desfaz o viés de sobrevivência que só contabiliza os acertos de Verne e Clarke, e redefine o mérito do gênero como amostragem densa de mundos possíveis.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
+        aria-controls="sbToc" title="Sumário do essay">
+  <span class="sb-toc-icon" aria-hidden="true">☰</span>
+  <span class="sb-toc-text">Sumário</span>
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=00d79791"></script>
+</body>
+</html>
