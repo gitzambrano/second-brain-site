@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado">
+<html lang="pt-BR" data-status="maduro">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa</title>
-<meta property="og:title" content="Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa">
-<meta property="og:description" content="A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe.">
+<title>Força Lateral de um Rotor em Voo à Frente: Inflow Uniforme e Coleman</title>
+<meta property="og:title" content="Força Lateral de um Rotor em Voo à Frente: Inflow Uniforme e Coleman">
+<meta property="og:description" content="Com inflow uniforme, a teoria de elemento de pá prevê força lateral média nula, porque as contribuições da frente e da traseira do disco se cancelam exatamente. O estudo deriva esse cancelamento a partir da cinemática azimutal, mostra que o gradiente longitudinal de Coleman quebra a simetria frente-trás e obtém uma expressão fechada para o coeficiente de força lateral, com o sinal, o lado do rotor e um exemplo numérico.">
 <meta property="og:type" content="article">
 <script defer="" src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -877,291 +877,853 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <header class="masthead">
   <div class="stripe"></div>
   <div class="masthead-inner">
-    <h1 class="hero-title">Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa</h1>
+    <h1 class="hero-title">Força Lateral de um Rotor em Voo à Frente: Inflow Uniforme e Coleman</h1>
     <hr class="masthead-rule">
-    <p class="byline">Gustavo Zambrano · Maio de 2026</p>
-    <p class="cover-summary">A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe.</p>
+    <p class="byline">Gustavo Zambrano · Setembro de 2026</p>
+    <p class="cover-summary">Com inflow uniforme, a teoria de elemento de pá prevê força lateral média nula, porque as contribuições da frente e da traseira do disco se cancelam exatamente. O estudo deriva esse cancelamento a partir da cinemática azimutal, mostra que o gradiente longitudinal de Coleman quebra a simetria frente-trás e obtém uma expressão fechada para o coeficiente de força lateral, com o sinal, o lado do rotor e um exemplo numérico.</p>
   </div>
 </header>
 
 <main class="content">
-<p>Este documento apresenta uma síntese teórica sobre a fenomenologia do
-<a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a> em aeronaves de asa fixa e rotores, com foco na evolução
-geométrica das modelagens de esteira em função da velocidade a frente
-(<span class="math inline">\(V_\infty\)</span>). Demonstra-se que a
-aparente divergência matemática entre os modelos clássicos deriva de
-suas diferentes bases de adimensionalização e das topologias de esteira
-dominantes em baixas velocidades.</p>
-<p>Avalia-se a formação do <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a> no rotor em transição — um fenômeno ausente na asa fixa.
-Conclui-se que, para manter o equilíbrio vertical em altas velocidades,
-ambas as arquiteturas convergem para o mesmo princípio físico: a
-anulação assintótica da perturbação aerodinâmica induzida, colapsando o
-benefício do <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a>.</p>
-<hr />
 <h2 id="sumário">Sumário</h2>
 <ul>
-<li><a
-href="#1-o-princípio-físico-fundamental-conservação-de-momento">1. O
-Princípio Físico Fundamental: Conservação de Momento</a></li>
-<li><a
-href="#2-asa-fixa-esteira-em-ferradura-e-a-ausência-de-estagnação">2.
-Asa Fixa: Esteira em Ferradura e a Ausência de Estagnação</a></li>
-<li><a
-href="#3-asa-rotativa-estagnação-ground-vortex-e-a-modelagem-de-cheeseman">3.
-Asa Rotativa: Estagnação, Ground Vortex e a Modelagem de
-Cheeseman</a></li>
-<li><a href="#4-a-unificação-convergência-em-alta-velocidade">4. A
-Unificação: Convergência em Alta Velocidade</a></li>
-<li><a href="#5-estabilidade-longitudinal-asa-fixa-vs-multi-rotor">5.
-Estabilidade Longitudinal: Asa Fixa vs. Multi-rotor</a></li>
+<li><a href="#introdução">Introdução</a></li>
+<li><a href="#convenção-de-azimute-e-sinais">Convenção de azimute e
+sinais</a></li>
+<li><a href="#o-que-o-bemt-mostra">O que o BEMT mostra</a></li>
+<li><a href="#inflow-uniforme-por-que-cy-é-nulo">Inflow uniforme: por
+que CY é nulo</a></li>
+<li><a href="#coleman-a-simetria-frente-trás-é-quebrada">Coleman: a
+simetria frente-trás é quebrada</a></li>
+<li><a href="#dedução-de-cy-com-coleman">Dedução de CY com
+Coleman</a></li>
+<li><a href="#por-que-a-força-aponta-para-o-lado-recuante">Por que a
+força aponta para o lado recuante</a></li>
+<li><a href="#por-que-cy-é-menor-que-ch">Por que CY é menor que
+CH</a></li>
+<li><a href="#exemplo-numérico-por-bet-ct-ch-e-cy">Exemplo numérico por
+BET: CT, CH e CY</a></li>
+<li><a href="#limites-da-interpretação">Limites da
+interpretação</a></li>
+<li><a href="#conclusão">Conclusão</a></li>
 </ul>
-<hr />
-<h2 id="1-o-princípio-físico-fundamental-conservação-de-momento">1. O
-Princípio Físico Fundamental: Conservação de Momento</h2>
-<p>A geração de força vertical obedece à conservação de momento linear
-no volume de controle. A superfície aerodinâmica deflete um fluxo de
-massa de ar (<span class="math inline">\(\dot{m}\)</span>) impondo uma
-variação de velocidade (velocidade induzida, <span
-class="math inline">\(v_i\)</span> ou <span
-class="math inline">\(w\)</span>):</p>
-<p><span class="math display">\[F \approx \dot{m} \cdot
-2v_i\]</span></p>
-<p>Para manter o voo nivelado e sustentação constante, <span
-class="math inline">\(F = W\)</span>. À medida que <span
-class="math inline">\(V_\infty\)</span> aumenta, a taxa de massa (<span
-class="math inline">\(\dot{m}\)</span>) que interage com a aeronave
-cresce substancialmente. Sendo <span class="math inline">\(F\)</span>
-constante, a superfície deve operar impondo uma velocidade induzida
-(<span class="math inline">\(v_i\)</span>) progressivamente menor ao
-fluido.</p>
+<h2 id="introdução">Introdução</h2>
+<p>Um rotor em voo à frente possui uma assimetria aerodinâmica forte
+entre os lados avançante e recuante. A velocidade relativa é maior no
+lado avançante e menor no recuante. Essa diferença domina o carregamento
+azimutal e aparece com clareza tanto na força normal quanto na força
+tangencial.</p>
+<p>Essa assimetria, porém, não produz sozinha uma força lateral média.
+Com inflow uniforme, uma <a
+href="https://ntrs.nasa.gov/citations/19810057419">teoria de elemento de
+pá</a> (BET, <em>Blade Element Theory</em>) ideal produz uma força
+longitudinal no plano do rotor, mas as contribuições laterais da frente
+e da traseira se cancelam. O resultado é</p>
+<p><span class="math display">\[
+C_Y=0.
+\]</span></p>
+<p>O quadro muda quando o inflow possui um gradiente longitudinal. O <a
+href="https://ntrs.nasa.gov/citations/19930093086">modelo de
+Coleman–Feingold</a> introduz exatamente essa assimetria frente-trás. O
+vetor de sustentação de cada elemento de pá passa a ter inclinação
+diferente na traseira e na frente do disco. O cancelamento lateral deixa
+de ser exato e aparece um pequeno <span
+class="math inline">\(C_Y\)</span> direto.</p>
+<p>Para o rotor considerado aqui, que gira no sentido anti-horário visto
+de cima, essa força aponta normalmente para o lado recuante. Sua
+magnitude continua menor que a força longitudinal <span
+class="math inline">\(C_H\)</span>.</p>
+<h2 id="convenção-de-azimute-e-sinais">Convenção de azimute e
+sinais</h2>
+<p>O rotor é visto de cima e avança para o norte. Usaremos a mesma
+convenção das figuras BEMT:</p>
 <ul>
-<li>Na <strong>asa fixa</strong>: o aumento de fluxo se reflete na
-redução do ângulo de ataque para manter voo nivelado</li>
-<li>Na <strong>asa rotativa</strong>: se reflete na redução do ângulo de
-passo das pás</li>
+<li><span class="math inline">\(\psi=0^\circ\)</span>: traseira do
+rotor;</li>
+<li><span class="math inline">\(\psi=90^\circ\)</span>: lado direito, pá
+avançante;</li>
+<li><span class="math inline">\(\psi=180^\circ\)</span>: frente do
+rotor;</li>
+<li><span class="math inline">\(\psi=270^\circ\)</span>: lado esquerdo,
+pá recuante.</li>
 </ul>
-<hr />
-<h2 id="2-asa-fixa-esteira-em-ferradura-e-a-ausência-de-estagnação">2.
-Asa Fixa: Esteira em Ferradura e a Ausência de Estagnação</h2>
-<p>Na asa fixa, a capacidade de gerar força é adimensionalizada pela
-pressão dinâmica do fluxo livre (<span class="math inline">\(q_\infty =
-\frac{1}{2}\rho V_\infty^2\)</span>):</p>
-<p><span class="math display">\[L = \frac{1}{2}\rho V^2 S
-C_L\]</span></p>
-<p>A esteira é modelada como sistema de <a
-href="https://en.wikipedia.org/wiki/Lift_(force)">vórtices em
-ferradura</a> (<em>horseshoe vortex</em>) pela <a
-href="https://en.wikipedia.org/wiki/Lifting-line_theory">Linha
-Sustentadora de Prandtl</a>.</p>
+<p>O eixo lateral de corpo <span class="math inline">\(+Y\)</span>
+aponta para a direita. Portanto, uma força dirigida para o lado
+recuante, à esquerda, possui <span
+class="math inline">\(C_Y&lt;0\)</span>.</p>
+<p>Adotamos <span class="math inline">\(x\)</span> positivo para a
+frente e <span class="math inline">\(Y\)</span> positivo para a direita.
+A tração normal ao disco é <span class="math inline">\(T\)</span>. A
+força longitudinal no plano do rotor é <span
+class="math inline">\(H\)</span> e será tomada positiva para trás, isto
+é, na direção de arrasto do rotor. A força lateral é <span
+class="math inline">\(Y\)</span>. Assim, em voo à frente usual, <span
+class="math inline">\(C_H&gt;0\)</span>, enquanto uma força lateral para
+a esquerda tem <span class="math inline">\(C_Y&lt;0\)</span>. Os
+coeficientes usados ao longo do texto são</p>
+<p><span class="math display">\[
+C_T=\frac{T}{\rho A(\Omega R)^2},
+\qquad
+C_H=\frac{H}{\rho A(\Omega R)^2},
+\qquad
+C_Y=\frac{Y}{\rho A(\Omega R)^2},
+\]</span></p>
+<p>onde <span class="math inline">\(A=\pi R^2\)</span> é a área do
+disco, <span class="math inline">\(R\)</span> é o raio do rotor, <span
+class="math inline">\(\rho\)</span> é a densidade do ar e <span
+class="math inline">\(\Omega\)</span> é a velocidade angular.</p>
+<p>Com essa definição, a velocidade tangencial normalizada de um
+elemento de pá é</p>
+<p><span class="math display">\[
+u_T=\bar r+\mu\sin\psi,
+\]</span></p>
+<p>onde <span class="math inline">\(\bar r=r/R\)</span> é a posição
+radial normalizada e <span class="math inline">\(\mu=V/(\Omega
+R)\)</span> é a razão de avanço. Aqui, <span
+class="math inline">\(V\)</span> é a velocidade de voo.</p>
+<p>Se <span class="math inline">\(w\)</span> é a componente da
+velocidade relativa normal ao disco, definimos o inflow adimensional
+como <span class="math inline">\(\lambda=w/(\Omega R)\)</span>. O
+símbolo <span class="math inline">\(\lambda_0\)</span> representa sua
+componente média sobre o disco. Quando houver corte de raiz, <span
+class="math inline">\(r_0\)</span> é o raio a partir do qual começa a
+região aerodinâmica efetiva da pá e</p>
+<p><span class="math display">\[
+\boxed{
+\bar r_0=\frac{r_0}{R}
+}.
+\]</span></p>
+<p>Assim, <span class="math inline">\(\bar r_0=0\)</span> representa o
+rotor ideal cuja região aerodinâmica se estende até o centro, enquanto
+<span class="math inline">\(\bar r_0=0{,}20\)</span> significa que a
+integração aerodinâmica começa em <span
+class="math inline">\(20\%\)</span> do raio.</p>
+<p>No lado avançante, <span
+class="math inline">\(\psi=90^\circ\)</span>:</p>
+<p><span class="math display">\[
+u_T=\bar r+\mu.
+\]</span></p>
+<p>No lado recuante, <span
+class="math inline">\(\psi=270^\circ\)</span>:</p>
+<p><span class="math display">\[
+u_T=\bar r-\mu.
+\]</span></p>
+<p>A diferença entre esses dois lados é a principal assimetria do voo à
+frente.</p>
+<h2 id="o-que-o-bemt-mostra">O que o BEMT mostra</h2>
+<p>As quatro figuras abaixo foram obtidas com o mesmo <a
+href="https://ntrs.nasa.gov/citations/19790013868">modelo de elemento de
+pá acoplado à teoria de quantidade de movimento</a> (BEMT, <em>Blade
+Element Momentum Theory</em>), em <span
+class="math inline">\(\mu=0{,}19\)</span>, usando inflow de Coleman.
+Neste estudo, o BEMT fornece o campo local mostrado nas figuras. A
+dedução analítica de <span class="math inline">\(C_Y\)</span>, por sua
+vez, usa o BET com o inflow prescrito pelo modelo de Coleman.</p>
+<p><img src="../assets/media/dinlon-bemt-disco-1.png"
+alt="Distribuição de força normal no disco do rotor" /></p>
+<p><em>Figura 1 — Distribuição de força normal. O lado avançante, à
+direita, é muito mais carregado que o lado recuante.</em></p>
+<p>A força normal evidencia a assimetria avançante–recuante. Como a
+pressão dinâmica varia aproximadamente com <span
+class="math inline">\(u_T^2\)</span>, o aumento de velocidade relativa
+no lado avançante produz uma diferença grande de carregamento.</p>
+<p><img src="../assets/media/dinlon-bemt-disco-2.png"
+alt="Distribuição de força tangencial no disco do rotor" /></p>
+<p><em>Figura 2 — Distribuição de força tangencial. A variação
+avançante–recuante é dominante. Sobre ela existe uma assimetria
+frente–trás menor.</em></p>
+<p>A força tangencial é a variável central para entender as forças no
+plano do rotor. Sua grande diferença entre os lados avançante e recuante
+gera principalmente <span class="math inline">\(C_H\)</span>. A
+diferença menor entre a traseira e a frente gera <span
+class="math inline">\(C_Y\)</span>.</p>
+<p><img src="../assets/media/dinlon-bemt-disco-3.png"
+alt="Distribuição do inflow total sobre o disco" /></p>
+<p><em>Figura 3 — Inflow total. O campo não uniforme modifica o
+carregamento local ao longo do azimute.</em></p>
+<p><img src="../assets/media/dinlon-bemt-disco-4.png"
+alt="Distribuição de ângulo de ataque sobre o disco" /></p>
+<p><em>Figura 4 — Ângulo de ataque. A variação de inflow altera
+simultaneamente o ângulo de ataque e a orientação da força aerodinâmica
+local.</em></p>
+<p>As Figuras 3 e 4 mostram uma distinção importante. O inflow não
+modifica apenas a magnitude da sustentação. Ele altera também a direção
+do escoamento relativo visto pela seção e, portanto, a direção do
+próprio vetor de sustentação.</p>
+<h2 id="inflow-uniforme-por-que-cy-é-nulo">Inflow uniforme: por que CY é
+nulo</h2>
+<p>No modelo uniforme,</p>
+<p><span class="math display">\[
+\lambda(\bar r,\psi)=\lambda_0.
+\]</span></p>
+<p>Considere a traseira e a frente do rotor. Na traseira, <span
+class="math inline">\(\psi=0^\circ\)</span>. Na frente, <span
+class="math inline">\(\psi=180^\circ\)</span>. Nos dois pontos,</p>
+<p><span class="math display">\[
+\sin\psi=0,
+\]</span></p>
+<p>e, portanto,</p>
+<p><span class="math display">\[
+u_T=\bar r.
+\]</span></p>
+<p>A velocidade tangencial é igual nas duas regiões. Se o inflow também
+é igual, o ângulo de inflow, o ângulo de ataque e a força tangencial
+possuem a mesma magnitude.</p>
+<p>As direções laterais são opostas. Na traseira, a força tangencial
+aerodinâmica possui componente para a esquerda. Na frente, possui
+componente para a direita.</p>
+<p>Logo,</p>
+<p><span class="math display">\[
+Y_{\text{trás}}+Y_{\text{frente}}=0
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+\boxed{C_Y=0}.
+\]</span></p>
+<p>O rotor continua fortemente assimétrico entre avançante e recuante. O
+que permanece simétrico, no modelo de inflow uniforme, é especificamente
+o par frente–trás que determina a força lateral.</p>
+<h2 id="coleman-a-simetria-frente-trás-é-quebrada">Coleman: a simetria
+frente-trás é quebrada</h2>
 <p>O <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a> é resolvido pelo <strong>Princípio das Imagens de
-Kelvin</strong>: um sistema espelhado a uma distância vertical <span
-class="math inline">\(h\)</span> abaixo da superfície do solo gera
-<em>upwash</em> que reduz o <em>downwash</em> efetivo:</p>
-<p><span class="math display">\[\Delta C_L = a_0\frac{C_L}{\pi AR}(1 -
-\sigma)\]</span></p>
-<p><strong>A característica limitante</strong>: a asa fixa nunca opera
-em <span class="math inline">\(V_\infty \approx 0\)</span>. Sua
-velocidade mínima garante que a pressão dinâmica seja sempre superior à
-velocidade induzida, então a esteira permanece sempre convectada a
-jusante. <strong>Não há estagnação frontal nem <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a></strong>.</p>
-<p><strong>Colapso em alta velocidade</strong>: como <span
-class="math inline">\(q_\infty\)</span> cresce quadraticamente, o ângulo
-de ataque é forçado a zero. Pelo <a
-href="https://en.wikipedia.org/wiki/Kutta%E2%80%93Joukowski_theorem">Teorema
-de Kutta-Joukowski</a>, a circulação total colapsa. O espelho no solo
-reflete uma perturbação nula. O <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a> desaparece.</p>
-<hr />
-<h2
-id="3-asa-rotativa-estagnação-ground-vortex-e-a-modelagem-de-cheeseman">3.
-Asa Rotativa: Estagnação, Ground Vortex e a Modelagem de Cheeseman</h2>
-<p>O rotor é adimensionalizado pela velocidade tangencial constante das
-pás (<span class="math inline">\(\Omega R\)</span>):</p>
-<p><span class="math display">\[T = C_T \rho A (\Omega R)^2\]</span></p>
-<p>Para manter tração constante com <span
-class="math inline">\(V_\infty\)</span> crescente, o controle de voo
-impõe redução progressiva do passo coletivo (<span
-class="math inline">\(\theta_0\)</span>).</p>
-<h3 id="a-formação-do-ground-vortex">A Formação do Ground Vortex</h3>
-<p>Diferentemente da asa fixa, o rotor opera rotineiramente em
-velocidades nulas (pairado). No pairado (<span
-class="math inline">\(V_\infty = 0\)</span>), o <em>downwash</em> maciço
-atinge o solo ortogonalmente, criando um ponto de estagnação e forçando
-o fluxo a se espalhar radialmente em <em>wall jet</em>.</p>
-<p>Quando o helicóptero adquire pequena velocidade a frente, o
-escoamento frontal colide com o <em>wall jet</em> contrário, criando uma
-<strong>linha de separação abrupta</strong> que rola sobre si mesma — o
-<a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a>. À medida que a aeronave acelera, a pressão dinâmica
-eventualmente supera o momento do <em>wall jet</em>, e o <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a> é varrido para trás (<em>blow back</em>).</p>
-<h3 id="o-modelo-de-cheeseman--bennett">O Modelo de Cheeseman &amp;
-Bennett</h3>
-<p>Na impossibilidade de modelar analiticamente o caos do <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a> nos anos 1950, Cheeseman e Bennett modelaram a esteira como
-uma fonte isolada com espelho, introduzindo o <em>wake skew</em> (<span
-class="math inline">\(\chi\)</span>) para capturar a transição da
-estagnação para a esteira convectada:</p>
-<p><span class="math display">\[\tan(\chi) =
-\frac{V_\infty}{v_i}\]</span></p>
-<p><span class="math display">\[\frac{T_{IGE}}{T_{OGE}} = \frac{1}{1 -
-\frac{R^2}{16h^2}\left(\frac{1}{1 + (V/v_i)^2}\right)}\]</span></p>
-<p>No pairado, a fonte espelho está alinhada na vertical. À medida que
-<span class="math inline">\(V\)</span> aumenta e supera <span
-class="math inline">\(v_i\)</span>, o espelho é deslocado a jusante —
-traduzindo matematicamente o <em>blow back</em> como deslocamento
-longitudinal da fonte espelho.</p>
-<hr />
-<h2 id="4-a-unificação-convergência-em-alta-velocidade">4. A Unificação:
-Convergência em Alta Velocidade</h2>
-<p>A controvérsia clássica resolve-se pela condição de equilíbrio
-vertical:</p>
-<table>
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 22%" />
-<col style="width: 61%" />
-</colgroup>
-<thead>
-<tr>
-<th>Modelo</th>
-<th>Mecanismo</th>
-<th>Resultado em alta velocidade</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Prandtl (asa fixa)</strong></td>
-<td><span class="math inline">\(\alpha \to 0\)</span>, <span
-class="math inline">\(\Gamma \to 0\)</span></td>
-<td>Espelho geométrico permanece, mas reflete perturbação nula</td>
-</tr>
-<tr>
-<td><strong>Cheeseman (rotor)</strong></td>
-<td><span class="math inline">\(\theta_0 \to\)</span> mínimo, <span
-class="math inline">\(\chi \to 90°\)</span></td>
-<td>Espelho varrido para <span class="math inline">\(\infty\)</span> a
-jusante</td>
-</tr>
-</tbody>
-</table>
-<p>Em ambos os casos, a superfície parou de injetar momento vertical
-significativo no fluido. O <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a> desaparece por inanição do campo induzido.</p>
-<hr />
-<h2 id="5-estabilidade-longitudinal-asa-fixa-vs-multi-rotor">5.
-Estabilidade Longitudinal: Asa Fixa vs. Multi-rotor</h2>
-<h3 id="asa-fixa-momento-picador-via-empenagem">Asa Fixa: Momento
-Picador via Empenagem</h3>
-<p>Imersa na esteira da asa, a empenagem “enxerga” um ângulo de ataque
-reduzido:</p>
-<p><span class="math display">\[\alpha_t = \alpha_w - i_w + i_t -
-\epsilon\]</span></p>
-<p>Onde <span class="math inline">\(i_w\)</span> e <span
-class="math inline">\(i_t\)</span> são os ângulos de incidência da asa e
-da cauda.</p>
-<p>Em <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a>, o colapso do <em>downwash</em> (<span
-class="math inline">\(\epsilon \to 0\)</span>) faz a empenagem “ver”
-mais fluxo, aumentando sua sustentação e gerando momento picador
-estabilizante:</p>
-<p><span class="math display">\[\Delta C_{M_{IGE}} \propto -V_H (\Delta
-C_{L_t})\]</span></p>
-<p><span class="math display">\[\Delta C_{M\alpha_{IGE}} \propto -V_H
-\cdot a_1 \left(1 - \frac{d\epsilon}{d\alpha_{IGE}}\right)\]</span></p>
-<p>Onde <span class="math inline">\(V_H\)</span> é o volume de cauda. A
-empenagem providencia <a
-href="https://en.wikipedia.org/wiki/Flight_dynamics_(fixed-wing_aircraft)">estabilidade
-estática</a> em velocidade.</p>
-<h3 id="multi-rotor-a-instabilidade-da-esteira">Multi-rotor: A
-Instabilidade da Esteira</h3>
-<p>Em multi-rotores (<a
-href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOL</a>),
-o equilíbrio é mantido por modulação diferencial de tração. Em IGE com
-baixas velocidades:</p>
-<ol type="1">
-<li>O rotor dianteiro forma seu <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a></li>
-<li>O <em>wake skew</em> varre a esteira para baixo do rotor
-traseiro</li>
-<li>O rotor traseiro ganha eficiência assimétrica de <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a></li>
-<li>O desbalanceamento gera momento picador severo (<span
-class="math inline">\(\Delta M\)</span>)</li>
-</ol>
-<h3 id="a-retroalimentação-positiva-divergente">A Retroalimentação
-Positiva Divergente</h3>
-<p>Uma rajada frontal em <a
-href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOL</a>
-IGE produz:</p>
-<ol type="1">
-<li>Aumento de <span class="math inline">\(\mu\)</span> → <em>blow
-back</em> mais severo do <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a></li>
-<li>Amplificação assimétrica de tração traseira → momento picador (<span
-class="math inline">\(\theta \downarrow\)</span>)</li>
-<li>Atitude picada inclina vetor de tração → aceleração linear → <span
-class="math inline">\(\mu\)</span> aumenta mais</li>
-<li><strong>Ciclo divergente</strong>: diferente do amortecimento
-provido pela empenagem da asa fixa, o acoplamento diferencial de
-esteiras no multi-rotor resulta em <strong>inversão da estabilidade em
-velocidade</strong></li>
-</ol>
-<hr />
+href="https://rotorcraft.arc.nasa.gov/ndarc/index.php/reports-and-papers">NDARC,
+da NASA</a>, representa a variação linear do inflow sobre o disco por um
+primeiro harmônico, isto é, por uma variação azimutal proporcional a
+<span class="math inline">\(\cos\psi\)</span>. Para voo puramente
+longitudinal, a contribuição de Coleman–Feingold pode ser escrita, na
+convenção deste estudo, como</p>
+<p><span class="math display">\[
+\boxed{
+\lambda(\bar r,\psi)
+=
+\lambda_0
+\left(
+1+K_x\bar r\cos\psi
+\right)
+}.
+\]</span></p>
+<p>O sinal positivo aparece porque <span
+class="math inline">\(\psi=0^\circ\)</span> está na traseira do
+rotor.</p>
+<p>O coeficiente longitudinal <span class="math inline">\(K_x\)</span>
+mede a intensidade do gradiente longitudinal do inflow. No modelo de
+Coleman–Feingold, ele é relacionado ao ângulo de inclinação da esteira
+<span class="math inline">\(\chi\)</span>, medido entre o eixo do rotor
+e a direção média da esteira. Para voo à frente sem velocidade axial
+externa, <span
+class="math inline">\(\tan\chi\simeq\mu/|\lambda_0|\)</span>. A forma
+usada pelo NDARC é</p>
+<p><span class="math display">\[
+\boxed{
+K_x=
+\frac{15\pi}{32}
+\tan\frac{\chi}{2}
+}
+\]</span></p>
+<p>quando o multiplicador empírico aplicado ao modelo é igual a 1. Em
+termos de <span class="math inline">\(\mu\)</span> e do inflow
+médio,</p>
+<p><span class="math display">\[
+\boxed{
+K_x=
+\frac{15\pi}{32}
+\frac{\mu}
+{\sqrt{\mu^2+\lambda_0^2}+|\lambda_0|}
+}.
+\]</span></p>
+<p>Na traseira,</p>
+<p><span class="math display">\[
+\lambda_{\text{trás}}
+=
+\lambda_0(1+K_x\bar r),
+\]</span></p>
+<p>enquanto na frente,</p>
+<p><span class="math display">\[
+\lambda_{\text{frente}}
+=
+\lambda_0(1-K_x\bar r).
+\]</span></p>
+<p>Assim,</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_{\text{trás}}&gt;
+\lambda_{\text{frente}}
+}.
+\]</span></p>
+<p>Essa desigualdade é o ingrediente que não existia no modelo
+uniforme.</p>
+<h2 id="dedução-de-cy-com-coleman">Dedução de CY com Coleman</h2>
+<p>A dedução pode ser construída diretamente a partir da força de um
+elemento de pá.</p>
+<p>Para pequenos ângulos de inflow,</p>
+<p><span class="math display">\[
+\phi\simeq\frac{\lambda}{u_T}.
+\]</span></p>
+<p>Se <span class="math inline">\(\theta\)</span> é o passo geométrico
+local da pá e <span class="math inline">\(a=dC_l/d\alpha\)</span> é a
+inclinação da curva de sustentação, a aproximação linear fornece</p>
+<p><span class="math display">\[
+C_l=a\left(\theta-\phi\right).
+\]</span></p>
+<p>Aqui, <span class="math inline">\(C_l\)</span> é o coeficiente de
+sustentação bidimensional da seção e <span
+class="math inline">\(\alpha\simeq\theta-\phi\)</span> é o ângulo de
+ataque.</p>
+<p>Para uma seção de corda <span class="math inline">\(c\)</span> e
+largura radial <span class="math inline">\(dr\)</span>, a sustentação
+elementar é aproximadamente</p>
+<p><span class="math display">\[
+dL=
+\frac{1}{2}\rho c(\Omega R)^2
+a
+\left(
+\theta u_T^2-\lambda u_T
+\right)dr.
+\]</span></p>
+<p>Como o vetor de sustentação está inclinado de um ângulo <span
+class="math inline">\(\phi\)</span>, existe uma componente no plano do
+rotor. Para pequenos ângulos,</p>
+<p><span class="math display">\[
+dF_i\simeq dL\,\phi.
+\]</span></p>
+<p>Substituindo <span
+class="math inline">\(\phi=\lambda/u_T\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+dF_i=
+\frac{1}{2}\rho c(\Omega R)^2a
+\left(
+\theta\lambda u_T-\lambda^2
+\right)dr
+}.
+\]</span></p>
+<p>Essa é a parcela de força tangencial associada à inclinação da
+sustentação. Para isolar o mecanismo de Coleman, consideraremos
+inicialmente apenas essa contribuição. Aqui, <span
+class="math inline">\(C_d\)</span> denota o coeficiente de arrasto
+bidimensional da seção. Se <span class="math inline">\(C_d\)</span> for
+tomado constante, a parcela de arrasto de perfil depende de <span
+class="math inline">\(u_T\)</span> mas não do inflow e, neste modelo
+ideal, não cria a assimetria frente–trás necessária para produzir <span
+class="math inline">\(C_Y\)</span>.</p>
+<p>Na convenção azimutal adotada, a projeção lateral é</p>
+<p><span class="math display">\[
+dY=-dF_i\cos\psi.
+\]</span></p>
+<p>Somando <span class="math inline">\(N_b\)</span> pás, fazendo a média
+em uma revolução e normalizando por <span class="math inline">\(\rho
+A(\Omega R)^2\)</span>, resulta</p>
+<p><span class="math display">\[
+\boxed{
+C_Y
+=
+-\frac{\sigma a}{4\pi}
+\int_{\bar r_0}^{1}
+\int_0^{2\pi}
+\left(
+\theta\lambda u_T-\lambda^2
+\right)
+\cos\psi
+\,d\psi\,d\bar r
+}
+\]</span></p>
+<p>onde</p>
+<p><span class="math display">\[
+\sigma=\frac{N_bc}{\pi R}
+\]</span></p>
+<p>é a solidez do rotor para corda constante e <span
+class="math inline">\(N_b\)</span> é o número de pás. O limite inferior
+<span class="math inline">\(\bar r_0\)</span> é o corte de raiz
+aerodinâmico definido anteriormente. Para um rotor ideal sem corte de
+raiz, usa-se <span class="math inline">\(\bar r_0=0\)</span>.</p>
+<p>Agora substituímos as duas dependências azimutais:</p>
+<p><span class="math display">\[
+u_T=\bar r+\mu\sin\psi
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+\lambda=
+\lambda_0
+\left(
+1+K_x\bar r\cos\psi
+\right).
+\]</span></p>
+<p>A parte proporcional a <span class="math inline">\(\theta\lambda
+u_T\)</span> torna-se</p>
+<p><span class="math display">\[
+\theta\lambda_0
+\left(
+1+K_x\bar r\cos\psi
+\right)
+\left(
+\bar r+\mu\sin\psi
+\right)
+\cos\psi.
+\]</span></p>
+<p>Ao integrar em <span class="math inline">\(\psi\)</span>, os termos
+proporcionais a</p>
+<p><span class="math display">\[
+\cos\psi,
+\qquad
+\sin\psi\cos\psi,
+\qquad
+\sin\psi\cos^2\psi
+\]</span></p>
+<p>desaparecem em uma revolução completa. O termo que sobrevive é</p>
+<p><span class="math display">\[
+\theta\lambda_0K_x\bar r^2\cos^2\psi.
+\]</span></p>
+<p>Como</p>
+<p><span class="math display">\[
+\int_0^{2\pi}\cos^2\psi\,d\psi=\pi,
+\]</span></p>
+<p>essa parcela fornece</p>
+<p><span class="math display">\[
+\pi\theta\lambda_0K_x\bar r^2.
+\]</span></p>
+<p>Agora examinamos o termo <span
+class="math inline">\(-\lambda^2\)</span>:</p>
+<p><span class="math display">\[
+-\lambda^2\cos\psi
+=
+-\lambda_0^2
+\left(
+1+2K_x\bar r\cos\psi
++K_x^2\bar r^2\cos^2\psi
+\right)
+\cos\psi.
+\]</span></p>
+<p>Os termos em <span class="math inline">\(\cos\psi\)</span> e <span
+class="math inline">\(\cos^3\psi\)</span> integram para zero. Resta
+apenas</p>
+<p><span class="math display">\[
+-2\lambda_0^2K_x\bar r\cos^2\psi.
+\]</span></p>
+<p>Depois da integração azimutal,</p>
+<p><span class="math display">\[
+-2\pi\lambda_0^2K_x\bar r.
+\]</span></p>
+<p>Portanto,</p>
+<p><span class="math display">\[
+\int_0^{2\pi}
+\left(
+\theta\lambda u_T-\lambda^2
+\right)\cos\psi\,d\psi
+=
+\pi K_x
+\left(
+\theta\lambda_0\bar r^2
+-
+2\lambda_0^2\bar r
+\right).
+\]</span></p>
+<p>Substituindo de volta na definição de <span
+class="math inline">\(C_Y\)</span>,</p>
+<p><span class="math display">\[
+C_Y=
+-\frac{\sigma aK_x\lambda_0}{4}
+\int_{\bar r_0}^{1}
+\left(
+\theta\bar r^2
+-
+2\lambda_0\bar r
+\right)d\bar r.
+\]</span></p>
+<p>A integração radial é imediata:</p>
+<p><span class="math display">\[
+\int_{\bar r_0}^{1}\bar r^2d\bar r
+=
+\frac{1-\bar r_0^3}{3},
+\]</span></p>
+<p><span class="math display">\[
+\int_{\bar r_0}^{1}2\bar r\,d\bar r
+=
+1-\bar r_0^2.
+\]</span></p>
+<p>Chegamos então a</p>
+<p><span class="math display">\[
+\boxed{
+C_Y
+=
+-\frac{\sigma aK_x\lambda_0}{4}
+\left[
+\frac{\theta}{3}
+(1-\bar r_0^3)
+-
+\lambda_0
+(1-\bar r_0^2)
+\right]
+}.
+\]</span></p>
+<p>Para um rotor ideal sem corte de raiz, <span
+class="math inline">\(\bar r_0=0\)</span>:</p>
+<p><span class="math display">\[
+\boxed{
+C_Y
+=
+-\frac{\sigma a}{4}
+K_x\lambda_0
+\left(
+\frac{\theta}{3}-\lambda_0
+\right)
+}.
+\]</span></p>
+<p>A forma final deixa clara a origem matemática do fenômeno. O inflow
+uniforme não contém um harmônico em <span
+class="math inline">\(\cos\psi\)</span>. Coleman introduz esse
+harmônico. Depois da projeção lateral surge um termo em <span
+class="math inline">\(\cos^2\psi\)</span>, cuja média não é zero.</p>
+<h2 id="por-que-a-força-aponta-para-o-lado-recuante">Por que a força
+aponta para o lado recuante</h2>
+<p>A matemática fornece o sinal, mas a geometria explica o
+mecanismo.</p>
+<p>Na traseira do disco, Coleman prevê inflow maior. A componente normal
+do escoamento relativo sobre o elemento de pá aumenta. Consequentemente,
+o ângulo de inflow</p>
+<p><span class="math display">\[
+\phi\simeq\frac{\lambda}{u_T}
+\]</span></p>
+<p>também aumenta.</p>
+<p>A sustentação permanece aproximadamente perpendicular ao escoamento
+relativo. Quando <span class="math inline">\(\phi\)</span> aumenta, o
+vetor de sustentação se inclina mais para trás em relação ao movimento
+tangencial local da pá. Essa inclinação aumenta a componente da
+sustentação no plano do rotor. Em linguagem física, aumenta a parcela de
+arrasto induzido do elemento.</p>
+<p>Na traseira, <span class="math inline">\(\psi=0^\circ\)</span>. A pá
+se desloca tangencialmente para a direita. A componente aerodinâmica que
+se opõe a esse movimento aponta para a esquerda.</p>
+<p>Na frente, <span class="math inline">\(\psi=180^\circ\)</span>. A pá
+se desloca tangencialmente para a esquerda. A componente aerodinâmica
+correspondente aponta para a direita.</p>
+<p>Com inflow uniforme, as duas magnitudes são iguais e se cancelam.</p>
+<p>Com Coleman,</p>
+<p><span class="math display">\[
+\lambda_{\text{trás}}&gt;
+\lambda_{\text{frente}},
+\]</span></p>
+<p>portanto o vetor de sustentação fica mais inclinado na traseira. A
+componente tangencial de origem induzida fica maior nessa região.</p>
+<p>Assim,</p>
+<p>$$ |Y_{}|</p>
+<div class="quote">
+
+</div>
+<p>|Y_{}|. $$</p>
+<p>Há mais força para a esquerda na traseira do disco do que força para
+a direita na frente. O saldo aponta para a esquerda, que neste rotor é o
+lado recuante.</p>
+<p>Nas condições usuais em que o termo entre colchetes da expressão de
+<span class="math inline">\(C_Y\)</span> é positivo,</p>
+<p><span class="math display">\[
+\boxed{C_Y&lt;0}.
+\]</span></p>
+<h2 id="por-que-cy-é-menor-que-ch">Por que CY é menor que CH</h2>
+<p><span class="math inline">\(C_H\)</span> e <span
+class="math inline">\(C_Y\)</span> nascem de assimetrias diferentes.</p>
+<p><span class="math inline">\(C_H\)</span> é produzido principalmente
+pela forte assimetria avançante–recuante. Ela aparece diretamente na
+velocidade tangencial:</p>
+<p><span class="math display">\[
+u_T=\bar r+\mu\sin\psi.
+\]</span></p>
+<p>Como as forças aerodinâmicas dependem aproximadamente do quadrado
+dessa velocidade, a diferença entre os lados avançante e recuante é
+grande.</p>
+<p><span class="math inline">\(C_Y\)</span> depende de uma assimetria de
+segunda ordem sobre esse campo. Coleman acrescenta a modulação
+longitudinal</p>
+<p><span class="math display">\[
+K_x\lambda_0\bar r\cos\psi.
+\]</span></p>
+<p>Ela não substitui a assimetria avançante–recuante. Apenas modifica um
+pouco a força tangencial entre a traseira e a frente.</p>
+<p>A Figura 2 mostra exatamente essa hierarquia: a variação
+direita–esquerda da força tangencial é dominante, enquanto a diferença
+frente–trás é muito menor.</p>
+<p>Por isso, em condições usuais, <span
+class="math inline">\(C_H\)</span> permanece a força dominante no plano
+do rotor e <span class="math inline">\(C_Y\)</span> é uma correção
+lateral menor.</p>
+<h2 id="exemplo-numérico-por-bet-ct-ch-e-cy">Exemplo numérico por BET:
+CT, CH e CY</h2>
+<p>A comparação numérica será feita diretamente pelas equações do BET.
+As figuras anteriores não serão integradas. Nesta comparação
+simplificada, <span class="math inline">\(C_H\)</span> inclui arrasto de
+perfil e a componente induzida da sustentação. O <span
+class="math inline">\(C_Y\)</span> calculado é a parcela direta
+produzida por Coleman. Com <span class="math inline">\(C_d\)</span>
+constante, o arrasto de perfil não acrescenta <span
+class="math inline">\(C_Y\)</span> neste modelo porque não cria uma
+diferença frente–trás.</p>
+<p>Considere um rotor representativo em voo à frente, com</p>
+<p><span class="math display">\[
+\mu=0{,}40,
+\qquad
+\sigma=0{,}10,
+\qquad
+a=5{,}7\ \mathrm{rad}^{-1},
+\]</span></p>
+<p><span class="math display">\[
+\theta=0{,}12\ \mathrm{rad},
+\qquad
+\bar r_0=0{,}20,
+\qquad
+\bar C_d=0{,}040.
+\]</span></p>
+<p>O símbolo <span class="math inline">\(\bar C_d\)</span> representa,
+apenas neste exemplo simplificado de <span
+class="math inline">\(C_H\)</span>, um coeficiente médio efetivo de
+arrasto de seção. Ele substitui a polar de arrasto que um BEMT completo
+avaliaria em cada elemento e em cada azimute, levando em conta ângulo de
+ataque, número de Mach e número de Reynolds. Portanto, <span
+class="math inline">\(\bar C_d\)</span> não deve ser confundido com o
+<span class="math inline">\(C_{d0}\)</span> de um aerofólio
+descarregado.</p>
+<h3 id="tração">Tração</h3>
+<p>Para passo e corda constantes, a integração BET da força normal
+fornece</p>
+<p><span class="math display">\[
+\boxed{
+C_T
+=
+\frac{\sigma a}{2}
+\left[
+\theta
+\left(
+\frac{1-\bar r_0^3}{3}
++
+\frac{\mu^2}{2}(1-\bar r_0)
+\right)
+-
+\frac{\lambda_0}{2}
+(1-\bar r_0^2)
+\right]
+}.
+\]</span></p>
+<p>Para fechar o problema, usamos a <a
+href="https://ntrs.nasa.gov/citations/19810057419">teoria de quantidade
+de movimento aplicada ao rotor</a> em voo à frente:</p>
+<p><span class="math display">\[
+C_T=
+2\lambda_0
+\sqrt{\mu^2+\lambda_0^2}.
+\]</span></p>
+<p>Resolvendo as duas equações conjuntamente,</p>
+<p><span class="math display">\[
+\lambda_0\simeq0{,}0144
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+\boxed{
+C_T\simeq0{,}01153
+}.
+\]</span></p>
+<h3 id="força-longitudinal">Força longitudinal</h3>
+<p>No mesmo BET simplificado, a força tangencial de um elemento contém
+duas parcelas principais:</p>
+<p><span class="math display">\[
+dF_t
+\simeq
+dD
++
+dL\,\phi.
+\]</span></p>
+<p>A primeira é o arrasto de perfil. A segunda é a componente induzida
+da sustentação inclinada.</p>
+<p>Projetando essa força na direção longitudinal e integrando uma
+revolução, obtém-se</p>
+<p>$$ $$</p>
+<p>para a magnitude da força de arrasto longitudinal.</p>
+<p>O primeiro termo é a contribuição de perfil:</p>
+<p><span class="math display">\[
+C_{H,\mathrm{perfil}}
+\simeq
+3{,}84\times10^{-4}.
+\]</span></p>
+<p>O segundo é a contribuição induzida:</p>
+<p><span class="math display">\[
+C_{H,\mathrm{ind}}
+\simeq
+7{,}88\times10^{-5}.
+\]</span></p>
+<p>Assim,</p>
+<p><span class="math display">\[
+\boxed{
+C_H
+\simeq
+4{,}63\times10^{-4}
+}.
+\]</span></p>
+<p>Comparando com a tração,</p>
+<p><span class="math display">\[
+\boxed{
+\frac{C_H}{C_T}
+\simeq
+0{,}040
+}
+\]</span></p>
+<p>ou cerca de <span class="math inline">\(4{,}0\%\)</span>.</p>
+<h3 id="força-lateral-de-coleman">Força lateral de Coleman</h3>
+<p>Para o mesmo ponto,</p>
+<p><span class="math display">\[
+K_x=
+\frac{15\pi}{32}
+\frac{\mu}
+{\sqrt{\mu^2+\lambda_0^2}+|\lambda_0|}
+\simeq1{,}42.
+\]</span></p>
+<p>Substituindo na expressão deduzida anteriormente,</p>
+<p><span class="math display">\[
+C_Y
+=
+-\frac{\sigma aK_x\lambda_0}{4}
+\left[
+\frac{\theta}{3}
+(1-\bar r_0^3)
+-
+\lambda_0
+(1-\bar r_0^2)
+\right],
+\]</span></p>
+<p>obtemos</p>
+<p><span class="math display">\[
+\boxed{
+C_Y
+\simeq
+-7{,}54\times10^{-5}
+}.
+\]</span></p>
+<p>Logo,</p>
+<p><span class="math display">\[
+\boxed{
+\frac{C_Y}{C_T}
+\simeq
+-0{,}0065
+}
+\]</span></p>
+<p>ou aproximadamente <span class="math inline">\(-0{,}65\%\)</span> da
+tração.</p>
+<p>A comparação direta é</p>
+<p><span class="math display">\[
+\boxed{
+\frac{C_H}{|C_Y|}
+\simeq6{,}1.
+}
+\]</span></p>
+<p>Nesse exemplo simples, portanto, a força lateral de Coleman é cerca
+de seis vezes menor que a força longitudinal.</p>
+<p>Esse fator não é universal. Em condições de maior razão de avanço ou
+maior arrasto médio de seção, <span class="math inline">\(C_H\)</span>
+cresce relativamente mais. Por exemplo, mantendo a mesma ordem de
+carregamento, um caso com <span
+class="math inline">\(\mu=0{,}45\)</span> e <span
+class="math inline">\(\bar C_d=0{,}050\)</span> fornece uma razão
+próxima de</p>
+<p><span class="math display">\[
+\frac{C_H}{|C_Y|}
+\simeq8{,}5.
+\]</span></p>
+<p>É nesse sentido que <span class="math inline">\(C_Y\)</span> pode
+aparecer aproximadamente uma ordem de grandeza abaixo de <span
+class="math inline">\(C_H\)</span> em um BEMT de voo à frente. O valor
+exato depende do ponto de operação, da polar, do carregamento e do
+modelo de inflow.</p>
+<h2 id="limites-da-interpretação">Limites da interpretação</h2>
+<p>A dedução analítica isola a força lateral aerodinâmica direta
+associada ao inflow longitudinal.</p>
+<p>A expressão de <span class="math inline">\(C_Y\)</span> considera a
+componente tangencial gerada pela inclinação da sustentação e assume
+pequenos ângulos, aerodinâmica linear, passo e corda constantes. Um BEMT
+completo também inclui a polar real do aerofólio, variação radial de
+geometria, <a
+href="https://ntrs.nasa.gov/citations/19860008819">compressibilidade em
+voo à frente</a>, estol e escoamento reverso quando aplicáveis.</p>
+<p>Também não foi incluída a <a
+href="https://ntrs.nasa.gov/citations/19810057419">resposta de flap e a
+dinâmica do rotor</a>. Um gradiente longitudinal de inflow modifica o
+carregamento de primeiro harmônico e pode inclinar o plano descrito
+pelas pontas das pás. Essa inclinação reorienta o vetor de tração e pode
+acrescentar outra parcela de força lateral.</p>
+<h2 id="conclusão">Conclusão</h2>
+<p>O voo à frente cria primeiro uma forte assimetria
+avançante–recuante:</p>
+<p><span class="math display">\[
+u_T=\bar r+\mu\sin\psi.
+\]</span></p>
+<p>Essa assimetria domina a força tangencial e produz a maior parte de
+<span class="math inline">\(C_H\)</span>.</p>
+<p>Com inflow uniforme, traseira e frente continuam equivalentes. Suas
+contribuições laterais possuem a mesma magnitude e sinais opostos.
+Portanto,</p>
+<p><span class="math display">\[
+C_Y=0.
+\]</span></p>
+<p>Coleman acrescenta um primeiro harmônico longitudinal:</p>
+<p><span class="math display">\[
+\lambda
+=
+\lambda_0
+\left(
+1+K_x\bar r\cos\psi
+\right).
+\]</span></p>
+<p>O inflow maior na traseira aumenta o ângulo de inflow e inclina mais
+o vetor de sustentação. A componente tangencial de origem induzida fica
+maior nessa região. Como ela aponta para a esquerda na traseira e para a
+direita na frente, o desequilíbrio produz uma força lateral para o lado
+recuante.</p>
+<p>Para o rotor considerado,</p>
+<p><span class="math display">\[
+\boxed{C_Y&lt;0}.
+\]</span></p>
+<p>A comparação por BET também estabelece a escala do efeito. No exemplo
+numérico,</p>
+<p><span class="math display">\[
+\frac{C_H}{C_T}\simeq4{,}0\%,
+\qquad
+\frac{|C_Y|}{C_T}\simeq0{,}65\%,
+\]</span></p>
+<p>portanto</p>
+<p><span class="math display">\[
+C_H\simeq6\,|C_Y|.
+\]</span></p>
+<p>Em pontos de maior razão de avanço e maior arrasto médio de seção, a
+diferença pode se aproximar de uma ordem de grandeza.</p>
 <h2 id="referências">Referências</h2>
-<p>[1] Cheeseman, I. C., e Bennett, W. E., <em>The Effect of the Ground
-on a Helicopter Rotor in Forward Flight</em>, Aeronautical Research
-Council Reports and Memoranda, No. 3021, HMSO, London, 1955. —
-Referência seminal: derivou a equação fechada do ganho IGE em função da
-altura normalizada e do ângulo de skew da esteira. <a
-href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/3590">Link</a></p>
-<p>[2] Prandtl, L.; Tietjens, O. G., <em>Applied Hydro- and
-Aeromechanics</em>, Dover Publications, New York, 1957. — Fundamento da
-teoria da linha sustentadora e dos vórtices em ferradura aplicados à asa
-fixa. <a
-href="https://archive.org/details/in.ernet.dli.2015.205401">Link</a></p>
-<p>[3] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
-2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
-em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
-de batimento e teoria de esteira. <a
-href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
-<p>[4] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
-University Press, Cambridge, 2013. — Tratamento moderno e abrangente de
-aeromecânica de rotores, incluindo teoria do disco atuador, modelos de
-esteira e dinâmica de indução. <a
-href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
-<p>[5] Anderson, J. D. <em>Fundamentals of Aerodynamics</em>, 6ª
-ed. McGraw-Hill, 2017. — <a
-href="https://en.wikipedia.org/wiki/Aerodynamics">Aerodinâmica</a> de
-asa fixa e <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">efeito
-solo</a>. <a
-href="https://archive.org/details/fundamentalsofae0000ande">Link</a></p>
+<p>[1] Coleman, R. P., Feingold, A. M., e Stempin, C. W., <em>Evaluation
+of the Induced-Velocity Field of an Idealized Helicopter Rotor</em>,
+NACA Advance Restricted Report L5E10, NACA Wartime Report L-126,
+National Advisory Committee for Aeronautics, June 1945. <a
+href="https://ntrs.nasa.gov/citations/19930093086">Link</a></p>
+<p>[2] Johnson, W. R., <em>NDARC — NASA Design and Analysis of
+Rotorcraft</em>, NASA/TP-2009-215402, NASA Ames Research Center,
+December 2009. <a
+href="https://ntrs.nasa.gov/citations/20100021405">Link</a></p>
+<p>[3] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. <a
+href="https://www.cambridge.org/core/books/rotorcraft-aeromechanics/925409FE09E517B13E4C9F9276513006">Link</a></p>
+<p>[4] Johnson, W., <em>Helicopter Theory</em>, Princeton University
+Press, Princeton, NJ, 1980. — Referência geral para teoria de elemento
+de pá, teoria de quantidade de movimento e voo à frente. <a
+href="https://ntrs.nasa.gov/citations/19810057419">Link</a></p>
+<p>[5] Stepniewski, W. Z., <em>Rotary-Wing Aerodynamics, Volume 1: Basic
+Theories of Rotor Aerodynamics with Application to Helicopters</em>,
+NASA-CR-3082, National Aeronautics and Space Administration, 1979. —
+Discute a combinação entre teoria de elemento de pá e teoria de
+quantidade de movimento. <a
+href="https://ntrs.nasa.gov/citations/19790013868">Link</a></p>
+<p>[6] Runyan, H. L., e Tai, H., <em>Compressible, Unsteady
+Lifting-Surface Theory for a Helicopter Rotor in Forward Flight</em>,
+NASA Technical Paper 2503, NASA Langley Research Center, December 1985.
+— Discute efeitos de compressibilidade em rotores em voo à frente. <a
+href="https://ntrs.nasa.gov/citations/19860008819">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
   <div class="ornament">· · ·</div>
   <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
-    Second Brain · Gustavo Zambrano · Maio de 2026
+    Second Brain · Gustavo Zambrano · Setembro de 2026
   </p>
 </footer>
 
@@ -1328,8 +1890,8 @@ href="https://archive.org/details/fundamentalsofae0000ande">Link</a></p>
   </nav>
 </header>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
-<div class="sb-tags"><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Dinâmica-de-Voo</span><span class="sb-tag">Efeito-Solo</span><span class="sb-tag">Rotores</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="parametros-adimensionais-esteira-rotores.html"><strong>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</strong><span>Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</span></a><a class="sb-related-card" href="modelagem-teorica-efeito-solo-multirotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirrotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem instáveis durante o voo pairado próximo ao solo..</span></a></div></section>
+<div class="sb-tags"><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Rotores</span><span class="sb-tag">Dinâmica-de-Voo</span><span class="sb-tag">Engenharia</span></div>
+
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do essay">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>
