@@ -18,7 +18,8 @@ O que reprova o deploy:
 1. página de essay sem autorização no `site-manifest.json`;
 2. essay autorizado sem página;
 3. corpo de texto no `search-index.json` (o índice é catálogo, não corpus);
-4. caminho do repositório privado (`data/`) vazando em qualquer arquivo;
+4. caminho para dentro do repositório privado (`data/` inteiro — `wiki/`, `plan/`,
+   `raw/`, `output/`, `.obsidian/` e o que mais vier) vazando em qualquer arquivo;
 5. caminho absoluto de máquina vazando em qualquer arquivo;
 6. artefato acima do orçamento de tamanho.
 
@@ -34,10 +35,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# `data/` é a raiz do repositório privado. Nenhum caminho para dentro dela pode
-# aparecer no site — nem como link, nem como comentário, nem como sobra de
-# build. O padrão pega `data/wiki/...` e variantes com barra invertida.
-PRIVATE_PATH_RE = re.compile(r"(?:^|[\s\"'(=])data[/\\]wiki[/\\]", re.MULTILINE)
+# `data/` é a raiz do repositório privado INTEIRA, não só `data/wiki/`: o corpus
+# convive ali com `data/plan/`, `data/raw/`, `data/output/` e `data/.obsidian/`,
+# e um caminho para qualquer um deles denuncia estrutura privada do mesmo jeito.
+# Ancorar em `wiki/` deixava os outros quatro passarem — e, pior, deixaria passar
+# qualquer subpasta nova que o repo privado ganhasse depois. Por isso a barreira
+# é o separador logo após `data`, não o nome da subpasta.
+#
+# O lookbehind `(?<!\w)` é o que separa caminho de coincidência: `data` só conta
+# quando não é sufixo de outra palavra (`metadata/`, `userdata/`), e exigir `/`
+# ou `\` logo em seguida descarta os usos legítimos e frequentes no HTML gerado
+# — `data-status="..."`, `data-tags=`, `data:image/svg+xml`, `.data` em JS. O
+# `.` fica FORA do lookbehind de propósito: `./data/wiki/x.md` e `../data/raw/`
+# são justamente as formas relativas que um vazamento assumiria.
+PRIVATE_PATH_RE = re.compile(r"(?<!\w)data[/\\]")
 
 # Caminho absoluto de máquina: `C:\Users\...`, `/home/...`, `/Users/...`.
 LOCAL_PATH_RE = re.compile(r"[A-Za-z]:\\Users\\|/home/[a-z]|/Users/[A-Za-z]")
