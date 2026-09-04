@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="revisao">
+<html lang="pt-BR" data-status="revisao" data-minutes="11">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1550,13 +1550,12 @@ C_T
 \left[
 \theta
 \left(
-\frac{1-\bar r_0^3}{3}
+\frac{1}{3}
 +
-\frac{\mu^2}{2}(1-\bar r_0)
+\frac{\mu^2}{2}
 \right)
 -
 \frac{\lambda_0}{2}
-(1-\bar r_0^2)
 \right]
 }.
 \]</span></p>
@@ -1592,7 +1591,17 @@ dL\,\phi.
 da sustentação inclinada.</p>
 <p>Projetando essa força na direção longitudinal e integrando uma
 revolução, obtém-se</p>
-<p>$$ $$</p>
+<p><span class="math display">\[
+\boxed{
+C_H
+=
+\frac{\sigma\mu}{4}
+\bar C_d
++
+\frac{\sigma\mu}{4}
+a\theta\lambda_0
+}
+\]</span></p>
 <p>para a magnitude da força de arrasto longitudinal.</p>
 <p>O primeiro termo é a contribuição de perfil:</p>
 <p><span class="math display">\[
@@ -1637,13 +1646,11 @@ K_x=
 C_Y
 =
 -\frac{\sigma aK_x\lambda_0}{4}
-\left[
+\left(
 \frac{\theta}{3}
-(1-\bar r_0^3)
 -
 \lambda_0
-(1-\bar r_0^2)
-\right],
+\right),
 \]</span></p>
 <p>obtemos</p>
 <p><span class="math display">\[
@@ -1938,11 +1945,26 @@ href="https://ntrs.nasa.gov/citations/19860008819">Link</a></p>
         // modo que o MESMO essay anunciava 81 min aqui e 73 no catalogo — e o
         // erro crescia justamente no essay tecnico, que e onde a formula pesa.
         // `cloneNode` para nao mexer no DOM que o leitor esta vendo.
-        var copia=content.cloneNode(true);
-        copia.querySelectorAll("mjx-container,.MathJax,math,script[type^='math/tex']")
-             .forEach(function(n){n.remove();});
-        var words=(copia.innerText||copia.textContent||"").trim().split(/\s+/).filter(Boolean).length;
-        var mins=Math.max(1,Math.round(words/220));
+        //
+        // O numero PRONTO chega do servidor em `data-minutes`, calculado por
+        // site_common.reading_minutes \u2014 a mesma funcao do catalogo, entao as
+        // duas superficies nunca divergem. Contar aqui era adivinhar duas
+        // vezes: media antes de o MathJax tipografar, com o LaTeX cru ainda no
+        // DOM como texto, e cada formula entrava como um punhado de palavras.
+        //
+        // A contagem local fica como plano B para um HTML antigo, gerado antes
+        // de o template passar a receber a variavel.
+        var servidor=parseInt(document.documentElement.getAttribute("data-minutes"),10);
+        var mins;
+        if(servidor>0){
+          mins=servidor;
+        }else{
+          var copia=content.cloneNode(true);
+          copia.querySelectorAll("mjx-container,.MathJax,math,script[type^='math/tex']")
+               .forEach(function(n){n.remove();});
+          var words=(copia.innerText||copia.textContent||"").trim().split(/\s+/).filter(Boolean).length;
+          mins=Math.max(1,Math.round(words/220));
+        }
         meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
       }
       by.parentNode.insertBefore(meta,by.nextSibling);
