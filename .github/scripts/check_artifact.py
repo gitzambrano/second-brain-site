@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
+import hashlib
 import json
 import re
 import sys
@@ -198,6 +199,79 @@ def fail(problems: list[str], message: str) -> None:
     problems.append(message)
 
 
+# Gates que o selo precisa registrar. Espelha `REQUIRED_GATES` de
+# `scripts/seal_publication.py`, no engine.
+REQUIRED_SEAL_GATES = {"privacy", "budget", "pages"}
+
+# Mesma exclusao do lado do engine, e tem de continuar a mesma: o digest
+# cobre o conjunto que vai ao ar, nao o checkout.
+SEAL_FORA = {".git", ".github"}
+SEAL_FORA_DA_RAIZ = {"README.md", ".gitignore", ".second-brain-site", "site-manifest.json"}
+
+
+def _fora_do_artefato(path: Path, root: Path) -> bool:
+    if SEAL_FORA & set(path.parts):
+        return True
+    return path.parent == root and path.name in SEAL_FORA_DA_RAIZ
+
+# Idêntico ao do engine, e tem de continuar idêntico: quebra de linha
+# normalizada porque o artefato é gerado no Windows (CRLF no disco) e conferido
+# no runner Linux (LF), e sem isso o digest nunca bateria.
+SEAL_TEXT_SUFFIXES = {".html", ".json", ".js", ".css", ".txt", ".md", ".xml", ".svg"}
+
+
+def artifact_digest(root: Path) -> str:
+    """Impressão do conteúdo publicado, menos o manifesto que carrega o selo."""
+    h = hashlib.sha256()
+    arquivos = sorted(
+        p for p in root.rglob("*")
+        if p.is_file() and not _fora_do_artefato(p, root)
+    )
+    for path in arquivos:
+        dados = path.read_bytes()
+        if path.suffix.lower() in SEAL_TEXT_SUFFIXES:
+            dados = dados.replace(b"\r\n", b"\n")
+        h.update(path.relative_to(root).as_posix().encode("utf-8"))
+        h.update(b"\0")
+        h.update(hashlib.sha256(dados).digest())
+    return h.hexdigest()
+
+
+def check_seal(root: Path, manifest: dict) -> list[str]:
+    """O artefato tem de trazer a prova de ter passado pelos gates do engine.
+
+    Um repositório não consegue consultar a CI do outro sem credencial. O que
+    ele consegue é exigir que o artefato traga a evidência junto e que ela cubra
+    exatamente os bytes presentes. Sem isso o deploy do site ficava verde
+    enquanto a CI do engine estava vermelha — as duas nunca se olhavam, e um
+    push manual ia ao ar pelo mesmo caminho de uma publicação legítima.
+
+    O selo é gravado por `scripts/seal_publication.py`, no engine, e só depois
+    de os gates passarem. Recalcular o digest aqui é o que impede selar e editar
+    depois: qualquer byte alterado invalida.
+    """
+    seal = manifest.get("seal")
+    if not isinstance(seal, dict):
+        return ["publicação sem selo: rode `python scripts/seal_publication.py` no engine"]
+
+    problems = []
+    faltando = REQUIRED_SEAL_GATES - set(seal.get("gates") or [])
+    if faltando:
+        problems.append(f"selo não registra os gates: {', '.join(sorted(faltando))}")
+
+    esperado = seal.get("artifact_digest")
+    if not esperado:
+        problems.append("selo sem artifact_digest")
+    else:
+        atual = artifact_digest(root)
+        if atual != esperado:
+            problems.append(
+                "o conteúdo mudou depois do selo "
+                f"(selado {esperado[:16]}…, atual {atual[:16]}…)"
+            )
+    return problems
+
+
 def check(root: Path, mode: str) -> list[str]:
     problems: list[str] = []
 
@@ -209,6 +283,11 @@ def check(root: Path, mode: str) -> list[str]:
     if not manifest_path.is_file():
         return ["site-manifest.json ausente; nada a validar contra"]
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    # O selo só é exigido do artefato que vai ao ar. No checkout, o modo
+    # `repo` roda antes de o engine selar — cobrar ali reprovaria a
+    # conferência local que o autor faz durante o trabalho.
+    if mode == "artifact":
+        problems.extend(check_seal(root, manifest))
     published = set(manifest.get("published", []))
     if not published:
         fail(problems, "site-manifest.json não lista nenhum essay autorizado")
