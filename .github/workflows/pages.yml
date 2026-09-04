@@ -25,12 +25,43 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      # O upload publicava `path: .`, isto é, o checkout inteiro: o `.github/`
+      # com os workflows, o `README.md`, o `.gitignore` e qualquer arquivo que
+      # tivesse entrado no repositório por engano iam ao ar junto. Aqui o que
+      # sobe é uma pasta montada de propósito.
+      #
+      # A cópia é por exclusão e a conferência é por allowlist, nessa ordem e
+      # não o contrário: copiar só o que a allowlist conhece faria um arquivo
+      # gerado novo desaparecer em silêncio do site, enquanto copiar tudo menos
+      # o administrativo entrega o intruso à portaria, que reprova o deploy
+      # dizendo o nome dele. Falhar alto é melhor do que publicar incompleto.
+      - name: Montar _site/ (só o que vai ao ar)
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site
+          rsync -a \
+            --exclude='/_site' \
+            --exclude='/.git' \
+            --exclude='/.github' \
+            --exclude='/README.md' \
+            --exclude='/.gitignore' \
+            --exclude='/.second-brain-site' \
+            --exclude='__pycache__/' \
+            ./ _site/
+          # `.nojekyll` vai junto de propósito: sem ele o Pages roda Jekyll,
+          # que ignora diretórios iniciados por underscore e reprocessa o HTML
+          # já pronto.
+          test -f _site/.nojekyll
+          find _site -type f | sort
+      # A portaria roda sobre `_site/`, não sobre o checkout: o que ela aprova
+      # é exatamente o que o upload empacota.
       - name: Gate — allowlist, vazamento e orçamento
-        run: python .github/scripts/check_artifact.py
+        run: python .github/scripts/check_artifact.py _site --mode artifact
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: _site
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

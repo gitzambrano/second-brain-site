@@ -15,6 +15,7 @@ portaria e viraria mais uma cópia do vazamento.
 
 O que reprova o deploy:
 
+0. arquivo fora da allowlist de caminhos do artefato;
 1. página de essay sem autorização no `site-manifest.json`;
 2. essay autorizado sem página;
 3. corpo de texto no `search-index.json` (o índice é catálogo, não corpus);
@@ -23,11 +24,21 @@ O que reprova o deploy:
 5. caminho absoluto de máquina vazando em qualquer arquivo;
 6. artefato acima do orçamento de tamanho.
 
+A regra 0 é a que muda o caráter da portaria. As regras 3 a 5 leem conteúdo, e
+só de alguns tipos de texto: um `.zip`, um `.pdf`, um binário qualquer ou um
+arquivo esquecido na raiz atravessavam a checagem inteira sem ninguém olhar,
+porque nenhuma regra perguntava se aquele arquivo tinha o direito de existir.
+A allowlist inverte o ônus: o build gera um conjunto conhecido de caminhos, e
+o que não corresponde a nenhum deles reprova por padrão.
+
 Uso:
-    python .github/scripts/check_artifact.py
+    python .github/scripts/check_artifact.py            # audita o checkout
+    python .github/scripts/check_artifact.py _site      # audita a pasta a publicar
 """
 from __future__ import annotations
 
+import argparse
+import fnmatch
 import json
 import re
 import sys
@@ -65,32 +76,174 @@ BUDGETS_KB = {
 
 TEXT_SUFFIXES = {".html", ".json", ".js", ".css", ".txt", ".md", ".xml", ".svg"}
 
+# ---------------------------------------------------------------------------
+# Allowlist de caminhos
+# ---------------------------------------------------------------------------
+# Espelha, em padrões, o que `scripts/build_site.py` produz no engine:
+# `GENERATED_ROOT_FILES`, `GENERATED_DIRS`, `FRONTEND_ASSETS` e `BRAND_ASSETS`,
+# mais o que os passos auxiliares deixam em `assets/` (fontes auto-hospedadas,
+# bundle local do MathJax, imagens dos essays, capas do cartão social).
+#
+# São padrões e não a lista literal de arquivos por um motivo prático: a lista
+# literal teria duzentas linhas e ficaria desatualizada no primeiro essay novo,
+# e uma portaria que reprova o build legítimo é desligada na semana seguinte. O
+# padrão é apertado onde importa — extensão e diretório — e frouxo só no nome.
+#
+# Sintaxe: `fnmatch` por segmento, `*` não atravessa `/`; `**` no fim libera a
+# subárvore inteira.
+ARTIFACT_ALLOWLIST = (
+    # Marcador que impede o Jekyll do Pages de comer diretórios com underscore
+    # e de reprocessar o HTML já pronto. Vai ao ar; sem ele o site quebra.
+    ".nojekyll",
+    # GENERATED_ROOT_FILES
+    "index.html",
+    "404.html",
+    "graph.html",
+    "sphere.html",
+    "graph.json",
+    "search-index.json",
+    "site-manifest.json",
+    # GENERATED_DIRS: uma página por essay autorizado. As regras 1 e 2 conferem
+    # nome por nome contra o manifesto; aqui só se garante que nada além de
+    # `.html` mora nessa pasta.
+    "essays/*.html",
+    # FRONTEND_ASSETS
+    "assets/site.css",
+    "assets/site.js",
+    "assets/theme.js",
+    "assets/essay.js",
+    # BRAND_ASSETS, assados por `build_favicons.py` e copiados como estão.
+    "assets/favicon.ico",
+    "assets/icon-16.png",
+    "assets/icon-32.png",
+    "assets/icon-32-dark.png",
+    "assets/icon-light-192.png",
+    "assets/icon-dark-192.png",
+    "assets/icon-light-512.png",
+    "assets/icon-dark-512.png",
+    "assets/apple-touch-icon.png",
+    # Capas do cartão social (Open Graph), uma por tema.
+    "assets/cover-light.png",
+    "assets/cover-dark.png",
+    # Fonte auto-hospedada: a folha e os arquivos binários que ela referencia.
+    # O nome do `.woff2` vem do Google Fonts e muda a cada revisão da fonte, por
+    # isso o padrão é por extensão e não por nome.
+    "assets/fonts/fonts.css",
+    "assets/fonts/*.woff2",
+    # MathJax local: o build baixa um único bundle para o leitor não depender de
+    # CDN de terceiro.
+    "assets/mathjax/tex-svg.js",
+    # Imagens dos essays. Fechado por extensão de propósito: é a pasta em que um
+    # `.pdf` ou um `.zip` esquecido teria a chance mais plausível de entrar de
+    # carona junto com as figuras.
+    "assets/media/*.png",
+    "assets/media/*.webp",
+    "assets/media/*.jpg",
+    "assets/media/*.jpeg",
+    "assets/media/*.gif",
+    "assets/media/*.svg",
+)
+
+# Administrativo: existe no repositório, nunca no artefato publicado.
+#
+# A linha divisória entre "legítimo no repo" e "legítimo no ar" é justamente
+# esta lista. O workflow monta `_site/` sem nenhum destes caminhos, e então a
+# portaria roda em modo `artifact`, onde a presença de qualquer um reprova.
+# (`.git/` não aparece aqui: tem tratamento próprio na varredura, para não
+# despejar o histórico inteiro na saída quando estiver no lugar errado.)
+REPO_ONLY_ALLOWLIST = (
+    ".github/**",
+    ".gitignore",
+    ".second-brain-site",
+    "README.md",
+)
+
+
+def path_matches(relative: str, pattern: str) -> bool:
+    """Casa `relative` (POSIX) contra um padrão segmento a segmento.
+
+    O `fnmatch` cru não serve: nele `*` atravessa `/`, de modo que `assets/*.js`
+    aceitaria `assets/qualquer/coisa.js` e a allowlist perderia a precisão que é
+    a razão de existir. Aqui cada segmento é comparado isoladamente e o número
+    de segmentos tem de bater, salvo quando o padrão termina em `**`.
+    """
+    parts = relative.split("/")
+    pattern_parts = pattern.split("/")
+    if pattern_parts[-1] == "**":
+        prefix = pattern_parts[:-1]
+        if len(parts) <= len(prefix):
+            return False
+        return all(fnmatch.fnmatchcase(a, b) for a, b in zip(parts, prefix))
+    if len(parts) != len(pattern_parts):
+        return False
+    return all(fnmatch.fnmatchcase(a, b) for a, b in zip(parts, pattern_parts))
+
+
+def allowed(relative: str, patterns: tuple[str, ...]) -> bool:
+    return any(path_matches(relative, pattern) for pattern in patterns)
+
+
+def detect_mode(root: Path) -> str:
+    """Decide se `root` é o checkout do repositório ou a pasta a publicar.
+
+    O marcador é `.github/`: ele só existe no repositório e o passo de montagem
+    do workflow nunca o copia. Assim o comando sem argumento continua auditando
+    o checkout — que legitimamente tem `README.md` e `.gitignore` — enquanto o
+    mesmo script, apontado para `_site/`, exige a árvore limpa.
+    """
+    return "repo" if (root / ".github").is_dir() else "artifact"
+
 
 def fail(problems: list[str], message: str) -> None:
     problems.append(message)
 
 
-def main() -> int:
+def check(root: Path, mode: str) -> list[str]:
     problems: list[str] = []
 
-    manifest_path = ROOT / "site-manifest.json"
+    patterns = ARTIFACT_ALLOWLIST
+    if mode == "repo":
+        patterns = patterns + REPO_ONLY_ALLOWLIST
+
+    manifest_path = root / "site-manifest.json"
     if not manifest_path.is_file():
-        print("FAIL: site-manifest.json ausente; nada a validar contra")
-        return 1
+        return ["site-manifest.json ausente; nada a validar contra"]
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     published = set(manifest.get("published", []))
     if not published:
         fail(problems, "site-manifest.json não lista nenhum essay autorizado")
 
+    # 0: allowlist. Percorre a árvore inteira, inclusive binários, e reprova o
+    # que não corresponde a nenhum padrão conhecido do build.
+    #
+    # `.git/` é tratado à parte para não despejar milhares de objetos soltos na
+    # saída: no repositório ele é esperado e se cala; num `_site/` ele é um
+    # achado grave — o histórico inteiro iria ao ar — e vira uma linha só.
+    if (root / ".git").exists() and mode == "artifact":
+        fail(problems, "diretório .git dentro do artefato: o histórico do repositório iria ao ar")
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root).as_posix()
+        if relative == ".git" or relative.startswith(".git/"):
+            continue
+        # Um symlink escapa da allowlist por definição: o caminho está na lista,
+        # o conteúdo servido está em outro lugar. O build nunca cria nenhum.
+        if path.is_symlink():
+            fail(problems, f"symlink no artefato: {relative}")
+            continue
+        if not path.is_file():
+            continue
+        if not allowed(relative, patterns):
+            fail(problems, f"arquivo fora da allowlist do artefato: {relative}")
+
     # 1 e 2: a allowlist e as páginas têm de coincidir exatamente.
-    pages = {p.stem for p in (ROOT / "essays").glob("*.html")}
+    pages = {p.stem for p in (root / "essays").glob("*.html")}
     for slug in sorted(pages - published):
         fail(problems, f"página publicada sem autorização no manifesto: essays/{slug}.html")
     for slug in sorted(published - pages):
         fail(problems, f"essay autorizado sem página renderizada: {slug}")
 
     # 3: o índice de busca é catálogo, não corpus.
-    search_path = ROOT / "search-index.json"
+    search_path = root / "search-index.json"
     if search_path.is_file():
         for entry in json.loads(search_path.read_text(encoding="utf-8")):
             slug = entry.get("slug")
@@ -101,14 +254,15 @@ def main() -> int:
             if entry.get("published") and slug not in published:
                 fail(problems, f"entrada marcada como publicada fora da allowlist: {slug}")
 
-    # 4 e 5: nenhum caminho interno vaza.
-    for path in sorted(ROOT.rglob("*")):
+    # 4 e 5: nenhum caminho interno vaza. `.github/` fica de fora porque a
+    # própria portaria cita `data/` na regex e reprovaria a si mesma.
+    for path in sorted(root.rglob("*")):
         if not path.is_file() or ".git" in path.parts or ".github" in path.parts:
             continue
         if path.suffix.lower() not in TEXT_SUFFIXES:
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
-        relative = path.relative_to(ROOT).as_posix()
+        relative = path.relative_to(root).as_posix()
         if PRIVATE_PATH_RE.search(text):
             fail(problems, f"caminho do repositório privado em {relative}")
         if LOCAL_PATH_RE.search(text):
@@ -116,20 +270,50 @@ def main() -> int:
 
     # 6: orçamento de tamanho.
     for name, limit in BUDGETS_KB.items():
-        target = ROOT / name
+        target = root / name
         if not target.is_file():
             continue
         kb = target.stat().st_size / 1024
         if kb > limit:
             fail(problems, f"{name}: {kb:.0f} KB excede o teto de {limit} KB")
 
+    return problems
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Portaria do artefato público antes do deploy.")
+    parser.add_argument(
+        "target",
+        nargs="?",
+        default=str(ROOT),
+        help="diretório a auditar (padrão: a raiz deste repositório)",
+    )
+    parser.add_argument(
+        "--mode",
+        choices=("auto", "repo", "artifact"),
+        default="auto",
+        help="'repo' tolera README/.gitignore/.github; 'artifact' exige a árvore limpa (padrão: auto)",
+    )
+    args = parser.parse_args(argv)
+
+    root = Path(args.target).resolve()
+    if not root.is_dir():
+        print(f"FAIL: alvo inexistente: {root}")
+        return 1
+    mode = detect_mode(root) if args.mode == "auto" else args.mode
+
+    problems = check(root, mode)
     if problems:
-        print(f"FAIL: {len(problems)} problema(s) antes do deploy")
+        print(f"FAIL: {len(problems)} problema(s) antes do deploy [{root.name}, modo {mode}]")
         for item in problems:
             print(f"  - {item}")
         return 1
 
-    print(f"PASS: {len(pages)} página(s) autorizada(s), nenhum vazamento, tamanho dentro do teto")
+    pages = len(list((root / "essays").glob("*.html")))
+    print(
+        f"PASS: {pages} página(s) autorizada(s), allowlist limpa, nenhum vazamento, "
+        f"tamanho dentro do teto [{root.name}, modo {mode}]"
+    )
     return 0
 
 

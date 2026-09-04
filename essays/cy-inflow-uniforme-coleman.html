@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="revisao" data-minutes="11">
+<html lang="pt-BR" data-status="revisao" data-minutes="13">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -954,10 +954,13 @@ simetria frente-trás é quebrada</a></li>
 Coleman</a></li>
 <li><a href="#por-que-a-força-aponta-para-o-lado-recuante">Por que a
 força aponta para o lado recuante</a></li>
+<li><a
+href="#por-que-cy-pode-inverter-em-razão-de-avanço-muito-baixa">Por que
+CY pode inverter em razão de avanço muito baixa</a></li>
 <li><a href="#por-que-cy-é-menor-que-ch">Por que CY é menor que
 CH</a></li>
-<li><a href="#exemplo-numérico-por-bet-ct-ch-e-cy">Exemplo numérico por
-BET: CT, CH e CY</a></li>
+<li><a href="#exemplo-numérico-por-bet-o-gráfico-como-exemplo">Exemplo
+numérico por BET: o gráfico como exemplo</a></li>
 <li><a href="#limites-da-interpretação">Limites da
 interpretação</a></li>
 <li><a href="#conclusão">Conclusão</a></li>
@@ -974,11 +977,10 @@ Com inflow uniforme, uma <a
 href="https://ntrs.nasa.gov/citations/19810057419">teoria de elemento de
 pá</a> (BET, <em>Blade Element Theory</em>) ideal produz uma força
 longitudinal no plano do rotor, mas as contribuições laterais da frente
-e da traseira se cancelam. O resultado é</p>
-<p><span class="math display">\[
+e da traseira se cancelam. O resultado é <span class="math display">\[
 C_Y=0.
-\]</span></p>
-<p>O quadro muda quando o inflow possui um gradiente longitudinal. O <a
+\]</span> O quadro muda quando o inflow possui um gradiente
+longitudinal. O <a
 href="https://ntrs.nasa.gov/citations/19930093086">modelo de
 Coleman–Feingold</a> introduz exatamente essa assimetria frente-trás. O
 vetor de sustentação de cada elemento de pá passa a ter inclinação
@@ -986,9 +988,10 @@ diferente na traseira e na frente do disco. O cancelamento lateral deixa
 de ser exato e aparece um pequeno <span
 class="math inline">\(C_Y\)</span> direto.</p>
 <p>Para o rotor considerado aqui, que gira no sentido anti-horário visto
-de cima, essa força aponta normalmente para o lado recuante. Sua
-magnitude continua menor que a força longitudinal <span
-class="math inline">\(C_H\)</span>.</p>
+de cima, essa força aponta normalmente para o lado recuante ao longo da
+maior parte do voo à frente. Muito perto do hover, porém, o sinal pode
+inverter porque o inflow altera simultaneamente a inclinação e a
+magnitude da sustentação.</p>
 <h2 id="convenção-de-azimute-e-sinais">Convenção de azimute e
 sinais</h2>
 <p>O rotor é visto de cima e avança para o norte. Usaremos a mesma
@@ -1016,25 +1019,21 @@ class="math inline">\(H\)</span> e será tomada positiva para trás, isto
 class="math inline">\(Y\)</span>. Assim, em voo à frente usual, <span
 class="math inline">\(C_H&gt;0\)</span>, enquanto uma força lateral para
 a esquerda tem <span class="math inline">\(C_Y&lt;0\)</span>. Os
-coeficientes usados ao longo do texto são</p>
-<p><span class="math display">\[
+coeficientes usados ao longo do texto são <span class="math display">\[
 C_T=\frac{T}{\rho A(\Omega R)^2},
 \qquad
 C_H=\frac{H}{\rho A(\Omega R)^2},
 \qquad
 C_Y=\frac{Y}{\rho A(\Omega R)^2},
-\]</span></p>
-<p>onde <span class="math inline">\(A=\pi R^2\)</span> é a área do
-disco, <span class="math inline">\(R\)</span> é o raio do rotor, <span
-class="math inline">\(\rho\)</span> é a densidade do ar e <span
+\]</span> onde <span class="math inline">\(A=\pi R^2\)</span> é a área
+do disco, <span class="math inline">\(R\)</span> é o raio do rotor,
+<span class="math inline">\(\rho\)</span> é a densidade do ar e <span
 class="math inline">\(\Omega\)</span> é a velocidade angular.</p>
 <p>Com essa definição, a velocidade tangencial normalizada de um
-elemento de pá é</p>
-<p><span class="math display">\[
+elemento de pá é <span class="math display">\[
 u_T=\bar r+\mu\sin\psi,
-\]</span></p>
-<p>onde <span class="math inline">\(\bar r=r/R\)</span> é a posição
-radial normalizada e <span class="math inline">\(\mu=V/(\Omega
+\]</span> onde <span class="math inline">\(\bar r=r/R\)</span> é a
+posição radial normalizada e <span class="math inline">\(\mu=V/(\Omega
 R)\)</span> é a <a
 href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>.
 Aqui, <span class="math inline">\(V\)</span> é a velocidade de voo.</p>
@@ -1044,29 +1043,25 @@ como <span class="math inline">\(\lambda=w/(\Omega R)\)</span>. O
 símbolo <span class="math inline">\(\lambda_0\)</span> representa sua
 componente média sobre o disco. Quando houver corte de raiz, <span
 class="math inline">\(r_0\)</span> é o raio a partir do qual começa a
-região aerodinâmica efetiva da pá e</p>
-<p><span class="math display">\[
+região aerodinâmica efetiva da pá e <span class="math display">\[
 \boxed{
 \bar r_0=\frac{r_0}{R}
 }.
-\]</span></p>
-<p>Assim, <span class="math inline">\(\bar r_0=0\)</span> representa o
-rotor ideal cuja região aerodinâmica se estende até o centro, enquanto
-<span class="math inline">\(\bar r_0=0{,}20\)</span> significa que a
-integração aerodinâmica começa em <span
+\]</span> Assim, <span class="math inline">\(\bar r_0=0\)</span>
+representa o rotor ideal cuja região aerodinâmica se estende até o
+centro, enquanto <span class="math inline">\(\bar r_0=0{,}20\)</span>
+significa que a integração aerodinâmica começa em <span
 class="math inline">\(20\%\)</span> do raio.</p>
 <p>No lado avançante, <span
-class="math inline">\(\psi=90^\circ\)</span>:</p>
-<p><span class="math display">\[
+class="math inline">\(\psi=90^\circ\)</span>: <span
+class="math display">\[
 u_T=\bar r+\mu.
-\]</span></p>
-<p>No lado recuante, <span
-class="math inline">\(\psi=270^\circ\)</span>:</p>
-<p><span class="math display">\[
+\]</span> No lado recuante, <span
+class="math inline">\(\psi=270^\circ\)</span>: <span
+class="math display">\[
 u_T=\bar r-\mu.
-\]</span></p>
-<p>A diferença entre esses dois lados é a principal assimetria do voo à
-frente.</p>
+\]</span> A diferença entre esses dois lados é a principal assimetria do
+voo à frente.</p>
 <h2 id="o-que-o-bemt-mostra">O que o BEMT mostra</h2>
 <p>As quatro figuras abaixo foram obtidas com o mesmo <a
 href="https://ntrs.nasa.gov/citations/19790013868">modelo de elemento de
@@ -1077,50 +1072,50 @@ Neste estudo, o BEMT fornece o campo local mostrado nas figuras. A
 dedução analítica de <span class="math inline">\(C_Y\)</span>, por sua
 vez, usa o BET com o inflow prescrito pelo modelo de Coleman.</p>
 <p><picture><source srcset="../assets/media/dinlon-bemt-disco-1.webp" type="image/webp"><img src="../assets/media/dinlon-bemt-disco-1.png"
-alt="Distribuição de força normal no disco do rotor" /></picture></p>
-<p><em>Figura 1 — Distribuição de força normal. O lado avançante, à
-direita, é muito mais carregado que o lado recuante.</em></p>
+style="width:43.0%"
+alt="Distribuição de força normal no disco do rotor" /></picture> <em>Figura 1 —
+Distribuição de força normal. O lado avançante, à direita, é muito mais
+carregado que o lado recuante.</em></p>
 <p>A força normal evidencia a assimetria avançante–recuante. Como a
 pressão dinâmica varia aproximadamente com <span
 class="math inline">\(u_T^2\)</span>, o aumento de velocidade relativa
 no lado avançante produz uma diferença grande de carregamento.</p>
 <p><picture><source srcset="../assets/media/dinlon-bemt-disco-2.webp" type="image/webp"><img src="../assets/media/dinlon-bemt-disco-2.png"
-alt="Distribuição de força tangencial no disco do rotor" /></picture></p>
-<p><em>Figura 2 — Distribuição de força tangencial. A variação
-avançante–recuante é dominante. Sobre ela existe uma assimetria
-frente–trás menor.</em></p>
+style="width:45.0%"
+alt="Distribuição de força tangencial no disco do rotor" /></picture> <em>Figura 2
+— Distribuição de força tangencial. A variação avançante–recuante é
+dominante, mas também há uma assimetria entre a frente e a traseira do
+disco.</em></p>
 <p>A força tangencial é a variável central para entender as forças no
 plano do rotor. Sua grande diferença entre os lados avançante e recuante
 gera principalmente <span class="math inline">\(C_H\)</span>. A
 diferença menor entre a traseira e a frente gera <span
 class="math inline">\(C_Y\)</span>.</p>
 <p><picture><source srcset="../assets/media/dinlon-bemt-disco-3.webp" type="image/webp"><img src="../assets/media/dinlon-bemt-disco-3.png"
-alt="Distribuição do inflow total sobre o disco" /></picture></p>
-<p><em>Figura 3 — Inflow total. O campo não uniforme modifica o
-carregamento local ao longo do azimute.</em></p>
+style="width:48.0%" alt="Distribuição do inflow total sobre o disco" /></picture>
+<em>Figura 3 — Inflow total. O campo não uniforme modifica o
+carregamento local ao longo do azimute. Coleman impõe um gradiente de
+inflow entre a frente e a traseira do disco</em></p>
 <p><picture><source srcset="../assets/media/dinlon-bemt-disco-4.webp" type="image/webp"><img src="../assets/media/dinlon-bemt-disco-4.png"
-alt="Distribuição de ângulo de ataque sobre o disco" /></picture></p>
-<p><em>Figura 4 — Ângulo de ataque. A variação de inflow altera
-simultaneamente o ângulo de ataque e a orientação da força aerodinâmica
-local.</em></p>
+style="width:48.0%"
+alt="Distribuição de ângulo de ataque sobre o disco" /></picture> <em>Figura 4 —
+Ângulo de ataque. A variação de inflow altera simultaneamente o ângulo
+de ataque e a orientação da força aerodinâmica local.</em></p>
 <p>As Figuras 3 e 4 mostram uma distinção importante. O inflow não
 modifica apenas a magnitude da sustentação. Ele altera também a direção
 do escoamento relativo visto pela seção e, portanto, a direção do
 próprio vetor de sustentação.</p>
 <h2 id="inflow-uniforme-por-que-cy-é-nulo">Inflow uniforme: por que CY é
 nulo</h2>
-<p>No modelo uniforme,</p>
-<p><span class="math display">\[
+<p>No modelo uniforme, <span class="math display">\[
 \lambda(\bar r,\psi)=\lambda_0.
-\]</span></p>
-<p>Considere a traseira e a frente do rotor. Na traseira, <span
+\]</span> Considere a traseira e a frente do rotor. Na traseira, <span
 class="math inline">\(\psi=0^\circ\)</span>. Na frente, <span
-class="math inline">\(\psi=180^\circ\)</span>. Nos dois pontos,</p>
-<p><span class="math display">\[
+class="math inline">\(\psi=180^\circ\)</span>. Nos dois pontos, <span
+class="math display">\[
 \sin\psi=0,
 \]</span></p>
-<p>e, portanto,</p>
-<p><span class="math display">\[
+<p>e, portanto, <span class="math display">\[
 u_T=\bar r.
 \]</span></p>
 <p>A velocidade tangencial é igual nas duas regiões. Se o inflow também
@@ -1129,17 +1124,13 @@ possuem a mesma magnitude.</p>
 <p>As direções laterais são opostas. Na traseira, a força tangencial
 aerodinâmica possui componente para a esquerda. Na frente, possui
 componente para a direita.</p>
-<p>Logo,</p>
-<p><span class="math display">\[
+<p>Logo, <span class="math display">\[
 Y_{\text{trás}}+Y_{\text{frente}}=0
-\]</span></p>
-<p>e</p>
-<p><span class="math display">\[
+\]</span> e <span class="math display">\[
 \boxed{C_Y=0}.
-\]</span></p>
-<p>O rotor continua fortemente assimétrico entre avançante e recuante. O
-que permanece simétrico, no modelo de inflow uniforme, é especificamente
-o par frente–trás que determina a força lateral.</p>
+\]</span> O rotor continua fortemente assimétrico entre avançante e
+recuante. O que permanece simétrico, no modelo de inflow uniforme, é
+especificamente o par frente–trás que determina a força lateral.</p>
 <h2 id="coleman-a-simetria-frente-trás-é-quebrada">Coleman: a simetria
 frente-trás é quebrada</h2>
 <p>O <a
@@ -1148,8 +1139,7 @@ da NASA</a>, representa a variação linear do inflow sobre o disco por um
 primeiro harmônico, isto é, por uma variação azimutal proporcional a
 <span class="math inline">\(\cos\psi\)</span>. Para voo puramente
 longitudinal, a contribuição de Coleman–Feingold pode ser escrita, na
-convenção deste estudo, como</p>
-<p><span class="math display">\[
+convenção deste estudo, como <span class="math display">\[
 \boxed{
 \lambda(\bar r,\psi)
 =
@@ -1158,8 +1148,7 @@ convenção deste estudo, como</p>
 1+K_x\bar r\cos\psi
 \right)
 }.
-\]</span></p>
-<p>O sinal positivo aparece porque <span
+\]</span> O sinal positivo aparece porque <span
 class="math inline">\(\psi=0^\circ\)</span> está na traseira do
 rotor.</p>
 <p>O coeficiente longitudinal <span class="math inline">\(K_x\)</span>
@@ -1169,18 +1158,15 @@ Coleman–Feingold, ele é relacionado ao ângulo de inclinação da esteira
 e a direção média da esteira. Para voo à frente sem velocidade axial
 externa, <span
 class="math inline">\(\tan\chi\simeq\mu/|\lambda_0|\)</span>. A forma
-usada pelo NDARC é</p>
-<p><span class="math display">\[
+usada pelo NDARC é <span class="math display">\[
 \boxed{
 K_x=
 \frac{15\pi}{32}
 \tan\frac{\chi}{2}
 }
-\]</span></p>
-<p>quando o multiplicador empírico aplicado ao modelo é igual a 1. Em
-termos de <span class="math inline">\(\mu\)</span> e do inflow
-médio,</p>
-<p><span class="math display">\[
+\]</span> quando o multiplicador empírico aplicado ao modelo é igual a
+1. Em termos de <span class="math inline">\(\mu\)</span> e do inflow
+médio, <span class="math display">\[
 \boxed{
 K_x=
 \frac{15\pi}{32}
@@ -1188,59 +1174,47 @@ K_x=
 {\sqrt{\mu^2+\lambda_0^2}+|\lambda_0|}
 }.
 \]</span></p>
-<p>Na traseira,</p>
-<p><span class="math display">\[
+<p>Na traseira, <span class="math display">\[
 \lambda_{\text{trás}}
 =
 \lambda_0(1+K_x\bar r),
-\]</span></p>
-<p>enquanto na frente,</p>
-<p><span class="math display">\[
+\]</span> enquanto na frente, <span class="math display">\[
 \lambda_{\text{frente}}
 =
 \lambda_0(1-K_x\bar r).
-\]</span></p>
-<p>Assim,</p>
-<p><span class="math display">\[
+\]</span> Assim, <span class="math display">\[
 \boxed{
 \lambda_{\text{trás}}&gt;
 \lambda_{\text{frente}}
 }.
-\]</span></p>
-<p>Essa desigualdade é o ingrediente que não existia no modelo
+\]</span> Essa desigualdade é o ingrediente que não existia no modelo
 uniforme.</p>
 <h2 id="dedução-de-cy-com-coleman">Dedução de CY com Coleman</h2>
 <p>A dedução pode ser construída diretamente a partir da força de um
 elemento de pá.</p>
-<p>Para pequenos ângulos de inflow,</p>
-<p><span class="math display">\[
+<p>Para pequenos ângulos de inflow, <span class="math display">\[
 \phi\simeq\frac{\lambda}{u_T}.
-\]</span></p>
-<p>Se <span class="math inline">\(\theta\)</span> é o passo geométrico
-local da pá e <span class="math inline">\(a=dC_l/d\alpha\)</span> é a
-inclinação da curva de sustentação, a aproximação linear fornece</p>
-<p><span class="math display">\[
+\]</span> Se <span class="math inline">\(\theta\)</span> é o passo
+geométrico local da pá e <span
+class="math inline">\(a=dC_l/d\alpha\)</span> é a inclinação da curva de
+sustentação, a aproximação linear fornece <span class="math display">\[
 C_l=a\left(\theta-\phi\right).
-\]</span></p>
-<p>Aqui, <span class="math inline">\(C_l\)</span> é o coeficiente de
-sustentação bidimensional da seção e <span
+\]</span> Aqui, <span class="math inline">\(C_l\)</span> é o coeficiente
+de sustentação bidimensional da seção e <span
 class="math inline">\(\alpha\simeq\theta-\phi\)</span> é o ângulo de
 ataque.</p>
 <p>Para uma seção de corda <span class="math inline">\(c\)</span> e
 largura radial <span class="math inline">\(dr\)</span>, a sustentação
-elementar é aproximadamente</p>
-<p><span class="math display">\[
+elementar é aproximadamente <span class="math display">\[
 dL=
 \frac{1}{2}\rho c(\Omega R)^2
 a
 \left(
 \theta u_T^2-\lambda u_T
 \right)dr.
-\]</span></p>
-<p>Como o vetor de sustentação está inclinado de um ângulo <span
+\]</span> Como o vetor de sustentação está inclinado de um ângulo <span
 class="math inline">\(\phi\)</span>, existe uma componente no plano do
-rotor. Para pequenos ângulos,</p>
-<p><span class="math display">\[
+rotor. Para pequenos ângulos, <span class="math display">\[
 dF_i\simeq dL\,\phi.
 \]</span></p>
 <p>Substituindo <span
@@ -1253,8 +1227,7 @@ dF_i=
 \theta\lambda u_T-\lambda^2
 \right)dr
 }.
-\]</span></p>
-<p>Essa é a parcela de força tangencial associada à inclinação da
+\]</span> Essa é a parcela de força tangencial associada à inclinação da
 sustentação. Para isolar o mecanismo de Coleman, consideraremos
 inicialmente apenas essa contribuição. Aqui, <span
 class="math inline">\(C_d\)</span> denota o coeficiente de arrasto
@@ -1263,14 +1236,13 @@ tomado constante, a parcela de arrasto de perfil depende de <span
 class="math inline">\(u_T\)</span> mas não do inflow e, neste modelo
 ideal, não cria a assimetria frente–trás necessária para produzir <span
 class="math inline">\(C_Y\)</span>.</p>
-<p>Na convenção azimutal adotada, a projeção lateral é</p>
-<p><span class="math display">\[
+<p>Na convenção azimutal adotada, a projeção lateral é <span
+class="math display">\[
 dY=-dF_i\cos\psi.
-\]</span></p>
-<p>Somando <span class="math inline">\(N_b\)</span> pás, fazendo a média
-em uma revolução e normalizando por <span class="math inline">\(\rho
-A(\Omega R)^2\)</span>, resulta</p>
-<p><span class="math display">\[
+\]</span> Somando <span class="math inline">\(N_b\)</span> pás, fazendo
+a média em uma revolução e normalizando por <span
+class="math inline">\(\rho A(\Omega R)^2\)</span>, resulta <span
+class="math display">\[
 \boxed{
 C_Y
 =
@@ -1283,32 +1255,26 @@ C_Y
 \cos\psi
 \,d\psi\,d\bar r
 }
-\]</span></p>
-<p>onde</p>
-<p><span class="math display">\[
+\]</span> onde <span class="math display">\[
 \sigma=\frac{N_bc}{\pi R}
-\]</span></p>
-<p>é a <a
+\]</span> é a <a
 href="https://en.wikipedia.org/wiki/Helicopter_rotor">solidez</a> do
 rotor para corda constante e <span class="math inline">\(N_b\)</span> é
 o número de pás. O limite inferior <span class="math inline">\(\bar
 r_0\)</span> é o corte de raiz aerodinâmico definido anteriormente. Para
 um rotor ideal sem corte de raiz, usa-se <span
 class="math inline">\(\bar r_0=0\)</span>.</p>
-<p>Agora substituímos as duas dependências azimutais:</p>
-<p><span class="math display">\[
+<p>Agora substituímos as duas dependências azimutais: <span
+class="math display">\[
 u_T=\bar r+\mu\sin\psi
-\]</span></p>
-<p>e</p>
-<p><span class="math display">\[
+\]</span> e <span class="math display">\[
 \lambda=
 \lambda_0
 \left(
 1+K_x\bar r\cos\psi
 \right).
-\]</span></p>
-<p>A parte proporcional a <span class="math inline">\(\theta\lambda
-u_T\)</span> torna-se</p>
+\]</span> A parte proporcional a <span
+class="math inline">\(\theta\lambda u_T\)</span> torna-se</p>
 <p><span class="math display">\[
 \theta\lambda_0
 \left(
@@ -1318,9 +1284,8 @@ u_T\)</span> torna-se</p>
 \bar r+\mu\sin\psi
 \right)
 \cos\psi.
-\]</span></p>
-<p>Ao integrar em <span class="math inline">\(\psi\)</span>, os termos
-proporcionais a</p>
+\]</span> Ao integrar em <span class="math inline">\(\psi\)</span>, os
+termos proporcionais a</p>
 <p><span class="math display">\[
 \cos\psi,
 \qquad
@@ -1328,21 +1293,15 @@ proporcionais a</p>
 \qquad
 \sin\psi\cos^2\psi
 \]</span></p>
-<p>desaparecem em uma revolução completa. O termo que sobrevive é</p>
-<p><span class="math display">\[
+<p>desaparecem em uma revolução completa. O termo que sobrevive é <span
+class="math display">\[
 \theta\lambda_0K_x\bar r^2\cos^2\psi.
-\]</span></p>
-<p>Como</p>
-<p><span class="math display">\[
+\]</span> Como <span class="math display">\[
 \int_0^{2\pi}\cos^2\psi\,d\psi=\pi,
-\]</span></p>
-<p>essa parcela fornece</p>
-<p><span class="math display">\[
+\]</span> essa parcela fornece <span class="math display">\[
 \pi\theta\lambda_0K_x\bar r^2.
-\]</span></p>
-<p>Agora examinamos o termo <span
-class="math inline">\(-\lambda^2\)</span>:</p>
-<p><span class="math display">\[
+\]</span> Agora examinamos o termo <span
+class="math inline">\(-\lambda^2\)</span>: <span class="math display">\[
 -\lambda^2\cos\psi
 =
 -\lambda_0^2
@@ -1351,19 +1310,13 @@ class="math inline">\(-\lambda^2\)</span>:</p>
 +K_x^2\bar r^2\cos^2\psi
 \right)
 \cos\psi.
-\]</span></p>
-<p>Os termos em <span class="math inline">\(\cos\psi\)</span> e <span
-class="math inline">\(\cos^3\psi\)</span> integram para zero. Resta
-apenas</p>
-<p><span class="math display">\[
+\]</span> Os termos em <span class="math inline">\(\cos\psi\)</span> e
+<span class="math inline">\(\cos^3\psi\)</span> integram para zero.
+Resta apenas <span class="math display">\[
 -2\lambda_0^2K_x\bar r\cos^2\psi.
-\]</span></p>
-<p>Depois da integração azimutal,</p>
-<p><span class="math display">\[
+\]</span> Depois da integração azimutal, <span class="math display">\[
 -2\pi\lambda_0^2K_x\bar r.
-\]</span></p>
-<p>Portanto,</p>
-<p><span class="math display">\[
+\]</span> Portanto, <span class="math display">\[
 \int_0^{2\pi}
 \left(
 \theta\lambda u_T-\lambda^2
@@ -1375,10 +1328,8 @@ apenas</p>
 -
 2\lambda_0^2\bar r
 \right).
-\]</span></p>
-<p>Substituindo de volta na definição de <span
-class="math inline">\(C_Y\)</span>,</p>
-<p><span class="math display">\[
+\]</span> Substituindo de volta na definição de <span
+class="math inline">\(C_Y\)</span>, <span class="math display">\[
 C_Y=
 -\frac{\sigma aK_x\lambda_0}{4}
 \int_{\bar r_0}^{1}
@@ -1393,14 +1344,11 @@ C_Y=
 \int_{\bar r_0}^{1}\bar r^2d\bar r
 =
 \frac{1-\bar r_0^3}{3},
-\]</span></p>
-<p><span class="math display">\[
+\]</span> <span class="math display">\[
 \int_{\bar r_0}^{1}2\bar r\,d\bar r
 =
 1-\bar r_0^2.
-\]</span></p>
-<p>Chegamos então a</p>
-<p><span class="math display">\[
+\]</span> Chegamos então a <span class="math display">\[
 \boxed{
 C_Y
 =
@@ -1413,10 +1361,8 @@ C_Y
 (1-\bar r_0^2)
 \right]
 }.
-\]</span></p>
-<p>Para um rotor ideal sem corte de raiz, <span
-class="math inline">\(\bar r_0=0\)</span>:</p>
-<p><span class="math display">\[
+\]</span> Para um rotor ideal sem corte de raiz, <span
+class="math inline">\(\bar r_0=0\)</span>: <span class="math display">\[
 \boxed{
 C_Y
 =
@@ -1426,9 +1372,8 @@ K_x\lambda_0
 \frac{\theta}{3}-\lambda_0
 \right)
 }.
-\]</span></p>
-<p>A forma final deixa clara a origem matemática do fenômeno. O inflow
-uniforme não contém um harmônico em <span
+\]</span> A forma final deixa clara a origem matemática do fenômeno. O
+inflow uniforme não contém um harmônico em <span
 class="math inline">\(\cos\psi\)</span>. Coleman introduz esse
 harmônico. Depois da projeção lateral surge um termo em <span
 class="math inline">\(\cos^2\psi\)</span>, cuja média não é zero.</p>
@@ -1438,11 +1383,9 @@ aponta para o lado recuante</h2>
 mecanismo.</p>
 <p>Na traseira do disco, Coleman prevê inflow maior. A componente normal
 do escoamento relativo sobre o elemento de pá aumenta. Consequentemente,
-o ângulo de inflow</p>
-<p><span class="math display">\[
+o ângulo de inflow <span class="math display">\[
 \phi\simeq\frac{\lambda}{u_T}
-\]</span></p>
-<p>também aumenta.</p>
+\]</span> também aumenta.</p>
 <p>A sustentação permanece aproximadamente perpendicular ao escoamento
 relativo. Quando <span class="math inline">\(\phi\)</span> aumenta, o
 vetor de sustentação se inclina mais para trás em relação ao movimento
@@ -1458,17 +1401,14 @@ correspondente aponta para a direita.</p>
 <p>Com inflow uniforme, as duas magnitudes são iguais e se cancelam.</p>
 <p>Com Coleman,</p>
 <p><span class="math display">\[
-\lambda_{\text{trás}}&gt;
-\lambda_{\text{frente}},
+\lambda_{\text{trás}} &gt; \lambda_{\text{frente}},
 \]</span></p>
 <p>portanto o vetor de sustentação fica mais inclinado na traseira. A
 componente tangencial de origem induzida fica maior nessa região.</p>
 <p>Assim,</p>
-<p>$$ |Y_{}|</p>
-<div class="quote">
-
-</div>
-<p>|Y_{}|. $$</p>
+<p><span class="math display">\[
+|Y_{\text{trás}}| &gt; |Y_{\text{frente}}|.
+\]</span></p>
 <p>Há mais força para a esquerda na traseira do disco do que força para
 a direita na frente. O saldo aponta para a esquerda, que neste rotor é o
 lado recuante.</p>
@@ -1477,26 +1417,136 @@ lado recuante.</p>
 <p><span class="math display">\[
 \boxed{C_Y&lt;0}.
 \]</span></p>
+<h2 id="por-que-cy-pode-inverter-em-razão-de-avanço-muito-baixa">Por que
+CY pode inverter em razão de avanço muito baixa</h2>
+<p>A interpretação anterior — mais inflow na traseira inclina mais a
+sustentação e tende a produzir força lateral para o lado recuante —
+descreve o efeito dominante na maior parte do voo à frente. Perto do
+hover, porém, há uma sutileza. O inflow atua de duas maneiras ao mesmo
+tempo: ele muda <strong>a direção</strong> do vetor de sustentação e
+também muda <strong>a magnitude</strong> desse vetor.</p>
+<p>A força tangencial associada à sustentação foi escrita como <span
+class="math display">\[
+dF_i
+=
+\frac{1}{2}\rho c(\Omega R)^2a
+\left(
+\theta\lambda u_T-\lambda^2
+\right)dr.
+\]</span> Os dois termos dentro dos parênteses vêm da mesma sustentação,
+mas representam efeitos físicos opostos.</p>
+<p>O primeiro, <span class="math inline">\(\theta\lambda u_T\)</span>, é
+o efeito de <strong>inclinação da sustentação</strong>. O passo
+geométrico <span class="math inline">\(\theta\)</span> gera ângulo de
+ataque e, portanto, sustentação. O inflow cria o ângulo <span
+class="math inline">\(\phi\simeq\lambda/u_T\)</span> e inclina esse
+vetor em relação ao eixo normal ao disco. Quanto maior <span
+class="math inline">\(\lambda\)</span>, maior é a parcela da sustentação
+projetada no plano do rotor. Como Coleman produz inflow maior na
+traseira, esse mecanismo tende a aumentar ali a componente tangencial.
+Para a convenção deste estudo, sua contribuição integrada para <span
+class="math inline">\(C_Y\)</span> é <span class="math display">\[
+\boxed{
+C_{Y,\mathrm{incl}}
+=
+-\frac{\sigma aK_x\lambda_0}{4}
+\frac{\theta}{3}
+(1-\bar r_0^3)
+}.
+\]</span> Ela é negativa para <span
+class="math inline">\(\mu&gt;0\)</span>: isoladamente, aponta para o
+lado recuante.</p>
+<p>O segundo termo, <span class="math inline">\(-\lambda^2\)</span>, vem
+de outro efeito do mesmo inflow. O ângulo de ataque não é <span
+class="math inline">\(\theta\)</span>, mas <span class="math display">\[
+\alpha\simeq\theta-\phi.
+\]</span> Portanto, aumentar o inflow também <strong>reduz o ângulo de
+ataque e a própria magnitude da sustentação</strong>. Na traseira, onde
+Coleman aumenta <span class="math inline">\(\lambda\)</span>, o vetor
+fica mais inclinado, mas simultaneamente fica menor. Essa redução da
+magnitude atua contra o primeiro mecanismo. Depois da integração, sua
+contribuição é <span class="math display">\[
+\boxed{
+C_{Y,\Delta L}
+=
++\frac{\sigma aK_x\lambda_0^2}{4}
+(1-\bar r_0^2)
+}.
+\]</span> O sinal é positivo: esse efeito, isoladamente, favorece o lado
+oposto ao recuante.</p>
+<p>A força lateral direta é a soma: <span class="math display">\[
+C_Y
+=
+C_{Y,\mathrm{incl}}
++
+C_{Y,\Delta L}.
+\]</span> Assim, dizer apenas que “mais inflow inclina mais a
+sustentação” é incompleto. Coleman cria simultaneamente uma diferença
+frente–trás de <strong>orientação</strong> e de
+<strong>magnitude</strong> da sustentação. A direção final de <span
+class="math inline">\(C_Y\)</span> depende de qual efeito é maior.</p>
+<p>A condição de inversão é obtida fazendo <span
+class="math inline">\(C_Y=0\)</span>: <span class="math display">\[
+\frac{\theta}{3}(1-\bar r_0^3)
+=
+\lambda_0(1-\bar r_0^2).
+\]</span> Logo, <span class="math display">\[
+\boxed{
+\lambda_{0,\mathrm{crit}}
+=
+\frac{\theta}{3}
+\frac{1-\bar r_0^3}{1-\bar r_0^2}
+}.
+\]</span> Se <span class="math display">\[
+\lambda_0&gt;\lambda_{0,\mathrm{crit}},
+\]</span> a redução da magnitude da sustentação domina e <span
+class="math inline">\(C_Y\)</span> pode ficar positivo. Se <span
+class="math display">\[
+\lambda_0&lt;\lambda_{0,\mathrm{crit}},
+\]</span> a inclinação da sustentação domina e o resultado usual <span
+class="math inline">\(C_Y&lt;0\)</span> é recuperado.</p>
+<p>Isso explica por que a inversão só aparece muito perto do hover.
+Nessa região, <span class="math inline">\(\lambda_0\)</span> ainda é
+relativamente alto. Ao aumentar <span
+class="math inline">\(\mu\)</span>, a velocidade através do disco passa
+a ter uma componente cada vez maior associada ao voo à frente e o inflow
+induzido médio necessário cai. O termo proporcional a <span
+class="math inline">\(\lambda_0^2\)</span>, responsável pela redução de
+sustentação, perde importância mais rapidamente que o termo proporcional
+a <span class="math inline">\(\lambda_0\)</span>.</p>
+<p>Há ainda um segundo limite. Quando <span
+class="math inline">\(\mu\rightarrow0\)</span>, o gradiente longitudinal
+de Coleman também desaparece: <span class="math display">\[
+K_x\rightarrow0.
+\]</span> Portanto, exatamente em hover, os dois efeitos deixam de ter
+assimetria frente–trás e <span class="math display">\[
+C_Y\rightarrow0.
+\]</span> O comportamento possível perto do hover é, portanto, <span
+class="math display">\[
+0
+\;\longrightarrow\;
+C_Y&gt;0
+\;\longrightarrow\;
+C_Y=0
+\;\longrightarrow\;
+C_Y&lt;0.
+\]</span></p>
 <h2 id="por-que-cy-é-menor-que-ch">Por que CY é menor que CH</h2>
 <p><span class="math inline">\(C_H\)</span> e <span
 class="math inline">\(C_Y\)</span> nascem de assimetrias diferentes.</p>
 <p><span class="math inline">\(C_H\)</span> é produzido principalmente
 pela forte assimetria avançante–recuante. Ela aparece diretamente na
-velocidade tangencial:</p>
-<p><span class="math display">\[
+velocidade tangencial: <span class="math display">\[
 u_T=\bar r+\mu\sin\psi.
-\]</span></p>
-<p>Como as forças aerodinâmicas dependem aproximadamente do quadrado
-dessa velocidade, a diferença entre os lados avançante e recuante é
-grande.</p>
+\]</span> Como as forças aerodinâmicas dependem aproximadamente do
+quadrado dessa velocidade, a diferença entre os lados avançante e
+recuante é grande.</p>
 <p><span class="math inline">\(C_Y\)</span> depende de uma assimetria de
 segunda ordem sobre esse campo. Coleman acrescenta a modulação
-longitudinal</p>
-<p><span class="math display">\[
+longitudinal <span class="math display">\[
 K_x\lambda_0\bar r\cos\psi.
-\]</span></p>
-<p>Ela não substitui a assimetria avançante–recuante. Apenas modifica um
-pouco a força tangencial entre a traseira e a frente.</p>
+\]</span> Ela não substitui a assimetria avançante–recuante. Apenas
+modifica um pouco a força tangencial entre a traseira e a frente.</p>
 <p>A Figura 2 mostra exatamente essa hierarquia: a variação
 direita–esquerda da força tangencial é dominante, enquanto a diferença
 frente–trás é muito menor.</p>
@@ -1504,45 +1554,31 @@ frente–trás é muito menor.</p>
 class="math inline">\(C_H\)</span> permanece a força dominante no plano
 do rotor e <span class="math inline">\(C_Y\)</span> é uma correção
 lateral menor.</p>
-<h2 id="exemplo-numérico-por-bet-ct-ch-e-cy">Exemplo numérico por BET:
-CT, CH e CY</h2>
-<p>A comparação numérica será feita diretamente pelas equações do BET.
-As figuras anteriores não serão integradas. Nesta comparação
-simplificada, <span class="math inline">\(C_H\)</span> inclui arrasto de
-perfil e a componente induzida da sustentação. O <span
-class="math inline">\(C_Y\)</span> calculado é a parcela direta
-produzida por Coleman. Com <span class="math inline">\(C_d\)</span>
-constante, o arrasto de perfil não acrescenta <span
-class="math inline">\(C_Y\)</span> neste modelo porque não cria uma
-diferença frente–trás.</p>
-<p>Considere um rotor representativo em voo à frente, com</p>
-<p><span class="math display">\[
-\mu=0{,}40,
-\qquad
-\sigma=0{,}10,
+<h2 id="exemplo-numérico-por-bet-o-gráfico-como-exemplo">Exemplo
+numérico por BET: o gráfico como exemplo</h2>
+<p>O exemplo numérico será construído como uma varredura em razão de
+avanço. Em vez de escolher primeiro um único ponto de operação,
+resolvemos o mesmo BET simplificado para vários valores de <span
+class="math inline">\(\mu\)</span> e usamos os gráficos como
+representação principal do comportamento.</p>
+<p>Em todo o exemplo usamos um único conjunto de parâmetros: <span
+class="math display">\[
+\sigma=0{,}20,
 \qquad
 a=5{,}7\ \mathrm{rad}^{-1},
-\]</span></p>
-<p><span class="math display">\[
-\theta=0{,}12\ \mathrm{rad},
 \qquad
+\theta=0{,}12\ \mathrm{rad},
+\]</span> <span class="math display">\[
 \bar r_0=0{,}20,
 \qquad
-\bar C_d=0{,}040.
-\]</span></p>
-<p>O símbolo <span class="math inline">\(\bar C_d\)</span> representa,
-apenas neste exemplo simplificado de <span
-class="math inline">\(C_H\)</span>, um coeficiente médio efetivo de
-arrasto de seção. Ele substitui a polar de arrasto que um BEMT completo
-avaliaria em cada elemento e em cada azimute, levando em conta ângulo de
-ataque, número de Mach e número de Reynolds. Portanto, <span
-class="math inline">\(\bar C_d\)</span> não deve ser confundido com o
-<span class="math inline">\(C_{d0}\)</span> de um aerofólio
-descarregado.</p>
-<h3 id="tração">Tração</h3>
-<p>Para passo e corda constantes, a integração BET da força normal
-fornece</p>
-<p><span class="math display">\[
+\bar C_d=0{,}020.
+\]</span> O coeficiente <span class="math inline">\(\bar C_d\)</span>
+representa um valor médio efetivo de arrasto de seção. Ele substitui, de
+forma simplificada, a polar que um BEMT completo avaliaria localmente em
+cada elemento e em cada azimute.</p>
+<p>Para cada valor de <span class="math inline">\(\mu\)</span>, o inflow
+médio <span class="math inline">\(\lambda_0\)</span> é obtido resolvendo
+simultaneamente a equação BET de tração, <span class="math display">\[
 \boxed{
 C_T
 =
@@ -1550,151 +1586,75 @@ C_T
 \left[
 \theta
 \left(
-\frac{1}{3}
+\frac{1-\bar r_0^3}{3}
 +
-\frac{\mu^2}{2}
+\frac{\mu^2}{2}(1-\bar r_0)
 \right)
 -
-\frac{\lambda_0}{2}
+\frac{\lambda_0}{2}(1-\bar r_0^2)
 \right]
-}.
-\]</span></p>
-<p>Para fechar o problema, usamos a <a
-href="https://ntrs.nasa.gov/citations/19810057419">teoria de quantidade
-de movimento aplicada ao rotor</a> em voo à frente:</p>
-<p><span class="math display">\[
+},
+\]</span> e o fechamento de quantidade de movimento, <span
+class="math display">\[
 C_T=
 2\lambda_0
 \sqrt{\mu^2+\lambda_0^2}.
-\]</span></p>
-<p>Resolvendo as duas equações conjuntamente,</p>
-<p><span class="math display">\[
-\lambda_0\simeq0{,}0144
-\]</span></p>
-<p>e</p>
-<p><span class="math display">\[
-\boxed{
-C_T\simeq0{,}01153
-}.
-\]</span></p>
-<h3 id="força-longitudinal">Força longitudinal</h3>
-<p>No mesmo BET simplificado, a força tangencial de um elemento contém
-duas parcelas principais:</p>
-<p><span class="math display">\[
-dF_t
-\simeq
-dD
-+
-dL\,\phi.
-\]</span></p>
-<p>A primeira é o arrasto de perfil. A segunda é a componente induzida
-da sustentação inclinada.</p>
-<p>Projetando essa força na direção longitudinal e integrando uma
-revolução, obtém-se</p>
-<p><span class="math display">\[
+\]</span> A força longitudinal é calculada pelo mesmo BET simplificado:
+<span class="math display">\[
 \boxed{
 C_H
 =
 \frac{\sigma\mu}{4}
-\bar C_d
+\bar C_d(1-\bar r_0^2)
 +
 \frac{\sigma\mu}{4}
-a\theta\lambda_0
-}
-\]</span></p>
-<p>para a magnitude da força de arrasto longitudinal.</p>
-<p>O primeiro termo é a contribuição de perfil:</p>
-<p><span class="math display">\[
-C_{H,\mathrm{perfil}}
-\simeq
-3{,}84\times10^{-4}.
-\]</span></p>
-<p>O segundo é a contribuição induzida:</p>
-<p><span class="math display">\[
-C_{H,\mathrm{ind}}
-\simeq
-7{,}88\times10^{-5}.
-\]</span></p>
-<p>Assim,</p>
-<p><span class="math display">\[
-\boxed{
-C_H
-\simeq
-4{,}63\times10^{-4}
+a\theta\lambda_0(1-\bar r_0)
 }.
-\]</span></p>
-<p>Comparando com a tração,</p>
-<p><span class="math display">\[
+\]</span> A força lateral direta de Coleman é <span
+class="math display">\[
 \boxed{
-\frac{C_H}{C_T}
-\simeq
-0{,}040
-}
-\]</span></p>
-<p>ou cerca de <span class="math inline">\(4{,}0\%\)</span>.</p>
-<h3 id="força-lateral-de-coleman">Força lateral de Coleman</h3>
-<p>Para o mesmo ponto,</p>
-<p><span class="math display">\[
-K_x=
-\frac{15\pi}{32}
-\frac{\mu}
-{\sqrt{\mu^2+\lambda_0^2}+|\lambda_0|}
-\simeq1{,}42.
-\]</span></p>
-<p>Substituindo na expressão deduzida anteriormente,</p>
-<p><span class="math display">\[
 C_Y
 =
 -\frac{\sigma aK_x\lambda_0}{4}
-\left(
-\frac{\theta}{3}
+\left[
+\frac{\theta}{3}(1-\bar r_0^3)
 -
-\lambda_0
-\right),
-\]</span></p>
-<p>obtemos</p>
-<p><span class="math display">\[
+\lambda_0(1-\bar r_0^2)
+\right]
+}.
+\]</span> O primeiro gráfico mostra exatamente os dois mecanismos
+discutidos no capítulo anterior:</p>
+<p><picture><source srcset="../assets/media/cy-coleman-componentes-vs-mu.webp" type="image/webp"><img src="../assets/media/cy-coleman-componentes-vs-mu.png"
+alt="Contribuições para CY de Coleman em função da razão de avanço" /></picture></p>
+<p><em>Figura 5 — <span class="math inline">\(C_Y\)</span> decomposto
+entre o efeito da inclinação da sustentação, a redução de sua magnitude
+causada pelo inflow (e a soma dos efeitos). Em razão de avanço muito
+baixa, a redução da magnitude da sustentação domina temporariamente e
+inverte o sinal.</em></p>
+<p>Para comparar visualmente a força longitudinal com a lateral,
+definimos apenas nesta figura <span class="math display">\[
+C_X=-C_H,
+\]</span> isto é, atribuímos sinal negativo à força longitudinal de
+arrasto. Assim, <span class="math inline">\(C_X\)</span> e o <span
+class="math inline">\(C_Y\)</span> dirigido para o lado recuante
+aparecem com o mesmo sinal.</p>
+<p><picture><source srcset="../assets/media/cx-cy-vs-mu.webp" type="image/webp"><img src="../assets/media/cx-cy-vs-mu.png"
+alt="Comparação entre CX e CY em função da razão de avanço" /></picture></p>
+<p><em>Figura 6 — Comparação entre <span
+class="math inline">\(C_X=-C_H\)</span> e <span
+class="math inline">\(C_Y\)</span> para o mesmo rotor. A inversão de
+<span class="math inline">\(C_Y\)</span> aparece em baixa razão de
+avanço; após o cruzamento, <span class="math inline">\(C_Y\)</span>
+permanece negativo e menor em módulo que <span
+class="math inline">\(C_X\)</span>.</em></p>
+<p>Tomando <span class="math inline">\(\mu=0{,}40\)</span>, a relação
+entre <span class="math inline">\(C_H\)</span> e <span
+class="math inline">\(C_Y\)</span> é: <span class="math display">\[
 \boxed{
-C_Y
-\simeq
--7{,}54\times10^{-5}
+\frac{C_H}{|C_Y|}
+\simeq4{,}27
 }.
 \]</span></p>
-<p>Logo,</p>
-<p><span class="math display">\[
-\boxed{
-\frac{C_Y}{C_T}
-\simeq
--0{,}0065
-}
-\]</span></p>
-<p>ou aproximadamente <span class="math inline">\(-0{,}65\%\)</span> da
-tração.</p>
-<p>A comparação direta é</p>
-<p><span class="math display">\[
-\boxed{
-\frac{C_H}{|C_Y|}
-\simeq6{,}1.
-}
-\]</span></p>
-<p>Nesse exemplo simples, portanto, a força lateral de Coleman é cerca
-de seis vezes menor que a força longitudinal.</p>
-<p>Esse fator não é universal. Em condições de maior razão de avanço ou
-maior arrasto médio de seção, <span class="math inline">\(C_H\)</span>
-cresce relativamente mais. Por exemplo, mantendo a mesma ordem de
-carregamento, um caso com <span
-class="math inline">\(\mu=0{,}45\)</span> e <span
-class="math inline">\(\bar C_d=0{,}050\)</span> fornece uma razão
-próxima de</p>
-<p><span class="math display">\[
-\frac{C_H}{|C_Y|}
-\simeq8{,}5.
-\]</span></p>
-<p>É nesse sentido que <span class="math inline">\(C_Y\)</span> pode
-aparecer aproximadamente uma ordem de grandeza abaixo de <span
-class="math inline">\(C_H\)</span> em um BEMT de voo à frente. O valor
-exato depende do ponto de operação, da polar, do carregamento e do
-modelo de inflow.</p>
 <h2 id="limites-da-interpretação">Limites da interpretação</h2>
 <p>A dedução analítica isola a força lateral aerodinâmica direta
 associada ao inflow longitudinal.</p>
@@ -1714,50 +1674,39 @@ carregamento de primeiro harmônico e pode inclinar o plano descrito
 pelas pontas das pás. Essa inclinação reorienta o vetor de tração e pode
 acrescentar outra parcela de força lateral.</p>
 <h2 id="conclusão">Conclusão</h2>
-<p>O voo à frente cria primeiro uma forte assimetria
-avançante–recuante:</p>
-<p><span class="math display">\[
+<p>O voo à frente cria primeiro uma forte assimetria avançante–recuante:
+<span class="math display">\[
 u_T=\bar r+\mu\sin\psi.
-\]</span></p>
-<p>Essa assimetria domina a força tangencial e produz a maior parte de
-<span class="math inline">\(C_H\)</span>.</p>
+\]</span> Essa assimetria domina a força tangencial e produz a maior
+parte de <span class="math inline">\(C_H\)</span>.</p>
 <p>Com inflow uniforme, traseira e frente continuam equivalentes. Suas
 contribuições laterais possuem a mesma magnitude e sinais opostos.
-Portanto,</p>
-<p><span class="math display">\[
+Portanto, <span class="math display">\[
 C_Y=0.
-\]</span></p>
-<p>Coleman acrescenta um primeiro harmônico longitudinal:</p>
-<p><span class="math display">\[
+\]</span> Coleman acrescenta um primeiro harmônico longitudinal: <span
+class="math display">\[
 \lambda
 =
 \lambda_0
 \left(
 1+K_x\bar r\cos\psi
 \right).
-\]</span></p>
-<p>O inflow maior na traseira aumenta o ângulo de inflow e inclina mais
-o vetor de sustentação. A componente tangencial de origem induzida fica
-maior nessa região. Como ela aponta para a esquerda na traseira e para a
-direita na frente, o desequilíbrio produz uma força lateral para o lado
-recuante.</p>
-<p>Para o rotor considerado,</p>
-<p><span class="math display">\[
+\]</span> O inflow maior na traseira aumenta o ângulo de inflow e tende
+a inclinar mais o vetor de sustentação, produzindo uma força lateral
+para o lado recuante. Muito perto do hover, entretanto, a redução
+simultânea da magnitude da sustentação pode temporariamente superar esse
+efeito e inverter o sinal.</p>
+<p>Fora da pequena região de inversão em baixa razão de avanço, o
+resultado usual para o rotor considerado é <span class="math display">\[
 \boxed{C_Y&lt;0}.
-\]</span></p>
-<p>A comparação por BET também estabelece a escala do efeito. No exemplo
-numérico,</p>
-<p><span class="math display">\[
-\frac{C_H}{C_T}\simeq4{,}0\%,
-\qquad
-\frac{|C_Y|}{C_T}\simeq0{,}65\%,
-\]</span></p>
-<p>portanto</p>
-<p><span class="math display">\[
-C_H\simeq6\,|C_Y|.
-\]</span></p>
-<p>Em pontos de maior razão de avanço e maior arrasto médio de seção, a
-diferença pode se aproximar de uma ordem de grandeza.</p>
+\]</span> O exemplo numérico mostra a escala do efeito ao longo de uma
+curva completa em razão de avanço. No ponto <span
+class="math inline">\(\mu=0{,}40\)</span>, obtém-se aproximadamente uma
+razão de 4 vezes.</p>
+<p>Essa razão varia com o ponto de operação. O mesmo gráfico mostra que,
+muito perto do hover, <span class="math inline">\(C_Y\)</span> pode
+inverter temporariamente de sinal antes de assumir o sentido usual para
+o lado recuante.</p>
 <h2 id="referências">Referências</h2>
 <p>[1] Coleman, R. P., Feingold, A. M., e Stempin, C. W., <em>Evaluation
 of the Induced-Velocity Field of an Idealized Helicopter Rotor</em>,
