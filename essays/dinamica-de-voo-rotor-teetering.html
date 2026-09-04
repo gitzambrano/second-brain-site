@@ -899,7 +899,8 @@ restauradoras inerciais e as assimetrias aerodinâmicas.</p>
 dinâmica malha aberta do veículo, poderemos extrapolar o entendimento
 para o veículo malha fechada como um todo, ou seja, compreender os
 desafios para leis de controle de uma configuração de rotores
-<em>teetering</em> de um eVTOL.</p>
+<em>teetering</em> de um <a
+href="https://en.wikipedia.org/wiki/EVTOL">eVTOL</a>.</p>
 <hr />
 <h2 id="sumário">Sumário</h2>
 <ul>
@@ -1003,12 +1004,13 @@ class="math inline">\(\Omega^2 I_\beta\)</span>), encontramos a
 proporcionalidade da amplitude do <em>flapping</em>:</p>
 <p><span class="math display">\[a_1 \propto \frac{\Omega V}{\Omega^2} =
 \frac{V}{\Omega}\]</span></p>
-<p>Esta razão é proporcional à razão de avanço (<em>advance ratio</em>)
-<span class="math inline">\(\mu = \frac{V}{\Omega R}\)</span>. A
-integração formal dos momentos aerodinâmicos ao longo da pá, assumindo
-inflow <span class="math inline">\(\lambda\)</span> constante, produz a
-equação completa do <em>flapping</em> longitudinal em regime
-permanente:</p>
+<p>Esta razão é proporcional à <a
+href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>
+(<em>advance ratio</em>) <span class="math inline">\(\mu =
+\frac{V}{\Omega R}\)</span>. A integração formal dos momentos
+aerodinâmicos ao longo da pá, assumindo inflow <span
+class="math inline">\(\lambda\)</span> constante, produz a equação
+completa do <em>flapping</em> longitudinal em regime permanente:</p>
 <p><span class="math display">\[a_1 = \frac{2\mu \left(
 \frac{4}{3}\theta_0 - \lambda \right)}{1 - \frac{1}{2}\mu^2}\]</span>
 onde:</p>
@@ -1083,9 +1085,10 @@ subir: o multiplicador <span class="math inline">\(\mu\)</span> no
 numerador cresce, o termo <span class="math inline">\(1 -
 \frac{1}{2}\mu^2\)</span> no denominador encolhe, e a razão de influxo
 (<em>inflow ratio</em>) <span class="math inline">\(\lambda\)</span> cai
-devido à sustentação de translação (<em>translational lift</em>). A
-força aerodinâmica supera a inércia centrífuga, inclinando o disco para
-trás.</p>
+devido à <a
+href="https://en.wikipedia.org/wiki/Translational_lift">sustentação de
+translação</a> (<em>translational lift</em>). A força aerodinâmica
+supera a inércia centrífuga, inclinando o disco para trás.</p>
 <p>Vide Figura 1 em <a href="#anexo---plots">Anexo - Plots</a>.</p>
 <hr />
 <h2 id="controle-de-rpm-o-acoplamento-entre-tração-e-arfagem">Controle
@@ -1139,12 +1142,13 @@ Limites da Folga do <em>Teetering</em></h2>
 <p>Uma articulação <em>teetering</em> depende de folga mecânica adequada
 para bater livremente. Se o plano do disco se inclinar muito em relação
 ao eixo do rotor, a estrutura do cubo entra em contato físico com o
-mastro, um evento conhecido como <em>mast bumping</em>. Como
-estabelecido, o disco sofre um <em>blowback</em> quando a velocidade de
-avanço aumenta. Por outro lado, reduzir a tração exige diminuir o RPM.
-Quando o RPM cai, a rigidez centrífuga que mantém a pá plana diminui
-muito mais rapidamente do que a assimetria aerodinâmica. Isso faz com
-que o disco se incline para trás.</p>
+mastro, um evento conhecido como <a
+href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook"><em>mast
+bumping</em></a>. Como estabelecido, o disco sofre um <em>blowback</em>
+quando a velocidade de avanço aumenta. Por outro lado, reduzir a tração
+exige diminuir o RPM. Quando o RPM cai, a rigidez centrífuga que mantém
+a pá plana diminui muito mais rapidamente do que a assimetria
+aerodinâmica. Isso faz com que o disco se incline para trás.</p>
 <p>Se o sistema de controle de voo comandar uma rápida redução no RPM
 durante o voo à frente — talvez para iniciar uma descida ou para gerar
 um momento diferencial de rolagem ou arfagem — a queda localizada na
@@ -1356,15 +1360,17 @@ linearmente proporcionais à velocidade do ar. Eles são funções
 não-lineares que variam inversamente com a velocidade rotacional e são
 sensíveis ao quadrado da razão de avanço.</p>
 <p><strong>O Desafio para as Leis de Controle:</strong></p>
-<p>Na teoria clássica de controle de voo, o <em>gain scheduling</em>
-(escalonamento de ganhos) mapeia as reações do controlador geralmente
-com base em uma única variável independente, como a velocidade calibrada
-(<em>airspeed</em>) ou a pressão dinâmica. No entanto, devido à forte
-não-linearidade geométrica explicada acima, a planta da aeronave (o
-modelo matemático que o controlador tenta governar) muda de forma
-contínua e não-linear com o RPM.</p>
-<p>Para manter características de manuseio previsíveis (<em>handling
-qualities</em>), as leis de controle exigem <em>schedules</em> muito
+<p>Na teoria clássica de controle de voo, o <a
+href="https://en.wikipedia.org/wiki/Gain_scheduling"><em>gain
+scheduling</em></a> (escalonamento de ganhos) mapeia as reações do
+controlador geralmente com base em uma única variável independente, como
+a velocidade calibrada (<em>airspeed</em>) ou a pressão dinâmica. No
+entanto, devido à forte não-linearidade geométrica explicada acima, a
+planta da aeronave (o modelo matemático que o controlador tenta
+governar) muda de forma contínua e não-linear com o RPM.</p>
+<p>Para manter características de manuseio previsíveis (<a
+href="https://en.wikipedia.org/wiki/Flying_qualities"><em>handling
+qualities</em></a>), as leis de controle exigem <em>schedules</em> muito
 mais complicados. Os ganhos do sistema devem ser interpolados em tabelas
 multidimensionais que monitoram simultaneamente a velocidade e o comando
 instantâneo de RPM de cada rotor. Omitir essa não-linearidade nos
