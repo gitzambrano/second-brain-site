@@ -18,6 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # O conteúdo chega pronto do engine, que já valida a privacidade na
+      # origem. Publicar na internet mesmo assim sem olhar seria confiar em
+      # quem empurrou o commit. A portaria é auto-suficiente: biblioteca
+      # padrão, só os arquivos deste repositório, sem acesso ao repo privado.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Gate — allowlist, vazamento e orçamento
+        run: python .github/scripts/check_artifact.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

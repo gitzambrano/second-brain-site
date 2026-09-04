@@ -29,6 +29,11 @@ type="text/javascript"></script>
   --rust-bright:#A84F3C;
   --accent:#4A8FA8;
   --amber:#967030;
+  /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
+     de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
+     No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
+  --box-bg:rgba(176,139,79,.055);
+  --box-verdict-bg:rgba(176,139,79,.10);
   --max-width:700px;
 }
 [data-theme="light"]{
@@ -45,11 +50,17 @@ type="text/javascript"></script>
   --rust-bright:#A04030;
   --accent:#35708A;
   --amber:#7A5A18;
+  --box-bg:var(--surface);
+  --box-verdict-bg:var(--surface2);
 }
 @media (min-width:901px){
-  /* Desktop: coluna larga (75% da tela) em AMBOS os temas */
+  /* Desktop: coluna larga, mas com teto. 75vw sozinho dava 2580px de linha
+     num monitor de 3440px — largura de planilha, não de leitura. A prosa para
+     em 1180px; figuras, tabelas e blocos de código continuam podendo usar a
+     largura antiga, que é onde ela servia para alguma coisa. */
   :root{
-    --max-width:75vw;
+    --wide-width:75vw;
+    --max-width:min(75vw,1180px);
   }
   /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
      escuro para quem preferir. Playfair permanece em todos os temas */
@@ -67,6 +78,8 @@ type="text/javascript"></script>
     --rust-bright:#A04030;
     --accent:#35708A;
     --amber:#7A5A18;
+    --box-bg:var(--surface);
+    --box-verdict-bg:var(--surface2);
   }
 }
 
@@ -193,6 +206,22 @@ body{
 /* Conteudo                                                            */
 /* ------------------------------------------------------------------ */
 .content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+/* Escape da coluna de prosa para o que é figura, e não frase. Só vale quando
+   a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
+   já ocupa quase tudo e o breakout não teria para onde ir. */
+@media (min-width:1400px){
+  /* Só o TETO sobe. Nada de `width`: uma tabela estreita continua estreita e
+     uma figura continua no tamanho natural — o que muda é até onde elas podem
+     ir quando precisam. `margin-left:50%` + `translateX(-50%)` centraliza
+     seja qual for a largura resultante. */
+  .content > figure,
+  .content > table{
+    max-width:min(var(--wide-width),1500px);
+    margin-left:50%;
+    transform:translateX(-50%);
+  }
+}
 
 h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
 .content h1{display:none;} /* titulo vive no masthead */
@@ -416,7 +445,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   border-top:1px solid var(--border);
   border-right:1px solid var(--border);
   border-bottom:1px solid var(--border);
-  background:var(--surface);
+  background:var(--box-bg);
   overflow:hidden;
 }
 .box.experimento{--boxc:var(--rust);}
@@ -426,15 +455,16 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box.aviso{--boxc:var(--amber);}
 .box.nivel{--boxc:var(--accent);}
 .box.ideia{--boxc:var(--gold-dim);}
-/* generico: filete cinza discreto — sem cor de destaque */
-.box.generico{--boxc:var(--border);}
+/* generico: filete cinza discreto — sem cor de destaque. O rótulo, porém,
+   precisa continuar legível: em cinza de borda ele desaparecia no fundo. */
+.box.generico{--boxc:var(--border);--box-badge-c:var(--text-dim);}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
   display:block;width:fit-content;
-  color:var(--boxc);
+  color:var(--box-badge-c,var(--boxc));
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
   padding:.55rem 1.3rem .1rem;
   font-variant:small-caps;
 }
@@ -449,7 +479,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 
 .box-verdict{
   margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
-  background:var(--surface2);
+  background:var(--box-verdict-bg);
   border-top:1px solid var(--border);
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
@@ -747,6 +777,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   --rust-bright:#a04030;
   --accent:#35708a;
   --amber:#7a5a18;
+  /* Claro: a caixa de destaque continua neutra. */
+  --box-bg:var(--surface);
+  --box-verdict-bg:var(--surface2);
 
   --sb-bg:#ffffff;
   --sb-surface:#ffffff;
@@ -774,6 +807,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   --rust-bright:#bd5a42;
   --accent:#5b95ac;
   --amber:#a77a2e;
+  /* Escuro: ouro do Atlas em opacidade mínima, o mesmo gesto do export
+     standalone, só com o gold do site (#c9a45c) em vez do #b08b4f. */
+  --box-bg:rgba(201,164,92,.055);
+  --box-verdict-bg:rgba(201,164,92,.10);
 
   --sb-bg:#090909;
   --sb-surface:#121212;
@@ -1105,8 +1142,8 @@ singularidade é da parametrização, não do voo.</p>
 <p>A figura abaixo compara as duas propagações numa cabragem quase pura
 de 30 graus por segundo, com uma guinada residual de meio grau por
 segundo, cruzando a vertical em três segundos.</p>
-<p><img src="../assets/media/metodos_quaternion_vs_euler.png"
-alt="Comparação entre propagação de atitude por quaternion e por ângulos de Euler numa passagem pela vertical" /></p>
+<p><picture><source srcset="../assets/media/metodos_quaternion_vs_euler.webp" type="image/webp"><img src="../assets/media/metodos_quaternion_vs_euler.png"
+alt="Comparação entre propagação de atitude por quaternion e por ângulos de Euler numa passagem pela vertical" /></picture></p>
 <p>À esquerda, o ângulo de rolamento calculado por Euler salta de zero a
 cento e oitenta graus em poucos milissegundos, enquanto as quatro
 componentes do quaternion atravessam o mesmo instante como senoides
@@ -1291,8 +1328,8 @@ são avançar e girar. Ainda assim, todo mundo estaciona em paralelo. A
 manobra de estacionar é literalmente o colchete de Lie: avançar, girar,
 recuar, desgirar, uma sequência cujo resultado líquido é um deslocamento
 lateral que nenhum comando isolado produz.</p>
-<p><img src="../assets/media/metodos_colchete_de_lie.png"
-alt="Duas ordens da mesma sequência de comandos levando a estados finais diferentes, com a lacuna medindo o colchete de Lie" /></p>
+<p><picture><source srcset="../assets/media/metodos_colchete_de_lie.webp" type="image/webp"><img src="../assets/media/metodos_colchete_de_lie.png"
+alt="Duas ordens da mesma sequência de comandos levando a estados finais diferentes, com a lacuna medindo o colchete de Lie" /></picture></p>
 <p>A figura mostra as duas ordens da mesma sequência de quatro comandos,
 partindo do mesmo estado. A separação entre os pontos finais é lateral,
 exatamente a direção que o colchete prevê e exatamente a direção que os
@@ -1495,8 +1532,8 @@ kernel anisotrópico, com comprimento próprio para cada entrada, diz algo
 ainda mais específico: que a resposta varia rápido em Mach na região
 transônica e devagar em Reynolds, que é exatamente o que a física do
 escoamento compressível prevê.</p>
-<p><img src="../assets/media/metodos_gp_polar_incerteza.png"
-alt="Processo gaussiano ajustado a cinco pontos de uma polar, com banda de incerteza que se alarga na região de estol" /></p>
+<p><picture><source srcset="../assets/media/metodos_gp_polar_incerteza.webp" type="image/webp"><img src="../assets/media/metodos_gp_polar_incerteza.png"
+alt="Processo gaussiano ajustado a cinco pontos de uma polar, com banda de incerteza que se alarga na região de estol" /></picture></p>
 <p>A figura mostra o comportamento que torna o método útil. Cinco pontos
 de túnel, colocados em menos quatro, zero, quatro, oito e dezesseis
 graus, definem uma média posterior que segue a parte linear da polar com
@@ -1635,8 +1672,8 @@ conceitualmente mais direto e computacionalmente mais caro.</p>
 o que um projetista experiente faz por intuição: não gastar a próxima
 simulação onde já se sabe a resposta, nem onde a resposta é claramente
 ruim, mas onde há chance real de descobrir algo que mude a decisão.</p>
-<p><img src="../assets/media/metodos_bo_expected_improvement.png"
-alt="Surrogate gaussiano e função de aquisição indicando o próximo ponto a simular na otimização do twist de uma pá" /></p>
+<p><picture><source srcset="../assets/media/metodos_bo_expected_improvement.webp" type="image/webp"><img src="../assets/media/metodos_bo_expected_improvement.png"
+alt="Surrogate gaussiano e função de aquisição indicando o próximo ponto a simular na otimização do twist de uma pá" /></picture></p>
 <p>A figura mostra o estado do algoritmo depois de quatro avaliações de
 CFD na otimização do twist de uma pá de rotor. O painel superior traz o
 surrogate com sua banda, e o inferior a melhoria esperada. As quatro
@@ -1781,8 +1818,8 @@ uma sucessão de picos. Um <span
 class="math inline">\(\varepsilon\)</span> pequeno produz bases largas e
 quase colineares entre si, o interpolador fica suave e a matriz <span
 class="math inline">\(A\)</span> fica mal condicionada.</p>
-<p><img src="../assets/media/metodos_rbf_forma_condicionamento.png"
-alt="Efeito da base e do parâmetro de forma na interpolação de uma polar, com o número de condição da matriz de interpolação" /></p>
+<p><picture><source srcset="../assets/media/metodos_rbf_forma_condicionamento.webp" type="image/webp"><img src="../assets/media/metodos_rbf_forma_condicionamento.png"
+alt="Efeito da base e do parâmetro de forma na interpolação de uma polar, com o número de condição da matriz de interpolação" /></picture></p>
 <p>A figura mostra os dois lados dessa moeda. À esquerda, a mesma
 amostra de oito pontos interpolada por três bases distintas: a thin
 plate spline e a gaussiana com <span
