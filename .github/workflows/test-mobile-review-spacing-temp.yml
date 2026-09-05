@@ -1,0 +1,121 @@
+name: Test mobile review spacing
+
+on:
+  push:
+    branches: [test/mobile-review-badge-spacing]
+    paths:
+      - '.github/workflows/test-mobile-review-spacing-temp.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Playwright
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Prepare before and after copies
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/before /tmp/after screenshots
+          rsync -a --exclude='.git/' --exclude='.github/' ./ /tmp/before/
+          rsync -a --exclude='.git/' --exclude='.github/' ./ /tmp/after/
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('/tmp/after/assets/site.css')
+          s = p.read_text(encoding='utf-8')
+          needle = '  .card-meta { font-size: 10.5px; gap: 6px; }\n'
+          replacement = needle + '  .card-meta .dot + span { font-size: 10px; letter-spacing: -0.025em; }\n'
+          if needle not in s:
+              raise SystemExit('mobile card-meta rule not found')
+          p.write_text(s.replace(needle, replacement, 1), encoding='utf-8')
+          PY
+
+      - name: Serve both versions
+        run: |
+          python -m http.server 8000 --directory /tmp/before >/tmp/before.log 2>&1 &
+          python -m http.server 8001 --directory /tmp/after >/tmp/after.log 2>&1 &
+          sleep 2
+
+      - name: Capture screenshots and measure spacing
+        run: |
+          cat > /tmp/check.py <<'PY'
+          import asyncio, json
+          from pathlib import Path
+          from playwright.async_api import async_playwright
+
+          async def inspect(browser, port, label, width):
+              context = await browser.new_context(viewport={"width": width, "height": 900}, device_scale_factor=1)
+              page = await context.new_page()
+              await page.add_init_script("localStorage.setItem('sb-view-v2', JSON.stringify({layout:'list',density:'compact'}))")
+              await page.goto(f'http://127.0.0.1:{port}/index.html', wait_until='networkidle')
+              await page.evaluate('document.fonts.ready')
+              data = await page.eval_on_selector_all('.essay-card[data-status="revisao"]', '''cards => cards.map((card, i) => {
+                const badge = card.querySelector('.badge-review');
+                const expand = card.querySelector('.card-expand');
+                const reading = card.querySelector('.card-meta .dot + span');
+                if (!badge || !expand || !reading) return null;
+                const b = badge.getBoundingClientRect();
+                const e = expand.getBoundingClientRect();
+                const r = reading.getBoundingClientRect();
+                const v = Math.max(0, Math.min(b.bottom, e.bottom) - Math.max(b.top, e.top));
+                return {
+                  index:i,
+                  title:card.dataset.title,
+                  gap:e.left-b.right,
+                  verticalOverlap:v,
+                  badge:{left:b.left,right:b.right,top:b.top,bottom:b.bottom},
+                  expand:{left:e.left,right:e.right,top:e.top,bottom:e.bottom},
+                  readingWidth:r.width
+                };
+              }).filter(Boolean)''')
+              if not data:
+                  raise RuntimeError('no public review cards with reading time found')
+              worst = min(data, key=lambda x: x['gap'])
+              card = page.locator('.essay-card[data-status="revisao"]').nth(worst['index'])
+              await card.scroll_into_view_if_needed()
+              await page.wait_for_timeout(150)
+              await card.screenshot(path=f'screenshots/{label}-{width}.png')
+              await context.close()
+              return worst
+
+          async def main():
+              out = {}
+              async with async_playwright() as p:
+                  browser = await p.chromium.launch()
+                  for width in (360, 390):
+                      out[f'before-{width}'] = await inspect(browser, 8000, 'before', width)
+                      out[f'after-{width}'] = await inspect(browser, 8001, 'after', width)
+                  await browser.close()
+              Path('screenshots/metrics.json').write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding='utf-8')
+              print(json.dumps(out, indent=2, ensure_ascii=False))
+              for width in (360, 390):
+                  before = out[f'before-{width}']
+                  after = out[f'after-{width}']
+                  if after['gap'] < 4:
+                      raise SystemExit(f'{width}px: after gap too small: {after["gap"]:.2f}px')
+                  if after['gap'] <= before['gap']:
+                      raise SystemExit(f'{width}px: badge did not move left relative to Resumo')
+                  if after['verticalOverlap'] > 0 and after['gap'] < 0:
+                      raise SystemExit(f'{width}px: overlap remains')
+          asyncio.run(main())
+          PY
+          python /tmp/check.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mobile-review-spacing-screenshots
+          path: screenshots/
