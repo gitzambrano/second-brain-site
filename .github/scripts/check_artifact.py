@@ -223,9 +223,16 @@ SEAL_TEXT_SUFFIXES = {".html", ".json", ".js", ".css", ".txt", ".md", ".xml", ".
 def artifact_digest(root: Path) -> str:
     """Impressão do conteúdo publicado, menos o manifesto que carrega o selo."""
     h = hashlib.sha256()
+    # Ordenar pelo caminho relativo em POSIX, não pelo `Path`. `WindowsPath`
+    # compara case-folded e `PosixPath` compara byte a byte: com as fontes web
+    # em CamelCase no artefato, selar no Windows e conferir aqui, no runner
+    # Linux, alimentava o hash em ordens diferentes e o deploy morria dizendo
+    # que o conteúdo mudou depois do selo. A chave é a mesma string que já
+    # entra no hash.
     arquivos = sorted(
-        p for p in root.rglob("*")
-        if p.is_file() and not _fora_do_artefato(p, root)
+        (p for p in root.rglob("*")
+         if p.is_file() and not _fora_do_artefato(p, root)),
+        key=lambda p: p.relative_to(root).as_posix(),
     )
     for path in arquivos:
         dados = path.read_bytes()
