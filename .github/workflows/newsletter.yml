@@ -1,0 +1,63 @@
+name: Newsletter
+
+on:
+  workflow_run:
+    workflows: ["Deploy Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 2
+
+      - name: Detectar manifesto anterior
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git show HEAD^:newsletter-manifest.json > /tmp/newsletter-previous.json 2>/dev/null; then
+            echo "manifesto anterior encontrado"
+          else
+            printf '{"version":1,"entries":[]}\n' > /tmp/newsletter-previous.json
+          fi
+
+      - name: Verificar manifesto atual
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f newsletter-manifest.json || {
+            echo "newsletter: manifesto ausente; nada a enviar"
+            exit 0
+          }
+
+      - name: Preparar modo
+        id: mode
+        shell: bash
+        env:
+          ENABLED: ${{ vars.KIT_NEWSLETTER_ENABLED }}
+        run: |
+          if [ "${ENABLED:-}" = "true" ]; then
+            echo "args=" >> "$GITHUB_OUTPUT"
+          else
+            echo "args=--dry-run" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Enviar newsletter
+        env:
+          SITE_BASE_URL: ${{ vars.SITE_BASE_URL }}
+          KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
+          KIT_EMAIL_TEMPLATE_ID: ${{ vars.KIT_EMAIL_TEMPLATE_ID }}
+        run: >-
+          python .github/scripts/send_kit_newsletter.py
+          newsletter-manifest.json
+          --previous-manifest /tmp/newsletter-previous.json
+          ${{ steps.mode.outputs.args }}
