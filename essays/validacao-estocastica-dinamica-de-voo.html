@@ -308,6 +308,11 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
    colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
 .box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
 .card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+/* Bloco de codigo dentro de caixa: mesmo recuo dos paragrafos e respiro em
+   cima e embaixo. Sem isto o <pre> ia de borda a borda da caixa e encostava
+   nos paragrafos vizinhos — a regra de recuo existia para heading e lista,
+   nunca para codigo. */
+.box > pre,.card > pre,.quote > pre{margin:1.1rem 1.3rem;}
 
 /* Ancora discreta nos titulos */
 .hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
@@ -551,9 +556,14 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  font-size:.8em;line-height:1.55;
+  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
+     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
+  font-size:.656em;line-height:1.55;
 }
-pre code{background:none;padding:0;}
+/* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
+   multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
+   abaixo do que o `pre` anuncia. O tamanho do bloco passa a ser só o do `pre`. */
+pre code{background:none;padding:0;font-size:inherit;}
 
 /* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
    Display mantem o tamanho e rola internamente; inline escala para caber
@@ -582,6 +592,13 @@ mjx-container:not([display="true"]){
   vertical-align:-.25em;
 }
 mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+/* Dentro de celula, `max-width:100%` era catastrofico: a tabela ja esta
+   limitada a 100% da coluna, o layout automatico espremia a celula, e a
+   formula encolhia junto — uma equacao de 35ex saia com 4px de altura no
+   celular. A tabela tem rolagem horizontal propria (regra de `table`), entao
+   aqui a formula fica no tamanho natural e quem rola e a tabela. */
+:is(td,th) mjx-container:not([display="true"]) svg{max-width:none;}
+:is(td,th) mjx-container:not([display="true"]){overflow:visible;}
 /* MathML assistivo: existe so para leitor de tela e ja vem `clip`ado pelo
    MathJax — mas `clip` esconde sem encolher. A caixa continuava com a largura
    real da formula (376px numa coluna de 356) e, absoluta dentro do container,
@@ -653,11 +670,30 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   .masthead-inner{padding:1.9rem 1rem 1.6rem;}
   .content{padding:2rem 1.05rem 4rem;}
   .content h2{margin-top:2.7rem;}
-  pre{font-size:.72em;}
+  /* Monoespaçada encolhe mais que a serifada no mesmo corpo: a `.72em` de
+     antes dava 11,9px no celular. Bloco e trecho inline sobem juntos. */
+  pre{font-size:.88em;}
+  code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
+  /* Pisos de legibilidade no celular. Na tela grande estas vozes menores
+     funcionam como hierarquia; a 375px viravam 10-12px, abaixo do que se le
+     confortavelmente. Só o piso sobe — a hierarquia continua. */
+  th{font-size:.82rem;}
+  .quote p{font-size:1rem;}
+  .box-verdict p{font-size:.96rem;}
+  /* Vozes de rótulo — versalete espacejado em monoespaçada. A 375px elas
+     caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
+     leitura nesse corpo. */
+  .box-badge{font-size:.78rem;}
+  .verdict-tag{font-size:.76rem;}
+  .label-solo{font-size:.74rem;}
+  .card-meta{font-size:.78rem;}
+  .pq-cite{font-size:.9rem;}
+  .pull-quote.epigraph p:last-child{font-size:.78rem;}
 }
 
 /* ------------------------------------------------------------------ */
@@ -1435,30 +1471,28 @@ apenas transfere o conservadorismo exigido pela certificação para outro
 lugar, e é precisamente lá que os critérios de equivalência da Seção 4 o
 recuperam, substituindo a opinião a priori sobre o modelo pela prova
 ativa de equivalência.</p>
+</div>
 <h3 id="exemplos-numéricos-concretos">Exemplos Numéricos Concretos</h3>
 <p>Considere os quatro cenários abaixo, todos referentes à mesma
 comparação (simulação vs. voo) mas com resultados diferentes:</p>
-<p><strong>Cenário A — p = 0,02</strong><br />
-<strong>Rejeita H₀</strong> com α = 0,05. Em um mundo de modelo
-perfeito, esta diferença ocorreria por acaso em apenas 2% das
-repetições. Evidência forte de divergência sistemática. O engenheiro
-deve investigar a física do modelo.</p>
-<p><strong>Cenário B — p = 0,06</strong><br />
-<strong>Não rejeita H₀</strong> com α = 0,05, mas muito próximo. A
-diferença poderia ocorrer em 6% das repetições. Tecnicamente não
-significativo, mas <em>borderline</em>: prudência aconselha investigação
-adicional antes da certificação.</p>
-<p><strong>Cenário C — p = 0,40</strong><br />
-<strong>Não rejeita H₀</strong>. A diferença observada ocorreria em 40%
-das repetições por pura sorte. Boa concordância estatística. O modelo
-<em>não foi refutado</em> pelos dados disponíveis — embora isso não
-prove que seja perfeito.</p>
-<p><strong>Cenário D — p = 0,80</strong><br />
-<strong>Excelente concordância.</strong> A diferença entre simulação e
-voo é completamente consistente com variabilidade aleatória normal. Em
-80% das repetições hipotéticas, obteríamos uma discrepância tão grande
-ou maior. O modelo passa este teste com folga.</p>
-</div>
+<p><strong>Cenário A — p = 0,02</strong> <strong>Rejeita H₀</strong> com
+α = 0,05. Em um mundo de modelo perfeito, esta diferença ocorreria por
+acaso em apenas 2% das repetições. Evidência forte de divergência
+sistemática. O engenheiro deve investigar a física do modelo.</p>
+<p><strong>Cenário B — p = 0,06</strong> <strong>Não rejeita H₀</strong>
+com α = 0,05, mas muito próximo. A diferença poderia ocorrer em 6% das
+repetições. Tecnicamente não significativo, mas <em>borderline</em>:
+prudência aconselha investigação adicional antes da certificação.</p>
+<p><strong>Cenário C — p = 0,40</strong> <strong>Não rejeita
+H₀</strong>. A diferença observada ocorreria em 40% das repetições por
+pura sorte. Boa concordância estatística. O modelo <em>não foi
+refutado</em> pelos dados disponíveis — embora isso não prove que seja
+perfeito.</p>
+<p><strong>Cenário D — p = 0,80</strong> <strong>Excelente
+concordância.</strong> A diferença entre simulação e voo é completamente
+consistente com variabilidade aleatória normal. Em 80% das repetições
+hipotéticas, obteríamos uma discrepância tão grande ou maior. O modelo
+passa este teste com folga.</p>
 <hr />
 <h2 id="seção-4--erros-tipo-i-e-tipo-ii-alpha-e-p-value">Seção 4 — Erros
 Tipo I e Tipo II, Alpha e p-value</h2>
@@ -1582,6 +1616,7 @@ dizendo que usamos um procedimento de decisão que, repetido no longo
 prazo em mundos onde H₀ é verdadeira, erraria em α × 100% das vezes. A
 probabilidade que α quantifica é sobre o <em>procedimento ao longo do
 tempo</em>, não sobre esta hipótese neste experimento.</p>
+</div>
 <h4 id="exemplo-concreto-por-que-isso-importa">Exemplo Concreto: Por que
 Isso Importa</h4>
 <p>Um engenheiro entrega o relatório: “o teste K-S produziu p = 0,03,
@@ -1619,12 +1654,13 @@ a amostra precisa ser grande o suficiente para comprovar (com confiança
 de ensaio em voo.</p>
 <p><strong>Estrutura de Hipóteses do TOST (Schuirmann,
 1987):</strong></p>
-<pre><code>H₀₁: O erro do modelo é ≤ −Δ  (Subestimação inaceitável)  
-H₀₂: O erro do modelo é ≥ +Δ  (Superestimação inaceitável)  
-H₁ (Equivalência): O erro está contido no intervalo aberto (−Δ, +Δ)  
-Nota: os sinais de ≤ e ≥ são essenciais — H₀ deve abrigar o sinal de  
-igualdade (ver §2.2) para que a distribuição de referência seja ancorada  
-num valor exato.  </code></pre>
+<pre><code>H₀₁: O erro do modelo é ≤ −Δ  (Subestimação inaceitável)
+H₀₂: O erro do modelo é ≥ +Δ  (Superestimação inaceitável)
+H₁ (Equivalência): O erro está contido no intervalo aberto (−Δ, +Δ)
+
+Nota: os sinais de ≤ e ≥ são essenciais — H₀ deve abrigar o sinal de
+igualdade (ver §2.2) para que a distribuição de referência seja ancorada
+num valor exato.</code></pre>
 <p>Antes do mecanismo, a calibração. O valor de Δ é decisão de
 engenharia, nunca estatística, e o exemplo de 0,5 ft/s no <em>sink
 rate</em> de toque ajuda a fixar a intuição. Um trem de pouso
@@ -1651,22 +1687,25 @@ limite inferior, o outro o afasta do superior, e a equivalência só é
 declarada quando ambos rejeitam suas nulas simultaneamente. Com θ
 denotando a diferença média simulador menos voo e SE o erro padrão dessa
 estimativa:</p>
-<pre><code>H₀: |θ| ≥ Δ        (erro fora da zona aceitável)  
-H₁: |θ| &lt; Δ        (equivalência)  
-Decomposição (dois testes unilaterais, nível α):  
-  H₀₁: θ ≤ −Δ   vs. H₁₁: θ &gt; −Δ     t₁ = (θ_obs + Δ) / SE  
-  H₀₂: θ ≥ +Δ   vs. H₁₂: θ &lt; +Δ     t₂ = (Δ − θ_obs) / SE  
-Equivalência declarada somente se t₁ e t₂ superarem  
-simultaneamente o valor crítico t de Student.  </code></pre>
+<pre><code>H₀: |θ| ≥ Δ        (erro fora da zona aceitável)
+H₁: |θ| &lt; Δ        (equivalência)
+
+Decomposição (dois testes unilaterais, nível α):
+  H₀₁: θ ≤ −Δ   vs. H₁₁: θ &gt; −Δ     t₁ = (θ_obs + Δ) / SE
+  H₀₂: θ ≥ +Δ   vs. H₁₂: θ &lt; +Δ     t₂ = (Δ − θ_obs) / SE
+
+Equivalência declarada somente se t₁ e t₂ superarem
+simultaneamente o valor crítico t de Student.</code></pre>
 <p>Um exemplo numérico completo mostra a máquina funcionando. Sejam Δ =
 0,5 ft/s no <em>sink rate</em>, diferença observada θ_obs = 0,12 ft/s,
 desvio-padrão amostral s = 1,5 ft/s e n = 100 voos. O erro padrão vale
 SE ≈ s/√n = 1,5/10 = 0,15 ft/s, e as estatísticas saem:</p>
-<pre><code>t₁ = (0,12 + 0,50) / 0,15 ≈ 4,1  
-t₂ = (0,50 − 0,12) / 0,15 ≈ 2,5  
-Os dois p-values unilaterais ficam abaixo de 0,025, portanto  
-rejeitamos H₀₁ e H₀₂: o viés do simulador está confinado em  
-(−0,5, +0,5) ft/s com confiança de 95%.  </code></pre>
+<pre><code>t₁ = (0,12 + 0,50) / 0,15 ≈ 4,1
+t₂ = (0,50 − 0,12) / 0,15 ≈ 2,5
+
+Os dois p-values unilaterais ficam abaixo de 0,025, portanto
+rejeitamos H₀₁ e H₀₂: o viés do simulador está confinado em
+(−0,5, +0,5) ft/s com confiança de 95%.</code></pre>
 <p>Existe uma identidade que comprime o procedimento em uma única
 checagem: o TOST com nível α equivale a exigir que o intervalo de
 confiança de (1 − 2α) da diferença esteja inteiramente contido em (−Δ,
@@ -1674,7 +1713,6 @@ confiança de (1 − 2α) da diferença esteja inteiramente contido em (−Δ,
 equivalência. No exemplo, o IC 90% vale 0,12 ± 1,66 × 0,15 ≈ (−0,13,
 +0,37) ft/s, contido com folga em (−0,5, +0,5), e a conclusão coincide
 com a dos dois testes, como a teoria garante.</p>
-</div>
 <div class="quote">
 <p><strong>Validação Epistemológica: O TOST Fere Karl
 Popper?</strong></p>
