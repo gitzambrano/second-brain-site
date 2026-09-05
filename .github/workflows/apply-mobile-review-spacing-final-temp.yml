@@ -1,0 +1,53 @@
+name: Apply final mobile review spacing to site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-mobile-review-spacing-final-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Apply screenshot-approved CSS and refresh fingerprint
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from hashlib import sha256
+          from pathlib import Path
+          import re
+          css=Path('assets/site.css')
+          s=css.read_text(encoding='utf-8')
+          old='  .card-meta .dot + span { font-size: 10px; letter-spacing: -0.025em; }\n'
+          new='  .card-meta .dot + span { font-size: 9.25px; letter-spacing: -0.045em; }\n'
+          if old not in s: raise SystemExit('expected current rule not found')
+          css.write_text(s.replace(old,new,1),encoding='utf-8')
+          digest=sha256(css.read_bytes()).hexdigest()[:8]
+          index=Path('index.html')
+          html=index.read_text(encoding='utf-8')
+          html,n=re.subn(r'assets/site\.css\?v=[0-9a-f]{8}',f'assets/site.css?v={digest}',html,count=1)
+          if n != 1: raise SystemExit('site.css fingerprint reference not found')
+          index.write_text(html,encoding='utf-8')
+          print('site.css fingerprint:',digest)
+          PY
+          rm -f .github/workflows/apply-mobile-review-spacing-final-temp.yml
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name 'Second Brain Publisher'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git diff --cached -- assets/site.css index.html
+          git commit -m 'fix: clear mobile review badge from summary'
+          git push origin HEAD:main
