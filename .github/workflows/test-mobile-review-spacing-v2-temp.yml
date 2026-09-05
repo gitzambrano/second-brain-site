@@ -1,0 +1,119 @@
+name: Test mobile review spacing v2
+
+on:
+  push:
+    branches: [test/mobile-review-badge-spacing-v2]
+    paths:
+      - '.github/workflows/test-mobile-review-spacing-v2-temp.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Playwright client
+        run: python -m pip install playwright
+
+      - name: Prepare candidate copies
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/base /tmp/a /tmp/b /tmp/c screenshots
+          for d in base a b c; do rsync -a --exclude='.git/' --exclude='.github/' ./ /tmp/$d/; done
+          python - <<'PY'
+          from pathlib import Path
+          old = '  .card-meta .dot + span { font-size: 10px; letter-spacing: -0.025em; }\n'
+          variants = {
+              'a': '  .card-meta .dot + span { font-size: 9.25px; letter-spacing: -0.045em; }\n',
+              'b': '  .card-meta .dot + span { font-size: 9px; letter-spacing: -0.045em; }\n',
+              'c': '  .card-meta .dot + span { font-size: 9px; letter-spacing: -0.05em; }\n',
+          }
+          for name, new in variants.items():
+              p = Path('/tmp') / name / 'assets/site.css'
+              s = p.read_text(encoding='utf-8')
+              if old not in s:
+                  raise SystemExit(f'current mobile reading-time rule not found in {name}')
+              p.write_text(s.replace(old, new, 1), encoding='utf-8')
+          PY
+
+      - name: Serve variants
+        run: |
+          set -euo pipefail
+          python -m http.server 8100 --directory /tmp/base >/tmp/base.log 2>&1 &
+          python -m http.server 8101 --directory /tmp/a >/tmp/a.log 2>&1 &
+          python -m http.server 8102 --directory /tmp/b >/tmp/b.log 2>&1 &
+          python -m http.server 8103 --directory /tmp/c >/tmp/c.log 2>&1 &
+          sleep 2
+
+      - name: Measure real cards and screenshot least aggressive passing variant
+        run: |
+          cat > /tmp/check.py <<'PY'
+          import asyncio, json, shutil
+          from pathlib import Path
+          from playwright.async_api import async_playwright
+
+          PORTS = {'base':8100, 'a':8101, 'b':8102, 'c':8103}
+
+          async def inspect(browser, name, width, take=False):
+              context = await browser.new_context(viewport={'width':width,'height':900}, device_scale_factor=1)
+              page = await context.new_page()
+              await page.add_init_script("localStorage.setItem('sb-view-v2', JSON.stringify({layout:'list',density:'compact'}))")
+              await page.goto(f'http://127.0.0.1:{PORTS[name]}/index.html', wait_until='networkidle')
+              await page.evaluate('document.fonts.ready')
+              rows = await page.eval_on_selector_all('.essay-card[data-status="revisao"]', '''cards => cards.map((card, i) => {
+                const badge=card.querySelector('.badge-review');
+                const expand=card.querySelector('.card-expand');
+                const reading=card.querySelector('.card-meta .dot + span');
+                if(!badge||!expand||!reading) return null;
+                const b=badge.getBoundingClientRect(), e=expand.getBoundingClientRect(), r=reading.getBoundingClientRect();
+                return {index:i,title:card.dataset.title,gap:e.left-b.right,readingWidth:r.width,
+                        overlap:Math.max(0,Math.min(b.right,e.right)-Math.max(b.left,e.left))};
+              }).filter(Boolean)''')
+              if not rows: raise RuntimeError('no review cards found')
+              worst=min(rows,key=lambda x:x['gap'])
+              if take:
+                  card=page.locator('.essay-card[data-status="revisao"]').nth(worst['index'])
+                  await card.scroll_into_view_if_needed(); await page.wait_for_timeout(150)
+                  await card.screenshot(path=f'screenshots/{name}-{width}.png')
+              await context.close()
+              return worst
+
+          async def main():
+              out={}
+              async with async_playwright() as p:
+                  browser=await p.chromium.launch(executable_path='/usr/bin/google-chrome', args=['--no-sandbox'])
+                  for name in PORTS:
+                      for width in (360,390):
+                          out[f'{name}-{width}']=await inspect(browser,name,width)
+                  chosen=None
+                  for name in ('a','b','c'):
+                      if out[f'{name}-360']['gap'] >= 4 and out[f'{name}-390']['gap'] >= 4:
+                          chosen=name; break
+                  if chosen is None:
+                      raise SystemExit('no candidate clears 4px at both widths')
+                  out['chosen']=chosen
+                  await inspect(browser,'base',360,True)
+                  await inspect(browser,chosen,360,True)
+                  await inspect(browser,'base',390,True)
+                  await inspect(browser,chosen,390,True)
+                  await browser.close()
+              Path('screenshots/metrics.json').write_text(json.dumps(out,indent=2,ensure_ascii=False),encoding='utf-8')
+              Path('screenshots/chosen.txt').write_text(str(out['chosen']),encoding='utf-8')
+              print(json.dumps(out,indent=2,ensure_ascii=False))
+          asyncio.run(main())
+          PY
+          python /tmp/check.py
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-review-spacing-v2
+          path: screenshots/
