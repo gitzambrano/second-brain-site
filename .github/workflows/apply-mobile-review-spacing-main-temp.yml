@@ -1,0 +1,59 @@
+name: Apply mobile review spacing to site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-mobile-review-spacing-main-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Apply tested mobile-only CSS and refresh fingerprint
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from hashlib import sha256
+          from pathlib import Path
+          import re
+
+          css = Path('assets/site.css')
+          text = css.read_text(encoding='utf-8')
+          needle = '  .card-meta { font-size: 10.5px; gap: 6px; }\n'
+          addition = '  .card-meta .dot + span { font-size: 10px; letter-spacing: -0.025em; }\n'
+          if addition not in text:
+              if needle not in text:
+                  raise SystemExit('mobile card-meta rule not found')
+              text = text.replace(needle, needle + addition, 1)
+              css.write_text(text, encoding='utf-8')
+
+          digest = sha256(css.read_bytes()).hexdigest()[:8]
+          index = Path('index.html')
+          html = index.read_text(encoding='utf-8')
+          html, n = re.subn(r'assets/site\.css\?v=[0-9a-f]{8}', f'assets/site.css?v={digest}', html, count=1)
+          if n != 1:
+              raise SystemExit('site.css fingerprint reference not found in index.html')
+          index.write_text(html, encoding='utf-8')
+          print('site.css fingerprint:', digest)
+          PY
+          rm -f .github/workflows/apply-mobile-review-spacing-main-temp.yml
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name 'Second Brain Publisher'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git diff --cached -- assets/site.css index.html
+          git commit -m 'fix: improve mobile review badge spacing'
+          git push origin HEAD:main
