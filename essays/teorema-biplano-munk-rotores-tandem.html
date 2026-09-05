@@ -263,6 +263,12 @@ h4{
   margin:1.8rem 0 .55rem;
   color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
 }
+h5{
+  font-family:var(--font-display);
+  font-size:1rem;font-weight:700;
+  margin:1.55rem 0 .5rem;
+  color:color-mix(in srgb,var(--text-bright) 58%,var(--text-dim));
+}
 
 p{
   margin:0 0 1.25rem;word-break:break-word;
@@ -591,7 +597,8 @@ mjx-container:not([display="true"]){
   max-width:100%;
   overflow-x:auto;
   overflow-y:hidden;
-  vertical-align:-.25em;
+  vertical-align:.001em;
+  font-size:90%;
 }
 mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
 /* Dentro de celula, `max-width:100%` era catastrofico: a tabela ja esta
@@ -628,9 +635,6 @@ figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:ita
    imagem e sua legenda ficam centradas, mas somente nesse padrão estrito. */
 .content > p:has(> picture:only-child){text-align:center;margin-bottom:.55rem;}
 .content > p:has(> picture:only-child) img{display:block;margin-inline:auto;}
-.content > p:has(> picture:only-child) + p:has(> em:first-child){
-  text-align:center;font-size:.84em;color:var(--text-dim);margin-bottom:1.7rem;
-}
 /* Uma imagem solta num paragrafo e um bloco, nao uma palavra: como inline-block
    ela ainda somava o espaco em branco vizinho e estourava a coluna por alguns
    pixels. */
@@ -647,9 +651,16 @@ img{max-width:100%;height:auto;}
 .content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
 .content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
   border-radius:6px;border:1px solid var(--border);}
-/* Legenda: parágrafo em itálico logo após uma figura. */
-.content p:has(> img) + p > em{display:block;text-align:center;font-size:.84em;
-  color:var(--text-dim);line-height:1.5;margin-bottom:2rem;}
+/* Legenda identificada semanticamente pelo JS do template. Um <em> no meio
+   da prosa pós-imagem nunca muda de display: isso evita quebrar frases como
+   "o modelo subestima o <em>sink rate</em> principalmente na cauda". */
+.content p.sb-image-caption{
+  text-align:center;font-size:.84em;color:var(--text-dim);
+  line-height:1.5;margin-bottom:2rem;
+}
+.content p.sb-image-caption > em{
+  display:inline;font-size:inherit;color:inherit;line-height:inherit;margin:0;
+}
 
 /* Notas de rodape */
 .footnotes hr{display:none;}
@@ -672,6 +683,9 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   .masthead-inner{padding:1.9rem 1rem 1.6rem;}
   .content{padding:2rem 1.05rem 4rem;}
   .content h2{margin-top:2.7rem;}
+  /* Equações em bloco ficam 10% menores só no celular. Fórmulas inline
+     preservam o corpo normal para não mudar a métrica da linha de texto. */
+  mjx-container[display="true"]{font-size:90%;}
   /* Monoespaçada encolhe mais que a serifada no mesmo corpo: a `.72em` de
      antes dava 11,9px no celular. Bloco e trecho inline sobem juntos. */
   pre{font-size:.88em;}
@@ -1305,6 +1319,23 @@ href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
   if(toTop){toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});}
   window.addEventListener("scroll",onScroll,{passive:true});
   onScroll();
+  /* Legendas de figura: só o parágrafo inteiramente em itálico ou um prefixo
+   explícito Fig./Figura/Tira é legenda. Itálico incidental em prosa continua
+   inline, inclusive quando o parágrafo vem imediatamente depois da imagem. */
+function isImageCaption(paragraph){
+  var nodes=[].slice.call(paragraph.childNodes).filter(function(node){
+    return !(node.nodeType===3&&!node.textContent.trim());
+  });
+  var pureEmphasis=nodes.length===1&&nodes[0].nodeType===1&&nodes[0].tagName==='EM';
+  var explicitCaption=/^(fig(?:ura)?\.?\s*\d+\b|tira\b)/i.test(paragraph.textContent.trim());
+  return pureEmphasis||explicitCaption;
+}
+document.querySelectorAll('.content p').forEach(function(paragraph){
+  var previous=paragraph.previousElementSibling;
+  if(!previous||previous.tagName!=='P')return;
+  if(!previous.querySelector(':scope > img, :scope > picture'))return;
+  if(isImageCaption(paragraph))paragraph.classList.add('sb-image-caption');
+});
   /* Identifica e classifica divisores de capitulo: o losango so aparece onde ha capitulo real */
   document.querySelectorAll(".content hr").forEach(function(hr){
     var next=hr.nextElementSibling;
@@ -1473,6 +1504,6 @@ href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
   <nav id="sbTocList"></nav>
 </aside>
 <script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=00d79791"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
 </body>
 </html>
