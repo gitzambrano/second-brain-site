@@ -7,7 +7,7 @@
 <meta property="og:title" content="Xadrez Computacional — do Brute-Force às Redes Neurais">
 <meta property="og:description" content="O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).">
 <meta property="og:type" content="article">
-<script defer="" src="../assets/mathjax/tex-svg.js"
+<script src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
 <style>
 /* ------------------------------------------------------------------ */
@@ -746,9 +746,8 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 @media print{
   .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
 }
-html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -1191,7 +1190,7 @@ enxadrista humano da história.</p>
 <p>Cada capítulo é escrito em duas camadas. A primeira costuma abrir o
 capítulo sob o título <strong>A Intuição</strong>, e explica a ideia com
 um experimento mental ou uma analogia concreta, sem pressupor que você
-programe ou jogue xadrez; nos subcapítulos menores, ela aparece
+programe ou jogue xadrez. Nos subcapítulos menores, ela aparece
 condensada na abertura. A segunda traz a implementação real, com as
 estruturas de dados, as fórmulas e os parâmetros exatos do Zchezz.</p>
 <p>Quem quer entender <em>por que</em> os engines funcionam pode ler
@@ -1240,111 +1239,111 @@ não necessariamente joga xadrez. Alguns termos recorrentes:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Termo</th>
 <th>Significado para o engine</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Posição</strong></td>
 <td>O estado completo do tabuleiro — equivalente ao <em>state</em> de um
 programa. 64 casas, até 32 peças, mais metadados (de quem é a vez,
 direitos de roque, etc.)</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Movimento (move)</strong></td>
 <td>Uma transição de estado: peça X sai da casa A e vai para casa B,
 possivelmente capturando uma peça adversária</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Peças e valores</strong></td>
 <td>Peão (1pt), Cavalo (3pt), Bispo (3pt), Torre (5pt), Dama (9pt), Rei
 (∞ — perder o rei é perder o jogo). Estes valores são a moeda da
 avaliação</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Captura</strong></td>
 <td>Mover uma peça para uma casa ocupada por peça adversária,
 removendo-a do jogo</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Xeque</strong></td>
 <td>Ameaça direta ao rei adversário — ele <em>deve</em> ser salvo no
 próximo lance</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Mate</strong></td>
 <td>Xeque do qual o rei não pode escapar — fim do jogo</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong><a
 href="https://en.wikipedia.org/wiki/En_passant">En-passant</a></strong></td>
 <td>Regra especial: um peão que avança 2 casas pode ser capturado “de
 passagem” pelo peão adversário, como se tivesse avançado apenas 1</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong><a href="https://en.wikipedia.org/wiki/Castling">Roque</a>
 (castling)</strong></td>
 <td>Movimento duplo especial: rei e torre trocam de posição
 simultaneamente, usado para proteger o rei</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Promoção</strong></td>
 <td>Quando um peão alcança a última fila, é promovido a qualquer peça
 (quase sempre dama)</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Centipawn (cp)</strong></td>
 <td>Unidade de avaliação: 100cp = 1 peão de vantagem. +300cp ≈ um cavalo
 a mais</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong><a
 href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo</a></strong></td>
 <td>Sistema de rating: humanos top ~2850, Stockfish ~3600, diferença de
 200 Elo ≈ 75% de vitórias</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Peão passado</strong></td>
 <td>Peão sem nenhum peão adversário bloqueando seu caminho de promoção —
 extremamente valioso</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Nó (node)</strong></td>
 <td>Cada posição individual visitada pela busca, um único ponto na
 árvore de jogo. Uma busca que “examinou 5 milhões de nós” avaliou 5
 milhões de posições diferentes</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Folha (leaf)</strong></td>
 <td>Um nó onde a busca para de se ramificar e devolve um valor, seja
 porque a profundidade combinada terminou, seja porque a posição está
 calma o bastante (ver Busca de Quiescência)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Ply</strong></td>
 <td>Um único lance de um único jogador (não um “lance completo” de
 xadrez, que envolve os dois). “Profundidade 20” quer dizer 20 plies, ou
 seja, 10 lances de cada lado</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Profundidade (depth)</strong></td>
 <td>Quantos plies à frente o engine calcula nesta iteração</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Nodes/s (nps)</strong></td>
 <td>Nós por segundo: quantas posições o engine consegue visitar e
 avaliar a cada segundo. É o “quantos passos por minuto” da busca — um
 engine moderno em hardware comum processa dezenas a centenas de milhões
 de nós por segundo</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>PV (Principal Variation)</strong></td>
 <td>A sequência de lances que o engine considera ótima — a “melhor
 linha”</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Nó PV / nó não-PV</strong></td>
 <td>Um nó PV é um nó que ainda faz parte da “melhor linha” sendo
 investigada, com uma janela alfa-beta larga porque sua pontuação exata
@@ -1352,13 +1351,13 @@ importa; a esmagadora maioria dos nós é não-PV, buscada com janela
 estreita só para confirmar “isto é pior que o que já tenho”, sem se
 importar com o valor exato</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Multi-PV</strong></td>
 <td>Em vez de reportar só a melhor linha, o engine reporta as N melhores
 linhas simultaneamente, cada uma com seu próprio score, para análise
 humana comparativa</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Avaliação estática (static eval)</strong></td>
 <td>O placar que a rede de avaliação (capítulos XI a XIII) devolve
 olhando <em>só</em> a posição atual, sem buscar nenhum lance à frente —
@@ -1367,35 +1366,35 @@ a “opinião imediata” da rede. No código, essa é a variável
 número, barato de calcular, contra o que a busca, cara de calcular,
 provavelmente encontraria</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Quiet move</strong></td>
 <td>Um lance que não captura peça nem dá xeque — o oposto de uma
 captura. A maioria dos lances numa posição típica é quiet, e por isso
 boa parte das técnicas de poda (capítulo VII) mira especificamente
 neles</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Cutoff (beta cutoff)</strong></td>
 <td>O momento em que a busca decide parar de examinar os lances
 restantes de um nó porque já encontrou algo bom demais para o adversário
 permitir — é o evento que a poda alfa-beta do capítulo IV existe para
 provocar o quanto antes</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>WDL (Win/Draw/Loss)</strong></td>
 <td>Um resultado ou uma probabilidade expressos como três números,
 vitória/empate/derrota, em vez de um único placar em centipawns. Usado
 tanto pelas tablebases (resultado exato, capítulo V) quanto como alvo de
 treinamento da rede NNUE (probabilidade, capítulo XIV)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>MVV-LVA</strong></td>
 <td>“Most Valuable Victim, Least Valuable Attacker” — heurística de
 ordenação de capturas: capturar uma dama com um peão é examinado antes
 de capturar um peão com uma dama, porque tende a ser a troca mais
 favorável</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong><a
 href="https://en.wikipedia.org/wiki/Universal_Chess_Interface">UCI</a></strong></td>
 <td>Protocolo de comunicação texto entre engine e interface (como uma
@@ -1609,7 +1608,7 @@ jogo estimada em <span class="math inline">\(10^{120}\)</span> nós, o
 chamado <strong><a
 href="https://en.wikipedia.org/wiki/Shannon_number">número de
 Shannon</a></strong>. Cada um desses nós é uma posição específica
-visitada pela busca; quando a busca para de se ramificar num nó e
+visitada pela busca. Quando a busca para de se ramificar num nó e
 devolve um valor, esse nó é chamado de <strong>folha</strong>. Para dar
 escala: o número de átomos no universo observável é cerca de <span
 class="math inline">\(10^{80}\)</span>. A árvore de jogo do xadrez é
@@ -1799,7 +1798,7 @@ precisa ser olhada até o fim para a conclusão se manter. Comece
 avaliando a jogada de pegar o 3. Sobra a fila <span
 class="math inline">\(4 \; 10 \; 2\)</span> para o adversário, e as duas
 respostas dele levam ao mesmo lugar: se ele pega o 4, você pega o 10 e
-ele fica com o 2; se ele pega o 2, você pega o 10 e ele fica com o 4.
+ele fica com o 2. Se ele pega o 2, você pega o 10 e ele fica com o 4.
 Nos dois casos você termina com 13. Essa opção, portanto,
 <strong>garante 13</strong>, e esse número passa a ser o piso contra o
 qual tudo o mais será comparado.</p>
@@ -1813,14 +1812,13 @@ escolher essa resposta. E 7 é pior que os 13 que você já tem garantidos.
 A outra resposta dele, pegar o 3, nunca chegará a ser examinada: seja
 qual for o resultado dela, não muda que ele tem a opção de 7 à
 disposição, e não muda que 13 continua sendo melhor.</p>
-<p>É essa a poda. Não se trata de adivinhar que um ramo é ruim, e sim de
-<strong>provar que ele já não pode competir</strong>, e parar exatamente
-no instante em que a prova fica pronta. Em quatro moedas o ganho é uma
-única jogada não examinada. No xadrez, onde cada nível da árvore
-multiplica por 35 o número de ramos, abandonar um ramo no segundo nível
-elimina não um caminho, mas todos os milhões que nasceriam dele. É essa
-multiplicação que torna a poda, e não a força bruta, o que separa um
-engine competitivo de um inviável.</p>
+<p>É essa a poda. Ela não adivinha que um ramo é ruim; <strong>prova que
+ele já não pode competir</strong> e para quando essa prova fica pronta.
+Em quatro moedas, o ganho é uma única jogada não examinada. No xadrez,
+onde cada nível da árvore multiplica por 35 o número de ramos, abandonar
+um ramo no segundo nível elimina não um caminho, mas todos os milhões
+que nasceriam dele. Essa multiplicação explica por que a poda, e não a
+força bruta, separa um engine competitivo de um inviável.</p>
 <h3 id="nó-folha-e-ply-vocabulário-da-árvore">Nó, Folha e Ply:
 Vocabulário da Árvore</h3>
 <p>Vale fixar três palavras antes de seguir, porque o resto do ensaio
@@ -1828,16 +1826,16 @@ depende delas. Cada posição examinada pela busca, cada “estado” único da
 fila de moedas ou do tabuleiro, é um <strong>nó</strong>. A posição
 inicial é a raiz; cada jogada possível a partir dela cria um novo nó
 filho. Um <strong>ply</strong> é um único lance de um único jogador: na
-fila de moedas, você pegar o 3 é um ply, o adversário responder pegando
-o 4 é outro ply. Dois plies formam o que no xadrez comum se chama “um
-lance completo” (um lance das brancas e a resposta das pretas). Quando a
-busca decide não se ramificar mais a partir de um nó, seja porque a
-profundidade combinada terminou, seja por outro critério de parada (o
-capítulo VIII trata do caso mais importante), esse nó é chamado de
-<strong>folha</strong>, e é ali que a avaliação heurística entra em
-cena. “Buscar até profundidade 12” significa, portanto, seguir a árvore
-por 12 plies a partir da raiz antes de tratar os nós alcançados como
-folhas.</p>
+fila de moedas, você pegar o 3 é um ply, e o adversário responder
+pegando o 4 é outro. Dois plies formam o que no xadrez comum se chama
+“um lance completo”, um lance das brancas e a resposta das pretas.
+Quando a busca decide não se ramificar mais a partir de um nó, seja
+porque a profundidade combinada terminou, seja por outro critério de
+parada, esse nó é chamado de <strong>folha</strong>. O capítulo VIII
+trata do caso mais importante. É na folha que a avaliação heurística
+entra em cena. “Buscar até profundidade 12” significa, portanto, seguir
+a árvore por 12 plies a partir da raiz antes de tratar os nós alcançados
+como folhas.</p>
 <h3 id="o-algoritmo-minimax">O Algoritmo Minimax</h3>
 <p>A formalização de <a
 href="https://en.wikipedia.org/wiki/Minimax_theorem">John von
@@ -1845,9 +1843,9 @@ Neumann</a> (1928) [12] para <a
 href="https://en.wikipedia.org/wiki/Zero-sum_game">jogos de soma
 zero</a> de dois jogadores com <a
 href="https://en.wikipedia.org/wiki/Perfect_information">informação
-perfeita</a> é elegantemente direta: o jogador que maximiza escolhe o
-movimento com maior valor; o adversário escolhe o de menor valor. A
-árvore é avaliada recursivamente desde as folhas até a raiz.</p>
+perfeita</a> é direta: o jogador que maximiza escolhe o movimento com
+maior valor, enquanto o adversário escolhe o de menor valor. A árvore é
+avaliada recursivamente desde as folhas até a raiz.</p>
 <p>O custo computacional é <span class="math inline">\(O(b^d)\)</span>,
 onde <span class="math inline">\(b \approx 35\)</span> é o fator de
 ramificação médio no xadrez e <span class="math inline">\(d\)</span> é a
@@ -1940,8 +1938,8 @@ com precisão.</p>
 Transposição e as Tablebases</h2>
 <h3 id="a-intuição-4">A Intuição</h3>
 <p>Volte à fila 4 10 2 3 e siga dois caminhos diferentes. No primeiro,
-você pega o 4 e o adversário responde pegando o 3; sobra a fila 10 2. No
-segundo, você pega o 3 e o adversário responde pegando o 4; sobra, de
+você pega o 4 e o adversário responde pegando o 3. Sobra a fila 10 2. No
+segundo, você pega o 3 e o adversário responde pegando o 4. Sobra, de
 novo, a fila 10 2. As duas sequências de jogadas foram diferentes, a
 ordem das escolhas foi diferente, mas o estado em que o jogo se encontra
 depois delas é idêntico: mesmas moedas, mesma ordem, mesmo jogador na
@@ -1978,19 +1976,19 @@ apenas a profundidade de milhares de entradas, os dados estão contíguos
 em memória.</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Plataforma</th>
 <th>Entradas</th>
 <th>Memória</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Nativo</td>
 <td>4M entradas</td>
 <td>~112 MB</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WASM (browser)</td>
 <td>512K entradas</td>
 <td>~14 MB</td>
@@ -2121,19 +2119,18 @@ ainda assim falhar, o engine abandona a aposta e rebusca com janela
 completa <span class="math inline">\((-\infty, +\infty)\)</span> para
 garantir resultado correto. São, no pior caso, cinco re-buscas.</p>
 <p>Um exemplo numérico fecha a ideia. Suponha que a iteração anterior
-devolveu +12 centipawns; a busca nova abre com a janela <span
-class="math inline">\([-13, +37]\)</span> e retorna +80, um fail-high: o
-valor real caiu fora da faixa apostada. Na primeira expansão, a
-meia-janela dobra para 50 e a janela passa a <span
-class="math inline">\([-13, +87]\)</span>; a re-busca devolve +80 dentro
+devolveu +12 centipawns. A busca nova abre com a janela <span
+class="math inline">\([-13, +37]\)</span> e retorna +80, um
+<em>fail-high</em>: o valor real caiu fora da faixa apostada. Na
+primeira expansão, a meia-janela dobra para 50 e a janela passa a <span
+class="math inline">\([-13, +87]\)</span>. A re-busca devolve +80 dentro
 dela, e o valor exato sai com uma única re-busca. O balanço compensa
-porque a passada inicial, de janela estreita, cortou barato a esmagadora
-maioria dos ramos, e mesmo a re-busca com janela de 50 ainda poda mais
-agressivamente que uma janela completa desde o início. Quando a aposta
-acerta, que é o caso típico, nenhuma re-busca acontece e a economia
-chega aos 30-40% dos nós; a escada inteira até a janela completa é rara,
-porque a avaliação raramente salta tanto de uma iteração para a
-seguinte.</p>
+porque a passada inicial, de janela estreita, poda mais ramos, e mesmo a
+re-busca com janela de 50 ainda poda mais agressivamente que uma janela
+completa desde o início. Quando a aposta acerta, que é o caso típico,
+nenhuma re-busca acontece e a economia chega a 30–40% dos nós. A escada
+inteira até a janela completa é rara, porque a avaliação raramente salta
+tanto de uma iteração para a seguinte.</p>
 <hr />
 <h2 id="vii-a-arte-da-poda-cortando-o-impossível">VII. A Arte da Poda:
 Cortando o Impossível</h2>
@@ -2254,13 +2251,12 @@ estreita: se capturas não salvam a posição, nada salvará.</p>
 <p><strong>Exemplo concreto</strong>: profundidade restante 1, alpha =
 200, avaliação estática = -400. A distância até alpha é de 600
 centipawns, mais do que qualquer lance quiet isolado costuma render. Em
-vez de gerar e ordenar todos os movimentos legais só para provavelmente
-descartá-los um a um, o engine pula direto para conferir apenas as
-capturas e promoções pendentes (a busca de quiescência do capítulo
-VIII), que são o único tipo de lance capaz de recuperar tanto material
-de uma vez. Se nem essa checagem rápida encontra salvação, a posição
-realmente está perdida e o resultado é aceito sem mais gastos de
-tempo.</p>
+vez de gerar e ordenar todos os movimentos legais apenas para
+descartá-los um a um, o engine vai direto às capturas e promoções
+pendentes, examinadas pela busca de quiescência do capítulo VIII. São o
+único tipo de lance capaz de recuperar tanto material de uma vez. Se nem
+essa checagem rápida encontra salvação, a posição é aceita como perdida
+sem gastar tempo com os demais lances.</p>
 <h3 id="probcut">ProbCut</h3>
 <p><strong>Ideia</strong>: uma busca rasa com margem larga decide se
 vale a pena uma busca profunda. É uma “aposta informada”: se uma busca
@@ -2343,7 +2339,7 @@ péssima: o engine entrega o equivalente a nove peões de material e a
 avaliação superficial desabona o lance. Só uma busca mais funda revela
 que toda defesa termina em mate e que o sacrifício é forçado. Sem a
 extensão, o horizonte da busca pode esconder justamente o mate que
-justifica o sacrifício; com ela, o lance singular recebe a profundidade
+justifica o sacrifício. Com ela, o lance singular recebe a profundidade
 extra de que precisa para mostrar seu valor verdadeiro.</p>
 <p><strong>Ideia</strong>: se um movimento é <em>claramente</em> o
 melhor (singular: significativamente melhor que todos os outros), merece
@@ -2367,7 +2363,7 @@ extensão.</p>
 escolhe entre lances bons e ruins, escolhe entre os poucos lances legais
 que salvam o rei, e isso muda a natureza da posição seguinte. Parar de
 buscar no meio dessa sequência seria avaliar um tabuleiro cuja parte
-essencial ainda não aconteceu; o ply extra deixa o xeque se resolver
+essencial ainda não aconteceu. O ply extra deixa o xeque se resolver
 antes da avaliação.</p>
 <p>Xeques na profundidade 1 recebem extensão de +1 ply para evitar o <a
 href="https://en.wikipedia.org/wiki/Horizon_effect">efeito
@@ -2429,7 +2425,7 @@ avaliando apenas capturas e promoções até que a posição esteja “calma”
 <h3 id="stand-pat-cutoff">Stand-Pat Cutoff</h3>
 <p>Antes de buscar qualquer captura, a avaliação estática é comparada
 com beta. Se <span class="math inline">\(\text{static\_eval} \geq
-\beta\)</span>, a posição já é boa o suficiente; nenhuma captura precisa
+\beta\)</span>, a posição já é boa o suficiente. Nenhuma captura precisa
 ser buscada. Este é o piso do qsearch: a posição nunca é pior que a
 avaliação estática, porque o jogador sempre pode escolher não
 capturar.</p>
@@ -2440,17 +2436,17 @@ centipawns (ou <span class="math inline">\(2\times\)</span> valor da
 dama + 50 se um peão passado está na 7ª fila, podendo promover).</p>
 <p><strong>Per-move delta pruning</strong>: individualmente, capturas
 onde <code>stand_pat + valor_da_peça_capturada + 50 &lt; alpha</code>
-são descartadas; o ganho não é suficiente para mudar o resultado.</p>
+são descartadas. O ganho não é suficiente para mudar o resultado.</p>
 <h3 id="see-pruning">SEE Pruning</h3>
 <p>Capturas com <strong>SEE negativo</strong> (Static Exchange
-Evaluation; ver <a href="#ix-static-exchange-evaluation-see">seção
+Evaluation. Ver <a href="#ix-static-exchange-evaluation-see">seção
 dedicada</a>) são descartadas inteiramente. Uma captura perdedora (por
 exemplo, dama captura peão defendido por cavalo) nunca vale a pena em
 qsearch.</p>
 <h3 id="pick-best-selection-sort">Pick-Best (Selection Sort)</h3>
 <p>Em vez de ordenar <em>todos</em> os movimentos de captura
 antecipadamente, o qsearch usa <strong>selection sort</strong>: encontra
-o melhor, busca-o; se houver cutoff, os demais nunca são ordenados. Isso
+o melhor, busca-o. Se houver cutoff, os demais nunca são ordenados. Isso
 evita o custo de ordenar movimentos que serão podados antes de serem
 buscados.</p>
 <hr />
@@ -2505,29 +2501,29 @@ cavalo sair do caminho. Com valores redondos (peão 100, cavalo 300,
 bispo 300, dama 900), a sequência completa fica:</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Captura</th>
 <th>Efeito no saldo branco</th>
 <th>Saldo acumulado</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Dama × peão</td>
 <td>+100</td>
 <td>+100</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Cavalo × dama</td>
 <td>−900</td>
 <td>−800</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Bispo × cavalo</td>
 <td>+300</td>
 <td>−500</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Torre × bispo</td>
 <td>−300</td>
 <td>−800</td>
@@ -2536,26 +2532,25 @@ bispo 300, dama 900), a sequência completa fica:</p>
 </table>
 <p>O valor final da troca, para quem iniciou com a dama, é −800
 centipawns, um prejuízo enorme. Note que os atacantes escondidos mudam a
-conta: sem a torre preta atrás do cavalo, a cadeia terminaria em −500; a
+conta: sem a torre preta atrás do cavalo, a cadeia terminaria em −500. A
 reconstrução incremental dos atacantes é o que revela a torre e corrige
 a avaliação antes que o lance seja tentado. Uma SEE negativa desse
 tamanho é exatamente o caso que a busca de quiescência do capítulo VIII
 descarta sem nem buscar.</p>
-<p>O resultado é tanto rápido quanto exato: a pontuação minimax
-retrograde completa é computada em um scratch board temporário, sem
-alocação de memória. O nome descreve com precisão o algoritmo: a troca é
-avaliada de trás para frente, começando da última captura possível e
-caminhando de volta até a primeira, e em cada ponto o capturador só
-prossegue se o saldo parcial melhora a favor dele. No exemplo da tabela,
-do fim para o começo: depois de Torre × Bispo não existe captura branca
-que compense, e o saldo congela em −800; voltando um passo, a torre
-preta compara parar a troca (saldo −500) com continuar (−800) e
-prossegue, porque piorar a posição branca é o objetivo dela; voltando
-mais um passo, o cavalo compara deixar o branco em +100 com derrubá-lo
-para −500 e recaptura. Cada decisão de trás para frente assume que o
-adversário responderá do próprio melhor interesse, que é justamente a
-definição de um minimax, resolvido aqui em miniatura dentro de uma única
-casa do tabuleiro.</p>
+<p>O algoritmo computa a pontuação minimax retroativa completa em um
+<em>scratch board</em> temporário, sem alocação de memória. O nome
+descreve o procedimento: a troca é avaliada de trás para frente,
+começando da última captura possível e voltando até a primeira. Em cada
+ponto, o capturador só prossegue se o saldo parcial melhorar a favor
+dele. No exemplo da tabela, do fim para o começo: depois de Torre ×
+Bispo não existe captura branca que compense, e o saldo congela em −800.
+Voltando um passo, a torre preta compara parar a troca, com saldo −500,
+ou continuar, com −800, e prossegue porque piorar a posição branca é o
+objetivo dela. Voltando mais um passo, o cavalo compara deixar o branco
+em +100 com derrubá-lo para −500 e recaptura. Cada decisão de trás para
+frente assume que o adversário responderá no próprio interesse. É um
+minimax em miniatura resolvido dentro de uma única casa do
+tabuleiro.</p>
 <p>A SEE é usada em múltiplos contextos:</p>
 <ul>
 <li><strong>Ordenação de movimentos</strong>: capturas com SEE <span
@@ -2570,17 +2565,16 @@ adicionais</li>
 <h2 id="x-ordenação-de-movimentos-e-heurísticas-de-história">X.
 Ordenação de Movimentos e Heurísticas de História</h2>
 <h3 id="a-intuição-9">A Intuição</h3>
-<p>Toda a eficiência da poda dos capítulos anteriores depende de uma
-condição que ainda não foi discutida: a ordem em que as opções são
-examinadas. Na fila de moedas, pegar o 3 primeiro revela imediatamente
-que o 10 fica protegido, e o resto do cálculo fica trivial; se você
-tivesse testado primeiro a jogada ruim, a de pegar o 4, ainda teria de
-calcular tudo de novo até achar a boa. No xadrez a mesma lógica se
-aplica em escala muito maior: se a primeira opção examinada em cada
-posição já é a melhor, o valor que ela estabelece permite descartar
-rapidamente todas as outras sem examiná-las a fundo; se a pior opção é
-examinada primeiro, nada é descartado cedo e o trabalho da poda
-praticamente desaparece.</p>
+<p>A eficiência da poda dos capítulos anteriores depende de uma condição
+ainda não discutida: a ordem em que as opções são examinadas. Na fila de
+moedas, pegar o 3 primeiro revela imediatamente que o 10 fica protegido,
+e o resto do cálculo fica trivial. Se a jogada ruim, pegar o 4, fosse
+testada primeiro, ainda seria necessário calcular tudo até encontrar a
+boa. No xadrez, a mesma lógica opera em escala muito maior. Se a
+primeira opção examinada em cada posição já é a melhor, o valor que ela
+estabelece permite descartar rapidamente as outras sem examiná-las a
+fundo. Se a pior opção vem primeiro, os cortes aparecem tarde e grande
+parte da vantagem da poda desaparece.</p>
 <p>O problema é que descobrir qual é a melhor jogada exigiria, a rigor,
 já ter resolvido a posição, o que é exatamente o que a busca está
 tentando fazer. A saída é usar pistas indiretas, sinais que
@@ -2642,61 +2636,61 @@ Zchezz</h3>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Prioridade</th>
 <th>Score</th>
 <th>Tipo de Movimento</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>2.000.000</td>
 <td>TT / PV move</td>
 <td>O melhor movimento da busca anterior</td>
 </tr>
-<tr>
+<tr class="even">
 <td>1.700.000+</td>
 <td>Promoções</td>
 <td>Promoção a dama tem prioridade máxima</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>1.600.000+</td>
 <td>Capturas ganhadoras/neutras</td>
 <td>SEE <span class="math inline">\(\geq 0\)</span>, ordenadas por <a
 href="https://www.chessprogramming.org/MVV-LVA">MVV-LVA</a></td>
 </tr>
-<tr>
+<tr class="even">
 <td>900.000</td>
 <td>Killer move slot 0</td>
 <td>Movimento que causou cutoff nesta mesma profundidade</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>800.000</td>
 <td>Killer move slot 1</td>
 <td>Segundo killer</td>
 </tr>
-<tr>
+<tr class="even">
 <td>780.000</td>
 <td>Counter move</td>
 <td>Melhor refutação do movimento anterior</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>700.000+</td>
 <td>Torre na 7ª fila</td>
 <td>Heurística posicional</td>
 </tr>
-<tr>
+<tr class="even">
 <td>600.000+</td>
 <td>Ataques à zona do rei</td>
 <td>Movimentos que atacam casas na Chebyshev <span
 class="math inline">\(\leq 2\)</span> do rei adversário</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>200.000+</td>
 <td>Quiet moves</td>
 <td>Score base + história + CMH</td>
 </tr>
-<tr>
+<tr class="even">
 <td>100.000–200.000</td>
 <td>Capturas perdedoras</td>
 <td>SEE <span class="math inline">\(&lt; 0\)</span> (últimas na
@@ -2743,12 +2737,12 @@ enquanto preservam a ordenação relativa.</p>
 <h3 id="improving-flag">Improving Flag</h3>
 <p>Antes de qualquer decisão de poda em nós fora de xeque, o engine
 computa uma flag <strong>improving</strong>: a avaliação estática atual
-é comparada com a de 2 plies atrás (armazenada em
-<code>prev_static_eval[ply-2]</code>). Se a posição está melhorando, as
-margens de poda são mais <strong>conservadoras</strong> (RFP margem
-reduzida em 50cp, LMP limites mais generosos); se está piorando, a poda
-é mais <strong>agressiva</strong>. Esse único flag aumenta
-significativamente a eficiência em <a
+é comparada com a de 2 plies atrás, armazenada em
+<code>prev_static_eval[ply-2]</code>. Se a posição está melhorando, as
+margens de poda são mais <strong>conservadoras</strong> (RFP com margem
+reduzida em 50cp, LMP com limites mais generosos). Se está piorando, a
+poda é mais <strong>agressiva</strong>. Esse único flag aumenta a
+eficiência em <a
 href="https://en.wikipedia.org/wiki/Chess_middlegame">middlegames</a>
 posicionais.</p>
 <hr />
@@ -2775,13 +2769,13 @@ bispos apontando para ele”, que nenhum enxadrista consegue reduzir a uma
 fórmula. O padrão existe e pode ser sentido, mas resiste a virar
 frase.</p>
 <p>A virada foi trocar a receita escrita por um sistema que aprende
-sozinho, olhando milhões de posições e seus resultados, até desenvolver
-a mesma espécie de reconhecimento instantâneo que humanos têm para
-rostos: uma rede neural. Ela não guarda uma lista de regras que alguém
-possa ler e explicar; guarda uma capacidade destilada de “isso aqui
-cheira a vantagem” que emergiu sozinha da exposição repetida. É o mesmo
-tipo de conhecimento tácito que se discute em outras áreas da cognição:
-sabemos mais do que conseguimos dizer.</p>
+olhando milhões de posições e seus resultados, até desenvolver uma forma
+de reconhecimento instantâneo comparável, por analogia, ao
+reconhecimento humano de rostos: uma rede neural. Ela não guarda uma
+lista de regras que alguém possa ler e explicar; guarda uma capacidade
+destilada de avaliar que “isso aqui cheira a vantagem”, aprendida pela
+exposição repetida. É o mesmo tipo de conhecimento tácito discutido em
+outras áreas da cognição: sabemos mais do que conseguimos dizer.</p>
 <p>O restante do capítulo detalha essa transição, da função de avaliação
 artesanal ao surgimento da arquitetura NNUE que substituiu o catálogo de
 regras por essa forma de intuição treinada.</p>
@@ -2859,7 +2853,7 @@ como o caixa que soma só o item novo.</p>
 neural de verdade, com centenas de conexões internas, dentro do laço
 mais quente do programa, aquele que se repete bilhões de vezes por
 segundo. Sem o acumulador, cada avaliação custaria caro demais para ser
-útil numa busca profunda; com ele, o custo de avaliar uma posição nova
+útil numa busca profunda. Com ele, o custo de avaliar uma posição nova
 cai para quase nada, porque a maior parte da conta já estava pronta.</p>
 <p>A seção seguinte detalha a arquitetura exata dessa rede no Zchezz:
 quantas entradas ela tem, como o acumulador é organizado para as duas
@@ -2934,7 +2928,7 @@ Half-Mirror resolve. Imagine um comentarista esportivo que descreve toda
 partida de futebol dizendo “nós atacamos o gol da direita”, não importa
 qual seja a direção real em que seu time está jogando naquele momento.
 No primeiro tempo o time dele pode estar defendendo à esquerda e
-atacando à direita; depois do intervalo, os lados trocam, e fisicamente
+atacando à direita. Depois do intervalo, os lados trocam, e fisicamente
 é o oposto, mas o comentarista continua narrando do mesmo jeito, “nós
 atacamos a direita”, porque ele descreve o jogo sempre da perspectiva do
 seu time, nunca em coordenadas absolutas do estádio.</p>
@@ -3002,7 +2996,7 @@ ninguém olhou para ele naquele lance específico.</p>
 <p>Os acumuladores são gerenciados como uma <strong>pilha de
 profundidade 512</strong> (<code>NN_ACC_DEPTH</code>), espelhando a
 pilha de undo do tabuleiro. <code>nnue_push</code> copia o topo da pilha
-e aplica uma atualização incremental para o movimento sendo feito;
+e aplica uma atualização incremental para o movimento sendo feito.
 <code>nnue_pop</code> simplesmente decrementa o ponteiro. Resultado:
 <strong>unmake é <span class="math inline">\(O(1)\)</span></strong>
 (nenhuma recomputação necessária).</p>
@@ -3090,19 +3084,18 @@ propriedade “cada lance muda só um punhado fixo de features”: um cavalo
 se movendo continua ativando e desativando duas features simples, só que
 dentro do bucket certo.</p>
 <p>A segunda solução é usar <strong>mais de uma rede neural inteira,
-escolhida conforme a fase do jogo</strong>. Como as prioridades
-posicionais mudam radicalmente entre a abertura, com os dois reis ainda
-no centro relativo e material cheio no tabuleiro, e o final, com poucas
-peças e reis ativos, forçar uma única rede a aprender as duas fases ao
-mesmo tempo desperdiça capacidade. Engines modernos frequentemente
-treinam <strong>múltiplas sub-redes</strong> e escolhem qual usar (ou
-como misturar mais de uma) com base na contagem de material da posição
-atual, uma rede afinada para posições desequilibradas e táticas, outra
-para posições balanceadas e mais posicionais, cada uma especializada em
-vez de uma só tentando servir a tudo. É, em espírito, a mesma ideia dos
-buckets, mas aplicada à rede inteira em vez de só à camada de entrada:
-em vez de uma feature explícita dizendo “estamos em final”, a própria
-escolha de qual rede rodar já carrega essa informação.</p>
+escolhida conforme a fase do jogo</strong>. As prioridades posicionais
+mudam entre a abertura, com os dois reis ainda no centro relativo e
+material cheio no tabuleiro, e o final, com poucas peças e reis ativos.
+Forçar uma única rede a aprender as duas fases ao mesmo tempo pode usar
+capacidade de forma menos eficiente. Engines modernos frequentemente
+treinam <strong>múltiplas sub-redes</strong> e escolhem qual usar, ou
+como misturar mais de uma, com base na contagem de material da posição
+atual: uma rede afinada para posições desequilibradas e táticas, outra
+para posições balanceadas e mais posicionais. É a mesma ideia dos
+<em>buckets</em> aplicada à rede inteira, em vez de apenas à camada de
+entrada. Em vez de uma feature explícita dizendo “estamos em final”, a
+própria escolha da rede já carrega essa informação.</p>
 <hr />
 <h2 id="xiii-quantização-e-inferência-inteira">XIII. Quantização e
 Inferência Inteira</h2>
@@ -3153,33 +3146,33 @@ treinamento, o conversor e o engine C:</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Parâmetro</th>
 <th>Valor</th>
 <th>Significado</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>QA</td>
 <td>255</td>
 <td>Escala L1: float <span class="math inline">\([-128.5, +128.5]
 \to\)</span> int16 <span class="math inline">\([-32767,
 +32767]\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>QB</td>
 <td>64</td>
 <td>Escala L2/L3: float <span class="math inline">\([-1.984, +1.984]
 \to\)</span> int8 <span class="math inline">\([-127, +127]\)</span></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>SHIFT</td>
 <td>8</td>
 <td>Right-shift após acumulação L1 (<span class="math inline">\(\approx
 \log_2(\text{QA})\)</span>)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>OUT_SCALE</td>
 <td><span class="math inline">\(320 / (QB \times QB) \approx
 0.078\)</span></td>
@@ -3266,7 +3259,7 @@ está mais forte.</p>
 probabilidade: qual a chance de vitória, de empate, de derrota a partir
 dali. A diferença importa porque +1,5 quer dizer coisas diferentes em
 contextos diferentes: numa posição calma e sólida, uma vantagem de peão
-e meio costuma converter em vitória; numa posição caótica cheia de peças
+e meio costuma converter em vitória. Numa posição caótica cheia de peças
 penduradas, o mesmo +1,5 pode desmoronar em três lances. Treinar com
 chance de vitória em vez de pontuação bruta obriga o sistema a aprender
 essa diferença de contexto, em vez de tratar todo +1,5 como
@@ -3371,24 +3364,24 @@ clipped.</p>
 <p>O QAT usa warm-up para transicionar suavemente:</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Épocas</th>
 <th>Estado</th>
 <th>O que é quantizado</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>0–14</td>
 <td>float32 (warm-up)</td>
 <td>Nada (ClippedReLU estabiliza)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>15–39</td>
 <td>QAT-L1</td>
 <td>Pesos/bias L1 + ativação L1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>40+</td>
 <td>QAT-ALL</td>
 <td>L1 (int16) + L2/L3 (int8) + todas ativações</td>
@@ -3401,7 +3394,7 @@ AlphaZero e a Revolução do Reinforcement Learning</h2>
 <h3 id="a-intuição-14">A Intuição</h3>
 <p>Imagine chegar numa cidade desconhecida com fome e sem guia. Uma
 estratégia é anotar os restaurantes que já foram bons e voltar sempre a
-eles; outra é sair testando lugares novos a esmo. As duas isoladas são
+eles. Outra é sair testando lugares novos a esmo. As duas isoladas são
 ruins: só repetir o conhecido nunca descobre o melhor restaurante da
 cidade, só testar novidade desperdiça noites boas em apostas malfeitas.
 A estratégia que funciona é um meio-termo que se ajusta sozinho: visitar
@@ -3414,7 +3407,7 @@ bons resultados nas simulações anteriores, e investiga mais fundo
 justamente onde a aposta está compensando.</p>
 <p>Essa é a segunda ruptura do AlphaZero, depois de já ter abandonado
 toda regra de xadrez escrita à mão por um humano. Ele não examina
-metodicamente cada lance possível como faz um motor tradicional; ele
+metodicamente cada lance possível como faz um motor tradicional. Ele
 joga milhares de partidas simuladas internamente, guiado por uma
 intuição (a rede neural) sobre quais restaurantes valem a pena visitar,
 e deixa a estatística dessas visitas apontar o melhor lance.</p>
@@ -3470,39 +3463,39 @@ Elo nos rankings atuais, uma diferença que flutua entre versões.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Dimensão</th>
 <th>Stockfish NNUE</th>
 <th>Leela Chess Zero (Lc0)</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Busca</td>
 <td>Alpha-Beta + PVS</td>
 <td>Monte Carlo Tree Search</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Avaliação</td>
 <td>NNUE (3 camadas, ~400KB)</td>
 <td>ResNet profunda (~100 camadas, ~100MB)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Posições/segundo</td>
 <td>~100M (CPU)</td>
 <td>~40K (GPU)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Nós por decisão</td>
 <td>Milhões</td>
 <td>Milhares</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Hardware</td>
 <td>CPU (AVX2/NEON)</td>
 <td>GPU (CUDA/ROCm)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Estilo de jogo</td>
 <td>Tático, preciso, calculista</td>
 <td>Posicional, criativo, “humano”</td>
@@ -3547,7 +3540,7 @@ no mesmo.</p>
 <p>Uma das formas mais diretas de ganhar velocidade é parar de fazer uma
 conta de cada vez e passar a fazer várias simultaneamente. É como uma
 linha de caixas de supermercado: se cada caixa atende um cliente por
-vez, o fluxo é limitado pelo número de caixas; abrir dezesseis caixas ao
+vez, o fluxo é limitado pelo número de caixas. Abrir dezesseis caixas ao
 mesmo tempo processa dezesseis clientes no tempo que uma levaria para
 processar um. O processador tem instruções especiais que fazem
 exatamente isso com números: em vez de somar dois valores de cada vez,
@@ -3731,7 +3724,7 @@ sozinho, várias threads pensam em paralelo sobre a mesma posição, como a
 equipe de investigadores do capítulo anterior. A fronteira mais incerta
 hoje não é de execução, é arquitetural.</p>
 <p>As redes que hoje avaliam posições de xadrez são desenhadas para
-captar padrões locais no tabuleiro; existe uma família de redes mais
+captar padrões locais no tabuleiro. Existe uma família de redes mais
 recente, usada com sucesso em tradução e geração de texto, capaz de
 relacionar qualquer parte de uma entrada com qualquer outra parte
 diretamente, sem essa limitação de vizinhança. Se essa arquitetura
@@ -3779,7 +3772,7 @@ um engine de xadrez, mesmo sem saber programar ou jogar: quando essa
 máquina vence um grande mestre, ela entendeu o que estava fazendo, ou só
 executou passos? A pergunta parece boba até se notar que não há como
 testá-la de fora. Toda evidência disponível, o lance jogado, a vitória,
-o comentário gerado, é comportamento observável; nada dela é acesso
+o comentário gerado, é comportamento observável. Nada dela é acesso
 direto ao que se passa “por dentro” da máquina enquanto ela decide.</p>
 <p>Esse é exatamente o ponto onde duas respostas filosóficas antigas se
 encontram, agora com um caso concreto e mensurável para testar. Uma
@@ -3806,7 +3799,7 @@ que outro engine, ou mais forte que um humano, nunca é um fato observado
 diretamente: é uma inferência sobre uma amostra de partidas, sujeita aos
 mesmos erros de qualquer teste estatístico. O erro tipo I declara força
 onde havia apenas sorte, o falso positivo que coroa uma versão nova por
-uma sequência vencedora dentro do ruído; o erro tipo II enterra um ganho
+uma sequência vencedora dentro do ruído. O erro tipo II enterra um ganho
 real que a amostra era pequena demais para revelar. É o tema de
 <em>Validação Estocástica de Dinâmica de Voo</em>, aplicado lá ao voo de
 rotores, mas idêntico aqui: toda comparação de força carrega esses dois
@@ -3866,14 +3859,14 @@ comportamento é vazia, e comportamento sem compreensão é indistinguível,
 então a pergunta “ele entende ou só calcula?” pode ser do tipo que
 nenhuma evidência externa decide. Na imagem que Gödel e Turing deixaram,
 existem perguntas que um sistema formal não consegue responder sobre si
-mesmo; levada como analogia, e não como consequência lógica, essa lição
+mesmo. Levada como analogia, e não como consequência lógica, essa lição
 sugere que talvez nenhum sistema, humano ou artificial, consiga decidir
 de dentro se a própria competência constitui compreensão.</p>
 <p>Esse arco, aberto na introdução, fecha com Daniel Kahneman. A divisão
 entre Sistema 1 e Sistema 2 descreve as duas metades de um engine
 moderno: a rede NNUE é o Sistema 1, rápido, heurístico, treinado por
 exposição massiva, devolvendo impressões instantâneas sobre posições que
-jamais calculou; a busca alfa-beta é o Sistema 2, lento, deliberado,
+jamais calculou. A busca alfa-beta é o Sistema 2, lento, deliberado,
 exaustivo, verificando passo a passo as consequências de cada lance.
 Nenhuma das duas basta sozinha, e a força do engine vem da coreografia
 entre elas, a intuição propondo e a deliberação auditando. Essa mesma
@@ -3893,25 +3886,24 @@ posicionais que nenhum manual humano jamais catalogou por completo. É um
 fato estranho de se admitir: o “conhecimento de xadrez de elite” de uma
 máquina de força sobre-humana cabe, compactado, num arquivo menor que
 uma única foto de celular.</p>
-<p>Essa estranheza tem um nome técnico e uma tradição teórica por trás.
-Em 1948, <a href="https://en.wikipedia.org/wiki/Claude_Shannon">Claude
+<p>Essa estranheza tem um nome técnico e uma tradição teórica. Em 1948,
+<a href="https://en.wikipedia.org/wiki/Claude_Shannon">Claude
 Shannon</a> publicou <em>A Mathematical Theory of Communication</em>
 [27], fundando a teoria da informação e definindo
 <strong>entropia</strong> como a medida de quanta incerteza, ou
-“surpresa esperada”, existe numa fonte de dados. Um texto redundante,
-previsível, comprime bem, porque a maior parte dele pode ser
-reconstruída a partir de pouca informação nova; um texto genuinamente
-aleatório não comprime nada, porque cada símbolo carrega surpresa total.
-Duas décadas depois, <a
-href="https://en.wikipedia.org/wiki/Andrey_Kolmogorov">Andrei
+“surpresa esperada”, existe numa fonte de dados. Um texto redundante e
+previsível comprime bem, porque grande parte dele pode ser reconstruída
+a partir de pouca informação nova. Um texto genuinamente aleatório não
+comprime, porque cada símbolo carrega surpresa total. Duas décadas
+depois, <a href="https://en.wikipedia.org/wiki/Andrey_Kolmogorov">Andrei
 Kolmogorov</a> formalizou uma ideia irmã, a <strong><a
 href="https://en.wikipedia.org/wiki/Kolmogorov_complexity">complexidade
 de Kolmogorov</a></strong> [28]: a complexidade “real” de qualquer dado
 é o tamanho do menor programa capaz de reproduzi-lo. Um milhão de
 dígitos de π parece aleatório à primeira vista, mas tem complexidade de
-Kolmogorov baixíssima, porque um programa curto o gera por inteiro; um
-milhão de dígitos genuinamente aleatórios não tem atalho, o menor
-programa que os reproduz é, essencialmente, copiá-los um a um.</p>
+Kolmogorov baixa porque um programa curto o gera por inteiro. Um milhão
+de dígitos genuinamente aleatórios não tem atalho: o menor programa que
+os reproduz é, essencialmente, copiá-los um a um.</p>
 <p>A ponte entre essas duas ideias e a palavra “inteligência” foi
 proposta com todas as letras pelo pesquisador <a
 href="https://en.wikipedia.org/wiki/Marcus_Hutter">Marcus Hutter</a>,
@@ -3931,7 +3923,7 @@ por trás resiste: só é possível prever bem, e portanto comprimir bem,
 aquilo que se compreende bem.</p>
 <p>Vista por essa lente, a rede NNUE do Zchezz é literalmente um
 exercício de compressão. O conjunto de treino contém milhões de posições
-rotuladas com seu resultado provável; a rede, forçada a caber em 256
+rotuladas com seu resultado provável. A rede, forçada a caber em 256
 neurônios na primeira camada e depois 64 na segunda, não tem espaço para
 memorizar cada posição individualmente, ela é <em>obrigada</em> a
 descobrir regularidades, padrões que se repetem entre posições
@@ -4281,7 +4273,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=f51be804"></script>
+<script src="../assets/theme.js?v=7389a45f"></script>
+<script src="../assets/essay.js?v=58dcd441"></script>
 </body>
 </html>

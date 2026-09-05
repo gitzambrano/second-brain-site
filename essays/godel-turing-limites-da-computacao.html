@@ -7,7 +7,7 @@
 <meta property="og:title" content="Gödel, Turing e os Limites da Computação">
 <meta property="og:description" content="Gödel mostrou que qualquer sistema aritmético consistente contém verdades indemonstráveis; Turing mostrou que existem problemas bem-definidos que nenhuma máquina pode resolver. O ensaio conecta esses resultados à complexidade de Kolmogorov, a P vs. NP e às implicações para IA, argumentando que a modéstia epistêmica que eles impõem é uma virtude, não uma derrota.">
 <meta property="og:type" content="article">
-<script defer="" src="../assets/mathjax/tex-svg.js"
+<script src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
 <style>
 /* ------------------------------------------------------------------ */
@@ -1094,7 +1094,7 @@ Whitehead</a> haviam publicado os <em>Principia Mathematica</em>
 href="https://en.wikipedia.org/wiki/Cantor%27s_diagonal_argument">diagonalização
 de Cantor</a> (1891). Georg Cantor provou que os números reais são
 <strong>incontáveis</strong>: não podem ser colocados em correspondência
-biunívoca com os naturais. O argumento é devastadoramente simples:</p>
+biunívoca com os naturais. O argumento é simples:</p>
 <ol type="1">
 <li>Assuma que <em>todos</em> os reais entre 0 e 1 podem ser listados:
 <span class="math inline">\(r_1, r_2, r_3, \ldots\)</span></li>
@@ -1245,7 +1245,7 @@ href="https://en.wikipedia.org/wiki/Halting_problem">Problema da
 Parada</a>.</p>
 <h3 id="a-prova-estilo-diagonalização">A Prova (Estilo
 Diagonalização)</h3>
-<p>A prova de Turing é, em essência, uma tradução computacional do
+<p>A prova de Turing pode ser lida como uma tradução computacional do
 argumento de Gödel/Cantor:</p>
 <ol type="1">
 <li><p><strong>Suponha</strong> que existe um programa <span
@@ -1286,32 +1286,32 @@ class="math inline">\(H\)</span> não pode existir. O problema da parada
 <col style="width: 53%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Gödel</th>
 <th>Turing</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Existem verdades indemonstráveis</td>
 <td>Existem problemas indecidíveis</td>
 </tr>
-<tr>
+<tr class="even">
 <td>A consistência não pode ser auto-provada</td>
 <td>A terminação não pode ser auto-verificada</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Proposição autorreferente: “esta frase não é demonstrável”</td>
 <td>Programa autorreferente: “este programa para se e somente se não
 para”</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Incompletude da aritmética</td>
 <td><a
 href="https://en.wikipedia.org/wiki/Computable_function">Incomputabilidade</a>
 de funções</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Diagonalização sobre provas</td>
 <td>Diagonalização sobre programas</td>
 </tr>
@@ -1439,9 +1439,9 @@ href="https://en.wikipedia.org/wiki/Stockfish_(chess)#NNUE">Stockfish
 NNUE</a> usam redes neurais para guiar a busca, priorizando movimentos
 promissores.</li>
 </ul>
-<p>Essa arquitetura é exatamente a que o projeto Zchezz implementa. O
-Zchezz é um engine de xadrez em Rust desenvolvido pelo autor deste
-ensaio, detalhado adiante, e combina <a
+<p>Essa arquitetura é a que o projeto Zchezz implementa. O Zchezz é um
+engine de xadrez em Rust desenvolvido pelo autor deste ensaio e
+detalhado adiante. Ele combina <a
 href="https://en.wikipedia.org/wiki/Bitboard">bitboards</a> para
 representação eficiente do estado, alpha-beta com <a
 href="https://www.chessprogramming.org/Aspiration_Windows">aspiration
@@ -1449,11 +1449,11 @@ windows</a>, <a
 href="https://en.wikipedia.org/wiki/Transposition_table">tabelas de
 transposição</a> com <a
 href="https://en.wikipedia.org/wiki/Zobrist_hashing">hashing de
-Zobrist</a>, e poda avançada (<a
-href="https://en.wikipedia.org/wiki/Null-move_heuristic">null move</a>,
+Zobrist</a> e técnicas de poda como <a
+href="https://en.wikipedia.org/wiki/Null-move_heuristic">null move</a> e
 <a href="https://www.chessprogramming.org/Late_Move_Reductions">late
-move reduction</a>). Cada uma dessas técnicas é uma resposta engenhosa à
-intratabilidade fundamental do problema.</p>
+move reduction</a>. Cada técnica responde, de uma forma diferente, à
+intratabilidade do problema.</p>
 <h3 id="a-hierarquia-polinomial">A Hierarquia Polinomial</h3>
 <p>Além de P e NP, existe toda uma <a
 href="https://en.wikipedia.org/wiki/Polynomial_hierarchy">hierarquia
@@ -1536,25 +1536,25 @@ neuronais.</p>
 <col style="width: 78%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Gödel</th>
 <th>Consciência (Hofstadter)</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Sistema fala sobre si mesmo (Gödelização)</td>
 <td>Cérebro modela a si mesmo</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Proposição indecidível emerge</td>
 <td>“Eu” emerge</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O sistema não pode resolver a autorreferência</td>
 <td>A mente não pode compreender completamente a si mesma</td>
 </tr>
-<tr>
+<tr class="even">
 <td>A incompletude é estrutural, não reparável</td>
 <td>O mistério da consciência pode ser estrutural</td>
 </tr>
@@ -1666,12 +1666,12 @@ Cada técnica é uma heurística que assume que a maioria dos movimentos
 não merece exploração profunda: uma aposta que funciona na prática mas
 não tem garantia teórica.</p></li>
 </ol>
-<p>A lição filosófica é que os limites de Turing não impedem a
-computação <em>útil</em>: impedem apenas a computação <em>completa</em>.
-Um engine de xadrez não resolve o xadrez; ele joga xadrez <em>bem</em>
-dentro dos limites disponíveis. Da mesma forma, a mente humana não
-resolve o problema da verdade; ela navega verdades <em>úteis</em> dentro
-de seus limites cognitivos.</p>
+<p>Os limites de Turing não impedem a computação <em>útil</em>. Eles
+impedem a computação <em>completa</em> em determinadas classes de
+problemas. Um engine de xadrez não resolve o xadrez, mas joga xadrez
+<em>bem</em> dentro dos limites disponíveis. Da mesma forma, a mente
+humana não resolve o problema da verdade. Ela navega verdades
+<em>úteis</em> dentro de seus limites cognitivos.</p>
 <p>Os números tornam essa modéstia produtiva concreta. A árvore completa
 do xadrez tem cerca de <span class="math inline">\(10^{120}\)</span>
 nós, o <a href="https://en.wikipedia.org/wiki/Shannon_number">número de
@@ -1821,7 +1821,7 @@ observador dentro de nenhum universo pode demonstrar</li>
 href="https://en.wikipedia.org/wiki/Theory_of_everything">teoria de
 tudo</a>” pode ser finalmente completa</li>
 </ul>
-<p>Isso reabre uma questão sobre a natureza das leis naturais. Se as
+<p>Isso reabre uma questão sobre a natureza das leis naturais: se as
 leis da natureza são estruturas matemáticas, a incompletude de Gödel
 aplica-se não apenas à matemática formal, mas à própria física.</p>
 <hr />
@@ -1841,7 +1841,7 @@ nenhum procedimento mecânico pode responder.</p>
 <col style="width: 26%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Limite</th>
 <th>Descobridor</th>
 <th>O que estabelece</th>
@@ -1849,38 +1849,38 @@ nenhum procedimento mecânico pode responder.</p>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Incompletude</td>
 <td>Gödel (1931)</td>
 <td>Verdades indemonstráveis em qualquer sistema formal consistente</td>
 <td>Certeza absoluta impossível</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Indecidibilidade</td>
 <td>Turing (1936)</td>
 <td>Problema da parada insolúvel</td>
 <td>Nenhum analisador universal de programas</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Incompressibilidade</td>
 <td>Chaitin (1966)</td>
 <td>A maioria das strings é aleatória e não pode ser provada como
 tal</td>
 <td>Aleatoriedade irredutível</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Intratabilidade</td>
 <td>Cook (1971)*</td>
 <td>P ≠ NP (conjectura em aberto): encontrar ≠ verificar</td>
 <td>Xadrez, otimização, criptografia</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Indeterminação</td>
 <td>Heisenberg (1927)</td>
 <td>Posição e momento não coexistem</td>
 <td>Realidade intrinsecamente indeterminada</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Não-localidade</td>
 <td>Bell (1964)</td>
 <td>Realismo local impossível</td>
@@ -2203,7 +2203,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=f51be804"></script>
+<script src="../assets/theme.js?v=7389a45f"></script>
+<script src="../assets/essay.js?v=58dcd441"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="revisao" data-minutes="112">
+<html lang="pt-BR" data-status="revisao" data-minutes="111">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,7 @@
 <meta property="og:title" content="Métodos Matemáticos e Computacionais na Engenharia Aeroespacial">
 <meta property="og:description" content="Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.">
 <meta property="og:type" content="article">
-<script defer="" src="../assets/mathjax/tex-svg.js"
+<script src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
 <style>
 /* ------------------------------------------------------------------ */
@@ -746,9 +746,8 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 @media print{
   .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
 }
-html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -1096,25 +1095,22 @@ Arquitetura de Dados Integrada e Fluxos Aeroespaciais</a></li>
 <hr />
 <h2 id="introdução-ferramentas-analíticas-de-análise">Introdução:
 Ferramentas Analíticas de Análise</h2>
-<p>A engenharia aeroespacial contemporânea vivencia uma transformação
-paradigmática em suas ferramentas analíticas. O incremento de
-complexidade em plataformas modernas — desde veículos de mobilidade
-urbana elétrica (<a
-href="https://en.wikipedia.org/wiki/eVTOL">eVTOL</a>) e aeronaves não
-tripuladas até foguetes reutilizáveis e veículos hipersônicos — exige
-abstrações matemáticas que superam as formulações analíticas
+<p>A engenharia aeroespacial contemporânea vem transformando suas
+ferramentas analíticas à medida que as plataformas se tornam mais
+complexas. Veículos de mobilidade urbana elétrica (<a
+href="https://en.wikipedia.org/wiki/eVTOL">eVTOL</a>), aeronaves não
+tripuladas, foguetes reutilizáveis e veículos hipersônicos exigem
+abstrações matemáticas que vão além das formulações analíticas
 determinísticas clássicas. A dinâmica de escoamentos altamente
-não-lineares, a presença de turbulência tridimensional, as incertezas
-estocásticas em parâmetros operacionais e a necessidade de controle
-geométrico em variedades não-euclidianas demandam uma rigorosa
-integração entre matemática pura, física teórica e métodos
-computacionais avançados.</p>
-<p>Este repositório analítico compila e estrutura formalmente vinte e um
-métodos matemáticos e computacionais aplicados à engenharia aeroespacial
-de maneira inovadora. O objetivo central é munir o projetista e
-pesquisador aeroespacial de uma visão profunda e unificada: cada
-formulação é apresentada com seus rigorosos axiomas matemáticos,
-interpretação física direta de fenômenos de voo/aerodinâmica, aplicações
+não-lineares, a turbulência tridimensional, as incertezas estocásticas
+em parâmetros operacionais e o controle geométrico em variedades
+não-euclidianas exigem integração entre matemática pura, física teórica
+e métodos computacionais.</p>
+<p>Este white paper compila e estrutura vinte e um métodos matemáticos e
+computacionais aplicados à engenharia aeroespacial. O objetivo é
+oferecer ao projetista e pesquisador uma visão unificada: cada
+formulação é apresentada com seus axiomas matemáticos, interpretação
+física direta de fenômenos de voo e aerodinâmica, aplicações
 computacionais concretas com trechos de código e análise crítica dos
 limites de validade.</p>
 <hr />
@@ -1207,14 +1203,15 @@ r &amp; q &amp; -p &amp; 0
 r\cos\phi)\tan\theta, \qquad
 \dot{\theta} = q\cos\phi - r\sin\phi, \qquad
 \dot{\psi} = \frac{q\sin\phi + r\cos\phi}{\cos\theta}.\]</span></p>
-<p>O contraste é a moral do capítulo inteiro. A equação do quaternion é
-linear em <span class="math inline">\(q\)</span>, tem coeficientes
-limitados pela velocidade angular e não contém nenhuma divisão. A de
-Euler tem <span class="math inline">\(\tan\theta\)</span> e <span
+<p>A diferença aparece diretamente nas equações. A equação do quaternion
+é linear em <span class="math inline">\(q\)</span>, tem coeficientes
+limitados pela velocidade angular e não contém nenhuma divisão. A
+cinemática de Euler contém <span
+class="math inline">\(\tan\theta\)</span> e <span
 class="math inline">\(1/\cos\theta\)</span>, ambos divergentes em <span
-class="math inline">\(\theta = \pm 90^\circ\)</span>, e a divergência
-aparece mesmo quando a velocidade angular física é modesta. A
-singularidade é da parametrização, não do voo.</p>
+class="math inline">\(\theta = \pm 90^\circ\)</span>, mesmo quando a
+velocidade angular física é modesta. A singularidade pertence à
+parametrização, não ao voo.</p>
 <h4 id="interpretação-física">Interpretação Física</h4>
 <p>A figura abaixo compara as duas propagações numa cabragem quase pura
 de 30 graus por segundo, com uma guinada residual de meio grau por
@@ -1224,17 +1221,17 @@ alt="Comparação entre propagação de atitude por quaternion e por ângulos de
 <p>À esquerda, o ângulo de rolamento calculado por Euler salta de zero a
 cento e oitenta graus em poucos milissegundos, enquanto as quatro
 componentes do quaternion atravessam o mesmo instante como senoides
-suaves, sem notar que algo aconteceu. À direita, a taxa <span
+suaves e contínuas. À direita, a taxa <span
 class="math inline">\(\dot{\psi}\)</span> chega a mil e oitocentos graus
 por segundo num voo cuja velocidade angular real nunca passa de trinta.
-Nenhum integrador numérico sobrevive a isso com passo fixo, e nenhum
+Nenhum integrador numérico com passo fixo sobrevive a isso, e nenhum
 filtro que use essa taxa como entrada produz uma estimativa
 confiável.</p>
-<p>O que a redundância compra, fisicamente, é continuidade. Uma
-trajetória contínua no espaço de atitudes vira uma trajetória contínua
-nas quatro componentes do quaternion, sempre. Nos três ângulos de Euler
-ela pode ser descontínua ainda que o movimento seja perfeitamente suave,
-porque a carta de coordenadas acabou. É a diferença entre um mapa que
+<p>Fisicamente, a redundância fornece continuidade. Uma trajetória
+contínua no espaço de atitudes produz uma trajetória contínua nas quatro
+componentes do quaternion. Nos três ângulos de Euler, a representação
+pode ser descontínua mesmo quando o movimento é perfeitamente suave,
+porque a carta de coordenadas termina. É a diferença entre um mapa que
 cobre o globo e um mapa que cobre tudo menos os polos.</p>
 <h4 id="exemplo-aeronáutico">Exemplo Aeronáutico</h4>
 <p>O caso de uso mais direto é a propagação de atitude num sistema de
@@ -1271,13 +1268,12 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a hr
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.rad2deg(np.arcsin(<span class="dv">2</span> <span class="op">*</span> (q[<span class="dv">0</span>]<span class="op">*</span>q[<span class="dv">2</span>] <span class="op">-</span> q[<span class="dv">3</span>]<span class="op">*</span>q[<span class="dv">1</span>]))))   <span class="co"># theta perto de 90 graus</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">abs</span>(np.linalg.det(para_matriz(q)) <span class="op">-</span> <span class="fl">1.0</span>))             <span class="co"># ortogonalidade preservada</span></span></code></pre></div>
-<p>A renormalização a cada passo é obrigatória, e não por preciosismo
-numérico. O erro de truncamento do integrador tira <span
-class="math inline">\(q\)</span> da esfera unitária, e um quaternion de
-norma diferente de um não representa rotação alguma: representa rotação
-mais escala. Sem a divisão pela norma, a matriz de atitude reconstruída
-deixa de ser ortogonal e o sistema passa a esticar vetores que deveria
-apenas girar.</p>
+<p>A renormalização a cada passo é necessária porque o erro de
+truncamento do integrador desloca <span class="math inline">\(q\)</span>
+para fora da esfera unitária. Um quaternion de norma diferente de um não
+representa uma rotação pura: introduz também escala. Sem a divisão pela
+norma, a matriz de atitude reconstruída deixa de ser ortogonal e passa a
+esticar vetores que deveria apenas girar.</p>
 <p>Um segundo uso, menos óbvio, é a interpolação. O <a
 href="https://en.wikipedia.org/wiki/Slerp">SLERP</a>, <a
 href="https://dl.acm.org/doi/10.1145/325165.325242">proposto</a> por <a
@@ -1457,10 +1453,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a hr
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> np.array([<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])</span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(colchete(f, g, x0))                    <span class="co"># [0, -1, 0]: deslocamento lateral puro</span></span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(lie(f, <span class="kw">lambda</span> x: x[<span class="dv">1</span>], x0))            <span class="co"># 0: avancar nao muda y quando theta = 0</span></span></code></pre></div>
-<p>O primeiro resultado é o ponto central. O colchete aponta na direção
-lateral, com magnitude unitária, apesar de nenhum dos dois campos ter
-componente lateral alguma. A direção proibida é alcançável pela
-combinação, e é isso que o teorema de Chow formaliza.</p>
+<p>O colchete aponta na direção lateral, com magnitude unitária, embora
+nenhum dos dois campos tenha componente lateral. A combinação torna essa
+direção alcançável; o teorema de Chow formaliza essa propriedade.</p>
 <p>Numa aplicação de voo real, o cálculo que importa é o do grau
 relativo de cada saída candidata. Num modelo longitudinal de eVTOL em
 transição, com estados de velocidade, ângulo de ataque, taxa de arfagem
@@ -1477,9 +1472,9 @@ projeto.</p>
 ser diferenciáveis tantas vezes quanto o grau relativo exigir, e
 sistemas de voo reais têm saturação de atuador, zona morta, atrito seco
 e chaveamento de lei de controle, nenhum deles suave. Perto dessas
-descontinuidades a teoria não erra por pouco: ela simplesmente não se
-aplica, e a linearização por realimentação calculada em cima de um
-modelo idealizado pode comandar deflexões que o atuador não entrega.</p>
+descontinuidades, a teoria não se aplica. Uma linearização por
+realimentação calculada sobre um modelo idealizado pode comandar
+deflexões que o atuador não entrega.</p>
 <p>O segundo limite é a robustez. A lei de linearização por
 realimentação cancela a não linearidade usando o modelo, e o
 cancelamento é exato apenas se o modelo for exato. Erro em derivada
@@ -1528,16 +1523,15 @@ quanto confiam em si mesmas e usando essa confiança para decidir onde
 gastar a próxima simulação.</p>
 <h3 id="processos-gaussianos-e-kriging">Processos Gaussianos e
 Kriging</h3>
-<p>O problema que o <a
-href="https://en.wikipedia.org/wiki/Gaussian_process">processo
-gaussiano</a> resolve é o problema econômico central da aerodinâmica
+<p>O <a href="https://en.wikipedia.org/wiki/Gaussian_process">processo
+gaussiano</a> resolve um problema econômico recorrente da aerodinâmica
 computacional. Cada ponto de uma polar custa horas de CFD ou uma
-ocupação de túnel de vento, o espaço de entrada tem ângulo de ataque,
+ocupação de túnel de vento, o espaço de entrada inclui ângulo de ataque,
 Mach, Reynolds e geometria, e o orçamento permite algumas dezenas de
 avaliações. A pergunta relevante não é apenas qual o valor de <span
-class="math inline">\(C_L\)</span> num ponto não amostrado, mas o quanto
-se pode confiar nesse valor, porque é a confiança que decide onde gastar
-a próxima simulação.</p>
+class="math inline">\(C_L\)</span> num ponto não amostrado, mas também o
+quanto se pode confiar nesse valor, porque essa confiança orienta onde
+gastar a próxima simulação.</p>
 <p>O método nasceu na geoestatística sul-africana dos anos cinquenta,
 com <a href="https://en.wikipedia.org/wiki/Danie_G._Krige">Danie
 Krige</a> estimando teor de ouro a partir de sondagens esparsas, e foi
@@ -1570,14 +1564,13 @@ fechada:</p>
 <p><span class="math display">\[\sigma_*^2(x_*) = k_{**} -
 \mathbf{k}_*^T (\mathbf{K} + \sigma_n^2 \mathbf{I})^{-1}
 \mathbf{k}_*.\]</span></p>
-<p>Dois fatos merecem atenção. Primeiro, a média posterior é linear nas
-observações: é uma combinação ponderada dos <span
-class="math inline">\(y\)</span> medidos, com pesos ditados pela
-covariância. Segundo, e mais importante, a variância posterior não
+<p>A média posterior é linear nas observações: é uma combinação
+ponderada dos <span class="math inline">\(y\)</span> medidos, com pesos
+ditados pela covariância. A variância posterior, por sua vez, não
 depende de <span class="math inline">\(\mathbf{y}\)</span>. Ela depende
-apenas de onde os pontos foram colocados, o que significa que é possível
-planejar um experimento e saber a incerteza resultante antes de rodar
-uma única simulação.</p>
+apenas de onde os pontos foram colocados. Assim, é possível planejar um
+experimento e estimar a incerteza resultante antes de executar uma nova
+simulação.</p>
 <p>Os hiperparâmetros do kernel são ajustados maximizando a
 verossimilhança marginal logarítmica,</p>
 <p><span class="math display">\[\log p(\mathbf{y}|X) =
@@ -1611,18 +1604,17 @@ transônica e devagar em Reynolds, que é exatamente o que a física do
 escoamento compressível prevê.</p>
 <p><picture><source srcset="../assets/media/metodos_gp_polar_incerteza.webp" type="image/webp"><img src="../assets/media/metodos_gp_polar_incerteza.png"
 alt="Processo gaussiano ajustado a cinco pontos de uma polar, com banda de incerteza que se alarga na região de estol" /></picture></p>
-<p>A figura mostra o comportamento que torna o método útil. Cinco pontos
-de túnel, colocados em menos quatro, zero, quatro, oito e dezesseis
-graus, definem uma média posterior que segue a parte linear da polar com
-fidelidade. Entre oito e dezesseis graus, justamente onde o estol
-acontece e onde não há nenhuma medição, a banda de dois sigma se alarga
-visivelmente, e o máximo de incerteza interna cai em doze graus e meio.
-O modelo não sabe onde está o estol, e diz que não sabe. Essa é a
-informação acionável: a próxima rodada de CFD deve ser em torno de doze
-graus, não distribuída uniformemente pelo domínio.</p>
+<p>Cinco pontos de túnel, colocados em menos quatro, zero, quatro, oito
+e dezesseis graus, definem uma média posterior que acompanha a parte
+linear da polar. Entre oito e dezesseis graus, onde ocorre o estol e não
+há nenhuma medição, a banda de dois sigma se alarga. O máximo de
+incerteza interna aparece em doze graus e meio. O modelo não localiza o
+estol e expressa essa incerteza pela banda. Essa informação orienta a
+próxima rodada de CFD para a região em torno de doze graus, em vez de
+distribuí-la uniformemente pelo domínio.</p>
 <h4 id="exemplo-aeronáutico-2">Exemplo Aeronáutico</h4>
 <p>A implementação numericamente correta usa decomposição de Cholesky em
-vez de inversão explícita, que é mais rápida e muito mais estável.</p>
+vez de inversão explícita, que é mais rápida e mais estável.</p>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1830,12 +1822,12 @@ recurso escasso no projeto.</p>
 Functions e Interpolação Espalhada</h3>
 <p>Nem todo problema de superfície de resposta precisa de incerteza.
 Quando os dados são resultado de simulação determinística, sem ruído, e
-o que se quer é uma superfície que passe exatamente pelos pontos e seja
-barata de avaliar milhões de vezes dentro de um laço de otimização ou de
-uma simulação em tempo real, o aparato probabilístico do processo
-gaussiano vira custo sem contrapartida. As <a
+o objetivo é obter uma superfície que passe exatamente pelos pontos e
+seja barata de avaliar milhões de vezes dentro de um laço de otimização
+ou de uma simulação em tempo real, o aparato probabilístico do processo
+gaussiano acrescenta custo sem contrapartida. As <a
 href="https://en.wikipedia.org/wiki/Radial_basis_function">funções de
-base radial</a> são a ferramenta certa nesse regime.</p>
+base radial</a> são adequadas nesse regime.</p>
 <p>O método foi introduzido por Rolland Hardy em 1971 para interpolar
 topografia a partir de pontos espalhados, e ganhou fundamento teórico
 com os trabalhos de Charles Micchelli sobre condições de
@@ -1897,18 +1889,18 @@ quase colineares entre si, o interpolador fica suave e a matriz <span
 class="math inline">\(A\)</span> fica mal condicionada.</p>
 <p><picture><source srcset="../assets/media/metodos_rbf_forma_condicionamento.webp" type="image/webp"><img src="../assets/media/metodos_rbf_forma_condicionamento.png"
 alt="Efeito da base e do parâmetro de forma na interpolação de uma polar, com o número de condição da matriz de interpolação" /></picture></p>
-<p>A figura mostra os dois lados dessa moeda. À esquerda, a mesma
-amostra de oito pontos interpolada por três bases distintas: a thin
-plate spline e a gaussiana com <span
+<p>A figura mostra o compromisso entre aproximação e condicionamento. À
+esquerda, a mesma amostra de oito pontos é interpolada por três bases: a
+thin plate spline e a gaussiana com <span
 class="math inline">\(\varepsilon\)</span> pequeno reproduzem a polar de
 forma aceitável, enquanto a gaussiana com <span
-class="math inline">\(\varepsilon = 1{,}2\)</span> oscila violentamente
-entre os dados, produzindo picos de <span
-class="math inline">\(C_L\)</span> que a física não tem. À direita, o
-número de condição da matriz de interpolação em função de <span
-class="math inline">\(\varepsilon\)</span>: ele cresce por dez ordens de
-grandeza quando <span class="math inline">\(\varepsilon\)</span>
-diminui, cruzando o limiar prático da precisão dupla.</p>
+class="math inline">\(\varepsilon = 1{,}2\)</span> oscila entre os dados
+e produz picos de <span class="math inline">\(C_L\)</span> que a física
+não tem. À direita, o número de condição da matriz de interpolação em
+função de <span class="math inline">\(\varepsilon\)</span> cresce por
+dez ordens de grandeza quando <span
+class="math inline">\(\varepsilon\)</span> diminui, cruzando o limiar
+prático da precisão dupla.</p>
 <p>Esse é o <a
 href="https://link.springer.com/article/10.1007/BF02432002">dilema da
 precisão mal condicionada</a>, formulado por Robert Schaback [10]: os
@@ -2002,12 +1994,12 @@ predição calibrada, com banda de incerteza.</p>
 href="http://www.cs.toronto.edu/~radford/ftp/thesis.pdf">Radford
 Neal</a> [14], que mostrou em 1996 que uma rede neural de uma camada,
 com largura tendendo a infinito, converge para um processo gaussiano
-exato. O resultado é elegante mas inútil em projeto real, porque nenhuma
-rede é infinitamente larga, e foi só com o trabalho de Wilson, Hu,
-Salakhutdinov e Xing em 2016 que a ideia virou ferramenta prática: usar
-uma rede finita, de largura comum, apenas para aprender a representação,
-e reservar a camada gaussiana final para a parte que precisa de
-incerteza calibrada.</p>
+exato. O resultado pressupõe largura infinita e, portanto, não é
+diretamente aplicável a uma rede de projeto real. Em 2016, Wilson, Hu,
+Salakhutdinov e Xing transformaram a ideia em uma ferramenta prática:
+uma rede finita, de largura comum, aprende a representação, enquanto a
+camada gaussiana final fornece a parte que precisa de incerteza
+calibrada.</p>
 <h4 id="formulação-matemática-5">Formulação Matemática</h4>
 <p>A rede mapeia a entrada bruta, por exemplo o vetor de coordenadas de
 controle de uma spline de aerofólio, para um espaço latente de dimensão
@@ -2642,16 +2634,15 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a hr
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;DE          : passo=</span><span class="sc">{</span>de<span class="sc">.</span>x[<span class="dv">0</span>]<span class="sc">:.2f}</span><span class="ss"> custo=</span><span class="sc">{</span>de<span class="sc">.</span>fun<span class="sc">:.4f}</span><span class="ss"> avals=</span><span class="sc">{</span>de<span class="sc">.</span>nfev<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Nelder-Mead : passo=</span><span class="sc">{</span>local<span class="sc">.</span>x[<span class="dv">0</span>]<span class="sc">:.2f}</span><span class="ss"> custo=</span><span class="sc">{</span>local<span class="sc">.</span>fun<span class="sc">:.4f}</span><span class="ss"> avals=</span><span class="sc">{</span>local<span class="sc">.</span>nfev<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;grade fina  : passo=</span><span class="sc">{</span>otimo_global<span class="sc">:.2f}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<p>O resultado mostra a diferença que importa: a evolução diferencial
-encontra <code>passo = 21.99</code> com <code>custo = -3.5000</code>,
-coincidindo com o ótimo global obtido por varredura fina em grade, ao
-custo de 302 avaliações. O Nelder-Mead, partindo de um chute inicial de
-dois graus, converge em apenas 44 avaliações, mas para em
-<code>passo = 9.92</code> com <code>custo = 0.2997</code>, um mínimo
-local quase quatro unidades pior. Para o projetista, a lição é direta:
-quando não se sabe se a superfície de custo tem um único vale ou vários,
-o custo extra de avaliações da heurística populacional é o preço de não
-apostar o projeto inteiro na sorte do chute inicial.</p>
+<p>A evolução diferencial encontra <code>passo = 21.99</code> com
+<code>custo = -3.5000</code>, coincidindo com o ótimo global obtido por
+varredura fina em grade, ao custo de 302 avaliações. O Nelder-Mead,
+partindo de um chute inicial de dois graus, converge em apenas 44
+avaliações, mas para em <code>passo = 9.92</code> com
+<code>custo = 0.2997</code>, um mínimo local quase quatro unidades pior.
+Quando não se sabe se a superfície de custo tem um único vale ou vários,
+o custo adicional de avaliações da heurística populacional reduz a
+dependência do chute inicial.</p>
 <h4 id="limites-de-validade-8">Limites de Validade</h4>
 <p>Nenhuma dessas heurísticas garante convergência ao ótimo global em
 tempo finito, e todas dependem de um número de avaliações que
@@ -4185,7 +4176,7 @@ constantes típicas de cada taxa:</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th><span class="math inline">\(N\)</span></th>
 <th>erro relativo, asa uniforme</th>
 <th>erro relativo, <span class="math inline">\(GJ\)</span> em duas
@@ -4193,22 +4184,22 @@ metades</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>8</td>
 <td><span class="math inline">\(2\times10^{-2}\)</span></td>
 <td><span class="math inline">\(3\times10^{-3}\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>16</td>
 <td><span class="math inline">\(4\times10^{-4}\)</span></td>
 <td><span class="math inline">\(4\times10^{-4}\)</span></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>32</td>
 <td><span class="math inline">\(9\times10^{-8}\)</span></td>
 <td><span class="math inline">\(5\times10^{-5}\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>64</td>
 <td>abaixo de <span class="math inline">\(10^{-14}\)</span></td>
 <td><span class="math inline">\(6\times10^{-6}\)</span></td>
@@ -5283,7 +5274,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=f51be804"></script>
+<script src="../assets/theme.js?v=7389a45f"></script>
+<script src="../assets/essay.js?v=58dcd441"></script>
 </body>
 </html>

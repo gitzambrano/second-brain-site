@@ -7,7 +7,7 @@
 <meta property="og:title" content="White Paper - Modelagem Estatística para a Copa do Mundo FIFA 2026">
 <meta property="og:description" content="A previsão do vencedor de uma Copa é formulada em três camadas: estimação de força relativa via ELO, modelagem de placares por Dixon-Coles sobre Poisson, e propagação de incerteza pelo torneio via Monte Carlo. O white paper documenta cada etapa com equações, apresenta os resultados para 2026 e discute as limitações do modelo ante a alta variância intrínseca do futebol.">
 <meta property="og:type" content="article">
-<script defer="" src="../assets/mathjax/tex-svg.js"
+<script src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
 <style>
 /* ------------------------------------------------------------------ */
@@ -1100,7 +1100,7 @@ sobre dados recentes.</li>
 <li><strong>Distribuição de placares via Poisson modificada por
 Dixon-Coles.</strong></li>
 <li><strong>Simulação Monte Carlo: propagação de incerteza pelo
-torneio.</strong> `</li>
+torneio.</strong></li>
 </ul>
 <h3 id="o-processo-de-inferência-estatística-em-detalhe">O Processo de
 Inferência Estatística em Detalhe</h3>
@@ -1240,7 +1240,7 @@ função de verossimilhança:</p>
 <col style="width: 5%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Categoria</th>
 <th style="text-align: left;">Torneios</th>
 <th style="text-align: center;"><span
@@ -1248,30 +1248,30 @@ class="math inline">\(K_w\)</span></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Copa do Mundo (FIFA)</td>
 <td style="text-align: left;">Copa do Mundo FIFA</td>
 <td style="text-align: center;">40</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Campeonatos continentais e grandes
 torneios</td>
 <td style="text-align: left;">Copa das Confederações, Eliminatórias
 Mundiais, Olimpíadas, etc.</td>
 <td style="text-align: center;">35</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Qualificatórias e ligas nacionais</td>
 <td style="text-align: left;">UEFA Euro, CONCACAF Nations League, Copa
 América, AFC Asian Cup, etc.</td>
 <td style="text-align: center;">30</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Amistosos</td>
 <td style="text-align: left;">-</td>
 <td style="text-align: center;">25</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Torneios não mapeados</td>
 <td style="text-align: left;">-</td>
 <td style="text-align: center;">28</td>
@@ -1753,7 +1753,8 @@ IC_{95\%} = \hat{p}_{i,f} \pm 1{,}96 \cdot \sqrt{\frac{\hat{p}_{i,f}(1 -
 \hat{p}_{i,f})}{N}}
 \]</span></p>
 <p>Com <span class="math inline">\(N = 1.000.000\)</span>, a margem de
-erro máxima (95é <span class="math inline">\(\pm 0{,}098\%\)</span>.</p>
+erro máxima (95%) é <span class="math inline">\(\pm
+0{,}098\%\)</span>.</p>
 <hr />
 <h2 id="7-resultados">7. Resultados</h2>
 <h3 id="parâmetros-do-modelo-calibrado">Parâmetros do Modelo
@@ -1768,14 +1769,14 @@ relevantes.</p>
 <col style="width: 66%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Parâmetro</th>
 <th style="text-align: right;">Valor</th>
 <th style="text-align: left;">Interpretação</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><span
 class="math inline">\(a\)</span></td>
 <td style="text-align: right;">0,2394</td>
@@ -1783,14 +1784,14 @@ class="math inline">\(a\)</span></td>
 = 1{,}270\)</span> gols esperados por time em campo neutro com times
 iguais</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"><span
 class="math inline">\(b\)</span></td>
 <td style="text-align: right;">0,002074</td>
 <td style="text-align: left;">Sensibilidade linear: +100 pts ELO<span
 class="math inline">\(\Rightarrow\)</span> +23% gols esperados</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><span
 class="math inline">\(c\)</span></td>
 <td style="text-align: right;"><span class="math inline">\(-6{,}31
@@ -1798,21 +1799,21 @@ class="math inline">\(c\)</span></td>
 <td style="text-align: left;">Curvatura quadrática (saturação para
 grandes diferenciais)</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"><span
 class="math inline">\(h_{fit}\)</span></td>
 <td style="text-align: right;">100 pts ELO</td>
 <td style="text-align: left;">Vantagem de sede equivalente em pontos
 ELO</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;"><span
 class="math inline">\(\rho_0^{raw}\)</span></td>
 <td style="text-align: right;">0,6724</td>
 <td style="text-align: left;"><span class="math inline">\(\rho(\Delta=0)
 = 0{,}117\)</span> (correlação em jogo equilibrado)</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;"><span
 class="math inline">\(\rho_1^{neg}\)</span></td>
 <td style="text-align: right;">0,4769</td>
@@ -1846,7 +1847,7 @@ class="math inline">\(K_{def}\)</span> estimados pela GRU e o grupo de
 origem. As seleções estão ordenadas por ELO decrescente.</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>#</th>
 <th>Seleção</th>
 <th>Gr</th>
@@ -1859,7 +1860,7 @@ class="math inline">\(K_{def}\)</span></th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>1</td>
 <td>Espanha</td>
 <td>H</td>
@@ -1868,7 +1869,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9598</td>
 <td style="text-align: right;">1,0897</td>
 </tr>
-<tr>
+<tr class="even">
 <td>2</td>
 <td>Argentina</td>
 <td>J</td>
@@ -1877,7 +1878,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9626</td>
 <td style="text-align: right;">1,0120</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>3</td>
 <td>França</td>
 <td>I</td>
@@ -1886,7 +1887,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9634</td>
 <td style="text-align: right;">1,0338</td>
 </tr>
-<tr>
+<tr class="even">
 <td>4</td>
 <td>Brasil</td>
 <td>C</td>
@@ -1895,7 +1896,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9773</td>
 <td style="text-align: right;">0,9607</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>5</td>
 <td>Inglaterra</td>
 <td>L</td>
@@ -1904,7 +1905,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9554</td>
 <td style="text-align: right;">0,9755</td>
 </tr>
-<tr>
+<tr class="even">
 <td>6</td>
 <td>Colômbia</td>
 <td>K</td>
@@ -1913,7 +1914,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0070</td>
 <td style="text-align: right;">0,9672</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>7</td>
 <td>Portugal</td>
 <td>K</td>
@@ -1922,7 +1923,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9861</td>
 <td style="text-align: right;">0,9831</td>
 </tr>
-<tr>
+<tr class="even">
 <td>8</td>
 <td>Holanda</td>
 <td>F</td>
@@ -1931,7 +1932,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9863</td>
 <td style="text-align: right;">1,0112</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>9</td>
 <td>Equador</td>
 <td>E</td>
@@ -1940,7 +1941,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9001</td>
 <td style="text-align: right;">0,8951</td>
 </tr>
-<tr>
+<tr class="even">
 <td>10</td>
 <td>Alemanha</td>
 <td>E</td>
@@ -1949,7 +1950,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0084</td>
 <td style="text-align: right;">1,0281</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>11</td>
 <td>Japão</td>
 <td>F</td>
@@ -1958,7 +1959,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9566</td>
 <td style="text-align: right;">0,9683</td>
 </tr>
-<tr>
+<tr class="even">
 <td>12</td>
 <td>Croácia</td>
 <td>L</td>
@@ -1967,7 +1968,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9696</td>
 <td style="text-align: right;">1,0125</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>13</td>
 <td>Marrocos</td>
 <td>C</td>
@@ -1976,7 +1977,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,8865</td>
 <td style="text-align: right;">0,9876</td>
 </tr>
-<tr>
+<tr class="even">
 <td>14</td>
 <td>Uruguai</td>
 <td>H</td>
@@ -1985,7 +1986,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9248</td>
 <td style="text-align: right;">0,9291</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>15</td>
 <td>Suíça</td>
 <td>B</td>
@@ -1994,7 +1995,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0140</td>
 <td style="text-align: right;">1,0088</td>
 </tr>
-<tr>
+<tr class="even">
 <td>16</td>
 <td>Bélgica</td>
 <td>G</td>
@@ -2003,7 +2004,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0133</td>
 <td style="text-align: right;">0,9968</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>17</td>
 <td>Noruega</td>
 <td>I</td>
@@ -2012,7 +2013,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0454</td>
 <td style="text-align: right;">1,0505</td>
 </tr>
-<tr>
+<tr class="even">
 <td>18</td>
 <td>Turquia</td>
 <td>D</td>
@@ -2021,7 +2022,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9629</td>
 <td style="text-align: right;">1,0212</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>19</td>
 <td>México</td>
 <td>A</td>
@@ -2030,7 +2031,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9580</td>
 <td style="text-align: right;">0,9360</td>
 </tr>
-<tr>
+<tr class="even">
 <td>20</td>
 <td>Senegal</td>
 <td>I</td>
@@ -2039,7 +2040,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9626</td>
 <td style="text-align: right;">0,9840</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>21</td>
 <td>Paraguai</td>
 <td>D</td>
@@ -2048,7 +2049,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9604</td>
 <td style="text-align: right;">0,9399</td>
 </tr>
-<tr>
+<tr class="even">
 <td>22</td>
 <td>Áustria</td>
 <td>J</td>
@@ -2057,7 +2058,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9704</td>
 <td style="text-align: right;">0,9822</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>23</td>
 <td>Austrália</td>
 <td>D</td>
@@ -2066,7 +2067,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9659</td>
 <td style="text-align: right;">0,9670</td>
 </tr>
-<tr>
+<tr class="even">
 <td>24</td>
 <td>Canadá</td>
 <td>B</td>
@@ -2075,7 +2076,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9474</td>
 <td style="text-align: right;">0,9273</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>25</td>
 <td>Irã</td>
 <td>G</td>
@@ -2084,7 +2085,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9669</td>
 <td style="text-align: right;">0,9610</td>
 </tr>
-<tr>
+<tr class="even">
 <td>26</td>
 <td>Coreia do Sul</td>
 <td>A</td>
@@ -2093,7 +2094,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9664</td>
 <td style="text-align: right;">0,9854</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>27</td>
 <td>Argélia</td>
 <td>J</td>
@@ -2102,7 +2103,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9643</td>
 <td style="text-align: right;">0,9846</td>
 </tr>
-<tr>
+<tr class="even">
 <td>28</td>
 <td>Panamá</td>
 <td>L</td>
@@ -2111,7 +2112,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9573</td>
 <td style="text-align: right;">0,9954</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>29</td>
 <td>Uzbequistão</td>
 <td>K</td>
@@ -2120,7 +2121,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9286</td>
 <td style="text-align: right;">0,9393</td>
 </tr>
-<tr>
+<tr class="even">
 <td>30</td>
 <td>EUA</td>
 <td>D</td>
@@ -2129,7 +2130,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0980</td>
 <td style="text-align: right;">1,0510</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>31</td>
 <td>Costa do Marfim</td>
 <td>E</td>
@@ -2138,7 +2139,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9496</td>
 <td style="text-align: right;">0,9357</td>
 </tr>
-<tr>
+<tr class="even">
 <td>32</td>
 <td>Egito</td>
 <td>G</td>
@@ -2147,7 +2148,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9102</td>
 <td style="text-align: right;">0,9484</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>33</td>
 <td>Escócia</td>
 <td>C</td>
@@ -2156,7 +2157,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9927</td>
 <td style="text-align: right;">0,9502</td>
 </tr>
-<tr>
+<tr class="even">
 <td>34</td>
 <td>Suécia</td>
 <td>F</td>
@@ -2165,7 +2166,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0876</td>
 <td style="text-align: right;">1,0779</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>35</td>
 <td>Rep. Tcheca</td>
 <td>A</td>
@@ -2174,7 +2175,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9809</td>
 <td style="text-align: right;">0,9980</td>
 </tr>
-<tr>
+<tr class="even">
 <td>36</td>
 <td>Tunísia</td>
 <td>F</td>
@@ -2183,7 +2184,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9623</td>
 <td style="text-align: right;">0,9526</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>37</td>
 <td>Jordânia</td>
 <td>J</td>
@@ -2192,7 +2193,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0615</td>
 <td style="text-align: right;">1,0077</td>
 </tr>
-<tr>
+<tr class="even">
 <td>38</td>
 <td>DR Congo</td>
 <td>K</td>
@@ -2201,7 +2202,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9123</td>
 <td style="text-align: right;">0,9559</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>39</td>
 <td>Nova Zelândia</td>
 <td>G</td>
@@ -2210,7 +2211,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,1262</td>
 <td style="text-align: right;">0,9742</td>
 </tr>
-<tr>
+<tr class="even">
 <td>40</td>
 <td>Iraque</td>
 <td>I</td>
@@ -2219,7 +2220,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9046</td>
 <td style="text-align: right;">0,9792</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>41</td>
 <td>Haiti</td>
 <td>C</td>
@@ -2228,7 +2229,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0296</td>
 <td style="text-align: right;">0,9933</td>
 </tr>
-<tr>
+<tr class="even">
 <td>42</td>
 <td>Arábia Saudita</td>
 <td>H</td>
@@ -2237,7 +2238,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9797</td>
 <td style="text-align: right;">0,9607</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>43</td>
 <td>Cabo Verde</td>
 <td>H</td>
@@ -2246,7 +2247,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9560</td>
 <td style="text-align: right;">0,9648</td>
 </tr>
-<tr>
+<tr class="even">
 <td>44</td>
 <td>Bósnia-Herz.</td>
 <td>B</td>
@@ -2255,7 +2256,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9969</td>
 <td style="text-align: right;">0,9442</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>45</td>
 <td>África do Sul</td>
 <td>A</td>
@@ -2264,7 +2265,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">0,9919</td>
 <td style="text-align: right;">0,9906</td>
 </tr>
-<tr>
+<tr class="even">
 <td>46</td>
 <td>Gana</td>
 <td>L</td>
@@ -2273,7 +2274,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0234</td>
 <td style="text-align: right;">0,9977</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>47</td>
 <td>Curaçao</td>
 <td>E</td>
@@ -2282,7 +2283,7 @@ class="math inline">\(K_{def}\)</span></th>
 <td style="text-align: right;">1,0269</td>
 <td style="text-align: right;">1,0280</td>
 </tr>
-<tr>
+<tr class="even">
 <td>48</td>
 <td>Catar</td>
 <td>B</td>
@@ -2661,7 +2662,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=f51be804"></script>
+<script src="../assets/theme.js?v=7389a45f"></script>
+<script src="../assets/essay.js?v=58dcd441"></script>
 </body>
 </html>
