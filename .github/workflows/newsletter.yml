@@ -20,18 +20,30 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 2
 
-      - name: Preparar manifestos
+      - name: Detectar manifesto
+        id: manifest
         shell: bash
         run: |
           set -euo pipefail
-          if [ ! -f newsletter-manifest.json ]; then
-            printf '{"version":1,"entries":[]}\n' > newsletter-manifest.json
+          CURRENT=.github/newsletter-manifest.json
+          if [ ! -f "$CURRENT" ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "newsletter: manifesto ausente; nada a enviar"
+            exit 0
           fi
-          if ! git show HEAD^:newsletter-manifest.json > /tmp/newsletter-previous.json 2>/dev/null; then
-            printf '{"version":1,"entries":[]}\n' > /tmp/newsletter-previous.json
+          echo "present=true" >> "$GITHUB_OUTPUT"
+
+          # Primeiro deploy da feature = baseline, nunca rajada histórica.
+          if git show HEAD^:.github/newsletter-manifest.json > /tmp/newsletter-previous.json 2>/dev/null; then
+            echo "bootstrap=false" >> "$GITHUB_OUTPUT"
+          else
+            cp "$CURRENT" /tmp/newsletter-previous.json
+            echo "bootstrap=true" >> "$GITHUB_OUTPUT"
+            echo "newsletter: baseline criado; nenhum envio no primeiro deploy"
           fi
 
       - name: Preparar modo
+        if: steps.manifest.outputs.present == 'true'
         id: mode
         shell: bash
         env:
@@ -44,12 +56,13 @@ jobs:
           fi
 
       - name: Enviar newsletter
+        if: steps.manifest.outputs.present == 'true'
         env:
-          SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://gitzambrano.github.io/second-brain-site' }}
+          SITE_BASE_URL: ${{ vars.SITE_BASE_URL }}
           KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
           KIT_EMAIL_TEMPLATE_ID: ${{ vars.KIT_EMAIL_TEMPLATE_ID }}
         run: >-
           python .github/scripts/send_kit_newsletter.py
-          newsletter-manifest.json
+          .github/newsletter-manifest.json
           --previous-manifest /tmp/newsletter-previous.json
           ${{ steps.mode.outputs.args }}
