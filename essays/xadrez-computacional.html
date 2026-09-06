@@ -7,7 +7,7 @@
 <meta property="og:title" content="Xadrez Computacional — do Brute-Force às Redes Neurais">
 <meta property="og:description" content="O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).">
 <meta property="og:type" content="article">
-<script defer="" src="../assets/mathjax/tex-svg.js"
+<script src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
 <style>
 /* ------------------------------------------------------------------ */
@@ -746,9 +746,8 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 @media print{
   .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
 }
-html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -1240,111 +1239,111 @@ não necessariamente joga xadrez. Alguns termos recorrentes:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Termo</th>
 <th>Significado para o engine</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Posição</strong></td>
 <td>O estado completo do tabuleiro — equivalente ao <em>state</em> de um
 programa. 64 casas, até 32 peças, mais metadados (de quem é a vez,
 direitos de roque, etc.)</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Movimento (move)</strong></td>
 <td>Uma transição de estado: peça X sai da casa A e vai para casa B,
 possivelmente capturando uma peça adversária</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Peças e valores</strong></td>
 <td>Peão (1pt), Cavalo (3pt), Bispo (3pt), Torre (5pt), Dama (9pt), Rei
 (∞ — perder o rei é perder o jogo). Estes valores são a moeda da
 avaliação</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Captura</strong></td>
 <td>Mover uma peça para uma casa ocupada por peça adversária,
 removendo-a do jogo</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Xeque</strong></td>
 <td>Ameaça direta ao rei adversário — ele <em>deve</em> ser salvo no
 próximo lance</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Mate</strong></td>
 <td>Xeque do qual o rei não pode escapar — fim do jogo</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong><a
 href="https://en.wikipedia.org/wiki/En_passant">En-passant</a></strong></td>
 <td>Regra especial: um peão que avança 2 casas pode ser capturado “de
 passagem” pelo peão adversário, como se tivesse avançado apenas 1</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong><a href="https://en.wikipedia.org/wiki/Castling">Roque</a>
 (castling)</strong></td>
 <td>Movimento duplo especial: rei e torre trocam de posição
 simultaneamente, usado para proteger o rei</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Promoção</strong></td>
 <td>Quando um peão alcança a última fila, é promovido a qualquer peça
 (quase sempre dama)</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Centipawn (cp)</strong></td>
 <td>Unidade de avaliação: 100cp = 1 peão de vantagem. +300cp ≈ um cavalo
 a mais</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong><a
 href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo</a></strong></td>
 <td>Sistema de rating: humanos top ~2850, Stockfish ~3600, diferença de
 200 Elo ≈ 75% de vitórias</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Peão passado</strong></td>
 <td>Peão sem nenhum peão adversário bloqueando seu caminho de promoção —
 extremamente valioso</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Nó (node)</strong></td>
 <td>Cada posição individual visitada pela busca, um único ponto na
 árvore de jogo. Uma busca que “examinou 5 milhões de nós” avaliou 5
 milhões de posições diferentes</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Folha (leaf)</strong></td>
 <td>Um nó onde a busca para de se ramificar e devolve um valor, seja
 porque a profundidade combinada terminou, seja porque a posição está
 calma o bastante (ver Busca de Quiescência)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Ply</strong></td>
 <td>Um único lance de um único jogador (não um “lance completo” de
 xadrez, que envolve os dois). “Profundidade 20” quer dizer 20 plies, ou
 seja, 10 lances de cada lado</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Profundidade (depth)</strong></td>
 <td>Quantos plies à frente o engine calcula nesta iteração</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Nodes/s (nps)</strong></td>
 <td>Nós por segundo: quantas posições o engine consegue visitar e
 avaliar a cada segundo. É o “quantos passos por minuto” da busca — um
 engine moderno em hardware comum processa dezenas a centenas de milhões
 de nós por segundo</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>PV (Principal Variation)</strong></td>
 <td>A sequência de lances que o engine considera ótima — a “melhor
 linha”</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Nó PV / nó não-PV</strong></td>
 <td>Um nó PV é um nó que ainda faz parte da “melhor linha” sendo
 investigada, com uma janela alfa-beta larga porque sua pontuação exata
@@ -1352,13 +1351,13 @@ importa; a esmagadora maioria dos nós é não-PV, buscada com janela
 estreita só para confirmar “isto é pior que o que já tenho”, sem se
 importar com o valor exato</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Multi-PV</strong></td>
 <td>Em vez de reportar só a melhor linha, o engine reporta as N melhores
 linhas simultaneamente, cada uma com seu próprio score, para análise
 humana comparativa</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Avaliação estática (static eval)</strong></td>
 <td>O placar que a rede de avaliação (capítulos XI a XIII) devolve
 olhando <em>só</em> a posição atual, sem buscar nenhum lance à frente —
@@ -1367,35 +1366,35 @@ a “opinião imediata” da rede. No código, essa é a variável
 número, barato de calcular, contra o que a busca, cara de calcular,
 provavelmente encontraria</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>Quiet move</strong></td>
 <td>Um lance que não captura peça nem dá xeque — o oposto de uma
 captura. A maioria dos lances numa posição típica é quiet, e por isso
 boa parte das técnicas de poda (capítulo VII) mira especificamente
 neles</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>Cutoff (beta cutoff)</strong></td>
 <td>O momento em que a busca decide parar de examinar os lances
 restantes de um nó porque já encontrou algo bom demais para o adversário
 permitir — é o evento que a poda alfa-beta do capítulo IV existe para
 provocar o quanto antes</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong>WDL (Win/Draw/Loss)</strong></td>
 <td>Um resultado ou uma probabilidade expressos como três números,
 vitória/empate/derrota, em vez de um único placar em centipawns. Usado
 tanto pelas tablebases (resultado exato, capítulo V) quanto como alvo de
 treinamento da rede NNUE (probabilidade, capítulo XIV)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td><strong>MVV-LVA</strong></td>
 <td>“Most Valuable Victim, Least Valuable Attacker” — heurística de
 ordenação de capturas: capturar uma dama com um peão é examinado antes
 de capturar um peão com uma dama, porque tende a ser a troca mais
 favorável</td>
 </tr>
-<tr>
+<tr class="even">
 <td><strong><a
 href="https://en.wikipedia.org/wiki/Universal_Chess_Interface">UCI</a></strong></td>
 <td>Protocolo de comunicação texto entre engine e interface (como uma
@@ -1977,19 +1976,19 @@ apenas a profundidade de milhares de entradas, os dados estão contíguos
 em memória.</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Plataforma</th>
 <th>Entradas</th>
 <th>Memória</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Nativo</td>
 <td>4M entradas</td>
 <td>~112 MB</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WASM (browser)</td>
 <td>512K entradas</td>
 <td>~14 MB</td>
@@ -2502,29 +2501,29 @@ cavalo sair do caminho. Com valores redondos (peão 100, cavalo 300,
 bispo 300, dama 900), a sequência completa fica:</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Captura</th>
 <th>Efeito no saldo branco</th>
 <th>Saldo acumulado</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Dama × peão</td>
 <td>+100</td>
 <td>+100</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Cavalo × dama</td>
 <td>−900</td>
 <td>−800</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Bispo × cavalo</td>
 <td>+300</td>
 <td>−500</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Torre × bispo</td>
 <td>−300</td>
 <td>−800</td>
@@ -2637,61 +2636,61 @@ Zchezz</h3>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Prioridade</th>
 <th>Score</th>
 <th>Tipo de Movimento</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>2.000.000</td>
 <td>TT / PV move</td>
 <td>O melhor movimento da busca anterior</td>
 </tr>
-<tr>
+<tr class="even">
 <td>1.700.000+</td>
 <td>Promoções</td>
 <td>Promoção a dama tem prioridade máxima</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>1.600.000+</td>
 <td>Capturas ganhadoras/neutras</td>
 <td>SEE <span class="math inline">\(\geq 0\)</span>, ordenadas por <a
 href="https://www.chessprogramming.org/MVV-LVA">MVV-LVA</a></td>
 </tr>
-<tr>
+<tr class="even">
 <td>900.000</td>
 <td>Killer move slot 0</td>
 <td>Movimento que causou cutoff nesta mesma profundidade</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>800.000</td>
 <td>Killer move slot 1</td>
 <td>Segundo killer</td>
 </tr>
-<tr>
+<tr class="even">
 <td>780.000</td>
 <td>Counter move</td>
 <td>Melhor refutação do movimento anterior</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>700.000+</td>
 <td>Torre na 7ª fila</td>
 <td>Heurística posicional</td>
 </tr>
-<tr>
+<tr class="even">
 <td>600.000+</td>
 <td>Ataques à zona do rei</td>
 <td>Movimentos que atacam casas na Chebyshev <span
 class="math inline">\(\leq 2\)</span> do rei adversário</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>200.000+</td>
 <td>Quiet moves</td>
 <td>Score base + história + CMH</td>
 </tr>
-<tr>
+<tr class="even">
 <td>100.000–200.000</td>
 <td>Capturas perdedoras</td>
 <td>SEE <span class="math inline">\(&lt; 0\)</span> (últimas na
@@ -3147,33 +3146,33 @@ treinamento, o conversor e o engine C:</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Parâmetro</th>
 <th>Valor</th>
 <th>Significado</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>QA</td>
 <td>255</td>
 <td>Escala L1: float <span class="math inline">\([-128.5, +128.5]
 \to\)</span> int16 <span class="math inline">\([-32767,
 +32767]\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>QB</td>
 <td>64</td>
 <td>Escala L2/L3: float <span class="math inline">\([-1.984, +1.984]
 \to\)</span> int8 <span class="math inline">\([-127, +127]\)</span></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>SHIFT</td>
 <td>8</td>
 <td>Right-shift após acumulação L1 (<span class="math inline">\(\approx
 \log_2(\text{QA})\)</span>)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>OUT_SCALE</td>
 <td><span class="math inline">\(320 / (QB \times QB) \approx
 0.078\)</span></td>
@@ -3365,24 +3364,24 @@ clipped.</p>
 <p>O QAT usa warm-up para transicionar suavemente:</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Épocas</th>
 <th>Estado</th>
 <th>O que é quantizado</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>0–14</td>
 <td>float32 (warm-up)</td>
 <td>Nada (ClippedReLU estabiliza)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>15–39</td>
 <td>QAT-L1</td>
 <td>Pesos/bias L1 + ativação L1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>40+</td>
 <td>QAT-ALL</td>
 <td>L1 (int16) + L2/L3 (int8) + todas ativações</td>
@@ -3464,39 +3463,39 @@ Elo nos rankings atuais, uma diferença que flutua entre versões.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Dimensão</th>
 <th>Stockfish NNUE</th>
 <th>Leela Chess Zero (Lc0)</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Busca</td>
 <td>Alpha-Beta + PVS</td>
 <td>Monte Carlo Tree Search</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Avaliação</td>
 <td>NNUE (3 camadas, ~400KB)</td>
 <td>ResNet profunda (~100 camadas, ~100MB)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Posições/segundo</td>
 <td>~100M (CPU)</td>
 <td>~40K (GPU)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Nós por decisão</td>
 <td>Milhões</td>
 <td>Milhares</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Hardware</td>
 <td>CPU (AVX2/NEON)</td>
 <td>GPU (CUDA/ROCm)</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Estilo de jogo</td>
 <td>Tático, preciso, calculista</td>
 <td>Posicional, criativo, “humano”</td>
@@ -4274,7 +4273,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=f51be804"></script>
+<script src="../assets/theme.js?v=7389a45f"></script>
+<script src="../assets/essay.js?v=58dcd441"></script>
 </body>
 </html>
