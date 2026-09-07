@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="59">
+<html lang="pt-BR" data-status="finalizado" data-minutes="60">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,6 +27,22 @@
   --rust-bright:#A84F3C;
   --accent:#4A8FA8;
   --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#B08B4F;
+  --callout-todo:#B18A4A;
+  --callout-tip:#B08B4F;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#8A857E;
+  --quote-bg:#1C1B1A;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
@@ -48,6 +64,22 @@
   --rust-bright:#A04030;
   --accent:#35708A;
   --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
   --box-bg:var(--surface);
   --box-verdict-bg:var(--surface2);
 }
@@ -76,6 +108,22 @@
     --rust-bright:#A04030;
     --accent:#35708A;
     --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
     --box-bg:var(--surface);
     --box-verdict-bg:var(--surface2);
   }
@@ -209,12 +257,9 @@ body{
    a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
    já ocupa quase tudo e o breakout não teria para onde ir. */
 @media (min-width:1400px){
-  /* Só o TETO sobe. Nada de `width`: uma tabela estreita continua estreita e
-     uma figura continua no tamanho natural — o que muda é até onde elas podem
-     ir quando precisam. `margin-left:50%` + `translateX(-50%)` centraliza
-     seja qual for a largura resultante. */
-  .content > figure,
-  .content > table{
+  /* Apenas figuras podem escapar da coluna de prosa. Tabelas permanecem na
+     coluna e, quando largas, rolam dentro do próprio elemento. */
+  .content > figure{
     max-width:min(var(--wide-width),1500px);
     margin-left:50%;
     transform:translateX(-50%);
@@ -403,7 +448,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--surface2);border-left:2px solid var(--gold-dim);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -411,7 +456,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--surface);border-left:3px solid var(--gold);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -423,11 +468,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-.pull-quote.epigraph p:last-child{
-  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-dim);margin-top:.9rem;
-}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -441,6 +483,62 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin-top:.3rem;
 }
 .pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--callout-quote) 62%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.8rem;line-height:1.55;letter-spacing:.035em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.66rem;line-height:1.35;letter-spacing:.08em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
 
 /* ------------------------------------------------------------------ */
 /* Caixas tipadas                                                      */
@@ -457,16 +555,29 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:var(--box-bg);
   overflow:hidden;
 }
-.box.experimento{--boxc:var(--rust);}
-.box.evidencia{--boxc:var(--accent);}
-.box.mapa{--boxc:var(--gold);}
-.box.ataque{--boxc:var(--rust);}
-.box.aviso{--boxc:var(--amber);}
-.box.nivel{--boxc:var(--accent);}
-.box.ideia{--boxc:var(--gold-dim);}
-/* generico: filete cinza discreto — sem cor de destaque. O rótulo, porém,
-   precisa continuar legível: em cinza de borda ele desaparecia no fundo. */
-.box.generico{--boxc:var(--border);--box-badge-c:var(--text-dim);}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-tip{--boxc:var(--callout-tip);}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);border-left-style:dashed;}
+.box.callout-danger{--boxc:var(--callout-danger);border-left-width:5px;}
+.box.callout-bug{--boxc:var(--callout-bug);border-left-style:double;}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
@@ -486,16 +597,33 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > p:last-of-type{margin-bottom:1.2rem;}
 .box-title p,.box-badge p{margin:0;padding:0;}
 
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;letter-spacing:.055em;line-height:1.35;
+}
+
 .box-verdict{
-  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
-  background:var(--box-verdict-bg);
-  border-top:1px solid var(--border);
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:.5rem;
+  color:var(--boxc);margin-bottom:.5rem;
 }
 
 /* Cards: filosofos e obras */
@@ -562,9 +690,11 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
-     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
-  font-size:.656em;line-height:1.55;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -689,7 +819,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -703,11 +837,159 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
      caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
      leitura nesse corpo. */
   .box-badge{font-size:.78rem;}
-  .verdict-tag{font-size:.76rem;}
+  .verdict-tag{font-size:.78rem;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.84rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 2.5%,var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
+  margin:0;padding:0 0 1.15rem;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:-1px 0 0 -1px;
+  padding:.5rem 1.05rem .44rem;
+  border:0;border-radius:0;
+  border-bottom:2px solid var(--boxc);
+  background:color-mix(in srgb,var(--boxc) 14%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato; `example`/`tip` propoem um cenario. A
+   faixa do segundo par pesa um pouco menos para marcar essa diferenca sem
+   trocar de cor — a familia visual continua a mesma. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  border-bottom-width:1px;
+  background:color-mix(in srgb,var(--boxc) 7%,transparent);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .3rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.82rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+.box.callout-abstract{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-info{background:color-mix(in srgb,var(--boxc) 3.5%,var(--bg));}
+.box.callout-tip{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-example{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-danger{background:color-mix(in srgb,var(--boxc) 7%,var(--surface));border-left-width:6px;}
+.box.callout-bug{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+.box.callout-failure{border-left-style:dashed;}
+.box.callout-danger{border-left-style:solid;}
+.box.callout-bug{border-left-style:double;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 .6rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
 }
 
 /* ------------------------------------------------------------------ */
@@ -1088,28 +1370,28 @@ profundidade que ela exige.</p>
 <col style="width: 21%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Opção</th>
 <th>Descrição</th>
 <th>Status</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Universo com Fronteira</strong></td>
 <td>O espaço tem bordas físicas — lugares onde simplesmente acaba. Exige
 condições de contorno impostas “de fora”, violando a causalidade
 fechada.</td>
 <td>Fisicamente inadmissível na Relatividade Geral</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Universo Infinito</strong></td>
 <td>O espaço se estende ilimitadamente em todas as direções, sem volume
 total definido. Colapsa o conceito de probabilidade e gera o problema
 dos Cérebros de Boltzmann.</td>
 <td>Matematicamente coerente, mas filosoficamente ruinoso</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Universo Fechado sem Fronteira</strong></td>
 <td>O espaço tem volume finito mas nenhuma borda — como a superfície de
 uma esfera em três dimensões.</td>
@@ -1142,10 +1424,12 @@ Relatividade Geral rejeita universalmente o universo com fronteira
 literal. Essa opção está, em termos de física conhecida, encerrada.
 Descartada. Não é uma candidata.</p>
 <div class="quote">
-<p>“Um universo com fronteira não é apenas contraintuitivo — é
-incoerente dentro da física padrão, da mesma forma que perguntar qual
-cor é mais rápida que o azul é incoerente dentro da linguagem padrão. A
-pergunta parece gramatical, mas não tem referente.”</p>
+<div class="quote-text">
+<p>Um universo com fronteira não é apenas contraintuitivo — é incoerente
+dentro da física padrão, da mesma forma que perguntar qual cor é mais
+rápida que o azul é incoerente dentro da linguagem padrão. A pergunta
+parece gramatical, mas não tem referente.</p>
+</div>
 </div>
 <p>Passemos ao <strong>universo infinito</strong>. Esta opção parece a
 mais generosa — simplesmente deixamos o espaço se estender para sempre,
@@ -1254,18 +1538,21 @@ incluindo o raciocínio que nos levou a concluir que vivemos num universo
 infinito — é provavelmente ilusório. A conclusão se autodestrói. O
 universo infinito, levado a sério, é uma cosmologia que mina a própria
 capacidade de fazer cosmologia.</p>
-<div class="quote">
-<p><strong>Por que descartamos o universo infinito:</strong> Um universo
-genuinamente infinito em extensão espacial gera três problemas
-irresolvidos: (1) torna as equações da cosmologia padrão mal definidas
-no regime de energia total; (2) colapsa o conceito de probabilidade,
-tornando impossível qualquer raciocínio estatístico sobre observações;
-(3) prediz que a maioria dos observadores no universo são ilusões
-estatísticas (Cérebros de Boltzmann), tornando autodestrutivo qualquer
-modelo que chega a essa conclusão. Nenhum desses problemas é
-superficial. O universo infinito não é uma hipótese proibida — mas vem
-acompanhada de um preço filosófico tão alto que exige uma seriedade
-raramente concedida nas apresentações populares de cosmologia.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Por que descartamos o universo infinito</p>
+</div>
+<p>Um universo genuinamente infinito em extensão espacial gera três
+problemas irresolvidos: (1) torna as equações da cosmologia padrão mal
+definidas no regime de energia total; (2) colapsa o conceito de
+probabilidade, tornando impossível qualquer raciocínio estatístico sobre
+observações; (3) prediz que a maioria dos observadores no universo são
+ilusões estatísticas (Cérebros de Boltzmann), tornando autodestrutivo
+qualquer modelo que chega a essa conclusão. Nenhum desses problemas é
+superficial. Todos exigem soluções que a física atual não possui. O
+universo infinito não é uma hipótese proibida — mas vem acompanhada de
+um preço filosófico tão alto que exige uma seriedade raramente concedida
+nas apresentações populares de cosmologia.</p>
 </div>
 <p>Chegamos, então, à <strong>terceira opção</strong> — a única que a
 física moderna considera seriamente plausível: um universo <em>finito
@@ -1387,7 +1674,7 @@ regime?</p>
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Curvatura</th>
 <th>Geometria</th>
 <th>Características</th>
@@ -1395,21 +1682,21 @@ regime?</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>k = 0 · Plano</td>
 <td>Euclidiana</td>
 <td>Linhas paralelas nunca se encontram; triângulos somam 180°; requer Ω
 = ρ_c ≈ 9,47 × 10⁻²⁷ kg/m³</td>
 <td>Expansão indefinida, taxa tendendo a zero</td>
 </tr>
-<tr class="even">
+<tr>
 <td>k = +1 · Esférico (Fechado)</td>
 <td>Riemanniana</td>
 <td>Linhas paralelas convergem; triângulos somam &gt; 180°; volume
 finito sem bordas</td>
 <td>Expansão para e reverte em Big Crunch (Ω &gt; 1)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>k = −1 · Hiperbólico (Aberto)</td>
 <td>Lobachevskiana</td>
 <td>Linhas paralelas divergem; triângulos somam &lt; 180°; superfície
@@ -1469,7 +1756,7 @@ matematicamente independentes.</p>
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Topologia</th>
 <th>Notação</th>
 <th>Curvatura</th>
@@ -1477,14 +1764,14 @@ matematicamente independentes.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><a href="https://en.wikipedia.org/wiki/3-sphere">3-Esfera</a></td>
 <td>S³</td>
 <td>Positiva constante</td>
 <td>Versão tridimensional da superfície de uma esfera 4D. Finita,
 fechada, sem fronteiras. Volume finito.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><a href="https://en.wikipedia.org/wiki/Three-torus">3-Toro</a></td>
 <td>T³</td>
 <td>Plana (zero)</td>
@@ -1493,7 +1780,7 @@ plana, topologia fechada. Viagem em linha reta eventualmente retorna ao
 ponto de partida. Popular em games: sair pela borda esquerda e
 reaparecer na direita.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><a href="https://en.wikipedia.org/wiki/Hyperbolic_space">Espaço
 Hiperbólico</a></td>
 <td>ℍ³</td>
@@ -1502,7 +1789,7 @@ Hiperbólico</a></td>
 Infinito, com distâncias crescendo exponencialmente com o raio. Conexão
 com a energia escura e o destino de resfriamento cósmico.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><a
 href="https://en.wikipedia.org/wiki/Seifert%E2%80%93Weber_space">Espaço
 de Seifert–Weber</a></td>
@@ -1511,7 +1798,7 @@ de Seifert–Weber</a></td>
 <td>Dodecaedro hiperbólico com faces opostas identificadas. Candidato
 exótico testado contra o mapa do CMB.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><a
 href="https://en.wikipedia.org/wiki/Poincar%C3%A9_homology_sphere">Espaço
 de Poincaré</a></td>
@@ -1521,7 +1808,7 @@ de Poincaré</a></td>
 holonomia icosaédrico. Luminet (2003) propôs compatibilidade com padrões
 no CMB.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><a href="https://en.wikipedia.org/wiki/Bieberbach_group">Variedades
 Quociente</a></td>
 <td>M/Γ</td>
@@ -1541,16 +1828,18 @@ diferentes. As missões WMAP e Planck buscaram esses padrões e não os
 encontraram de forma conclusiva, o que impõe limites inferiores ao
 tamanho de qualquer topologia compacta: se existe, é maior que o
 horizonte observável.</p>
-<div class="pull-quote">
-<p>“Existe algo profundamente perturbador na ideia de um universo
+<div class="quote">
+<div class="quote-text">
+<p>Existe algo profundamente perturbador na ideia de um universo
 toroidal: você olharia para o céu e, com telescópios suficientemente
 poderosos, veria a Via Láctea pela frente e por trás, pela direita e
 pela esquerda, acima e abaixo — uma galeria de espelhos cósmicos
 estendendo-se em todas as direções, cada imagem mais antiga que a
 anterior, camadas sobrepostas de tempo-espaço dobrado sobre si
-mesmo.”</p>
-<div class="pq-cite">
-<p>Implicação observacional do universo toroidal compacto</p>
+mesmo.</p>
+</div>
+<div class="quote-attribution">
+<p>— Implicação observacional do universo toroidal compacto</p>
 </div>
 </div>
 <p>Além das topologias derivadas de curvatura constante, há também
@@ -1625,17 +1914,37 @@ têm ângulos que somam mais de 180°, e que a área de uma “esfera” nesse
 espaço (o conjunto de pontos a distância r de um dado ponto) cresce mais
 lentamente que 4πr² para r grandes. A curvatura é real, intrínseca, e
 detectável sem referenciar nenhuma quarta dimensão.</p>
-<div class="quote">
+<p>Dizemos que a Terra é esférica — e ela é, extrinsecamente. Mas um
+cosmólogo que pergunta “qual é a curvatura intrínseca do universo?” está
+fazendo uma pergunta radicalmente diferente: uma que pode ser respondida
+apenas por observações feitas de dentro, sem nunca sair para uma
+perspectiva exterior que, aliás, pode não existir. A importância
+cosmológica dessa distinção é profunda. As equações de Einstein
+determinam a curvatura intrínseca do espaço-tempo — e só essa. Não há
+“exterior” ao universo do qual sua curvatura extrínseca poderia ser
+medida. O parâmetro Ω que o Planck mede é uma grandeza intrínseca:
+reflete como geodésicas divergem ou convergem dentro do espaço, como a
+soma de ângulos de triângulos cósmicos se compara a 180°. E isso nos
+leva ao argumento da “coincidência improvável” com mais força. Se o
+universo fosse uma S³, qualquer triângulo suficientemente grande
+revelaria a curvatura positiva. O fato de que o Planck encontra Ω =
+1,0007 com uma barra de erro de ±0,0019 significa que, se existe
+curvatura, ela é menor que nossa capacidade de detectar dentro do
+horizonte observável. Ou o universo é genuinamente plano — e
+provavelmente infinito — ou tem uma escala de curvatura tão grande que
+parece plano daqui dentro, como a Terra parece plana do nível do solo. A
+segunda opção é fisicamente válida mas impõe um ajuste fino de escala
+que exige explicação.</p>
+<div class="box callout-note box-untitled">
 <p>A <strong>inflação cósmica</strong> resolve o problema da planura de
-forma elegante: um período<br />
-de expansão exponencial no início do universo esticaria qualquer
-curvatura original para além do horizonte observável, tornando o cosmos
-local inevitavelmente plano independentemente de qual fosse a topologia
-inicial. É uma das predições mais elegantes da teoria inflacionária — e
-uma das que mais suporte observacional possui. Mas ela também “aplaina”
-o debate: se a inflação necessariamente produz um cosmos local plano, a
-questão da topologia global fica permanentemente fora de alcance
-observacional.</p>
+forma elegante: um período de expansão exponencial no início do universo
+esticaria qualquer curvatura original para além do horizonte observável,
+tornando o cosmos local inevitavelmente plano independentemente de qual
+fosse a topologia inicial. É uma das predições mais elegantes da teoria
+inflacionária — e uma das que mais suporte observacional possui. Mas ela
+também “aplaina” o debate: se a inflação necessariamente produz um
+cosmos local plano, a questão da topologia global fica permanentemente
+fora de alcance observacional.</p>
 </div>
 <hr />
 <h2 id="nível-i--o-horizonte-além-do-horizonte">Nível I — O Horizonte
@@ -1654,9 +1963,11 @@ que o número de configurações distinguíveis de matéria dentro de um
 volume do tamanho do nosso horizonte observável é finito — embora
 grotescamente grande, da ordem de 10<sup>(10</sup>118).</p>
 <div class="quote">
-<p>“Em um universo espacialmente infinito, qualquer configuração finita
+<div class="quote-text">
+<p>Em um universo espacialmente infinito, qualquer configuração finita
 de matéria e energia que possa existir, existe — e existe infinitas
-vezes. A questão não é se existe um duplo seu: é quantos existem.”</p>
+vezes. A questão não é se existe um duplo seu: é quantos existem.</p>
+</div>
 </div>
 <p>A distância estimada até o doppelgänger mais próximo — um volume
 idêntico ao nosso, com a mesma história cósmica, as mesmas galáxias, o
@@ -1759,7 +2070,7 @@ realizamos uma observação, vemos apenas um resultado. A superposição
 “colapsa” para um estado definido. Mas as equações da mecânica quântica,
 em si, não descrevem nenhum colapso. A equação de Schrödinger é linear e
 determinística: nunca produz uma redução da função de onda.</p>
-<div class="quote">
+<div class="box callout-note box-untitled">
 <p><a href="https://en.wikipedia.org/wiki/Hugh_Everett_III">Hugh Everett
 III</a> propôs, em 1957, a solução mais radical: o colapso não existe. A
 função de onda nunca colapsa. Todos os resultados ocorrem — em ramos
@@ -1782,30 +2093,30 @@ igualmente reais, simplesmente inacessíveis uma à outra.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Característica</th>
 <th>Nível I — Separação Espacial</th>
 <th>Nível III — Separação no Espaço de Hilbert</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Localização das cópias</td>
 <td>Regiões causalmente desconectadas do mesmo espaço-tempo</td>
 <td>Ramos distintos do mesmo espaço-tempo, separados no espaço de
 estados quânticos</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Leis físicas</td>
 <td>Mesmas</td>
 <td>Mesmas</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Diferenças</td>
 <td>Condições iniciais distintas</td>
 <td>Histórias de medição distintas</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Analogia</td>
 <td>Cidades em continentes que nunca se comunicaram</td>
 <td>Histórias alternativas do mesmo universo</td>
@@ -1866,12 +2177,16 @@ existem universos governados por geometrias completamente distintas,
 universos com mais dimensões compactas, universos onde a própria noção
 de “lei física” é irreconhecível para nós.</p>
 <div class="quote">
-<p>“A questão ‘por que essas equações e não outras?’ dissolve-se no
-Nível IV: não há ‘essas equações’. Há todas as equações, simultânea e
+<div class="quote-text">
+<p>A questão ‘por que essas equações e não outras?’ dissolve-se no Nível
+IV: não há ‘essas equações’. Há todas as equações, simultânea e
 igualmente reais. A pergunta não é por que vivemos neste universo, mas
 por que esta estrutura matemática particular gera observadores que se
-perguntam por que vivem aqui.” — Consequência da Hipótese do Universo
-Matemático (Tegmark, 2007)</p>
+perguntam por que vivem aqui.</p>
+</div>
+<div class="quote-attribution">
+<p>— Consequência da Hipótese do Universo Matemático (Tegmark, 2007)</p>
+</div>
 </div>
 <p>O Nível IV reacende o debate filosófico do <strong>platonismo
 matemático</strong>. Platão argumentava que as formas matemáticas
@@ -1908,9 +2223,9 @@ rastros no CMB, que puxa galáxias gravitacionalmente. Essa é a
 existência no sentido mais comum — existência como participação numa
 rede causal.</p>
 <p><strong>Ontologias dos quatro níveis de multiverso</strong></p>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
-<p>🌍 <strong>Nível I — Monismo Espacial Expandido</strong></p>
+<p>🌍 Nível I — Monismo Espacial Expandido</p>
 </div>
 <p>Uma única ontologia física, estendida além do horizonte. Os “outros
 universos” são partes do mesmo universo — diferentes apenas no sentido
@@ -1921,9 +2236,9 @@ ontologia: apenas a expande. É o multiverso mais parcimonioso — mas que
 ainda assim requer aceitar que o universo é fisicamente infinito, o que
 não é parcimonioso em absoluto.</p>
 </div>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
-<p>🫧 <strong>Nível II — Pluralismo de Leis</strong></p>
+<p>🫧 Nível II — Pluralismo de Leis</p>
 </div>
 <p>Aqui a ontologia se fragmenta: há uma pluralidade de “regiões
 causalmente fechadas” com leis físicas diferentes. Ainda há um substrato
@@ -1933,9 +2248,9 @@ filosófica central é: as leis da física são necessárias ou contingentes?
 O Nível II responde: completamente contingentes. Poderiam ter sido
 outras. E, em outras bolhas, são outras.</p>
 </div>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
-<p>∴ <strong>Nível III — Realismo da Função de Onda</strong></p>
+<p>∴ Nível III — Realismo da Função de Onda</p>
 </div>
 <p>A ontologia fundamental é o espaço de Hilbert — um objeto matemático
 de dimensão prodigiosamente alta (ou infinita). O “universo clássico”
@@ -1946,9 +2261,9 @@ radicalmente não-clássica: o que existe fundamentalmente é a função de
 onda universal, e tudo o mais — incluindo você, este planeta e essa
 galáxia — é uma estrutura que emerge da sua evolução.</p>
 </div>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
-<p>∞ <strong>Nível IV — Platonismo Radical</strong></p>
+<p>∞ Nível IV — Platonismo Radical</p>
 </div>
 <p>A ontologia não é física mas matemática. Existência não significa
 “participar de uma rede causal”; significa “ser uma estrutura matemática
@@ -1982,7 +2297,8 @@ IV, o padrão de fundo é a existência de tudo que é matematicamente
 possível. O que precisaria de explicação seria o silêncio, a ausência —
 e ela não tem explicação, porque não ocorre.</p>
 <div class="quote">
-<p>“Há uma linha divisória filosófica entre os multiversos que preservam
+<div class="quote-text">
+<p>Há uma linha divisória filosófica entre os multiversos que preservam
 unicidade ontológica — uma realidade, muito maior do que vemos — e os
 que a fragmentam em irredutivelmente muitas realidades. No primeiro
 caso, a cosmologia expande o mapa sem pluralizar o território. No
@@ -1990,7 +2306,8 @@ segundo, a própria noção de ‘o’ universo se dissolve numa conjunção de
 universos sem denominador ontológico comum. É a diferença entre
 descobrir que a Terra tem mais continentes do que se pensava, e
 descobrir que ‘Terra’ é apenas o nome que damos à perspectiva local de
-uma estrutura que não tem perspectiva global privilegiada.”</p>
+uma estrutura que não tem perspectiva global privilegiada.</p>
+</div>
 </div>
 <hr />
 <h2 id="os-limites-do-conhecimento">Os Limites do
@@ -2008,10 +2325,12 @@ os outros universos são, por definição, causalmente desconectados do
 nosso, como qualquer observação poderia, mesmo em princípio, refutar sua
 existência?</p>
 <div class="quote">
-<p>“A ciência que não pode errar não é ciência — é metafísica elegante.
+<div class="quote-text">
+<p>A ciência que não pode errar não é ciência — é metafísica elegante.
 Mas rejeitar uma teoria por ser infalsificável é diferente de demonstrar
 que ela é falsa. A questão real é: que tipo de razão epistêmica temos
-para acreditar em algo inobservável?”</p>
+para acreditar em algo inobservável?</p>
+</div>
 </div>
 <p>Os defensores do multiverso respondem em múltiplas frentes. Primeiro:
 a <em>elegância matemática</em> de uma teoria que unifica e simplifica
@@ -2160,9 +2479,8 @@ inflacionário de Nível II. Em cada caso, as cópias existem por razões
 diferentes, com graus distintos de similaridade, e as implicações
 filosóficas para a identidade pessoal diferem de forma sutil mas
 importante.</p>
-<div class="quote">
-<p>Três tipos de doppelgänger, três origens distintas</p>
-</div>
+<h3 id="três-tipos-de-doppelgänger-três-origens-distintas">Três tipos de
+doppelgänger, três origens distintas</h3>
 <p><strong>No Nível I (universo infinito):</strong> o doppelgänger surge
 por pura combinatória. Se o espaço é infinito e a matéria está
 distribuída de forma homogênea, toda configuração finita de partículas
@@ -2203,14 +2521,14 @@ as cópias</h3>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Teoria</th>
 <th>Tese central</th>
 <th>Impacto do Doppelgänger</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Psicológica</strong> (<a
 href="https://en.wikipedia.org/wiki/John_Locke">Locke</a>, <a
 href="https://en.wikipedia.org/wiki/Derek_Parfit">Parfit</a>)</td>
@@ -2219,7 +2537,7 @@ href="https://en.wikipedia.org/wiki/Derek_Parfit">Parfit</a>)</td>
 continuidade causal. Parfit sugeriria que “identidade” pode não ser a
 pergunta certa.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Biológica</strong> (<a
 href="https://en.wikipedia.org/wiki/Eric_T._Olson">Olson</a>)</td>
 <td>Identidade é continuidade do organismo</td>
@@ -2227,7 +2545,7 @@ href="https://en.wikipedia.org/wiki/Eric_T._Olson">Olson</a>)</td>
 pessoas diferentes que se parecem — como gêmeos idênticos levados ao
 extremo.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Informacional</strong> (Tegmark, Deutsch)</td>
 <td>Identidade é padrão de informação, não de substrato</td>
 <td>O Doppelgänger é o mesmo padrão rodando em hardware diferente. O
@@ -2236,21 +2554,23 @@ extremo.</td>
 </tbody>
 </table>
 <div class="quote">
-<p>“Talvez o problema não seja que o multiverso torna a identidade
+<div class="quote-text">
+<p>Talvez o problema não seja que o multiverso torna a identidade
 impossível, mas que ele revela que a identidade sempre foi uma convenção
 — uma narrativa de continuidade que a mente constrói sobre um substrato
-que, em si mesmo, não conhece sujeitos.” Na interpretação de Muitos
-Mundos, toda decisão que você toma está associada a uma bifurcação
-quântica: existe um ramo onde você escolheu A e um ramo onde você
-escolheu B. Ambos os ramos existem. Ambas as versões de você acreditam
-ter “escolhido livremente”. Mas o conjunto de todas as escolhas já está,
-em certo sentido, determinado pela função de onda global. O que chamamos
-de “livre escolha” é, nessa perspectiva, o processo pelo qual você
-descobre em qual ramo está — não o processo pelo qual você cria o ramo.
-A sensação de deliberação é real, mas seu estatuto ontológico é ambíguo:
-ela é a experiência subjetiva de uma bifurcação que já ocorreu na
-física, não a causa da bifurcação.</p>
+que, em si mesmo, não conhece sujeitos.</p>
 </div>
+</div>
+<p>Na interpretação de Muitos Mundos, toda decisão que você toma está
+associada a uma bifurcação quântica: existe um ramo onde você escolheu A
+e um ramo onde você escolheu B. Ambos os ramos existem. Ambas as versões
+de você acreditam ter “escolhido livremente”. Mas o conjunto de todas as
+escolhas já está, em certo sentido, determinado pela função de onda
+global. O que chamamos de “livre escolha” é, nessa perspectiva, o
+processo pelo qual você descobre em qual ramo está — não o processo pelo
+qual você cria o ramo. A sensação de deliberação é real, mas seu
+estatuto ontológico é ambíguo: ela é a experiência subjetiva de uma
+bifurcação que já ocorreu na física, não a causa da bifurcação.</p>
 <p>O problema se agrava quando consideramos o doppelgänger do Nível I
 sob a ótica do livre-arbítrio. Se existe um duplo seu que tomou as
 mesmas decisões que você — porque emergiu das mesmas condições iniciais
@@ -2274,10 +2594,12 @@ vertiginosos da cosmologia moderna — e, como todo experimento mental
 sobre consciência, revela mais sobre as limitações de nossas categorias
 conceituais do que sobre a estrutura da realidade.</p>
 <div class="quote">
+<div class="quote-text">
 <p>Talvez o problema não seja que o multiverso torna a identidade
 impossível, mas que ele revela que a identidade sempre foi uma convenção
 — uma narrativa de continuidade que a mente constrói sobre um substrato
 que, em si mesmo, não conhece sujeitos.</p>
+</div>
 </div>
 <p>Derek Parfit, em seu monumental <em>Reasons and Persons</em>,
 argumentou que a identidade pessoal não é o que importa — o que importa
@@ -2289,10 +2611,8 @@ ter resposta, porque a premissa que a anima — que existe um único “eu”
 ontologicamente privilegiado — pode ser simplesmente falsa. O multiverso
 não cria o problema da identidade pessoal: ele o exacerba ao ponto de
 não poder mais ser ignorado.</p>
-<div class="box generico">
-<div class="box-badge">
-<p>O problema do valor moral em mundos múltiplos</p>
-</div>
+<h3 id="o-problema-do-valor-moral-em-mundos-múltiplos">O problema do
+valor moral em mundos múltiplos</h3>
 <p>A ética em multiversos levanta questões que a filosofia moral
 ordinária não antecipou. Se toda decisão se bifurca em ramos, e se todos
 os ramos são igualmente reais, então a distinção entre “a decisão que
@@ -2306,16 +2626,17 @@ filósofo David Lewis lidou com problemas adjacentes na sua análise dos
 contrafactuais em mundos possíveis, mas o Nível III é mais radical: os
 outros ramos não são meros mundos “possíveis” em sentido modal — são
 mundos atuais com o mesmo status ontológico que este.</p>
-</div>
 <div class="quote">
-<p>“Há ainda a questão da escala moral. Em um universo de Nível I com
+<div class="quote-text">
+<p>Há ainda a questão da escala moral. Em um universo de Nível I com
 infinitas cópias de cada pessoa, o valor moral de um ato afeta — em
 teoria — um número infinito de seres. A ética consequencialista, que
 avalia atos por suas consequências sobre o bem-estar total, fica
 matematicamente indeterminada: somar infinitos bens e infinitos
 malefícios produz, novamente, ∞ − ∞, que é indeterminado. O multiverso
 obriga a ética a reformular suas bases de uma forma que a filosofia
-moral ainda não enfrentou com seriedade suficiente.”</p>
+moral ainda não enfrentou com seriedade suficiente.</p>
+</div>
 </div>
 <hr />
 <h2 id="o-observador-como-arquiteto">O Observador como
@@ -2335,9 +2656,8 @@ precisa enfrentar diretamente.</p>
 de lidar com essa tensão. Mas sua aplicação difere significativamente
 conforme o nível de multiverso que se considera — e essa diferença é
 filosófica, não apenas técnica. Vale examinar cada caso com cuidado.</p>
-<div class="quote">
-<p>O Princípio Antrópico em cada nível de multiverso</p>
-</div>
+<h3 id="o-princípio-antrópico-em-cada-nível-de-multiverso">O Princípio
+Antrópico em cada nível de multiverso</h3>
 <p><strong>No Nível I (universo espacialmente infinito):</strong> o
 princípio antrópico opera de forma trivial. Existe apenas um conjunto de
 leis físicas — as leis que conhecemos — e observadores surgem onde as
@@ -2393,10 +2713,10 @@ existência de observadores. Por si só, ele não explica por que o
 universo existe, por que tem as leis que tem, ou por que há observadores
 em vez de nenhum. Ele apenas filtra os cenários em que observadores
 podem surgir — o que é útil, mas não suficiente.</p>
-<div class="quote">
-<p>O argumento do ajuste fino — e por que o princípio antrópico não é a
-última palavra</p>
-</div>
+<h3
+id="o-argumento-do-ajuste-fino--e-por-que-o-princípio-antrópico-não-é-a-última-palavra">O
+argumento do ajuste fino — e por que o princípio antrópico não é a
+última palavra</h3>
 <p>O ajuste fino das constantes físicas é real. A constante cosmológica
 Λ é 120 ordens de grandeza menor do que o valor previsto pela teoria
 quântica de campos — uma discrepância que Leonard Susskind chamou de “o
@@ -2407,7 +2727,7 @@ ou planetas. A constante de estrutura fina (α ≈ 1/137) determina a força
 com que elétrons e prótons se ligam: se fosse apenas alguns por cento
 diferente, a química orgânica — e portanto a vida — seria
 impossível.</p>
-<div class="quote">
+<div class="box callout-abstract box-untitled">
 <p>O Princípio Antrópico fraco, na versão de Brandon Carter (1974), é
 uma tautologia útil: simplesmente notamos que observamos condições
 compatíveis com observadores, porque se não fossem, não estaríamos aqui
@@ -2419,7 +2739,7 @@ universo deve ter as propriedades que permitem observadores — o que é
 uma afirmação cosmológica substantiva que a maior parte dos físicos
 rejeita por sua circularidade e por sua dificuldade de falsificação.</p>
 </div>
-<div class="quote">
+<div class="box callout-abstract box-untitled">
 <p>A versão mais interessante — e mais filosófica — é o Princípio
 Antrópico Participativo de Wheeler. Não apenas observadores são
 selecionados pelo universo: observadores participam da definição do
@@ -2455,20 +2775,26 @@ não apenas revelam a realidade: elas contribuem para definir qual
 aspecto da realidade quântica se cristaliza como experiência
 clássica.</p>
 <div class="quote">
-<p>“O cosmos não é uma sala de teatro onde a plateia assiste
-passivamente a uma peça já encenada. É um texto que existe em
-potencialidade e que se atualiza no ato da leitura. Não porque a leitura
-crie o texto — o texto preexiste — mas porque a leitura é o único modo
-pelo qual o texto se torna algo além de tinta sobre papel.”</p>
+<div class="quote-text">
+<p>O cosmos não é uma sala de teatro onde a plateia assiste passivamente
+a uma peça já encenada. É um texto que existe em potencialidade e que se
+atualiza no ato da leitura. Não porque a leitura crie o texto — o texto
+preexiste — mas porque a leitura é o único modo pelo qual o texto se
+torna algo além de tinta sobre papel.</p>
+</div>
 </div>
 <div class="quote">
-<p>“A mente não está no universo como um peixe está no oceano. Ela está
+<div class="quote-text">
+<p>A mente não está no universo como um peixe está no oceano. Ela está
 no universo como o significado está na linguagem: não como objeto
 separado, mas como uma dimensão adicional que emerge da interação entre
-estrutura e interpretação.” — Reflexão sobre o participatory universe
-(<a
+estrutura e interpretação.</p>
+</div>
+<div class="quote-attribution">
+<p>— Reflexão sobre o participatory universe (<a
 href="https://en.wikipedia.org/wiki/Participatory_anthropic_principle">Wheeler,
 1990</a>)</p>
+</div>
 </div>
 <p>O filósofo Thomas Nagel, em <em>Mind and Cosmos</em>, argumentou que
 o reducionismo materialista é incapaz de explicar a existência de pontos
@@ -2874,7 +3200,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=7389a45f"></script>
-<script src="../assets/essay.js?v=58dcd441"></script>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
 </body>
 </html>

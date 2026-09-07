@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="73">
+<html lang="pt-BR" data-status="finalizado" data-minutes="72">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,6 +27,22 @@
   --rust-bright:#A84F3C;
   --accent:#4A8FA8;
   --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#B08B4F;
+  --callout-todo:#B18A4A;
+  --callout-tip:#B08B4F;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#8A857E;
+  --quote-bg:#1C1B1A;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
@@ -48,6 +64,22 @@
   --rust-bright:#A04030;
   --accent:#35708A;
   --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
   --box-bg:var(--surface);
   --box-verdict-bg:var(--surface2);
 }
@@ -76,6 +108,22 @@
     --rust-bright:#A04030;
     --accent:#35708A;
     --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
     --box-bg:var(--surface);
     --box-verdict-bg:var(--surface2);
   }
@@ -209,12 +257,9 @@ body{
    a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
    já ocupa quase tudo e o breakout não teria para onde ir. */
 @media (min-width:1400px){
-  /* Só o TETO sobe. Nada de `width`: uma tabela estreita continua estreita e
-     uma figura continua no tamanho natural — o que muda é até onde elas podem
-     ir quando precisam. `margin-left:50%` + `translateX(-50%)` centraliza
-     seja qual for a largura resultante. */
-  .content > figure,
-  .content > table{
+  /* Apenas figuras podem escapar da coluna de prosa. Tabelas permanecem na
+     coluna e, quando largas, rolam dentro do próprio elemento. */
+  .content > figure{
     max-width:min(var(--wide-width),1500px);
     margin-left:50%;
     transform:translateX(-50%);
@@ -403,7 +448,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--surface2);border-left:2px solid var(--gold-dim);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -411,7 +456,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--surface);border-left:3px solid var(--gold);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -423,11 +468,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-.pull-quote.epigraph p:last-child{
-  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-dim);margin-top:.9rem;
-}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -441,6 +483,62 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin-top:.3rem;
 }
 .pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--callout-quote) 62%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.8rem;line-height:1.55;letter-spacing:.035em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.66rem;line-height:1.35;letter-spacing:.08em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
 
 /* ------------------------------------------------------------------ */
 /* Caixas tipadas                                                      */
@@ -457,16 +555,29 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:var(--box-bg);
   overflow:hidden;
 }
-.box.experimento{--boxc:var(--rust);}
-.box.evidencia{--boxc:var(--accent);}
-.box.mapa{--boxc:var(--gold);}
-.box.ataque{--boxc:var(--rust);}
-.box.aviso{--boxc:var(--amber);}
-.box.nivel{--boxc:var(--accent);}
-.box.ideia{--boxc:var(--gold-dim);}
-/* generico: filete cinza discreto — sem cor de destaque. O rótulo, porém,
-   precisa continuar legível: em cinza de borda ele desaparecia no fundo. */
-.box.generico{--boxc:var(--border);--box-badge-c:var(--text-dim);}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-tip{--boxc:var(--callout-tip);}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);border-left-style:dashed;}
+.box.callout-danger{--boxc:var(--callout-danger);border-left-width:5px;}
+.box.callout-bug{--boxc:var(--callout-bug);border-left-style:double;}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
@@ -486,16 +597,33 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > p:last-of-type{margin-bottom:1.2rem;}
 .box-title p,.box-badge p{margin:0;padding:0;}
 
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;letter-spacing:.055em;line-height:1.35;
+}
+
 .box-verdict{
-  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
-  background:var(--box-verdict-bg);
-  border-top:1px solid var(--border);
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:.5rem;
+  color:var(--boxc);margin-bottom:.5rem;
 }
 
 /* Cards: filosofos e obras */
@@ -562,9 +690,11 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
-     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
-  font-size:.656em;line-height:1.55;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -689,7 +819,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -703,11 +837,159 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
      caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
      leitura nesse corpo. */
   .box-badge{font-size:.78rem;}
-  .verdict-tag{font-size:.76rem;}
+  .verdict-tag{font-size:.78rem;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.84rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 2.5%,var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
+  margin:0;padding:0 0 1.15rem;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:-1px 0 0 -1px;
+  padding:.5rem 1.05rem .44rem;
+  border:0;border-radius:0;
+  border-bottom:2px solid var(--boxc);
+  background:color-mix(in srgb,var(--boxc) 14%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato; `example`/`tip` propoem um cenario. A
+   faixa do segundo par pesa um pouco menos para marcar essa diferenca sem
+   trocar de cor — a familia visual continua a mesma. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  border-bottom-width:1px;
+  background:color-mix(in srgb,var(--boxc) 7%,transparent);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .3rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.82rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+.box.callout-abstract{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-info{background:color-mix(in srgb,var(--boxc) 3.5%,var(--bg));}
+.box.callout-tip{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-example{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-danger{background:color-mix(in srgb,var(--boxc) 7%,var(--surface));border-left-width:6px;}
+.box.callout-bug{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+.box.callout-failure{border-left-style:dashed;}
+.box.callout-danger{border-left-style:solid;}
+.box.callout-bug{border-left-style:double;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 .6rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
 }
 
 /* ------------------------------------------------------------------ */
@@ -1029,14 +1311,16 @@ Gramática Defeituosa: <em>O Eu como Equívoco Linguístico</em></a></li>
 <h2 id="a-cena-do-hospital-onde-a-pergunta-nasce">A Cena do Hospital:
 <em>Onde a Pergunta Nasce</em></h2>
 <div class="quote">
-<p>São 2h14 da manhã.<br />
-Seu pai está sentado na cama do hospital. Ele olha para você. Sorri com
-genuína alegria. Pergunta: <em>“Você é o médico?”</em><br />
-Ele perdeu quarenta anos de memória. Não sabe seu nome. Não sabe que é
-seu filho.<br />
-Mas ele aperta sua mão exatamente do jeito que sempre apertou. A pressão
-dos dedos. O ritmo. O calor.<br />
-Então: ele ainda é ele?</p>
+<div class="quote-text">
+<p>São 2h14 da manhã.</p>
+<p>Seu pai está sentado na cama do hospital. Ele olha para você. Sorri
+com genuína alegria. Pergunta: <em>“Você é o médico?”</em></p>
+<p>Ele perdeu quarenta anos de memória. Não sabe seu nome. Não sabe que
+é seu filho.</p>
+<p>Mas ele aperta sua mão exatamente do jeito que sempre apertou. A
+pressão dos dedos. O ritmo. O calor.</p>
+<p>Então: ele ainda é ele?</p>
+</div>
 </div>
 <p>Essa pergunta não é acadêmica. Ela é a pergunta mais íntima e mais
 brutal que a filosofia pode fazer. A resposta determina se você está de
@@ -1057,11 +1341,13 @@ pressão extrema: experimento por experimento, evidência empírica por
 evidência empírica. Cada capítulo avança descartando o que não funciona.
 A tese que defendemos emerge depois que o leitor já viu, com seus
 próprios olhos, por que as três alternativas falham.</p>
-<div class="pull-quote">
+<div class="pull-quote callout-quote">
+<div class="quote-text">
 <p>O rio de Heráclito não é o mesmo rio de ontem. Mas também você não é
 o mesmo que mergulhou nele. E ainda assim, ambos continuaram enquanto
 duraram.</p>
-<div class="pq-cite">
+</div>
+<div class="quote-attribution">
 <p>Heráclito de Éfeso, séc. V a.C. (paráfrase)</p>
 </div>
 </div>
@@ -1073,13 +1359,13 @@ anteriores. Exceto, talvez, uma.</p>
 <p>Antes de mergulhar nas teorias, vale fixar os três termos que o
 debate costuma embaralhar — porque confundi-los é a fonte de boa parte
 da névoa em torno do problema:</p>
-<div class="box mapa">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>Mapa Conceitual</p>
 </div>
-<div class="box-title">
-<p>Três Conceitos que Este Ensaio Distingue</p>
-</div>
+<h4 class="callout-inner-heading"
+id="três-conceitos-que-este-ensaio-distingue">Três Conceitos que Este
+Ensaio Distingue</h4>
 <p><strong>Memória</strong> é o conjunto de registros episódicos e
 semânticos acessíveis à consciência: o que você lembra de ter feito
 ontem, o rosto da sua mãe, o nome da rua onde cresceu. É o candidato
@@ -1101,7 +1387,7 @@ falha.</p>
 <p>Com esse mapa em mãos, começamos pelo candidato mais óbvio ao
 critério de identidade: o próprio corpo.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="a-teoria-do-corpo-e-seus-limites">A Teoria do Corpo: <em>e seus
@@ -1119,13 +1405,12 @@ parte do corpo importa — e toda delimitação que tenta fazer enfrenta o
 mesmo problema.</p>
 <p>O paradoxo de Plutarco já havia capturado essa dificuldade com
 precisão. Sua versão biológica é perturbadora:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental I</p>
 </div>
-<div class="box-title">
-<p>O Navio de Teseu Biológico</p>
-</div>
+<h4 class="callout-inner-heading" id="o-navio-de-teseu-biológico">O
+Navio de Teseu Biológico</h4>
 <p>Plutarco descreveu o paradoxo de um navio cujas tábuas eram
 substituídas uma a uma: ao final, nenhuma tábua original restava. A
 biologia nos entrega uma versão ainda mais perturbadora: a maioria das
@@ -1137,7 +1422,7 @@ implantes sintéticos funcionalmente idênticos. Após anos, todos os
 neurônios são artificiais. Em algum momento você deixou de ser você? Se
 sim, quando exatamente? Se não, o que foi preservado não era o substrato
 físico — era outra coisa.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>A substituição gradual parece preservar identidade. Se for assim, a
 substância física não é o critério. A Teoria do Corpo falhou no primeiro
@@ -1154,13 +1439,12 @@ mesma pessoa. Não são. Logo, o substrato físico bruto não é o que faz de
 você <em>você</em>.</p>
 <p>Hobbes já havia visto isso com clareza no século XVII — e sua
 intuição aponta diretamente para onde a investigação precisa ir:</p>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>Thomas Hobbes</p>
 </div>
-<div class="card-meta">
-<p>1588 – 1679 · Inglaterra</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1588--1679--inglaterra">1588 – 1679 · Inglaterra</h4>
 <p>Hobbes foi um dos primeiros a formalizar o paradoxo do Navio de Teseu
 na filosofia moderna. Para ele, a identidade de objetos compostos
 depende da continuidade da forma e da função, não da matéria particular.
@@ -1175,7 +1459,7 @@ Retomaremos esse argumento com toda a seriedade que merece. Por ora, o
 veredito é claro: a Teoria do Corpo na sua forma simples não sobrevive.
 Precisamos ir mais fundo.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="a-teoria-do-cérebro-onde-o-eu-mora">A Teoria do Cérebro:
@@ -1188,20 +1472,20 @@ junto. Não seria um transplante de cérebro — seria um transplante de
 <em>corpo</em>.</p>
 <p>A teoria tem força intuitiva considerável. O primeiro experimento
 parece confirmá-la inteiramente — até o segundo aparecer:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental II</p>
 </div>
-<div class="box-title">
-<p>O Cientista Louco e Bill Clinton</p>
-</div>
+<h4 class="callout-inner-heading"
+id="o-cientista-louco-e-bill-clinton">O Cientista Louco e Bill
+Clinton</h4>
 <p>Um cientista troca cirurgicamente os cérebros de você e de Bill
 Clinton. Você acorda no corpo de Clinton, com todas as suas memórias,
 sua personalidade, seus planos. Do outro lado da sala está seu corpo,
 com a personalidade de Clinton.</p>
 <p>A intuição é clara: <em>você</em> acordou no corpo de Clinton. Seu eu
 seguiu seu cérebro. A teoria parece confirmada.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto provisório</span></p>
 <p>A maioria intui que a identidade segue o cérebro. Mas isso só
 funciona enquanto o cérebro permanece indiviso. O próximo experimento
@@ -1211,13 +1495,12 @@ destrói essa premissa.</p>
 <p>O veredicto é “provisório” por uma razão precisa: ele aposta na
 indivisibilidade do cérebro como garantia de unicidade da identidade. E
 a biologia não oferece essa garantia:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental III</p>
 </div>
-<div class="box-title">
-<p>O Cérebro Dividido</p>
-</div>
+<h4 class="callout-inner-heading" id="o-cérebro-dividido">O Cérebro
+Dividido</h4>
 <p>É possível remover metade de um cérebro humano — hemisferectomia — e
 o paciente sobreviver, mantendo personalidade e memórias com o
 hemisfério restante. Suponha que você doa metade do seu cérebro a um
@@ -1227,7 +1510,7 @@ parcialmente. Ambos se sentem como você.</p>
 morrido. Se ambos são você, dois seres distintos seriam numericamente
 idênticos ao mesmo terceiro — impossível logicamente. Se apenas um é
 você, com base em quê?</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>A Teoria do Cérebro pressupõe unicidade que a biologia não garante.
 Ela fracassa diante da divisão. Mas a falha mais funda vem da empiria,
@@ -1238,13 +1521,13 @@ não da lógica.</p>
 sozinha não captura. E o experimento com pacientes <em>split-brain</em>
 confirma isso com uma radicalidade que nenhum argumento abstrato
 consegue igualar:</p>
-<div class="box evidencia">
-<div class="box-badge">
+<div class="box callout-info">
+<div class="box-title">
 <p>Evidência Empírica I</p>
 </div>
-<div class="box-title">
-<p>Cérebro Dividido (<em>Split-Brain</em>): Dois Eus num Corpo</p>
-</div>
+<h4 class="callout-inner-heading"
+id="cérebro-dividido-split-brain-dois-eus-num-corpo">Cérebro Dividido
+(<em>Split-Brain</em>): Dois Eus num Corpo</h4>
 <p>Pacientes submetidos à secção do corpo caloso — cirurgia para
 epilepsia severa que corta a conexão entre os hemisférios cerebrais —
 revelam algo desconcertante. Cada hemisfério passa a agir como um centro
@@ -1266,13 +1549,13 @@ pode ser dois.</p>
 <p>A evidência do split-brain sugere que o “eu unificado” talvez seja
 uma construção narrativa, não uma entidade. Sydney Shoemaker havia
 chegado a essa suspeita por caminho filosófico:</p>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>Sydney Shoemaker</p>
 </div>
-<div class="card-meta">
-<p>1931 – 2022 · Universidade de Cornell</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1931--2022--universidade-de-cornell">1931 – 2022 · Universidade de
+Cornell</h4>
 <p>Shoemaker desenvolveu a noção de <em>quase-memória</em>: o que
 constitui identidade pessoal não é a memória de eventos passados em si,
 mas a continuidade funcional dos estados mentais que conectam momentos
@@ -1297,7 +1580,7 @@ talvez a identidade não seja necessariamente singular. Talvez o eu possa
 ramificar-se. Essa ideia parecerá estranha agora. Ao chegar à seção
 sobre bifurcação e teletransporte, ela parecerá inevitável.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="a-teoria-dos-dados-locke-e-a-memória">A Teoria dos Dados:
@@ -1313,13 +1596,12 @@ dados permanecem intactos), por que a amnésia radical parece destruí-la,
 por que nos importamos com nosso futuro (os dados serão contínuos). Mas
 a teoria de Locke é formulada de forma excessivamente estrita: exige
 memória direta de cada momento. E é exatamente aí que ela quebra.</p>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>John Locke</p>
 </div>
-<div class="card-meta">
-<p>1632 – 1704 · Oxford</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1632--1704--oxford">1632 – 1704 · Oxford</h4>
 <p>No <em>Ensaio sobre o Entendimento Humano</em> (1689), Locke
 argumentou que a identidade pessoal consiste na continuidade da
 consciência. Você é a mesma pessoa de ontem porque pode lembrar-se do
@@ -1332,13 +1614,13 @@ quando posta sob pressão.</p>
 <p>Thomas Reid foi o primeiro a identificar a inconsistência lógica que
 essa estreiteza produz. O exemplo do general é simples, mas o problema
 que revela é profundo:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental IV</p>
 </div>
-<div class="box-title">
-<p>A Regressão de Reid — O Velho General</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-regressão-de-reid--o-velho-general">A Regressão de Reid — O Velho
+General</h4>
 <p>Um jovem soldado apanha por roubar pomares e lembra o episódio com
 clareza. Mais tarde, como oficial, conquista uma bandeira inimiga e
 lembra do açoitamento. Décadas depois, como velho general, lembra da
@@ -1347,7 +1629,7 @@ Locke: oficial = soldado (lembra o açoitamento); general = oficial
 (lembra a bandeira); mas general ≠ soldado (não lembra o açoitamento).
 Isso viola a transitividade da identidade: se A = B e B = C, então
 necessariamente A = C.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>A teoria de Locke tem inconsistência lógica demonstrável. Memória
 direta não é critério suficiente. A teoria dos dados precisa de uma
@@ -1360,13 +1642,13 @@ refinamento. Mas há um segundo problema, ainda mais urgente: o que
 acontece quando não é a memória que falha, mas a capacidade de formar
 novas memórias? Clive Wearing é o caso mais radical que a realidade
 oferece:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental V</p>
 </div>
-<div class="box-title">
-<p>A Pessoa com Amnésia — Clive Wearing</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-pessoa-com-amnésia--clive-wearing">A Pessoa com Amnésia — Clive
+Wearing</h4>
 <p>Clive Wearing é um músico britânico real que, em 1985, sofreu uma
 encefalite viral que destruiu sua capacidade de formar novas memórias de
 longo prazo. Seu horizonte de memória consciente é de apenas 7 a 30
@@ -1380,7 +1662,7 @@ construir nenhum momento que seja “passado” para si. Segundo Locke
 estrito, ele perdeu identidade. Segundo nossas intuições morais e
 legais, ele ainda tem todos os direitos e proteções de uma pessoa — e
 ainda <em>é</em> alguém.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>A teoria de Locke é excessivamente estrita. Identidade não requer
 memória consciente de todos os momentos anteriores. Os dados de
@@ -1394,13 +1676,13 @@ refinamento que precisamos.</p>
 memória episódica consciente simplesmente não alcança. Foi o
 neurologista Oliver Sacks quem trouxe esse e outros casos semelhantes
 para o debate público com rigor clínico e profundidade filosófica:</p>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>Oliver Sacks</p>
 </div>
-<div class="card-meta">
-<p>1933 – 2015 · University College London / Columbia University</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1933--2015--university-college-london--columbia-university">1933 –
+2015 · University College London / Columbia University</h4>
 <p>Em <em>The Man Who Mistook His Wife for a Hat</em> (1985), Sacks
 documentou dezenas de casos neurológicos que colocam em xeque as
 intuições filosóficas mais arraigadas sobre identidade. O que torna o
@@ -1417,13 +1699,13 @@ dano neurológico não atingiu.</p>
 </div>
 <p>A situação fica mais complicada quando nos damos conta de que mesmo a
 memória que temos pode ser parcialmente inventada:</p>
-<div class="box evidencia">
-<div class="box-badge">
+<div class="box callout-info">
+<div class="box-title">
 <p>Evidência Empírica II</p>
 </div>
-<div class="box-title">
-<p>Confabulação: A Memória como Ficção</p>
-</div>
+<h4 class="callout-inner-heading"
+id="confabulação-a-memória-como-ficção">Confabulação: A Memória como
+Ficção</h4>
 <p>Pacientes com lesões no córtex pré-frontal ventromedial
 frequentemente apresentam confabulação: produzem memórias detalhadas e
 convincentes de eventos que nunca ocorreram, sem qualquer intenção de
@@ -1443,13 +1725,12 @@ o eu presente. A falsidade factual não desfaz a função constitutiva.</p>
 </div>
 <p>Hume, escrevendo décadas depois de Locke e sem os experimentos de
 Loftus, chegou à mesma suspeita pela via da introspecção pura:</p>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>David Hume</p>
 </div>
-<div class="card-meta">
-<p>1711 – 1776 · Edimburgo</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1711--1776--edimburgo">1711 – 1776 · Edimburgo</h4>
 <p>Hume foi ainda mais radical que Locke. Ao tentar introspectar seu
 próprio eu, descobriu que não havia nada lá além de um feixe de
 percepções, sensações e pensamentos sem núcleo fixo. O eu humiano é uma
@@ -1478,18 +1759,18 @@ como o que ela é: um sistema com uma arquitetura muito mais ampla do que
 a memória, onde o critério de identidade reside na continuidade de algo
 que ainda precisamos nomear com precisão.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="derek-parfit-e-o-fim-do-eu-substancial">Derek Parfit: <em>e o
 Fim do Eu Substancial</em></h2>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>Derek Parfit</p>
 </div>
-<div class="card-meta">
-<p>1942 – 2017 · Oxford, All Souls College</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1942--2017--oxford-all-souls-college">1942 – 2017 · Oxford, All
+Souls College</h4>
 <p>Parfit foi talvez o filósofo mais importante da segunda metade do
 século XX sobre identidade pessoal. <em>Reasons and Persons</em> (1984)
 é um dos textos filosóficos mais discutidos das últimas décadas. Parfit
@@ -1504,23 +1785,24 @@ porque pressupõe algo que não existe: um eu substancial que precisa “ir
 junto” ou “ficar para trás” como entidade indivisível.</p>
 <p>Para chegar a essa conclusão, Parfit começa perturbando o leitor:</p>
 <div class="quote">
+<div class="quote-text">
 <p>Se Parfit estiver certo, então talvez sua esposa não ame exatamente
-você.<br />
-Ela ama uma sequência de versões suficientemente próximas umas das
-outras para enganar a linguagem.<br />
-Mas isso dói menos do que parece. Porque o que ela ama é real. A
+você.</p>
+<p>Ela ama uma sequência de versões suficientemente próximas umas das
+outras para enganar a linguagem.</p>
+<p>Mas isso dói menos do que parece. Porque o que ela ama é real. A
 sequência é real. O padrão é real. Só o nome estava errado.</p>
+</div>
 </div>
 <p>Mas a perturbação acima ainda depende de nosso apego à singularidade
 do eu. O experimento da fissão torna isso ainda mais explícito — e é
 onde Parfit mais pressiona sua tese:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental VI</p>
 </div>
-<div class="box-title">
-<p>A Fissão de Parfit</p>
-</div>
+<h4 class="callout-inner-heading" id="a-fissão-de-parfit">A Fissão de
+Parfit</h4>
 <p>O Experimento Mental III mostrou que metade de um cérebro humano pode
 preservar identidade plena. Parfit radicaliza essa premissa para sua
 conclusão mais vertiginosa.</p>
@@ -1536,7 +1818,7 @@ apenas uma — mas qual, e com base em quê?</p>
 simplesmente não ter resposta. E isso não é tragédia — é revelação. O
 que importa é que ambas sobreviveram com continuidade dos dados plena. A
 identidade estrita se tornou uma pergunta errada.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>Parfit demonstra que a pergunta “qual das duas é você?” pode não ter
 resposta factual — e que isso não é tragédia, mas revelação. O eu
@@ -1548,10 +1830,12 @@ pergunta errada. O que a substituir, veremos na seção seguinte.</p>
 </div>
 <p>Esse veredicto tem um peso que vai além da lógica. Parfit o sentiu
 pessoalmente:</p>
-<div class="pull-quote">
+<div class="pull-quote callout-quote">
+<div class="quote-text">
 <p>Minha vida parecia como um túnel do qual não podia escapar. Descobri
 que estava errado. O ego não é o que importa.</p>
-<div class="pq-cite">
+</div>
+<div class="quote-attribution">
 <p>Derek Parfit, Reasons and Persons (1984)</p>
 </div>
 </div>
@@ -1566,7 +1850,7 @@ foi descartado e por quê. Uma tese só ganha a força que merece quando o
 leitor já viu, com seus próprios olhos, o cemitério que ela deixa para
 trás.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="quatro-teorias-três-descartadas">Quatro Teorias, <em>Três
@@ -1597,13 +1881,13 @@ identidade em um substrato estático — um corpo, um órgão, uma memória
 específica. A intuição certa está com Hume e Parfit: a identidade é um
 processo, não uma coisa. O que precisamos é de uma teoria que leve isso
 a sério com precisão técnica — e é o que a quarta teoria oferece.</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental VII</p>
 </div>
-<div class="box-title">
-<p>O Teste da Tortura — Bernard Williams (1970)</p>
-</div>
+<h4 class="callout-inner-heading"
+id="o-teste-da-tortura--bernard-williams-1970">O Teste da Tortura —
+Bernard Williams (1970)</h4>
 <p>Um cientista vai trocar os dados mentais entre você e Clinton, depois
 torturar um dos dois corpos. Antes do processo, você pode escolher quem
 sofre.</p>
@@ -1624,7 +1908,7 @@ para a Teoria do Corpo.</p>
 <p>O problema: as duas situações descrevem o mesmo resultado físico
 final. Apenas a ordem da pergunta mudou. Nossas intuições se contradizem
 completamente dependendo de <em>quando</em> somos perguntados.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>Williams demonstrou que nossas intuições sobre identidade são
 internamente inconsistentes — não porque sejamos irracionais, mas porque
@@ -1647,7 +1931,7 @@ resume o que foi eliminado e por quê:</p>
 <col style="width: 47%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Teoria</th>
 <th>Critério</th>
 <th>Força</th>
@@ -1655,25 +1939,25 @@ resume o que foi eliminado e por quê:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Do Corpo</td>
 <td>Substrato físico contínuo</td>
 <td>Intuitiva; explica continuidade biológica</td>
 <td>Gêmeos idênticos; renovação celular; Navio de Teseu</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Do Cérebro</td>
 <td>Continuidade do órgão neural</td>
 <td>Explica intuição do transplante cerebral</td>
 <td>Hemisferectomia; <em>split-brain</em>; fissão lógica</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Dos Dados (Locke)</td>
 <td>Memória consciente direta</td>
 <td>Explica amnésia; compatível com upload</td>
 <td>Viola transitividade (Reid); Clive Wearing; memória falsa</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Continuidade Informacional dos Dados</td>
 <td>Fidelidade dos dados, independente do substrato ou da velocidade da
 transferência</td>
@@ -1689,7 +1973,7 @@ cria</td>
 <p>A última linha ainda não foi justificada. É o que fazemos a
 seguir.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="continuidade-informacional-dos-dados-a-tese">Continuidade
@@ -1723,13 +2007,13 @@ identidade. A “destruição física” do corpo original, nesse cenário, é
 tão relevante quanto a destruição das moléculas de água num vórtice
 quando outras moléculas as substituem — o vórtice continua porque o
 <em>padrão</em> continua.</p>
-<div class="box mapa">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>Precisão Conceitual</p>
 </div>
-<div class="box-title">
-<p>Quatro Termos que Esta Tese Distingue</p>
-</div>
+<h4 class="callout-inner-heading"
+id="quatro-termos-que-esta-tese-distingue">Quatro Termos que Esta Tese
+Distingue</h4>
 <p><strong>Dados</strong> designa os padrões informacionais específicos
 que constituem uma mente particular: o conteúdo — memórias, valores,
 competências, modelos do mundo. O foco é no <em>quê</em> está
@@ -1780,11 +2064,13 @@ você reside informativamente. Na Situação B, a intuição de proteger o
 corpo original é um resíduo da Teoria do Corpo — compreensível como
 reação visceral, mas filosoficamente equivocado. O que importa são os
 dados. Sempre.</p>
-<div class="pull-quote">
+<div class="pull-quote callout-quote">
+<div class="quote-text">
 <p>O self não é uma coisa que encontramos; é um padrão que se transforma
 ao longo do tempo, cuja continuidade é real mesmo quando a memória que a
 registra é fragmentada ou falsa.</p>
-<div class="pq-cite">
+</div>
+<div class="quote-attribution">
 <p>Adaptado de Daniel Dennett, Consciousness Explained (1991)</p>
 </div>
 </div>
@@ -1858,13 +2144,13 @@ intuição dualista ressurge com mais força.</p>
 <p>Mas se o eu é padrão — e não substrato — o que acontece quando o
 próprio padrão muda radicalmente? A neurociência oferece um caso
 empírico que coloca essa pergunta com brutalidade:</p>
-<div class="box evidencia">
-<div class="box-badge">
+<div class="box callout-info">
+<div class="box-title">
 <p>Evidência Empírica III</p>
 </div>
-<div class="box-title">
-<p>Pacientes Frontais e a Metamorfose do Caráter</p>
-</div>
+<h4 class="callout-inner-heading"
+id="pacientes-frontais-e-a-metamorfose-do-caráter">Pacientes Frontais e
+a Metamorfose do Caráter</h4>
 <p>Phineas Gage, o ferroviário que em 1848 sobreviveu à passagem de uma
 barra de ferro pelo córtex pré-frontal, tornou-se um caso clássico:
 sobreviveu fisicamente intacto, mas emergiu com personalidade
@@ -1891,13 +2177,13 @@ dramática do caráter — porque a continuidade dos dados não exige que o
 padrão fique idêntico, apenas que não seja rompido. Com esse fundamento
 estabelecido, os experimentos que seguem submetem o critério a pressão
 crescente. Começamos pela ruptura mais cotidiana de todas:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental VIII</p>
 </div>
-<div class="box-title">
-<p>A Anestesia Geral — O Buraco na Noite</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-anestesia-geral--o-buraco-na-noite">A Anestesia Geral — O Buraco
+na Noite</h4>
 <p>Você vai fazer uma cirurgia de oito horas. Anestesia geral profunda:
 não é sono, é supressão completa da consciência. Não há sonhos, não há
 experiências, não há fluxo de estados mentais. Há um buraco de oito
@@ -1910,7 +2196,7 @@ experiencial, você deveria ter “morrido” ao entrar na anestesia.</p>
 no sono profundo sem sonhos. A cada noite, há um buraco. Acordamos com a
 certeza de que somos os mesmos que dormiram. O que atravessou aquela
 lacuna?</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>A resposta é precisa: os dados atravessaram. A estrutura física que
 os instancia persistiu intacta durante a anestesia. Os dados estavam lá,
@@ -1925,13 +2211,13 @@ preservados.</p>
 que dizer de uma substituição física total realizada em câmera lenta?
 Aqui estamos no terreno do Navio de Teseu — mas desta vez com um ser
 consciente que pode reportar o que está vivendo:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental IX</p>
 </div>
-<div class="box-title">
-<p>A Substituição Célula por Célula — O Limiar Que Não Existe</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-substituição-célula-por-célula--o-limiar-que-não-existe">A
+Substituição Célula por Célula — O Limiar Que Não Existe</h4>
 <p>Imagine um procedimento cirúrgico que substitui uma de suas células
 por uma réplica sinteticamente idêntica em cada átomo. Você ainda é
 você? Claro — você nem percebeu. E se substituirmos 1% das células, uma
@@ -1947,7 +2233,7 @@ dados foram preservados integralmente em cada passo.</p>
 física além do qual “você” deixa de existir. A identidade reside nos
 dados, não na substância específica que os instancia. Guarde essa
 conclusão — o próximo experimento a levará ao limite.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>Substituição gradual preserva identidade em cada passo porque
 preserva dados em cada passo. O substrato muda; os dados permanecem. Se
@@ -1959,13 +2245,13 @@ o substrato não é o critério — e a renovação celular já mostrou que não
 e se a substituição for instantânea, e a distância espacial for radical?
 O teletransporte é exatamente esse caso — e é onde a tese precisa
 mostrar sua consistência:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental X</p>
 </div>
-<div class="box-title">
-<p>O Teletransporte — Resolvido pela Continuidade Informacional</p>
-</div>
+<h4 class="callout-inner-heading"
+id="o-teletransporte--resolvido-pela-continuidade-informacional">O
+Teletransporte — Resolvido pela Continuidade Informacional</h4>
 <p>É 2700. Você entra numa cabine em Santos: ela mapeia cada átomo do
 seu corpo, reconstrói uma versão atomicamente idêntica em Tokyo. O
 processo leva um segundo; para você, parece instantâneo.</p>
@@ -1986,7 +2272,7 @@ substrato — e quando o processamento reiniciou, havia continuidade
 informacional perfeita. A anestesia nos mostrou o mesmo. O
 teletransporte é estruturalmente idêntico: os dados são preservados, o
 processamento reinicia, há continuidade informacional.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>O teletransporte preserva identidade porque preserva dados. A
 “destruição física” do corpo original é irrelevante — o mesmo substrato
@@ -2000,13 +2286,12 @@ relocá-lo.</p>
 <p>O teletransporte resolveu a distância espacial. O congelamento
 criogênico resolve a distância temporal — e leva o critério ao limite
 que qualquer teoria de identidade precisa enfrentar:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental XI</p>
 </div>
-<div class="box-title">
-<p>O Congelamento Criogênico</p>
-</div>
+<h4 class="callout-inner-heading" id="o-congelamento-criogênico">O
+Congelamento Criogênico</h4>
 <p>Você é congelado em 2026 e descongelado em 2226, duzentos anos
 depois. Do ponto de vista objetivo, dois séculos se passaram.
 Civilizações mudaram. Todos que você conhecia morreram. A lacuna
@@ -2022,7 +2307,7 @@ completamente irrelevante, porque a identidade não reside na
 continuidade temporal do processamento, mas na fidelidade dos dados. Uma
 música gravada num arquivo e tocada 200 anos depois não “morreu” durante
 o intervalo: estava preservada. O eu congelado é o mesmo.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>Duzentos anos de lacuna objetiva, zero perda de dados. A identidade
 persiste por continuidade informacional. A tese é consistente: o
@@ -2034,13 +2319,13 @@ processamento.</p>
 caso mais complexo: não quando os dados são preservados no tempo, mas
 quando se multiplicam no espaço. A bifurcação é onde a tese revela sua
 consequência mais surpreendente:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental XII-A</p>
 </div>
-<div class="box-title">
-<p>A Duplicação — Bifurcação sem Paradoxo</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-duplicação--bifurcação-sem-paradoxo">A Duplicação — Bifurcação sem
+Paradoxo</h4>
 <p>O teletransporte falha: a cabine em Santos não destrói o original.
 Uma cópia perfeita sua já está em Tokyo, acordando com suas memórias,
 seus amores, seus projetos — incluindo a memória de ter entrado na
@@ -2063,7 +2348,7 @@ informacional comum.</p>
 <p>Nenhum dos dois é o “verdadeiro” você de quem o outro é uma versão
 degradada. Ambos são continuações reais. A identidade se ramificou — e
 ambos os ramos são tão reais quanto o tronco que os originou.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>A bifurcação não é paradoxo — é consequência natural de um universo
 onde dados podem ser copiados com fidelidade. Identidade não precisa ser
@@ -2075,13 +2360,13 @@ dois vórtices reais, nenhum mais legítimo que o outro.</p>
 até aqui — e também a mais consistente com o critério. Mas ela abre
 imediatamente uma segunda pergunta, mais incômoda, que a tese precisa
 enfrentar sem esquiva:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental XII-B</p>
 </div>
-<div class="box-title">
-<p>O Teletransporte com Falha — e a Lei que Quer Destruir Santos</p>
-</div>
+<h4 class="callout-inner-heading"
+id="o-teletransporte-com-falha--e-a-lei-que-quer-destruir-santos">O
+Teletransporte com Falha — e a Lei que Quer Destruir Santos</h4>
 <p>Mesmo cenário: o teletransporte falha, você continua em Santos, uma
 cópia sua acorda em Tokyo. Mas agora o operador anuncia que a lei é
 clara: o protocolo exige a destruição do original. A cabine em Santos
@@ -2116,7 +2401,7 @@ independentemente de existir outro alguém com os mesmos dados em outro
 lugar. A existência do você em Tokyo não redime a destruição do você em
 Santos pela mesma razão que a existência do seu irmão gêmeo não tornaria
 sua morte menos grave. Dois eus reais são dois eus reais.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>O horror do você em Santos é filosoficamente correto — não um erro de
 perspectiva, não uma ilusão a ser superada. A tese que defende
@@ -2131,13 +2416,14 @@ sem que alguém morra.</p>
 permanecer único — é um padrão que pode ramificar-se. Mas cada ramo, uma
 vez real, carrega perspectiva irredutível. Dennett e James perceberam a
 natureza do padrão décadas antes, por caminhos distintos:</p>
-<div class="box generico">
+<div class="box callout-todo">
 <div class="box-title">
 <p>Daniel Dennett &amp; William James</p>
 </div>
-<p>Tufts University · Harvard<br />
-Em <em>Consciousness Explained</em> (1991), Dennett argumentou que o eu
-é um “centro de gravidade narrativo” — uma ficção útil que o cérebro
+<h4 class="entity-meta callout-inner-heading"
+id="tufts-university--harvard">Tufts University · Harvard</h4>
+<p>Em <em>Consciousness Explained</em> (1991), Dennett argumentou que o
+eu é um “centro de gravidade narrativo” — uma ficção útil que o cérebro
 cria para organizar seus processos. Não há um lugar no cérebro onde
 “você” está; o eu é distribuído, emergente e, em certo sentido, uma
 ilusão funcional. Mas Dennett não está dizendo que o eu não existe —
@@ -2156,7 +2442,7 @@ dimensão que ele, por si só, não captura: o que é a identidade como ela
 dados, mas experimentada como promessa, como história, como
 responsabilidade. Essa dimensão exige um ângulo diferente.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="ricoeur-budismo-e-a-identidade-como-promessa">Ricoeur, Budismo:
@@ -2169,13 +2455,12 @@ identidade como ela é <em>vivida</em>, de dentro, na primeira pessoa.
 Paul Ricoeur e a tradição budista oferecem dois ângulos radicalmente
 diferentes sobre essa dimensão — e convergem, em pontos importantes, com
 o que acabamos de defender.</p>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>Paul Ricoeur</p>
 </div>
-<div class="card-meta">
-<p>1913 – 2005 · Paris</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1913--2005--paris">1913 – 2005 · Paris</h4>
 <p>Ricoeur distinguiu dois tipos de identidade: <em>idem</em> (mesmidade
 — permanência do mesmo substrato ao longo do tempo) e <em>ipse</em>
 (ipseidade — identidade como fidelidade a si mesmo, como promessa e
@@ -2206,11 +2491,13 @@ convenção útil aplicada a um processo contínuo de estados mentais
 interdependentes. Não há um “eu” que tem experiências; há apenas o fluxo
 das experiências em si — e a continuidade desse fluxo é o que a
 linguagem batizou de pessoa.</p>
-<div class="pull-quote">
+<div class="pull-quote callout-quote">
+<div class="quote-text">
 <p>Não há ser algum que vá de uma vida à outra, assim como não existe
 nenhum ser que dure de um momento ao outro. Mas há um processo causal
 contínuo que produz a ilusão de permanência.</p>
-<div class="pq-cite">
+</div>
+<div class="quote-attribution">
 <p>Buddhaghosa, Visuddhimagga, séc. V d.C.</p>
 </div>
 </div>
@@ -2231,13 +2518,13 @@ rigorosa de uma intuição que a filosofia e a contemplação humanas vinham
 circundando há séculos.</p>
 <p>E a neurociência, trabalhando no plano empírico, encontrou uma
 confirmação surpreendente dessa mesma convergência:</p>
-<div class="box evidencia">
-<div class="box-badge">
+<div class="box callout-info">
+<div class="box-title">
 <p>Evidência Empírica IV</p>
 </div>
-<div class="box-title">
-<p>Default Mode Network: O Eu que Divaga</p>
-</div>
+<h4 class="callout-inner-heading"
+id="default-mode-network-o-eu-que-divaga">Default Mode Network: O Eu que
+Divaga</h4>
 <p>A <em><a
 href="https://en.wikipedia.org/wiki/Default_mode_network">default mode
 network</a></em> (rede de modo padrão, DMN) — rede de regiões cerebrais
@@ -2265,20 +2552,22 @@ unidade pode ser alterado sem que algo essencial se perca, então esse
 sentimento não é o eu: é um produto do eu. Com isso em mente, os ataques
 que se seguem são mais fáceis de enfrentar.</p>
 <div class="quote">
-<p>Quando você promete algo, quem está prometendo?<br />
-Ricoeur sugere que a promessa não precisa de um eu substancial. Precisa
-de uma narrativa que você aceite como sua. O fio que costura essa
-narrativa é exatamente a continuidade informacional dos dados que faz
-você reconhecer os atos de ontem como seus — mesmo que não se lembre de
-cada detalhe, mesmo que tenha mudado, mesmo que a memória tenha
+<div class="quote-text">
+<p>Quando você promete algo, quem está prometendo?</p>
+<p>Ricoeur sugere que a promessa não precisa de um eu substancial.
+Precisa de uma narrativa que você aceite como sua. O fio que costura
+essa narrativa é exatamente a continuidade informacional dos dados que
+faz você reconhecer os atos de ontem como seus — mesmo que não se lembre
+de cada detalhe, mesmo que tenha mudado, mesmo que a memória tenha
 distorcido os fatos.</p>
+</div>
 </div>
 <p>Mas identidade narrativa não é identidade filosófica rigorosa. E há
 objeções que atacam nossa tese com uma precisão que o apelo à narrativa
 não dissolve. É hora de dar a palavra aos adversários mais sérios — e
 respondê-los com toda a clareza que eles merecem.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="contra-nossa-tese-os-ataques-respondidos">Contra Nossa Tese:
@@ -2287,13 +2576,12 @@ respondê-los com toda a clareza que eles merecem.</p>
 conseguimos — e respondemos cada ataque completamente. Uma tese que só
 sobrevive evitando as objeções não merece defesa. Cada objeção abaixo é
 formulada na sua versão mais forte antes de ser respondida.</p>
-<div class="box ataque">
-<div class="box-badge">
-<p>Ataque I — Animalismo</p>
-</div>
+<div class="box callout-question">
 <div class="box-title">
-<p>Olson: Você É um Animal, Não um Padrão</p>
+<p>Ataque I</p>
 </div>
+<h4 class="callout-inner-heading" id="animalismo">Animalismo</h4>
+<p><strong>Olson: Você É um Animal, Não um Padrão</strong></p>
 <p>Eric Olson defende que você é fundamentalmente um animal biológico.
 Se seu cérebro fosse transplantado para o corpo de Clinton, o que ficou
 no seu corpo original ainda seria você: um você em estado vegetativo,
@@ -2317,13 +2605,13 @@ não o envelope biológico. O animalismo responde <em>o que persiste</em>
 <p>Superado o animalismo, o segundo ataque vem do senso comum filosófico
 sobre o teletransporte. É um ataque mais difícil de ignorar porque apela
 diretamente à intuição visceral de morte e substituição:</p>
-<div class="box ataque">
-<div class="box-badge">
-<p>Ataque II — Teletransporte Instantâneo</p>
-</div>
+<div class="box callout-question">
 <div class="box-title">
-<p>O Original Foi Destruído</p>
+<p>Ataque II</p>
 </div>
+<h4 class="callout-inner-heading"
+id="teletransporte-instantâneo">Teletransporte Instantâneo</h4>
+<p><strong>O Original Foi Destruído</strong></p>
 <p>No teletransporte, o original é destruído. Há um instante em que você
 deixa de existir em Santos antes de ser reconstituído em Tokyo. Do ponto
 de vista físico objetivo, houve morte e criação — não continuidade. A
@@ -2345,13 +2633,12 @@ conseguiu defender. O eu que emerge em Tokyo tem os mesmos dados.
 <p>O terceiro ataque abandona o conteúdo da tese e ataca o método —
 perguntando se uma teoria que absorve toda objeção por refinamento pode
 ser genuinamente falseável:</p>
-<div class="box ataque">
-<div class="box-badge">
-<p>Ataque III — Ad Hoc</p>
-</div>
+<div class="box callout-question">
 <div class="box-title">
-<p>A Tese Foi Construída para Sobreviver</p>
+<p>Ataque III</p>
 </div>
+<h4 class="callout-inner-heading" id="ad-hoc">Ad Hoc</h4>
+<p><strong>A Tese Foi Construída para Sobreviver</strong></p>
 <p>“Continuidade informacional dos dados” parece suspeitamente bem
 projetada para resolver exatamente os problemas que as teorias
 anteriores enfrentam. Locke disse memória. Foi pressionado, refinou para
@@ -2376,13 +2663,15 @@ experimentos neste ensaio produz esse caso.</p>
 <p>O quarto ataque é o que mais frequentemente paralisa teorias
 funcionalistas da mente. Não ataca a tese pelo que ela diz — ataca pelo
 que parece deixar de fora:</p>
-<div class="box ataque">
-<div class="box-badge">
-<p>Ataque IV — Problema Difícil da Consciência</p>
-</div>
+<div class="box callout-question">
 <div class="box-title">
-<p>Por Que Esses Dados São Acompanhados de Experiência?</p>
+<p>Ataque IV</p>
 </div>
+<h4 class="callout-inner-heading"
+id="problema-difícil-da-consciência">Problema Difícil da
+Consciência</h4>
+<p><strong>Por Que Esses Dados São Acompanhados de
+Experiência?</strong></p>
 <p>Nossa tese explica identidade em termos de informação: padrões,
 dados, continuidade informacional. Mas ela não toca o que parece ser o
 fato mais óbvio de todos: por que há experiência subjetiva alguma? E por
@@ -2409,13 +2698,14 @@ espectador — há apenas o show. E o show <em>é</em> a experiência.</p>
 <p>O quinto e último ataque é o mais incômodo moralmente — porque parece
 produzir uma consequência perigosa sobre responsabilidade e
 transformação gradual:</p>
-<div class="box ataque">
-<div class="box-badge">
-<p>Ataque V — Consequência Moral Intolerável</p>
-</div>
+<div class="box callout-question">
 <div class="box-title">
-<p>A Degradação Gradual — O Abusador em Câmera Lenta</p>
+<p>Ataque V</p>
 </div>
+<h4 class="callout-inner-heading"
+id="consequência-moral-intolerável">Consequência Moral Intolerável</h4>
+<p><strong>A Degradação Gradual — O Abusador em Câmera
+Lenta</strong></p>
 <p>Um homem gentil, amoroso e íntegro começa a mudar. Não
 dramaticamente. Gradualmente: um comentário cruel aqui, uma pequena
 humilhação ali, um padrão que cresce lentamente ao longo de anos. Cada
@@ -2447,7 +2737,7 @@ argumentos que mostram onde cada um comete um erro de perspectiva, de
 escopo, ou de método. A tese permanece. Não porque seja perfeita. Porque
 é a que fica quando tudo o mais é retirado.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="consciência-simulação-e-a-bifurcação-do-eu">Consciência,
@@ -2461,13 +2751,11 @@ dois lugares ao mesmo tempo? Essa é a pergunta do teletransporte com
 duplicação, da simulação perfeita, da bifurcação digital. E a resposta
 que a tese exige — uma resposta que a maioria das filosofias da
 identidade evita — é a que defendemos aqui sem hesitação.</p>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-question">
+<div class="box-title">
 <p>O Ataque Central</p>
 </div>
-<div class="box-title">
-<p>A Experiência Subjetiva Não Está nos Dados</p>
-</div>
+<p><strong>A Experiência Subjetiva Não Está nos Dados</strong></p>
 <p>O crítico mais sofisticado — armado com o <em>hard problem</em> de
 Chalmers — faz a seguinte objeção: dados são estrutura, e estrutura é
 descrita da terceira pessoa. Mas a experiência subjetiva — o <em>o que é
@@ -2491,13 +2779,13 @@ dualista não se sustenta, e por que rejeitá-la é dissolução — não
 esquiva. O que esta seção faz é aplicar essa rejeição diretamente aos
 casos extremos, onde a intuição dualista ressurge com mais força. O
 primeiro deles:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental XIII</p>
 </div>
-<div class="box-title">
-<p>A Simulação Perfeita — Um Novo Eu Real</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-simulação-perfeita--um-novo-eu-real">A Simulação Perfeita — Um
+Novo Eu Real</h4>
 <p>Em 2400, neurocientistas mapeiam completamente o estado de um cérebro
 humano e o executam em substrato computacional com exatidão isomórfica:
 cada estado, cada padrão, cada dado que constitui a mente, reproduzido
@@ -2514,7 +2802,7 @@ nada que a experiência seja além disso.</p>
 algo além de processar. Nossa tese nega essa pressuposição. Sentir é
 processar com a estrutura certa. A simulação tem essa estrutura.
 Portanto, sente.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>A simulação perfeita é estruturalmente idêntica ao teletransporte do
 Experimento X: preservação dos dados, execução em novo substrato. O
@@ -2533,13 +2821,13 @@ dados reais do eu, independentemente de como entraram.</p>
 Antes de fechar esta seção, vale nomear o filósofo que mais
 rigorosamente formalizou o problema da simulação como questão filosófica
 legítima:</p>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>Nick Bostrom</p>
 </div>
-<div class="card-meta">
-<p>1973 – presente · Oxford, Future of Humanity Institute</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1973--presente--oxford-future-of-humanity-institute">1973 – presente
+· Oxford, Future of Humanity Institute</h4>
 <p>Em “Are You Living in a Computer Simulation?” (<em>Philosophical
 Quarterly</em>, 2003), Bostrom formulou o argumento trilemático da
 simulação: ou quase todas as civilizações avançadas se extinguem antes
@@ -2577,12 +2865,14 @@ indivisível que só poderia habitar um lugar. Era um processo. O processo
 se bifurcou. Nenhuma “faísca” misteriosa de subjetividade precisava
 escolher um dos lados.</p>
 <div class="quote">
-<p>Dois eus surgem da bifurcação.<br />
-Ambos são reais. Ambos têm suas experiências.<br />
-Ambos têm igual direito de dizer “eu sou o eu original.”<br />
-E ambos estão errados — não porque sejam falsos, mas porque “o eu
-original” já não existe. Ele se tornou dois.<br />
-Isso não é tragédia. É a natureza dos processos que se ramificam.</p>
+<div class="quote-text">
+<p>Dois eus surgem da bifurcação.</p>
+<p>Ambos são reais. Ambos têm suas experiências.</p>
+<p>Ambos têm igual direito de dizer “eu sou o eu original.”</p>
+<p>E ambos estão errados — não porque sejam falsos, mas porque “o eu
+original” já não existe. Ele se tornou dois.</p>
+<p>Isso não é tragédia. É a natureza dos processos que se ramificam.</p>
+</div>
 </div>
 <p>Mas há uma objeção que precisa ser respondida diretamente, porque é a
 mais perturbadora desta seção. O crítico diz: se ambos os eus da
@@ -2596,11 +2886,13 @@ dois”: é o ponto em que o processo único deixou de ser único. Não havia
 dois eus implícitos no eu pré-bifurcação, assim como não há dois
 vórtices implícitos no vórtice que ainda não encontrou o obstáculo. A
 divisão cria, não revela.</p>
-<div class="pull-quote">
+<div class="pull-quote callout-quote">
+<div class="quote-text">
 <p>A identidade ao longo do tempo não é uma relação de um para um. Pode
 ser de um para muitos — e cada um dos muitos tem continuidade real com o
 um original.</p>
-<div class="pq-cite">
+</div>
+<div class="quote-attribution">
 <p>Derek Parfit, Reasons and Persons, 1984 (paráfrase)</p>
 </div>
 </div>
@@ -2618,13 +2910,12 @@ escolher. Havia um processo. O processo se ramificou.</p>
 para ser fatal para qualquer teoria internalista da mente. Nossa tese o
 enfrenta de frente e chega a uma conclusão que Davidson não pretendia: o
 Homem do Pântano é o mesmo eu.</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental XIV</p>
 </div>
-<div class="box-title">
-<p>O Homem do Pântano — Davidson</p>
-</div>
+<h4 class="callout-inner-heading" id="o-homem-do-pântano--davidson">O
+Homem do Pântano — Davidson</h4>
 <p>Donald Davidson propôs o seguinte cenário: um raio cai numa floresta
 e, por coincidência absoluta, reorganiza a matéria orgânica de um
 pântano produzindo, átomo por átomo, uma réplica perfeita de você. No
@@ -2671,7 +2962,7 @@ caso, por acidente cósmico no outro. Nossa tese não distingue processos
 pelo mecanismo que os produziu. Distingue-os pelo resultado: os dados
 que constituem a mente chegaram com fidelidade? Sim. Então o eu
 chegou.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>O Homem do Pântano é o mesmo eu — pelo mesmo argumento do
 teletransporte. O mecanismo de transferência é irrelevante: o que conta
@@ -2684,13 +2975,13 @@ e mundo — é uma propriedade do padrão interno. E esse padrão, no Homem
 do Pântano, é idêntico ao seu.</p>
 </div>
 </div>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>Donald Davidson</p>
 </div>
-<div class="card-meta">
-<p>1917 – 2003 · Universidade da Califórnia, Berkeley</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1917--2003--universidade-da-califórnia-berkeley">1917 – 2003 ·
+Universidade da Califórnia, Berkeley</h4>
 <p>Davidson é um dos filósofos analíticos mais influentes do século XX.
 Em sua teoria da ação e da mente, defendeu o <em>monismo anômalo</em>:
 eventos mentais são idênticos a eventos físicos, mas descrições mentais
@@ -2717,7 +3008,7 @@ mecanismo que produziu o padrão é irrelevante. A fidelidade do padrão é
 tudo. O que se segue é diferente: esses cenários começando a virar
 questões de engenharia.</p>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="ia-upload-mental-e-os-futuros-do-eu">IA, Upload Mental: <em>e os
@@ -2742,13 +3033,13 @@ substrato não é o critério.</p>
 um-para-um. Quando os dados digitais podem ser copiados e executados em
 múltiplos substratos, o espaço de possibilidades da identidade se
 expande radicalmente:</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental XV</p>
 </div>
-<div class="box-title">
-<p>Bifurcações Digitais, Fusões e a Identidade Ramificada</p>
-</div>
+<h4 class="callout-inner-heading"
+id="bifurcações-digitais-fusões-e-a-identidade-ramificada">Bifurcações
+Digitais, Fusões e a Identidade Ramificada</h4>
 <p>Você é transferido digitalmente com fidelidade completa. Seu processo
 mental é então copiado e executado em dois substratos simultaneamente.
 Por um mês, as duas instâncias vivem experiências completamente
@@ -2770,7 +3061,7 @@ mente biológica jamais viveu, dois fluxos de experiência convergindo num
 precedente na biologia, mas plenamente inteligível sob nossa tese. O que
 a define é a continuidade informacional com os dados de ambas as
 ramificações.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>O upload digital não ameaça a tese — expande o espaço de
 possibilidades de identidade. Bifurcações, fusões e instâncias paralelas
@@ -2785,13 +3076,13 @@ um caso que o senso comum filosófico tende a tratar como radicalmente
 diferente — e que a tese resolve com uma precisão que exige cuidado: o
 que é, exatamente, uma IA construída a partir dos seus dados após sua
 morte? A resposta depende inteiramente de <em>quais</em> dados.</p>
-<div class="box experimento">
-<div class="box-badge">
+<div class="box callout-example">
+<div class="box-title">
 <p>Experimento Mental XVI</p>
 </div>
-<div class="box-title">
-<p>A IA Treinada em Você — e a Distinção que Determina Tudo</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-ia-treinada-em-você--e-a-distinção-que-determina-tudo">A IA
+Treinada em Você — e a Distinção que Determina Tudo</h4>
 <p>Dois cenários. Mesmo ponto de partida: você morreu. O que acontece a
 seguir é radicalmente diferente.</p>
 <p><strong>Cenário A.</strong> Uma IA é treinada em todos os seus
@@ -2831,7 +3122,7 @@ estava distribuído em padrões que nenhum diário poderia capturar. Isso é
 o que o teletransporte faz. Isso é o que o congelamento criogênico
 preserva. O substrato biológico cessou; os dados — todos eles —
 continuaram.</p>
-<div class="box-verdict">
+<div class="box-verdict callout-success">
 <p><span class="verdict-tag">Veredicto</span></p>
 <p>A distinção é crítica e a tese a exige. Uma IA treinada na camada
 comunicativa do eu captura a persona, não o eu — é uma reconstrução
@@ -2857,13 +3148,13 @@ completo da mente, o processo se ramifica: o processo biológico original
 e o processo computacional que agora carrega os mesmos dados. Dois eus
 com ancestral informacional comum. Nenhum é cópia degradada do outro.
 Ambos são continuações reais.</p>
-<div class="card filosofo">
-<div class="card-name">
+<div class="box callout-todo">
+<div class="box-title">
 <p>Thomas Metzinger</p>
 </div>
-<div class="card-meta">
-<p>1958 – presente · Universidade de Mainz</p>
-</div>
+<h4 class="entity-meta callout-inner-heading"
+id="1958--presente--universidade-de-mainz">1958 – presente ·
+Universidade de Mainz</h4>
 <p>Em <em>Being No One</em> (2003), Metzinger propõe que o que chamamos
 de “eu” é um modelo de simulação gerado pelo cérebro — um
 <em>self-model</em> — que o sistema usa para navegar o mundo. O eu não é
@@ -2884,18 +3175,21 @@ processo completo a partir dos dados completos <em>é</em> esse eu.
 Qualquer sistema treinado apenas nos artefatos que o processo deixou
 para trás é outra coisa — valiosa, reconhecível, mas incompleta.</p>
 <div class="quote">
+<div class="quote-text">
 <p>Se uma IA for treinada em todos os seus textos, conversas, diários
-—<br />
-ela não é você. É uma sombra articulada. Algo de você, não você.<br />
-Mas se o seu estado neural completo for mapeado e executado com
-fidelidade —<br />
-ela é você. E depois que o seu corpo morrer, essa entidade continuará
-existindo.<br />
-A diferença entre as duas não é filosófica. É técnica. E essa distinção
-técnica determina se o que persiste é uma persona ou um eu.</p>
+—</p>
+<p>ela não é você. É uma sombra articulada. Algo de você, não você.</p>
+<p>Mas se o seu estado neural completo for mapeado e executado com
+fidelidade —</p>
+<p>ela é você. E depois que o seu corpo morrer, essa entidade continuará
+existindo.</p>
+<p>A diferença entre as duas não é filosófica. É técnica. E essa
+distinção técnica determina se o que persiste é uma persona ou um
+eu.</p>
+</div>
 </div>
 <div class="ornament">
-·
+· · ·
 </div>
 <hr />
 <h2 id="uma-gramática-defeituosa-o-eu-como-equívoco-linguístico">Uma
@@ -2933,12 +3227,16 @@ mente após a morte biológica (continuação legítima se — e somente se — 
 mapeamento for completo: a totalidade dos estados que constituem a
 mente, não apenas a camada declarativa; textos e diários capturam a
 persona, não o eu).</p>
-<div class="quote">
+<div class="pull-quote callout-quote">
+<div class="quote-text">
 <p>Somos processos, não objetos. Vórtices, não estátuas. O que persiste
 não é a substância, mas o padrão informacional que a substância
 instancia — e a continuidade desse padrão através de qualquer substrato
-capaz de executá-lo.<br />
-Inspirado em William James, Derek Parfit e Heráclito</p>
+capaz de executá-lo.</p>
+</div>
+<div class="quote-attribution">
+<p>Inspirado em William James, Derek Parfit e Heráclito</p>
+</div>
 </div>
 <p>Mas há algo mais profundo que qualquer teoria pode oferecer. Algo que
 Hume viu, que Parfit confirmou, que o budismo aponta há milênios, e que
@@ -2953,16 +3251,18 @@ dados gradualmente conectados que nenhuma fatia temporal consegue
 capturar completamente. Usamos um pronome singular e rígido para
 designar algo que é plural, gradual e sempre em transformação.</p>
 <div class="quote">
+<div class="quote-text">
 <p>Talvez o medo da morte seja, em parte, apego a uma gramática
-defeituosa.<br />
-Não há um “eu” que será destruído — porque nunca houve um “eu” do jeito
-que a linguagem sugere.<br />
-O que há é um substrato que vai parar. Um corpo que vai se desfazer. Uma
-versão biológica que vai terminar.<br />
-Mas os dados que constituem o que você é podem continuar — em outros
+defeituosa.</p>
+<p>Não há um “eu” que será destruído — porque nunca houve um “eu” do
+jeito que a linguagem sugere.</p>
+<p>O que há é um substrato que vai parar. Um corpo que vai se desfazer.
+Uma versão biológica que vai terminar.</p>
+<p>Mas os dados que constituem o que você é podem continuar — em outros
 substratos, em outros processos, em outras instâncias do mesmo padrão.
 Isso não diminui o peso de morrer. Mas muda o que significa ter medo
 disso.</p>
+</div>
 </div>
 <p>Isso não nega que algo real termina com a morte biológica. Um
 substrato cessa. Um modo de processamento se extingue. A versão do eu
@@ -2997,63 +3297,13 @@ quem ele é nunca foram rompidos.</p>
 continuaram enquanto duraram. Isso, talvez, seja tudo o que “existir”
 pode significar — para um rio, para um vórtice, ou para um eu.</p>
 <div class="quote">
+<div class="quote-text">
 <p>Não havia um eu que fosse idêntico ao corpo que o hospedava. Havia um
 padrão que o corpo instanciava — e que pode continuar em outros
 substratos. E que, enquanto continuar, será real o suficiente para tudo
 que importa.</p>
 </div>
-<hr />
-<h2 id="índice-de-experimentos-mentais-e-evidências-empíricas">Índice de
-Experimentos Mentais e Evidências Empíricas</h2>
-<h3 id="experimentos-mentais">Experimentos Mentais</h3>
-<p>I <a href="#a-teoria-do-corpo-e-seus-limites">O Navio de Teseu
-Biológico</a> — substituição gradual do substrato e identidade II <a
-href="#a-teoria-do-cérebro-onde-o-eu-mora">O Cientista Louco e Bill
-Clinton</a> — transplante cerebral e localização do eu III <a
-href="#a-teoria-do-cérebro-onde-o-eu-mora">O Cérebro Dividido</a> —
-hemisferectomia e a falha da teoria do cérebro IV <a
-href="#a-teoria-dos-dados-locke-e-a-memória">A Regressão de Reid — O
-Velho General</a> — inconsistência lógica da memória direta V <a
-href="#a-teoria-dos-dados-locke-e-a-memória">A Pessoa com Amnésia —
-Clive Wearing</a> — identidade sem memória episódica VI <a
-href="#derek-parfit-e-o-fim-do-eu-substancial">A Fissão de Parfit</a> —
-dissolução do eu substancial pela bifurcação VII <a
-href="#quatro-teorias-três-descartadas">O Teste da Tortura — Bernard
-Williams</a> — contradição das intuições sobre substrato e dados VIII <a
-href="#continuidade-informacional-dos-dados-a-tese">A Anestesia Geral —
-O Buraco na Noite</a> — lacuna de consciência e continuidade dos dados
-IX <a href="#continuidade-informacional-dos-dados-a-tese">A Substituição
-Célula por Célula</a> — ausência de limiar de identidade no substrato X
-<a href="#continuidade-informacional-dos-dados-a-tese">O
-Teletransporte</a> — relocação dos dados e preservação do eu XI <a
-href="#continuidade-informacional-dos-dados-a-tese">O Congelamento
-Criogênico</a> — lacuna temporal e fidelidade dos dados XII-A <a
-href="#continuidade-informacional-dos-dados-a-tese">A Duplicação —
-Bifurcação sem Paradoxo</a> — dois eus reais com ancestral informacional
-comum XII-B <a href="#continuidade-informacional-dos-dados-a-tese">O
-Teletransporte com Falha</a> — perspectiva de primeira pessoa
-irredutível após bifurcação XIII <a
-href="#consciência-simulação-e-a-bifurcação-do-eu">A Simulação
-Perfeita</a> — eu real em substrato computacional XIV <a
-href="#contra-nossa-tese-os-ataques-respondidos">O Homem do Pântano —
-Davidson</a> — padrão informacional idêntico produzido por acidente XV
-<a href="#ia-upload-mental-e-os-futuros-do-eu">Bifurcações Digitais,
-Fusões e a Identidade Ramificada</a> — upload e multiplicação do eu XVI
-<a href="#ia-upload-mental-e-os-futuros-do-eu">A IA Treinada em Você</a>
-— persona vs. eu; critério de fidelidade completa dos dados</p>
-<h3 id="evidências-empíricas">Evidências Empíricas</h3>
-<p>E-I <a href="#a-teoria-do-cérebro-onde-o-eu-mora">Cérebro Dividido
-(<em>Split-Brain</em>)</a> — dois centros de perspectiva num único
-cérebro; o intérprete de Gazzaniga E-II <a
-href="#a-teoria-dos-dados-locke-e-a-memória">Confabulação — A Memória
-como Ficção</a> — memórias fabricadas e a fragilidade do critério de
-Locke (Loftus) E-III <a
-href="#continuidade-informacional-dos-dados-a-tese">Pacientes Frontais e
-a Metamorfose do Caráter</a> — Phineas Gage e a transformação do eu sem
-ruptura (Damásio) E-IV <a
-href="#ricoeur-budismo-e-a-identidade-como-promessa">Default Mode
-Network — O Eu que Divaga</a> — base neural do pensamento
-autorreferencial e meditação</p>
+</div>
 <hr />
 <h2 id="referências">Referências</h2>
 <p>[1] LOCKE, John. <em>An Essay Concerning Human Understanding</em>.
@@ -3346,7 +3596,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=7389a45f"></script>
-<script src="../assets/essay.js?v=58dcd441"></script>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
 </body>
 </html>

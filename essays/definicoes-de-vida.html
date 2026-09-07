@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="28">
+<html lang="pt-BR" data-status="finalizado" data-minutes="35">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,6 +27,22 @@
   --rust-bright:#A84F3C;
   --accent:#4A8FA8;
   --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#B08B4F;
+  --callout-todo:#B18A4A;
+  --callout-tip:#B08B4F;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#8A857E;
+  --quote-bg:#1C1B1A;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
@@ -48,6 +64,22 @@
   --rust-bright:#A04030;
   --accent:#35708A;
   --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
   --box-bg:var(--surface);
   --box-verdict-bg:var(--surface2);
 }
@@ -76,6 +108,22 @@
     --rust-bright:#A04030;
     --accent:#35708A;
     --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
     --box-bg:var(--surface);
     --box-verdict-bg:var(--surface2);
   }
@@ -209,12 +257,9 @@ body{
    a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
    já ocupa quase tudo e o breakout não teria para onde ir. */
 @media (min-width:1400px){
-  /* Só o TETO sobe. Nada de `width`: uma tabela estreita continua estreita e
-     uma figura continua no tamanho natural — o que muda é até onde elas podem
-     ir quando precisam. `margin-left:50%` + `translateX(-50%)` centraliza
-     seja qual for a largura resultante. */
-  .content > figure,
-  .content > table{
+  /* Apenas figuras podem escapar da coluna de prosa. Tabelas permanecem na
+     coluna e, quando largas, rolam dentro do próprio elemento. */
+  .content > figure{
     max-width:min(var(--wide-width),1500px);
     margin-left:50%;
     transform:translateX(-50%);
@@ -403,7 +448,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--surface2);border-left:2px solid var(--gold-dim);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -411,7 +456,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--surface);border-left:3px solid var(--gold);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -423,11 +468,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-.pull-quote.epigraph p:last-child{
-  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-dim);margin-top:.9rem;
-}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -441,6 +483,62 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin-top:.3rem;
 }
 .pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--callout-quote) 62%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.8rem;line-height:1.55;letter-spacing:.035em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.66rem;line-height:1.35;letter-spacing:.08em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
 
 /* ------------------------------------------------------------------ */
 /* Caixas tipadas                                                      */
@@ -457,16 +555,29 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:var(--box-bg);
   overflow:hidden;
 }
-.box.experimento{--boxc:var(--rust);}
-.box.evidencia{--boxc:var(--accent);}
-.box.mapa{--boxc:var(--gold);}
-.box.ataque{--boxc:var(--rust);}
-.box.aviso{--boxc:var(--amber);}
-.box.nivel{--boxc:var(--accent);}
-.box.ideia{--boxc:var(--gold-dim);}
-/* generico: filete cinza discreto — sem cor de destaque. O rótulo, porém,
-   precisa continuar legível: em cinza de borda ele desaparecia no fundo. */
-.box.generico{--boxc:var(--border);--box-badge-c:var(--text-dim);}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-tip{--boxc:var(--callout-tip);}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);border-left-style:dashed;}
+.box.callout-danger{--boxc:var(--callout-danger);border-left-width:5px;}
+.box.callout-bug{--boxc:var(--callout-bug);border-left-style:double;}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
@@ -486,16 +597,33 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > p:last-of-type{margin-bottom:1.2rem;}
 .box-title p,.box-badge p{margin:0;padding:0;}
 
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;letter-spacing:.055em;line-height:1.35;
+}
+
 .box-verdict{
-  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
-  background:var(--box-verdict-bg);
-  border-top:1px solid var(--border);
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:.5rem;
+  color:var(--boxc);margin-bottom:.5rem;
 }
 
 /* Cards: filosofos e obras */
@@ -562,9 +690,11 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
-     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
-  font-size:.656em;line-height:1.55;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -689,7 +819,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -703,11 +837,159 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
      caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
      leitura nesse corpo. */
   .box-badge{font-size:.78rem;}
-  .verdict-tag{font-size:.76rem;}
+  .verdict-tag{font-size:.78rem;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.84rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 2.5%,var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
+  margin:0;padding:0 0 1.15rem;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:-1px 0 0 -1px;
+  padding:.5rem 1.05rem .44rem;
+  border:0;border-radius:0;
+  border-bottom:2px solid var(--boxc);
+  background:color-mix(in srgb,var(--boxc) 14%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato; `example`/`tip` propoem um cenario. A
+   faixa do segundo par pesa um pouco menos para marcar essa diferenca sem
+   trocar de cor — a familia visual continua a mesma. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  border-bottom-width:1px;
+  background:color-mix(in srgb,var(--boxc) 7%,transparent);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .3rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.82rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+.box.callout-abstract{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-info{background:color-mix(in srgb,var(--boxc) 3.5%,var(--bg));}
+.box.callout-tip{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-example{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-danger{background:color-mix(in srgb,var(--boxc) 7%,var(--surface));border-left-width:6px;}
+.box.callout-bug{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+.box.callout-failure{border-left-style:dashed;}
+.box.callout-danger{border-left-style:solid;}
+.box.callout-bug{border-left-style:double;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 .6rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
 }
 
 /* ------------------------------------------------------------------ */
@@ -998,54 +1280,65 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 
 <main class="content">
 <div class="quote">
-<p>“A vida é o modo pelo qual a matéria encontrou de contemplar a si
-mesma.” — atribuído a <a
-href="https://en.wikipedia.org/wiki/Carl_Sagan">Carl Sagan</a></p>
+<div class="quote-text">
+<p>A vida é o modo pelo qual a matéria encontrou de contemplar a si
+mesma.</p>
+</div>
+<div class="quote-attribution">
+<p>— atribuído a <a href="https://en.wikipedia.org/wiki/Carl_Sagan">Carl
+Sagan</a></p>
+</div>
 </div>
 <div class="quote">
-<p>“Os limites de minha linguagem são os limites do meu mundo.” — <a
-href="https://en.wikipedia.org/wiki/Ludwig_Wittgenstein">Ludwig
+<div class="quote-text">
+<p>Os limites de minha linguagem são os limites do meu mundo.</p>
+</div>
+<div class="quote-attribution">
+<p>— <a href="https://en.wikipedia.org/wiki/Ludwig_Wittgenstein">Ludwig
 Wittgenstein</a>, <em>Tractatus Logico-Philosophicus</em></p>
+</div>
 </div>
 <hr />
 <h2 id="sumário">Sumário</h2>
 <ul>
 <li><a href="#introdução-a-pergunta-que-resiste">Introdução: A Pergunta
 que Resiste</a></li>
-<li><a href="#i-a-definição-clássica-os-sete-pilares-da-biologia">I. A
+<li><a
+href="#i-as-seis-formulações-canônicas--e-onde-cada-uma-quebra">I. As
+Seis Formulações Canônicas — e Onde Cada Uma Quebra</a></li>
+<li><a href="#ii-a-definição-clássica-os-sete-pilares-da-biologia">II. A
 Definição Clássica: Os Sete Pilares da Biologia</a></li>
 <li><a
-href="#ii-a-definição-química-vida-como-química-em-desequilíbrio">II. A
-Definição Química: Vida como Química em Desequilíbrio</a></li>
-<li><a href="#iii-a-definição-termodinâmica-vida-como-negentropia">III.
-A Definição Termodinâmica: Vida como Negentropia</a></li>
-<li><a href="#iv-a-definição-informacional-vida-como-software">IV. A
+href="#iii-a-definição-química-vida-como-química-em-desequilíbrio">III.
+A Definição Química: Vida como Química em Desequilíbrio</a></li>
+<li><a href="#iv-a-definição-termodinâmica-vida-como-negentropia">IV. A
+Definição Termodinâmica: Vida como Negentropia</a></li>
+<li><a href="#v-a-definição-informacional-vida-como-software">V. A
 Definição Informacional: Vida como Software</a></li>
 <li><a
-href="#v-a-definição-matemática-vida-como-computação-universal">V. A
+href="#vi-a-definição-matemática-vida-como-computação-universal">VI. A
 Definição Matemática: Vida como Computação Universal</a></li>
 <li><a
-href="#vi-a-definição-filosófica-autopoiese-intencionalidade-e-consciência">VI.
+href="#vii-a-definição-filosófica-autopoiese-intencionalidade-e-consciência">VII.
 A Definição Filosófica: Autopoiese, Intencionalidade e
 Consciência</a></li>
 <li><a
-href="#vii-o-princípio-da-energia-livre-vida-como-minimização-de-surpresa">VII.
+href="#viii-o-princípio-da-energia-livre-vida-como-minimização-de-surpresa">VIII.
 O Princípio da Energia Livre: Vida como Minimização de Surpresa</a></li>
-<li><a href="#viii-vida-como-fenômeno-coletivo">VIII. Vida como Fenômeno
+<li><a href="#ix-vida-como-fenômeno-coletivo">IX. Vida como Fenômeno
 Coletivo</a></li>
-<li><a
-href="#ix-estrelas-buracos-negros-e-civilizações-de-kardashev">IX.
+<li><a href="#x-estrelas-buracos-negros-e-civilizações-de-kardashev">X.
 Estrelas, Buracos Negros e Civilizações de Kardashev</a></li>
-<li><a href="#x-vida-no-limiar-quântico-clássico">X. Vida no Limiar
+<li><a href="#xi-vida-no-limiar-quântico-clássico">XI. Vida no Limiar
 Quântico-Clássico</a></li>
-<li><a href="#xi-vida-extrema-extremófilos">XI. Vida Extrema:
+<li><a href="#xii-vida-extrema-extremófilos">XII. Vida Extrema:
 Extremófilos</a></li>
-<li><a href="#xii-ficção-científica-como-filosofia-natural">XII. Ficção
-Científica como Filosofia Natural</a></li>
-<li><a href="#xiii-o-self-sampling-bias-a-armadilha-do-n1">XIII. O
+<li><a href="#xiii-ficção-científica-como-filosofia-natural">XIII.
+Ficção Científica como Filosofia Natural</a></li>
+<li><a href="#xiv-o-self-sampling-bias-a-armadilha-do-n1">XIV. O
 Self-Sampling Bias: A Armadilha do N=1</a></li>
-<li><a href="#xiv-síntese-o-espectro-da-vida">XIV. Síntese: O Espectro
-da Vida</a></li>
+<li><a href="#xv-síntese-o-espectro-da-vida">XV. Síntese: O Espectro da
+Vida</a></li>
 <li><a
 href="#conclusão-definições-ética-e-o-futuro-da-astrobiologia">Conclusão:
 Definições, Ética e o Futuro da Astrobiologia</a></li>
@@ -1075,7 +1368,289 @@ href="https://en.wikipedia.org/wiki/Qualia">consciência</a>), e (7) o <a
 href="https://en.wikipedia.org/wiki/Free_energy_principle">Princípio da
 Energia Livre</a> (FEP).</p>
 <hr />
-<h2 id="i-a-definição-clássica-os-sete-pilares-da-biologia">I. A
+<h2 id="i-as-seis-formulações-canônicas--e-onde-cada-uma-quebra">I. As
+Seis Formulações Canônicas — e Onde Cada Uma Quebra</h2>
+<p>Antes de percorrer as famílias de definição que organizam o resto do
+ensaio, vale examinar as seis formulações que a literatura consagrou.
+Cada uma foi proposta por um autor específico, cada uma resolve um
+problema real, e cada uma quebra diante de um contraexemplo que ela
+mesma não consegue expulsar. O padrão que emerge dessa bateria — a
+definição funciona até encontrar um sistema que satisfaz seus critérios
+sem ser vivo — é o que motiva a estratégia de critérios múltiplos
+adotada daqui em diante.</p>
+<h3 id="ernst-mayr--a-definição-biológica">Ernst Mayr — a definição
+biológica</h3>
+<div class="quote">
+<div class="quote-text">
+<p>A vida é caracterizada por processos biológicos como crescimento,
+reprodução, resposta a estímulos e adaptação evolucionária.</p>
+</div>
+<div class="quote-attribution">
+<p>— Ernst Mayr, <em>The Growth of Biological Thought</em> (1982)</p>
+</div>
+</div>
+<p>A abordagem funcionalista de Mayr dominou a biologia do século XX.
+Para ele, uma entidade é viva se executa um conjunto de funções:
+metabolismo, crescimento, reprodução, resposta a estímulos e adaptação
+via <a href="https://en.wikipedia.org/wiki/Evolution">seleção
+natural</a>. Esta é a definição que aparece na maioria dos livros de
+biologia.</p>
+<p><strong>Contraexemplo</strong>: Um robô avançado pode crescer
+(adicionando módulos), responder a estímulos, replicar-se e até
+adaptar-se ao ambiente via algoritmos evolutivos. Ele satisfaz todos os
+critérios funcionais, mas ninguém o chamaria de “vivo”. A resposta de
+Mayr seria que a vida exige uma base biológica — DNA, proteínas,
+membranas — e está sujeita a <a
+href="https://en.wikipedia.org/wiki/Evolution">pressões evolutivas
+naturais</a>, não programadas. Mas isso transforma a definição numa
+tautologia: vida é aquilo que tem biologia, e biologia é aquilo que os
+seres vivos fazem.</p>
+<p>O problema mais profundo é que esta definição é
+<strong>carbo-chauvinista</strong>. Ela assume implicitamente que a vida
+deve ser baseada em carbono e água, eliminando a priori qualquer forma
+de vida não-biológica que a <a
+href="https://en.wikipedia.org/wiki/Astrobiology">Exobiologia</a>
+poderia descobrir.</p>
+<h3 id="erwin-schrödinger--a-definição-termodinâmica">Erwin Schrödinger
+— a definição termodinâmica</h3>
+<div class="quote">
+<div class="quote-text">
+<p>A vida é aquilo que evita a rápida desintegração no estado de
+equilíbrio termodinâmico, mantendo-se em um estado de não-equilíbrio ao
+extrair ordem do ambiente circundante.</p>
+</div>
+<div class="quote-attribution">
+<p>— Erwin Schrödinger, <em>What is Life?</em> (1944)</p>
+</div>
+</div>
+<p><a href="https://en.wikipedia.org/wiki/Erwin_Schr%C3%B6dinger">Erwin
+Schrödinger</a> introduziu a <a
+href="https://en.wikipedia.org/wiki/Negentropy">negentropia</a> como
+conceito central. Seres vivos são sistemas que se mantêm longe do
+equilíbrio termodinâmico ao absorver ordem (entropia baixa) do ambiente
+e exportar desordem (entropia alta). Esta é a definição mais elegante do
+ponto de vista da física, e conecta-se diretamente à <a
+href="https://en.wikipedia.org/wiki/Thermodynamics#Non-equilibrium_thermodynamics">Termodinâmica
+da Vida</a>.</p>
+<p><strong>Contraexemplo</strong>: Uma geladeira mantém-se em estado de
+não-equilíbrio termodinâmico extraindo calor do interior e dissipando-o
+no ambiente. Uma vela acesa consome cera, emite luz e calor, e resiste
+(temporariamente) ao equilíbrio. Nenhuma é considerada viva. Schrödinger
+responderia que a distinção está na capacidade
+<strong>intrínseca</strong> do organismo de manter sua ordem — a
+geladeira depende de uma fonte externa de energia elétrica projetada por
+um engenheiro, enquanto a bactéria gera sua própria maquinaria de
+captação energética.</p>
+<p>A força desta definição está em ser <strong>independente do
+substrato</strong>: ela não exige carbono, água ou DNA. Qualquer sistema
+que mantenha <a
+href="https://en.wikipedia.org/wiki/Negentropy">Negentropia</a> às
+custas do ambiente poderia, em princípio, ser considerado vivo. Isso a
+torna especialmente útil para a <a
+href="https://en.wikipedia.org/wiki/Astrobiology">Exobiologia</a>.</p>
+<h3 id="richard-dawkins--a-definição-genética">Richard Dawkins — a
+definição genética</h3>
+<div class="quote">
+<div class="quote-text">
+<p>A vida é uma série de replicadores (genes) que utilizam organismos
+para se perpetuar.</p>
+</div>
+<div class="quote-attribution">
+<p>— Richard Dawkins, <em>The Selfish Gene</em> (1976)</p>
+</div>
+</div>
+<p>Para <a href="https://en.wikipedia.org/wiki/Richard_Dawkins">Richard
+Dawkins</a>, os organismos são “máquinas de sobrevivência” construídas
+pelos genes para se replicarem. A unidade fundamental da vida não é o
+indivíduo, mas o <strong>replicador</strong> — uma entidade capaz de
+cópia fiel com variação ocasional, sujeita a seleção. Esta perspectiva
+radical inverte a relação usual: não são os organismos que possuem
+genes, são os genes que possuem organismos.</p>
+<p><strong>Contraexemplo</strong>: Um vírus de computador se replica,
+utiliza recursos do hospedeiro, evolui por mutação e seleção (pressão de
+antivírus), e se “adapta” ao ambiente digital. A resposta de Dawkins
+seria que os replicadores genuínos operam num contexto biológico e estão
+sujeitos às leis da química orgânica, não da engenharia de software. Mas
+essa resposta é novamente carbo-chauvinista.</p>
+<p>A definição de Dawkins é poderosa porque captura a essência da <a
+href="https://en.wikipedia.org/wiki/Evolution">Evolução Darwiniana</a>:
+informação que se copia com variação e é selecionada. Se levarmos essa
+lógica a sério, qualquer sistema com replicadores darwinianos —
+incluindo programas evolutivos artificiais — poderia ser “vivo” em
+sentido dawkiniano.</p>
+<h3 id="gerald-joyce-nasa--a-definição-química">Gerald Joyce (NASA) — a
+definição química</h3>
+<div class="quote">
+<div class="quote-text">
+<p>Vida é um sistema químico auto-sustentável capaz de evolução
+darwiniana.</p>
+</div>
+<div class="quote-attribution">
+<p>— Gerald Joyce, NASA Working Definition (1994)</p>
+</div>
+</div>
+<p>Esta é a “definição de trabalho” da NASA, usada para orientar a busca
+por vida extraterrestre. Ela combina dois requisitos: (a)
+auto-sustentabilidade química e (b) capacidade de <a
+href="https://en.wikipedia.org/wiki/Evolution">Evolução Darwiniana</a>.
+É mais restritiva que Schrödinger (exige química) mas mais ampla que
+Mayr (não especifica qual química).</p>
+<p><strong>Contraexemplo</strong>: Cristais de gelo crescem, replicam
+sua estrutura cristalina e se propagam. Mas não evoluem darwinianamente
+— suas “cópias” não possuem variação hereditária sujeita a seleção.
+Joyce insistiria que a capacidade de evolução é o que separa a vida de
+meros processos químicos auto-catalíticos.</p>
+<p>O problema sutil desta definição é que ela exclui uma <strong>célula
+individual</strong> — uma bactéria isolada que não pode evoluir
+(evolução requer populações). Uma célula é claramente viva, mas não é
+capaz de evolução darwiniana sozinha. A definição de Joyce funciona
+melhor para <strong>populações</strong> do que para
+<strong>indivíduos</strong>.</p>
+<h3 id="fritjof-capra--a-definição-sistêmica">Fritjof Capra — a
+definição sistêmica</h3>
+<div class="quote">
+<div class="quote-text">
+<p>Vida é um sistema auto-organizado, auto-regulador, autopoiético e em
+rede, que mantém sua identidade e integridade através da interação
+contínua com seu ambiente.</p>
+</div>
+<div class="quote-attribution">
+<p>— Fritjof Capra, <em>The Web of Life</em> (1996)</p>
+</div>
+</div>
+<p>Capra integra conceitos de Maturana e Varela sobre
+<strong>autopoiese</strong> — a capacidade de um sistema de produzir e
+manter a si mesmo. Para ele, a vida é um fenômeno emergente de redes
+complexas que se auto-organizam.</p>
+<p><strong>Contraexemplo</strong>: Uma cidade é auto-organizada,
+auto-regulada, mantém sua identidade e interage com o ambiente. Tem
+“metabolismo” (fluxo de energia e materiais), “memória” (infraestrutura)
+e até “reprodução” (fundação de novas cidades). A resposta de Capra
+seria que cidades não possuem processos metabólicos biológicos e não se
+reproduzem biologicamente. Mas essa restrição reintroduz o viés
+biológico que a definição sistêmica pretendia superar.</p>
+<h3 id="gregory-bateson--a-definição-informacional">Gregory Bateson — a
+definição informacional</h3>
+<div class="quote">
+<div class="quote-text">
+<p>Vida é um sistema que processa, armazena, transmite e utiliza
+informação para se auto-sustentar e evoluir.</p>
+</div>
+<div class="quote-attribution">
+<p>— Gregory Bateson, <em>Steps to an Ecology of Mind</em> (1972)</p>
+</div>
+</div>
+<p>Esta definição é a mais abstrata e a mais poderosa. Ela identifica a
+vida com o <strong>processamento de informação</strong> para fins de
+auto-sustentação. Conecta-se diretamente à <a
+href="https://en.wikipedia.org/wiki/Large_language_model">Arquitetura de
+LLMs</a> e ao debate sobre <a
+href="https://en.wikipedia.org/wiki/Artificial_consciousness">Consciência
+em LLMs</a>.</p>
+<p><strong>Contraexemplo</strong>: Um sistema de inteligência artificial
+avançado processa, armazena, transmite e utiliza informação para se
+manter operacional e melhorar seus algoritmos. A pergunta que Bateson
+nos força a enfrentar é: por que <strong>não</strong> considerá-lo
+vivo?</p>
+<h3 id="as-seis-definições-diante-de-uma-estrela">As seis definições
+diante de uma estrela</h3>
+<p>Aplicadas a uma <strong>estrela</strong>, as seis formulações não
+convergem — e é aí que o problema aparece inteiro:</p>
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr>
+<th>Definição</th>
+<th>A estrela satisfaz?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mayr</strong> (biológica)</td>
+<td>Parcialmente — tem ciclo de nascimento, crescimento e morte, mas sem
+DNA</td>
+</tr>
+<tr>
+<td><strong><a
+href="https://en.wikipedia.org/wiki/Erwin_Schr%C3%B6dinger">Schrödinger</a></strong>
+(termodinâmica)</td>
+<td><strong>Sim</strong> — mantém-se em não-equilíbrio exportando <a
+href="https://en.wikipedia.org/wiki/Negentropy">entropia</a></td>
+</tr>
+<tr>
+<td><strong><a
+href="https://en.wikipedia.org/wiki/Richard_Dawkins">Dawkins</a></strong>
+(genética)</td>
+<td>Parcialmente — supernovas “semeiam” elementos para novas
+estrelas</td>
+</tr>
+<tr>
+<td><strong>Joyce</strong> (química)</td>
+<td>Parcialmente — reações nucleares são auto-sustentáveis, mas sem
+evolução darwiniana</td>
+</tr>
+<tr>
+<td><strong>Capra</strong> (sistêmica)</td>
+<td><strong>Sim</strong> — auto-organizada, auto-regulada, em rede
+galáctica</td>
+</tr>
+<tr>
+<td><strong>Bateson</strong> (informacional)</td>
+<td><strong>Sim</strong> — processa e transmite informação via
+radiação</td>
+</tr>
+</tbody>
+</table>
+<p>A ideia não é nova. Olaf Stapledon, em <em>Star Maker</em> (1937),
+imaginou estrelas como entidades conscientes com estados mentais e
+interações coletivas. David Layzer, em <em>Cosmogenesis</em> (1990),
+argumentou que processos de complexificação cósmica — da nucleossíntese
+estelar à vida biológica — formam um continuum, não categorias
+discretas.</p>
+<p>A provocação é séria: se uma estrela satisfaz três ou quatro das seis
+definições de vida mais aceitas, o problema talvez não esteja na
+estrela, mas nas nossas definições. Estamos tentando capturar com uma
+única palavra — “vida” — um fenômeno que existe num espectro contínuo de
+organização, desde cristais até civilizações.</p>
+<h3 id="o-que-conseguiríamos-reconhecer">O que conseguiríamos
+reconhecer</h3>
+<p>A pergunta deixa de ser abstrata assim que se procura vida fora da
+Terra. Uma definição estreita não apenas descreve mal: ela decide de
+antemão o que uma sonda é capaz de detectar.</p>
+<p>A <a
+href="https://en.wikipedia.org/wiki/Silurian_hypothesis">Hipótese
+Siluriana</a> nos lembra que mesmo na Terra, civilizações anteriores
+poderiam ter existido e desaparecido sem deixar rastros reconhecíveis. A
+questão não é apenas “a vida existe lá fora?”, mas “seríamos capazes de
+reconhecê-la se a encontrássemos?”</p>
+<h3 id="o-problema-da-indução">O problema da indução</h3>
+<p>No fundo, todas as definições de vida compartilham um problema: elas
+são construídas <strong>indutivamente</strong> a partir de uma única
+amostra — a vida terrestre. Como <a
+href="https://en.wikipedia.org/wiki/David_Hume">David Hume</a>
+demonstrou, a indução não pode garantir universalidade. Uma definição
+baseada em N=1 é, na melhor das hipóteses, uma conjectura.</p>
+<p><a href="https://en.wikipedia.org/wiki/Karl_Popper">Karl Popper</a>
+diria que o caminho correto não é tentar <strong>definir</strong> a
+vida, mas propor definições <a
+href="https://en.wikipedia.org/wiki/Falsifiability">falsificáveis</a> e
+testá-las. A descoberta de uma única forma de vida não-biológica — uma
+criatura plasmática numa estrela, um ecossistema baseado em silício em
+Titã — falsificaria instantaneamente as definições de Mayr e Dawkins,
+mas fortaleceria as de Schrödinger e Bateson.</p>
+<p>Talvez a lição mais profunda seja que a vida não é uma
+<strong>coisa</strong>, mas um <strong>processo</strong> — um modo
+particular de organização da matéria e da energia que pode se manifestar
+em substratos radicalmente diferentes. Como argumentou <a
+href="https://en.wikipedia.org/wiki/Erwin_Schr%C3%B6dinger">Erwin
+Schrödinger</a>, “o que é vida?” pode ser a pergunta errada. A pergunta
+certa talvez seja: “quais são as condições físicas sob as quais a
+organização neguentrópica auto-sustentável emerge?”</p>
+<hr />
+<h2 id="ii-a-definição-clássica-os-sete-pilares-da-biologia">II. A
 Definição Clássica: Os Sete Pilares da Biologia</h2>
 <p>A biologia convergiu em torno de uma lista: Organização, Metabolismo,
 Homeostase, Crescimento, Resposta a estímulos, Reprodução, Adaptação/<a
@@ -1105,43 +1680,43 @@ da Definição Clássica</h3>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Virtudes</strong></th>
 <th><strong>Problemas</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>✓ Especificidade alta: distingue bem vida terrestre de não-vida,
 evitando falsas inclusões</td>
 <td>✗ Especificidade excessiva: etnocêntrica em relação à biosfera
 terrestre — construída a partir de N=1</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Utilidade pragmática excelente: estrutura experimentos,
 diagnósticos e classificações biológicas</td>
 <td>✗ Extrapolação fraca: vírus, prions e organismos em criptobiose
 criam exceções sérias</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Operacionalizável: critérios são mensuráveis e testáveis em
 laboratório</td>
 <td>✗ Falha na reprodução: mulas, trabalhadores estéreis e organismos
 clonais desafiam o critério</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Falseabilidade razoável: é possível testar empiricamente se um
 organismo satisfaz cada critério</td>
 <td>✗ Inutilizável em astrobiologia: vida em silício, amônia ou baseada
 em gradientes não-celulares ficaria de fora</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Poder de síntese histórico: integra séculos de biologia em um
 quadro coerente</td>
 <td>✗ Sem poder filosófico: não responde por que a vida tem valor moral
 distinto de sistemas físicos complexos</td>
 </tr>
-<tr class="even">
+<tr>
 <td></td>
 <td>✗ Abrangência insuficiente: deixa de fora redes miceliais,
 superorganismos e sistemas coletivos</td>
@@ -1149,8 +1724,8 @@ superorganismos e sistemas coletivos</td>
 </tbody>
 </table>
 <hr />
-<h2 id="ii-a-definição-química-vida-como-química-em-desequilíbrio">II. A
-Definição Química: Vida como Química em Desequilíbrio</h2>
+<h2 id="iii-a-definição-química-vida-como-química-em-desequilíbrio">III.
+A Definição Química: Vida como Química em Desequilíbrio</h2>
 <p>A definição favorita de Gerald Joyce e da NASA: <em>“vida é um
 sistema químico autossustentável capaz de <a
 href="https://en.wikipedia.org/wiki/Evolution">evolução
@@ -1205,32 +1780,32 @@ da Definição Química</h3>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Virtudes</strong></th>
 <th><strong>Problemas</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>✓ Extrapolação excelente: permite imaginar vida em Titã, Vênus,
 Encélado sem pressupor carbono ou água</td>
 <td>✗ Inclui demais: sistemas autocatalíticos puramente inorgânicos (ex:
 reações de Belousov-Zhabotinsky) passariam no teste</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Falseabilidade boa (em contexto terrestre): autocatálise e
 evolução darwiniana são empiricamente verificáveis em sistemas
 conhecidos</td>
 <td>✗ Silenciosa sobre consciência e agência: não distingue um RNA
 autocatalítico de um organismo que sofre</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Fundamenta a astrobiologia: orienta missões de busca por vida com
 critérios físico-químicos concretos</td>
 <td>✗ Depende do substrato químico: dificulta reconhecer vida puramente
 informacional (código de computador evoluindo)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Captura a origem da vida: o mundo do RNA demonstra que vida pode
 emergir de sistemas químicos simples</td>
 <td>✗ Demarcação não universal: a definição é falseável em contextos
@@ -1240,7 +1815,7 @@ Avaliar simultaneamente a falseabilidade como virtude e como problema no
 mesmo critério revela que se trata de dois domínios de validade
 distintos, não de uma contradição interna resolúvel</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Especificidade razoável: exclui estruturas físicas como furacões e
 cristais sem evolução</td>
 <td>✗ Abrangência limitada: formas de vida coletivas (Gaia, colônias)
@@ -1249,7 +1824,7 @@ não se encaixam claramente como ‘sistemas químicos’</td>
 </tbody>
 </table>
 <hr />
-<h2 id="iii-a-definição-termodinâmica-vida-como-negentropia">III. A
+<h2 id="iv-a-definição-termodinâmica-vida-como-negentropia">IV. A
 Definição Termodinâmica: Vida como Negentropia</h2>
 <p>Em 1944, <a
 href="https://en.wikipedia.org/wiki/Erwin_Schr%C3%B6dinger">Erwin
@@ -1287,37 +1862,37 @@ Problemas da Definição Termodinâmica</h3>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Virtudes</strong></th>
 <th><strong>Problemas</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>✓ Extrapolação máxima: permite imaginar formas de vida de escala
 estelar, galáctica ou cosmológica</td>
 <td>✗ Especificidade muito baixa: inclui furacões, chamas e células de
 convecção — perde o sentido útil de ‘vida’</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Fundamentação física sólida: ancorada em termodinâmica de
 não-equilíbrio (Prigogine, England)</td>
 <td>✗ Utilidade pragmática fraca: não orienta diagnóstico, experimentos
 ou classificação biológica cotidiana</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Dissolve fronteiras artificiais: coloca vida num continuum com
 outros fenômenos naturais</td>
 <td>✗ Falseabilidade difícil: como testar se um sistema dissipativo ‘é
 vivo’ além de ser organizado?</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Poder filosófico razoável: sugere que a vida não é exceção, mas
 expressão das leis físicas</td>
 <td>✗ Não captura informação hereditária: uma chama e uma bactéria são
 equivalentes pelo critério termodinâmico puro</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Serve à astrofísica: fornece critério de detecção de organizações
 anômalas em dados astronômicos</td>
 <td>✗ Sem poder ético: não distingue o que tem valor intrínseco do que é
@@ -1326,7 +1901,7 @@ apenas complexidade física organizada</td>
 </tbody>
 </table>
 <hr />
-<h2 id="iv-a-definição-informacional-vida-como-software">IV. A Definição
+<h2 id="v-a-definição-informacional-vida-como-software">V. A Definição
 Informacional: Vida como Software</h2>
 <p><a href="https://en.wikipedia.org/wiki/Richard_Dawkins">Richard
 Dawkins</a>, em <em>O Gene Egoísta</em> (1976): a unidade de seleção não
@@ -1365,37 +1940,37 @@ Problemas da Definição Informacional</h3>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Virtudes</strong></th>
 <th><strong>Problemas</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>✓ Máxima extrapolação: agnóstica quanto ao substrato — inclui vida
 digital, silício, plasma, qualquer implementação</td>
 <td>✗ Especificidade baixa: mercados financeiros, culturas e programas
 de computador evoluem — são vivos?</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Coerente com biologia moderna: DNA como código é empírico, não
 metáfora</td>
 <td>✗ Falseabilidade difícil: onde traçar a linha entre ‘informação que
 evolui’ e qualquer sistema complexo?</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Permite detectar vida por assinatura: complexidade informacional
 alta é mensurável em sinais ou materiais</td>
 <td>✗ Sem critério de substrato: não distingue por que vida em carbono e
 código de computador merecem tratamento diferente</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Inclui vírus e prions naturalmente: são sistemas informacionais
 que evoluem</td>
 <td>✗ Utilidade pragmática média: útil em bioinformática, mas não
 orienta medicina ou conservação</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Poder filosófico razoável: sustenta discussões sobre IA,
 consciência digital e status moral de seres sintéticos</td>
 <td>✗ Risco de abstração excessiva: ao descartar substrato, pode perder
@@ -1404,7 +1979,7 @@ o que é relevante para ética e experiência</td>
 </tbody>
 </table>
 <hr />
-<h2 id="v-a-definição-matemática-vida-como-computação-universal">V. A
+<h2 id="vi-a-definição-matemática-vida-como-computação-universal">VI. A
 Definição Matemática: Vida como Computação Universal</h2>
 <p><a href="https://en.wikipedia.org/wiki/Alan_Turing">Alan Turing</a>
 especulou sobre reações-difusão que produzem padrões complexos
@@ -1428,36 +2003,36 @@ Problemas da Definição Matemática</h3>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Virtudes</strong></th>
 <th><strong>Problemas</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>✓ Extrapolação máxima: vida é substrato-agnóstica no grau mais
 radical — existe em qualquer estrutura matemática funcional</td>
 <td>✗ Especificidade mínima: qualquer autômato com regras suficientes
 seria ‘vivo’ — dissolve a categoria</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Assinatura detectável: complexidade de Kolmogorov é
 matematicamente mensurável e empiricamente aplicável a sinais</td>
 <td>✗ Utilidade pragmática muito baixa: não orienta experimentos,
 diagnósticos ou políticas de conservação</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Coerente com ciências da computação e teoria da informação</td>
 <td>✗ Falseabilidade problemática: como testar empiricamente se algo tem
 ‘complexidade incompressível suficiente para ser vivo’?</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Poder filosófico alto: conecta vida à questão mais profunda de o
 que existe matematicamente</td>
 <td>✗ Abstração excessiva: perde contato com o que biologicamente
 importa — metabolismo, experiência, agência</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Unifica vida biológica e artificial sob o mesmo princípio
 formal</td>
 <td>✗ Sem implicação ética direta: não responde se autômatos celulares
@@ -1467,7 +2042,7 @@ merecem proteção moral</td>
 </table>
 <hr />
 <h2
-id="vi-a-definição-filosófica-autopoiese-intencionalidade-e-consciência">VI.
+id="vii-a-definição-filosófica-autopoiese-intencionalidade-e-consciência">VII.
 A Definição Filosófica: Autopoiese, Intencionalidade e Consciência</h2>
 <h3 id="hans-jonas">Hans Jonas</h3>
 <p>Toda vida exibe intencionalidade primitiva. Um organismo tem “ponto
@@ -1488,37 +2063,37 @@ Problemas das Definições Filosóficas</h3>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Virtudes</strong></th>
 <th><strong>Problemas</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>✓ Poder filosófico máximo: captura dimensões — agência, experiência,
 autoconstituição — que outras ignoram</td>
 <td>✗ Falseabilidade muito baixa: como medir intencionalidade ou
 experiência em Marte?</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Relevância ética direta: intencionalidade e experiência são o que
 fundamenta valor moral intrínseco</td>
 <td>✗ Utilidade pragmática fraca: não opera em missões espaciais,
 laboratórios ou classificação taxonômica</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Especificidade razoável para entidades complexas: distingue
 organismos de máquinas fabricadas</td>
 <td>✗ Extrapolação limitada: difícil aplicar a entidades físicas
 radicalmente diferentes (estrelas, redes miceliais)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Unifica biologia e filosofia da mente: conecta ‘ser vivo’ a ‘ter
 perspectiva’</td>
 <td>✗ Risco de exclusão: pode excluir formas de vida simples sem
 intencionalidade óbvia (RNA autocatalítico, vírus)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Resistente ao reducionismo trivial: não confunde complexidade
 física com vida</td>
 <td>✗ Operacionalização impossível em contextos astronômicos: sem
@@ -1528,7 +2103,7 @@ instrumentos para detectar autopoiese ou agência à distância</td>
 </table>
 <hr />
 <h2
-id="vii-o-princípio-da-energia-livre-vida-como-minimização-de-surpresa">VII.
+id="viii-o-princípio-da-energia-livre-vida-como-minimização-de-surpresa">VIII.
 O Princípio da Energia Livre: Vida como Minimização de Surpresa</h2>
 <p>Karl Friston: sistemas biológicos agem para minimizar a surpresa
 informacional sobre seus estados sensoriais. O FEP é o candidato mais
@@ -1570,43 +2145,43 @@ Problemas do FEP como Definição de Vida</h3>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Virtudes</strong></th>
 <th><strong>Problemas</strong></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>✓ Poder filosófico alto: unifica vida, cognição e ação num único
 princípio formal</td>
 <td>✗ Especificidade ainda problemática: termostatos e sistemas de
 controle simples podem satisfazer o critério em versão mínima</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Especificidade melhor que termodinâmica: furacões e chamas não
 minimizam surpresa — têm modelo interno</td>
 <td>✗ Falseabilidade limitada em astrobiologia: difícil detectar ‘modelo
 interno’ em sistemas alienígenas remotamente</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Extrapolação razoável: aplicável a qualquer sistema físico que
 persiste mantendo estados internos coerentes</td>
 <td>✗ Utilidade pragmática baixa: não orienta diagnósticos, taxonomias
 ou experimentos biológicos cotidianos</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Falseabilidade parcial: é possível modelar matematicamente se um
 sistema minimiza energia livre variacional</td>
 <td>✗ Altamente técnico: requer domínio de teoria da informação e
 estatística bayesiana para aplicação rigorosa</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>✓ Conecta biologia à neurociência e à inteligência artificial —
 promissor para pesquisa interdisciplinar</td>
 <td>✗ Debatido: o FEP é controverso mesmo em neurociência — aplicá-lo
 como definição de vida é especulativo</td>
 </tr>
-<tr class="even">
+<tr>
 <td>✓ Dissolve a fronteira vida/cognição de forma produtiva: todo ser
 vivo ‘conhece’ o ambiente de alguma forma</td>
 <td>✗ Risco de circularidade: ‘todo sistema que persiste minimiza
@@ -1615,7 +2190,7 @@ surpresa’ pode ser tautologicamente verdadeiro</td>
 </tbody>
 </table>
 <hr />
-<h2 id="viii-vida-como-fenômeno-coletivo">VIII. Vida como Fenômeno
+<h2 id="ix-vida-como-fenômeno-coletivo">IX. Vida como Fenômeno
 Coletivo</h2>
 <h3 id="a-hipótese-gaia">A Hipótese Gaia</h3>
 <p>James Lovelock e Lynn Margulis (1972): a biosfera da Terra forma um
@@ -1646,7 +2221,7 @@ diferentes ‘linhagens’ que compartilham um ancestral comum e trocam
 material genético ocasionalmente via cometas. A galáxia, como a floresta
 de Le Guin, seria uma única rede de vida.</p>
 <hr />
-<h2 id="ix-estrelas-buracos-negros-e-civilizações-de-kardashev">IX.
+<h2 id="x-estrelas-buracos-negros-e-civilizações-de-kardashev">X.
 Estrelas, Buracos Negros e Civilizações de Kardashev</h2>
 <h3 id="estrelas-como-seres-vivos">Estrelas como Seres Vivos</h3>
 <p>Uma estrela tem ciclo de vida, homeostase (equilíbrio
@@ -1666,7 +2241,7 @@ pareceria estrutura puramente física — conectando-se ao problema central
 do <a href="https://en.wikipedia.org/wiki/Fermi_paradox">Paradoxo de
 Fermi</a>.</p>
 <hr />
-<h2 id="x-vida-no-limiar-quântico-clássico">X. Vida no Limiar
+<h2 id="xi-vida-no-limiar-quântico-clássico">XI. Vida no Limiar
 Quântico-Clássico</h2>
 <ul>
 <li><strong>Fotossíntese</strong>: coerência quântica na transferência
@@ -1682,7 +2257,7 @@ tardio do cosmos, mas condição para sua existência — conectando-se ao <a
 href="https://en.wikipedia.org/wiki/Anthropic_principle">Princípio
 Antrópico</a>.</p>
 <hr />
-<h2 id="xi-vida-extrema-extremófilos">XI. Vida Extrema:
+<h2 id="xii-vida-extrema-extremófilos">XII. Vida Extrema:
 Extremófilos</h2>
 <ul>
 <li><strong>Tardigrados</strong> (ursos-d’água): organismos
@@ -1704,7 +2279,7 @@ considerado pelo <a
 href="https://en.wikipedia.org/wiki/Great_Filter">paradoxo de
 Fermi</a>.</p>
 <hr />
-<h2 id="xii-ficção-científica-como-filosofia-natural">XII. Ficção
+<h2 id="xiii-ficção-científica-como-filosofia-natural">XIII. Ficção
 Científica como Filosofia Natural</h2>
 <p>A ficção científica, em seu melhor, é um laboratório de ideias onde
 definições são testadas contra casos extremos. Mais do que
@@ -1718,70 +2293,70 @@ abordar.</p>
 <col style="width: 59%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Obra</th>
 <th>Autor</th>
 <th>Definição Testada</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>Solaris</em></td>
 <td>Stanisław Lem</td>
 <td>Vida incompreensível (termodinâmica + informacional)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>The Invincible</em></td>
 <td>Lem</td>
 <td>Necrósfera: enxame que evolui</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Blindsight</em></td>
 <td>Peter Watts</td>
 <td>Inteligência sem consciência</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Annihilation</em></td>
 <td>Jeff VanderMeer</td>
 <td>Colapso de categorias biológicas</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Dragon’s Egg</em></td>
 <td><a href="https://en.wikipedia.org/wiki/Robert_L._Forward">Robert
 Forward</a></td>
 <td>Bioquímica de matéria nuclear</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Os Próprios Deuses</em></td>
 <td>Isaac Asimov</td>
 <td>Leis físicas alternativas</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Permutation City</em></td>
 <td>Greg Egan</td>
 <td>Vida digital ontologicamente equivalente</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Diaspora</em></td>
 <td>Greg Egan</td>
 <td>Software como vida</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Childhood’s End</em></td>
 <td>Arthur C. Clarke</td>
 <td>Entidade cósmica ambígua</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>O Problema dos Três Corpos</em></td>
 <td>Liu Cixin</td>
 <td>Predação cosmológica</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Oryx and Crake</em></td>
 <td>Margaret Atwood</td>
 <td>Vida biológica ≠ status moral</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Lilith’s Brood</em></td>
 <td>Octavia Butler</td>
 <td>Simbiose radical genética</td>
@@ -1912,8 +2487,8 @@ href="https://en.wikipedia.org/wiki/Philip_K._Dick">Philip K. Dick</a>
 perguntava: se um ser se comporta como vivo, ama, sofre, tem memórias —
 que diferença ontológica faz o substrato?</p>
 <hr />
-<h2 id="xiii-o-self-sampling-bias-a-armadilha-do-n1">XIII. O
-Self-Sampling Bias: A Armadilha do N=1</h2>
+<h2 id="xiv-o-self-sampling-bias-a-armadilha-do-n1">XIV. O Self-Sampling
+Bias: A Armadilha do N=1</h2>
 <p>Toda nossa intuição vem de um único exemplo: a biosfera terrestre.
 Todas as espécies compartilham o mesmo ancestral, o mesmo código
 genético. O <a
@@ -1926,7 +2501,7 @@ mundo.” A palavra “vida” pode ser como “jade” — denotando fenômenos
 fundamentalmente distintos que apenas parecem unificados da nossa
 perspectiva.</p>
 <hr />
-<h2 id="xiv-síntese-o-espectro-da-vida">XIV. Síntese: O Espectro da
+<h2 id="xv-síntese-o-espectro-da-vida">XV. Síntese: O Espectro da
 Vida</h2>
 <p>Não há definição única e suficiente. O que emerge é um
 <strong>espectro</strong> — um espaço multidimensional onde a vida
@@ -1953,7 +2528,7 @@ parcialmente ou ambiguamente.</p>
 <col style="width: 12%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Entidade</strong></th>
 <th style="text-align: center;"><strong>Clássica</strong></th>
 <th style="text-align: center;"><strong>Química</strong></th>
@@ -1965,7 +2540,7 @@ parcialmente ou ambiguamente.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Bactéria</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -1975,7 +2550,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✓</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Vírus</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -1985,7 +2560,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Prion</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
@@ -1995,7 +2570,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Tardigrado</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -2005,7 +2580,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✓</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Mula / estéril</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -2015,7 +2590,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✓</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Colônia de formigas</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -2025,7 +2600,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Floresta micelial</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -2035,7 +2610,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Fogo</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
@@ -2045,7 +2620,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Furacão</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
@@ -2055,7 +2630,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Cristal</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
@@ -2065,7 +2640,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>RNA autocatalítico</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -2075,7 +2650,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Tierra (código)</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
@@ -2085,7 +2660,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>IA hipotética</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
@@ -2095,7 +2670,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Gaia (Terra)</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
@@ -2105,7 +2680,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Estrela</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
@@ -2115,7 +2690,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Buraco negro (Smolin)</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
@@ -2125,7 +2700,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Civilização Tipo III</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
@@ -2135,7 +2710,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Solaris (Lem)</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
@@ -2145,7 +2720,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Crealhos (Forward)</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -2155,7 +2730,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Entidade Blindsight</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
@@ -2165,7 +2740,7 @@ parcialmente ou ambiguamente.</p>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✓</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Meme cultural</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
 <td style="text-align: center;"><strong>✗</strong></td>
@@ -2286,7 +2861,7 @@ filosóficos e científicos discutidos ao longo do ensaio. ++ = excelente;
 <col style="width: 14%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><strong>Definição</strong></th>
 <th style="text-align: center;"><strong>Especificidade</strong></th>
 <th style="text-align: center;"><strong>Extrapolação</strong></th>
@@ -2297,7 +2872,7 @@ filosóficos e científicos discutidos ao longo do ensaio. ++ = excelente;
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Clássica Biológica</strong></td>
 <td style="text-align: center;"><strong>++</strong></td>
 <td style="text-align: center;"><strong>—</strong></td>
@@ -2306,7 +2881,7 @@ filosóficos e científicos discutidos ao longo do ensaio. ++ = excelente;
 <td style="text-align: center;"><strong>—</strong></td>
 <td style="text-align: center;"><strong>+</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Química</strong></td>
 <td style="text-align: center;"><strong>+</strong></td>
 <td style="text-align: center;"><strong>++</strong></td>
@@ -2315,7 +2890,7 @@ filosóficos e científicos discutidos ao longo do ensaio. ++ = excelente;
 <td style="text-align: center;"><strong>+</strong></td>
 <td style="text-align: center;"><strong>+</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Termodinâmica</strong></td>
 <td style="text-align: center;"><strong>—</strong></td>
 <td style="text-align: center;"><strong>++</strong></td>
@@ -2324,7 +2899,7 @@ filosóficos e científicos discutidos ao longo do ensaio. ++ = excelente;
 <td style="text-align: center;"><strong>++</strong></td>
 <td style="text-align: center;"><strong>+</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Informacional</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>++</strong></td>
@@ -2333,7 +2908,7 @@ filosóficos e científicos discutidos ao longo do ensaio. ++ = excelente;
 <td style="text-align: center;"><strong>++</strong></td>
 <td style="text-align: center;"><strong>+</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Matemática-Computac.</strong></td>
 <td style="text-align: center;"><strong>~</strong></td>
 <td style="text-align: center;"><strong>++</strong></td>
@@ -2342,7 +2917,7 @@ filosóficos e científicos discutidos ao longo do ensaio. ++ = excelente;
 <td style="text-align: center;"><strong>++</strong></td>
 <td style="text-align: center;"><strong>++</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Filosófica (Autopoiese)</strong></td>
 <td style="text-align: center;"><strong>++</strong></td>
 <td style="text-align: center;"><strong>+</strong></td>
@@ -2351,7 +2926,7 @@ filosóficos e científicos discutidos ao longo do ensaio. ++ = excelente;
 <td style="text-align: center;"><strong>+</strong></td>
 <td style="text-align: center;"><strong>++</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>FEP</strong></td>
 <td style="text-align: center;"><strong>+</strong></td>
 <td style="text-align: center;"><strong>+</strong></td>
@@ -2410,9 +2985,11 @@ no cosmos que nos fará pausar e perguntar — <em>isso é vida?</em> — a
 resposta mais honesta será não uma definição, mas uma pergunta mais
 profunda: <strong>o que estamos dispostos a reconhecer?</strong></p>
 <div class="quote">
-<p>“É cedo demais para saber. E essa pode ser a resposta mais honesta e
+<div class="quote-text">
+<p>É cedo demais para saber. E essa pode ser a resposta mais honesta e
 mais científica que podemos dar — não como derrota, mas como a abertura
-que mantém a pergunta viva.”</p>
+que mantém a pergunta viva.</p>
+</div>
 </div>
 <hr />
 <h2 id="referências">Referências</h2>
@@ -2476,6 +3053,22 @@ Forest</em> (2008).</p>
 (1968).</p>
 <p>[30] Dennett, D. — <em>Consciousness Explained</em> (1991).</p>
 <p>[31] Langton, C. — <em>Artificial Life</em> (1989).</p>
+<p>[32] Mayr, E. (1982). <em>The Growth of Biological Thought</em>.
+Harvard University Press. <a
+href="https://en.wikipedia.org/wiki/The_Growth_of_Biological_Thought">Link</a></p>
+<p>[33] Joyce, G.F. (1989). <em>RNA Evolution and the Origins of
+Life</em>. Nature, 338(6212), 217–224. <a
+href="https://doi.org/10.1038/338217a0">Link</a></p>
+<p>[34] Capra, F. (1996). <em>The Web of Life</em>. Anchor Books. <a
+href="https://en.wikipedia.org/wiki/The_Web_of_Life">Link</a></p>
+<p>[35] Bateson, G. (1972). <em>Steps to an Ecology of Mind</em>.
+Chandler Publishing Company. <a
+href="https://en.wikipedia.org/wiki/Steps_to_an_Ecology_of_Mind">Link</a></p>
+<p>[36] Layzer, D. (1990). <em>Cosmogenesis: The Growth of Order in the
+Universe</em>. Oxford University Press. <a
+href="https://archive.org/details/cosmogenesisgrow00layz">Link</a></p>
+<p>[37] Stapledon, O. (1937). <em>Star Maker</em>. <a
+href="https://en.wikipedia.org/wiki/Star_Maker">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
@@ -2690,7 +3283,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
 </header>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
 <div class="sb-tags"><span class="sb-tag">Biologia</span><span class="sb-tag">Filosofia</span><span class="sb-tag">Exobiologia</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="conceito-de-vida.html"><strong>O Conceito de Vida — das Definições Formais à Exobiologia</strong><span>Seis definições formais de vida (de Mayr, Schrödinger, Dawkins, Joyce/NASA, Capra e Bateson) são testadas contra contraexemplos progressivamente mais radicais. O fracasso de qualquer definição única revela que vida é um espectro de organização sem fronteira discreta, com consequências diretas para a busca de vida extraterrestre e para o debate sobre consciência artificial.</span></a><a class="sb-related-card" href="paradoxo-de-fermi.html"><strong>O Grande Filtro do Antropocentrismo</strong><span>O silêncio cósmico do Paradoxo de Fermi é reinterpretado não como evidência de ausência de vida, mas como sintoma do antropocentrismo da busca: procuramos sinais que se parecem conosco, com uma definição de vida que só reconhece o que já conhecemos. O ensaio percorre Terra Rara, Grande Filtro e Floresta Escura antes de perguntar se não estaríamos procurando pelas coisas erradas.</span></a><a class="sb-related-card" href="principio-antropico-v7.html"><strong>O Princípio Antrópico</strong><span>O ensaio refuta sistematicamente o argumento do ajuste fino como evidência de design cosmológico, sem recorrer ao conforto do multiverso físico. Cada pressuposto é destruído (a centralidade dos observadores, a especificidade de universos com vida), substituído por análise rigorosa do viés antrópico, do biocentrismo e do cognocentrismo que estruturam nossa intuição de espanto.</span></a></div></section>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="paradoxo-de-fermi.html"><strong>O Grande Filtro do Antropocentrismo</strong><span>O silêncio cósmico do Paradoxo de Fermi é reinterpretado não como evidência de ausência de vida, mas como sintoma do antropocentrismo da busca: procuramos sinais que se parecem conosco, com uma definição de vida que só reconhece o que já conhecemos. O ensaio percorre Terra Rara, Grande Filtro e Floresta Escura antes de perguntar se não estaríamos procurando pelas coisas erradas.</span></a><a class="sb-related-card" href="principio-antropico-v7.html"><strong>O Princípio Antrópico</strong><span>O ensaio refuta sistematicamente o argumento do ajuste fino como evidência de design cosmológico, sem recorrer ao conforto do multiverso físico. Cada pressuposto é destruído (a centralidade dos observadores, a especificidade de universos com vida), substituído por análise rigorosa do viés antrópico, do biocentrismo e do cognocentrismo que estruturam nossa intuição de espanto.</span></a></div></section>
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do essay">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>
@@ -2701,7 +3294,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=7389a45f"></script>
-<script src="../assets/essay.js?v=58dcd441"></script>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
 </body>
 </html>

@@ -27,6 +27,22 @@
   --rust-bright:#A84F3C;
   --accent:#4A8FA8;
   --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#B08B4F;
+  --callout-todo:#B18A4A;
+  --callout-tip:#B08B4F;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#8A857E;
+  --quote-bg:#1C1B1A;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
@@ -48,6 +64,22 @@
   --rust-bright:#A04030;
   --accent:#35708A;
   --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
   --box-bg:var(--surface);
   --box-verdict-bg:var(--surface2);
 }
@@ -76,6 +108,22 @@
     --rust-bright:#A04030;
     --accent:#35708A;
     --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
     --box-bg:var(--surface);
     --box-verdict-bg:var(--surface2);
   }
@@ -209,12 +257,9 @@ body{
    a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
    já ocupa quase tudo e o breakout não teria para onde ir. */
 @media (min-width:1400px){
-  /* Só o TETO sobe. Nada de `width`: uma tabela estreita continua estreita e
-     uma figura continua no tamanho natural — o que muda é até onde elas podem
-     ir quando precisam. `margin-left:50%` + `translateX(-50%)` centraliza
-     seja qual for a largura resultante. */
-  .content > figure,
-  .content > table{
+  /* Apenas figuras podem escapar da coluna de prosa. Tabelas permanecem na
+     coluna e, quando largas, rolam dentro do próprio elemento. */
+  .content > figure{
     max-width:min(var(--wide-width),1500px);
     margin-left:50%;
     transform:translateX(-50%);
@@ -403,7 +448,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--surface2);border-left:2px solid var(--gold-dim);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -411,7 +456,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--surface);border-left:3px solid var(--gold);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -423,11 +468,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-.pull-quote.epigraph p:last-child{
-  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-dim);margin-top:.9rem;
-}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -441,6 +483,62 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin-top:.3rem;
 }
 .pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--callout-quote) 62%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.8rem;line-height:1.55;letter-spacing:.035em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.66rem;line-height:1.35;letter-spacing:.08em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
 
 /* ------------------------------------------------------------------ */
 /* Caixas tipadas                                                      */
@@ -457,16 +555,29 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:var(--box-bg);
   overflow:hidden;
 }
-.box.experimento{--boxc:var(--rust);}
-.box.evidencia{--boxc:var(--accent);}
-.box.mapa{--boxc:var(--gold);}
-.box.ataque{--boxc:var(--rust);}
-.box.aviso{--boxc:var(--amber);}
-.box.nivel{--boxc:var(--accent);}
-.box.ideia{--boxc:var(--gold-dim);}
-/* generico: filete cinza discreto — sem cor de destaque. O rótulo, porém,
-   precisa continuar legível: em cinza de borda ele desaparecia no fundo. */
-.box.generico{--boxc:var(--border);--box-badge-c:var(--text-dim);}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-tip{--boxc:var(--callout-tip);}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);border-left-style:dashed;}
+.box.callout-danger{--boxc:var(--callout-danger);border-left-width:5px;}
+.box.callout-bug{--boxc:var(--callout-bug);border-left-style:double;}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
@@ -486,16 +597,33 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > p:last-of-type{margin-bottom:1.2rem;}
 .box-title p,.box-badge p{margin:0;padding:0;}
 
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;letter-spacing:.055em;line-height:1.35;
+}
+
 .box-verdict{
-  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
-  background:var(--box-verdict-bg);
-  border-top:1px solid var(--border);
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:.5rem;
+  color:var(--boxc);margin-bottom:.5rem;
 }
 
 /* Cards: filosofos e obras */
@@ -562,9 +690,11 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
-     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
-  font-size:.656em;line-height:1.55;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -689,7 +819,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -703,11 +837,159 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
      caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
      leitura nesse corpo. */
   .box-badge{font-size:.78rem;}
-  .verdict-tag{font-size:.76rem;}
+  .verdict-tag{font-size:.78rem;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.84rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 2.5%,var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
+  margin:0;padding:0 0 1.15rem;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:-1px 0 0 -1px;
+  padding:.5rem 1.05rem .44rem;
+  border:0;border-radius:0;
+  border-bottom:2px solid var(--boxc);
+  background:color-mix(in srgb,var(--boxc) 14%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato; `example`/`tip` propoem um cenario. A
+   faixa do segundo par pesa um pouco menos para marcar essa diferenca sem
+   trocar de cor — a familia visual continua a mesma. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  border-bottom-width:1px;
+  background:color-mix(in srgb,var(--boxc) 7%,transparent);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .3rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.82rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+.box.callout-abstract{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-info{background:color-mix(in srgb,var(--boxc) 3.5%,var(--bg));}
+.box.callout-tip{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-example{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-danger{background:color-mix(in srgb,var(--boxc) 7%,var(--surface));border-left-width:6px;}
+.box.callout-bug{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+.box.callout-failure{border-left-style:dashed;}
+.box.callout-danger{border-left-style:solid;}
+.box.callout-bug{border-left-style:double;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 .6rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
 }
 
 /* ------------------------------------------------------------------ */
@@ -1110,15 +1392,15 @@ e Lee (2007)</a> revisam estudos lexicais conduzidos em múltiplos
 idiomas e encontram, de forma recorrente, um sexto fator —
 Honestidade-Humildade — que o modelo anterior simplesmente não
 capturava.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://journals.sagepub.com/doi/10.1177/1088868306294907">Ashton
 &amp; Lee (2007), <em>Personality and Social Psychology
-Review</em></a><br />
-Resultado: estrutura de <strong>seis fatores</strong> replicada em
+Review</em></a></p>
+<p>Resultado: estrutura de <strong>seis fatores</strong> replicada em
 estudos lexicais conduzidos em pelo menos <strong>sete idiomas</strong>
 distintos (entre eles holandês, coreano, italiano, húngaro, polonês,
 filipino e grego), contra os cinco fatores do modelo anterior.</p>
@@ -1163,14 +1445,14 @@ atinge <code>α = .98</code>, e a estabilidade teste-reteste, calculada
 com 298 participantes reavaliados após um intervalo médio de 22 dias,
 foi de <code>r = .96</code> — valores próximos ao teto teórico da escala
 de confiabilidade.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://www.mdpi.com/2079-3200/5/1/2">Bowden et al. (2016),
 <em>Journal of Intelligence</em>, com base no manual técnico do
-WAIS-IV</a><br />
-Resultado: confiabilidade interna do QI Total = <strong>α =
+WAIS-IV</a></p>
+<p>Resultado: confiabilidade interna do QI Total = <strong>α =
 .98</strong>; confiabilidade teste-reteste = <strong>r = .96</strong> (n
 = 298, intervalo médio de 22 dias).</p>
 </div>
@@ -1223,19 +1505,19 @@ pelo instrumento.</p>
 href="https://doi.org/10.1037/0033-2909.124.2.262">Schmidt e Hunter
 (1998)</a>, que reuniu 85 anos de pesquisa sobre 19 métodos distintos de
 seleção de pessoal.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://doi.org/10.1037/0033-2909.124.2.262">Schmidt &amp;
-Hunter (1998), <em>Psychological Bulletin</em></a><br />
-Resultado: habilidade cognitiva geral (GMA) → desempenho no trabalho,
+Hunter (1998), <em>Psychological Bulletin</em></a></p>
+<p>Resultado: habilidade cognitiva geral (GMA) → desempenho no trabalho,
 <strong>r = .51</strong>; GMA → desempenho em treinamento, <strong>r =
 .56</strong>; anos de experiência, <strong>r = .18</strong>; grafologia,
 <strong>r = .02</strong>; combinação de GMA com entrevista estruturada,
 <strong>r &gt; .63</strong>.</p>
 </div>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Nota filosófica</p>
 </div>
@@ -1258,13 +1540,13 @@ para “restrição de faixa” (o fenômeno pelo qual amostras de candidatos
 já pré-selecionados reduzem artificialmente a variância observada) foram
 aplicadas na literatura clássica, e recalcularam a validade da GMA para
 baixo.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://doi.org/10.1037/apl0000994">Sackett, Zhang, Berry
-&amp; Lievens (2022), <em>Journal of Applied Psychology</em></a><br />
-Resultado: validade operacional da GMA para desempenho no trabalho
+&amp; Lievens (2022), <em>Journal of Applied Psychology</em></a></p>
+<p>Resultado: validade operacional da GMA para desempenho no trabalho
 revisada de <strong>r = .51</strong> para <strong>r = .31</strong>, ao
 substituir a correção por consistência interna por uma correção baseada
 em confiabilidade entre avaliadores.</p>
@@ -1275,15 +1557,15 @@ e validade corrigida de <code>r = .22</code> — uma estimativa mais
 conservadora ainda, que alguns autores atribuem à crescente importância
 de competências interpessoais em ambientes de trabalho contemporâneos,
 menos dominados por tarefas manufatureiras isoladas.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.cambridge.org/core/journals/industrial-and-organizational-psychology/article/revisiting-the-design-of-selection-systems-in-light-of-new-findings-regarding-the-validity-of-widely-used-predictors/A20984B138319E3D432E643978BF026D">Griebe
 et al., citado em Sackett et al. (2023), <em>Industrial and
-Organizational Psychology</em></a><br />
-Resultado: metanálise de <strong>113 estudos</strong> do século XXI
+Organizational Psychology</em></a></p>
+<p>Resultado: metanálise de <strong>113 estudos</strong> do século XXI
 sobre a relação entre GMA e desempenho no trabalho — validade observada
 de <strong>r = .16</strong>, corrigida para <strong>r =
 .22</strong>.</p>
@@ -1336,16 +1618,17 @@ entre 6 a 8 opções, a peça que falta. Não há limite de tempo na versão
 padrão. Por depender quase exclusivamente de raciocínio abstrato e
 memória operacional, encontra-se entre os testes com maior carga no
 fator g de toda a psicometria.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.cogn-iq.org/learn/tests/ravens-matrices/">Síntese de
 estudos fatoriais sobre as Matrizes de Raven, Cogn-IQ
-Encyclopedia</a><br />
-Resultado: carga fatorial em g de <strong>0,75 a 0,85</strong> — entre
-as mais altas já registradas para um único instrumento cognitivo.</p>
+Encyclopedia</a></p>
+<p>Resultado: carga fatorial em g de <strong>0,75 a 0,85</strong> —
+entre as mais altas já registradas para um único instrumento
+cognitivo.</p>
 </div>
 <h4 id="o-que-é-wonderlic-personnel-test-wpt">O que é (Wonderlic
 Personnel Test (WPT))</h4>
@@ -1359,15 +1642,15 @@ vocabulário, matemática e lógica, respondidas em apenas
 <code>12 minutos</code> — a pressão de tempo é parte deliberada do
 desenho do instrumento. Produz um escore bruto único, de 0 a 50,
 altamente correlacionado com o QI medido por escalas mais longas.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.proneurohealth.com/RaiseYourWonderlicScore.html">Validade
 ocupacional do WPT reportada pela editora do teste, síntese
-independente</a><br />
-Resultado: validade preditiva de <strong>r = .22 a .35</strong> para
+independente</a></p>
+<p>Resultado: validade preditiva de <strong>r = .22 a .35</strong> para
 cargos administrativos e de <strong>r = .39 a .67</strong> para cargos
 profissionais especializados (engenharia, medicina, policiamento).</p>
 </div>
@@ -1378,13 +1661,13 @@ quarterbacks e seu desempenho em campo — um lembrete de que a validade
 de um teste cognitivo é sempre relativa ao critério que está sendo
 predito, e desempenho atlético especializado depende de capacidades que
 um teste cognitivo geral simplesmente não mede.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://en.wikipedia.org/wiki/Wonderlic_test">Lyons, Hoffman
-&amp; Michel (2009), citado no verbete sobre o Wonderlic Test</a><br />
-Resultado: escores do WPT <strong>não predisseram de forma
+&amp; Michel (2009), citado no verbete sobre o Wonderlic Test</a></p>
+<p>Resultado: escores do WPT <strong>não predisseram de forma
 significativa</strong> desempenho em campo, posição no draft ou número
 de jogos iniciados na NFL, em nenhuma posição analisada.</p>
 </div>
@@ -1419,28 +1702,28 @@ a intermediária de <code>100 itens</code> (a mais usada em pesquisa) e a
 curta de <code>60 itens</code> (10 por fator, com ao menos 2 itens por
 faceta). Cada um dos seis fatores se divide em 4 facetas, totalizando 24
 facetas na versão completa.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8757920/">Estudo de
 confiabilidade teste-reteste do HEXACO-100, <em>PLOS ONE</em>
-(2022)</a><br />
-Resultado: confiabilidade teste-reteste de <strong>r = .88</strong> ao
-nível dos 6 fatores e <strong>r = .81</strong> ao nível de facetas, em
-intervalo de 12 dias (n = 416).</p>
+(2022)</a></p>
+<p>Resultado: confiabilidade teste-reteste de <strong>r = .88</strong>
+ao nível dos 6 fatores e <strong>r = .81</strong> ao nível de facetas,
+em intervalo de 12 dias (n = 416).</p>
 </div>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.sciencedirect.com/science/article/abs/pii/S0191886919302740">Adaptação
 brasileira do HEXACO-PI-R (100 itens), <em>Personality and Individual
-Differences</em></a><br />
-Resultado: estrutura de 6 fatores replicada em amostra brasileira; todos
-os domínios com <strong>alfa de Cronbach &gt; 0,70</strong>, exceto
-Emotionalidade.</p>
+Differences</em></a></p>
+<p>Resultado: estrutura de 6 fatores replicada em amostra brasileira;
+todos os domínios com <strong>alfa de Cronbach &gt; 0,70</strong>,
+exceto Emotionalidade.</p>
 </div>
 <p>Merecem ainda menção o <strong>16PF</strong> de Raymond Cattell, um
 dos primeiros inventários dimensionais construídos por análise fatorial
@@ -1465,14 +1748,14 @@ administrar emoções. É pontuado por consenso (a resposta “correta” é a
 mais frequentemente escolhida por uma amostra normativa ou por
 especialistas), o que é, em si, uma das críticas metodológicas mais
 discutidas sobre o instrumento.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/job.714">Van
 Rooy &amp; Viswesvaran (2004), síntese em O’Boyle et al. (2011),
-<em>Journal of Organizational Behavior</em></a><br />
-Resultado: inteligência emocional baseada em habilidade prediz
+<em>Journal of Organizational Behavior</em></a></p>
+<p>Resultado: inteligência emocional baseada em habilidade prediz
 desempenho no trabalho com <strong>r = .18 a .23</strong> — cerca de um
 terço da validade da GMA (r = .51, Schmidt &amp; Hunter, 1998).</p>
 </div>
@@ -1481,14 +1764,14 @@ baseados em autorrelato (em vez de tarefas de habilidade objetiva)
 mostram-se, na prática, dificilmente distinguíveis de inventários de
 personalidade — o que levanta uma questão legítima sobre se estão
 medindo algo genuinamente novo.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.cogn-iq.org/blog/emotional-intelligence-assessment/">Petrides
-&amp; Furnham, síntese em Cogn-IQ Encyclopedia</a><br />
-Resultado: medidas de inteligência emocional por autorrelato
+&amp; Furnham, síntese em Cogn-IQ Encyclopedia</a></p>
+<p>Resultado: medidas de inteligência emocional por autorrelato
 correlacionam-se em <strong>r = .60 a .80</strong> com traços do Big
 Five — sobreposição alta o suficiente para questionar sua distinção
 conceitual como constructo independente.</p>
@@ -1520,26 +1803,26 @@ determinantes formais, conteúdo temático. Essa complexidade de
 codificação é, ironicamente, uma das fontes centrais de sua fragilidade
 psicométrica: poucas variáveis mostram validade robusta quando testadas
 contra critérios externos.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9225754/">Mihura,
 Meyer, Dumitrascu &amp; Bombel (2013), citado em revisão crítica
-publicada em <em>Frontiers in Psychiatry</em></a><br />
-Resultado: quando correlacionadas a critérios externos (diagnóstico
+publicada em <em>Frontiers in Psychiatry</em></a></p>
+<p>Resultado: quando correlacionadas a critérios externos (diagnóstico
 psiquiátrico), as variáveis do Sistema Compreensivo alcançaram validade
 média de <strong>r = .27</strong>; quando correlacionadas a critérios de
 autorrelato, a validade média caiu para <strong>r = .08</strong>.</p>
 </div>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://journals.sagepub.com/doi/10.1177/107319119900600405">Wood
-&amp; Lilienfeld (1999), <em>Psychological Assessment</em></a><br />
-Resultado: revisão sistemática identifica problemas persistentes de
+&amp; Lilienfeld (1999), <em>Psychological Assessment</em></a></p>
+<p>Resultado: revisão sistemática identifica problemas persistentes de
 normas, sensibilidade cultural, confiabilidade entre avaliadores,
 confiabilidade teste-reteste e estrutura fatorial do instrumento,
 concluindo que alegações de validade amplamente divulgadas são
@@ -1563,15 +1846,15 @@ Sua estrutura tipológica (nove ou quatro categorias discretas) também
 herda o mesmo problema estrutural do MBTI: força em categorias binárias
 ou discretas traços que a evidência acumulada sugere serem
 contínuos.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://en.wikipedia.org/wiki/Enneagram_of_Personality">Verbete
 consolidado sobre o Eneagrama, com síntese de revisões de 2002 e
-2020</a><br />
-Resultado: revisões sistemáticas da literatura empírica sobre o
+2020</a></p>
+<p>Resultado: revisões sistemáticas da literatura empírica sobre o
 Eneagrama descrevem-no como um <strong>“método de avaliação sem
 confiabilidade ou validade demonstrada”</strong>, com evidência mista
 mesmo nos estudos mais recentes.</p>
@@ -1588,13 +1871,13 @@ pode ser afirmado com confiança: testes de QI predizem, de forma
 consistente, desempenho escolar e desempenho em treinamento
 profissional. O que eles não predizem bem é criatividade, sabedoria
 prática, qualidade dos relacionamentos ou bem-estar subjetivo.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://doi.org/10.1037/0003-066X.51.2.77">Neisser et
-al. (1996), <em>American Psychologist</em></a><br />
-Resultado: correlação QI–desempenho escolar situada entre <strong>r =
+al. (1996), <em>American Psychologist</em></a></p>
+<p>Resultado: correlação QI–desempenho escolar situada entre <strong>r =
 .40 e .70</strong> conforme a série e o nível educacional; correlação
 QI–desempenho no trabalho entre <strong>r = .20 e .60</strong>,
 dependendo da complexidade do cargo.</p>
@@ -1606,7 +1889,7 @@ comportamental da inteligência, mostrando que ela é, entre todos os
 traços psicológicos estudados, o que mais consistentemente se associa a
 desfechos educacionais de longo prazo — afirmação forte, mas
 circunscrita a esse domínio específico de desfechos.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Nota filosófica</p>
 </div>
@@ -1632,27 +1915,27 @@ se transfere automaticamente para indivíduos, tampouco para comparações
 entre populações distintas.</p>
 <p>Um achado contraintuitivo, denominado <strong>Efeito Wilson</strong>,
 é que a herdabilidade do QI <em>aumenta</em> com a idade.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2889158/">Haworth
-et al. (2010), <em>Molecular Psychiatry</em></a><br />
-Resultado: herdabilidade da capacidade cognitiva geral sobe de
+et al. (2010), <em>Molecular Psychiatry</em></a></p>
+<p>Resultado: herdabilidade da capacidade cognitiva geral sobe de
 <strong>41%</strong> aos 9 anos para <strong>55%</strong> aos 12 e
 <strong>66%</strong> aos 17 anos, em amostra de mais de <strong>11.000
 pares de gêmeos</strong> de 4 países (Reino Unido, Holanda, Austrália e
 Estados Unidos).</p>
 </div>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.cambridge.org/core/journals/twin-research-and-human-genetics/article/wilson-effect-the-increase-in-heritability-of-iq-with-age/FF406CC4CF286D78AF72C9E7EF9B5E3F">Bouchard,
 revisão sobre o Efeito Wilson, <em>Twin Research and Human
-Genetics</em></a><br />
-Resultado: herdabilidade estimada em cerca de <strong>20%</strong> na
+Genetics</em></a></p>
+<p>Resultado: herdabilidade estimada em cerca de <strong>20%</strong> na
 primeira infância, subindo para a faixa de <strong>60% a 80%</strong> na
 vida adulta plena.</p>
 </div>
@@ -1665,19 +1948,19 @@ consolidado sobre herdabilidade do QI</a>).</p>
 <p>Estimativas equivalentes existem para os traços de personalidade. Um
 dos estudos de gêmeos mais citados da área mediu especificamente a
 herdabilidade dos Cinco Grandes fatores usando o NEO-PI-R.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://pubmed.ncbi.nlm.nih.gov/8776880/">Jang, Livesley
-&amp; Vernon (1996), <em>Journal of Personality</em></a><br />
-Resultado: herdabilidade estimada em <strong>41%</strong>
+&amp; Vernon (1996), <em>Journal of Personality</em></a></p>
+<p>Resultado: herdabilidade estimada em <strong>41%</strong>
 (Neuroticismo), <strong>53%</strong> (Extroversão), <strong>61%</strong>
 (Abertura), <strong>41%</strong> (Amabilidade) e <strong>44%</strong>
 (Conscienciosidade), com 123 pares de gêmeos idênticos e 127 pares de
 gêmeos fraternos.</p>
 </div>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Ponto crítico</p>
 </div>
@@ -1688,7 +1971,7 @@ com variância intergrupo —, e foi precisamente esse erro (ou essa
 manipulação deliberada) que sustentou boa parte do pensamento eugenista
 do início do século XX, como o próximo capítulo detalha.</p>
 </div>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Nota filosófica</p>
 </div>
@@ -1707,14 +1990,14 @@ psicometria. Em Ellis Island, Henry Goddard aplicou versões apressadas
 da escala Binet-Simon em imigrantes recém-chegados — muitos deles
 exaustos, sem domínio do inglês, avaliados por meio de tradutores
 improvisados.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência histórica</p>
 </div>
 <p><a
 href="https://theconversation.com/the-iq-test-wars-why-screening-for-intelligence-is-still-so-controversial-81428">Reconstrução
-histórica publicada em The Conversation</a><br />
-Resultado: Goddard classificou <strong>83%</strong> dos judeus,
+histórica publicada em The Conversation</a></p>
+<p>Resultado: Goddard classificou <strong>83%</strong> dos judeus,
 <strong>80%</strong> dos húngaros, <strong>79%</strong> dos italianos e
 <strong>87%</strong> dos russos testados em Ellis Island como
 “feeble-minded” — metodologia hoje reconhecida como grosseiramente
@@ -1728,13 +2011,13 @@ consequência jurídica mais grave sobreveio em 1927, no caso <em>Buck v.
 Bell</em>, quando a Suprema Corte dos Estados Unidos legitimou a
 esterilização compulsória de pessoas classificadas como “deficientes
 mentais”.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência histórica</p>
 </div>
 <p><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4202623/">Revisão
-histórica publicada nos National Institutes of Health</a><br />
-Resultado: mais de <strong>65.000 esterilizações</strong> forçadas
+histórica publicada nos National Institutes of Health</a></p>
+<p>Resultado: mais de <strong>65.000 esterilizações</strong> forçadas
 realizadas nos Estados Unidos ao longo do século XX,
 desproporcionalmente entre pessoas pobres e não-brancas, com respaldo
 direto do precedente de <em>Buck v. Bell</em>.</p>
@@ -1744,7 +2027,7 @@ salto ideológico sobre resultados mal controlados, aplicados sem
 qualquer verificação de viés cultural, para justificar decisões que a
 própria ciência da época já deveria ter rejeitado por falta de rigor
 metodológico.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Nota filosófica</p>
 </div>
@@ -1767,40 +2050,40 @@ validade e confiabilidade suficientes, mas circulam com linguagem
 científica. O caso mais estudado é o MBTI, cuja arquitetura de escolha
 forçada — descrita no Capítulo 4 — já antecipa boa parte do
 problema.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.researchgate.net/publication/237675975_Measuring_the_MBTI_and_coming_up_short">Pittenger
-(1993), <em>Review of Educational Research</em></a><br />
-Resultado: aproximadamente <strong>50%</strong> dos respondentes recebem
-um tipo de quatro letras diferente ao refazer o MBTI dentro de apenas
-<strong>cinco semanas</strong>.</p>
+(1993), <em>Review of Educational Research</em></a></p>
+<p>Resultado: aproximadamente <strong>50%</strong> dos respondentes
+recebem um tipo de quatro letras diferente ao refazer o MBTI dentro de
+apenas <strong>cinco semanas</strong>.</p>
 </div>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.researchgate.net/publication/232494957_Cautionary_comments_regarding_the_Myers-Briggs_Type_Indicator">Pittenger
-(2005), <em>Journal of Career Planning and Employment</em></a><br />
-Resultado: taxa de reclassificação em novo tipo variando de <strong>39%
-a 76%</strong>, conforme o estudo e o intervalo de reteste
+(2005), <em>Journal of Career Planning and Employment</em></a></p>
+<p>Resultado: taxa de reclassificação em novo tipo variando de
+<strong>39% a 76%</strong>, conforme o estudo e o intervalo de reteste
 analisado.</p>
 </div>
 <p>Quanto ao poder preditivo ocupacional — o critério que mais importa
 para decisões de contratação — a literatura converge para o mesmo
 veredito.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://mypassion.ai/blog/16personalities-career-test-review">Boyle
 (1995), <em>Australian Psychologist</em>, citado em revisão
-contemporânea sobre tipologias derivadas do MBTI</a><br />
-Resultado: os tipos do MBTI correlacionam-se apenas
+contemporânea sobre tipologias derivadas do MBTI</a></p>
+<p>Resultado: os tipos do MBTI correlacionam-se apenas
 <strong>fracamente</strong> com desempenho no trabalho depois de
 controlado o efeito dos traços de personalidade do Big Five — isto é, o
 tipo MBTI não acrescenta poder preditivo além do que os Cinco Grandes já
@@ -1809,16 +2092,16 @@ explicam.</p>
 <p>O contraste com o HEXACO é instrutivo. Uma metanálise recente
 comparou diretamente os seis fatores do modelo com desvio de conduta no
 trabalho — furto, sabotagem, absenteísmo não justificado, assédio.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.sciencedirect.com/science/article/abs/pii/S0191886919304714">Pletzer,
 Bentvelzen, Oostrom &amp; De Vries (2019), <em>Personality and
-Individual Differences</em></a><br />
-Resultado: Honestidade-Humildade foi o preditor mais forte de desvio de
-conduta no trabalho (<strong>ρ = −0,42</strong>), à frente de
+Individual Differences</em></a></p>
+<p>Resultado: Honestidade-Humildade foi o preditor mais forte de desvio
+de conduta no trabalho (<strong>ρ = −0,42</strong>), à frente de
 Conscienciosidade (<strong>ρ = −0,39</strong>) e Amabilidade (<strong>ρ
 = −0,21</strong>); Abertura não apresentou correlação significativa.</p>
 </div>
@@ -1827,7 +2110,7 @@ fatorial replicada, mensuração contínua e validade preditiva mensurável
 em metanálise; do outro, uma tipologia binária sem os mesmos
 fundamentos. A diferença não é de opinião — é de arquitetura de
 mensuração e de evidência empírica acumulada.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Nota filosófica</p>
 </div>
@@ -1859,15 +2142,15 @@ escolar, classe social e idioma nativo. Adaptar um teste para outro
 idioma exige revalidação completa: não basta traduzir palavras, é
 necessário reconfirmar a estrutura fatorial e renormatizar a
 população-alvo.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://onlinelibrary.wiley.com/doi/10.1111/jopy.12664">Thielmann
 et al. (2019), citado em García et al. (2022), <em>Journal of
-Personality</em></a><br />
-Resultado: a estrutura fatorial do HEXACO-PI-R (versão de 100 itens)
+Personality</em></a></p>
+<p>Resultado: a estrutura fatorial do HEXACO-PI-R (versão de 100 itens)
 mostrou invariância configural e métrica em <strong>16 versões
 linguísticas diferentes</strong>, embora a invariância escalar completa
 não tenha se confirmado — a estrutura se replica, mas os pontos de corte
@@ -1876,15 +2159,15 @@ exigem recalibração cultural.</p>
 <p>O fenômeno mais fascinante nessa área é o <strong>Efeito
 Flynn</strong>: ao longo do século XX, os escores brutos de QI subiram
 de forma consistente em praticamente todos os países estudados.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a
 href="https://www.researchgate.net/publication/303125919_One_century_of_global_IQ_gains_A_formal_meta-analysis_of_the_Flynn_effect_1909-2013">Pietschnig
 &amp; Voracek (2015), <em>Perspectives on Psychological
-Science</em></a><br />
-Resultado: metanálise com quase <strong>4 milhões de
+Science</em></a></p>
+<p>Resultado: metanálise com quase <strong>4 milhões de
 participantes</strong> em <strong>31 países</strong> (1909–2013)
 confirma ganho histórico médio próximo de <strong>3 pontos de QI por
 década</strong>, com desaceleração acentuada nas coortes mais
@@ -1894,16 +2177,16 @@ recentes.</p>
 recrutamento militar norueguês, o que permitiu isolar a variação
 <em>dentro da mesma família</em> — controlando qualquer explicação de
 natureza genética populacional.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://www.pnas.org/doi/10.1073/pnas.1718793115">Bratsberg
-&amp; Rogeberg (2018), <em>PNAS</em></a><br />
-Resultado: declínio de aproximadamente <strong>7 pontos de QI</strong>
-por geração entre coortes nascidas depois de 1975 na Noruega, com a
-variação ocorrendo <em>dentro</em> das mesmas famílias — evidência
-direta de causa ambiental, não genética.</p>
+&amp; Rogeberg (2018), <em>PNAS</em></a></p>
+<p>Resultado: declínio de aproximadamente <strong>7 pontos de
+QI</strong> por geração entre coortes nascidas depois de 1975 na
+Noruega, com a variação ocorrendo <em>dentro</em> das mesmas famílias —
+evidência direta de causa ambiental, não genética.</p>
 </div>
 <table>
 <colgroup>
@@ -1911,23 +2194,23 @@ direta de causa ambiental, não genética.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>O que o Efeito Flynn evidencia</th>
 <th>Implicação</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Escores sobem e descem em poucas décadas</td>
 <td>QI é sensível a nutrição, escolarização e complexidade ambiental —
 não é fixo</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Ganhos maiores em inteligência fluida do que cristalizada</td>
 <td>Sugere mudança em estilos de raciocínio, não apenas em conhecimento
 acumulado</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Normas ficam desatualizadas com o tempo</td>
 <td>Testes precisam ser renormatizados periodicamente para continuar
 válidos</td>
@@ -1948,31 +2231,31 @@ testes são — e não são — aplicáveis</h2>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Aplicáveis quando</th>
 <th>Não deveriam ser usados quando</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Há norma populacional adequada e atualizada para o grupo
 testado</td>
 <td>Servem a decisões irreversíveis sobre valor humano, reprodução ou
 cidadania</td>
 </tr>
-<tr class="even">
+<tr>
 <td>O objetivo é prever um critério concreto, e não “definir” a
 pessoa</td>
 <td>Funcionam como triagem única e determinística, sem revisão humana
 contextual</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>São combinados com outras fontes de evidência (entrevista, amostra
 de trabalho)</td>
 <td>A população testada não corresponde à população em que o teste foi
 validado</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Há domínio técnico de quem aplica e interpreta os resultados</td>
 <td>O instrumento carece de validade demonstrada (ex.: MBTI, grafologia)
 para decisões consequentes</td>
@@ -1981,16 +2264,16 @@ para decisões consequentes</td>
 </table>
 <p>A própria metanálise de Schmidt e Hunter já continha essa lição:
 nenhum método isolado é suficiente.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Evidência</p>
 </div>
 <p><a href="https://doi.org/10.1037/0033-2909.124.2.262">Schmidt &amp;
-Hunter (1998)</a><br />
-Resultado: validade composta de GMA combinada com entrevista estruturada
-ultrapassa <strong>r = 0,63</strong> — evidência de que o valor está no
-uso combinado de métodos, e não na aplicação isolada de um único
-escore.</p>
+Hunter (1998)</a></p>
+<p>Resultado: validade composta de GMA combinada com entrevista
+estruturada ultrapassa <strong>r = 0,63</strong> — evidência de que o
+valor está no uso combinado de métodos, e não na aplicação isolada de um
+único escore.</p>
 </div>
 <hr />
 <h2
@@ -2015,7 +2298,7 @@ composta ultrapassa <code>0,60</code>.</li>
 de conduta no trabalho (<code>ρ = −0,42</code>, Pletzer et al., 2019) —
 dimensão que um teste puramente cognitivo não captura.</li>
 </ul>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>O que evitar</p>
 </div>
@@ -2027,7 +2310,7 @@ Utilizá-lo para decidir quem é contratado equivale, literalmente, a
 decidir com uma moeda que muda de resultado sozinha em metade das
 vezes.</p>
 </div>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>Nota filosófica</p>
 </div>
@@ -2065,10 +2348,12 @@ e, como demonstrou a própria revisão de Sackett et al. (2022), até os
 números mais citados da área precisam ser reabertos quando a metodologia
 avança.</p>
 <div class="quote">
+<div class="quote-text">
 <p>Sócrates dizia que sua única vantagem sobre os demais era saber que
 nada sabia. A psicometria séria opera sob a mesma ética: quanto mais
 precisa a ferramenta, maior a obrigação de declarar, com igual precisão,
 onde termina seu alcance.</p>
+</div>
 </div>
 <hr />
 <h2 id="referências">Referências</h2>
@@ -2451,7 +2736,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=7389a45f"></script>
-<script src="../assets/essay.js?v=58dcd441"></script>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
 </body>
 </html>

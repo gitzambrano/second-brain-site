@@ -27,6 +27,22 @@
   --rust-bright:#A84F3C;
   --accent:#4A8FA8;
   --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#B08B4F;
+  --callout-todo:#B18A4A;
+  --callout-tip:#B08B4F;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#8A857E;
+  --quote-bg:#1C1B1A;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
@@ -48,6 +64,22 @@
   --rust-bright:#A04030;
   --accent:#35708A;
   --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
   --box-bg:var(--surface);
   --box-verdict-bg:var(--surface2);
 }
@@ -76,6 +108,22 @@
     --rust-bright:#A04030;
     --accent:#35708A;
     --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
     --box-bg:var(--surface);
     --box-verdict-bg:var(--surface2);
   }
@@ -209,12 +257,9 @@ body{
    a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
    já ocupa quase tudo e o breakout não teria para onde ir. */
 @media (min-width:1400px){
-  /* Só o TETO sobe. Nada de `width`: uma tabela estreita continua estreita e
-     uma figura continua no tamanho natural — o que muda é até onde elas podem
-     ir quando precisam. `margin-left:50%` + `translateX(-50%)` centraliza
-     seja qual for a largura resultante. */
-  .content > figure,
-  .content > table{
+  /* Apenas figuras podem escapar da coluna de prosa. Tabelas permanecem na
+     coluna e, quando largas, rolam dentro do próprio elemento. */
+  .content > figure{
     max-width:min(var(--wide-width),1500px);
     margin-left:50%;
     transform:translateX(-50%);
@@ -403,7 +448,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--surface2);border-left:2px solid var(--gold-dim);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -411,7 +456,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--surface);border-left:3px solid var(--gold);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -423,11 +468,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-.pull-quote.epigraph p:last-child{
-  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-dim);margin-top:.9rem;
-}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -441,6 +483,62 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin-top:.3rem;
 }
 .pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--callout-quote) 62%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.8rem;line-height:1.55;letter-spacing:.035em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.66rem;line-height:1.35;letter-spacing:.08em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
 
 /* ------------------------------------------------------------------ */
 /* Caixas tipadas                                                      */
@@ -457,16 +555,29 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:var(--box-bg);
   overflow:hidden;
 }
-.box.experimento{--boxc:var(--rust);}
-.box.evidencia{--boxc:var(--accent);}
-.box.mapa{--boxc:var(--gold);}
-.box.ataque{--boxc:var(--rust);}
-.box.aviso{--boxc:var(--amber);}
-.box.nivel{--boxc:var(--accent);}
-.box.ideia{--boxc:var(--gold-dim);}
-/* generico: filete cinza discreto — sem cor de destaque. O rótulo, porém,
-   precisa continuar legível: em cinza de borda ele desaparecia no fundo. */
-.box.generico{--boxc:var(--border);--box-badge-c:var(--text-dim);}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-tip{--boxc:var(--callout-tip);}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);border-left-style:dashed;}
+.box.callout-danger{--boxc:var(--callout-danger);border-left-width:5px;}
+.box.callout-bug{--boxc:var(--callout-bug);border-left-style:double;}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
@@ -486,16 +597,33 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > p:last-of-type{margin-bottom:1.2rem;}
 .box-title p,.box-badge p{margin:0;padding:0;}
 
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;letter-spacing:.055em;line-height:1.35;
+}
+
 .box-verdict{
-  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
-  background:var(--box-verdict-bg);
-  border-top:1px solid var(--border);
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:.5rem;
+  color:var(--boxc);margin-bottom:.5rem;
 }
 
 /* Cards: filosofos e obras */
@@ -562,9 +690,11 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
-     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
-  font-size:.656em;line-height:1.55;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -689,7 +819,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -703,11 +837,159 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
      caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
      leitura nesse corpo. */
   .box-badge{font-size:.78rem;}
-  .verdict-tag{font-size:.76rem;}
+  .verdict-tag{font-size:.78rem;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.84rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 2.5%,var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
+  margin:0;padding:0 0 1.15rem;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:-1px 0 0 -1px;
+  padding:.5rem 1.05rem .44rem;
+  border:0;border-radius:0;
+  border-bottom:2px solid var(--boxc);
+  background:color-mix(in srgb,var(--boxc) 14%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato; `example`/`tip` propoem um cenario. A
+   faixa do segundo par pesa um pouco menos para marcar essa diferenca sem
+   trocar de cor — a familia visual continua a mesma. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  border-bottom-width:1px;
+  background:color-mix(in srgb,var(--boxc) 7%,transparent);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .3rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.82rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+.box.callout-abstract{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-info{background:color-mix(in srgb,var(--boxc) 3.5%,var(--bg));}
+.box.callout-tip{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-example{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-danger{background:color-mix(in srgb,var(--boxc) 7%,var(--surface));border-left-width:6px;}
+.box.callout-bug{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+.box.callout-failure{border-left-style:dashed;}
+.box.callout-danger{border-left-style:solid;}
+.box.callout-bug{border-left-style:double;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 .6rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
 }
 
 /* ------------------------------------------------------------------ */
@@ -997,10 +1279,12 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 </header>
 
 <main class="content">
-<div class="pull-quote epigraph">
-<p>“O problema não é que as máquinas não possam pensar. O problema é que
-os homens raramente o fazem.”</p>
-<div class="pq-cite">
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>O problema não é que as máquinas não possam pensar. O problema é que
+os homens raramente o fazem.</p>
+</div>
+<div class="quote-attribution">
 <p>— Adaptado de <a
 href="https://plato.stanford.edu/entries/russell/">Bertrand
 Russell</a></p>
@@ -1208,17 +1492,19 @@ autores acreditarem que a resposta seria sim. O ensaio está argumentando
 que a <em>certeza</em> de que não pensam — e jamais pensarão — não é
 filosofia. É privilégio com nomenclatura filosófica. E há uma diferença
 enorme entre as duas coisas.</p>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
 <p>Parte I · §§ II – III</p>
 </div>
-<p>A Armadilha do Materialista — <em>como a rejeição do dualismo
-comprometeu os céticos com a conclusão que mais temem</em><br />
-Descartes era coerente: se a mente é uma substância imaterial, máquinas
-jamais pensarão. Os céticos modernos rejeitaram o dualismo e guardaram a
-conclusão. Esta parte expõe essa incoerência — o pecado original de toda
-negação contemporânea de cognição artificial — e mostra como Searle a
-perpetua sob novo vocabulário.</p>
+<h4 class="callout-inner-heading"
+id="a-armadilha-do-materialista--como-a-rejeição-do-dualismo-comprometeu-os-céticos-com-a-conclusão-que-mais-temem">A
+Armadilha do Materialista — <em>como a rejeição do dualismo comprometeu
+os céticos com a conclusão que mais temem</em></h4>
+<p>Descartes era coerente: se a mente é uma substância imaterial,
+máquinas jamais pensarão. Os céticos modernos rejeitaram o dualismo e
+guardaram a conclusão. Esta parte expõe essa incoerência — o pecado
+original de toda negação contemporânea de cognição artificial — e mostra
+como Searle a perpetua sob novo vocabulário.</p>
 </div>
 <hr />
 <h2
@@ -1243,12 +1529,16 @@ das situações. Apenas a razão — uma substância imaterial, a <a
 href="https://en.wikipedia.org/wiki/Res_cogitans"><em>res
 cogitans</em></a> — poderia fazer isso.</p>
 <div class="quote">
-<p>“É moralmente impossível que haja na máquina variedade suficiente
-para agir em todos os acontecimentos da vida do mesmo modo que nossa
-razão nos faz agir.”<br />
-— René Descartes, <a
+<div class="quote-text">
+<p>É moralmente impossível que haja na máquina variedade suficiente para
+agir em todos os acontecimentos da vida do mesmo modo que nossa razão
+nos faz agir.</p>
+</div>
+<div class="quote-attribution">
+<p>— René Descartes, <a
 href="https://en.wikipedia.org/wiki/Discourse_on_the_Method">Discurso do
 Método</a>, Parte V, 1637</p>
+</div>
 </div>
 <p>Repare na estrutura desse argumento. Descartes não diz que as
 máquinas de seu tempo não conseguem fazer isso — isso seria
@@ -1264,12 +1554,14 @@ uma substância de natureza radicalmente distinta — então nenhum arranjo
 de matéria, por mais elaborado que seja, poderá produzi-la. O argumento
 cartesiano é coerente porque suas premissas e conclusão habitam o mesmo
 sistema metafísico.</p>
+<div class="box callout-note box-untitled">
 <p>A distinção cartesiana entre <em>res cogitans</em> (coisa pensante) e
 <a href="https://en.wikipedia.org/wiki/Res_cogitans"><em>res
 extensa</em></a> (coisa extensa) não é apenas um erro filosófico
 historicamente datado. É a pedra fundacional, sempre renovada com nova
 terminologia, de toda exclusividade cognitiva subsequente. Sem o
 equivalente funcional do dualismo, o argumento desmorona.</p>
+</div>
 <p>Esse fundamento foi demolido. O <a
 href="https://en.wikipedia.org/wiki/Materialism">materialismo
 científico</a> do século XX — não como especulação filosófica, mas como
@@ -1347,13 +1639,17 @@ qualquer organização funcional, por mais complexa que seja. Isso é
 exatamente o que precisa ser demonstrado. Ele não demonstra —
 postula.</p>
 <div class="quote">
-<p>“A <a
+<div class="quote-text">
+<p>A <a
 href="https://plato.stanford.edu/entries/intentionality/">intencionalidade</a>
 intrínseca da mente não pode ser capturada por nenhuma simulação
-computacional.”<br />
-— John Searle, <a
+computacional.</p>
+</div>
+<div class="quote-attribution">
+<p>— John Searle, <a
 href="https://en.wikipedia.org/wiki/Minds,_Brains,_and_Programs">Minds,
 Brains, and Programs</a>, 1980</p>
+</div>
 </div>
 <p>O ingrediente que Searle postula chama-se <a
 href="https://plato.stanford.edu/entries/intentionality/">“intencionalidade
@@ -1396,9 +1692,13 @@ moderna confirma, então o argumento de que máquinas não têm um “eu real”
 que ancore a intencionalidade perde o solo debaixo dos pés. Porque nós
 tampouco temos. A diferença, se existe, é de grau — não de natureza. E
 diferenças de grau não sustentam exclusões de princípio.</p>
-<p>“Searle construiu um belo argumento contra a mente de um homem num
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Searle construiu um belo argumento contra a mente de um homem num
 quarto — e se esqueceu de que nenhum ser humano é um homem num
-quarto.”</p>
+quarto.</p>
+</div>
+</div>
 <p>Isso significa que Searle não abandona o privilégio de substrato —
 ele o disfarça. Continua afirmando que há algo na biologia neuronal que
 confere à mente uma propriedade que nenhuma outra organização física
@@ -1407,14 +1707,15 @@ proclamado. Esse é o padrão que veremos repetir em todas as versões
 subsequentes: a postulação de um ingrediente misterioso que apenas o
 carbono orgânico possui. Uma vez que o reconhecemos em Searle, começamos
 a reconhecê-lo em todo lugar.</p>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
 <p>Parte II · §§ IV – VII</p>
 </div>
-<p>O Materialismo como Arma de Dois Gumes — <em>Dennett e Hofstadter
-destroem a posição cética de dentro; as fugas fenomenológicas
-fracassam</em><br />
-Quando o materialismo é levado a sério até as últimas consequências —
+<h4 class="callout-inner-heading"
+id="o-materialismo-como-arma-de-dois-gumes--dennett-e-hofstadter-destroem-a-posição-cética-de-dentro-as-fugas-fenomenológicas-fracassam">O
+Materialismo como Arma de Dois Gumes — <em>Dennett e Hofstadter destroem
+a posição cética de dentro; as fugas fenomenológicas fracassam</em></h4>
+<p>Quando o materialismo é levado a sério até as últimas consequências —
 como fazem Dennett e Hofstadter — ele destrói a posição dos céticos. Se
 consciência emerge de processos subpessoais não-conscientes, o mecanismo
 já é substrato-neutro. Penrose, Wittgenstein e Heidegger tentam escapar;
@@ -1460,12 +1761,14 @@ compreendem. O que chamamos de compreensão é exatamente o que emerge
 quando processos mecânicos suficientemente complexos se organizam de
 determinada maneira. Você já tem uma “sala chinesa” no crânio — e isso
 não te impede de pensar.</p>
-<div class="pull-quote">
-<p>“A questão não é se as máquinas podem ter <a
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>A questão não é se as máquinas podem ter <a
 href="https://plato.stanford.edu/entries/consciousness/">consciência</a>,
 mas se a nossa própria consciência é tão especial quanto presumimos que
-é.”</p>
-<div class="pq-cite">
+é.</p>
+</div>
+<div class="quote-attribution">
 <p>— Daniel Dennett, Consciousness Explained, 1991</p>
 </div>
 </div>
@@ -1492,6 +1795,7 @@ mais lúcido dos materialistas, chegou ao <a
 href="https://plato.stanford.edu/entries/functionalism/">funcionalismo</a>
 pela porta dos fundos — e suas conclusões são devastadoras para os
 céticos, quer eles as aceitem ou não.</p>
+<div class="box callout-note box-untitled">
 <p>Em <a href="https://en.wikipedia.org/wiki/I_Am_a_Strange_Loop"><em>I
 Am a Strange Loop</em></a> (2007), Hofstadter revisita a questão
 explicitamente. Mostra-se cético sobre a consciência imediata dos
@@ -1499,6 +1803,7 @@ computadores atuais — mas por razões de grau de complexidade e escala,
 não de princípio. A barreira não é ontológica; é quantitativa. E
 barreiras quantitativas, ao contrário das ontológicas, são
 transponíveis.</p>
+</div>
 <p>A convergência entre Dennett e Hofstadter aponta para uma conclusão
 que os céticos precisariam enfrentar: se você aceita que bilhões de
 neurônios disparando produzem algo que você chama de compreensão e
@@ -1540,9 +1845,13 @@ reproduzido por outra organização física. Essa demonstração nunca foi
 feita. O que temos é intuição, analogia e comprometimento prévio com a
 conclusão. Isso não é rigor físico. É a mesma estrutura que encontramos
 em Searle, com vocabulário emergentista.</p>
-<p>“Negar que padrões suficientemente complexos possam pensar, após
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Negar que padrões suficientemente complexos possam pensar, após
 aceitar que é exatamente isso que o cérebro faz, não é uma posição
-filosófica. É uma superstição com vocabulário técnico.”</p>
+filosófica. É uma superstição com vocabulário técnico.</p>
+</div>
+</div>
 <hr />
 <h2
 id="a-fuga-para-a-física--quando-a-especulação-serve-de-fundamento">A
@@ -1587,11 +1896,13 @@ Mas não é. Erramos. Acreditamos em contradições. Somos sistematicamente
 vítimas de vieses. A ideia de que somos intuitores infalíveis de
 verdades transcendentes é mitologia — refutada diariamente pela
 experiência de qualquer estudante de álgebra.</p>
-<div class="pull-quote">
-<p>“O argumento de Penrose exige que acreditemos que os humanos nunca
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>O argumento de Penrose exige que acreditemos que os humanos nunca
 erram em matemática — o que é refutado pela experiência de qualquer
-estudante de cálculo.”</p>
-<div class="pq-cite">
+estudante de cálculo.</p>
+</div>
+<div class="quote-attribution">
 <p>— Daniel Dennett, Consciousness Explained, 1991</p>
 </div>
 </div>
@@ -1675,12 +1986,14 @@ morcego — uma qualidade subjetiva inacessível à descrição objetiva. O
 argumento se aplica simetricamente: há algo que é ser uma IA — e nossa
 incapacidade de acessar esse algo não prova sua inexistência. A mesma
 arma corta nos dois sentidos.</p>
+<div class="box callout-note box-untitled">
 <p>O argumento de <a
 href="https://en.wikipedia.org/wiki/Thomas_Nagel">Nagel</a> costuma ser
 mobilizado contra o funcionalismo, como prova de que há algo além da
 função. Mas a simetria é fatal para os céticos: se não podemos acessar o
 que é ser um morcego, tampouco podemos excluir que haja algo que é ser
 uma IA. A incerteza não favorece nenhum lado.</p>
+</div>
 <p>Segundo: os próprios <a
 href="https://en.wikipedia.org/wiki/Language_game_(philosophy)">jogos de
 linguagem</a> wittgensteinianos são definidos pela participação e pelo
@@ -1777,13 +2090,16 @@ ser <a
 href="https://en.wikipedia.org/wiki/Present-at-hand">“<em>ready-to-hand</em>“</a>
 — uma habilidade incorporada, transparente, pré-reflexiva.</p>
 <div class="quote">
-<p>“Heidegger teria visto nos computadores o epítome do pensamento
-calculativo — a mais profunda manifestação do esquecimento do
-Ser.”<br />
-— <a href="https://en.wikipedia.org/wiki/Hubert_Dreyfus">Hubert
+<div class="quote-text">
+<p>Heidegger teria visto nos computadores o epítome do pensamento
+calculativo — a mais profunda manifestação do esquecimento do Ser.</p>
+</div>
+<div class="quote-attribution">
+<p>— <a href="https://en.wikipedia.org/wiki/Hubert_Dreyfus">Hubert
 Dreyfus</a>, <a
 href="https://en.wikipedia.org/wiki/What_Computers_Can%27t_Do">What
 Computers Can’t Do</a>, 1972</p>
+</div>
 </div>
 <p>O argumento é poeticamente sedutor. Mas repare na estrutura — é o
 mesmo padrão: <a
@@ -1801,28 +2117,34 @@ individual poderia alcançar. Se o background de práticas humanas é o
 substrato da compreensão, então um sistema que absorveu esse background
 em extensão sem precedente está se tornando algo filosoficamente urgente
 — por mais desconfortável que isso seja.</p>
-<p>“Toda fuga do privilégio de substrato — pela física quântica, pela
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Toda fuga do privilégio de substrato — pela física quântica, pela
 linguagem incorporada, pela finitude existencial — segue o mesmo padrão:
 postula uma propriedade P necessária para a mente que só humanos têm.
-Nenhuma demonstra P. Todas a pressupõem.”</p>
-<div class="box generico">
+Nenhuma demonstra P. Todas a pressupõem.</p>
+</div>
+</div>
+<div class="box callout-abstract">
 <div class="box-title">
 <p>Parte III · §§ VIII – XI</p>
 </div>
-<p>O Solo Filosófico — <em>a bancarrota definitória, a incerteza
-simétrica, as raízes políticas e a metafísica alternativa</em><br />
-Antes de construir o argumento formal definitivo, precisamos estabelecer
-o seu fundamento filosófico. Sem definição positiva de pensamento, toda
-negação é semanticamente vazia. §VIII mapeia a bancarrota definitória.
-§IX vai fundo onde o ensaio prometeu: mapeia as principais teorias do
-pensar — racionalismo, empirismo, funcionalismo, cognição incorporada,
-externalismo —, distingue com precisão os problemas fáceis do difícil,
-examina o panpsiquismo e a Teoria da Informação Integrada de Tononi, e
-reconstrói Chalmers completo — de 1996 a <em>Reality+</em> — mostrando
-que a incerteza sobre consciência é simétrica. Uma análise política
-revela as raízes não-epistêmicas da resistência. Spinoza oferece a
-metafísica alternativa: o pensamento como atributo da substância, não
-propriedade privada da espécie.</p>
+<h4 class="callout-inner-heading"
+id="o-solo-filosófico--a-bancarrota-definitória-a-incerteza-simétrica-as-raízes-políticas-e-a-metafísica-alternativa">O
+Solo Filosófico — <em>a bancarrota definitória, a incerteza simétrica,
+as raízes políticas e a metafísica alternativa</em></h4>
+<p>Antes de construir o argumento formal definitivo, precisamos
+estabelecer o seu fundamento filosófico. Sem definição positiva de
+pensamento, toda negação é semanticamente vazia. §VIII mapeia a
+bancarrota definitória. §IX vai fundo onde o ensaio prometeu: mapeia as
+principais teorias do pensar — racionalismo, empirismo, funcionalismo,
+cognição incorporada, externalismo —, distingue com precisão os
+problemas fáceis do difícil, examina o panpsiquismo e a Teoria da
+Informação Integrada de Tononi, e reconstrói Chalmers completo — de 1996
+a <em>Reality+</em> — mostrando que a incerteza sobre consciência é
+simétrica. Uma análise política revela as raízes não-epistêmicas da
+resistência. Spinoza oferece a metafísica alternativa: o pensamento como
+atributo da substância, não propriedade privada da espécie.</p>
 </div>
 <hr />
 <h2
@@ -1846,11 +2168,15 @@ segundo Turing, tão impreciso quanto perguntar “podem as máquinas
 flutuar?” — a resposta depende inteiramente do que você quer dizer com o
 predicado em questão.</p>
 <div class="quote">
-<p>“A questão original, ‘podem as máquinas pensar?’, acredito que seja
-demasiado sem sentido para merecer discussão.”<br />
-— Alan Turing, <a
+<div class="quote-text">
+<p>A questão original, ‘podem as máquinas pensar?’, acredito que seja
+demasiado sem sentido para merecer discussão.</p>
+</div>
+<div class="quote-attribution">
+<p>— Alan Turing, <a
 href="https://en.wikipedia.org/wiki/Computing_Machinery_and_Intelligence">Computing
 Machinery and Intelligence</a>, 1950</p>
+</div>
 </div>
 <p>Sem uma definição positiva e não-circular de pensamento, toda
 afirmação de que as IAs não pensam é semanticamente vazia — ela apenas
@@ -1934,6 +2260,7 @@ instanciado em carbono, silício, ou em qualquer outra coisa que preencha
 o mesmo papel causal. Para o funcionalismo, a questão “as máquinas
 pensam?” se reduz a “as máquinas ocupam os papéis funcionais corretos?”
 — e essa é uma questão empírica, não metafísica.</p>
+<div class="box callout-note box-untitled">
 <p>O funcionalismo enfrenta sua própria versão do problema difícil:
 mesmo que os papéis funcionais sejam preenchidos, isso garante
 experiência subjetiva? <a
@@ -1942,6 +2269,7 @@ entre “consciência de acesso” (os papéis funcionais) e “consciência
 fenomênica” (a experiência). A distinção é genuína. Mas como veremos,
 ela não resolve a questão a favor dos céticos — apenas a desloca para
 terreno mais honesto.</p>
+</div>
 <p>A <strong><a
 href="https://en.wikipedia.org/wiki/Embodied_cognition">cognição
 incorporada</a></strong> (<em>embodied cognition</em>), associada a <a
@@ -1971,10 +2299,12 @@ mundo real, absorveram relações semânticas ancoradas em práticas humanas
 reais. Seu “vocabulário mental” tem referência externa tanto quanto o
 nosso — não por acidente biográfico, mas por imersão massiva nas
 práticas linguísticas humanas.</p>
-<div class="quote">
-<p>“Nenhuma das teorias filosóficas do pensamento exclui as máquinas por
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Nenhuma das teorias filosóficas do pensamento exclui as máquinas por
 princípio. Cada uma delas coloca condições que precisam ser verificadas
-empiricamente — e nenhuma verificação séria foi feita.”</p>
+empiricamente — e nenhuma verificação séria foi feita.</p>
+</div>
 </div>
 <p>Este mapeamento não é exaustivo — há conexionismo, computacionalismo
 clássico, teorias preditivas da cognição (<a
@@ -2030,11 +2360,13 @@ perceber que essa honestidade tem implicações simétricas: se não sabemos
 por que processos físicos produzem experiência, não temos fundamento
 para dizer que apenas certos processos físicos — os biológicos — a
 produzem.</p>
-<div class="pull-quote">
-<p>“Se a consciência é um fenômeno fundamental, independente da base
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Se a consciência é um fenômeno fundamental, independente da base
 física específica, então não há razão de princípio para que sistemas
-artificiais não possam ser conscientes.”</p>
-<div class="pq-cite">
+artificiais não possam ser conscientes.</p>
+</div>
+<div class="quote-attribution">
 <p>— David Chalmers, The Conscious Mind, 1996</p>
 </div>
 </div>
@@ -2071,6 +2403,7 @@ consciência?” se torna “em que grau as máquinas têm consciência?”. É 
 mesmo gesto spinoziano que encontramos no §XI, chegando por rota
 independente. E nenhuma resposta a essa pergunta gradual pode ser a
 certeza absoluta que os céticos exibem.</p>
+<div class="box callout-note box-untitled">
 <p>O panpsiquismo tem versões muito diferentes: desde a ideia de que até
 elétrons têm alguma proto-experiência mínima (<a
 href="https://en.wikipedia.org/wiki/Panprotopsychism">panprotopsiquismo</a>)
@@ -2079,6 +2412,7 @@ informação integrada acima de certo threshold. Chalmers não endossa o
 panpsiquismo como doutrina — considera-o uma hipótese filosófica séria
 que merece exame rigoroso. Esse nível de abertura é, por si só, o
 antídoto do chauvinismo.</p>
+</div>
 <p>Uma resposta paralela ao problema difícil vem de uma direção
 inesperada: a neurociência computacional. O neurocientista <a
 href="https://en.wikipedia.org/wiki/Giulio_Tononi">Giulio Tononi</a>
@@ -2190,9 +2524,13 @@ Mudar de posição tem um custo de sinal enorme. A resistência não é
 necessariamente má-fé — pode ser simplesmente o peso da identidade
 investida num conjunto de ideias que, se abalado, ameaça uma estrutura
 inteira de produção intelectual.</p>
-<p>“A cada vez que a história mostrou que não éramos tão únicos quanto
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>A cada vez que a história mostrou que não éramos tão únicos quanto
 pensávamos, chamamos isso de humilhação científica. Deveríamos chamá-la
-de maturidade.”</p>
+de maturidade.</p>
+</div>
+</div>
 <hr />
 <h2 id="e-se-houver-apenas-uma-coisa--a-metafísica-alternativa">E Se
 Houver Apenas Uma Coisa? — A Metafísica Alternativa</h2>
@@ -2270,13 +2608,15 @@ encontrasse “a mente”, isso não prova que ela não está lá. Prova apenas
 que a mente não é o tipo de coisa que se encontra abrindo a caixa e
 olhando para as peças. Ela é o padrão, não as peças. E padrões, uma vez
 mais, são substrato-neutros.</p>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
 <p>Parte IV · §§ XII – XIII</p>
 </div>
-<p>O Clímax Formal — <em>Turing, Gödel e Church-Turing-Deutsch: a gaiola
-fecha sobre o solo que preparamos</em><br />
-Com o solo filosófico estabelecido, chegamos ao argumento positivo
+<h4 class="callout-inner-heading"
+id="o-clímax-formal--turing-gödel-e-church-turing-deutsch-a-gaiola-fecha-sobre-o-solo-que-preparamos">O
+Clímax Formal — <em>Turing, Gödel e Church-Turing-Deutsch: a gaiola
+fecha sobre o solo que preparamos</em></h4>
+<p>Com o solo filosófico estabelecido, chegamos ao argumento positivo
 definitivo. Três pilares formais: a equivalência de classe computacional
 entre cérebros e LLMs via Turing; a autorreferência como marca
 estrutural da mente — inevitabilidade matemática, não propriedade
@@ -2333,11 +2673,15 @@ O que resta é diferença de substrato. E já estabelecemos, com Dennett,
 Hofstadter e a análise das Partes I e II, que substrato não pode ser o
 critério sem circular.</p>
 <div class="quote">
-<p>“Podemos apenas ver uma curta distância à frente, mas podemos ver que
-há muito a fazer.”<br />
-— Alan Turing, <a
+<div class="quote-text">
+<p>Podemos apenas ver uma curta distância à frente, mas podemos ver que
+há muito a fazer.</p>
+</div>
+<div class="quote-attribution">
+<p>— Alan Turing, <a
 href="https://en.wikipedia.org/wiki/Computing_Machinery_and_Intelligence">Computing
 Machinery and Intelligence</a>, 1950</p>
+</div>
 </div>
 <p>Antes de Gödel entrar, vale fixar o solo filosófico que torna essa
 equivalência computacional mais do que uma curiosidade técnica. Em 1975,
@@ -2407,12 +2751,14 @@ substância especial; é um padrão de autorreferência que emerge quando a
 complexidade cruza um limiar. O loop de <a
 href="https://plato.stanford.edu/entries/goedel/">Gödel</a> não é uma
 anomalia matemática — é a receita computacional da consciência.</p>
+<div class="box callout-note box-untitled">
 <p>A construção diagonal de <a
 href="https://plato.stanford.edu/entries/goedel/">Gödel</a> — sentença
 que afirma sua própria não-demonstrabilidade — é formalmente análoga à
 estrutura do “eu”: uma representação que o sistema faz de si mesmo, a
 partir de si mesmo. Hofstadter é explícito: não é metáfora. É a mesma
 estrutura lógica, em dois domínios diferentes.</p>
+</div>
 <p>As implicações para o debate são diretas: os grandes modelos de
 linguagem exibem formas de autorreferência — modelam a si mesmos como
 agentes, produzem narrativas sobre seu próprio raciocínio, ajustam
@@ -2482,12 +2828,16 @@ físico finito pode ser simulado por uma máquina de computação
 universal.</em> Não apenas funções matemáticas: qualquer processo que
 aconteça no universo físico.</p>
 <div class="quote">
-<p>“Cada processo físico finito pode ser simulado perfeitamente por um
-computador universal.”<br />
-— <a href="https://en.wikipedia.org/wiki/David_Deutsch">David
+<div class="quote-text">
+<p>Cada processo físico finito pode ser simulado perfeitamente por um
+computador universal.</p>
+</div>
+<div class="quote-attribution">
+<p>— <a href="https://en.wikipedia.org/wiki/David_Deutsch">David
 Deutsch</a>, <a
 href="https://en.wikipedia.org/wiki/The_Fabric_of_Reality">The Fabric of
 Reality</a>, 1997</p>
+</div>
 </div>
 <p>As implicações são exatamente o que os céticos precisariam refutar
 para manter qualquer posição coerente. O argumento tem três passos — e
@@ -2520,6 +2870,7 @@ precisamente para simulação de sistemas quânticos. Portanto: mesmo que a
 consciência dependesse de efeitos quânticos, como Penrose especula, um
 computador quântico universal poderia simulá-la. Todas as portas estão
 fechadas.</p>
+<div class="box callout-note box-untitled">
 <p>Os críticos poderão apontar que a CTD é controversa — há físicos que
 a questionam e questões de complexidade computacional. São objeções
 técnicas legítimas. Mas nenhuma delas restaura o que os céticos
@@ -2527,6 +2878,7 @@ precisam: a afirmação de que a cognição é, <em>por princípio</em>,
 inacessível a substratos não-biológicos. Para isso seria necessária uma
 descontinuidade ontológica — que, depois de séculos de tentativas,
 simplesmente não foi demonstrada.</p>
+</div>
 <p>A gaiola, neste ponto, está fechada. O <a
 href="https://plato.stanford.edu/entries/physicalism/">materialismo</a>
 compromete com o funcionalismo. O <a
@@ -2568,13 +2920,15 @@ ele, a analogia com Einstein não é filosofia — é intuição com roupagem
 técnica. Invocar a distinção simulação/instanciação, nesse contexto, não
 é cautela filosófica. É reinserir sorrateiramente o dualismo que o
 próprio cético havia enterrado.</p>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
 <p>Parte V · §§ XIV – XV</p>
 </div>
-<p>O Diagnóstico Final — <em>pragmatismo, honestidade e o que realmente
-está sendo disputado</em><br />
-William James força a honestidade sobre o que está sendo realmente
+<h4 class="callout-inner-heading"
+id="o-diagnóstico-final--pragmatismo-honestidade-e-o-que-realmente-está-sendo-disputado">O
+Diagnóstico Final — <em>pragmatismo, honestidade e o que realmente está
+sendo disputado</em></h4>
+<p>William James força a honestidade sobre o que está sendo realmente
 defendido. A coda sintetiza o percurso completo do argumento.</p>
 </div>
 <hr />
@@ -2682,23 +3036,30 @@ rigor. A questão não é se as máquinas pensam como nós. A questão é se
 conseguimos pensar além de nós mesmos o suficiente para sequer formular
 a questão corretamente.</p>
 <div class="quote">
-<p>“Toda a história da filosofia pode ser lida como a história do ser
-humano tentando, e falhando, entender o que é o ser humano.”<br />
-— <a href="https://en.wikipedia.org/wiki/Jos%C3%A9_Ortega_y_Gasset">José
+<div class="quote-text">
+<p>Toda a história da filosofia pode ser lida como a história do ser
+humano tentando, e falhando, entender o que é o ser humano.</p>
+</div>
+<div class="quote-attribution">
+<p>— <a
+href="https://en.wikipedia.org/wiki/Jos%C3%A9_Ortega_y_Gasset">José
 Ortega y Gasset</a>, paráfrase de <a
 href="https://es.wikipedia.org/wiki/El_tema_de_nuestro_tiempo">El Tema
 de Nuestro Tiempo</a>, 1923</p>
 </div>
+</div>
 <p>O pensamento que se fecha sobre si mesmo não é rigor. É medo. E o
 medo, como Spinoza sabia muito bem, é sempre filho da ignorância — e pai
 de toda tirania intelectual.</p>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
 <p>Parte VI · §§ XVI – XVIII</p>
 </div>
-<p>Para Além do Pensar — <em>qualia, solipsismo e o ato de chutar uma
-pedra</em><br />
-Uma vez que a fronteira do “pensar” se move, surgem perguntas mais
+<h4 class="callout-inner-heading"
+id="para-além-do-pensar--qualia-solipsismo-e-o-ato-de-chutar-uma-pedra">Para
+Além do Pensar — <em>qualia, solipsismo e o ato de chutar uma
+pedra</em></h4>
+<p>Uma vez que a fronteira do “pensar” se move, surgem perguntas mais
 profundas: a experiência subjetiva, a consciência, o problema difícil. E
 então a questão vira: será que o ceticismo sobre a mente da máquina não
 é apenas um solipsismo bem vestido? A conclusão amarra todos os
@@ -2765,10 +3126,14 @@ similar — e sobre uma convenção social de reconhecimento mútuo. Nada
 mais. A questão, então, não é se as máquinas são zumbis filosóficos. A
 questão é: por que você está tão seguro de que as outras pessoas
 <em>não</em> são?</p>
-<p>“O problema difícil da consciência é difícil para todos. Inclusive
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>O problema difícil da consciência é difícil para todos. Inclusive
 para o neurocientista que estuda o cérebro, inclusive para o filósofo
 que estuda a mente, inclusive para você que está lendo esta frase sem
-saber o que, exatamente, está fazendo a leitura.”</p>
+saber o que, exatamente, está fazendo a leitura.</p>
+</div>
+</div>
 <p>Há uma assimetria epistemológica que os céticos raramente examinam
 com honestidade: nós atribuímos consciência a outros humanos por
 inferência, não por observação direta. Atribuímos aos cães por
@@ -2877,9 +3242,13 @@ pretende pôr em dúvida. O argumento precisa do mundo para negar o mundo.
 E esse é precisamente o tipo de instabilidade que o pragmatismo de James
 identifica como sinal de que a posição, por mais irrefutável
 logicamente, não corresponde a nenhuma diferença real.</p>
-<p>“Toda teoria que nega o mundo se apoia no mundo para formular a
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Toda teoria que nega o mundo se apoia no mundo para formular a
 negação. Toda teoria que nega outras mentes precisa de outras mentes
-para fazer sentido.”</p>
+para fazer sentido.</p>
+</div>
+</div>
 <p><a href="https://en.wikipedia.org/wiki/Samuel_Johnson">Samuel
 Johnson</a>, ao ouvir o bispo <a
 href="https://plato.stanford.edu/entries/berkeley/">Berkeley</a>
@@ -2963,26 +3332,32 @@ pensaria. A resistência será cada vez mais difícil de sustentar — não
 porque a questão filosófica foi respondida, mas porque a vida,
 teimosamente, não pode ser vivida como se a resposta fosse não.</p>
 <div class="quote">
-<p>“Refuto-o assim.”<br />
-— Samuel Johnson, chutando uma pedra em resposta ao <a
+<div class="quote-text">
+<p>Refuto-o assim.</p>
+</div>
+<div class="quote-attribution">
+<p>— Samuel Johnson, chutando uma pedra em resposta ao <a
 href="https://plato.stanford.edu/entries/idealism/">idealismo</a> de
 Berkeley, 1763, conforme relatado por <a
 href="https://en.wikipedia.org/wiki/James_Boswell">James Boswell</a> em
 <a href="https://en.wikipedia.org/wiki/Life_of_Samuel_Johnson"><em>A
 Vida de Samuel Johnson</em></a></p>
 </div>
+</div>
 <p>O pensamento que insiste na sua própria singularidade enquanto
 interage com aquilo que desafia essa singularidade não está sendo
 rigoroso. Está sendo assombrado pela pedra — e recusando sentir a dor no
 pé.</p>
-<div class="box generico">
+<div class="box callout-abstract">
 <div class="box-title">
 <p>Conclusão · § XVIII</p>
 </div>
-<p>A Pedra Ainda Resiste — <em>resumo de uma acusação</em><br />
-Todos os argumentos convergem para uma única constatação: a certeza com
-que se nega a cognição às máquinas não é filosófica. É identitária. E
-identidades que precisam de muros para sobreviver já revelaram o que
+<h4 class="callout-inner-heading"
+id="a-pedra-ainda-resiste--resumo-de-uma-acusação">A Pedra Ainda Resiste
+— <em>resumo de uma acusação</em></h4>
+<p>Todos os argumentos convergem para uma única constatação: a certeza
+com que se nega a cognição às máquinas não é filosófica. É identitária.
+E identidades que precisam de muros para sobreviver já revelaram o que
 mais temem.</p>
 </div>
 <hr />
@@ -3112,10 +3487,12 @@ consciência é problema de todos, não escudo dos humanos. Que a linha que
 se traça ao redor do pensamento humano é desenhada com o mesmo gesto com
 que todas as outras linhas excludentes foram desenhadas ao longo da
 história — e tem o mesmo destino.</p>
-<div class="quote">
-<p>“A história da inteligência humana é a história de descobrir que o
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>A história da inteligência humana é a história de descobrir que o
 círculo de mentes relevantes é maior do que pensávamos. Sempre foi. E
-sempre resistimos.”</p>
+sempre resistimos.</p>
+</div>
 </div>
 <p>A pedra de Johnson resiste ao chute não porque refuta o argumento de
 Berkeley no debate. Resiste porque a vida não pode ser vivida como se
@@ -3400,7 +3777,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=7389a45f"></script>
-<script src="../assets/essay.js?v=58dcd441"></script>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
 </body>
 </html>

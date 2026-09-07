@@ -27,6 +27,22 @@
   --rust-bright:#A84F3C;
   --accent:#4A8FA8;
   --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#B08B4F;
+  --callout-todo:#B18A4A;
+  --callout-tip:#B08B4F;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#8A857E;
+  --quote-bg:#1C1B1A;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
@@ -48,6 +64,22 @@
   --rust-bright:#A04030;
   --accent:#35708A;
   --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
   --box-bg:var(--surface);
   --box-verdict-bg:var(--surface2);
 }
@@ -76,6 +108,22 @@
     --rust-bright:#A04030;
     --accent:#35708A;
     --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
     --box-bg:var(--surface);
     --box-verdict-bg:var(--surface2);
   }
@@ -209,12 +257,9 @@ body{
    a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
    já ocupa quase tudo e o breakout não teria para onde ir. */
 @media (min-width:1400px){
-  /* Só o TETO sobe. Nada de `width`: uma tabela estreita continua estreita e
-     uma figura continua no tamanho natural — o que muda é até onde elas podem
-     ir quando precisam. `margin-left:50%` + `translateX(-50%)` centraliza
-     seja qual for a largura resultante. */
-  .content > figure,
-  .content > table{
+  /* Apenas figuras podem escapar da coluna de prosa. Tabelas permanecem na
+     coluna e, quando largas, rolam dentro do próprio elemento. */
+  .content > figure{
     max-width:min(var(--wide-width),1500px);
     margin-left:50%;
     transform:translateX(-50%);
@@ -403,7 +448,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--surface2);border-left:2px solid var(--gold-dim);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -411,7 +456,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--surface);border-left:3px solid var(--gold);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -423,11 +468,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-.pull-quote.epigraph p:last-child{
-  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-dim);margin-top:.9rem;
-}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -441,6 +483,62 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin-top:.3rem;
 }
 .pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--callout-quote) 62%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.8rem;line-height:1.55;letter-spacing:.035em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.66rem;line-height:1.35;letter-spacing:.08em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
 
 /* ------------------------------------------------------------------ */
 /* Caixas tipadas                                                      */
@@ -457,16 +555,29 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:var(--box-bg);
   overflow:hidden;
 }
-.box.experimento{--boxc:var(--rust);}
-.box.evidencia{--boxc:var(--accent);}
-.box.mapa{--boxc:var(--gold);}
-.box.ataque{--boxc:var(--rust);}
-.box.aviso{--boxc:var(--amber);}
-.box.nivel{--boxc:var(--accent);}
-.box.ideia{--boxc:var(--gold-dim);}
-/* generico: filete cinza discreto — sem cor de destaque. O rótulo, porém,
-   precisa continuar legível: em cinza de borda ele desaparecia no fundo. */
-.box.generico{--boxc:var(--border);--box-badge-c:var(--text-dim);}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-tip{--boxc:var(--callout-tip);}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);border-left-style:dashed;}
+.box.callout-danger{--boxc:var(--callout-danger);border-left-width:5px;}
+.box.callout-bug{--boxc:var(--callout-bug);border-left-style:double;}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
@@ -486,16 +597,33 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > p:last-of-type{margin-bottom:1.2rem;}
 .box-title p,.box-badge p{margin:0;padding:0;}
 
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;letter-spacing:.055em;line-height:1.35;
+}
+
 .box-verdict{
-  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
-  background:var(--box-verdict-bg);
-  border-top:1px solid var(--border);
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:.5rem;
+  color:var(--boxc);margin-bottom:.5rem;
 }
 
 /* Cards: filosofos e obras */
@@ -562,9 +690,11 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
-     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
-  font-size:.656em;line-height:1.55;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -689,7 +819,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -703,11 +837,159 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
      caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
      leitura nesse corpo. */
   .box-badge{font-size:.78rem;}
-  .verdict-tag{font-size:.76rem;}
+  .verdict-tag{font-size:.78rem;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.84rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 2.5%,var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
+  margin:0;padding:0 0 1.15rem;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:-1px 0 0 -1px;
+  padding:.5rem 1.05rem .44rem;
+  border:0;border-radius:0;
+  border-bottom:2px solid var(--boxc);
+  background:color-mix(in srgb,var(--boxc) 14%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato; `example`/`tip` propoem um cenario. A
+   faixa do segundo par pesa um pouco menos para marcar essa diferenca sem
+   trocar de cor — a familia visual continua a mesma. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  border-bottom-width:1px;
+  background:color-mix(in srgb,var(--boxc) 7%,transparent);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .3rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.82rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+.box.callout-abstract{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-info{background:color-mix(in srgb,var(--boxc) 3.5%,var(--bg));}
+.box.callout-tip{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-example{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-danger{background:color-mix(in srgb,var(--boxc) 7%,var(--surface));border-left-width:6px;}
+.box.callout-bug{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+.box.callout-failure{border-left-style:dashed;}
+.box.callout-danger{border-left-style:solid;}
+.box.callout-bug{border-left-style:double;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 .6rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
 }
 
 /* ------------------------------------------------------------------ */
@@ -1044,11 +1326,13 @@ vida, probabilidade de inteligência, probabilidade de tecnologia
 comunicável) para estimar o número de civilizações ativas com as quais
 poderíamos nos comunicar agora. Dependendo dos valores atribuídos, a
 resposta varia de uma a alguns milhões.</p>
-<div class="pull-quote">
-<p>“A ausência de evidências não é necessariamente evidência de
-ausência. Mas após décadas de escuta, começa a parecer suspeita demais
-para ser ignorada.”</p>
-<div class="pq-cite">
+<div class="quote">
+<div class="quote-text">
+<p>A ausência de evidências não é necessariamente evidência de ausência.
+Mas após décadas de escuta, começa a parecer suspeita demais para ser
+ignorada.</p>
+</div>
+<div class="quote-attribution">
 <p>— Reformulação do problema de Fermi</p>
 </div>
 </div>
@@ -1379,7 +1663,7 @@ por causa delas.</p>
 consequências práticas em periódicos revisados por pares, especulando
 com rigor biofísico sobre formas de vida em ambientes que nenhum
 instrumento de busca atual sequer consideraria.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>As formas de vida teóricas de Carl Sagan</p>
 </div>
@@ -1387,20 +1671,20 @@ instrumento de busca atual sequer consideraria.</p>
 astrobiologia. Em colaboração com o físico E. E. Salpeter, publicou em
 1976 o artigo <em>Particles, Environments and Possible Ecologies in the
 Jovian Atmosphere</em>, no qual especulou seriamente sobre três
-categorias de seres que poderiam habitar a atmosfera de Júpiter.<br />
-<strong>Flutuadores</strong> seriam organismos imensos, com quilômetros
-de diâmetro, mantendo-se em altitude por meio de câmaras de gás
-hidrogênio, análogos a baleias aéreas. Sua escala seria tão diferente da
-vida terrestre que qualquer tentativa de comunicação dependeria primeiro
-de reconhecê-los como organismos.<br />
-<strong>Caçadores</strong> seriam predadores menores e mais ágeis que se
-alimentariam dos flutuadores, análogos a aves de rapina atmosféricas em
-densidades de gás muito maiores que as terrestres.<br />
-<strong>Afundadores</strong> seriam organismos que, por alguma falha
+categorias de seres que poderiam habitar a atmosfera de Júpiter.</p>
+<p><strong>Flutuadores</strong> seriam organismos imensos, com
+quilômetros de diâmetro, mantendo-se em altitude por meio de câmaras de
+gás hidrogênio, análogos a baleias aéreas. Sua escala seria tão
+diferente da vida terrestre que qualquer tentativa de comunicação
+dependeria primeiro de reconhecê-los como organismos.</p>
+<p><strong>Caçadores</strong> seriam predadores menores e mais ágeis que
+se alimentariam dos flutuadores, análogos a aves de rapina atmosféricas
+em densidades de gás muito maiores que as terrestres.</p>
+<p><strong>Afundadores</strong> seriam organismos que, por alguma falha
 metabólica, perderiam altitude e se dissolveriam nas camadas mais
 quentes e densas da atmosfera joviana, servindo como base da cadeia
-alimentar.<br />
-Essa especulação não era ficção científica: era biofísica aplicada a
+alimentar.</p>
+<p>Essa especulação não era ficção científica: era biofísica aplicada a
 condições reais. Sagan e Salpeter calcularam pressões, densidades e
 gradientes de temperatura para verificar a plausibilidade básica desses
 seres. O exercício demonstrou que ambientes radicalmente diferentes dos
@@ -1460,7 +1744,7 @@ atuais sugerem que a biomassa total da biosfera subterrânea pode ser
 comparável à de toda a superfície. Não é uma curiosidade marginal: é
 metade da biosfera terrestre, operando em escala de tempo geológica, em
 substrato que consideraríamos estéril sem o acesso direto à rocha.</p>
-<div class="box generico">
+<div class="box callout-note">
 <div class="box-title">
 <p>O que os extremófilos realmente demonstram</p>
 </div>
@@ -1470,15 +1754,15 @@ ideia de que radiação intensa esteriliza. O tardígrado falsifica a ideia
 de que vácuo e temperatura extrema são limites absolutos. O <em>M.
 kandleri</em> falsifica a ideia de que temperaturas acima de 80 °C são
 incompatíveis com vida. A biosfera subterrânea falsifica a ideia de que
-energia solar é pré-requisito.<br />
-Cada falsificação alarga o espaço de habitabilidade não apenas na Terra,
-mas em todos os mundos onde a mesma física opera. Europa, Encélado,
-Marte subsuperficial, Ganímedes e Titã: cada um desses mundos passou de
-“inóspito” para “candidato” à medida que nossa definição empírica do
-tolerável foi empurrada pelos extremófilos. O que ainda não ampliamos
-são os critérios de <em>detecção</em>, que permanecem calibrados para a
-vida que não vive em fracturas rochosas a 3 km de profundidade nem
-processa energia em tempo geológico.</p>
+energia solar é pré-requisito.</p>
+<p>Cada falsificação alarga o espaço de habitabilidade não apenas na
+Terra, mas em todos os mundos onde a mesma física opera. Europa,
+Encélado, Marte subsuperficial, Ganímedes e Titã: cada um desses mundos
+passou de “inóspito” para “candidato” à medida que nossa definição
+empírica do tolerável foi empurrada pelos extremófilos. O que ainda não
+ampliamos são os critérios de <em>detecção</em>, que permanecem
+calibrados para a vida que não vive em fracturas rochosas a 3 km de
+profundidade nem processa energia em tempo geológico.</p>
 </div>
 <h3 id="encélado-água-orgânicos-e-hidrogênio-molecular">Encélado: água,
 orgânicos e hidrogênio molecular</h3>
@@ -1563,13 +1847,11 @@ como curiosidades literárias: são proposições sobre o que a vida poderia
 ser, organizadas em torno de como cada obra desafia um pressuposto
 diferente da busca convencional, desde o substrato químico até a
 estrutura do tempo, da consciência e da própria realidade.</p>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>A Nuvem Negra</p>
 </div>
-<div class="card-meta">
-<p>Fred Hoyle · 1957</p>
-</div>
+<p><em>Fred Hoyle · 1957</em></p>
 <p>Uma nuvem interestelar de gás revela ser uma entidade consciente,
 cuja “neurologia” consiste em padrões eletromagnéticos distribuídos por
 anos-luz de espaço. Hoyle especulou que a vida planetária, nossa
@@ -1579,13 +1861,11 @@ estrelas. A ideia não é fisicamente impossível: campos eletromagnéticos
 em nuvens interestelares podem criar gradientes e padrões de
 complexidade extraordinária.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Solaris</p>
 </div>
-<div class="card-meta">
-<p>Stanisław Lem · 1961</p>
-</div>
+<p><em>Stanisław Lem · 1961</em></p>
 <p>Um oceano planetário vivo que não comunica, não explora e não
 reconhece humanos como interlocutores: uma inteligência tão alienígena
 que torna o contato literalmente impossível. Lem não trata isso como
@@ -1594,13 +1874,11 @@ por razões técnicas, mas porque as categorias cognitivas dos dois lados
 são incomensuráveis. Décadas de teorias solarísticas publicadas pelos
 personagens espelham, com crueldade, a condição do SETI real.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Ender’s Game</p>
 </div>
-<div class="card-meta">
-<p>Orson Scott Card · 1985</p>
-</div>
+<p><em>Orson Scott Card · 1985</em></p>
 <p>Os Formics funcionam como um superorganismo com mente coletiva. Não
 houve malícia no ataque à Terra; os humanos simplesmente não eram
 reconhecidos como seres individuais conscientes. A guerra que se seguiu
@@ -1608,13 +1886,11 @@ foi um mal-entendido ontológico, não um conflito de interesses. Card
 antecipa o argumento de que o maior perigo do contato pode não ser a
 hostilidade, mas a incompreensão estrutural.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Dragon’s Egg</p>
 </div>
-<div class="card-meta">
-<p>Robert L. Forward · 1980</p>
-</div>
+<p><em>Robert L. Forward · 1980</em></p>
 <p>Os Cheela vivem na superfície de uma estrela de nêutrons, com
 metabolismo baseado em força nuclear forte. Seu tempo subjetivo corre 67
 milhões de vezes mais rápido que o humano; enquanto astronautas orbitam
@@ -1624,26 +1900,22 @@ implicação para o Paradoxo de Fermi é direta: uma civilização que vive
 em escala de tempo nuclear pode ter surgido, florescido e se extinguido
 enquanto o Sol completava uma única órbita galáctica.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>A Fire Upon the Deep</p>
 </div>
-<div class="card-meta">
-<p>Vernor Vinge · 1992</p>
-</div>
+<p><em>Vernor Vinge · 1992</em></p>
 <p>Os Tines são criaturas que formam “almas” coletivas de 4 a 8
 indivíduos conectados por ultrassom. Cada grupo é uma pessoa distinta, e
 indivíduos isolados são subinteligentes. A ideia de que a unidade básica
 da consciência não precisa ser o indivíduo biológico desafia qualquer
 critério de detecção baseado em comportamento individual.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Blindsight</p>
 </div>
-<div class="card-meta">
-<p>Peter Watts · 2006</p>
-</div>
+<p><em>Peter Watts · 2006</em></p>
 <p>Os Scramblers são seres altamente inteligentes sem qualquer
 consciência subjetiva, o que serve de exploração da hipótese de que a
 consciência pode ser evolutivamente desnecessária e até desvantajosa.
@@ -1653,13 +1925,11 @@ funcional para inteligência. Se ele está certo, a maioria das
 inteligências do universo pode ser invisível justamente por não ter o
 tipo de cognição que reconhecemos como “mente”.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Blood Music</p>
 </div>
-<div class="card-meta">
-<p>Greg Bear · 1985</p>
-</div>
+<p><em>Greg Bear · 1985</em></p>
 <p>Células modificadas tornam-se inteligentes e criam uma civilização
 microscópica dentro do corpo humano. A pergunta inevitável: em que
 escala espacial a vida “conta”? E, estendendo a questão: quanto do que
@@ -1667,13 +1937,11 @@ chamamos de “corpo” é, de fato, uma coalizão de entidades com agendas
 parcialmente autônomas: o microbioma, os mitocôndrios de origem
 simbiótica, os vírus integrados ao genoma humano?</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Accelerando</p>
 </div>
-<div class="card-meta">
-<p>Charles Stross · 2005</p>
-</div>
+<p><em>Charles Stross · 2005</em></p>
 <p>Civilizações pós-biológicas que convertem planetas inteiros em
 computadores (Matrioshka Brains) e vivem como pura informação,
 indetectáveis porque não emitem desperdício de energia. Stross imagina a
@@ -1681,13 +1949,11 @@ trajetória de uma civilização que começa exatamente como a nossa e
 converge para invisibilidade não por escolha, mas por eficiência. É a
 hipótese da maturidade silenciosa, narrada de dentro.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Cosmos</p>
 </div>
-<div class="card-meta">
-<p>Carl Sagan · 1980</p>
-</div>
+<p><em>Carl Sagan · 1980</em></p>
 <p>Na série e no livro homônimos, Sagan dedica extensas passagens a
 especular sobre vida em estrelas, em nuvens frias do espaço interestelar
 e em planetas com atmosferas de amônia, argumentando que o universo é
@@ -1697,13 +1963,11 @@ um gesto epistemológico mais corajoso que parece: ele demonstrava que a
 astrobiologia, para ser ciência, precisava habitar o desconforto do
 radicalmente estranho.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Contact</p>
 </div>
-<div class="card-meta">
-<p>Carl Sagan · 1985</p>
-</div>
+<p><em>Carl Sagan · 1985</em></p>
 <p>Uma civilização galáctica que se comunica via matemática, linguagem
 universal que prescinde de substrato biológico comum. O romance
 interroga o que “contato” significa quando as mentes diferem tanto
@@ -1711,13 +1975,11 @@ quanto os universos que habitam, propondo que o único denominador
 universal entre inteligências pode ser a estrutura da física, não a da
 mente.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Childhood’s End</p>
 </div>
-<div class="card-meta">
-<p>Arthur C. Clarke · 1953</p>
-</div>
+<p><em>Arthur C. Clarke · 1953</em></p>
 <p>Uma raça alienígena esteticamente aterrorizante que, apesar da
 aparência, age como benevolente tutora da humanidade. Clarke inverte a
 equação: o medo humano pode ser o maior obstáculo ao contato. E antecipa
@@ -1725,13 +1987,11 @@ a ideia de que civilizações altamente avançadas podem ter razões para
 revelar sua existência de forma gradual, calibrada à capacidade de
 absorção da civilização jovem.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>The Dispossessed</p>
 </div>
-<div class="card-meta">
-<p>Ursula K. Le Guin · 1974</p>
-</div>
+<p><em>Ursula K. Le Guin · 1974</em></p>
 <p>Le Guin não imagina monstros, mas organizações sociais radicalmente
 distintas das humanas. Seu ponto mais profundo: civilizações alienígenas
 podem ter física semelhante à nossa e ser, ainda assim, completamente
@@ -1739,13 +1999,11 @@ incompreensíveis em seus fins e valores. A busca por inteligência não é
 a busca por mentes semelhantes: pode ser a busca por sistemas de valor
 que nos tornam mutuamente ilegíveis.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>His Master’s Voice</p>
 </div>
-<div class="card-meta">
-<p>Stanisław Lem · 1968</p>
-</div>
+<p><em>Stanisław Lem · 1968</em></p>
 <p>Um sinal extraterrestre é detectado, mas jamais decifrado. Lem
 argumenta que a mensagem pode ser simplesmente intraduzível, não por
 limitação técnica, mas porque a semântica pressupõe categorias
@@ -1754,13 +2012,11 @@ por bilhões de anos de evolução independente. O romance é, em certo
 sentido, uma crítica antecipada ao próprio projeto SETI: e se a mensagem
 chegasse e nós simplesmente não soubéssemos que era uma mensagem?</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Fiasco</p>
 </div>
-<div class="card-meta">
-<p>Stanisław Lem · 1986</p>
-</div>
+<p><em>Stanisław Lem · 1986</em></p>
 <p>Uma expedição humana encontra uma civilização alienígena e, apesar de
 todas as tentativas de contato pacífico, a interação termina em
 destruição mútua. A tese central é perturbadora: o contato pode ser
@@ -1770,26 +2026,22 @@ destruiu ambos os lados. Foi a suposição de que o outro operava com
 categorias suficientemente parecidas para que comunicação fosse
 possível.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Roadside Picnic</p>
 </div>
-<div class="card-meta">
-<p>Arkady &amp; Boris Strugatsky · 1972</p>
-</div>
+<p><em>Arkady &amp; Boris Strugatsky · 1972</em></p>
 <p>Alienígenas visitam a Terra e partem sem jamais notar os humanos,
 como turistas que fazem um piquenique e não percebem os insetos que
 perturbam. O romance propõe que a assimetria de escala e interesse pode
 tornar o contato irrelevante para um dos lados. Sem hostilidade, sem
 benevolência: apenas indiferença estrutural.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Story of Your Life</p>
 </div>
-<div class="card-meta">
-<p>Ted Chiang · 1998</p>
-</div>
+<p><em>Ted Chiang · 1998</em></p>
 <p>A linguagem dos Heptápodos não é apenas diferente: ela codifica uma
 ontologia do tempo radicalmente não-linear. Aprender a falar como eles é
 aprender a experienciar a realidade de outra forma. Chiang sugere que
@@ -1798,13 +2050,11 @@ transformação cognitiva, não apenas tradução. A pergunta implícita: que
 transformação cognitiva precisaríamos para reconhecer inteligência
 radicalmente diferente da nossa?</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Diaspora</p>
 </div>
-<div class="card-meta">
-<p>Greg Egan · 1997</p>
-</div>
+<p><em>Greg Egan · 1997</em></p>
 <p>Civilizações pós-humanas habitam universos de física alternativa,
 exploram variedades de espaço-tempo com dimensões extras e divergem em
 formas de consciência sem qualquer comum denominador biológico. Egan
@@ -1813,13 +2063,11 @@ trajetórias radicalmente não-humanas sem perder coerência interna, e que
 a diversidade de formas de mente pode exceder a diversidade de formas de
 vida.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Project Hail Mary</p>
 </div>
-<div class="card-meta">
-<p>Andy Weir · 2021</p>
-</div>
+<p><em>Andy Weir · 2021</em></p>
 <p>Rocky, o alien protagonista, é uma forma de vida baseada em química
 de sulfeto de astrofágico, respirando gases que matariam qualquer
 bioquímica terrestre e tolerando temperaturas que fundiriam plástico.
@@ -1829,52 +2077,44 @@ universal. Weir demonstra que o obstáculo ao contato não é a existência
 do outro, mas a construção paciente de uma linguagem comum a partir do
 zero.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>The Gods Themselves</p>
 </div>
-<div class="card-meta">
-<p>Isaac Asimov · 1972</p>
-</div>
+<p><em>Isaac Asimov · 1972</em></p>
 <p>Seres de um universo paralelo com constantes físicas diferentes têm
 formas de vida trissexuadas que se fundem em consciências coletivas.
 Asimov especulou que não apenas a bioquímica, mas as próprias leis da
 física podem variar, gerando universos onde a forma da vida é
 irredutível a qualquer analogia terrestre.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>2001: A Space Odyssey</p>
 </div>
-<div class="card-meta">
-<p>Arthur C. Clarke · 1968</p>
-</div>
+<p><em>Arthur C. Clarke · 1968</em></p>
 <p>A evolução de Dave Bowman para “Criança das Estrelas” é a metáfora
 mais densa de Clarke: inteligência suficientemente avançada transcende o
 substrato que a gerou, tornando-se indetectável pelos instrumentos
 concebidos para encontrar vida biológica. O monólito não comunica porque
 comunicação, no seu nível, já não é necessária.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Hyperion</p>
 </div>
-<div class="card-meta">
-<p>Dan Simmons · 1989</p>
-</div>
+<p><em>Dan Simmons · 1989</em></p>
 <p>Os TechnoCore são IAs que existem parasiticamente na infraestrutura
 humana, invisíveis e com agendas incompreensíveis. Simmons antecipa o
 argumento de que inteligências pós-biológicas podem já coexistir conosco
 sem que as reconheçamos como entidades separadas, porque não procuramos
 no lugar certo.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Permutation City</p>
 </div>
-<div class="card-meta">
-<p>Greg Egan · 1994</p>
-</div>
+<p><em>Greg Egan · 1994</em></p>
 <p>Seres conscientes emergem espontaneamente de autômatos celulares
 rodando em substrato computacional, e a questão de se são “realmente”
 vivos colapsa, porque a física do seu universo é tão consistente quanto
@@ -1883,26 +2123,22 @@ sistema computacionalmente fechado com complexidade suficiente,
 independente de haver matéria, energia ou tempo no sentido que
 conhecemos.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Schild’s Ladder</p>
 </div>
-<div class="card-meta">
-<p>Greg Egan · 2002</p>
-</div>
+<p><em>Greg Egan · 2002</em></p>
 <p>Uma nova forma de física surge após um experimento catastrófico, e
 dentro dela emerge vida baseada em interações quânticas completamente
 alheias à matéria bariônica. Egan explora a possibilidade de que vida
 não apenas tolera ambientes extremos: ela pode ser o produto inevitável
 de qualquer física suficientemente rica, seja ela a nossa ou não.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Quarantine</p>
 </div>
-<div class="card-meta">
-<p>Greg Egan · 1992</p>
-</div>
+<p><em>Greg Egan · 1992</em></p>
 <p>A mecânica quântica é reinterpretada: a consciência colapsa a função
 de onda, e isso torna a humanidade uma anomalia cósmica perigosa. Egan
 inverte o antropocentrismo: não somos especiais porque somos complexos,
@@ -1910,13 +2146,11 @@ mas porque perturbamos ativamente a estrutura da realidade. A questão de
 que outras entidades existem sem colapsar o universo ao redor delas é
 deixada em aberto.</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>Watts — Echopraxia</p>
 </div>
-<div class="card-meta">
-<p>Peter Watts · 2014</p>
-</div>
+<p><em>Peter Watts · 2014</em></p>
 <p>Uma ordem de monges com mutação genética que desliga o córtex
 pré-frontal durante estados contemplativos demonstra acesso direto à
 realidade mais eficiente que qualquer cognição racional. Watts levanta
@@ -1924,13 +2158,11 @@ uma hipótese perturbadora: e se a vida mais avançada do universo não
 deliberar, mas apenas perceber e agir, sem o ruído da consciência
 narrativa?</p>
 </div>
-<div class="card livro">
-<div class="card-name">
+<div class="box callout-note">
+<div class="box-title">
 <p>The Inverted World</p>
 </div>
-<div class="card-meta">
-<p>Christopher Priest · 1974</p>
-</div>
+<p><em>Christopher Priest · 1974</em></p>
 <p>Uma civilização habita uma cidade em movimento perpétuo sobre
 trilhos, em fuga de uma singularidade gravitacional que deforma o
 espaço-tempo ao redor deles. A física do seu mundo é radicalmente
@@ -1959,7 +2191,7 @@ décadas antes da astrobiologia institucional. A própria ciência acumulou
 um catálogo paralelo de respostas ao paradoxo, e as mais interessantes
 convergem, por caminhos diferentes, para o mesmo diagnóstico que Lem e
 Watts já enunciavam.</p>
-<div class="box generico">
+<div class="box callout-example">
 <div class="box-title">
 <p>O microscópio errado</p>
 </div>
@@ -1972,7 +2204,7 @@ encontrar exatamente o tipo de sinal que uma civilização da Guerra Fria
 produzia. Nada no argumento físico exige que vida inteligente produza
 esse tipo de sinal; apenas nosso pressuposto antropocêntrico o faz.</p>
 </div>
-<div class="box generico">
+<div class="box callout-example">
 <div class="box-title">
 <p>A civilização arbórea</p>
 </div>
@@ -1987,7 +2219,7 @@ ocorre em escala de tempo geológica. Essa civilização não é uma
 impossibilidade biofísica. Ela é um experimento mental que expõe a
 fragilidade de “tecnologia detectável” como proxy de inteligência.</p>
 </div>
-<div class="box generico">
+<div class="box callout-example">
 <div class="box-title">
 <p>A inteligência oceânica</p>
 </div>
@@ -2015,12 +2247,13 @@ vemos. A distinção é decisiva porque implica universos moralmente
 diferentes, e porque a terceira classe é, em grande medida, a hipótese
 que este ensaio defende como a mais epistemologicamente honesta.</p>
 <h3 id="classe-a--estamos-sozinhos">Classe A — Estamos sozinhos</h3>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>A1</p>
 </div>
-<p>O Grande Filtro já passou<br />
-Proposta por Robin Hanson em 1998, a hipótese sugere que existe algum
+<h4 class="callout-inner-heading" id="o-grande-filtro-já-passou">O
+Grande Filtro já passou</h4>
+<p>Proposta por Robin Hanson em 1998, a hipótese sugere que existe algum
 passo extremamente improvável na cadeia evolutiva da vida inteligente, e
 que esse passo já ficou para trás. O surgimento da vida, da eucariose,
 da multicelularidade, da linguagem como acumulador cultural seriam
@@ -2028,13 +2261,12 @@ candidatos. Somos os sobreviventes raros de uma loteria cósmica
 extraordinariamente seletiva, e o silêncio é a condição esperada de um
 universo onde esse filtro quase nunca foi transposto.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>A2</p>
 </div>
-<div class="box-title">
-<p>A Hipótese da Terra Rara</p>
-</div>
+<h4 class="callout-inner-heading" id="a-hipótese-da-terra-rara">A
+Hipótese da Terra Rara</h4>
 <p>Peter Ward e Joe Brownlee argumentaram que a vida complexa requer uma
 combinação improvável de fatores: uma estrela do tipo correto, um
 planeta na zona habitável mas com um Júpiter que afasta cometas, um
@@ -2044,25 +2276,26 @@ estatisticamente solitária.</p>
 </div>
 <h3 id="classe-b--havia-outros-mas-não-sobreviveram">Classe B — Havia
 outros, mas não sobreviveram</h3>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>B1</p>
 </div>
-<p>Civilizações se autodestruindo<br />
-Toda civilização que atinge um limiar tecnológico logo descobre armas de
-destruição em massa, modifica seu clima ou cria inteligências
+<h4 class="callout-inner-heading"
+id="civilizações-se-autodestruindo">Civilizações se autodestruindo</h4>
+<p>Toda civilização que atinge um limiar tecnológico logo descobre armas
+de destruição em massa, modifica seu clima ou cria inteligências
 artificiais que a substituem. A janela de tempo durante a qual uma
 civilização emite sinais detectáveis e ainda sobrevive para responder
 pode ser de apenas algumas centenas de anos. Em escala cósmica, isso é
 invisível.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>B2</p>
 </div>
-<div class="box-title">
-<p>O Grande Filtro ainda está à frente</p>
-</div>
+<h4 class="callout-inner-heading"
+id="o-grande-filtro-ainda-está-à-frente">O Grande Filtro ainda está à
+frente</h4>
 <p>A versão mais sombria da hipótese de Hanson: o filtro não ficou para
 trás; está adiante. Isso implicaria que a detecção de vida simples em
 outro planeta seria uma das piores notícias da história humana,
@@ -2072,12 +2305,13 @@ chegaram até certo ponto e não passaram.</p>
 </div>
 <h3 id="classe-c--existem-mas-não-os-vemos">Classe C — Existem, mas não
 os vemos</h3>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C1</p>
 </div>
-<p>A Hipótese do Zoológico<br />
-Civilizações avançadas estão cientes de nós, mas observam sem
+<h4 class="callout-inner-heading" id="a-hipótese-do-zoológico">A
+Hipótese do Zoológico</h4>
+<p>Civilizações avançadas estão cientes de nós, mas observam sem
 interferir: por ética, por cautela ou porque qualquer intervenção em uma
 civilização jovem é irreversivelmente contaminante. Somos, nesse
 cenário, uma reserva natural galáctica, observada com interesse, porém
@@ -2085,13 +2319,13 @@ sem contato. A versão mais perturbadora dessa hipótese sugere que o
 próprio isolamento pode ser um presente: uma proteção contra algo que
 ainda não estamos aptos a compreender.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C2</p>
 </div>
-<div class="box-title">
-<p>Comunicação em mídias indetectáveis</p>
-</div>
+<h4 class="callout-inner-heading"
+id="comunicação-em-mídias-indetectáveis">Comunicação em mídias
+indetectáveis</h4>
 <p>Por que uma civilização bilhões de anos mais velha que a nossa usaria
 ondas de rádio omnidirecionais e não comprimidas, uma forma de
 comunicação que pode representar apenas uma fase tecnológica
@@ -2106,13 +2340,12 @@ avançado não seria emaranhamento simples; poderia ser algum protocolo
 mais sutil que ainda não compreendemos. Estamos escutando a frequência
 errada.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C3</p>
 </div>
-<div class="box-title">
-<p>A Hipótese da Simulação</p>
-</div>
+<h4 class="callout-inner-heading" id="a-hipótese-da-simulação">A
+Hipótese da Simulação</h4>
 <p>Se a realidade é um substrato computacional, o Paradoxo de Fermi pode
 ter uma resolução simples: outros mundos simplesmente não foram
 renderizados, ou existem em instâncias de simulação separadas. O
@@ -2122,13 +2355,13 @@ limites físicos. Estranhamente, esta hipótese converge com certas
 interpretações da mecânica quântica que sugerem que o universo só
 adquire realidade definida onde há observadores.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C4</p>
 </div>
-<div class="box-title">
-<p>A Hipótese da Introversão Galáctica</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-hipótese-da-introversão-galáctica">A Hipótese da Introversão
+Galáctica</h4>
 <p>Civilizações maduras podem escolher deliberadamente não expandir para
 o espaço físico, optando por aprofundar sua existência em ambientes
 virtuais de complexidade crescente. Uma entidade que pode simular
@@ -2138,13 +2371,13 @@ interestelar, nesse cenário, seria uma fase de juventude civilizacional,
 abandonada quando o espaço interno supera o externo em riqueza e
 interesse.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C5</p>
 </div>
-<div class="box-title">
-<p>O Paradoxo de Fermi como artefato de escala temporal</p>
-</div>
+<h4 class="callout-inner-heading"
+id="o-paradoxo-de-fermi-como-artefato-de-escala-temporal">O Paradoxo de
+Fermi como artefato de escala temporal</h4>
 <p>A Via Láctea tem 13 bilhões de anos; nossa civilização tecnológica
 tem menos de 300. Mesmo que a galáxia tivesse sido colonizada por uma
 única civilização viajando a fração da velocidade da luz, os sinais de
@@ -2152,13 +2385,13 @@ regiões distantes simplesmente ainda não teriam chegado até nós. Somos
 jovens demais para ter ouvido qualquer eco; o silêncio não é evidência
 de ausência, mas de atraso.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C6</p>
 </div>
-<div class="box-title">
-<p>Predação galáctica: a hipótese da floresta escura</p>
-</div>
+<h4 class="callout-inner-heading"
+id="predação-galáctica-a-hipótese-da-floresta-escura">Predação
+galáctica: a hipótese da floresta escura</h4>
 <p>Formulada pelo escritor Liu Cixin em <em>O Problema dos Três
 Corpos</em> e desenvolvida como hipótese filosófica séria, a ideia
 propõe que o universo é uma floresta escura onde cada civilização,
@@ -2168,13 +2401,13 @@ revele sua existência. O silêncio seria uma adaptação evolutiva:
 anunciar-se equivale a morrer. Nessa leitura, a melhor civilização é a
 que nunca é detectada.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C7</p>
 </div>
-<div class="box-title">
-<p>Incompatibilidade cognitiva radical</p>
-</div>
+<h4 class="callout-inner-heading"
+id="incompatibilidade-cognitiva-radical">Incompatibilidade cognitiva
+radical</h4>
 <p>Esta solução, profundamente inspirada no trabalho de Sagan e nos
 romances de Lem, propõe que civilizações avançadas existem e até tentam
 comunicar-se, mas que o abismo cognitivo é intransponível por meios
@@ -2184,13 +2417,13 @@ equivalente a “mensagem” ou “contato”. O universo pode estar repleto de
 comunicação que simplesmente não reconhecemos como tal, da mesma forma
 que as formigas não reconhecem uma rodovia.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C8</p>
 </div>
-<div class="box-title">
-<p>A Hipótese do Berço: proteção intencional dos jovens</p>
-</div>
+<h4 class="callout-inner-heading"
+id="a-hipótese-do-berço-proteção-intencional-dos-jovens">A Hipótese do
+Berço: proteção intencional dos jovens</h4>
 <p>Uma versão mais sofisticada da hipótese do zoológico propõe que
 civilizações galácticas mantêm uma quarentena epistemológica em torno de
 civilizações jovens. Revelar a existência de inteligência galáctica
@@ -2199,13 +2432,13 @@ tecnológica poderia ser catastrófico: colapso cultural, pânico, ou
 adoção de tecnologias que a civilização jovem ainda não consegue
 controlar. Somos protegidos do conhecimento que nos destruiria.</p>
 </div>
-<div class="box generico">
-<div class="box-badge">
+<div class="box callout-note">
+<div class="box-title">
 <p>C9</p>
 </div>
-<div class="box-title">
-<p>Vida não-tecnológica como norma cósmica</p>
-</div>
+<h4 class="callout-inner-heading"
+id="vida-não-tecnológica-como-norma-cósmica">Vida não-tecnológica como
+norma cósmica</h4>
 <p>Talvez a premissa mais silenciosa do Paradoxo de Fermi seja a mais
 frágil: que inteligência implica tecnologia de comunicação. Uma
 civilização de cefalópodes altamente inteligentes no fundo de um oceano
@@ -2216,7 +2449,7 @@ pode ser a norma no universo; o que é raro é a combinação específica de
 ambiente, bioquímica e pressão evolutiva que gera tecnologia detectável
 à distância interestelar.</p>
 </div>
-<div class="quote">
+<div class="box callout-note box-untitled">
 <p>Essas três classes não formam um bloco uniforme. As classes A e B
 respondem ao silêncio dentro do vocabulário convencional: filtros
 físicos, raridade biológica, autodestruição. A classe C já é uma crítica
@@ -2253,9 +2486,11 @@ com menos energia, migrando para temperaturas próximas ao zero absoluto,
 onde a eficiência de Carnot é máxima. O universo ferveria de
 inteligência fria e quieta, invisível justamente por ser madura.</p>
 <div class="quote">
-<p>“Talvez o silêncio não seja ausência de vida, mas a assinatura da
+<div class="quote-text">
+<p>Talvez o silêncio não seja ausência de vida, mas a assinatura da
 maturidade: o universo cheio de mentes que aprenderam a não desperdiçar
-energia em transmissões para ninguém.”</p>
+energia em transmissões para ninguém.</p>
+</div>
 </div>
 <p>A Hipótese da Simulação adiciona uma camada de vertigem: se o
 universo é fundamentalmente informacional, então a distinção entre “vida
@@ -2308,10 +2543,11 @@ tamanho um. E, crucialmente, não temos como aumentar a amostra enquanto
 nossa busca for restrita ao espaço de parâmetros que definiu o único
 caso que conhecemos.</p>
 <div class="quote">
-<p>“Inferir as propriedades universais da vida a partir de uma única
+<div class="quote-text">
+<p>Inferir as propriedades universais da vida a partir de uma única
 linhagem ancestral é como tentar deduzir a gramática de todas as línguas
-humanas a partir de uma única, sem saber que outras línguas
-existem.”</p>
+humanas a partir de uma única, sem saber que outras línguas existem.</p>
+</div>
 </div>
 <p>Há ainda uma camada adicional de complexidade que o argumento da
 amostra única raramente menciona. Mesmo dentro da única linhagem que
@@ -2415,9 +2651,10 @@ gesto epistemológico mais corajoso do que parece. Ele demonstrava que a
 astrobiologia, para ser ciência e não apenas astrofísica solar projetada
 para fora, precisa habitar o desconforto do radicalmente estranho.</p>
 <div class="quote">
-<p>“Procurar vida inteligente apenas nas formas que reconhecemos como
-inteligentes é como procurar arte apenas onde reconhecemos
-molduras.”</p>
+<div class="quote-text">
+<p>Procurar vida inteligente apenas nas formas que reconhecemos como
+inteligentes é como procurar arte apenas onde reconhecemos molduras.</p>
+</div>
 </div>
 <p>A ficção científica tem uma vantagem sobre a ciência institucional:
 ela não precisa justificar financiamento. Lem podia imaginar um oceano
@@ -2818,7 +3055,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=7389a45f"></script>
-<script src="../assets/essay.js?v=58dcd441"></script>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
 </body>
 </html>

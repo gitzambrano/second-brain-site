@@ -27,6 +27,22 @@
   --rust-bright:#A84F3C;
   --accent:#4A8FA8;
   --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#B08B4F;
+  --callout-todo:#B18A4A;
+  --callout-tip:#B08B4F;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#8A857E;
+  --quote-bg:#1C1B1A;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
@@ -48,6 +64,22 @@
   --rust-bright:#A04030;
   --accent:#35708A;
   --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
   --box-bg:var(--surface);
   --box-verdict-bg:var(--surface2);
 }
@@ -76,6 +108,22 @@
     --rust-bright:#A04030;
     --accent:#35708A;
     --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#2F5FB0;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#7A7A76;
+  --quote-bg:#F3F2F0;
     --box-bg:var(--surface);
     --box-verdict-bg:var(--surface2);
   }
@@ -209,12 +257,9 @@ body{
    a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
    já ocupa quase tudo e o breakout não teria para onde ir. */
 @media (min-width:1400px){
-  /* Só o TETO sobe. Nada de `width`: uma tabela estreita continua estreita e
-     uma figura continua no tamanho natural — o que muda é até onde elas podem
-     ir quando precisam. `margin-left:50%` + `translateX(-50%)` centraliza
-     seja qual for a largura resultante. */
-  .content > figure,
-  .content > table{
+  /* Apenas figuras podem escapar da coluna de prosa. Tabelas permanecem na
+     coluna e, quando largas, rolam dentro do próprio elemento. */
+  .content > figure{
     max-width:min(var(--wide-width),1500px);
     margin-left:50%;
     transform:translateX(-50%);
@@ -403,7 +448,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--surface2);border-left:2px solid var(--gold-dim);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -411,7 +456,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--surface);border-left:3px solid var(--gold);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -423,11 +468,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-.pull-quote.epigraph p:last-child{
-  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-dim);margin-top:.9rem;
-}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -441,6 +483,62 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin-top:.3rem;
 }
 .pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--callout-quote) 62%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.8rem;line-height:1.55;letter-spacing:.035em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.66rem;line-height:1.35;letter-spacing:.08em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
 
 /* ------------------------------------------------------------------ */
 /* Caixas tipadas                                                      */
@@ -457,16 +555,29 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:var(--box-bg);
   overflow:hidden;
 }
-.box.experimento{--boxc:var(--rust);}
-.box.evidencia{--boxc:var(--accent);}
-.box.mapa{--boxc:var(--gold);}
-.box.ataque{--boxc:var(--rust);}
-.box.aviso{--boxc:var(--amber);}
-.box.nivel{--boxc:var(--accent);}
-.box.ideia{--boxc:var(--gold-dim);}
-/* generico: filete cinza discreto — sem cor de destaque. O rótulo, porém,
-   precisa continuar legível: em cinza de borda ele desaparecia no fundo. */
-.box.generico{--boxc:var(--border);--box-badge-c:var(--text-dim);}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-tip{--boxc:var(--callout-tip);}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);border-left-style:dashed;}
+.box.callout-danger{--boxc:var(--callout-danger);border-left-width:5px;}
+.box.callout-bug{--boxc:var(--callout-bug);border-left-style:double;}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
@@ -486,16 +597,33 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > p:last-of-type{margin-bottom:1.2rem;}
 .box-title p,.box-badge p{margin:0;padding:0;}
 
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;letter-spacing:.055em;line-height:1.35;
+}
+
 .box-verdict{
-  margin-top:1.3rem;padding:1rem 1.3rem 1.05rem;
-  background:var(--box-verdict-bg);
-  border-top:1px solid var(--border);
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:.5rem;
+  color:var(--boxc);margin-bottom:.5rem;
 }
 
 /* Cards: filosofos e obras */
@@ -562,9 +690,11 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
-     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
-  font-size:.656em;line-height:1.55;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -689,7 +819,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -703,11 +837,159 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
      caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
      leitura nesse corpo. */
   .box-badge{font-size:.78rem;}
-  .verdict-tag{font-size:.76rem;}
+  .verdict-tag{font-size:.78rem;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.84rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 2.5%,var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
+  margin:0;padding:0 0 1.15rem;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:-1px 0 0 -1px;
+  padding:.5rem 1.05rem .44rem;
+  border:0;border-radius:0;
+  border-bottom:2px solid var(--boxc);
+  background:color-mix(in srgb,var(--boxc) 14%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato; `example`/`tip` propoem um cenario. A
+   faixa do segundo par pesa um pouco menos para marcar essa diferenca sem
+   trocar de cor — a familia visual continua a mesma. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  border-bottom-width:1px;
+  background:color-mix(in srgb,var(--boxc) 7%,transparent);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .3rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.82rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+.box.callout-abstract{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-info{background:color-mix(in srgb,var(--boxc) 3.5%,var(--bg));}
+.box.callout-tip{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-example{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-danger{background:color-mix(in srgb,var(--boxc) 7%,var(--surface));border-left-width:6px;}
+.box.callout-bug{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+.box.callout-failure{border-left-style:dashed;}
+.box.callout-danger{border-left-style:solid;}
+.box.callout-bug{border-left-style:double;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 .6rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
 }
 
 /* ------------------------------------------------------------------ */
@@ -1126,11 +1408,13 @@ relatórios e comentários do JIRA, sem precisar ter sido treinado
 especificamente com esses dados. A base de dados pode ser atualizada
 constantemente (novos projetos concluídos, novas atas, novos dados de
 execução) e o LLM imediatamente se beneficia dessas atualizações.</p>
-<div class="quote">
-<p><strong>Vantagem central do RAG:</strong> não exige retreinamento do
-modelo. A base de conhecimento cresce e melhora independentemente do LLM
-subjacente. Isso o torna ideal para ambientes corporativos onde os dados
-mudam continuamente.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Vantagem central do RAG</p>
+</div>
+<p>não exige retreinamento do modelo. A base de conhecimento cresce e
+melhora independentemente do LLM subjacente. Isso o torna ideal para
+ambientes corporativos onde os dados mudam continuamente.</p>
 </div>
 <h3 id="o-que-é-uma-knowledge-base">O que é uma Knowledge Base</h3>
 <p>Uma <strong>knowledge base</strong> (base de conhecimento) é um
@@ -1162,11 +1446,13 @@ organizar, indexar e manter os dados. No entanto, é um investimento com
 retorno composto: cada novo projeto concluído enriquece a base, tornando
 as sugestões cada vez mais calibradas para a realidade
 organizacional.</p>
-<div class="quote">
-<p><strong>Nota:</strong> Os agentes modernos são capazes de eles
-próprios “gerenciarem” uma knowledge base na forma de wiki, criando
-novas páginas, atualizando referências cruzadas e organizando glossários
-automaticamente.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Nota</p>
+</div>
+<p>Os agentes modernos são capazes de eles próprios “gerenciarem” uma
+knowledge base na forma de wiki, criando novas páginas, atualizando
+referências cruzadas e organizando glossários automaticamente.</p>
 </div>
 <h3 id="o-que-é-um-llm-wiki">O que é um LLM Wiki</h3>
 <p>Um <strong>LLM Wiki</strong> é uma forma específica de knowledge base
@@ -1420,10 +1706,6 @@ para o humano que toma a decisão.</p>
 <hr />
 <h2 id="ideia-1--ia-como-guardião-do-buffer">Ideia 1 — IA como Guardião
 do Buffer</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 01</p>
-</div>
 <h3 id="o-problema">O Problema</h3>
 <p>O buffer de projeto é o ativo central da CCPM — é ele que absorve as
 variações inevitáveis de execução e protege a data de entrega. Monitorar
@@ -1446,19 +1728,21 @@ tempo.</p>
 pode <em>interpretar</em> o sinal: a diferença entre o número e a
 tendência, e, crucialmente, fornecer o <strong>contexto</strong> que o
 número sozinho não oferece.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Exemplo</p>
 </div>
-<div class="quote">
-<p><strong>Exemplo:</strong> O buffer de projeto está a 38% consumido,
-com a cadeia crítica a 41% completa: situação tecnicamente verde. Mas o
-agente detecta que as últimas três tarefas da cadeia sofreram
-deslizamentos consecutivos de um dia cada, e que o remaining duration da
-tarefa X foi atualizado de 2 dias para 25 dias em um único evento.
-Alerta gerado: <em>“Tendência de deslizamento sistemático nas tarefas de
-integração de software. Buffer verde, mas deterioração acelerada nos
-últimos 6 dias úteis. A Tarefa X teve remaining duration aumentado em 23
-dias ontem — possível redescoberta de escopo ou impedimento não
-declarado. Recurso afetado: Aviônica — mesmo recurso identificado como
-PACER em outros dois cronogramas ativos.”</em></p>
+<p>O buffer de projeto está a 38% consumido, com a cadeia crítica a 41%
+completa: situação tecnicamente verde. Mas o agente detecta que as
+últimas três tarefas da cadeia sofreram deslizamentos consecutivos de um
+dia cada, e que o remaining duration da tarefa X foi atualizado de 2
+dias para 25 dias em um único evento. Alerta gerado: <em>“Tendência de
+deslizamento sistemático nas tarefas de integração de software. Buffer
+verde, mas deterioração acelerada nos últimos 6 dias úteis. A Tarefa X
+teve remaining duration aumentado em 23 dias ontem — possível
+redescoberta de escopo ou impedimento não declarado. Recurso afetado:
+Aviônica — mesmo recurso identificado como PACER em outros dois
+cronogramas ativos.”</em></p>
 </div>
 <p>A implementação técnica desse agente usa uma combinação de: (1)
 <strong><a href="https://en.wikipedia.org/wiki/Webhook">webhook</a> do
@@ -1485,10 +1769,6 @@ de tarefa, se o recurso é gargalo em outros programas</li>
 id="ideia-2--monitoramento-da-execução-em-tempo-real-e-antecipação-de-gargalos">Ideia
 2 — Monitoramento da Execução em Tempo Real e Antecipação de
 Gargalos</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 02</p>
-</div>
 <h3 id="o-problema-1">O Problema</h3>
 <p>A CCPM já resolve bem o problema de priorização: a lógica de cálculo
 de quem é mais importante na fila, baseada na posição na cadeia crítica
@@ -1521,15 +1801,16 @@ no momento certo.</p>
 área que impacta programas de alta prioridade, o alerta pode perpassar
 diretamente para o executante e seu supervisor, com contexto
 acionável:</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Alerta ao gerente de projetos, ao supervisor e/ou ao executante</p>
 </div>
-<div class="quote">
-<p><strong>Alerta ao gerente de projetos, ao supervisor e/ou ao
-executante:</strong> <em>“Atenção: a área de Aviônica apresenta
-tendência de atraso em 3 tarefas ativas da cadeia crítica do programa X
-nas últimas 72 horas. Esse padrão é consistente com sobrecarga pontual.
-O programa X é o de maior prioridade no portfólio. Recomendo revisar as
-atividades com o supervisor para identificar o gargalo e avaliar
-remanejamento de recursos.”</em></p>
+<p><em>“Atenção: a área de Aviônica apresenta tendência de atraso em 3
+tarefas ativas da cadeia crítica do programa X nas últimas 72 horas.
+Esse padrão é consistente com sobrecarga pontual. O programa X é o de
+maior prioridade no portfólio. Recomendo revisar as atividades com o
+supervisor para identificar o gargalo e avaliar remanejamento de
+recursos.”</em></p>
 </div>
 <p>Quanto à questão das sub-atividades: um agente pode sugerir
 automaticamente o desmembramento da tarefa macro em sub-tarefas com base
@@ -1551,10 +1832,6 @@ calibrado ao longo do tempo.</p>
 <hr />
 <h2 id="ideia-3--detecção-de-dependências-implícitas">Ideia 3 — Detecção
 de Dependências Implícitas</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 03</p>
-</div>
 <h3 id="o-problema-2">O Problema</h3>
 <p>O mapa de dependências de um projeto aeronáutico nunca está completo.
 Dependências explícitas são aquelas que o planejador inseriu no sistema:
@@ -1580,13 +1857,14 @@ ferramenta de agendamento convencional detectaria. Isso é
 qualitativamente diferente de qualquer abordagem tradicional — exige
 simultaneamente conhecimento de norma, compreensão do que cada tarefa
 faz e raciocínio sobre implicações.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Dependência identificada pela IA</p>
 </div>
-<div class="quote">
-<p><strong>Dependência identificada pela IA:</strong> “A tarefa
-<em>Validação de Software de Controle de Voo — Atividade X</em> está
-marcada como independente de <em>Definição Final de Envelope de Voo —
-Atividade Y</em>. Sob ARP4754A §5.3, validação de software de nível
-crítico requer que os requisitos de segurança do sistema sejam
+<p>“A tarefa <em>Validação de Software de Controle de Voo — Atividade
+X</em> está marcada como independente de <em>Definição Final de Envelope
+de Voo — Atividade Y</em>. Sob ARP4754A §5.3, validação de software de
+nível crítico requer que os requisitos de segurança do sistema sejam
 definitivos antes do início. Recomendo criar link de dependência formal
 entre essas tarefas.”</p>
 </div>
@@ -1622,10 +1900,6 @@ criação automática sem revisão.</li>
 id="ideia-4--previsão-de-conclusão-com-modelos-probabilísticos-e-análise-de-dados">Ideia
 4 — Previsão de Conclusão com Modelos Probabilísticos e Análise de
 Dados</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 04</p>
-</div>
 <h3 id="o-problema-3">O Problema</h3>
 <p>A data de entrega de um projeto aeronáutico é tratada como um número,
 um compromisso pontual assumido com o cliente ou com o mercado. Mas na
@@ -1662,14 +1936,15 @@ distribuições de duração específicas para cada categoria de tarefa, não
 distribuições genéricas, mas calibradas com os dados reais da
 organização. Ela torna a análise de dados e de complexidade muito mais
 rápida para o planejador, acelerando imensamente o processo.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Saída para o planejador</p>
 </div>
-<div class="quote">
-<p><strong>Saída para o planejador:</strong> “Com base em 12 tarefas de
-‘Ensaio Vibratório em Câmara Anecóica’ dos últimos 5 anos: mediana 14
-dias, P25 = 10d, P75 = 22d. Principal fator de variância: é o primeiro
-ensaio do programa (variância 2,3× maior). Se for o primeiro ensaio do
-programa X, recomendo calibrar o buffer desta fase com distribuição mais
-conservadora.”</p>
+<p>“Com base em 12 tarefas de ‘Ensaio Vibratório em Câmara Anecóica’ dos
+últimos 5 anos: mediana 14 dias, P25 = 10d, P75 = 22d. Principal fator
+de variância: é o primeiro ensaio do programa (variância 2,3× maior). Se
+for o primeiro ensaio do programa X, recomendo calibrar o buffer desta
+fase com distribuição mais conservadora.”</p>
 </div>
 <p>Além das estimativas individuais, a IA identifica correlações que um
 planejador dificilmente veria manualmente: “projetos que tiveram mudança
@@ -1699,10 +1974,6 @@ para consultas futuras.</p>
 <h2
 id="ideia-5--antecipação-e-gestão-de-recursos-críticos-e-gargalos">Ideia
 5 — Antecipação e Gestão de Recursos Críticos e Gargalos</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 05</p>
-</div>
 <h3 id="o-problema-4">O Problema</h3>
 <p>Conflitos de recursos são um dos maiores destruidores silenciosos de
 buffer em projetos da CCPM. Em ambientes aeronáuticos, o problema é
@@ -1736,17 +2007,18 @@ projetada sobre cada recurso (incluindo os físicos, conectando-se ao
 sistema de reserva de instalações, cronograma de ensaios, etc.) ao longo
 do horizonte temporal, e alerta quando a carga projetada sobre um
 recurso em um período futuro excede sua capacidade disponível.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Alerta proativo de gargalo emergente</p>
 </div>
-<div class="quote">
-<p><strong>Alerta proativo de gargalo emergente:</strong> “Área de
-Ensaios Estruturais está alocada a 140% da capacidade na janela de 15 a
-30 de maio. Projetos afetados: Projeto X (ensaio vibratório, Atividade
-XXX), Projeto Y (ensaio de fadiga, Atividade YYY) e Projeto Z (ensaio de
-cargas estáticas, Atividade ZZZ). O programa de maior prioridade de
-portfólio (Projeto X) tem apenas 8 dias de folga nessa janela.
-Sugestões: (1) antecipar a Atividade XXX para 10-14 de maio — libera a
-janela crítica, consome 0% de buffer adicional; (2) postergar Atividade
-ZZZ para junho — impacto moderado em Projeto Z.”</p>
+<p>“Área de Ensaios Estruturais está alocada a 140% da capacidade na
+janela de 15 a 30 de maio. Projetos afetados: Projeto X (ensaio
+vibratório, Atividade XXX), Projeto Y (ensaio de fadiga, Atividade YYY)
+e Projeto Z (ensaio de cargas estáticas, Atividade ZZZ). O programa de
+maior prioridade de portfólio (Projeto X) tem apenas 8 dias de folga
+nessa janela. Sugestões: (1) antecipar a Atividade XXX para 10-14 de
+maio — libera a janela crítica, consome 0% de buffer adicional; (2)
+postergar Atividade ZZZ para junho — impacto moderado em Projeto Z.”</p>
 </div>
 <p>A detecção de novos PACERs, áreas que passaram a ser gargalo sem que
 os critérios de identificação tivessem sido atualizados, é uma aplicação
@@ -1758,10 +2030,6 @@ acumular demanda cruzada de múltiplos projetos seria sinalizada como
 <hr />
 <h2 id="ideia-6--análise-semântica-de-impedimentos-e-riscos">Ideia 6 —
 Análise Semântica de Impedimentos e Riscos</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 06</p>
-</div>
 <h3 id="o-problema-5">O Problema</h3>
 <p>O registro de riscos formal de um projeto aeronáutico é atualizado
 periodicamente, em reuniões programadas, por pessoas que precisam
@@ -1791,24 +2059,23 @@ do JIRA aplica processamento de linguagem natural para classificar
 observações por categoria de risco e urgência inferida:</p>
 <ul>
 <li>“Aguardando”, “sem retorno de”, “pending response” → risco de
-fornecedor ou dependência externa<br />
-</li>
+fornecedor ou dependência externa</li>
 <li>“Não definido”, “ainda em aberto”, “mudança de requisito” → risco de
-escopo<br />
-</li>
+escopo</li>
 <li>“Laboratório ocupado”, “fila longa”, “sem recurso para” → risco de
-capacidade<br />
-</li>
+capacidade</li>
 <li>“Problema encontrado”, “não estava no escopo”, “precisa investigar”
 → risco técnico</li>
 </ul>
+<div class="box callout-example">
+<div class="box-title">
+<p>Alerta gerado</p>
 </div>
-<div class="quote">
-<p><strong>Alerta gerado:</strong> “4 comentários nos últimos 3 dias
-mencionam incerteza sobre os requisitos da interface Nav/FMS. Tarefas
-afetadas: Atividade X, Atividade Y, Atividade Z. Sugestão: verificar se
-o ICD correspondente foi formalmente congelado e se a data de
-congelamento está refletida no plano.”</p>
+<p>“4 comentários nos últimos 3 dias mencionam incerteza sobre os
+requisitos da interface Nav/FMS. Tarefas afetadas: Atividade X,
+Atividade Y, Atividade Z. Sugestão: verificar se o ICD correspondente
+foi formalmente congelado e se a data de congelamento está refletida no
+plano.”</p>
 </div>
 <p>A implementação usa um <strong>LLM com RAG</strong> sobre um léxico
 de padrões linguísticos de risco, construído e refinado com o histórico
@@ -1826,10 +2093,6 @@ drasticamente.</p>
 <hr />
 <h2 id="ideia-7--copiloto-de-reuniões-de-controle">Ideia 7 — Copiloto de
 Reuniões de Controle</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 07</p>
-</div>
 <h3 id="o-problema-6">O Problema</h3>
 <p>As reuniões de acompanhamento são os rituais centrais da gestão da
 CCPM e do JIRA. Em projetos aeronáuticos complexos, elas podem incluir
@@ -1857,9 +2120,10 @@ tendo pensado em alternativas. Isso permite tomar ações com antecipação,
 como deslocar recursos de atividades não críticas para as críticas.</p>
 <p><strong>Durante:</strong> O agente responde perguntas quantitativas
 em tempo real.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Interação durante reunião</p>
 </div>
-<div class="quote">
-<p><strong>Interação durante reunião:</strong></p>
 <p>PM: “Se o ensaio vibratório escorrega para segunda-feira, como fica o
 buffer?”</p>
 <p>IA: “Consumo adicional de 12%, levando de 34% para 46%.
@@ -1898,10 +2162,6 @@ gerenciando.</p>
 <h2
 id="ideia-8--aprendizado-contínuo-com-base-em-projetos-anteriores">Ideia
 8 — Aprendizado Contínuo com Base em Projetos Anteriores</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 08</p>
-</div>
 <h3 id="o-problema-7">O Problema</h3>
 <p>A indústria aeronáutica sofre de um paradoxo do conhecimento:
 projetos são documentados exaustivamente por razões regulatórias, mas é
@@ -1934,14 +2194,15 @@ foram os principais motivos de atraso em projetos de certificação
 suplementar de tipo nos últimos 3 anos?” O sistema de RAG recupera os
 dados relevantes da knowledge base e o LLM sintetiza a resposta em
 linguagem natural.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Saída na fase de planejamento</p>
 </div>
-<div class="quote">
-<p><strong>Saída na fase de planejamento:</strong> “Para ‘Revisão de
-Design Preliminar — Sistema Hidráulico’, com base em 7 tarefas similares
-em projetos anteriores: mediana 12 dias, P25 = 9d, P75 = 18d. Principal
-fator de variância: maturidade dos requisitos no início. Recomendo 12
-dias com buffer adicional se requisitos não estiverem congelados na data
-de início.”</p>
+<p>“Para ‘Revisão de Design Preliminar — Sistema Hidráulico’, com base
+em 7 tarefas similares em projetos anteriores: mediana 12 dias, P25 =
+9d, P75 = 18d. Principal fator de variância: maturidade dos requisitos
+no início. Recomendo 12 dias com buffer adicional se requisitos não
+estiverem congelados na data de início.”</p>
 </div>
 <p>Além de estimativas, a IA identifica <strong>padrões de falha que se
 repetem entre projetos</strong>, não como azar, mas como padrão
@@ -1963,10 +2224,6 @@ as próximas consultas</li>
 <hr />
 <h2 id="ideia-9--geração-automática-de-plano-de-recuperação">Ideia 9 —
 Geração Automática de Plano de Recuperação</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 09</p>
-</div>
 <h3 id="o-problema-8">O Problema</h3>
 <p>Entrar em zona vermelha na CCPM não é necessariamente catastrófico. É
 um sinal de que o projeto precisa de intervenção ativa. A pergunta que o
@@ -1997,9 +2254,10 @@ aceitam paralelismo sem retrabalho excessivo, e quais são as atividades
 onde fast-tracking aumentou significativamente o risco de retrabalho.
 Esse contexto histórico enriquece cada opção de recuperação
 apresentada.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Opções de recuperação geradas automaticamente</p>
 </div>
-<div class="quote">
-<p><strong>Opções de recuperação geradas automaticamente:</strong></p>
 <p><strong>Opção A — Paralelismo nas tarefas de documentação:</strong>
 Alocar segundo engenheiro técnico para paralelizar Atividade X e
 Atividade Y, que hoje estão em série. Recupera 8 dias de buffer. Custo:
@@ -2021,10 +2279,6 @@ depender de intuição sob pressão.</p>
 <hr />
 <h2 id="ideia-10--triagem-inteligente-de-mudança-de-escopo">Ideia 10 —
 Triagem Inteligente de Mudança de Escopo</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 10</p>
-</div>
 <h3 id="o-problema-9">O Problema</h3>
 <p>Em projetos aeronáuticos, mudanças de escopo chegam de múltiplas
 direções: o cliente muda um requisito operacional, a autoridade
@@ -2057,17 +2311,13 @@ buffer consumiu, informações que enriquecem enormemente a triagem da
 mudança atual.</p>
 <ul>
 <li>Classificação automática: mudança crítica / moderada / cosmética com
-base no impacto estimado.<br />
-</li>
+base no impacto estimado.</li>
 <li>Lista das tarefas JIRA afetadas com justificativa baseada em
-correspondência semântica.<br />
-</li>
+correspondência semântica.</li>
 <li>Estimativa preliminar de consumo adicional de buffer se a mudança
-for aprovada.<br />
-</li>
+for aprovada.</li>
 <li>RAG sobre histórico de mudanças similares para contextualizar o
-impacto esperado.<br />
-</li>
+impacto esperado.</li>
 <li>Flag automático para revisão de certificação quando a mudança toca
 sistemas ou requisitos de segurança.</li>
 </ul>
@@ -2075,15 +2325,10 @@ sistemas ou requisitos de segurança.</li>
 determina a urgência e o nível de atenção que cada mudança merece, e
 pré-popula a análise de impacto com dados suficientes para que a reunião
 de decisão seja focada e rápida.</p>
-</div>
 <hr />
 <h2
 id="ideia-11--assistente-de-estimativa-por-analogia-e-preenchimento-do-jira">Ideia
 11 — Assistente de Estimativa por Analogia e Preenchimento do JIRA</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 11</p>
-</div>
 <h3 id="o-problema-10">O Problema</h3>
 <p>A tendência humana de subestimar a duração de tarefas, o “<a
 href="https://pt.wikipedia.org/wiki/Falácia_do_planejamento">planning
@@ -2111,10 +2356,11 @@ planejamento do sprint, os valores de story points e remaining duration
 para cada atividade, comparando com análogos históricos. Ela pode também
 sugerir o desmembramento em sub-tarefas, com base em como tarefas
 similares foram estruturadas em projetos anteriores.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Assistente durante abertura de sprint</p>
 </div>
-<div class="quote">
-<p><strong>Assistente durante abertura de sprint:</strong><br />
-“A tarefa ‘Análise de tolerâncias do trem de pouso principal’ foi
+<p>“A tarefa ‘Análise de tolerâncias do trem de pouso principal’ foi
 estimada em 5 dias, sem story points. Encontrei 6 tarefas similares em
 projetos anteriores. Distribuição de duração real: mediana 9 dias. Story
 points mediana: 8 pontos. Sugestão de sub-tarefas: (1) Levantamento de
@@ -2148,10 +2394,6 @@ conversacional.</p>
 <hr />
 <h2 id="ideia-12--monitoramento-de-saúde-coletiva-da-equipe">Ideia 12 —
 Monitoramento de Saúde Coletiva da Equipe</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 12</p>
-</div>
 <h3 id="o-problema-11">O Problema</h3>
 <p>A <a href="https://en.wikipedia.org/wiki/Brooks%27s_law">Lei de
 Brooks</a> diz que adicionar pessoas a um projeto atrasado o atrasa
@@ -2173,11 +2415,12 @@ nunca individualmente, índices de saúde coletiva combinando: carga atual
 versus capacidade declarada do grupo, tendência de velocidade coletiva
 nas últimas quatro semanas, taxa de retrabalho nos entregáveis da área,
 e frequência de comentários de impedimento por área.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Alerta para o supervisor da área de Estruturas</p>
 </div>
-<div class="quote">
-<p><strong>Alerta para o supervisor da área de Estruturas:</strong> “A
-área de Estruturas apresenta carga projetada de 135% da capacidade nas
-próximas 3 semanas, combinada com queda de 20% na velocidade de
+<p>“A área de Estruturas apresenta carga projetada de 135% da capacidade
+nas próximas 3 semanas, combinada com queda de 20% na velocidade de
 conclusão de tarefas nas últimas 2 semanas. Isso é consistente com
 sobrecarga coletiva. Recomendo avaliar redistribuição de tarefas não
 críticas ou reforço pontual de recursos neste período.”</p>
@@ -2197,10 +2440,6 @@ individual, apenas padrões de grupo.</p>
 <hr />
 <h2 id="ideia-13--simulador-de-cenários-what-if">Ideia 13 — Simulador de
 Cenários What-If</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 13</p>
-</div>
 <h3 id="o-problema-12">O Problema</h3>
 <p>Simulações de cenários what-if já são realizadas e são parte do
 instrumental de análise de risco e planejamento de contingências. O
@@ -2240,27 +2479,18 @@ passa a estar disponível em minutos, diretamente na reunião onde a
 decisão precisa ser tomada.</p>
 <ul>
 <li>Interface conversacional: PM descreve o cenário em linguagem
-natural, IA modifica o modelo e calcula impacto<br />
-</li>
-<li>Comparação lado a lado de até três cenários simultâneos<br />
-</li>
+natural, IA modifica o modelo e calcula impacto</li>
+<li>Comparação lado a lado de até três cenários simultâneos</li>
 <li>RAG sobre histórico para estimar probabilidade de cada cenário
-alternativo com base em casos reais<br />
-</li>
+alternativo com base em casos reais</li>
 <li>Identificação automática das variáveis com maior alavancagem sobre o
-resultado (análise de sensibilidade)<br />
-</li>
+resultado (análise de sensibilidade)</li>
 <li>Registro dos cenários explorados para documentação do processo de
 decisão</li>
 </ul>
-</div>
 <hr />
 <h2 id="ideia-14--geração-automatizada-de-wbs-para-novos-projetos">Ideia
 14 — Geração Automatizada de WBS para Novos Projetos</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 14</p>
-</div>
 <h3 id="o-problema-13">O Problema</h3>
 <p>Criar a Work Breakdown Structure de um novo projeto é um processo que
 mistura conhecimento técnico de domínio, experiência em projetos
@@ -2275,11 +2505,13 @@ Dado o escopo do novo projeto em linguagem natural, o agente produz um
 WBS com pacotes de trabalho, estimativas preliminares baseadas em
 projetos similares, recursos típicos, e flags para elementos que
 costumam ser esquecidos em projetos desse tipo.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Entrada</p>
 </div>
-<div class="quote">
-<p><strong>Entrada:</strong> “Novo projeto de certificação suplementar
-de tipo para instalação de sistema de entretenimento a bordo em aeronave
-regional, regulação ANAC/FAA, prazo contratual 18 meses.”</p>
+<p>“Novo projeto de certificação suplementar de tipo para instalação de
+sistema de entretenimento a bordo em aeronave regional, regulação
+ANAC/FAA, prazo contratual 18 meses.”</p>
 <p><strong>Saída da IA:</strong> WBS com 127 pacotes de trabalho
 distribuídos em 8 fases, incluindo flags para: análise de impacto em STC
 existente, atualização de FMEA de sistemas elétricos, testes de
@@ -2298,10 +2530,6 @@ revisão focada.</p>
 <hr />
 <h2 id="ideia-15--detector-da-síndrome-de-90">Ideia 15 — Detector da
 Síndrome de 90%</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 15</p>
-</div>
 <h3 id="o-problema-14">O Problema</h3>
 <p>A <a
 href="https://pt.linkedin.com/pulse/s%C3%ADndrome-dos-90-fabio-lessa">síndrome
@@ -2340,22 +2568,15 @@ Historicamente, tarefas nessa fase e desse nível de complexidade levam
 em média 12 dias após chegar a esse ponto. Recomendo verificação.”</p>
 <ul>
 <li>Monitoramento contínuo da relação progresso-reportado versus
-tempo-decorrido por tarefa<br />
-</li>
+tempo-decorrido por tarefa</li>
 <li>Detecção de remaining duration que não diminui ao longo do tempo
-(padrão “always 1 day left”)<br />
-</li>
+(padrão “always 1 day left”)</li>
 <li>RAG sobre histórico para calibrar o que é “normal” para cada tipo de
 tarefa nessa fase</li>
 </ul>
-</div>
 <hr />
 <h2 id="ideia-16--integração-com-sistemas-de-configuração-e-plm">Ideia
 16 — Integração com Sistemas de Configuração e PLM</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 16</p>
-</div>
 <h3 id="o-problema-15">O Problema</h3>
 <p>Em organizações aeronáuticas, existem certos bancos de dados (como o
 PLM) que indicam a real evolução do produto: onde vivem as versões dos
@@ -2383,14 +2604,15 @@ pode compreender semanticamente o que cada artefato é e quais conexões
 deveriam existir entre eles. Não apenas verificar links explícitos, mas
 inferir que um relatório que menciona “Desenho Rev. B” deveria ser
 revalidado quando o PLM registra que a “Rev. C” foi aprovada.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Alerta de inconsistência gerado</p>
 </div>
-<div class="quote">
-<p><strong>Alerta de inconsistência gerado:</strong> “Relatório X
-aprovado no PLM em 14/03 modifica o suporte de motor — revisão de
-estresse da estrutura. Tarefas CCPM afetadas: Atividade Y (Análise de
-cargas do Motor) marcada como concluída com base na revisão anterior.
-Recomendo reabrir Atividade Y ou criar Atividade Z para revalidação com
-o novo desenho.”</p>
+<p>“Relatório X aprovado no PLM em 14/03 modifica o suporte de motor —
+revisão de estresse da estrutura. Tarefas CCPM afetadas: Atividade Y
+(Análise de cargas do Motor) marcada como concluída com base na revisão
+anterior. Recomendo reabrir Atividade Y ou criar Atividade Z para
+revalidação com o novo desenho.”</p>
 </div>
 <p>A IA também pode gerar <strong>relatórios com contexto</strong> sobre
 o estado de consistência entre PLM e CCPM, não apenas uma lista de
@@ -2401,10 +2623,6 @@ sem priorização.</p>
 <hr />
 <h2 id="ideia-17--detecção-de-gold-plating-e-definição-de-pronto">Ideia
 17 — Detecção de Gold Plating e Definição de Pronto</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 17</p>
-</div>
 <h3 id="o-problema-16">O Problema</h3>
 <p><a
 href="https://en.wikipedia.org/wiki/Gold_plating_(project_management)">Gold
@@ -2440,23 +2658,20 @@ e no que gerou overbuild por excesso. O gestor pode simplesmente passar
 uma <strong>lista de critérios em linguagem natural</strong> e a IA
 buscará na base e responderá com sim ou não e todas as pendências em
 aberto.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Verificação de Definition of Done para Atividade X (Análise
+estrutural da Asa)</p>
 </div>
-<div class="quote">
-<p><strong>Verificação de Definition of Done para Atividade X (Análise
-estrutural da Asa):</strong><br />
-✓ Relatório de análise gerado e revisado internamente<br />
-✓ Requisito de análise referenciado à versão atual do documento de
-requisitos<br />
-✗ Desenho referenciado no relatório (Rev. B) foi substituído por Rev. C
-no PLM. Análise precisa confirmar validade</p>
+<p>✓ Relatório de análise gerado e revisado internamente</p>
+<p>✓ Requisito de análise referenciado à versão atual do documento de
+requisitos</p>
+<p>✗ Desenho referenciado no relatório (Rev. B) foi substituído por
+Rev. C no PLM. Análise precisa confirmar validade</p>
 </div>
 <hr />
 <h2 id="ideia-18--orquestrador-de-revisões-técnicas-formais">Ideia 18 —
 Orquestrador de Revisões Técnicas Formais</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 18</p>
-</div>
 <h3 id="o-problema-17">O Problema</h3>
 <p>Revisões técnicas formais, como Preliminary Design Review, Critical
 Design Review e Design Evidence, são eventos críticos em programas
@@ -2484,24 +2699,21 @@ pode simplesmente passar à IA uma lista dos critérios de entrada da
 revisão em texto comum. A IA buscará na base de dados e responderá com
 sim ou não para cada critério, com as evidências que sustentam cada
 resposta e todas as pendências identificadas.</p>
+<div class="box callout-example">
+<div class="box-title">
+<p>Verificação de prontidão para CDR</p>
 </div>
-<div class="quote">
-<p><strong>Verificação de prontidão para CDR:</strong><br />
-✓ Todos os action items do PDR fechados (47/47)<br />
-✓ Requisitos do sistema congelados na versão 3.2<br />
-✗ Análise de FHA de nível sistema não concluída (Atividade X em
-andamento, estimativa 5 dias)<br />
-✗ ICD Y na versão preliminar. Versão definitiva esperada em 18/04</p>
+<p>✓ Todos os action items do PDR fechados (47/47)</p>
+<p>✓ Requisitos do sistema congelados na versão 3.2</p>
+<p>✗ Análise de FHA de nível sistema não concluída (Atividade X em
+andamento, estimativa 5 dias)</p>
+<p>✗ ICD Y na versão preliminar. Versão definitiva esperada em 18/04</p>
 <p>CDR pode ser realizada em 19/04 no mínimo, assumindo conclusão dos
 itens acima.</p>
 </div>
 <hr />
 <h2 id="ideia-19--radar-de-fornecedores-e-sistemas-externos">Ideia 19 —
 Radar de Fornecedores e Sistemas Externos</h2>
-<div class="box ideia">
-<div class="box-badge">
-<p>Ideia 19</p>
-</div>
 <h3 id="o-problema-18">O Problema</h3>
 <p>A CCPM gerencia o que está dentro do projeto. Mas uma fração
 significativa do que determina o buffer de projeto está <strong>fora
@@ -2531,31 +2743,29 @@ aeronáutico:</p>
 <ul>
 <li><strong>Gestão de fornecedores:</strong> status de entregas,
 percentual de conclusão, histórico de performance em contratos
-anteriores.<br />
-</li>
+anteriores.</li>
 <li><strong>Cadeia de suprimentos:</strong> disponibilidade de materiais
-e componentes de longo lead time, status de pedidos em aberto.<br />
-</li>
+e componentes de longo lead time, status de pedidos em aberto.</li>
 <li><strong>Gestão de certificação:</strong> status de CAIs, abertura e
 fechamento de FCARs, status de planos de certificação, milestones de
-aprovação regulatória, etc.<br />
-</li>
+aprovação regulatória, etc.</li>
 <li><strong>Interfaces entre sistemas:</strong> status de congelamento
 de ICDs, versões de documentos de interface ainda em revisão que são
-predecessoras de atividades de integração.<br />
-</li>
+predecessoras de atividades de integração.</li>
 <li><strong>Qualificação:</strong> validade de qualificações de
 fornecedores, status de ensaios de qualificação em andamento em
 laboratórios externos.</li>
 </ul>
+<div class="box callout-example">
+<div class="box-title">
+<p>Alerta gerado</p>
 </div>
-<div class="quote">
-<p><strong>Alerta gerado:</strong> “O ICD entre os subsistemas de
-navegação e FMS está na versão preliminar 0.3 e não tem data de
-congelamento confirmada. Duas atividades na cadeia crítica — Atividade X
-e Atividade Y — têm esse ICD como predecessora implícita. O milestone de
-congelamento previsto para 10/05 não aparece no cronograma. Risco de
-impacto direto no buffer nas próximas 3 semanas.”</p>
+<p>“O ICD entre os subsistemas de navegação e FMS está na versão
+preliminar 0.3 e não tem data de congelamento confirmada. Duas
+atividades na cadeia crítica — Atividade X e Atividade Y — têm esse ICD
+como predecessora implícita. O milestone de congelamento previsto para
+10/05 não aparece no cronograma. Risco de impacto direto no buffer nas
+próximas 3 semanas.”</p>
 </div>
 <p>A lista de fontes conectáveis é aberta e cresce com a maturidade da
 integração. O princípio é único: qualquer sistema externo que produza
@@ -2648,13 +2858,16 @@ de gold plating e gestão de qualidade (Ideia 17).
 <strong>Tecnologia:</strong> Agentes orquestrados multi-sistema + LLM
 Wiki + fine-tuning organizacional. A organização usa IA não como
 ferramenta, mas como colega de trabalho permanente do PM.</p>
-<div class="quote">
-<p><strong>Recomendação de implementação:</strong> A maioria das
-organizações está hoje no Nível 0 (sem IA) ou Nível 1 (uso ad-hoc). O
-salto mais valioso é do Nível 1 para o Nível 2, quando a IA passa de
-reativa para proativa. Esse salto é tecnicamente simples (webhooks +
-modelo de linguagem + canais de notificação) e gera visibilidade
-imediata para a liderança sobre o retorno do investimento.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Recomendação de implementação</p>
+</div>
+<p>A maioria das organizações está hoje no Nível 0 (sem IA) ou Nível 1
+(uso ad-hoc). O salto mais valioso é do Nível 1 para o Nível 2, quando a
+IA passa de reativa para proativa. Esse salto é tecnicamente simples
+(webhooks + modelo de linguagem + canais de notificação) e gera
+visibilidade imediata para a liderança sobre o retorno do
+investimento.</p>
 </div>
 <p>O modelo de maturidade é também uma ferramenta de comunicação e de
 gestão de mudança: ele permite ao PM explicar para a organização onde
@@ -2726,9 +2939,11 @@ amanhã com as planilhas analíticas e lineares de ontem.</p>
 <h3 id="ethan-mollick--one-useful-thing">Ethan Mollick — One Useful
 Thing</h3>
 <div class="quote">
+<div class="quote-text">
 <p>Mollick é professor da Wharton School (UPenn) e o autor mais
 acessível e rigoroso sobre IA aplicada ao trabalho. Seu Substack é
 leitura obrigatória.</p>
+</div>
 </div>
 <ul>
 <li><p><a
@@ -2755,8 +2970,10 @@ Bestseller. O manual mais completo e equilibrado sobre trabalhar com IA.
 </ul>
 <h3 id="andrej-karpathy">Andrej Karpathy</h3>
 <div class="quote">
+<div class="quote-text">
 <p>Ex-diretor de IA da Tesla e cofundador da OpenAI. Referência técnica
 de primeira linha sobre o estado real dos LLMs.</p>
+</div>
 </div>
 <ul>
 <li><p><a
@@ -3053,7 +3270,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=7389a45f"></script>
-<script src="../assets/essay.js?v=58dcd441"></script>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
 </body>
 </html>
