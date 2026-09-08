@@ -29,23 +29,29 @@
   --amber:#967030;
   /* Native Obsidian callout palette — dark theme. Each semantic type owns
      an explicit accent instead of borrowing a generic global color. */
-  --callout-note:#63C7C2;
-  --callout-abstract:#5A9EAE;
-  --callout-info:#5E9FB8;
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#98938A;
   --callout-todo:#B18A4A;
-  --callout-tip:#A88B55;
+  --callout-tip:#B08B4F;
   --callout-success:#63A37B;
-  --callout-question:#B76550;
-  --callout-warning:#D66E5C;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
   --callout-failure:#A95C4C;
   --callout-danger:#D06A58;
   --callout-bug:#C65F52;
-  --callout-example:#B96A50;
-  --callout-quote:#B08B4F;
+  --callout-example:#B08B4F;
+  --callout-quote:#85878C;
+  --quote-bg:#1B1C1F;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
   --box-bg:rgba(176,139,79,.055);
+  /* No claro o acento e escuro sobre papel branco e 2,5% ja marcam.
+     No escuro o acento e mais claro que o fundo e a mesma proporcao
+     some: a mistura sobe ate dar o mesmo degrau de contraste. */
+  --tab-mix:9%;
+  --verdict-mix:10%;
   --box-verdict-bg:rgba(176,139,79,.10);
   --max-width:700px;
 }
@@ -65,20 +71,23 @@
   --amber:#7A5A18;
   /* Native Obsidian callout palette — light theme. Hues keep the same
      semantic identity, but luminance/saturation are tuned independently. */
-  --callout-note:#2D7775;
-  --callout-abstract:#2F7182;
-  --callout-info:#2F6E8A;
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#6E7684;
   --callout-todo:#7B5C22;
-  --callout-tip:#735B22;
+  --callout-tip:#2F5FB0;
   --callout-success:#2F7951;
-  --callout-question:#8A4939;
-  --callout-warning:#A5483B;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
   --callout-failure:#874238;
   --callout-danger:#A13F34;
   --callout-bug:#963A32;
-  --callout-example:#8C4A37;
-  --callout-quote:#735A23;
+  --callout-example:#2F5FB0;
+  --callout-quote:#6E7684;
+  --quote-bg:#F1F3F7;
   --box-bg:var(--surface);
+  --tab-mix:3%;
+  --verdict-mix:4%;
   --box-verdict-bg:var(--surface2);
 }
 @media (min-width:901px){
@@ -108,20 +117,23 @@
     --amber:#7A5A18;
   /* Native Obsidian callout palette — light theme. Hues keep the same
      semantic identity, but luminance/saturation are tuned independently. */
-  --callout-note:#2D7775;
-  --callout-abstract:#2F7182;
-  --callout-info:#2F6E8A;
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#6E7684;
   --callout-todo:#7B5C22;
-  --callout-tip:#735B22;
+  --callout-tip:#2F5FB0;
   --callout-success:#2F7951;
-  --callout-question:#8A4939;
-  --callout-warning:#A5483B;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
   --callout-failure:#874238;
   --callout-danger:#A13F34;
   --callout-bug:#963A32;
-  --callout-example:#8C4A37;
-  --callout-quote:#735A23;
+  --callout-example:#2F5FB0;
+  --callout-quote:#6E7684;
+  --quote-bg:#F1F3F7;
     --box-bg:var(--surface);
+  --tab-mix:3%;
+  --verdict-mix:4%;
     --box-verdict-bg:var(--surface2);
   }
 }
@@ -215,11 +227,11 @@ body{
 .masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
 .byline{
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+  font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);
 }
 .cover-meta{
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
   color:var(--text-dim);opacity:.85;margin-top:.95rem;
 }
 /* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
@@ -275,7 +287,7 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-
 .sb-kicker{
   display:flex;align-items:center;gap:.85rem;
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.72rem;font-weight:400;letter-spacing:.18em;
+  font-size:.78rem;font-weight:400;letter-spacing:.14em;
   color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
 }
 .sb-kicker::after{
@@ -445,7 +457,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--surface2);border-left:2px solid var(--callout-quote);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -453,7 +465,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--surface);border-left:3px solid var(--callout-quote);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -465,11 +477,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-.pull-quote.epigraph p:last-child{
-  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold-dim);margin-top:.9rem;
-}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -492,11 +501,11 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .quote{
   margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
-  background:var(--surface2);border-left:2px solid var(--callout-quote);
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
 .pull-quote{
   margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
-  background:var(--surface);border-left:3px solid var(--callout-quote);
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 .quote-text{
   position:relative;
@@ -506,7 +515,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   position:absolute;
   font-family:var(--font-display);
   font-size:2.35rem;line-height:.85;
-  color:color-mix(in srgb,var(--callout-quote) 34%,transparent);
+  color:color-mix(in srgb,var(--gold) 78%,transparent);
   pointer-events:none;
 }
 .quote-text::before{content:"“";left:.02rem;top:.08rem;}
@@ -523,21 +532,21 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin:.8rem 1.45rem 0 1.5rem;
   padding-top:.65rem;
   border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
-  font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.72rem;line-height:1.55;letter-spacing:.035em;
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:.9rem;line-height:1.5;letter-spacing:.005em;
   color:var(--text-dim);font-style:normal;
 }
 .quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
 .quote-label{
   width:fit-content;margin:0 1.45rem .45rem 1.5rem;
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.66rem;line-height:1.35;letter-spacing:.08em;
+  font-size:.76rem;line-height:1.35;letter-spacing:.06em;
   color:var(--callout-quote);font-weight:600;
 }
 .quote-label p{margin:0;}
 .pull-quote.epigraph .quote-text p{color:var(--text-dim);}
 .pull-quote.epigraph .quote-attribution{
-  text-align:center;border-top:none;color:var(--callout-quote);margin-top:.45rem;
+  text-align:center;border-top:none;margin-top:.55rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -574,8 +583,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > h3,.box > h4,.box > h5,.box > h6{
   padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
 }
-.box > h3{font-size:1.08rem;margin:1.2rem 0 .55rem;}
-.box > h4{font-size:1rem;margin:1rem 0 .45rem;}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1rem;margin:1rem 0 1rem;}
 .box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
 .box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
@@ -584,7 +593,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   display:block;width:fit-content;
   color:var(--box-badge-c,var(--boxc));
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+  font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
   padding:.55rem 1.3rem .1rem;
   font-variant:small-caps;
 }
@@ -611,19 +620,19 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:color-mix(in srgb,var(--boxc) 8%,transparent);
   color:var(--boxc);
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.72rem;font-weight:600;letter-spacing:.055em;line-height:1.35;
+  font-size:.78rem;font-weight:600;letter-spacing:.05em;line-height:1.35;
 }
 
 .box-verdict{
   margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
-  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  background:color-mix(in srgb,var(--boxc) var(--verdict-mix),var(--bg));
   border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
 .box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--boxc);margin-bottom:.62rem;
+  font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--boxc);margin-bottom:.5rem;
 }
 
 /* Cards: filosofos e obras */
@@ -635,7 +644,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .card.livro .card-name{font-style:italic;}
 .card-meta{
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.72rem;letter-spacing:.05em;
+  font-size:.78rem;letter-spacing:.05em;
   color:var(--text-dim);margin:.25rem 0 .75rem;
 }
 .card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
@@ -644,7 +653,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* Rotulo solto / ornamento */
 .label-solo{
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;
   color:var(--gold);margin:2.3rem 0 .9rem;
 }
 .ornament{
@@ -690,9 +699,11 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
-     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
-  font-size:.656em;line-height:1.55;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -766,6 +777,37 @@ figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:ita
    pixels. */
 .content p > img{display:block;margin-inline:auto;}
 img{max-width:100%;height:auto;}
+/* Visor de figura: o painel cientifico e legivel na coluna como panorama,
+   mas os eixos so se leem em tamanho natural. O toque abre o visor; o
+   conteudo da pagina nao muda. */
+.content img{cursor:zoom-in;}
+#lupa{
+  position:fixed;inset:0;z-index:200;display:none;
+  background:color-mix(in srgb,var(--bg) 94%,black);
+  overscroll-behavior:contain;touch-action:none;
+}
+#lupa[open]{display:block;}
+#lupa img{
+  position:absolute;top:50%;left:50%;
+  max-width:none;max-height:none;
+  transform-origin:center;border-radius:0;border:0;
+  will-change:transform;
+}
+#lupa-fechar{
+  position:fixed;top:.9rem;right:.9rem;z-index:201;
+  width:2.6rem;height:2.6rem;border-radius:50%;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--text-bright);font-size:1.35rem;line-height:1;
+  display:grid;place-items:center;cursor:pointer;
+}
+#lupa-dica{
+  position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%);
+  z-index:201;padding:.4rem .85rem;border-radius:999px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-dim);font-size:.76rem;
+  font-family:'JetBrains Mono',Consolas,monospace;letter-spacing:.06em;
+}
+
 
 /* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
    deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
@@ -817,7 +859,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -835,6 +881,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.88rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
 }
 
@@ -848,21 +895,33 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
   border:1px solid var(--boxc);
   border-radius:0;
-  background:color-mix(in srgb,var(--boxc) 2.5%,var(--bg));
+  background:color-mix(in srgb,var(--boxc) var(--tab-mix),var(--bg));
   overflow:hidden;
 }
 .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
-  margin:0;padding:0 0 .65rem;
+  /* `line-height:0` no contentor: o rotulo e `inline-block` e sentava sobre a
+     linha de texto do pai, o que abria um fio sem tinta entre ele e a moldura. */
+  margin:0;padding:0 0 1.15rem;line-height:0;
 }
 .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
-  display:inline-block;margin:-1px 0 0 -1px;
-  padding:.58rem 1.05rem .55rem;
-  border:0;border-radius:0;
-  background:var(--boxc);color:#fff;
+  display:inline-block;margin:0;
+  padding:.5rem 1.05rem .44rem;
+  /* Sem borda em cima nem a esquerda: quem faz esses dois lados e a propria
+     moldura da caixa. Com borda propria e recuo negativo, o `overflow:hidden`
+     da caixa cortava o recuo e sobravam duas linhas quase coincidentes. */
+  border:1px solid var(--boxc);border-top:0;border-left:0;border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 15%,transparent);
+  color:var(--boxc);
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.78rem;font-weight:600;line-height:1.35;
-  letter-spacing:.14em;text-transform:uppercase;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
   font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato e a faixa vem cheia; `example`/`tip`
+   propoem um cenario e vem so contornada. Mesma cor, mesma tipografia,
+   mesma medida — o que muda e o preenchimento. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  background:color-mix(in srgb,var(--boxc) 9%,transparent);
 }
 .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
   color:var(--boxc);
@@ -872,19 +931,24 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 }
 
 /* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
 .box.callout-note{
-  border:0;border-left:5px solid var(--boxc);border-radius:2px;
-  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
 }
-.box.callout-note > .box-title{padding:1.05rem 1.3rem .35rem;}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .85rem;}
 .box.callout-note > .box-title p{
   display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
-  color:var(--boxc);
-  font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
-  font-size:1rem;font-weight:760;letter-spacing:.035em;line-height:1.38;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
   text-transform:none;font-variant:normal;
 }
-.box.callout-note > p{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.68;}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
 
 /* ENTITY — explicit [!todo]; title=name, ####=metadata. */
 .box.callout-todo{
@@ -910,12 +974,12 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   border:1px solid var(--border);border-left:6px solid var(--boxc);
   border-radius:9px;background:var(--surface);overflow:hidden;
 }
-.box.callout-warning > .box-title{padding:1.38rem 1.3rem .45rem;}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
 .box.callout-warning > .box-title p{
   display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
   color:var(--boxc);font-family:var(--font-display);
-  font-size:clamp(2.7rem,9vw,4.4rem);font-weight:700;line-height:1.02;
-  letter-spacing:-.025em;text-transform:none;font-variant:normal;
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
 }
 .box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
 .box.callout-warning > .stat-divider{
@@ -932,10 +996,12 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 
 /* Small native-family refinements. Color remains semantic, while geometry
    keeps related callouts distinguishable even without relying on hue alone. */
-.box.callout-abstract{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
-.box.callout-info{background:color-mix(in srgb,var(--boxc) 3.5%,var(--bg));}
-.box.callout-tip{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
-.box.callout-example{background:color-mix(in srgb,var(--boxc) 3%,var(--bg));}
+/* Estas quatro vinham com proporcao fixa e venciam a regra da familia, o
+   que prendia o preenchimento no valor calibrado para o tema claro. Passam
+   ao mesmo token: a diferenca entre os tipos vem do acento, nao daqui. */
+.box:is(.callout-abstract,.callout-info,.callout-tip,.callout-example){
+  background:color-mix(in srgb,var(--boxc) var(--tab-mix),var(--bg));
+}
 .box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
 .box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
 .box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
@@ -2007,6 +2073,90 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   }
 })();
 </script>
+<script>
+/* Visor de figura. Arrasta com um dedo ou com o mouse; a pinca de dois
+   dedos e a roda dao zoom. Fecha no botao, no Esc ou no toque fora. */
+(function(){
+  var alvo = document.querySelectorAll('.content img');
+  if (!alvo.length) return;
+  var visor = document.createElement('div');
+  visor.id = 'lupa';
+  visor.innerHTML =
+    '<button id="lupa-fechar" aria-label="Fechar">\u00d7</button>' +
+    '<span id="lupa-dica">arraste para mover \u00b7 pin\u00e7a ou roda para ampliar</span>';
+  document.body.appendChild(visor);
+  // O <img> existe fora do documento ate a primeira abertura: com src
+  // vazio mas presente no DOM ele conta como imagem quebrada na checagem
+  // de render, mesmo escondido por CSS.
+  var img = document.createElement('img');
+  img.alt = '';
+  var esc = 1, x = 0, y = 0, base = 1;
+
+  function aplica(){
+    img.style.transform =
+      'translate(-50%,-50%) translate(' + x + 'px,' + y + 'px) scale(' + esc + ')';
+  }
+  function abre(src, alt){
+    img.src = src; img.alt = alt || '';
+    if (!img.isConnected) visor.insertBefore(img, visor.firstChild);
+    img.onload = function(){
+      // Comeca enquadrando a figura inteira; dai o leitor amplia onde quiser.
+      var cx = innerWidth / img.naturalWidth, cy = innerHeight / img.naturalHeight;
+      base = Math.min(cx, cy) * 0.94;
+      esc = base; x = 0; y = 0; aplica();
+    };
+    visor.setAttribute('open', '');
+    document.body.style.overflow = 'hidden';
+  }
+  function fecha(){
+    visor.removeAttribute('open');
+    document.body.style.overflow = '';
+  }
+  alvo.forEach(function(n){
+    n.addEventListener('click', function(){ abre(n.currentSrc || n.src, n.alt); });
+  });
+  visor.querySelector('#lupa-fechar').addEventListener('click', fecha);
+  visor.addEventListener('click', function(e){ if (e.target === visor) fecha(); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') fecha(); });
+
+  var arrastando = false, px = 0, py = 0, dedos = {}, dist0 = 0, esc0 = 1;
+  visor.addEventListener('pointerdown', function(e){
+    if (e.target === img) {
+      dedos[e.pointerId] = [e.clientX, e.clientY];
+      var ids = Object.keys(dedos);
+      if (ids.length === 1) { arrastando = true; px = e.clientX; py = e.clientY; }
+      else if (ids.length === 2) {
+        arrastando = false;
+        var a = dedos[ids[0]], b = dedos[ids[1]];
+        dist0 = Math.hypot(a[0]-b[0], a[1]-b[1]); esc0 = esc;
+      }
+      img.setPointerCapture(e.pointerId);
+    }
+  });
+  visor.addEventListener('pointermove', function(e){
+    if (!(e.pointerId in dedos)) return;
+    dedos[e.pointerId] = [e.clientX, e.clientY];
+    var ids = Object.keys(dedos);
+    if (ids.length >= 2) {
+      var a = dedos[ids[0]], b = dedos[ids[1]];
+      var d = Math.hypot(a[0]-b[0], a[1]-b[1]);
+      if (dist0) { esc = Math.max(base * 0.5, Math.min(esc0 * d / dist0, base * 12)); aplica(); }
+    } else if (arrastando) {
+      x += e.clientX - px; y += e.clientY - py;
+      px = e.clientX; py = e.clientY; aplica();
+    }
+  });
+  function solta(e){ delete dedos[e.pointerId]; arrastando = false; dist0 = 0; }
+  visor.addEventListener('pointerup', solta);
+  visor.addEventListener('pointercancel', solta);
+  visor.addEventListener('wheel', function(e){
+    if (!visor.hasAttribute('open')) return;
+    e.preventDefault();
+    esc = Math.max(base * 0.5, Math.min(esc * (e.deltaY < 0 ? 1.12 : 0.89), base * 12));
+    aplica();
+  }, {passive:false});
+})();
+</script>
 
 <header class="sb-bar">
   <a class="sb-brand" href="../index.html"><span class="sb-mark" aria-hidden="true"></span>Second Brain Atlas</a>
@@ -2018,7 +2168,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
 </header>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
 <div class="sb-tags"><span class="sb-tag">Engenharia</span><span class="sb-tag">Filosofia</span><span class="sb-tag">Cultura-Maker</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="engenharia-em-menos-de-um-metro-cubico.html"><strong>Engenharia em menos de um metro cúbico — A impressora 3D como microcosmo de um projeto de aeronave</strong><span>Uma impressora 3D de mesa comprime, em menos de um metro cúbico, uma parcela surpreendente das disciplinas de um projeto de aeronave. A escala, a criticidade e o rigor são radicalmente diferentes, mas as classes de problemas são reconhecíveis: mecanismos, estruturas, vibrações, controle, calor, escoamento, eletrônica, software, materiais, manufatura, ensaios e integração. A interação entre essas disciplinas, e não cada uma isoladamente, transforma a máquina em um pequeno laboratório de engenharia de sistemas.</span></a><a class="sb-related-card" href="micro-hardwares-e-a-democratizacao-maker.html"><strong>Micro-Hardwares e a Democratização Maker — Da Queda das Barreiras Técnicas ao Desafio da Curadoria</strong><span>Uma estação meteorológica autônoma exigiu por décadas equipe especializada e instrumentação cara. Hoje se monta numa tarde, com placas de poucos dólares. O ensaio mede essa queda de barreiras e mostra que ela não eliminou a dificuldade, apenas a deslocou para o julgamento crítico e para a distância entre o protótipo que funciona uma vez e o sistema que funciona sempre.</span></a></div></section>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="impressao-3d-como-microcosmo-da-engenharia.html"><strong>Engenharia em menos de um metro cúbico — A impressora 3D como microcosmo de um projeto de aeronave</strong><span>Uma impressora 3D de mesa comprime, em menos de um metro cúbico, uma parcela surpreendente das disciplinas de um projeto de aeronave. A escala, a criticidade e o rigor são radicalmente diferentes, mas as classes de problemas são reconhecíveis: mecanismos, estruturas, vibrações, controle, calor, escoamento, eletrônica, software, materiais, manufatura, ensaios e integração. A interação entre essas disciplinas, e não cada uma isoladamente, transforma a máquina em um pequeno laboratório de engenharia de sistemas.</span></a><a class="sb-related-card" href="micro-hardwares-e-a-democratizacao-maker.html"><strong>Micro-Hardwares e a Democratização Maker — Da Queda das Barreiras Técnicas ao Desafio da Curadoria</strong><span>Uma estação meteorológica autônoma exigiu por décadas equipe especializada e instrumentação cara. Hoje se monta numa tarde, com placas de poucos dólares. O ensaio mede essa queda de barreiras e mostra que ela não eliminou a dificuldade, apenas a deslocou para o julgamento crítico e para a distância entre o protótipo que funciona uma vez e o sistema que funciona sempre.</span></a></div></section>
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do essay">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>

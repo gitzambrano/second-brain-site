@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="14">
+<html lang="pt-BR" data-status="finalizado" data-minutes="8">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</title>
-<meta property="og:title" content="Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton">
-<meta property="og:description" content="O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.">
+<title>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</title>
+<meta property="og:title" content="Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores">
+<meta property="og:description" content="Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.">
 <meta property="og:type" content="article">
 <script defer="" src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -1318,1006 +1318,372 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <header class="masthead">
   <div class="stripe"></div>
   <div class="masthead-inner">
-    <h1 class="hero-title">Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</h1>
+    <h1 class="hero-title">Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</h1>
     <hr class="masthead-rule">
-    <p class="byline">Gustavo Zambrano · Julho de 2026</p>
-    <p class="cover-summary">O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.</p>
+    <p class="byline">Gustavo Zambrano · Agosto de 2026</p>
+    <p class="cover-summary">Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</p>
   </div>
 </header>
 
 <main class="content">
 <h2 id="sumário">Sumário</h2>
 <ul>
-<li><a href="#1-introdução-e-objetivo-do-trabalho">1. Introdução e
-Objetivo do Trabalho</a></li>
-<li><a href="#2-intuição-física-a-quadratura-e-a-massa-girante">2.
-Intuição Física: A Quadratura e a Massa Girante</a></li>
-<li><a href="#3-o-giroscópio-como-bloco-de-construção">3. O Giroscópio
-como Bloco de Construção</a></li>
-<li><a href="#4-o-rotor-de-asas-rotativas">4. O Rotor de Asas
-Rotativas</a></li>
+<li><a href="#introdução">Introdução</a></li>
+<li><a href="#1-cinemática-do-rotor-em-voo-de-avanço">1. Cinemática do
+Rotor em Voo de Avanço</a></li>
 <li><a
-href="#5-transformação-de-coleman-e-a-demonstração-da-equivalência">5.
-Transformação de Coleman e a Demonstração da Equivalência</a></li>
-<li><a href="#6-tabela-comparativa-geral-e-conclusão">6. Tabela
-Comparativa Geral e Conclusão</a></li>
+href="#2-demonstração-da-bijeção-entre-o-coeficiente-de-tração-e-a-razão-cinemática">2.
+Demonstração da Bijeção Entre o Coeficiente de Tração e a Razão
+Cinemática</a></li>
+<li><a
+href="#3-relação-entre-as-duas-normalizações-do-coeficiente-de-tração">3.
+Relação Entre as Duas Normalizações do Coeficiente de Tração</a></li>
+<li><a
+href="#4-o-coeficiente-de-tração-como-controlador-da-geometria-da-esteira">4.
+O Coeficiente de Tração Como Controlador da Geometria da
+Esteira</a></li>
+<li><a
+href="#5-carregamento-de-disco-como-condição-adicional-para-a-similaridade-de-energia">5.
+Carregamento de Disco Como Condição Adicional Para a Similaridade de
+Energia</a></li>
+<li><a href="#conclusão">Conclusão</a></li>
 </ul>
 <hr />
-<h2 id="1-introdução-e-objetivo-do-trabalho">1. Introdução e Objetivo do
-Trabalho</h2>
-<p>Um dos tópicos mais desafiadores no ensino e na prática da dinâmica
-de rotores de asas rotativas é compreender a relação entre a resposta de
-batimento das pás e a precessão giroscópica de corpos rígidos. Na
-literatura introdutória, afirma-se frequentemente que o rotor de um
-helicóptero “comporta-se como um <a
-href="https://en.wikipedia.org/wiki/Gyroscope">giroscópio</a>”,
-precessando <span class="math inline">\(90^\circ\)</span> após a
-aplicação de uma força. Por outro lado, na dinâmica de estruturas e <a
-href="https://en.wikipedia.org/wiki/Aeroelasticity">aeroelasticidade</a>,
-demonstra-se que a pá de um rotor articulado é um oscilador harmônico
-excitado em sua frequência natural de rotação (<span
-class="math inline">\(1/\text{rev}\)</span>), cuja resposta ressonante
-em regime permanente apresenta um atraso de fase de <span
-class="math inline">\(90^\circ\)</span>.</p>
-<p>O objetivo principal deste trabalho é demonstrar formalmente que
-essas duas explicações não são visões concorrentes, mas sim <strong>duas
-leituras matemáticas da mesma equação de movimento</strong>, expressas
-em referenciais diferentes:</p>
-<ol type="1">
-<li>No <strong>referencial girante</strong> da pá, o fenômeno é visto
-como a resposta de um oscilador harmônico em ressonância (<span
-class="math inline">\(1/\text{rev}\)</span>) estabilizado por
-amortecimento aerodinâmico.</li>
-<li>No <strong>referencial fixo</strong> do helicóptero, a resposta
-coletiva de todas as pás forma o Plano de Ponta de Pá (<em>Tip-Path
-Plane</em> — TPP), cuja dinâmica diferencial é formalmente equivalente
-às <a
-href="https://en.wikipedia.org/wiki/Euler%27s_equations_(rigid_body_dynamics)">equações
-de Euler</a> de um giroscópio acoplado.</li>
-</ol>
-<p>Para demonstrar essa equivalência sem saltos lógicos, este trabalho
-percorrerá o seguinte itinerário:</p>
-<ul>
-<li><strong>Intuição Física</strong>: Explicar por que uma força em
-<span class="math inline">\(\psi = 0^\circ\)</span> gera deslocamento
-máximo em <span class="math inline">\(\psi = 90^\circ\)</span>.</li>
-<li><strong>Modelagem do Giroscópio</strong>: Derivar passo a passo as
-equações no vácuo, com amortecimento e com rigidez torsional, analisando
-polos e ângulos de fase.</li>
-<li><strong>Modelagem do Rotor</strong>: Derivar de primeiros princípios
-a rigidez centrífuga, o amortecimento aerodinâmico, o <a
-href="https://en.wikipedia.org/wiki/Lock_number">Número de Lock</a> e o
-efeito de <em>hinge offset</em> / <em>hingeless</em>.</li>
-<li><strong>Demonstração da Equivalência via Transformação de
-Coleman</strong>: Mapear as equações do rotor para o referencial
-inercial e comparar termo a termo com o giroscópio.</li>
-</ul>
-<hr />
-<h2 id="2-intuição-física-a-quadratura-e-a-massa-girante">2. Intuição
-Física: A Quadratura e a Massa Girante</h2>
-<h3 id="o-comportamento-da-massa-na-borda-do-disco">O Comportamento da
-Massa na Borda do Disco</h3>
-<p>Considere um disco rígido girando com velocidade angular constante
-<span class="math inline">\(\Omega\)</span>. Imagine uma massa pontual
-<span class="math inline">\(m\)</span> localizada na borda do disco em
-um raio <span class="math inline">\(R\)</span>. A posição azimutal da
-massa é dada por <span class="math inline">\(\psi(t) = \Omega
-t\)</span>.</p>
-<p>Suponha que essa massa seja submetida a uma força vertical
-descendente <span class="math inline">\(F_z(\psi)\)</span> que atinge
-seu valor máximo no azimute de referência <span
-class="math inline">\(\psi = 0^\circ\)</span> (força apontando para
-baixo) e varia harmonicamente com o azimute:</p>
-<p><span class="math display">\[
-F_z(t) = -F_0 \cos(\Omega t)
+<h2 id="introdução">Introdução</h2>
+<p>A modelagem da <a
+href="https://en.wikipedia.org/wiki/Wake_(physics)">esteira</a> de um
+rotor é um dos problemas centrais da aerodinâmica de aeronaves de asas
+rotativas e de arquiteturas <a
+href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOL</a>.
+É a esteira que determina a interferência mútua entre rotores, o
+carregamento aerodinâmico imposto sobre superfícies de controle a
+jusante e, em última instância, a eficiência propulsiva do sistema.</p>
+<p>Uma questão de <a
+href="https://en.wikipedia.org/wiki/Similitude">similaridade</a> se
+impõe naturalmente no projeto conceitual e nos ensaios em <a
+href="https://en.wikipedia.org/wiki/Wind_tunnel">túnel de vento</a>.
+Dados dois rotores fisicamente distintos, com diâmetros, rotações,
+torções aerodinâmicas e solidezes diferentes, operando sob o mesmo
+coeficiente de tração <span class="math inline">\(T_c\)</span>, suas
+esteiras serão semelhantes no ângulo de deflexão e no campo de
+velocidades?</p>
+<p>A resposta é afirmativa sob condições precisas. Sob o mesmo <span
+class="math inline">\(T_c\)</span> e o mesmo carregamento de disco, as
+esteiras de dois rotores fisicamente distintos coincidem em geometria e
+em velocidade absoluta, com independência total dos demais parâmetros
+construtivos. Essa coincidência decorre de duas propriedades
+demonstradas adiante. A primeira é que <span
+class="math inline">\(T_c\)</span> e a razão cinemática <span
+class="math inline">\(\mu/\lambda\)</span> não são grandezas
+independentes. São funcionalmente equivalentes, ligadas por uma relação
+biunívoca, o que faz de <span class="math inline">\(T_c\)</span> o
+parâmetro que governa exclusivamente a geometria da esteira, seu ângulo
+de deflexão e a topologia de suas linhas de corrente. A segunda é que
+<span class="math inline">\(T_c\)</span> não fixa por si só a energia da
+esteira. A igualdade de velocidades absolutas, e portanto de energia
+cinética induzida no escoamento, só é garantida quando se impõe
+adicionalmente a igualdade do carregamento de disco <span
+class="math inline">\(T/A\)</span>, condição sob a qual <span
+class="math inline">\(T_c\)</span> passa a determinar também a
+velocidade induzida.</p>
+<h2 id="1-cinemática-do-rotor-em-voo-de-avanço">1. Cinemática do Rotor
+em Voo de Avanço</h2>
+<p>Para isolar a física da esteira sem a complexidade adicional da
+inclinação do disco, adota-se a condição <span
+class="math inline">\(\alpha = 0\)</span>. O disco do rotor permanece
+paralelo ao escoamento livre. Nessa condição, a velocidade de voo <span
+class="math inline">\(V\)</span> atua inteiramente no plano do disco, e
+toda velocidade normal ao disco provém exclusivamente do fluxo induzido
+<span class="math inline">\(v_i\)</span>.</p>
+<p>As razões adimensionais clássicas do rotor, a <a
+href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>
+<span class="math inline">\(\mu\)</span> e o influxo <span
+class="math inline">\(\lambda\)</span>, definidas em relação à
+velocidade de ponta de pá <span class="math inline">\(\Omega R\)</span>,
+tornam-se:</p>
+<p><span class="math display">\[ \mu = \frac{V}{\Omega R}, \qquad
+\lambda = \frac{v_i}{\Omega R} \]</span></p>
+<p>A razão <span class="math inline">\(\mu/\lambda\)</span> elimina
+<span class="math inline">\(\Omega R\)</span> e reduz-se à razão
+cinemática entre a corrente livre e a velocidade induzida:</p>
+<p><span class="math display">\[ \frac{\mu}{\lambda} = \frac{V}{v_i}
 \]</span></p>
-<p>A segunda lei de Newton na direção vertical <span
-class="math inline">\(z\)</span> fornece a aceleração instantânea da
-massa:</p>
-<p><span class="math display">\[
-\ddot{z}(t) = \frac{F_z(t)}{m} = -\frac{F_0}{m} \cos(\Omega t)
+<p>Pela <a href="https://en.wikipedia.org/wiki/Momentum_theory">teoria
+de momento</a> de <a
+href="https://en.wikipedia.org/wiki/Hermann_Glauert">Glauert</a> em voo
+de avanço, a tração <span class="math inline">\(T\)</span> resulta da
+taxa de variação do momento linear da massa de ar que atravessa o disco,
+com velocidade resultante <span class="math inline">\(U = \sqrt{V^2 +
+v_i^2}\)</span>:</p>
+<p><span class="math display">\[ T = 2 \rho A v_i \sqrt{V^2 + v_i^2}
 \]</span></p>
-<p>A aceleração vertical atinge seu valor negativo máximo (para baixo)
-exatamente em <span class="math inline">\(\psi = 0^\circ\)</span> (<span
-class="math inline">\(t=0\)</span>). Integrando a aceleração em relação
-ao tempo, obtém-se a velocidade vertical <span
-class="math inline">\(v_z(t) = \dot{z}(t)\)</span>:</p>
-<p><span class="math display">\[
-v_z(t) = \int \ddot{z}(t) \, dt = -\frac{F_0}{m\Omega} \sin(\Omega t) =
-\frac{F_0}{m\Omega} \cos\left(\Omega t + \frac{\pi}{2}\right)
+<p>onde <span class="math inline">\(\rho\)</span> é a densidade do ar e
+<span class="math inline">\(A\)</span> a área do disco.</p>
+<h2
+id="2-demonstração-da-bijeção-entre-o-coeficiente-de-tração-e-a-razão-cinemática">2.
+Demonstração da Bijeção Entre o Coeficiente de Tração e a Razão
+Cinemática</h2>
+<p>O coeficiente de tração baseado na <a
+href="https://en.wikipedia.org/wiki/Dynamic_pressure">pressão
+dinâmica</a> da corrente livre, <span class="math inline">\(q_\infty =
+\tfrac{1}{2}\rho V^2\)</span>, é definido como:</p>
+<p><span class="math display">\[ T_c = \frac{T}{\frac{1}{2} \rho V^2 A}
 \]</span></p>
-<p>A velocidade vertical não é máxima em <span
-class="math inline">\(\psi = 0^\circ\)</span>; em <span
-class="math inline">\(\psi = 0^\circ\)</span>, ela é nula (<span
-class="math inline">\(v_z = 0\)</span>). Conforme a massa gira de <span
-class="math inline">\(\psi = 0^\circ\)</span> até <span
-class="math inline">\(\psi = 90^\circ\)</span>, a força continua
-empurrando-a para baixo (com intensidade decrescente), acumulando
-velocidade descendente. A velocidade descendente atinge seu valor máximo
-exatamente em <span class="math inline">\(\psi = 90^\circ\)</span>
-(<span class="math inline">\(\Omega t = \pi/2\)</span>).</p>
-<p>Integrando a velocidade vertical mais uma vez, obtém-se o
-deslocamento vertical <span class="math inline">\(z(t)\)</span>:</p>
-<p><span class="math display">\[
-z(t) = \int v_z(t) \, dt = \frac{F_0}{m\Omega^2} \cos(\Omega t) =
--\frac{F_0}{m\Omega^2} \cos(\Omega t - \pi)
+<p>Substituindo a expressão de <span class="math inline">\(T\)</span>
+obtida pela teoria de momento:</p>
+<p><span class="math display">\[ T_c = \frac{2 \rho A v_i \sqrt{V^2 +
+v_i^2}}{\frac{1}{2} \rho V^2 A} = \frac{4 v_i \sqrt{V^2 + v_i^2}}{V^2}
 \]</span></p>
-<p>O deslocamento vertical descendente máximo ocorre em <span
-class="math inline">\(\psi = 180^\circ\)</span> (<span
-class="math inline">\(\Omega t = \pi\)</span>).</p>
-<hr />
-<h3
-id="do-ponto-isolado-ao-disco-rígido-a-origem-da-precessão-espacial">Do
-Ponto Isolado ao Disco Rígido: A Origem da Precessão Espacial</h3>
-<p>Se o sistema consistisse em um único ponto livre sem restauração, o
-deslocamento máximo estaria <span
-class="math inline">\(180^\circ\)</span> defasado da força, agindo como
-um integrador duplo puro. Porém, em um disco rígido ou em um rotor de
-várias massas conectadas:</p>
-<ol type="1">
-<li>Em <span class="math inline">\(\psi = 90^\circ\)</span>, todas as
-massas que passam por esse ponto possuem a <strong>velocidade
-descendente máxima</strong>.</li>
-<li>No lado oposto (<span class="math inline">\(\psi =
-270^\circ\)</span>), as massas possuem a <strong>velocidade ascendente
-máxima</strong>.</li>
-<li>Em <span class="math inline">\(\psi = 0^\circ\)</span> e <span
-class="math inline">\(\psi = 180^\circ\)</span>, a velocidade vertical
-instantânea do disco é nula.</li>
-</ol>
-<p>Como o disco é um corpo rígido com ponto de apoio central, uma
-distribuição de velocidades verticais que é máxima na linha <span
-class="math inline">\(\psi = 90^\circ - 270^\circ\)</span> força o plano
-do disco a <strong>girar (inclinar-se) em torno do eixo <span
-class="math inline">\(\psi = 0^\circ - 180^\circ\)</span></strong>.</p>
-<p>Consequentemente, a inclinação máxima do plano do disco (o ponto mais
-baixo do disco) ocorre na região de <span class="math inline">\(\psi =
-90^\circ\)</span>. A força aplicada em <span class="math inline">\(\psi
-= 0^\circ\)</span> produz o deslocamento angular máximo do disco <span
-class="math inline">\(90^\circ\)</span> depois. Isso é a
-<strong>resposta em quadratura</strong> ou <strong>precessão
-espacial</strong>.</p>
-<p><picture><source srcset="../assets/media/rotores-e-giroscopios_fig1.webp" type="image/webp"><img src="../assets/media/rotores-e-giroscopios_fig1.jpeg"
-alt="Força descendente em uma pequena massa em um disco girante: as quatro fases do azimute, a variação temporal de força, aceleração, velocidade e deslocamento, e a consequência de precessão no disco rígido" /></picture></p>
-<p><em>Figura 1. Resposta de uma massa no disco girante a uma força
-descendente, ao longo das quatro fases do azimute.</em></p>
-<hr />
-<h2 id="3-o-giroscópio-como-bloco-de-construção">3. O Giroscópio como
-Bloco de Construção</h2>
-<p>Consideremos agora a modelagem dinâmica do giroscópio clássico como
-um corpo rígido simétrico girando a uma velocidade angular constante
-<span class="math inline">\(\Omega\)</span> em torno do seu eixo
-polar.</p>
-<h3 id="notação-e-parâmetros">Notação e Parâmetros</h3>
-<ul>
-<li><span class="math inline">\(I_T\)</span>: Momento de inércia
-transversal (em torno dos eixos de inclinação <span
-class="math inline">\(x\)</span> e <span
-class="math inline">\(y\)</span>).</li>
-<li><span class="math inline">\(I_P\)</span>: Momento de inércia polar
-(em torno do eixo de rotação <span
-class="math inline">\(z\)</span>).</li>
-<li><span class="math inline">\(\Omega\)</span>: Velocidade angular de
-rotação do giroscópio.</li>
-<li><span class="math inline">\(\theta_x, \theta_y\)</span>: Ângulos de
-inclinação (arfagem e rolamento) no referencial inercial/fixo.</li>
-<li><span class="math inline">\(M_x, M_y\)</span>: Momentos externos
-aplicados nos eixos <span class="math inline">\(x\)</span> e <span
-class="math inline">\(y\)</span>.</li>
-<li><span class="math inline">\(D\)</span>: Coeficiente de amortecimento
-viscoso torsional.</li>
-<li><span class="math inline">\(K\)</span>: Rigidez torsional externa
-aplicada aos eixos de inclinação.</li>
-</ul>
-<hr />
-<h3 id="giroscópio-ideal-no-vácuo-d--0-k--0">Giroscópio Ideal no Vácuo
-(<span class="math inline">\(D = 0, K = 0\)</span>)</h3>
-<p>No referencial inercial, para pequenas inclinações <span
-class="math inline">\(\theta_x\)</span> e <span
-class="math inline">\(\theta_y\)</span>, as equações de Euler
-linearizadas são:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + I_P \Omega \dot{\theta}_y = M_x \\
-I_T \ddot{\theta}_y - I_P \Omega \dot{\theta}_x = M_y
-\end{cases}
+<p>Dividindo o termo sob a raiz por <span
+class="math inline">\(v_i^2\)</span> e o denominador por <span
+class="math inline">\(V^2\)</span>, isola-se a dependência exclusiva em
+<span class="math inline">\(V/v_i\)</span>:</p>
+<p><span class="math display">\[ T_c = \frac{4
+\sqrt{\left(\dfrac{V}{v_i}\right)^2 + 1}}{\left(\dfrac{V}{v_i}\right)^2}
 \]</span></p>
-<p>O termo cruzado <span class="math inline">\(I_P \Omega
-\dot{\theta}\)</span> é a <strong>força/momento giroscópico
-acoplado</strong>, que converte uma taxa de inclinação no eixo <span
-class="math inline">\(y\)</span> em um momento no eixo <span
-class="math inline">\(x\)</span>, e vice-versa.</p>
-<h4 id="formulacao-complexa">Formulacao Complexa</h4>
-<p>Definimos a inclinação complexa <span class="math inline">\(\theta(t)
-= \theta_x(t) + i \theta_y(t)\)</span> e o momento complexo <span
-class="math inline">\(M(t) = M_x(t) + i M_y(t)\)</span>. Multiplicando a
-segunda equação por <span class="math inline">\(i\)</span> e somando à
-primeira:</p>
-<p><span class="math display">\[
-I_T (\ddot{\theta}_x + i \ddot{\theta}_y) - i I_P \Omega (\dot{\theta}_x
-+ i \dot{\theta}_y) = M_x + i M_y
+<p>Como <span class="math inline">\(V/v_i = \mu/\lambda\)</span> para
+<span class="math inline">\(\alpha = 0\)</span>, obtém-se a relação
+fechada:</p>
+<p><span class="math display">\[ T_c = \frac{4
+\sqrt{\left(\dfrac{\mu}{\lambda}\right)^2 +
+1}}{\left(\dfrac{\mu}{\lambda}\right)^2} \]</span></p>
+<p>Esta é a relação central do estudo. O lado direito é <a
+href="https://en.wikipedia.org/wiki/Monotonic_function">função
+estritamente monotônica</a> e, portanto, <a
+href="https://en.wikipedia.org/wiki/Bijection">bijetora</a> de <span
+class="math inline">\(\mu/\lambda\)</span> no domínio físico de
+interesse, <span class="math inline">\(\mu/\lambda &gt; 0\)</span>. A
+cada valor de <span class="math inline">\(T_c\)</span> corresponde
+exatamente um valor de <span class="math inline">\(\mu/\lambda\)</span>,
+e vice-versa. Não há dependência residual de solidez, perfil
+aerodinâmico, torção de pá ou rotação. Dois rotores com <span
+class="math inline">\(T_c\)</span> idêntico operam necessariamente sob a
+mesma razão <span class="math inline">\(\mu/\lambda\)</span>, e portanto
+sob a mesma razão <span class="math inline">\(V/v_i\)</span>, por mais
+distintos que sejam em seus demais parâmetros de projeto. <span
+class="math inline">\(T_c\)</span> é, nesse sentido, uma medida
+adimensional da intensidade da perturbação induzida frente à energia
+cinética do escoamento livre.</p>
+<p>É essa bijeção que justifica uma prática comum em textos de
+aerodinâmica de rotores. Variáveis de esteira como o ângulo de skew, a
+distribuição de influxo e a contração do tubo de corrente são
+frequentemente apresentadas em gráficos parametrizados por <span
+class="math inline">\(\mu/\lambda\)</span>, e não por <span
+class="math inline">\(T_c\)</span> diretamente. Como as duas grandezas
+se determinam mutuamente, o eixo <span
+class="math inline">\(\mu/\lambda\)</span> carrega exatamente a mesma
+informação de estado aerodinâmico que <span
+class="math inline">\(T_c\)</span>. A vantagem é expressar diretamente a
+razão de velocidades que aparece nas equações de composição vetorial da
+esteira, como a do ângulo <span class="math inline">\(\chi\)</span> na
+Seção 4. Plotar em função de <span
+class="math inline">\(\mu/\lambda\)</span> é, portanto, equivalente a
+plotar em função de <span class="math inline">\(T_c\)</span>, apenas com
+a escala do eixo trocada.</p>
+<h2
+id="3-relação-entre-as-duas-normalizações-do-coeficiente-de-tração">3.
+Relação Entre as Duas Normalizações do Coeficiente de Tração</h2>
+<p>A literatura de rotores emprega, além de <span
+class="math inline">\(T_c\)</span>, o coeficiente de tração <span
+class="math inline">\(C_T\)</span>, referenciado não à pressão dinâmica
+da corrente livre, mas à pressão dinâmica associada à velocidade de
+ponta de pá:</p>
+<p><span class="math display">\[ C_T = \frac{T}{\rho A (\Omega R)^2}
 \]</span></p>
-<p><span class="math display">\[
-I_T \ddot{\theta} - i I_P \Omega \dot{\theta} = M
+<p>Enquanto <span class="math inline">\(T_c\)</span> normaliza a tração
+por uma grandeza extrínseca ao rotor, a dinâmica do voo, <span
+class="math inline">\(C_T\)</span> a normaliza por uma grandeza
+intrínseca, a rotação do próprio disco. A razão entre as duas definições
+elimina <span class="math inline">\(T\)</span>, <span
+class="math inline">\(\rho\)</span> e <span
+class="math inline">\(A\)</span>:</p>
+<p><span class="math display">\[ \frac{T_c}{C_T} = \frac{\rho A (\Omega
+R)^2}{\frac{1}{2}\rho V^2 A} = \frac{2(\Omega R)^2}{V^2} =
+\frac{2}{\mu^2} \]</span></p>
+<p>de modo que:</p>
+<p><span class="math display">\[ T_c = \frac{2\,C_T}{\mu^2}, \qquad
+\text{ou equivalentemente} \qquad C_T = \frac{\mu^2}{2}\,T_c
 \]</span></p>
-<h4 id="equação-característica-e-polos">Equação Característica e
-Polos</h4>
-<p>Para a equação homogênea (<span class="math inline">\(M =
-0\)</span>), assumindo solução do tipo <span
-class="math inline">\(\theta(t) = \Theta e^{st}\)</span>:</p>
-<p><span class="math display">\[
-I_T s^2 - i I_P \Omega s = 0 \implies s \left( I_T s - i I_P \Omega
-\right) = 0
+<p>O termo de acoplamento entre os dois coeficientes é exatamente <span
+class="math inline">\(\mu^2\)</span>, a mesma razão de avanço que
+aparece na relação <span class="math inline">\(\mu/\lambda\)</span>
+estabelecida na Seção 2. Isso expõe uma distinção importante entre os
+dois parâmetros. <span class="math inline">\(C_T\)</span>, por si só,
+não determina a geometria da esteira. Dois rotores com o mesmo <span
+class="math inline">\(C_T\)</span> mas <span
+class="math inline">\(\mu\)</span> diferentes correspondem, pela relação
+acima, a <span class="math inline">\(T_c\)</span> diferentes e,
+portanto, a ângulos de esteira <span class="math inline">\(\chi\)</span>
+diferentes. <span class="math inline">\(T_c\)</span>, por já incorporar
+a velocidade de voo em sua própria definição, é o parâmetro que carrega
+diretamente a informação de similaridade cinemática. <span
+class="math inline">\(C_T\)</span> carrega a mesma informação apenas
+quando acompanhado explicitamente de <span
+class="math inline">\(\mu\)</span>. Por essa razão, <span
+class="math inline">\(T_c\)</span>, e não <span
+class="math inline">\(C_T\)</span>, é o parâmetro natural para tratar da
+similaridade de esteiras entre rotores de dimensionamento distinto.</p>
+<h2
+id="4-o-coeficiente-de-tração-como-controlador-da-geometria-da-esteira">4.
+O Coeficiente de Tração Como Controlador da Geometria da Esteira</h2>
+<p>A esteira não desce ao longo do eixo normal do disco. Ela é inclinada
+pela velocidade de avanço. O ângulo entre o eixo da esteira e a normal
+ao disco, o ângulo de skew <span class="math inline">\(\chi\)</span>,
+resulta da <a
+href="https://en.wikipedia.org/wiki/Euclidean_vector">composição
+vetorial</a> no centro do disco entre a componente <span
+class="math inline">\(V\)</span>, perpendicular ao eixo normal, e a
+componente <span class="math inline">\(v_i\)</span>, ao longo do eixo
+normal:</p>
+<p><span class="math display">\[ \tan \chi = \frac{V}{v_i} =
+\frac{\mu}{\lambda} \]</span></p>
+<p>Como a Seção 2 estabelece que <span
+class="math inline">\(T_c\)</span> fixa univocamente <span
+class="math inline">\(\mu/\lambda\)</span>, segue diretamente que
+<strong>rotores com o mesmo <span class="math inline">\(T_c\)</span>
+produzem esteiras com o mesmo ângulo de deflexão <span
+class="math inline">\(\chi\)</span></strong>. Em uma arquitetura eVTOL
+multirrotor, isso significa que a trajetória da esteira, e portanto sua
+propensão a incidir sobre a cauda ou a ser ingerida por um rotor
+vizinho, permanece topologicamente constante para um dado <span
+class="math inline">\(T_c\)</span>, independentemente do dimensionamento
+físico de cada rotor.</p>
+<p>O mesmo argumento estende-se ao campo de velocidades relativo. Na
+esteira distante, a velocidade axial induzida duplica, atinge <span
+class="math inline">\(2v_i\)</span> e forma o vetor <span
+class="math inline">\(\vec{V} + 2\vec{v}_i\)</span>. Como <span
+class="math inline">\(T_c\)</span> trava a razão <span
+class="math inline">\(V/v_i\)</span>, os triângulos vetoriais que
+descrevem o escoamento em qualquer estação da esteira são <a
+href="https://en.wikipedia.org/wiki/Similarity_(geometry)">semelhantes</a>
+entre os dois rotores. A similaridade geométrica adimensional, portanto,
+não se limita ao ângulo <span class="math inline">\(\chi\)</span> no
+plano do disco. Ela se estende a toda a topologia da esteira, do plano
+do rotor à esteira distante.</p>
+<h2
+id="5-carregamento-de-disco-como-condição-adicional-para-a-similaridade-de-energia">5.
+Carregamento de Disco Como Condição Adicional Para a Similaridade de
+Energia</h2>
+<p>A similaridade estabelecida até aqui é adimensional. Permanece em
+aberto se as velocidades absolutas, e portanto a energia cinética
+efetivamente depositada no escoamento, também coincidem entre os dois
+rotores.</p>
+<p>Isolando <span class="math inline">\(V\)</span> na definição de <span
+class="math inline">\(T_c\)</span> escrita em termos do <a
+href="https://en.wikipedia.org/wiki/Disk_loading">carregamento de
+disco</a> <span class="math inline">\(T/A\)</span>:</p>
+<p><span class="math display">\[ T_c = \frac{T/A}{\frac{1}{2}\rho V^2}
+\quad \Longrightarrow \quad V = \sqrt{\frac{T/A}{\frac{1}{2}\rho T_c}}
 \]</span></p>
-<p>As raízes (polos do sistema) são:</p>
-<p><span class="math display">\[
-s_1 = 0 \qquad \text{e} \qquad s_2 = i \left( \frac{I_P}{I_T} \right)
-\Omega
-\]</span></p>
-<p><strong>Interpretação Física dos Polos</strong>:</p>
-<ul>
-<li><strong><span class="math inline">\(s_1 = 0\)</span></strong>:
-Corresponde ao modo de posição nula/constante. O giroscópio livre não
-possui força restauradora de posição; qualquer orientação angular
-alcançada permanece constante na ausência de momentos.</li>
-<li><strong><span class="math inline">\(s_2 = i \frac{I_P}{I_T}
-\Omega\)</span></strong>: Corresponde ao modo de precessão livre
-(nutação puramente senoidal sem amortecimento). Como a parte real é nula
-(<span class="math inline">\(\sigma = 0\)</span>), o giroscópio ideal no
-vácuo é <strong>marginalmente estável</strong>.</li>
-<li><strong>Resposta Forçada em Ressonância</strong>: Se aplicarmos um
-momento harmônico exatamente na frequência <span
-class="math inline">\(1/\text{rev}\)</span> (<span
-class="math inline">\(\omega = \Omega\)</span>), e para o caso de um
-disco fino onde <span class="math inline">\(I_P \approx 2 I_T\)</span>
-(ou <span class="math inline">\(I_P = I_T\)</span>), a excitação
-coincide com a frequência natural e, devido à ausência de amortecimento,
-a amplitude cresce secularmente sem limite no regime linear.</li>
-</ul>
-<hr />
-<h3 id="giroscópio-com-amortecimento-viscoso-d--0-k--0">Giroscópio com
-Amortecimento Viscoso (<span class="math inline">\(D &gt; 0, K =
-0\)</span>)</h3>
-<p>Adicionando um amortecimento viscoso <span
-class="math inline">\(D\)</span> que opõe às taxas de inclinação <span
-class="math inline">\(\dot{\theta}_x\)</span> e <span
-class="math inline">\(\dot{\theta}_y\)</span>:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + D \dot{\theta}_x + I_P \Omega \dot{\theta}_y = M_x
-\\
-I_T \ddot{\theta}_y + D \dot{\theta}_y - I_P \Omega \dot{\theta}_x = M_y
-\end{cases}
-\]</span></p>
-<p>Na forma complexa:</p>
-<p><span class="math display">\[
-I_T \ddot{\theta} + (D - i I_P \Omega) \dot{\theta} = M
-\]</span></p>
-<h4 id="equação-característica-e-polos-1">Equação Característica e
-Polos</h4>
-<p><span class="math display">\[
-I_T s^2 + (D - i I_P \Omega) s = 0 \implies s \left[ I_T s + (D - i I_P
-\Omega) \right] = 0
-\]</span></p>
-<p>Os polos são:</p>
-<p><span class="math display">\[
-s_1 = 0 \qquad \text{e} \qquad s_2 = -\frac{D}{I_T} + i \left(
-\frac{I_P}{I_T} \right) \Omega
-\]</span></p>
-<p><strong>Interpretação Física</strong>:</p>
-<p>O amortecimento viscoso introduz uma parte real negativa <span
-class="math inline">\(\sigma = -D/I_T\)</span> no modo oscilatório. A
-precessão livre agora é um movimento espiral decrescente no tempo
-(estável). O polo em <span class="math inline">\(s_1 = 0\)</span>
-permanece na origem pois ainda não há rigidez de posição.</p>
-<hr />
-<h3 id="giroscópio-com-rigidez-torsional-externa-d--0-k--0">Giroscópio
-com Rigidez Torsional Externa (<span class="math inline">\(D &gt; 0, K
-&gt; 0\)</span>)</h3>
-<p>Adicionando molas torsionais externas de rigidez <span
-class="math inline">\(K\)</span> em cada eixo:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + D \dot{\theta}_x + I_P \Omega \dot{\theta}_y + K
-\theta_x = M_x \\
-I_T \ddot{\theta}_y + D \dot{\theta}_y - I_P \Omega \dot{\theta}_x + K
-\theta_y = M_y
-\end{cases}
-\]</span></p>
-<p>Na forma complexa unificada:</p>
-<p><span class="math display">\[
-I_T \ddot{\theta} + (D - i I_P \Omega) \dot{\theta} + K \theta = M
-\]</span></p>
-<h4 id="equação-característica-geral">Equação Característica Geral</h4>
-<p><span class="math display">\[
-I_T s^2 + (D - i I_P \Omega) s + K = 0
-\]</span></p>
-<p>Usando a fórmula quadrática:</p>
-<p><span class="math display">\[
-s = \frac{-(D - i I_P \Omega) \pm \sqrt{(D - i I_P \Omega)^2 - 4 I_T
-K}}{2 I_T}
-\]</span></p>
-<p>A presença de <span class="math inline">\(K &gt; 0\)</span> remove o
-polo da origem (<span class="math inline">\(s_1 \neq 0\)</span>),
-deslocando ambos os polos e estabelecendo uma posição de equilíbrio
-elástico estático.</p>
-<hr />
-<h3
-id="resposta-em-frequência-rigidez-efetiva-e-ângulo-de-fase">Resposta em
-Frequência, Rigidez Efetiva e Ângulo de Fase</h3>
-<p>Para avaliar a resposta forçada a uma excitação harmônica <span
-class="math inline">\(M(t) = M_0 e^{i \omega t}\)</span>, assumimos
-resposta permanente <span class="math inline">\(\theta(t) = \Theta e^{i
-\omega t}\)</span>:</p>
-<p><span class="math display">\[
-\left[ -I_T \omega^2 + i \omega (D - i I_P \Omega) + K \right] \Theta =
-M_0
-\]</span></p>
-<p><span class="math display">\[
-\left[ (K - I_T \omega^2 + \omega I_P \Omega) + i \omega D \right]
-\Theta = M_0
-\]</span></p>
-<p>Definimos a <strong>Rigidez Efetiva Giroscópica</strong> <span
-class="math inline">\(K_{\text{ef}}(\omega)\)</span> como a parte real
-do operador:</p>
-<p><span class="math display">\[
-K_{\text{ef}}(\omega) = K - I_T \omega^2 + \omega I_P \Omega
-\]</span></p>
-<p>A função de transferência de resposta em frequência é:</p>
-<p><span class="math display">\[
-\Theta(\omega) = \frac{M_0}{K_{\text{ef}}(\omega) + i \omega D}
-\]</span></p>
-<p>A amplitude <span class="math inline">\(|\Theta|\)</span> e o ângulo
-de fase <span class="math inline">\(\phi\)</span> são dados por:</p>
-<p><span class="math display">\[
-|\Theta| = \frac{|M_0|}{\sqrt{[K_{\text{ef}}(\omega)]^2 + (\omega D)^2}}
-\]</span></p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\omega D}{K_{\text{ef}}(\omega)} \right) =
-\arctan \left( \frac{\omega D}{K - I_T \omega^2 + \omega I_P \Omega}
-\right)
-\]</span></p>
-<p><strong>Análise do Ângulo de Fase <span
-class="math inline">\(\phi\)</span></strong>:</p>
-<ol type="1">
-<li><p><strong>Ressonância Giroscópica Pura (<span
-class="math inline">\(K_{\text{ef}}(\omega) = 0\)</span>)</strong>:
-Quando a rigidez efetiva se anula, a parte real do denominador
-desaparece. O ângulo de fase torna-se:</p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\omega D}{0} \right) = 90^\circ
-\]</span></p>
-<p>A resposta está exatamente em <strong>quadratura</strong> (<span
-class="math inline">\(90^\circ\)</span> atrasada em relação à força
-aplicada).</p></li>
-<li><p><strong>Efeito de Rigidez Dominante (<span
-class="math inline">\(K_{\text{ef}}(\omega) &gt; 0\)</span>)</strong>:
-Se a rigidez externa <span class="math inline">\(K\)</span> for grande
-de modo que <span class="math inline">\(K_{\text{ef}}(\omega) &gt;
-0\)</span>, o denominador possui parte real positiva:</p>
-<p><span class="math display">\[
-\phi &lt; 90^\circ
-\]</span></p>
-<p>A fase diminui, aproximando a resposta espacial do eixo de aplicação
-da força.</p></li>
-<li><p><strong>Efeito Inercial Dominante (<span
-class="math inline">\(K_{\text{ef}}(\omega) &lt; 0\)</span>)</strong>:
-Se o termo inercial ou de rotação dominar fazendo com que <span
-class="math inline">\(K_{\text{ef}}(\omega) &lt; 0\)</span>, a fase
-supera <span class="math inline">\(90^\circ\)</span>:</p>
-<p><span class="math display">\[
-90^\circ &lt; \phi \le 180^\circ
-\]</span></p></li>
-</ol>
-<hr />
-<h2 id="4-o-rotor-de-asas-rotativas">4. O Rotor de Asas Rotativas</h2>
-<p>Analisaremos agora a dinâmica de batimento (<em>flapping</em>) da pá
-de um rotor no referencial girante.</p>
-<h3 id="notação-e-parâmetros-1">Notação e Parâmetros</h3>
-<ul>
-<li><span class="math inline">\(I_b\)</span>: Momento de inércia de
-batimento da pá em relação à articulação (<span
-class="math inline">\(\int_0^R r^2 dm\)</span>).</li>
-<li><span class="math inline">\(\Omega\)</span>: Velocidade angular de
-rotação do rotor.</li>
-<li><span class="math inline">\(\psi\)</span>: Posição azimutal da pá
-(<span class="math inline">\(\psi = \Omega t\)</span>).</li>
-<li><span class="math inline">\(\beta\)</span>: Ângulo de batimento
-(<em>flap angle</em>) da pá.</li>
-<li><span class="math inline">\(C_\beta\)</span>: Coeficiente de
-amortecimento aerodinâmico de batimento.</li>
-<li><span class="math inline">\(K_{cf}\)</span>: Rigidez centrífuga de
-batimento (<span class="math inline">\(I_b \Omega^2\)</span>).</li>
-<li><span class="math inline">\(K_e\)</span>: Rigidez equivalente devida
-ao <em>hinge offset</em> (excentricidade da articulação <span
-class="math inline">\(e\)</span>).</li>
-<li><span class="math inline">\(K_s\)</span>: Rigidez elástica
-estrutural da raiz da pá (rotores <em>hingeless</em> /
-<em>bearingless</em>).</li>
-<li><span class="math inline">\(\gamma\)</span>: Número de Lock (<span
-class="math inline">\(\frac{\rho a c R^4}{I_b}\)</span>).</li>
-</ul>
-<hr />
-<h3 id="pá-articulada-no-vácuo-e-rigidez-centrífuga">Pá Articulada no
-Vácuo e Rigidez Centrífuga</h3>
-<p>Considere uma pá articulada na origem (<span
-class="math inline">\(e=0\)</span>) girando no vácuo (<span
-class="math inline">\(C_\beta = 0\)</span>, sem forças aerodinâmicas).
-Quando a pá se desloca do plano de rotação por um ângulo <span
-class="math inline">\(\beta\)</span>, a força centrífuga atuando em um
-elemento de massa <span class="math inline">\(dm\)</span> a uma
-distância <span class="math inline">\(r\)</span> desenvolve um momento
-restaurador em torno da articulação de batimento:</p>
-<p><span class="math display">\[
-d M_{cf} = -(r \Omega^2 dm) \cdot (r \sin \beta) \approx -r^2 \Omega^2
-\beta \, dm
-\]</span></p>
-<p>Integrando ao longo de toda a extensão da pá de <span
-class="math inline">\(0\)</span> a <span
-class="math inline">\(R\)</span>:</p>
-<p><span class="math display">\[
-M_{cf} = -\beta \Omega^2 \int_0^R r^2 dm = -I_b \Omega^2 \beta
-\]</span></p>
-<p>O termo <span class="math inline">\(K_{cf} = I_b \Omega^2\)</span>
-representa a <strong>Rigidez Centrífuga de Batimento</strong>. Esta
-rigidez não decorre de uma mola física, mas sim da geometria da
-rotação.</p>
-<p>A equação de movimento da pá no vácuo sob um momento excitador <span
-class="math inline">\(M_1 \cos(\Omega t)\)</span> é:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + I_b \Omega^2 \beta = M_1 \cos(\Omega t)
-\]</span></p>
-<p>Dividindo por <span class="math inline">\(I_b\)</span>:</p>
-<p><span class="math display">\[
-\ddot{\beta} + \Omega^2 \beta = \frac{M_1}{I_b} \cos(\Omega t)
-\]</span></p>
-<h4 id="frequência-natural-e-polos-no-vácuo">Frequência Natural e Polos
-no Vácuo</h4>
-<p>A frequência natural de batimento no vácuo é <span
-class="math inline">\(\omega_n = \sqrt{\frac{I_b \Omega^2}{I_b}} =
-\Omega\)</span>.</p>
-<p>O rotor articulado no vácuo possui uma frequência natural exatamente
-igual à frequência de rotação (<span
-class="math inline">\(1/\text{rev}\)</span>). A equação característica
-<span class="math inline">\(s^2 + \Omega^2 = 0\)</span> fornece os
-polos:</p>
-<p><span class="math display">\[
-s_{1,2} = \pm i \Omega
-\]</span></p>
-<h4 id="o-cancelamento-inercial-e-centrífugo">O “Cancelamento” Inercial
-e Centrífugo</h4>
-<p>Para uma resposta harmônica <span class="math inline">\(\beta(t) = B
-\cos(\Omega t - \phi)\)</span>:</p>
-<ul>
-<li>O termo inercial é: <span class="math inline">\(I_b \ddot{\beta} =
--I_b \Omega^2 \beta(t)\)</span></li>
-<li>O termo centrífugo é: <span class="math inline">\(K_{cf} \beta =
-+I_b \Omega^2 \beta(t)\)</span></li>
-</ul>
-<p>Somando ambos os termos reativos:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + I_b \Omega^2 \beta = -I_b \Omega^2 \beta(t) + I_b
-\Omega^2 \beta(t) \equiv 0
-\]</span></p>
-<p>Em rotação de <span class="math inline">\(1/\text{rev}\)</span>,
-<strong>o termo inercial e o termo centrífugo cancelam-se mutuamente a
-cada instante t</strong>. Na ausência de amortecimento (<span
-class="math inline">\(C_\beta = 0\)</span>), a solução para excitação
-exatamente na frequência ressonante <span
-class="math inline">\(\Omega\)</span> cresce linearmente com o
-tempo:</p>
-<p><span class="math display">\[
-\beta(t) = \frac{M_1}{2 I_b \Omega} t \sin(\Omega t)
-\]</span></p>
-<p>Assim como o giroscópio ideal no vácuo, o rotor no vácuo não possui
-amplitude estacionária finita em ressonância.</p>
-<hr />
-<h3 id="origem-do-amortecimento-aerodinâmico-e-número-de-lock">Origem do
-Amortecimento Aerodinâmico e Número de Lock</h3>
-<p>Quando o rotor opera na atmosfera, o movimento de batimento da pá
-<span class="math inline">\(\dot{\beta}\)</span> gera uma velocidade
-vertical relativa do ar no elemento de pá <span
-class="math inline">\(U_p = r \dot{\beta}\)</span>. Isso altera o ângulo
-de ataque local <span class="math inline">\(\alpha(r)\)</span>:</p>
-<p><span class="math display">\[
-\Delta \alpha(r) = -\frac{U_p}{U_t} = -\frac{r \dot{\beta}}{\Omega r} =
--\frac{\dot{\beta}}{\Omega}
-\]</span></p>
-<p>A variação correspondente na sustentação aerodinâmica gera um momento
-de amortecimento oposto à velocidade de batimento <span
-class="math inline">\(\dot{\beta}\)</span>. Integrando ao longo da
-pá:</p>
-<p><span class="math display">\[
-M_{aero\_damp} = -\int_0^R \frac{1}{2} \rho U_t^2 c a \left( \frac{r
-\dot{\beta}}{\Omega r} \right) r \, dr = -\frac{1}{8} \rho a c R^4
-\Omega \dot{\beta}
-\]</span></p>
-<p>Definindo o <strong>Número de Lock</strong> <span
-class="math inline">\(\gamma\)</span>, que quantifica a razão entre as
-forças aerodinâmicas e as forças inerciais da pá:</p>
-<p><span class="math display">\[
-\gamma = \frac{\rho a c R^4}{I_b}
-\]</span></p>
-<p>O coeficiente de amortecimento aerodinâmico <span
-class="math inline">\(C_\beta\)</span> torna-se:</p>
-<p><span class="math display">\[
-C_\beta = \frac{1}{8} \rho a c R^4 \Omega = \frac{\gamma I_b \Omega}{8}
-\]</span></p>
-<p>O amortecimento de batimento em um rotor de helicóptero é de origem
-<strong>puramente aerodinâmica</strong> e é diretamente proporcional ao
-Número de Lock <span class="math inline">\(\gamma\)</span> e à
-velocidade angular <span class="math inline">\(\Omega\)</span>.</p>
-<hr />
-<h3 id="rotor-articuladoteetering-na-atmosfera">Rotor
-Articulado/Teetering na Atmosfera</h3>
-<p>Incluindo o amortecimento aerodinâmico <span
-class="math inline">\(C_\beta\)</span>, a equação de batimento no
-referencial girante passa a ser:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + C_\beta \dot{\beta} + I_b \Omega^2 \beta = M_1
-\cos(\Omega t)
-\]</span></p>
-<p><span class="math display">\[
-\ddot{\beta} + \frac{\gamma \Omega}{8} \dot{\beta} + \Omega^2 \beta =
-\frac{M_1}{I_b} \cos(\Omega t)
-\]</span></p>
-<h4 id="polos-no-plano-completo-s">Polos no Plano Completo <span
-class="math inline">\(s\)</span></h4>
-<p>A equação característica <span class="math inline">\(s^2 +
-\frac{\gamma \Omega}{8} s + \Omega^2 = 0\)</span> possui as raízes:</p>
-<p><span class="math display">\[
-s_{1,2} = -\frac{\gamma \Omega}{16} \pm i \Omega \sqrt{1 -
-\left(\frac{\gamma}{16}\right)^2}
-\]</span></p>
-<p>Como <span class="math inline">\(\gamma &gt; 0\)</span> (tipicamente
-entre 5 e 10 para helicópteros), a parte real é estritamente negativa
-(<span class="math inline">\(\sigma = -\frac{\gamma
-\Omega}{16}\)</span>). O amortecimento aerodinâmico move os polos para o
-semiplano esquerdo, garantindo a <strong>estabilidade e a existência de
-um regime permanente estacionário de amplitude finita</strong>.</p>
-<h4 id="resposta-estacionária-e-ângulo-de-fase">Resposta Estacionária e
-Ângulo de Fase</h4>
-<p>Para <span class="math inline">\(\beta(t) = \Re\{ B e^{i \Omega t}
-\}\)</span>:</p>
-<p><span class="math display">\[
-\left[ -I_b \Omega^2 + i \Omega C_\beta + I_b \Omega^2 \right] B = M_1
-\implies i \Omega C_\beta B = M_1
-\]</span></p>
-<p><span class="math display">\[
-B = \frac{M_1}{i \Omega C_\beta} = \frac{M_1}{\Omega C_\beta} e^{-i
-\frac{\pi}{2}}
-\]</span></p>
-<p><span class="math display">\[
-\beta(t) = \frac{M_1}{\Omega C_\beta} \cos\left(\Omega t -
-90^\circ\right)
-\]</span></p>
-<p>Em um rotor articulado puro (<span
-class="math inline">\(e=0\)</span>), <strong>o cancelamento perfeito
-entre os termos inercial e centrífugo faz com que a resposta seja
-governada unicamente pelo amortecimento aerodinâmico</strong>,
-resultando em uma defasagem de fase estacionária de <strong>exatamente
-<span class="math inline">\(90^\circ\)</span></strong>.</p>
-<hr />
-<h3 id="rotores-com-hinge-offset-e-hingeless-omega_n--omega">Rotores com
-Hinge Offset e Hingeless (<span class="math inline">\(\omega_n &gt;
-\Omega\)</span>)</h3>
-<p>Em rotores reais com excentricidade da articulação (<em>hinge
-offset</em> <span class="math inline">\(e &gt; 0\)</span>) ou rotores
-rígidos/flexíveis sem articulação (<em>hingeless</em> /
-<em>bearingless</em>), surge uma rigidez mecânica ou geométrica
-adicional:</p>
-<ul>
-<li><span class="math inline">\(K_e\)</span>: Rigidez do <em>hinge
-offset</em> (<span class="math inline">\(K_e \approx \frac{3}{2}
-\frac{e}{R} I_b \Omega^2\)</span>).</li>
-<li><span class="math inline">\(K_s\)</span>: Rigidez elástica de mola
-na raiz da pá.</li>
-</ul>
-<p>A rigidez total de batimento <span
-class="math inline">\(K_{tot}\)</span> passa a ser:</p>
-<p><span class="math display">\[
-K_{tot} = K_{cf} + K_e + K_s = I_b \Omega^2 + K_e + K_s &gt; I_b
-\Omega^2
-\]</span></p>
-<p>A frequência natural não dimensional de batimento <span
-class="math inline">\(\nu_\beta = \frac{\omega_n}{\Omega}\)</span>
-torna-se maior que <span
-class="math inline">\(1.0/\text{rev}\)</span>:</p>
-<p><span class="math display">\[
-\nu_\beta = \sqrt{1 + \frac{K_e + K_s}{I_b \Omega^2}} &gt; 1.0
-\]</span></p>
-<p>(Tipicamente <span class="math inline">\(\nu_\beta \approx 1.03 -
-1.05\)</span> para rotores com <em>offset</em> e <span
-class="math inline">\(\nu_\beta \approx 1.10 - 1.20\)</span> para
-rotores <em>hingeless</em>).</p>
-<hr />
-<h3
-id="generalização-resposta-de-fase-e-amplitude-no-rotor">Generalização:
-Resposta de Fase e Amplitude no Rotor</h3>
-<p>A equação genérica de batimento para qualquer rotor é:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + C_\beta \dot{\beta} + K_{tot} \beta = M_1 \cos(\omega
-t)
-\]</span></p>
-<p>A amplitude <span class="math inline">\(B\)</span> e o ângulo de
-atraso de fase <span class="math inline">\(\phi\)</span> para uma
-excitação em frequência <span class="math inline">\(\omega\)</span>
-são:</p>
-<p><span class="math display">\[
-B = \frac{M_1}{\sqrt{(K_{tot} - I_b \omega^2)^2 + (C_\beta \omega)^2}}
-\]</span></p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{C_\beta \omega}{K_{tot} - I_b \omega^2}
-\right)
-\]</span></p>
-<p>Para excitação de <span class="math inline">\(1/\text{rev}\)</span>
-(<span class="math inline">\(\omega = \Omega\)</span>), substituindo
-<span class="math inline">\(C_\beta = \frac{\gamma I_b
-\Omega}{8}\)</span>:</p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\frac{\gamma}{8} I_b \Omega^2}{K_{tot} - I_b
-\Omega^2} \right) = \arctan \left( \frac{\frac{\gamma}{8}}{\nu_\beta^2 -
-1} \right)
-\]</span></p>
-<p><strong>Análise do Ângulo de Fase no Rotor</strong>:</p>
-<ol type="1">
-<li><p><strong>Rotor Articulado Puro (<span
-class="math inline">\(\nu_\beta = 1.0\)</span>, <span
-class="math inline">\(K_{tot} = I_b \Omega^2\)</span>)</strong>:
-Denominador do argumento é zero <span class="math inline">\(\implies
-\phi = \arctan(\infty) = 90^\circ\)</span>.</p></li>
-<li><p><strong>Rotor com Hinge Offset ou Hingeless (<span
-class="math inline">\(\nu_\beta &gt; 1.0\)</span>, <span
-class="math inline">\(K_{tot} &gt; I_b \Omega^2\)</span>)</strong>: Como
-<span class="math inline">\(K_{tot} - I_b \Omega^2 &gt; 0\)</span>, o
-argumento do arcotangente é finito e positivo:</p>
-<p><span class="math display">\[
-\phi &lt; 90^\circ
-\]</span></p>
-<p>A resposta antecipa-se angularmente. O pico de batimento ocorre antes
-de <span class="math inline">\(90^\circ\)</span> (tipicamente <span
-class="math inline">\(80^\circ\)</span> a <span
-class="math inline">\(85^\circ\)</span> para <em>offset</em> e <span
-class="math inline">\(70^\circ\)</span> a <span
-class="math inline">\(75^\circ\)</span> para
-<em>hingeless</em>).</p></li>
-</ol>
-<hr />
-<h2 id="5-transformação-de-coleman-e-a-demonstração-da-equivalência">5.
-Transformação de Coleman e a Demonstração da Equivalência</h2>
-<p>Para provar rigorosamente a identidade matemática entre o rotor e o
-giroscópio, devemos transformar as equações de movimento do rotor
-(escritas para pás individuais no referencial girante) para o
-referencial inercial fixo.</p>
-<h3 id="as-coordenadas-multi-pá-de-coleman">As Coordenadas Multi-pá de
-Coleman</h3>
-<p>Consideremos um rotor de <span class="math inline">\(N\)</span> pás
-(<span class="math inline">\(N \ge 3\)</span>). O ângulo de batimento da
-<span class="math inline">\(i\)</span>-ésima pá no azimute <span
-class="math inline">\(\psi_i = \Omega t + \frac{2\pi(i-1)}{N}\)</span>
-pode ser expresso pela Transformação de Coleman (Coleman &amp; Feingold,
-1958):</p>
-<p><span class="math display">\[
-\beta_i(t) = \beta_0(t) + \beta_{1c}(t) \cos \psi_i + \beta_{1s}(t) \sin
-\psi_i + \dots
-\]</span></p>
-<p>onde:</p>
-<ul>
-<li><span class="math inline">\(\beta_0\)</span>: Modo de coning
-uniforme do rotor.</li>
-<li><span class="math inline">\(\beta_{1c}\)</span>: Inclinação
-longitudinal do Plano de Ponta de Pá (TPP) em relação ao referencial
-fixo (positiva para trás).</li>
-<li><span class="math inline">\(\beta_{1s}\)</span>: Inclinação lateral
-do TPP em relação ao referencial fixo (positiva para a direita).</li>
-</ul>
-<p>O vetor complexo do TPP no referencial fixo é definido como:</p>
-<p><span class="math display">\[
-\mu(t) = \beta_{1c}(t) + i \beta_{1s}(t)
-\]</span></p>
-<hr />
-<h3 id="dedução-das-equações-no-referencial-fixo">Dedução das Equações
-no Referencial Fixo</h3>
-<p>Derivando <span class="math inline">\(\beta_i(t)\)</span> em relação
-ao tempo e aplicando a regra da cadeia com <span
-class="math inline">\(\dot{\psi}_i = \Omega\)</span>:</p>
-<p><span class="math display">\[
-\dot{\beta}_i = \dot{\beta}_0 + (\dot{\beta}_{1c} + \Omega \beta_{1s})
-\cos \psi_i + (\dot{\beta}_{1s} - \Omega \beta_{1c}) \sin \psi_i
-\]</span></p>
-<p><span class="math display">\[
-\ddot{\beta}_i = \ddot{\beta}_0 + (\ddot{\beta}_{1c} + 2\Omega
-\dot{\beta}_{1s} - \Omega^2 \beta_{1c}) \cos \psi_i + (\ddot{\beta}_{1s}
-- 2\Omega \dot{\beta}_{1c} - \Omega^2 \beta_{1s}) \sin \psi_i
-\]</span></p>
-<p>Substituindo <span class="math inline">\(\beta_i, \dot{\beta}_i,
-\ddot{\beta}_i\)</span> na equação genérica de batimento <span
-class="math inline">\(I_b \ddot{\beta}_i + C_\beta \dot{\beta}_i +
-K_{tot} \beta_i = M_i(\psi_i)\)</span>, multiplicando por <span
-class="math inline">\(\cos \psi_i\)</span> e <span
-class="math inline">\(\sin \psi_i\)</span> e somando sobre todas as
-<span class="math inline">\(N\)</span> pás, isolam-se as equações
-desacopladas dos modos cíclicos do TPP no referencial fixo:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_b \ddot{\beta}_{1c} + C_\beta \dot{\beta}_{1c} + (K_{tot} - I_b
-\Omega^2) \beta_{1c} + 2 I_b \Omega \dot{\beta}_{1s} + C_\beta \Omega
-\beta_{1s} = M_{1c} \\
-I_b \ddot{\beta}_{1s} + C_\beta \dot{\beta}_{1s} + (K_{tot} - I_b
-\Omega^2) \beta_{1s} - 2 I_b \Omega \dot{\beta}_{1c} - C_\beta \Omega
-\beta_{1c} = M_{1s}
-\end{cases}
-\]</span></p>
-<p>Multiplicando a segunda equação por <span
-class="math inline">\(i\)</span> e somando à primeira, obtém-se a
-<strong>Equação Complexa Unificada do Rotor no Referencial
-Fixo</strong>:</p>
-<p><span class="math display">\[
-I_b \ddot{\mu} + (C_\beta - 2 i I_b \Omega) \dot{\mu} + (K_{tot} - I_b
-\Omega^2 - i C_\beta \Omega) \mu = M
-\]</span></p>
-<hr />
-<h3 id="comparação-com-a-equação-do-giroscópio">Comparação com a Equação
-do Giroscópio</h3>
-<p>Colocando lado a lado a equação do giroscópio no referencial fixo
-(Seção 3.4) e a equação do rotor no referencial fixo derivada via
-Transformação de Coleman:</p>
-<p><span class="math display">\[
-\text{Giroscópio:} \qquad I_T \ddot{\theta} + (D - i I_P \Omega)
-\dot{\theta} + K \theta = M
-\]</span></p>
-<p><span class="math display">\[
-\text{Rotor (TPP):} \qquad I_b \ddot{\mu} + (C_\beta - 2 i I_b \Omega)
-\dot{\mu} + (K_{tot} - I_b \Omega^2 - i C_\beta \Omega) \mu = M
-\]</span></p>
-<h4
-id="1-caso-ideal-sem-amortecimento-e-sem-offset-c_beta--0-k_tot--i_b-omega2">1.
-Caso Ideal (Sem Amortecimento e Sem Offset: <span
-class="math inline">\(C_\beta = 0\)</span>, <span
-class="math inline">\(K_{tot} = I_b \Omega^2\)</span>)</h4>
-<ul>
-<li>Giroscópio: <span class="math inline">\(I_T \ddot{\theta} - i I_P
-\Omega \dot{\theta} = M\)</span></li>
-<li>Rotor: <span class="math inline">\(I_b \ddot{\mu} - 2 i I_b \Omega
-\dot{\mu} = M\)</span></li>
-</ul>
-<p><strong>Demonstração da Identidade Exata</strong>:</p>
-<p>As duas equações são <strong>rigorosamente idênticas</strong> sob a
-correspondência de parâmetros:</p>
-<p><span class="math display">\[
-\Theta \Longleftrightarrow \mu = \beta_{1c} + i \beta_{1s}
-\]</span></p>
-<p><span class="math display">\[
-I_T \Longleftrightarrow I_b
-\]</span></p>
-<p><span class="math display">\[
-I_P \Longleftrightarrow 2 I_b
-\]</span></p>
-<p>Os polos do rotor no referencial fixo são <span
-class="math inline">\(s_1 = 0\)</span> e <span class="math inline">\(s_2
-= 2 i \Omega\)</span>, que correspondem exatamente aos polos do
-giroscópio com <span class="math inline">\(I_P = 2 I_T\)</span>.</p>
-<h4 id="2-caso-geral-com-amortecimento-e-rigidez">2. Caso Geral (Com
-Amortecimento e Rigidez)</h4>
-<p>Comparando termo a termo:</p>
-<table>
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 32%" />
-<col style="width: 38%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Parâmetro / Termo</th>
-<th style="text-align: left;">Giroscópio</th>
-<th style="text-align: left;">Rotor (Referencial Fixo)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Coordenada do Plano</strong></td>
-<td style="text-align: left;"><span class="math inline">\(\theta =
-\theta_x + i \theta_y\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\mu =
-\beta_{1c} + i \beta_{1s}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Inércia Transversal</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(I_T\)</span></td>
-<td style="text-align: left;"><span
-class="math inline">\(I_b\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Inércia Giroscópica</strong></td>
-<td style="text-align: left;"><span class="math inline">\(I_P
-\Omega\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(2 I_b \Omega
-\implies (I_P = 2 I_b)\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Amortecimento Direto</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(D\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(C_\beta =
-\frac{\gamma I_b \Omega}{8}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Rigidez Efetiva</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(K\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(K_{tot} - I_b
-\Omega^2\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Termo Residual</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(0\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(-i C_\beta
-\Omega\)</span></td>
-</tr>
-</tbody>
-</table>
-<p><strong>O Significado Físico do Termo Residual <span
-class="math inline">\(-i C_\beta \Omega\)</span></strong>:</p>
-<p>O termo <span class="math inline">\(-i C_\beta \Omega\)</span> surge
-porque o amortecimento aerodinâmico atua no referencial girante da pá.
-Quando transformado para o referencial fixo por Coleman, a rotação faz
-com que a força de amortecimento em um eixo acople com a posição angular
-do eixo ortogonal. Esse termo introduz um pequeno amortecimento cruzado
-que refina a resposta, mas não altera a estrutura fundamental de
-equivalência giroscópica.</p>
-<hr />
-<h3 id="condições-de-validade-da-equivalência">Condições de Validade da
-Equivalência</h3>
-<p>A equivalência física e matemática entre o rotor e o giroscópio é
-válida sob as seguintes condições:</p>
-<ol type="1">
-<li><strong>Referencial Inercial Fixo</strong>: A comparação deve ser
-feita entre a orientação espacial do giroscópio <span
-class="math inline">\((\theta_x, \theta_y)\)</span> e os modos cíclicos
-do TPP <span class="math inline">\((\beta_{1c}, \beta_{1s})\)</span>,
-<strong>e não com a pá individual no referencial girante</strong>.</li>
-<li><strong>Hipótese de Pequenos Ângulos e Linearidade</strong>: Válida
-para pequenas inclinações de TPP e pequenos ângulos de batimento.</li>
-<li><strong>Mapeamento do Momento Polar</strong>: O rotor comporta-se
-como um giroscópio cujo momento de inércia polar efetivo é o dobro do
-momento de inércia de batimento de uma pá (<span
-class="math inline">\(I_P = 2 I_b\)</span>).</li>
-</ol>
-<hr />
-<h2 id="6-tabela-comparativa-geral-e-conclusão">6. Tabela Comparativa
-Geral e Conclusão</h2>
-<p>A Tabela 1 resume a correspondência estrutural entre as diferentes
-configurações de giroscópios e rotores.</p>
-<table>
-<colgroup>
-<col style="width: 15%" />
-<col style="width: 24%" />
-<col style="width: 26%" />
-<col style="width: 14%" />
-<col style="width: 18%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Configuração do Giroscópio</th>
-<th style="text-align: left;">Configuração do Rotor</th>
-<th style="text-align: left;">Equação de Movimento Unificada</th>
-<th style="text-align: left;">Polos Dominantes (<span
-class="math inline">\(s\)</span>)</th>
-<th style="text-align: left;">Resposta de Fase (<span
-class="math inline">\(\phi\)</span>)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Ideal no Vácuo</strong> (<span
-class="math inline">\(D=0, K=0\)</span>)</td>
-<td style="text-align: left;"><strong>Teetering/Articulado no
-Vácuo</strong> (<span class="math inline">\(C_\beta=0,
-e=0\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} -
-2i I \Omega \dot{x} = M\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(s_1 =
-0\)</span>, <span class="math inline">\(s_2 = 2i\Omega\)</span>
-(Marginal)</td>
-<td style="text-align: left;">Ressonância secular sem steady-state
-finito</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Amortecido em Fluido</strong>
-(<span class="math inline">\(D&gt;0, K=0\)</span>)</td>
-<td style="text-align: left;"><strong>Teetering/Articulado na
-Atmosfera</strong> (<span class="math inline">\(C_\beta&gt;0,
-e=0\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} +
-(C - 2i I \Omega)\dot{x} - iC\Omega x = M\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\Re(s) =
--\frac{C}{2I} &lt; 0\)</span> Estável</td>
-<td style="text-align: left;"><strong>Exatamente <span
-class="math inline">\(90^\circ\)</span></strong> (Quadratura Pura)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Com Molas Torsionais</strong>
-(<span class="math inline">\(D&gt;0, K&gt;0\)</span>)</td>
-<td style="text-align: left;"><strong>Hinge Offset / Hingeless</strong>
-(<span class="math inline">\(C_\beta&gt;0,
-K_{tot}&gt;I_b\Omega^2\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} +
-(C - 2i I \Omega)\dot{x} + (K_{\text{ef}} - iC\Omega)x = M\)</span></td>
-<td style="text-align: left;">Deslocados para a esquerda</td>
-<td style="text-align: left;"><strong>Menor que <span
-class="math inline">\(90^\circ\)</span></strong> (<span
-class="math inline">\(\phi &lt; 90^\circ\)</span>)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="conclusões">Conclusões</h3>
-<ol type="1">
-<li><strong>Unidade Matemática</strong>: A precessão giroscópica
-clássica e a resposta de batimento em <span
-class="math inline">\(1/\text{rev}\)</span> de um rotor articulado não
-são fenômenos distintos. São a mesma estrutura matemática vista sob
-referenciais diferentes (fixo vs. girante).</li>
-<li><strong>Papel da Transformação de Coleman</strong>: A Transformação
-de Coleman é o elo formal que demonstra que o Plano de Ponta de Pá
-(<span class="math inline">\(TPP\)</span>) no referencial inercial
-rege-se pelas mesmas equações de Euler de um giroscópio acoplado com
-<span class="math inline">\(I_P = 2 I_b\)</span>.</li>
-<li><strong>Origem da Fase de <span
-class="math inline">\(90^\circ\)</span></strong>: Em um rotor articulado
-ideal na atmosfera, a resposta de <span
-class="math inline">\(90^\circ\)</span> decorre do cancelamento exato
-entre os termos reativos (inercial e centrífugo) em <span
-class="math inline">\(1/\text{rev}\)</span>, deixando o amortecimento
-aerodinâmico como único regulador de potência no regime permanente.</li>
-<li><strong>Efeito da Rigidez Estrutural</strong>: Ligar molas a um
-giroscópio ou adicionar <em>hinge offset</em> / rigidez
-<em>hingeless</em> a um rotor produz o mesmo efeito físico: introduz
-rigidez líquida positiva em <span
-class="math inline">\(1/\text{rev}\)</span>, aumentando a frequência
-natural e reduzindo o atraso de fase para valores inferiores a <span
-class="math inline">\(90^\circ\)</span>.</li>
-</ol>
-<hr />
+<p>Como <span class="math inline">\(v_i = V \cdot
+(\lambda/\mu)\)</span>, e <span
+class="math inline">\(\lambda/\mu\)</span> já está fixado por <span
+class="math inline">\(T_c\)</span> segundo a Seção 2:</p>
+<p><span class="math display">\[ v_i = \left(\frac{\lambda}{\mu}\right)
+\sqrt{\frac{T/A}{\frac{1}{2}\rho T_c}} \]</span></p>
+<p>Esta expressão mostra que, para <span
+class="math inline">\(T_c\)</span> e <span
+class="math inline">\(\rho\)</span> fixos, tanto <span
+class="math inline">\(V\)</span> quanto <span
+class="math inline">\(v_i\)</span> escalam com a raiz quadrada do
+carregamento de disco <span class="math inline">\(T/A\)</span>. Dois
+rotores com o mesmo <span class="math inline">\(T_c\)</span> mas
+carregamento de disco diferente têm esteiras geometricamente idênticas,
+com o mesmo ângulo <span class="math inline">\(\chi\)</span> e a mesma
+topologia de linhas de corrente, porém com velocidades absolutas
+distintas. O rotor de maior carregamento de disco precisa voar mais
+rápido e induz uma velocidade de esteira proporcionalmente maior para
+sustentar o mesmo <span class="math inline">\(T_c\)</span>. A energia
+cinética dissipada na esteira, portanto, não é determinada por <span
+class="math inline">\(T_c\)</span> isoladamente.</p>
+<p>Quando, além de <span class="math inline">\(T_c\)</span>, impõe-se
+também a igualdade de carregamento de disco <span
+class="math inline">\(T/A\)</span>, as duas equações acima forçam <span
+class="math inline">\(V\)</span> e <span
+class="math inline">\(v_i\)</span> a serem numericamente idênticos entre
+os dois rotores. Nessa condição conjunta, e somente nela, <span
+class="math inline">\(T_c\)</span> passa a determinar univocamente
+também a velocidade induzida, isto é, a energia da esteira. As esteiras
+tornam-se então idênticas não apenas em forma, mas em magnitude,
+independentemente de diferenças em rotação, número de pás ou
+distribuição de corda e torção ao longo do raio.</p>
+<h2 id="conclusão">Conclusão</h2>
+<p>A relação <span class="math inline">\(T_c =
+4\sqrt{(\mu/\lambda)^2+1}\,/\,(\mu/\lambda)^2\)</span>, deduzida a
+partir da teoria de momento sob <span
+class="math inline">\(\alpha=0\)</span>, estabelece que <span
+class="math inline">\(T_c\)</span> e <span
+class="math inline">\(\mu/\lambda\)</span> são grandezas biunivocamente
+equivalentes. Fixar uma fixa a outra, sem exceção e sem dependência de
+parâmetros internos do rotor.</p>
+<p>A relação <span class="math inline">\(T_c = 2C_T/\mu^2\)</span>
+localiza <span class="math inline">\(T_c\)</span> frente ao coeficiente
+de tração convencional <span class="math inline">\(C_T\)</span>. Os dois
+medem a mesma tração, mas referenciada a pressões dinâmicas distintas. É
+justamente por incorporar <span class="math inline">\(V\)</span>
+diretamente em sua definição que <span
+class="math inline">\(T_c\)</span>, e não <span
+class="math inline">\(C_T\)</span>, carrega por si só a informação de
+similaridade cinemática.</p>
+<p>Dessa bijeção decorre que <span class="math inline">\(T_c\)</span> é
+o parâmetro que governa integralmente a geometria da esteira. Rotores
+distintos operando sob o mesmo <span class="math inline">\(T_c\)</span>
+produzem o mesmo ângulo de deflexão <span
+class="math inline">\(\chi\)</span> e campos de velocidade relativos
+geometricamente semelhantes em toda a extensão da esteira.</p>
+<p><span class="math inline">\(T_c\)</span>, contudo, não fixa por si só
+a energia da esteira. As velocidades absolutas <span
+class="math inline">\(V\)</span> e <span
+class="math inline">\(v_i\)</span> escalam com a raiz quadrada do
+carregamento de disco <span class="math inline">\(T/A\)</span>. Somente
+quando <span class="math inline">\(T_c\)</span> e <span
+class="math inline">\(T/A\)</span> são impostos simultaneamente, <span
+class="math inline">\(T_c\)</span> passa também a determinar a
+velocidade induzida, e a similaridade se torna completa, geométrica e
+energética.</p>
+<p>Essa dualidade entre a variável de contorno adimensional <span
+class="math inline">\(T_c\)</span> e a variável de carregamento
+dimensional <span class="math inline">\(T/A\)</span> permite decompor a
+similaridade de esteiras em dois eixos independentes de projeto. A forma
+da esteira é controlada externamente pela condição de voo. A energia da
+esteira é controlada internamente pelo dimensionamento do disco. Essa
+decomposição é a base analítica para escalar interferências de esteira
+entre rotores de geometrias distintas sem recorrer a simulação completa
+de cada configuração.</p>
 <h2 id="referências">Referências</h2>
-<p>[1] Bielawa, R. L., <em>Rotary Wing Structural Dynamics and
-Aeroelasticity</em>, AIAA Education Series, 2nd ed., 2006. — Tratado
-fundamental sobre aerodinâmica, aeroelasticidade e dinâmica de rotores.
-<a href="https://doi.org/10.2514/4.862373">Link</a></p>
-<p>[2] Bramwell, A. R. S., Done, G., e Balmford, D., <em>Bramwell’s
-Helicopter Dynamics</em>, 2ª ed., Butterworth-Heinemann, Oxford, 2001. —
-Referência clássica na formulação de voo e acoplamento de rotores de
-helicóptero.</p>
-<p>[3] Coleman, R. P., and Feingold, A. M., <em>Theory of Self-Excited
-Mechanical Oscillations of Helicopter Rotors with Hinged Blades</em>,
-NACA Report 1351, 1958. — Trabalho seminal que introduziu a
-Transformação de Coleman para coordenadas multi-pá. <a
-href="https://ntrs.nasa.gov/citations/19930092066">Link</a></p>
-<p>[4] Gessow, A., and Myers, G. C., <em>Aerodynamics of the
-Helicopter</em>, Macmillan, 1952. — Texto fundacional sobre teoria de
-elemento de pá e dinâmica de batimento. <a
-href="https://archive.org/details/aerodynamicsofhe0000gess">Link</a></p>
-<p>[5] Johnson, W., <em>Helicopter Theory</em>, Princeton University
-Press, Princeton, 1980. — Obra de referência abrangente em mecânica de
-voo e rotores de asas rotativas. <a
-href="https://archive.org/details/helicoptertheory0000john_y9s0">Link</a></p>
-<p>[6] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
+<p>[1] Glauert, H., <em>The Elements of Aerofoil and Airscrew
+Theory</em>, Cambridge University Press, Cambridge, 1926. — Base da
+Teoria do Momento para discos atuadores em escoamento oblíquo, origem da
+relação de tração empregada na Seção 1. <a
+href="https://archive.org/details/elementsofaerofo00glau">Link</a></p>
+<p>[2] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
 2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
-em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
-de batimento e teoria de esteira. <a
+em aerodinâmica de helicópteros, incluindo teoria do momento, modelos de
+influxo e geometria de esteira em voo de avanço. <a
 href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
-<p>[7] Padfield, G. D., <em>Helicopter Flight Dynamics</em>, 2ª ed.,
-Blackwell Science, Oxford, 2007. — Referência abrangente sobre
-qualidades de voo e modelagem de dinâmica de helicópteros. <a
-href="https://en.wikipedia.org/wiki/Gareth_D._Padfield">Link</a></p>
+<p>[3] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. — Tratamento moderno da teoria do
+disco atuador e dos modelos de esteira, incluindo a parametrização pelo
+ângulo de skew. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+<p>[4] Coleman, R. P., Feingold, A. M., e Stempin, C. W., <em>Evaluation
+of the Induced-Velocity Field of an Idealized Helicopter Rotor</em>,
+NACA Wartime Report L-126 (ARR L5E10), Langley Memorial Aeronautical
+Laboratory, Hampton, 1945. — Campo de velocidades induzidas de esteira
+inclinada, referência clássica para a dependência da distribuição de
+influxo com o ângulo de skew. <a
+href="https://ntrs.nasa.gov/citations/19930093646">Link</a></p>
+<p>[5] Prouty, R. W., <em>Helicopter Performance, Stability, and
+Control</em>, Krieger Publishing, Malabar, 2002. — Formulações
+analíticas de desempenho de rotores, incluindo as definições
+alternativas de coeficiente de tração. <a
+href="https://archive.org/details/prouty-r.-w.-helicopter-performance-stability-and-control">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
   <div class="ornament">· · ·</div>
   <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
-    Second Brain · Gustavo Zambrano · Julho de 2026
+    Second Brain · Gustavo Zambrano · Agosto de 2026
   </p>
 </footer>
 
@@ -2609,8 +1975,8 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   </nav>
 </header>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
-<div class="sb-tags"><span class="sb-tag">Dinâmica-de-Voo</span><span class="sb-tag">Rotores</span><span class="sb-tag">Giroscópio</span><span class="sb-tag">Aeroelasticidade</span><span class="sb-tag">Engenharia</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="dinamica-de-voo-rotor-teetering.html"><strong>Dinâmica de Voo de um Rotor Teetering Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a><a class="sb-related-card" href="metodos-matematicos-engenharia-aeroespacial.html"><strong>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</strong><span>Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</span></a></div></section>
+<div class="sb-tags"><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Rotores</span><span class="sb-tag">Engenharia</span><span class="sb-tag">Dinâmica-de-Voo</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="efeito-da-solidez-em-rotores.html"><strong>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</strong><span>A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.</span></a><a class="sb-related-card" href="modelagem-teorica-efeito-solo-multirrotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirrotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem instáveis durante o voo pairado próximo ao solo..</span></a><a class="sb-related-card" href="ground-effect-asa-fixa-vs-rotativa.html"><strong>Efeito Solo em Superfícies Aerodinâmicas — Asa Fixa vs. Rotativa</strong><span>A partir da conservação de momento linear, o white paper demonstra que asa fixa e rotativa exibem mecanismos distintos de efeito solo (esteira em ferradura versus estagnação e Ground Vortex), mas convergem para o mesmo resultado assintótico em alta velocidade: a anulação progressiva do benefício aerodinâmico. O fenômeno do Ground Vortex no rotor em transição, ausente na asa fixa, é examinado em detalhe.</span></a><a class="sb-related-card" href="teorema-biplano-munk-rotores-tandem.html"><strong>O Teorema do Stagger de Munk e sua Universalidade em Sistemas Aerodinâmicos de Múltiplas Superfícies</strong><span>O Teorema do Stagger de Munk (o arrasto induzido total de múltiplas superfícies sustentadoras é invariante ao espaçamento longitudinal das superfícies) é demonstrado via Plano de Trefftz para asas fixas e estendido a rotores em tandem e coaxial em voo avançado. A equivalência no balanço de energia induzida revela a universalidade do teorema muito além do contexto histórico para o qual foi derivado.</span></a><a class="sb-related-card" href="dinamica-de-voo-rotor-teetering.html"><strong>Dinâmica de Voo de um Rotor Teetering Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a><a class="sb-related-card" href="rotores-e-giroscopios.html"><strong>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</strong><span>O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.</span></a></div></section>
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do essay">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>
