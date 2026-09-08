@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="14">
+<html lang="pt-BR" data-status="finalizado" data-minutes="23">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</title>
-<meta property="og:title" content="Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton">
-<meta property="og:description" content="O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.">
+<title>White Paper - Modelagem Estatística para a Copa do Mundo FIFA 2026</title>
+<meta property="og:title" content="White Paper - Modelagem Estatística para a Copa do Mundo FIFA 2026">
+<meta property="og:description" content="A previsão do vencedor de uma Copa é formulada em três camadas: estimação de força relativa via ELO, modelagem de placares por Dixon-Coles sobre Poisson, e propagação de incerteza pelo torneio via Monte Carlo. O white paper documenta cada etapa com equações, apresenta os resultados para 2026 e discute as limitações do modelo ante a alta variância intrínseca do futebol.">
 <meta property="og:type" content="article">
 <script defer="" src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -1252,1006 +1252,1464 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <header class="masthead">
   <div class="stripe"></div>
   <div class="masthead-inner">
-    <h1 class="hero-title">Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</h1>
+    <h1 class="hero-title">White Paper - Modelagem Estatística para a Copa do Mundo FIFA 2026</h1>
     <hr class="masthead-rule">
-    <p class="byline">Gustavo Zambrano · Julho de 2026</p>
-    <p class="cover-summary">O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.</p>
+    <p class="byline">Gustavo Zambrano · Maio de 2026</p>
+    <p class="cover-summary">A previsão do vencedor de uma Copa é formulada em três camadas: estimação de força relativa via ELO, modelagem de placares por Dixon-Coles sobre Poisson, e propagação de incerteza pelo torneio via Monte Carlo. O white paper documenta cada etapa com equações, apresenta os resultados para 2026 e discute as limitações do modelo ante a alta variância intrínseca do futebol.</p>
   </div>
 </header>
 
 <main class="content">
+<p><strong>Previsão Probabilística via ELO, Redes Neurais Recorrentes e
+Simulação Monte Carlo</strong></p>
 <h2 id="sumário">Sumário</h2>
 <ul>
-<li><a href="#1-introdução-e-objetivo-do-trabalho">1. Introdução e
-Objetivo do Trabalho</a></li>
-<li><a href="#2-intuição-física-a-quadratura-e-a-massa-girante">2.
-Intuição Física: A Quadratura e a Massa Girante</a></li>
-<li><a href="#3-o-giroscópio-como-bloco-de-construção">3. O Giroscópio
-como Bloco de Construção</a></li>
-<li><a href="#4-o-rotor-de-asas-rotativas">4. O Rotor de Asas
-Rotativas</a></li>
-<li><a
-href="#5-transformação-de-coleman-e-a-demonstração-da-equivalência">5.
-Transformação de Coleman e a Demonstração da Equivalência</a></li>
-<li><a href="#6-tabela-comparativa-geral-e-conclusão">6. Tabela
-Comparativa Geral e Conclusão</a></li>
+<li><a href="#1-visão-geral-e-processo-de-inferência-estatística">1.
+Visão Geral e Processo de Inferência Estatística</a></li>
+<li><a href="#2-o-sistema-elo-como-proxy-de-força-relativa">2. O Sistema
+ELO como Proxy de Força Relativa</a></li>
+<li><a href="#3-das-diferenças-elo-às-taxas-esperadas-de-gols">3. Das
+Diferenças ELO às Taxas Esperadas de Gols</a></li>
+<li><a href="#4-os-fatores-de-correção-k_att-e-k_def">4. Os Fatores de
+Correção <span class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span></a></li>
+<li><a href="#5-o-modelo-de-placares-dixon-coles-sobre-poisson">5. O
+Modelo de Placares — Dixon-Coles sobre Poisson</a></li>
+<li><a href="#6-simulação-monte-carlo-do-torneio">6. Simulação Monte
+Carlo do Torneio</a></li>
+<li><a href="#7-resultados">7. Resultados</a></li>
+<li><a href="#8-conclusão">8. Conclusão</a></li>
 </ul>
 <hr />
-<h2 id="1-introdução-e-objetivo-do-trabalho">1. Introdução e Objetivo do
-Trabalho</h2>
-<p>Um dos tópicos mais desafiadores no ensino e na prática da dinâmica
-de rotores de asas rotativas é compreender a relação entre a resposta de
-batimento das pás e a precessão giroscópica de corpos rígidos. Na
-literatura introdutória, afirma-se frequentemente que o rotor de um
-helicóptero “comporta-se como um <a
-href="https://en.wikipedia.org/wiki/Gyroscope">giroscópio</a>”,
-precessando <span class="math inline">\(90^\circ\)</span> após a
-aplicação de uma força. Por outro lado, na dinâmica de estruturas e <a
-href="https://en.wikipedia.org/wiki/Aeroelasticity">aeroelasticidade</a>,
-demonstra-se que a pá de um rotor articulado é um oscilador harmônico
-excitado em sua frequência natural de rotação (<span
-class="math inline">\(1/\text{rev}\)</span>), cuja resposta ressonante
-em regime permanente apresenta um atraso de fase de <span
-class="math inline">\(90^\circ\)</span>.</p>
-<p>O objetivo principal deste trabalho é demonstrar formalmente que
-essas duas explicações não são visões concorrentes, mas sim <strong>duas
-leituras matemáticas da mesma equação de movimento</strong>, expressas
-em referenciais diferentes:</p>
+<h2 id="1-visão-geral-e-processo-de-inferência-estatística">1. Visão
+Geral e Processo de Inferência Estatística</h2>
+<h3 id="o-problema">O Problema</h3>
+<p>Prever o vencedor de uma Copa do Mundo é essencialmente um problema
+de <strong>inferência probabilística sobre um sistema estocástico com
+estrutura hierárquica</strong>. O torneio é composto de dezenas de
+partidas interdependentes — o resultado de um jogo determina quem
+participa dos seguintes — e cada partida é, por si só, um evento de alta
+variância: equipes inferiores vencem equipes superiores com frequência
+não negligenciável. Modelar esse sistema corretamente exige responder a
+três perguntas distintas:</p>
 <ol type="1">
-<li>No <strong>referencial girante</strong> da pá, o fenômeno é visto
-como a resposta de um oscilador harmônico em ressonância (<span
-class="math inline">\(1/\text{rev}\)</span>) estabilizado por
-amortecimento aerodinâmico.</li>
-<li>No <strong>referencial fixo</strong> do helicóptero, a resposta
-coletiva de todas as pás forma o Plano de Ponta de Pá (<em>Tip-Path
-Plane</em> — TPP), cuja dinâmica diferencial é formalmente equivalente
-às <a
-href="https://en.wikipedia.org/wiki/Euler%27s_equations_(rigid_body_dynamics)">equações
-de Euler</a> de um giroscópio acoplado.</li>
+<li><strong>Qual é a força relativa de cada seleção?</strong> — pergunta
+de <em>estimação de parâmetros</em></li>
+<li><strong>Dado o par de times, qual é a distribuição de probabilidade
+sobre os possíveis placares?</strong> — pergunta de <em>modelagem
+probabilística</em></li>
+<li><strong>Dada a distribuição sobre placares individuais, qual é a
+probabilidade de cada time vencer o torneio inteiro?</strong> — pergunta
+de <em>propagação de incerteza</em> por uma estrutura combinatória
+complexa</li>
 </ol>
-<p>Para demonstrar essa equivalência sem saltos lógicos, este trabalho
-percorrerá o seguinte itinerário:</p>
+<p>O modelo desenvolvido neste trabalho responde a cada uma dessas
+perguntas com uma abordagem específica e fundamentada na literatura
+estatística.</p>
+<h3 id="arquitetura-geral-do-modelo">Arquitetura Geral do Modelo</h3>
+<p>O pipeline de inferência opera em três etapas sequenciais:</p>
+<p><strong>Etapa 1 — Estimação da força relativa via ELO.</strong> A
+força de cada seleção é representada por seu rating ELO, calculado
+cronologicamente sobre todo o histórico de partidas internacionais desde
+1872. A diferença de rating entre dois times (<span
+class="math inline">\(\Delta_{eff}\)</span>) serve como variável
+explicativa fundamental: é a partir dela que se derivam as taxas
+esperadas de gols (<span class="math inline">\(\lambda\)</span>) via uma
+função exponencial quadrática cujos parâmetros são estimados por máxima
+verossimilhança (MLE) sobre partidas desde 1990. O ELO captura a
+<strong>força estrutural e histórica</strong> de cada seleção.</p>
+<p><strong>Etapa 2 — Correção pela forma recente e pelo perfil de
+jogo.</strong> As taxas esperadas de gols derivadas do ELO representam a
+expectativa de longo prazo, mas o ELO não observa o <em>volume</em> de
+gols — apenas o resultado final (vitória, empate, derrota). Para
+incorporar tanto o <strong>desempenho ofensivo e defensivo
+recente</strong> quanto o <strong>perfil de jogo estrutural</strong> de
+cada seleção, dois fatores adimensionais são estimados por time: <span
+class="math inline">\(K_{att}\)</span> (multiplicador de ataque) e <span
+class="math inline">\(K_{def}\)</span> (multiplicador de defesa). Esses
+fatores são produzidos por uma rede neural recorrente do tipo GRU (<a
+href="https://arxiv.org/abs/1406.1078">Cho et al., 2014</a>) treinada
+sobre os últimos <span class="math inline">\(T = 20\)</span> jogos de
+cada seleção, com decaimento exponencial por posição na sequência
+(meia-vida de 7 jogos). A taxa final é <span
+class="math inline">\(\lambda_A = \lambda^{home} \cdot K_{att}^A \cdot
+K_{def}^B\)</span>, integrando força histórica, identidade ofensiva
+própria e vulnerabilidade defensiva do adversário.</p>
+<p><strong>Etapa 3 — Distribuição de placares e propagação de
+incerteza.</strong> As taxas finais esperadas de gols <span
+class="math inline">\(\lambda_A\)</span> e <span
+class="math inline">\(\lambda_B\)</span> alimentam o modelo de <a
+href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles, 1997</a>,
+que constrói uma distribuição de probabilidade conjunta sobre todos os
+placares possíveis (até 8 gols por time). O torneio completo é então
+simulado <span class="math inline">\(N = 1.000.000\)</span> de vezes via
+Monte Carlo, e as frequências observadas em cada fase constituem as
+estimativas finais de probabilidade.</p>
+<p>O fluxo completo pode ser resumido em:</p>
 <ul>
-<li><strong>Intuição Física</strong>: Explicar por que uma força em
-<span class="math inline">\(\psi = 0^\circ\)</span> gera deslocamento
-máximo em <span class="math inline">\(\psi = 90^\circ\)</span>.</li>
-<li><strong>Modelagem do Giroscópio</strong>: Derivar passo a passo as
-equações no vácuo, com amortecimento e com rigidez torsional, analisando
-polos e ângulos de fase.</li>
-<li><strong>Modelagem do Rotor</strong>: Derivar de primeiros princípios
-a rigidez centrífuga, o amortecimento aerodinâmico, o <a
-href="https://en.wikipedia.org/wiki/Lock_number">Número de Lock</a> e o
-efeito de <em>hinge offset</em> / <em>hingeless</em>.</li>
-<li><strong>Demonstração da Equivalência via Transformação de
-Coleman</strong>: Mapear as equações do rotor para o referencial
-inercial e comparar termo a termo com o giroscópio.</li>
+<li><strong>Cálculo do Rating ELO</strong> através do histórico de todas
+as partidas de todas as seleções.</li>
+<li><strong>Taxa esperada de gols <span
+class="math inline">\(\lambda\)</span></strong> como função da diferença
+de rating ELO entre as duas equipes (utilizando MLE sobre todos os jogos
+desde 1990).</li>
+<li><strong>Correção por <span
+class="math inline">\(K_{\mathrm{att}}\)</span> e <span
+class="math inline">\(K_{\mathrm{def}}\)</span>:</strong> forma recente
+e estilo de jogo calculados utilizando uma rede neural GRU treinada
+sobre dados recentes.</li>
+<li><strong>Distribuição de placares via Poisson modificada por
+Dixon-Coles.</strong></li>
+<li><strong>Simulação Monte Carlo: propagação de incerteza pelo
+torneio.</strong></li>
 </ul>
+<h3 id="o-processo-de-inferência-estatística-em-detalhe">O Processo de
+Inferência Estatística em Detalhe</h3>
+<p>Formalmente, o modelo define dois conjuntos de parâmetros:</p>
+<p><strong>Parâmetros dos priors</strong> <span
+class="math inline">\(\theta = \{a, b, c, h, \rho_0, \rho_1\}\)</span>:
+governam como a diferença ELO se traduz em taxas esperadas de gols e
+correlação. São estimados por <strong>máxima verossimilhança
+(MLE)</strong> sobre partidas internacionais desde 1990, com ponderação
+temporal por recência (meia-vida de 4 anos) e por importância do
+torneio. A função de log-verossimilhança maximizada é:</p>
+<p><span class="math display">\[
+\hat{\theta} = \arg\max_{\theta} \sum_{i=1}^{N_{hist}} w_i^{temp} \cdot
+\log P_{\theta}(X_i, Y_i \mid \Delta_{eff,i})
+\]</span></p>
+<p>onde <span class="math inline">\(w_i^{temp} =
+\exp\!\left(-\frac{t_{ref} - t_i}{t_{1/2}}\right)\)</span> é o peso
+temporal e <span class="math inline">\((X_i, Y_i)\)</span> é o placar
+observado.</p>
+<p><strong>Parâmetros da rede neural</strong> <span
+class="math inline">\(\phi\)</span>: pesos da GRU que mapeiam sequências
+de resultados recentes em fatores <span
+class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span>. São estimados por
+<strong>descida de gradiente</strong> (otimizador AdamW, <span
+class="math inline">\(\eta = 2 \times 10^{-4}\)</span>) minimizando a
+log-verossimilhança negativa (NLL) Dixon-Coles ponderada, com
+regularização L2 sobre <span class="math inline">\(\log K\)</span>:</p>
+<p><span class="math display">\[
+\hat{\phi} = \arg\min_{\phi} \left[ -\sum_{i} w_i \cdot \log P_{\theta,
+\phi}(X_i, Y_i) \;+\; \lambda_{reg} \cdot \mathbb{E}\!\left[(\log
+K_{att})^2 + (\log K_{def})^2\right] \right]
+\]</span></p>
+<p>com <span class="math inline">\(\lambda_{reg} = 0.5\)</span> e
+critério de parada antecipada com paciência de 25 épocas.</p>
+<p>A separação entre os dois conjuntos de parâmetros é deliberada: <span
+class="math inline">\(\theta\)</span> captura regularidades de longo
+prazo no futebol, enquanto <span class="math inline">\(\phi\)</span>
+captura padrões recentes por seleção. Ambos são estimados a partir dos
+dados, sem imposição de valores a priori além da estrutura
+funcional.</p>
 <hr />
-<h2 id="2-intuição-física-a-quadratura-e-a-massa-girante">2. Intuição
-Física: A Quadratura e a Massa Girante</h2>
-<h3 id="o-comportamento-da-massa-na-borda-do-disco">O Comportamento da
-Massa na Borda do Disco</h3>
-<p>Considere um disco rígido girando com velocidade angular constante
-<span class="math inline">\(\Omega\)</span>. Imagine uma massa pontual
-<span class="math inline">\(m\)</span> localizada na borda do disco em
-um raio <span class="math inline">\(R\)</span>. A posição azimutal da
-massa é dada por <span class="math inline">\(\psi(t) = \Omega
-t\)</span>.</p>
-<p>Suponha que essa massa seja submetida a uma força vertical
-descendente <span class="math inline">\(F_z(\psi)\)</span> que atinge
-seu valor máximo no azimute de referência <span
-class="math inline">\(\psi = 0^\circ\)</span> (força apontando para
-baixo) e varia harmonicamente com o azimute:</p>
+<h2 id="2-o-sistema-elo-como-proxy-de-força-relativa">2. O Sistema ELO
+como Proxy de Força Relativa</h2>
+<h3 id="origem-e-princípio">Origem e Princípio</h3>
+<p>O sistema ELO foi proposto pelo físico húngaro-americano Arpad Elo
+como método de rating para xadrez (<a
+href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo, 1978</a>).
+Sua ideia central é que a força de um competidor pode ser representada
+por um único número real, e que a diferença entre dois números codifica
+diretamente a probabilidade de vitória de um sobre o outro. A
+atualização do rating após cada partida segue a regra:</p>
 <p><span class="math display">\[
-F_z(t) = -F_0 \cos(\Omega t)
+\text{ELO}_i^{\,novo} = \text{ELO}_i^{\,antigo} + K_w \cdot G \cdot
+\bigl(S_i - \hat{p}_i\bigr)
 \]</span></p>
-<p>A segunda lei de Newton na direção vertical <span
-class="math inline">\(z\)</span> fornece a aceleração instantânea da
-massa:</p>
+<p>onde <span class="math inline">\(S_i \in \{0, 0.5, 1\}\)</span> é o
+resultado real (derrota, empate, vitória), <span
+class="math inline">\(\hat{p}_i\)</span> é a probabilidade de vitória
+prevista antes da partida, <span class="math inline">\(K_w &gt;
+0\)</span> é o fator de importância do torneio e <span
+class="math inline">\(G\)</span> é um fator de margem de gols que
+amplifica o sinal de partidas com grandes diferenciais de placar:</p>
 <p><span class="math display">\[
-\ddot{z}(t) = \frac{F_z(t)}{m} = -\frac{F_0}{m} \cos(\Omega t)
+G = \begin{cases} 1{,}0 &amp; \text{se } |S_{home} - S_{away}| \leq 1 \\
+1{,}5 &amp; \text{se } |S_{home} - S_{away}| = 2 \\ \frac{11 + |S_{home}
+- S_{away}|}{8} &amp; \text{caso contrário} \end{cases}
 \]</span></p>
-<p>A aceleração vertical atinge seu valor negativo máximo (para baixo)
-exatamente em <span class="math inline">\(\psi = 0^\circ\)</span> (<span
-class="math inline">\(t=0\)</span>). Integrando a aceleração em relação
-ao tempo, obtém-se a velocidade vertical <span
-class="math inline">\(v_z(t) = \dot{z}(t)\)</span>:</p>
+<p>A probabilidade de vitória prevista é dada pela função logística:</p>
 <p><span class="math display">\[
-v_z(t) = \int \ddot{z}(t) \, dt = -\frac{F_0}{m\Omega} \sin(\Omega t) =
-\frac{F_0}{m\Omega} \cos\left(\Omega t + \frac{\pi}{2}\right)
+\hat{p}_A = \frac{1}{1 + 10^{-\Delta_{eff}/400}}
 \]</span></p>
-<p>A velocidade vertical não é máxima em <span
-class="math inline">\(\psi = 0^\circ\)</span>; em <span
-class="math inline">\(\psi = 0^\circ\)</span>, ela é nula (<span
-class="math inline">\(v_z = 0\)</span>). Conforme a massa gira de <span
-class="math inline">\(\psi = 0^\circ\)</span> até <span
-class="math inline">\(\psi = 90^\circ\)</span>, a força continua
-empurrando-a para baixo (com intensidade decrescente), acumulando
-velocidade descendente. A velocidade descendente atinge seu valor máximo
-exatamente em <span class="math inline">\(\psi = 90^\circ\)</span>
-(<span class="math inline">\(\Omega t = \pi/2\)</span>).</p>
-<p>Integrando a velocidade vertical mais uma vez, obtém-se o
-deslocamento vertical <span class="math inline">\(z(t)\)</span>:</p>
+<p>onde <span class="math inline">\(\Delta_{eff} = \text{ELO}_A -
+\text{ELO}_B + h_{fit}\)</span></p>
+<p>Para o modelo Dixon-Coles, o efeito do mando de jogo é <span
+class="math inline">\(h_{fit} = 100\)</span> pontos (estimado por
+MLE).</p>
+<h3 id="o-elo-como-proxy-estatístico-no-futebol">O ELO como Proxy
+Estatístico no Futebol</h3>
+<p>A questão de saber se o ELO é um bom proxy para a força relativa de
+seleções de futebol tem sido extensivamente estudada. É importante,
+contudo, contextualizar tanto as virtudes quanto as limitações do
+sistema no ambiente específico do futebol.</p>
+<p>Em sistemas onde o ruído estocástico é nulo ou próximo de zero — como
+no xadrez, onde o resultado depende quase inteiramente da habilidade
+relativa dos jogadores — a diferença de ELO possui poder preditivo quase
+absoluto e imediato. No futebol, porém, a alta estocasticidade
+intrínseca ao esporte (gols acidentais, desvios de trajetória, decisões
+de arbitragem, variância nos pênaltis) faz com que o ELO opere
+estritamente como uma referência assintótica: ele se aproxima do
+“verdadeiro” nível de cada seleção apenas ao longo de muitas partidas.
+Esse ruído de curto prazo não pode ser eliminado pelo ELO por
+construção, o que torna indispensáveis as etapas posteriores do modelo —
+a correção pela GRU e a correção de Dixon-Coles — para mitigar esses
+efeitos em escala de partida individual.</p>
+<p><a href="https://doi.org/10.1016/j.ijforecast.2009.10.002">Hvattum e
+Arntzen (2010)</a> compararam o ELO com seis métodos alternativos de
+previsão em futebol associativo e concluíram que o sistema ELO produz
+previsões competitivas — e em vários cenários superiores — quando usado
+como covariável em modelos de regressão. A principal virtude do ELO é
+sua capacidade de comparar times de diferentes confederações e épocas a
+partir de um histórico unificado de resultados.</p>
+<p><a href="https://doi.org/10.1177/1471082X18817650">Ley, Van de Wiele
+e Van Eetvelde (2019)</a> apresentaram uma comparação sistemática de dez
+modelos estatísticos para ranking de seleções, incluindo variantes do
+ELO e modelos Poisson bivariados. Os autores demonstram que modelos
+baseados em ELO têm desempenho preditivo comparável aos modelos
+estruturais mais complexos, especialmente quando combinados com
+ponderação temporal e por importância do torneio — exatamente as
+características incorporadas ao nosso pipeline.</p>
+<p><a href="https://arxiv.org/pdf/1806.01930">Gilch e Müller (2018)</a>
+aplicaram modelos de regressão Poisson com covariáveis ELO para prever a
+Copa do Mundo de 2018, utilizando simulação Monte Carlo para estimar
+probabilidades de classificação em cada fase. Esse trabalho é
+metodologicamente análogo ao nosso e serve como referência de validação
+da abordagem.</p>
+<p>Em síntese, o ELO não é uma medida perfeita — ignora escalação,
+lesões e características táticas específicas — mas é um <strong>proxy
+estatisticamente bem fundamentado</strong> para a força relativa de
+seleções, robusto a variações de base de dados e computacionalmente
+eficiente. Essas propriedades justificam seu uso como âncora do modelo,
+desde que complementado pelas correções descritas nas seções
+seguintes.</p>
+<h3 id="pesos-por-importância-de-torneio">Pesos por Importância de
+Torneio</h3>
+<p>Nem todas as partidas têm o mesmo valor informativo. Um amistoso
+jogado com escalação experimental diz muito menos sobre a real
+capacidade de uma seleção do que uma semifinal de Copa do Mundo. Para
+refletir isso, cada jogo recebe um fator <span
+class="math inline">\(K_w\)</span> proporcional à sua relevância
+competitiva, usado tanto na atualização do ELO quanto na ponderação da
+função de verossimilhança:</p>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 58%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Categoria</th>
+<th style="text-align: left;">Torneios</th>
+<th style="text-align: center;"><span
+class="math inline">\(K_w\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Copa do Mundo (FIFA)</td>
+<td style="text-align: left;">Copa do Mundo FIFA</td>
+<td style="text-align: center;">40</td>
+</tr>
+<tr>
+<td style="text-align: left;">Campeonatos continentais e grandes
+torneios</td>
+<td style="text-align: left;">Copa das Confederações, Eliminatórias
+Mundiais, Olimpíadas, etc.</td>
+<td style="text-align: center;">35</td>
+</tr>
+<tr>
+<td style="text-align: left;">Qualificatórias e ligas nacionais</td>
+<td style="text-align: left;">UEFA Euro, CONCACAF Nations League, Copa
+América, AFC Asian Cup, etc.</td>
+<td style="text-align: center;">30</td>
+</tr>
+<tr>
+<td style="text-align: left;">Amistosos</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr>
+<td style="text-align: left;">Torneios não mapeados</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: center;">28</td>
+</tr>
+</tbody>
+</table>
+<p>Para a estimação dos priors por MLE, existe ainda um peso temporal
+adicional independente: <span class="math inline">\(w_i^{temp} =
+\exp\!\left(-\frac{t_{ref} - t_i}{t_{1/2}}\right)\)</span>, com
+meia-vida de <span class="math inline">\(t_{1/2} = 4\)</span> anos
+(1.460 dias). Jogos mais antigos têm influência decrescente na
+calibração dos parâmetros, refletindo a evolução do futebol ao longo do
+tempo. O ELO, por sua vez, é calculado desde 1872 sem corte — ele
+“aquece” nos dados antigos — e a MLE usa apenas partidas a partir de
+1990 com o ELO já estabilizado.</p>
+<p>Para amistosos, aplica-se ainda um peso de torneio adicional de <span
+class="math inline">\(w_{friendly} = 0.7\)</span>, multiplicado ao peso
+temporal. Para todos os demais torneios, <span
+class="math inline">\(w_{torneio} = 1.0\)</span>.</p>
+<h3 id="vantagem-de-sede">Vantagem de Sede</h3>
+<p>Para a Copa 2026, os países sede — EUA, México e Canadá — jogam com
+uma vantagem estrutural documentada: familiaridade com o ambiente, apoio
+da torcida, menor desgaste de viagem e ausência de adaptação climática e
+de altitude. Essa vantagem é modelada como um deslocamento aditivo no
+delta ELO efetivo utilizado no cálculo das taxas esperadas de gols:</p>
 <p><span class="math display">\[
-z(t) = \int v_z(t) \, dt = \frac{F_0}{m\Omega^2} \cos(\Omega t) =
--\frac{F_0}{m\Omega^2} \cos(\Omega t - \pi)
+\Delta_{eff} = (\text{ELO}_A - \text{ELO}_B) + h_{fit}
 \]</span></p>
-<p>O deslocamento vertical descendente máximo ocorre em <span
-class="math inline">\(\psi = 180^\circ\)</span> (<span
-class="math inline">\(\Omega t = \pi\)</span>).</p>
+<p>O parâmetro <span class="math inline">\(h_{fit}\)</span> é estimado
+por MLE conjuntamente com os demais priors. O valor calibrado foi <span
+class="math inline">\(h_{fit} = 100{,}0\)</span> pontos ELO, equivalente
+a dizer que jogar como país sede aumenta a taxa esperada de gols do time
+anfitrião por um fator de <span class="math inline">\(e^{b \cdot
+h_{fit}} \approx e^{0{,}002 \times 100} \approx 1{,}22\)</span> — ou
+seja, aproximadamente 22% mais gols esperados do que em campo neutro,
+tudo o mais constante.</p>
 <hr />
-<h3
-id="do-ponto-isolado-ao-disco-rígido-a-origem-da-precessão-espacial">Do
-Ponto Isolado ao Disco Rígido: A Origem da Precessão Espacial</h3>
-<p>Se o sistema consistisse em um único ponto livre sem restauração, o
-deslocamento máximo estaria <span
-class="math inline">\(180^\circ\)</span> defasado da força, agindo como
-um integrador duplo puro. Porém, em um disco rígido ou em um rotor de
-várias massas conectadas:</p>
+<h2 id="3-das-diferenças-elo-às-taxas-esperadas-de-gols">3. Das
+Diferenças ELO às Taxas Esperadas de Gols</h2>
+<h3 id="por-que-modelar-gols-como-poisson">Por que Modelar Gols como
+Poisson?</h3>
+<p>A distribuição de Poisson descreve o número de ocorrências de um
+evento raro em um intervalo fixo de tempo ou espaço, sob a hipótese de
+que os eventos ocorrem a uma taxa média constante <span
+class="math inline">\(\lambda\)</span> e de forma (aproximadamente)
+independente entre si. A probabilidade de observar exatamente <span
+class="math inline">\(k\)</span> eventos é:</p>
+<p><span class="math display">\[
+P(X = k \mid \lambda) = \frac{\lambda^k \, e^{-\lambda}}{k!}, \quad k =
+0, 1, 2, \ldots
+\]</span></p>
+<p>A adequação do modelo de Poisson para gols no futebol foi
+estabelecida empiricamente por <a
+href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">Maher
+(1982)</a>. Maher incorporou parâmetros de ataque e defesa por equipe e
+mostrou, por meio de testes de aderência (<span
+class="math inline">\(\chi^2\)</span>), que o modelo de Poisson
+independente descreve adequadamente as frequências de placares no
+futebol inglês, embora com pequenos desvios sistemáticos nos placares
+baixos — um problema que Dixon e Coles resolveriam quinze anos depois. O
+modelo de Poisson para gols tornou-se, desde então, o ponto de partida
+padrão na literatura de estatística esportiva (<a
+href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles, 1997</a>;
+<a href="https://doi.org/10.1111/1467-9884.00366">Karlis e Ntzoufras,
+2003</a>).</p>
+<h3 id="da-diferença-elo-à-taxa-esperada-de-gols">Da Diferença ELO à
+Taxa Esperada de Gols</h3>
+<p>Para converter <span class="math inline">\(\Delta_{eff}\)</span> em
+taxas esperadas de gols <span class="math inline">\(\lambda\)</span>,
+adotamos uma função exponencial quadrática:</p>
+<p><span class="math display">\[
+\lambda^{home}(\Delta_{eff}) = \exp\!\bigl(a + b\,\Delta_{eff} +
+c\,\Delta_{eff}^2\bigr)
+\]</span></p>
+<p><span class="math display">\[
+\lambda^{away}(\Delta_{eff}) = \exp\!\bigl(a - b\,\Delta_{eff} +
+c\,\Delta_{eff}^2\bigr)
+\]</span></p>
+<p>Os parâmetros <span class="math inline">\(\{a, b, c\}\)</span> são
+estimados conjuntamente com os demais priors por MLE. Os valores
+calibrados e suas interpretações são apresentados na Seção 7.1.</p>
+<p><strong>Interpretação do parâmetro <span
+class="math inline">\(a\)</span>:</strong> O intercepto determina a taxa
+esperada de gols quando os dois times têm ELO idêntico (<span
+class="math inline">\(\Delta_{eff} = 0\)</span>). Nesse caso, <span
+class="math inline">\(\lambda = e^a\)</span> para ambos. O valor
+calibrado foi <span class="math inline">\(a = 0{,}2394\)</span>,
+correspondendo a <span class="math inline">\(\lambda = e^{0{,}2394}
+\approx 1{,}270\)</span> gols por time por jogo em campo neutro com
+times de igual força — coerente com a média histórica do futebol
+internacional de alto nível.</p>
+<p><strong>Interpretação do parâmetro <span
+class="math inline">\(b\)</span>:</strong> O coeficiente linear captura
+a assimetria induzida pela diferença de qualidade. O valor calibrado foi
+<span class="math inline">\(b = 0{,}002074\)</span>: para cada 100
+pontos ELO de vantagem, a taxa esperada de gols do time superior aumenta
+por <span class="math inline">\(e^{0{,}002074 \times 100} \approx
+1{,}231\)</span> (23% mais gols esperados), enquanto a do inferior
+diminui simetricamente.</p>
+<p><strong>Interpretação do parâmetro <span
+class="math inline">\(c\)</span>:</strong> O coeficiente quadrático
+captura a saturação para grandes diferenciais. O valor calibrado foi
+<span class="math inline">\(c = -6{,}31 \times 10^{-7}\)</span>,
+ligeiramente negativo, indicando que o efeito marginal de cada ponto ELO
+adicional decresce para diferenciais muito elevados — o que é
+empiricamente razoável, pois não se pode marcar infinitos gols
+independentemente de quão superior se é.</p>
+<h3 id="verificação-de-consistência">Verificação de Consistência</h3>
+<p>Por construção, as duas funções são simétricas: inverter os papéis
+dos times (<span class="math inline">\(\Delta_{eff} \to
+-\Delta_{eff}\)</span>) troca <span
+class="math inline">\(\lambda^{home}\)</span> por <span
+class="math inline">\(\lambda^{away}\)</span>:</p>
+<p><span class="math display">\[
+\lambda^{home}(+\Delta) = \lambda^{away}(-\Delta)
+\]</span></p>
+<p>Essa simetria garante que o modelo seja internamente consistente: a
+taxa esperada de gols de <span class="math inline">\(A\)</span> contra
+<span class="math inline">\(B\)</span> em campo de <span
+class="math inline">\(A\)</span> é exatamente o que o modelo preveria
+para <span class="math inline">\(B\)</span> se o jogo fosse
+espelhado.</p>
+<h3 id="o-parâmetro-rho--correlação-de-dixon-coles">O Parâmetro <span
+class="math inline">\(\rho\)</span> — Correlação de Dixon-Coles</h3>
+<p>O parâmetro <span class="math inline">\(\rho\)</span> captura a
+dependência estatística entre os gols das duas equipes em uma mesma
+partida. Sua dependência de <span
+class="math inline">\(|\Delta_{eff}|\)</span> é modelada por:</p>
+<p><span class="math display">\[
+\rho(\Delta_{eff}) = \rho_{max} \cdot \tanh\!\left(\rho_0 - \rho_1^{neg}
+\cdot \frac{|\Delta_{eff}|}{400}\right)
+\]</span></p>
+<p>com <span class="math inline">\(\rho_{max} = 0{,}2\)</span>. Os
+parâmetros <span class="math inline">\(\rho_0\)</span> e <span
+class="math inline">\(\rho_1^{neg}\)</span> são parâmetros da curva de
+decaimento — não confundir com o próprio <span
+class="math inline">\(\rho\)</span>, que é o valor de correlação
+resultante para um dado <span
+class="math inline">\(\Delta_{eff}\)</span>. O valor de <span
+class="math inline">\(\rho_1^{neg}\)</span> é forçado a ser não-negativo
+via <span class="math inline">\(\rho_1^{neg} =
+\text{softplus}(\rho_1^{raw})\)</span>, garantindo que <span
+class="math inline">\(\rho\)</span> seja monotonamente decrescente em
+<span class="math inline">\(|\Delta_{eff}|\)</span> — partidas mais
+desequilibradas têm menor dependência entre os gols.</p>
+<p>Os valores calibrados foram <span class="math inline">\(\rho_0^{raw}
+= 0{,}6724\)</span> e <span class="math inline">\(\rho_1^{neg} =
+0{,}4769\)</span>, resultando em:</p>
+<ul>
+<li><span class="math inline">\(\rho(\Delta_{eff} = 0) =
+0{,}117\)</span> — correlação em jogo equilibrado</li>
+<li><span class="math inline">\(\rho(\Delta_{eff} = 400) =
+0{,}039\)</span> — correlação em jogo com 400 pts de diferença</li>
+</ul>
+<p>Esses valores são coerentes com a estimativa original de <a
+href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles (1997)</a>,
+que obtiveram <span class="math inline">\(\rho \approx -0{,}13\)</span>
+(com sinal oposto por diferença de convenção) para o futebol inglês.</p>
+<hr />
+<h2 id="4-os-fatores-de-correção-k_att-e-k_def">4. Os Fatores de
+Correção <span class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span></h2>
+<h3 id="motivação-as-duas-limitações-do-elo">Motivação: As Duas
+Limitações do ELO</h3>
+<p>O rating ELO é, por construção, uma medida de longo prazo: ele se
+atualiza incrementalmente a cada partida e converge lentamente para o
+“verdadeiro” nível de uma seleção. Isso gera duas limitações importantes
+quando o objetivo é modelar o volume de gols de uma partida
+específica.</p>
+<p><strong>Primeira limitação — forma recente.</strong> Um time pode ter
+ELO historicamente elevado mas estar em crise de resultados: mudança de
+treinador, lesões em jogadores-chave, período de adaptação tática. Outro
+pode ter ELO modesto mas estar em ascensão acelerada. O ELO não
+refletirá essas divergências de forma imediata.</p>
+<p><strong>Segunda limitação — estilo de jogo e identidade
+ofensiva.</strong> O ELO é cego ao <em>como</em> uma equipe vence ou
+perde: ele registra apenas o resultado (vitória, empate, derrota), não o
+placar. Dois times com ELO idêntico podem ter perfis de jogo
+radicalmente diferentes. Uma seleção de estilo ofensivo pode vencer por
+4–2 e perder por 1–3, acumulando muitos gols nos dois lados; outra, de
+estilo defensivo e pragmático, pode vencer por 1–0 e empatar por 0–0,
+com poucos gols em ambos os sentidos. Para o ELO, os dois comportamentos
+são indistinguíveis. Contudo, para a modelagem de placares via Poisson,
+a diferença é fundamental: a taxa esperada de gols <span
+class="math inline">\(\lambda\)</span> de cada time é muito diferente
+entre os dois perfis, mesmo com força igual.</p>
+<p>Os fatores <span class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span> corrigem ambas as limitações
+simultaneamente, pois são estimados a partir dos gols marcados e
+sofridos nos jogos recentes de cada seleção — informação que o ELO
+descarta completamente.</p>
+<p>Formalmente: <span class="math inline">\(K_{att} &gt; 1\)</span>
+significa que o time marca mais gols do que seu ELO preveria; <span
+class="math inline">\(K_{att} &lt; 1\)</span>, o contrário. <span
+class="math inline">\(K_{def} &lt; 1\)</span> indica que o time sofre
+menos gols do que o esperado para seu nível ELO (defesa sólida ou estilo
+defensivo); <span class="math inline">\(K_{def} &gt; 1\)</span>, maior
+vulnerabilidade relativa. Ambos são adimensionais e centrados em 1:
+quando não há evidência de desvio, a rede retorna <span
+class="math inline">\(K \approx 1\)</span>.</p>
+<h3 id="a-combinação-com-a-taxa-esperada-de-gols">A Combinação com a
+Taxa Esperada de Gols</h3>
+<p>As taxas finais esperadas de gols que alimentam a distribuição de
+placares são:</p>
+<p><span class="math display">\[
+\lambda_A = \lambda^{home}(\Delta_{eff}) \cdot K_{att}^A \cdot K_{def}^B
+\]</span></p>
+<p><span class="math display">\[
+\lambda_B = \lambda^{away}(\Delta_{eff}) \cdot K_{att}^B \cdot K_{def}^A
+\]</span></p>
+<p>O número esperado de gols de <span class="math inline">\(A\)</span>
+é, portanto, o produto de três componentes: o referencial do diferencial
+ELO, a correção pelo perfil ofensivo e forma recente do próprio time
+<span class="math inline">\(A\)</span> (<span
+class="math inline">\(K_{att}^A\)</span>), e a correção pela
+vulnerabilidade defensiva e forma recente do adversário <span
+class="math inline">\(B\)</span> (<span
+class="math inline">\(K_{def}^B\)</span>). O ataque de <span
+class="math inline">\(A\)</span> encontra a defesa de <span
+class="math inline">\(B\)</span>; cada um entra com seu fator
+multiplicativo.</p>
+<p>Se todos os fatores forem iguais a 1, <span
+class="math inline">\(\lambda_A = \lambda^{home}\)</span> — o modelo
+reduz ao prior puro, baseado apenas no diferencial ELO.</p>
+<h3 id="a-rede-neural-gru">A Rede Neural GRU</h3>
+<p>Os fatores <span class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span> são produzidos por uma
+<strong>rede neural recorrente do tipo GRU</strong> (<em>Gated Recurrent
+Unit</em>), introduzida por <a
+href="https://arxiv.org/abs/1406.1078">Cho et al. (2014)</a> e
+empiricamente avaliada por <a
+href="https://arxiv.org/abs/1412.3555">Chung et al. (2014)</a>. A GRU
+processa a sequência dos últimos <span class="math inline">\(T =
+20\)</span> jogos de cada seleção. Para cada jogo <span
+class="math inline">\(t\)</span> da sequência, são extraídas seis
+variáveis (<span class="math inline">\(F = 6\)</span>):</p>
 <ol type="1">
-<li>Em <span class="math inline">\(\psi = 90^\circ\)</span>, todas as
-massas que passam por esse ponto possuem a <strong>velocidade
-descendente máxima</strong>.</li>
-<li>No lado oposto (<span class="math inline">\(\psi =
-270^\circ\)</span>), as massas possuem a <strong>velocidade ascendente
-máxima</strong>.</li>
-<li>Em <span class="math inline">\(\psi = 0^\circ\)</span> e <span
-class="math inline">\(\psi = 180^\circ\)</span>, a velocidade vertical
-instantânea do disco é nula.</li>
+<li>Diferença ELO normalizada: <span class="math inline">\(\Delta_{elo}
+/ 400\)</span></li>
+<li>Gols marcados pela seleção naquele jogo (normalizados por 3)</li>
+<li>Gols sofridos pela seleção naquele jogo (normalizados por 3)</li>
+<li>Peso do torneio <span class="math inline">\(w_i\)</span>
+(importância competitiva da partida)</li>
+<li>Resultado codificado: <span class="math inline">\(+1\)</span>
+(vitória), <span class="math inline">\(0\)</span> (empate), <span
+class="math inline">\(-1\)</span> (derrota)</li>
+<li>Decaimento por posição: <span
+class="math inline">\(e^{-\lambda_{decay} \cdot pos}\)</span>, com <span
+class="math inline">\(\lambda_{decay} = \ln 2 / 7 \approx
+0{,}099\)</span> (meia-vida de 7 jogos)</li>
 </ol>
-<p>Como o disco é um corpo rígido com ponto de apoio central, uma
-distribuição de velocidades verticais que é máxima na linha <span
-class="math inline">\(\psi = 90^\circ - 270^\circ\)</span> força o plano
-do disco a <strong>girar (inclinar-se) em torno do eixo <span
-class="math inline">\(\psi = 0^\circ - 180^\circ\)</span></strong>.</p>
-<p>Consequentemente, a inclinação máxima do plano do disco (o ponto mais
-baixo do disco) ocorre na região de <span class="math inline">\(\psi =
-90^\circ\)</span>. A força aplicada em <span class="math inline">\(\psi
-= 0^\circ\)</span> produz o deslocamento angular máximo do disco <span
-class="math inline">\(90^\circ\)</span> depois. Isso é a
-<strong>resposta em quadratura</strong> ou <strong>precessão
-espacial</strong>.</p>
-<p><picture><source srcset="../assets/media/rotores-e-giroscopios_fig1.webp" type="image/webp"><img src="../assets/media/rotores-e-giroscopios_fig1.jpeg"
-alt="Força descendente em uma pequena massa em um disco girante: as quatro fases do azimute, a variação temporal de força, aceleração, velocidade e deslocamento, e a consequência de precessão no disco rígido" /></picture></p>
-<p><em>Figura 1. Resposta de uma massa no disco girante a uma força
-descendente, ao longo das quatro fases do azimute.</em></p>
+<p>Essas variáveis formam um tensor de entrada de dimensão <span
+class="math inline">\(T \times 6\)</span>. Times com menos de <span
+class="math inline">\(T\)</span> jogos são completados com zeros
+(<em>zero-padding</em>).</p>
+<h4 id="a-mecânica-da-gru">A Mecânica da GRU</h4>
+<p>A GRU mantém um vetor de estado oculto <span
+class="math inline">\(h_t \in \mathbb{R}^{H}\)</span> (com <span
+class="math inline">\(H = 48\)</span>) atualizado a cada passo por:</p>
+<p><span class="math display">\[
+z_t = \sigma(W_z x_t + U_z h_{t-1} + b_z) \quad \text{(gate de
+atualização)}
+\]</span></p>
+<p><span class="math display">\[
+r_t = \sigma(W_r x_t + U_r h_{t-1} + b_r) \quad \text{(gate de reset)}
+\]</span></p>
+<p><span class="math display">\[
+\tilde{h}_t = \tanh\!\bigl(W_h x_t + U_h (r_t \odot h_{t-1}) + b_h\bigr)
+\quad \text{(estado candidato)}
+\]</span></p>
+<p><span class="math display">\[
+h_t = (1 - z_t) \odot h_{t-1} + z_t \odot \tilde{h}_t \quad
+\text{(estado atualizado)}
+\]</span></p>
+<p>O <strong>gate de atualização</strong> <span
+class="math inline">\(z_t\)</span> atua como uma <em>constante de
+inércia</em> do sistema: quando <span class="math inline">\(z_t \approx
+0\)</span>, o estado oculto é mantido essencialmente inalterado, o que
+equivale a dizer que o novo jogo é pouco informativo — o modelo filtra
+variações ruidosas do desempenho recente e não as incorpora ao perfil da
+seleção. Quando <span class="math inline">\(z_t \approx 1\)</span>, o
+estado é completamente substituído pelo candidato, refletindo uma
+atualização decisiva na visão do modelo sobre a equipe.</p>
+<p>O <strong>gate de reset</strong> <span
+class="math inline">\(r_t\)</span> funciona como um <em>gatilho de
+detecção de ruptura</em>: quando <span class="math inline">\(r_t \approx
+0\)</span>, o candidato <span class="math inline">\(\tilde{h}_t\)</span>
+é computado ignorando quase inteiramente o histórico acumulado,
+permitindo que o modelo descarte o estado anterior frente a uma mudança
+estrutural abrupta — como uma troca súbita de comando tático ou uma
+série atípica de resultados que rompe com o padrão estabelecido.
+Combinados, os dois gates permitem à GRU distinguir entre flutuação
+normal de desempenho (que deve ser suavizada) e ruptura estrutural (que
+exige reinicialização do estado), produzindo estimativas de <span
+class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span> que refletem o perfil corrente da
+seleção sem se deixar enganar por ruído.</p>
+<p>O estado oculto final <span class="math inline">\(h_T\)</span> é
+projetado por uma rede <em>feedforward</em> com uma camada oculta de 32
+neurônios com ativação ReLU:</p>
+<p><span class="math display">\[
+k^{raw} = W_2 \cdot \text{ReLU}(W_1 h_T + b_1) + b_2 \in \mathbb{R}^2
+\]</span></p>
+<p>Os escalares brutos são então mapeados para os fatores <span
+class="math inline">\(K\)</span> positivos pela função
+<strong>softplus</strong>:</p>
+<p><span class="math display">\[
+K_{att} = \ln(1 + e^{k_{att}^{raw}}) + \varepsilon, \quad K_{def} =
+\ln(1 + e^{k_{def}^{raw}}) + \varepsilon
+\]</span></p>
+<p>com <span class="math inline">\(\varepsilon = 10^{-2}\)</span>
+garantindo <span class="math inline">\(K &gt; 0\)</span> para todo
+input.</p>
+<h3 id="compartilhamento-de-pesos-e-regularização">Compartilhamento de
+Pesos e Regularização</h3>
+<p>A mesma GRU é utilizada para processar a sequência de qualquer
+seleção. Esse <strong>compartilhamento de parâmetros</strong> força o
+modelo a aprender uma representação universal de “forma recente” que
+seja interpretável da mesma forma para qualquer time, e age como
+regularização implícita: com 48 seleções e 20 jogos cada, o dataset é
+modesto, e parâmetros compartilhados reduzem o risco de sobreajuste.</p>
+<p>A regularização explícita é feita por um termo L2 sobre <span
+class="math inline">\(\log K\)</span>:</p>
+<p><span class="math display">\[
+\mathcal{L}_{reg} = \lambda_{reg} \cdot \mathbb{E}\!\left[(\log
+K_{att})^2 + (\log K_{def})^2\right]
+\]</span></p>
+<p>com <span class="math inline">\(\lambda_{reg} = 0{,}5\)</span>. Como
+<span class="math inline">\(\log(1) = 0\)</span>, essa regularização
+penaliza desvios de <span class="math inline">\(K = 1\)</span> de forma
+quadrática na escala logarítmica — equivalente a um prior log-normal
+centrado em 1. Times com histórico recente pouco informativo regridem ao
+referencial do ELO (<span class="math inline">\(K \approx
+1\)</span>).</p>
 <hr />
-<h2 id="3-o-giroscópio-como-bloco-de-construção">3. O Giroscópio como
-Bloco de Construção</h2>
-<p>Consideremos agora a modelagem dinâmica do giroscópio clássico como
-um corpo rígido simétrico girando a uma velocidade angular constante
-<span class="math inline">\(\Omega\)</span> em torno do seu eixo
-polar.</p>
-<h3 id="notação-e-parâmetros">Notação e Parâmetros</h3>
-<ul>
-<li><span class="math inline">\(I_T\)</span>: Momento de inércia
-transversal (em torno dos eixos de inclinação <span
-class="math inline">\(x\)</span> e <span
-class="math inline">\(y\)</span>).</li>
-<li><span class="math inline">\(I_P\)</span>: Momento de inércia polar
-(em torno do eixo de rotação <span
-class="math inline">\(z\)</span>).</li>
-<li><span class="math inline">\(\Omega\)</span>: Velocidade angular de
-rotação do giroscópio.</li>
-<li><span class="math inline">\(\theta_x, \theta_y\)</span>: Ângulos de
-inclinação (arfagem e rolamento) no referencial inercial/fixo.</li>
-<li><span class="math inline">\(M_x, M_y\)</span>: Momentos externos
-aplicados nos eixos <span class="math inline">\(x\)</span> e <span
-class="math inline">\(y\)</span>.</li>
-<li><span class="math inline">\(D\)</span>: Coeficiente de amortecimento
-viscoso torsional.</li>
-<li><span class="math inline">\(K\)</span>: Rigidez torsional externa
-aplicada aos eixos de inclinação.</li>
-</ul>
-<hr />
-<h3 id="giroscópio-ideal-no-vácuo-d--0-k--0">Giroscópio Ideal no Vácuo
-(<span class="math inline">\(D = 0, K = 0\)</span>)</h3>
-<p>No referencial inercial, para pequenas inclinações <span
-class="math inline">\(\theta_x\)</span> e <span
-class="math inline">\(\theta_y\)</span>, as equações de Euler
-linearizadas são:</p>
+<h2 id="5-o-modelo-de-placares-dixon-coles-sobre-poisson">5. O Modelo de
+Placares: Dixon-Coles sobre Poisson</h2>
+<h3 id="o-problema-da-independência">O Problema da Independência</h3>
+<p>O modelo de Poisson independente — gols de <span
+class="math inline">\(A\)</span> e <span
+class="math inline">\(B\)</span> como variáveis independentes com
+parâmetros <span class="math inline">\(\lambda_A\)</span> e <span
+class="math inline">\(\lambda_B\)</span> — seria a escolha mais simples.
+Contudo, <a href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles
+(1997)</a> observaram empiricamente que esse modelo subestima
+sistematicamente a frequência dos placares 0-0, 1-0, 0-1 e 1-1, e
+superestima outros placares próximos. A causa é a dependência tática
+entre os times: o estado do placar influencia as escolhas de jogo de
+ambas as equipes, quebrando a hipótese de independência dos gols,
+especialmente em placares baixos.</p>
+<h3 id="a-correção-de-dixon-coles">A Correção de Dixon-Coles</h3>
+<p>Dixon e Coles propuseram uma correção multiplicativa aplicada
+exclusivamente aos quatro placares baixos:</p>
 <p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + I_P \Omega \dot{\theta}_y = M_x \\
-I_T \ddot{\theta}_y - I_P \Omega \dot{\theta}_x = M_y
-\end{cases}
-\]</span></p>
-<p>O termo cruzado <span class="math inline">\(I_P \Omega
-\dot{\theta}\)</span> é a <strong>força/momento giroscópico
-acoplado</strong>, que converte uma taxa de inclinação no eixo <span
-class="math inline">\(y\)</span> em um momento no eixo <span
-class="math inline">\(x\)</span>, e vice-versa.</p>
-<h4 id="formulacao-complexa">Formulacao Complexa</h4>
-<p>Definimos a inclinação complexa <span class="math inline">\(\theta(t)
-= \theta_x(t) + i \theta_y(t)\)</span> e o momento complexo <span
-class="math inline">\(M(t) = M_x(t) + i M_y(t)\)</span>. Multiplicando a
-segunda equação por <span class="math inline">\(i\)</span> e somando à
-primeira:</p>
-<p><span class="math display">\[
-I_T (\ddot{\theta}_x + i \ddot{\theta}_y) - i I_P \Omega (\dot{\theta}_x
-+ i \dot{\theta}_y) = M_x + i M_y
-\]</span></p>
-<p><span class="math display">\[
-I_T \ddot{\theta} - i I_P \Omega \dot{\theta} = M
-\]</span></p>
-<h4 id="equação-característica-e-polos">Equação Característica e
-Polos</h4>
-<p>Para a equação homogênea (<span class="math inline">\(M =
-0\)</span>), assumindo solução do tipo <span
-class="math inline">\(\theta(t) = \Theta e^{st}\)</span>:</p>
-<p><span class="math display">\[
-I_T s^2 - i I_P \Omega s = 0 \implies s \left( I_T s - i I_P \Omega
-\right) = 0
-\]</span></p>
-<p>As raízes (polos do sistema) são:</p>
-<p><span class="math display">\[
-s_1 = 0 \qquad \text{e} \qquad s_2 = i \left( \frac{I_P}{I_T} \right)
-\Omega
-\]</span></p>
-<p><strong>Interpretação Física dos Polos</strong>:</p>
-<ul>
-<li><strong><span class="math inline">\(s_1 = 0\)</span></strong>:
-Corresponde ao modo de posição nula/constante. O giroscópio livre não
-possui força restauradora de posição; qualquer orientação angular
-alcançada permanece constante na ausência de momentos.</li>
-<li><strong><span class="math inline">\(s_2 = i \frac{I_P}{I_T}
-\Omega\)</span></strong>: Corresponde ao modo de precessão livre
-(nutação puramente senoidal sem amortecimento). Como a parte real é nula
-(<span class="math inline">\(\sigma = 0\)</span>), o giroscópio ideal no
-vácuo é <strong>marginalmente estável</strong>.</li>
-<li><strong>Resposta Forçada em Ressonância</strong>: Se aplicarmos um
-momento harmônico exatamente na frequência <span
-class="math inline">\(1/\text{rev}\)</span> (<span
-class="math inline">\(\omega = \Omega\)</span>), e para o caso de um
-disco fino onde <span class="math inline">\(I_P \approx 2 I_T\)</span>
-(ou <span class="math inline">\(I_P = I_T\)</span>), a excitação
-coincide com a frequência natural e, devido à ausência de amortecimento,
-a amplitude cresce secularmente sem limite no regime linear.</li>
-</ul>
-<hr />
-<h3 id="giroscópio-com-amortecimento-viscoso-d--0-k--0">Giroscópio com
-Amortecimento Viscoso (<span class="math inline">\(D &gt; 0, K =
-0\)</span>)</h3>
-<p>Adicionando um amortecimento viscoso <span
-class="math inline">\(D\)</span> que opõe às taxas de inclinação <span
-class="math inline">\(\dot{\theta}_x\)</span> e <span
-class="math inline">\(\dot{\theta}_y\)</span>:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + D \dot{\theta}_x + I_P \Omega \dot{\theta}_y = M_x
-\\
-I_T \ddot{\theta}_y + D \dot{\theta}_y - I_P \Omega \dot{\theta}_x = M_y
-\end{cases}
-\]</span></p>
-<p>Na forma complexa:</p>
-<p><span class="math display">\[
-I_T \ddot{\theta} + (D - i I_P \Omega) \dot{\theta} = M
-\]</span></p>
-<h4 id="equação-característica-e-polos-1">Equação Característica e
-Polos</h4>
-<p><span class="math display">\[
-I_T s^2 + (D - i I_P \Omega) s = 0 \implies s \left[ I_T s + (D - i I_P
-\Omega) \right] = 0
-\]</span></p>
-<p>Os polos são:</p>
-<p><span class="math display">\[
-s_1 = 0 \qquad \text{e} \qquad s_2 = -\frac{D}{I_T} + i \left(
-\frac{I_P}{I_T} \right) \Omega
-\]</span></p>
-<p><strong>Interpretação Física</strong>:</p>
-<p>O amortecimento viscoso introduz uma parte real negativa <span
-class="math inline">\(\sigma = -D/I_T\)</span> no modo oscilatório. A
-precessão livre agora é um movimento espiral decrescente no tempo
-(estável). O polo em <span class="math inline">\(s_1 = 0\)</span>
-permanece na origem pois ainda não há rigidez de posição.</p>
-<hr />
-<h3 id="giroscópio-com-rigidez-torsional-externa-d--0-k--0">Giroscópio
-com Rigidez Torsional Externa (<span class="math inline">\(D &gt; 0, K
-&gt; 0\)</span>)</h3>
-<p>Adicionando molas torsionais externas de rigidez <span
-class="math inline">\(K\)</span> em cada eixo:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + D \dot{\theta}_x + I_P \Omega \dot{\theta}_y + K
-\theta_x = M_x \\
-I_T \ddot{\theta}_y + D \dot{\theta}_y - I_P \Omega \dot{\theta}_x + K
-\theta_y = M_y
-\end{cases}
-\]</span></p>
-<p>Na forma complexa unificada:</p>
-<p><span class="math display">\[
-I_T \ddot{\theta} + (D - i I_P \Omega) \dot{\theta} + K \theta = M
-\]</span></p>
-<h4 id="equação-característica-geral">Equação Característica Geral</h4>
-<p><span class="math display">\[
-I_T s^2 + (D - i I_P \Omega) s + K = 0
-\]</span></p>
-<p>Usando a fórmula quadrática:</p>
-<p><span class="math display">\[
-s = \frac{-(D - i I_P \Omega) \pm \sqrt{(D - i I_P \Omega)^2 - 4 I_T
-K}}{2 I_T}
-\]</span></p>
-<p>A presença de <span class="math inline">\(K &gt; 0\)</span> remove o
-polo da origem (<span class="math inline">\(s_1 \neq 0\)</span>),
-deslocando ambos os polos e estabelecendo uma posição de equilíbrio
-elástico estático.</p>
-<hr />
-<h3
-id="resposta-em-frequência-rigidez-efetiva-e-ângulo-de-fase">Resposta em
-Frequência, Rigidez Efetiva e Ângulo de Fase</h3>
-<p>Para avaliar a resposta forçada a uma excitação harmônica <span
-class="math inline">\(M(t) = M_0 e^{i \omega t}\)</span>, assumimos
-resposta permanente <span class="math inline">\(\theta(t) = \Theta e^{i
-\omega t}\)</span>:</p>
-<p><span class="math display">\[
-\left[ -I_T \omega^2 + i \omega (D - i I_P \Omega) + K \right] \Theta =
-M_0
-\]</span></p>
-<p><span class="math display">\[
-\left[ (K - I_T \omega^2 + \omega I_P \Omega) + i \omega D \right]
-\Theta = M_0
-\]</span></p>
-<p>Definimos a <strong>Rigidez Efetiva Giroscópica</strong> <span
-class="math inline">\(K_{\text{ef}}(\omega)\)</span> como a parte real
-do operador:</p>
-<p><span class="math display">\[
-K_{\text{ef}}(\omega) = K - I_T \omega^2 + \omega I_P \Omega
-\]</span></p>
-<p>A função de transferência de resposta em frequência é:</p>
-<p><span class="math display">\[
-\Theta(\omega) = \frac{M_0}{K_{\text{ef}}(\omega) + i \omega D}
-\]</span></p>
-<p>A amplitude <span class="math inline">\(|\Theta|\)</span> e o ângulo
-de fase <span class="math inline">\(\phi\)</span> são dados por:</p>
-<p><span class="math display">\[
-|\Theta| = \frac{|M_0|}{\sqrt{[K_{\text{ef}}(\omega)]^2 + (\omega D)^2}}
-\]</span></p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\omega D}{K_{\text{ef}}(\omega)} \right) =
-\arctan \left( \frac{\omega D}{K - I_T \omega^2 + \omega I_P \Omega}
-\right)
-\]</span></p>
-<p><strong>Análise do Ângulo de Fase <span
-class="math inline">\(\phi\)</span></strong>:</p>
-<ol type="1">
-<li><p><strong>Ressonância Giroscópica Pura (<span
-class="math inline">\(K_{\text{ef}}(\omega) = 0\)</span>)</strong>:
-Quando a rigidez efetiva se anula, a parte real do denominador
-desaparece. O ângulo de fase torna-se:</p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\omega D}{0} \right) = 90^\circ
-\]</span></p>
-<p>A resposta está exatamente em <strong>quadratura</strong> (<span
-class="math inline">\(90^\circ\)</span> atrasada em relação à força
-aplicada).</p></li>
-<li><p><strong>Efeito de Rigidez Dominante (<span
-class="math inline">\(K_{\text{ef}}(\omega) &gt; 0\)</span>)</strong>:
-Se a rigidez externa <span class="math inline">\(K\)</span> for grande
-de modo que <span class="math inline">\(K_{\text{ef}}(\omega) &gt;
-0\)</span>, o denominador possui parte real positiva:</p>
-<p><span class="math display">\[
-\phi &lt; 90^\circ
-\]</span></p>
-<p>A fase diminui, aproximando a resposta espacial do eixo de aplicação
-da força.</p></li>
-<li><p><strong>Efeito Inercial Dominante (<span
-class="math inline">\(K_{\text{ef}}(\omega) &lt; 0\)</span>)</strong>:
-Se o termo inercial ou de rotação dominar fazendo com que <span
-class="math inline">\(K_{\text{ef}}(\omega) &lt; 0\)</span>, a fase
-supera <span class="math inline">\(90^\circ\)</span>:</p>
-<p><span class="math display">\[
-90^\circ &lt; \phi \le 180^\circ
-\]</span></p></li>
-</ol>
-<hr />
-<h2 id="4-o-rotor-de-asas-rotativas">4. O Rotor de Asas Rotativas</h2>
-<p>Analisaremos agora a dinâmica de batimento (<em>flapping</em>) da pá
-de um rotor no referencial girante.</p>
-<h3 id="notação-e-parâmetros-1">Notação e Parâmetros</h3>
-<ul>
-<li><span class="math inline">\(I_b\)</span>: Momento de inércia de
-batimento da pá em relação à articulação (<span
-class="math inline">\(\int_0^R r^2 dm\)</span>).</li>
-<li><span class="math inline">\(\Omega\)</span>: Velocidade angular de
-rotação do rotor.</li>
-<li><span class="math inline">\(\psi\)</span>: Posição azimutal da pá
-(<span class="math inline">\(\psi = \Omega t\)</span>).</li>
-<li><span class="math inline">\(\beta\)</span>: Ângulo de batimento
-(<em>flap angle</em>) da pá.</li>
-<li><span class="math inline">\(C_\beta\)</span>: Coeficiente de
-amortecimento aerodinâmico de batimento.</li>
-<li><span class="math inline">\(K_{cf}\)</span>: Rigidez centrífuga de
-batimento (<span class="math inline">\(I_b \Omega^2\)</span>).</li>
-<li><span class="math inline">\(K_e\)</span>: Rigidez equivalente devida
-ao <em>hinge offset</em> (excentricidade da articulação <span
-class="math inline">\(e\)</span>).</li>
-<li><span class="math inline">\(K_s\)</span>: Rigidez elástica
-estrutural da raiz da pá (rotores <em>hingeless</em> /
-<em>bearingless</em>).</li>
-<li><span class="math inline">\(\gamma\)</span>: Número de Lock (<span
-class="math inline">\(\frac{\rho a c R^4}{I_b}\)</span>).</li>
-</ul>
-<hr />
-<h3 id="pá-articulada-no-vácuo-e-rigidez-centrífuga">Pá Articulada no
-Vácuo e Rigidez Centrífuga</h3>
-<p>Considere uma pá articulada na origem (<span
-class="math inline">\(e=0\)</span>) girando no vácuo (<span
-class="math inline">\(C_\beta = 0\)</span>, sem forças aerodinâmicas).
-Quando a pá se desloca do plano de rotação por um ângulo <span
-class="math inline">\(\beta\)</span>, a força centrífuga atuando em um
-elemento de massa <span class="math inline">\(dm\)</span> a uma
-distância <span class="math inline">\(r\)</span> desenvolve um momento
-restaurador em torno da articulação de batimento:</p>
-<p><span class="math display">\[
-d M_{cf} = -(r \Omega^2 dm) \cdot (r \sin \beta) \approx -r^2 \Omega^2
-\beta \, dm
-\]</span></p>
-<p>Integrando ao longo de toda a extensão da pá de <span
-class="math inline">\(0\)</span> a <span
-class="math inline">\(R\)</span>:</p>
-<p><span class="math display">\[
-M_{cf} = -\beta \Omega^2 \int_0^R r^2 dm = -I_b \Omega^2 \beta
-\]</span></p>
-<p>O termo <span class="math inline">\(K_{cf} = I_b \Omega^2\)</span>
-representa a <strong>Rigidez Centrífuga de Batimento</strong>. Esta
-rigidez não decorre de uma mola física, mas sim da geometria da
-rotação.</p>
-<p>A equação de movimento da pá no vácuo sob um momento excitador <span
-class="math inline">\(M_1 \cos(\Omega t)\)</span> é:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + I_b \Omega^2 \beta = M_1 \cos(\Omega t)
-\]</span></p>
-<p>Dividindo por <span class="math inline">\(I_b\)</span>:</p>
-<p><span class="math display">\[
-\ddot{\beta} + \Omega^2 \beta = \frac{M_1}{I_b} \cos(\Omega t)
-\]</span></p>
-<h4 id="frequência-natural-e-polos-no-vácuo">Frequência Natural e Polos
-no Vácuo</h4>
-<p>A frequência natural de batimento no vácuo é <span
-class="math inline">\(\omega_n = \sqrt{\frac{I_b \Omega^2}{I_b}} =
-\Omega\)</span>.</p>
-<p>O rotor articulado no vácuo possui uma frequência natural exatamente
-igual à frequência de rotação (<span
-class="math inline">\(1/\text{rev}\)</span>). A equação característica
-<span class="math inline">\(s^2 + \Omega^2 = 0\)</span> fornece os
-polos:</p>
-<p><span class="math display">\[
-s_{1,2} = \pm i \Omega
-\]</span></p>
-<h4 id="o-cancelamento-inercial-e-centrífugo">O “Cancelamento” Inercial
-e Centrífugo</h4>
-<p>Para uma resposta harmônica <span class="math inline">\(\beta(t) = B
-\cos(\Omega t - \phi)\)</span>:</p>
-<ul>
-<li>O termo inercial é: <span class="math inline">\(I_b \ddot{\beta} =
--I_b \Omega^2 \beta(t)\)</span></li>
-<li>O termo centrífugo é: <span class="math inline">\(K_{cf} \beta =
-+I_b \Omega^2 \beta(t)\)</span></li>
-</ul>
-<p>Somando ambos os termos reativos:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + I_b \Omega^2 \beta = -I_b \Omega^2 \beta(t) + I_b
-\Omega^2 \beta(t) \equiv 0
-\]</span></p>
-<p>Em rotação de <span class="math inline">\(1/\text{rev}\)</span>,
-<strong>o termo inercial e o termo centrífugo cancelam-se mutuamente a
-cada instante t</strong>. Na ausência de amortecimento (<span
-class="math inline">\(C_\beta = 0\)</span>), a solução para excitação
-exatamente na frequência ressonante <span
-class="math inline">\(\Omega\)</span> cresce linearmente com o
-tempo:</p>
-<p><span class="math display">\[
-\beta(t) = \frac{M_1}{2 I_b \Omega} t \sin(\Omega t)
-\]</span></p>
-<p>Assim como o giroscópio ideal no vácuo, o rotor no vácuo não possui
-amplitude estacionária finita em ressonância.</p>
-<hr />
-<h3 id="origem-do-amortecimento-aerodinâmico-e-número-de-lock">Origem do
-Amortecimento Aerodinâmico e Número de Lock</h3>
-<p>Quando o rotor opera na atmosfera, o movimento de batimento da pá
-<span class="math inline">\(\dot{\beta}\)</span> gera uma velocidade
-vertical relativa do ar no elemento de pá <span
-class="math inline">\(U_p = r \dot{\beta}\)</span>. Isso altera o ângulo
-de ataque local <span class="math inline">\(\alpha(r)\)</span>:</p>
-<p><span class="math display">\[
-\Delta \alpha(r) = -\frac{U_p}{U_t} = -\frac{r \dot{\beta}}{\Omega r} =
--\frac{\dot{\beta}}{\Omega}
-\]</span></p>
-<p>A variação correspondente na sustentação aerodinâmica gera um momento
-de amortecimento oposto à velocidade de batimento <span
-class="math inline">\(\dot{\beta}\)</span>. Integrando ao longo da
-pá:</p>
-<p><span class="math display">\[
-M_{aero\_damp} = -\int_0^R \frac{1}{2} \rho U_t^2 c a \left( \frac{r
-\dot{\beta}}{\Omega r} \right) r \, dr = -\frac{1}{8} \rho a c R^4
-\Omega \dot{\beta}
-\]</span></p>
-<p>Definindo o <strong>Número de Lock</strong> <span
-class="math inline">\(\gamma\)</span>, que quantifica a razão entre as
-forças aerodinâmicas e as forças inerciais da pá:</p>
-<p><span class="math display">\[
-\gamma = \frac{\rho a c R^4}{I_b}
-\]</span></p>
-<p>O coeficiente de amortecimento aerodinâmico <span
-class="math inline">\(C_\beta\)</span> torna-se:</p>
-<p><span class="math display">\[
-C_\beta = \frac{1}{8} \rho a c R^4 \Omega = \frac{\gamma I_b \Omega}{8}
-\]</span></p>
-<p>O amortecimento de batimento em um rotor de helicóptero é de origem
-<strong>puramente aerodinâmica</strong> e é diretamente proporcional ao
-Número de Lock <span class="math inline">\(\gamma\)</span> e à
-velocidade angular <span class="math inline">\(\Omega\)</span>.</p>
-<hr />
-<h3 id="rotor-articuladoteetering-na-atmosfera">Rotor
-Articulado/Teetering na Atmosfera</h3>
-<p>Incluindo o amortecimento aerodinâmico <span
-class="math inline">\(C_\beta\)</span>, a equação de batimento no
-referencial girante passa a ser:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + C_\beta \dot{\beta} + I_b \Omega^2 \beta = M_1
-\cos(\Omega t)
-\]</span></p>
-<p><span class="math display">\[
-\ddot{\beta} + \frac{\gamma \Omega}{8} \dot{\beta} + \Omega^2 \beta =
-\frac{M_1}{I_b} \cos(\Omega t)
-\]</span></p>
-<h4 id="polos-no-plano-completo-s">Polos no Plano Completo <span
-class="math inline">\(s\)</span></h4>
-<p>A equação característica <span class="math inline">\(s^2 +
-\frac{\gamma \Omega}{8} s + \Omega^2 = 0\)</span> possui as raízes:</p>
-<p><span class="math display">\[
-s_{1,2} = -\frac{\gamma \Omega}{16} \pm i \Omega \sqrt{1 -
-\left(\frac{\gamma}{16}\right)^2}
-\]</span></p>
-<p>Como <span class="math inline">\(\gamma &gt; 0\)</span> (tipicamente
-entre 5 e 10 para helicópteros), a parte real é estritamente negativa
-(<span class="math inline">\(\sigma = -\frac{\gamma
-\Omega}{16}\)</span>). O amortecimento aerodinâmico move os polos para o
-semiplano esquerdo, garantindo a <strong>estabilidade e a existência de
-um regime permanente estacionário de amplitude finita</strong>.</p>
-<h4 id="resposta-estacionária-e-ângulo-de-fase">Resposta Estacionária e
-Ângulo de Fase</h4>
-<p>Para <span class="math inline">\(\beta(t) = \Re\{ B e^{i \Omega t}
-\}\)</span>:</p>
-<p><span class="math display">\[
-\left[ -I_b \Omega^2 + i \Omega C_\beta + I_b \Omega^2 \right] B = M_1
-\implies i \Omega C_\beta B = M_1
-\]</span></p>
-<p><span class="math display">\[
-B = \frac{M_1}{i \Omega C_\beta} = \frac{M_1}{\Omega C_\beta} e^{-i
-\frac{\pi}{2}}
-\]</span></p>
-<p><span class="math display">\[
-\beta(t) = \frac{M_1}{\Omega C_\beta} \cos\left(\Omega t -
-90^\circ\right)
-\]</span></p>
-<p>Em um rotor articulado puro (<span
-class="math inline">\(e=0\)</span>), <strong>o cancelamento perfeito
-entre os termos inercial e centrífugo faz com que a resposta seja
-governada unicamente pelo amortecimento aerodinâmico</strong>,
-resultando em uma defasagem de fase estacionária de <strong>exatamente
-<span class="math inline">\(90^\circ\)</span></strong>.</p>
-<hr />
-<h3 id="rotores-com-hinge-offset-e-hingeless-omega_n--omega">Rotores com
-Hinge Offset e Hingeless (<span class="math inline">\(\omega_n &gt;
-\Omega\)</span>)</h3>
-<p>Em rotores reais com excentricidade da articulação (<em>hinge
-offset</em> <span class="math inline">\(e &gt; 0\)</span>) ou rotores
-rígidos/flexíveis sem articulação (<em>hingeless</em> /
-<em>bearingless</em>), surge uma rigidez mecânica ou geométrica
-adicional:</p>
-<ul>
-<li><span class="math inline">\(K_e\)</span>: Rigidez do <em>hinge
-offset</em> (<span class="math inline">\(K_e \approx \frac{3}{2}
-\frac{e}{R} I_b \Omega^2\)</span>).</li>
-<li><span class="math inline">\(K_s\)</span>: Rigidez elástica de mola
-na raiz da pá.</li>
-</ul>
-<p>A rigidez total de batimento <span
-class="math inline">\(K_{tot}\)</span> passa a ser:</p>
-<p><span class="math display">\[
-K_{tot} = K_{cf} + K_e + K_s = I_b \Omega^2 + K_e + K_s &gt; I_b
-\Omega^2
-\]</span></p>
-<p>A frequência natural não dimensional de batimento <span
-class="math inline">\(\nu_\beta = \frac{\omega_n}{\Omega}\)</span>
-torna-se maior que <span
-class="math inline">\(1.0/\text{rev}\)</span>:</p>
-<p><span class="math display">\[
-\nu_\beta = \sqrt{1 + \frac{K_e + K_s}{I_b \Omega^2}} &gt; 1.0
-\]</span></p>
-<p>(Tipicamente <span class="math inline">\(\nu_\beta \approx 1.03 -
-1.05\)</span> para rotores com <em>offset</em> e <span
-class="math inline">\(\nu_\beta \approx 1.10 - 1.20\)</span> para
-rotores <em>hingeless</em>).</p>
-<hr />
-<h3
-id="generalização-resposta-de-fase-e-amplitude-no-rotor">Generalização:
-Resposta de Fase e Amplitude no Rotor</h3>
-<p>A equação genérica de batimento para qualquer rotor é:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + C_\beta \dot{\beta} + K_{tot} \beta = M_1 \cos(\omega
-t)
-\]</span></p>
-<p>A amplitude <span class="math inline">\(B\)</span> e o ângulo de
-atraso de fase <span class="math inline">\(\phi\)</span> para uma
-excitação em frequência <span class="math inline">\(\omega\)</span>
-são:</p>
-<p><span class="math display">\[
-B = \frac{M_1}{\sqrt{(K_{tot} - I_b \omega^2)^2 + (C_\beta \omega)^2}}
-\]</span></p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{C_\beta \omega}{K_{tot} - I_b \omega^2}
-\right)
-\]</span></p>
-<p>Para excitação de <span class="math inline">\(1/\text{rev}\)</span>
-(<span class="math inline">\(\omega = \Omega\)</span>), substituindo
-<span class="math inline">\(C_\beta = \frac{\gamma I_b
-\Omega}{8}\)</span>:</p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\frac{\gamma}{8} I_b \Omega^2}{K_{tot} - I_b
-\Omega^2} \right) = \arctan \left( \frac{\frac{\gamma}{8}}{\nu_\beta^2 -
-1} \right)
-\]</span></p>
-<p><strong>Análise do Ângulo de Fase no Rotor</strong>:</p>
-<ol type="1">
-<li><p><strong>Rotor Articulado Puro (<span
-class="math inline">\(\nu_\beta = 1.0\)</span>, <span
-class="math inline">\(K_{tot} = I_b \Omega^2\)</span>)</strong>:
-Denominador do argumento é zero <span class="math inline">\(\implies
-\phi = \arctan(\infty) = 90^\circ\)</span>.</p></li>
-<li><p><strong>Rotor com Hinge Offset ou Hingeless (<span
-class="math inline">\(\nu_\beta &gt; 1.0\)</span>, <span
-class="math inline">\(K_{tot} &gt; I_b \Omega^2\)</span>)</strong>: Como
-<span class="math inline">\(K_{tot} - I_b \Omega^2 &gt; 0\)</span>, o
-argumento do arcotangente é finito e positivo:</p>
-<p><span class="math display">\[
-\phi &lt; 90^\circ
-\]</span></p>
-<p>A resposta antecipa-se angularmente. O pico de batimento ocorre antes
-de <span class="math inline">\(90^\circ\)</span> (tipicamente <span
-class="math inline">\(80^\circ\)</span> a <span
-class="math inline">\(85^\circ\)</span> para <em>offset</em> e <span
-class="math inline">\(70^\circ\)</span> a <span
-class="math inline">\(75^\circ\)</span> para
-<em>hingeless</em>).</p></li>
-</ol>
-<hr />
-<h2 id="5-transformação-de-coleman-e-a-demonstração-da-equivalência">5.
-Transformação de Coleman e a Demonstração da Equivalência</h2>
-<p>Para provar rigorosamente a identidade matemática entre o rotor e o
-giroscópio, devemos transformar as equações de movimento do rotor
-(escritas para pás individuais no referencial girante) para o
-referencial inercial fixo.</p>
-<h3 id="as-coordenadas-multi-pá-de-coleman">As Coordenadas Multi-pá de
-Coleman</h3>
-<p>Consideremos um rotor de <span class="math inline">\(N\)</span> pás
-(<span class="math inline">\(N \ge 3\)</span>). O ângulo de batimento da
-<span class="math inline">\(i\)</span>-ésima pá no azimute <span
-class="math inline">\(\psi_i = \Omega t + \frac{2\pi(i-1)}{N}\)</span>
-pode ser expresso pela Transformação de Coleman (Coleman &amp; Feingold,
-1958):</p>
-<p><span class="math display">\[
-\beta_i(t) = \beta_0(t) + \beta_{1c}(t) \cos \psi_i + \beta_{1s}(t) \sin
-\psi_i + \dots
+P(X{=}x, Y{=}y) = \tau(x, y, \lambda_A, \lambda_B, \rho) \cdot
+\text{Pois}(x;\, \lambda_A) \cdot \text{Pois}(y;\, \lambda_B)
 \]</span></p>
 <p>onde:</p>
-<ul>
-<li><span class="math inline">\(\beta_0\)</span>: Modo de coning
-uniforme do rotor.</li>
-<li><span class="math inline">\(\beta_{1c}\)</span>: Inclinação
-longitudinal do Plano de Ponta de Pá (TPP) em relação ao referencial
-fixo (positiva para trás).</li>
-<li><span class="math inline">\(\beta_{1s}\)</span>: Inclinação lateral
-do TPP em relação ao referencial fixo (positiva para a direita).</li>
-</ul>
-<p>O vetor complexo do TPP no referencial fixo é definido como:</p>
 <p><span class="math display">\[
-\mu(t) = \beta_{1c}(t) + i \beta_{1s}(t)
-\]</span></p>
-<hr />
-<h3 id="dedução-das-equações-no-referencial-fixo">Dedução das Equações
-no Referencial Fixo</h3>
-<p>Derivando <span class="math inline">\(\beta_i(t)\)</span> em relação
-ao tempo e aplicando a regra da cadeia com <span
-class="math inline">\(\dot{\psi}_i = \Omega\)</span>:</p>
-<p><span class="math display">\[
-\dot{\beta}_i = \dot{\beta}_0 + (\dot{\beta}_{1c} + \Omega \beta_{1s})
-\cos \psi_i + (\dot{\beta}_{1s} - \Omega \beta_{1c}) \sin \psi_i
-\]</span></p>
-<p><span class="math display">\[
-\ddot{\beta}_i = \ddot{\beta}_0 + (\ddot{\beta}_{1c} + 2\Omega
-\dot{\beta}_{1s} - \Omega^2 \beta_{1c}) \cos \psi_i + (\ddot{\beta}_{1s}
-- 2\Omega \dot{\beta}_{1c} - \Omega^2 \beta_{1s}) \sin \psi_i
-\]</span></p>
-<p>Substituindo <span class="math inline">\(\beta_i, \dot{\beta}_i,
-\ddot{\beta}_i\)</span> na equação genérica de batimento <span
-class="math inline">\(I_b \ddot{\beta}_i + C_\beta \dot{\beta}_i +
-K_{tot} \beta_i = M_i(\psi_i)\)</span>, multiplicando por <span
-class="math inline">\(\cos \psi_i\)</span> e <span
-class="math inline">\(\sin \psi_i\)</span> e somando sobre todas as
-<span class="math inline">\(N\)</span> pás, isolam-se as equações
-desacopladas dos modos cíclicos do TPP no referencial fixo:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_b \ddot{\beta}_{1c} + C_\beta \dot{\beta}_{1c} + (K_{tot} - I_b
-\Omega^2) \beta_{1c} + 2 I_b \Omega \dot{\beta}_{1s} + C_\beta \Omega
-\beta_{1s} = M_{1c} \\
-I_b \ddot{\beta}_{1s} + C_\beta \dot{\beta}_{1s} + (K_{tot} - I_b
-\Omega^2) \beta_{1s} - 2 I_b \Omega \dot{\beta}_{1c} - C_\beta \Omega
-\beta_{1c} = M_{1s}
+\tau(x, y) = \begin{cases}
+1 - \lambda_A \lambda_B \rho &amp; \text{se } x = 0,\; y = 0 \\[6pt]
+1 + \lambda_A \rho &amp; \text{se } x = 1,\; y = 0 \\[6pt]
+1 + \lambda_B \rho &amp; \text{se } x = 0,\; y = 1 \\[6pt]
+1 - \rho &amp; \text{se } x = 1,\; y = 1 \\[6pt]
+1 &amp; \text{caso contrário}
 \end{cases}
 \]</span></p>
-<p>Multiplicando a segunda equação por <span
-class="math inline">\(i\)</span> e somando à primeira, obtém-se a
-<strong>Equação Complexa Unificada do Rotor no Referencial
-Fixo</strong>:</p>
+<p>Para <span class="math inline">\(\rho &gt; 0\)</span>, os fatores
+<span class="math inline">\(\tau\)</span> reduzem a probabilidade dos
+placares 1-0 e 0-1 (fatores <span class="math inline">\(1 + \lambda_A
+\rho &gt; 1\)</span> e <span class="math inline">\(1 + \lambda_B \rho
+&gt; 1\)</span> atuam como denominadores da redistribuição) e aumentam
+relativamente o 0-0 e o 1-1. O efeito líquido, para os valores típicos
+de <span class="math inline">\(\lambda\)</span> e <span
+class="math inline">\(\rho\)</span> calibrados, é um aumento da massa
+probabilística nos empates de placar baixo, consistente com o padrão
+histórico.</p>
+<p><strong>Validade matemática:</strong> Para que <span
+class="math inline">\(\tau(0,0) = 1 - \lambda_A \lambda_B \rho &gt;
+0\)</span>, é necessário <span class="math inline">\(\rho &lt;
+1/(\lambda_A \lambda_B)\)</span>. Com <span
+class="math inline">\(\rho_{max} = 0{,}2\)</span> e <span
+class="math inline">\(\lambda \approx 1{,}27\)</span>, temos <span
+class="math inline">\(1/(\lambda_A \lambda_B) \approx 0{,}62 \gg
+0{,}2\)</span>, garantindo validade em todo o espaço de parâmetros
+utilizados. O valor <span class="math inline">\(\rho = 0\)</span>
+recupera o modelo de Poisson independente como caso especial.</p>
+<h3 id="a-distribuição-sobre-resultados-e-pênaltis">A Distribuição sobre
+Resultados e Pênaltis</h3>
+<p>A partir da matriz de placares <span class="math inline">\(M[x][y] =
+P(X=x, Y=y)\)</span>, as probabilidades de resultado são obtidas
+por:</p>
 <p><span class="math display">\[
-I_b \ddot{\mu} + (C_\beta - 2 i I_b \Omega) \dot{\mu} + (K_{tot} - I_b
-\Omega^2 - i C_\beta \Omega) \mu = M
+P(\text{vitória } A) = \sum_{x &gt; y} M[x][y], \quad P(\text{empate}) =
+\sum_{x = y} M[x][x], \quad P(\text{vitória } B) = \sum_{y &gt; x}
+M[x][y]
+\]</span></p>
+<p>Em partidas eliminatórias, empates levam à disputa de pênaltis. A
+probabilidade de vitória nos pênaltis é modelada proporcionalmente às
+taxas esperadas de gols:</p>
+<p><span class="math display">\[
+P(A \text{ vence nos pênaltis}) = \frac{\lambda_A}{\lambda_A +
+\lambda_B}
+\]</span></p>
+<h3 id="a-função-de-verossimilhança">A Função de Verossimilhança</h3>
+<p>O modelo é estimado por minimização da NLL ponderada:</p>
+<p><span class="math display">\[
+\mathcal{L}_{NLL} = -\sum_{i=1}^{N} w_i \cdot \log P_{\theta,\phi}(X_i,
+Y_i)
+\]</span></p>
+<p>onde o log da probabilidade Dixon-Coles de um placar <span
+class="math inline">\((X, Y)\)</span> é:</p>
+<p><span class="math display">\[
+\log P(X, Y) = \log \tau(X, Y) + X \log \lambda_A - \lambda_A - \log(X!)
++ Y \log \lambda_B - \lambda_B - \log(Y!)
 \]</span></p>
 <hr />
-<h3 id="comparação-com-a-equação-do-giroscópio">Comparação com a Equação
-do Giroscópio</h3>
-<p>Colocando lado a lado a equação do giroscópio no referencial fixo
-(Seção 3.4) e a equação do rotor no referencial fixo derivada via
-Transformação de Coleman:</p>
+<h2 id="6-simulação-monte-carlo-do-torneio">6. Simulação Monte Carlo do
+Torneio</h2>
+<h3 id="por-que-monte-carlo">Por que Monte Carlo?</h3>
+<p>A Copa 2026 tem 48 seleções distribuídas em 12 grupos de 4 times. Os
+dois primeiros colocados de cada grupo mais os 8 melhores terceiros
+avançam para uma fase de 32 equipes, seguida de oitavas, quartas,
+semifinais e final. Calcular analiticamente <span
+class="math inline">\(P(\text{time } A \text{ vence a Copa})\)</span>
+exigiria somar as probabilidades de todas as trajetórias possíveis pelo
+chaveamento — um espaço combinatório intratável. A simulação Monte Carlo
+resolve isso pela amostragem estocástica: em vez de enumerar, simula-se
+o torneio completo <span class="math inline">\(N\)</span> vezes, e as
+frequências convergem às probabilidades verdadeiras pela Lei dos Grandes
+Números.</p>
+<h3 id="pré-computação-das-matrizes-de-placar">Pré-Computação das
+Matrizes de Placar</h3>
+<p>Para cada par ordenado de seleções <span class="math inline">\((i,
+j)\)</span>, a matriz de probabilidades de placar <span
+class="math inline">\(M_{ij}\)</span> de dimensão <span
+class="math inline">\(9 \times 9\)</span> (placares 0–8 por time) é
+calculada uma única vez antes do início das simulações. Com 48 times, há
+<span class="math inline">\(48 \times 47 = 2.256\)</span> matrizes a
+pré-computar. Esse investimento inicial torna cada simulação individual
+muito rápida: sorteia-se apenas um inteiro de uma distribuição discreta
+com 81 massas pré-computadas.</p>
+<h3 id="o-procedimento-de-simulação">O Procedimento de Simulação</h3>
+<p>Cada uma das <span class="math inline">\(N = 1.000.000\)</span> de
+simulações executa o torneio completo:</p>
+<p><strong>Fase de grupos:</strong> Para cada um dos 12 grupos, os 6
+confrontos (<span class="math inline">\(\binom{4}{2} = 6\)</span>) são
+simulados sorteando um placar da distribuição <span
+class="math inline">\(M_{ij}\)</span>. A classificação final é
+determinada pela seguinte hierarquia:</p>
+<ol type="1">
+<li>Pontos totais (3 por vitória, 1 por empate)</li>
+<li>Confronto direto (pontos, saldo e gols no(s) jogo(s) direto(s))</li>
+<li>Saldo de gols geral</li>
+<li>Gols marcados no total</li>
+<li>Sorteio (em caso de empate absoluto)</li>
+</ol>
+<p><strong>Melhores terceiros:</strong> Os 12 terceiros colocados são
+ordenados por pontos, saldo de gols e gols marcados. Os 8 melhores
+avançam, completando os 32 classificados.</p>
+<p><strong>Fase eliminatória:</strong> Em cada confronto, sorteia-se um
+placar de <span class="math inline">\(M_{ij}\)</span>. Em caso de
+empate, decide-se nos pênaltis por uma Bernoulli com <span
+class="math inline">\(p = \lambda_A / (\lambda_A +
+\lambda_B)\)</span>.</p>
+<h3
+id="estimativa-das-probabilidades-e-intervalos-de-confiança">Estimativa
+das Probabilidades e Intervalos de Confiança</h3>
+<p>Após <span class="math inline">\(N = 1.000.000\)</span> de
+simulações, a estimativa da probabilidade de cada time atingir uma fase
+<span class="math inline">\(f\)</span> é:</p>
 <p><span class="math display">\[
-\text{Giroscópio:} \qquad I_T \ddot{\theta} + (D - i I_P \Omega)
-\dot{\theta} + K \theta = M
+\hat{p}_{i,f} = \frac{\text{número de simulações em que o time } i
+\text{ atingiu a fase } f}{N}
 \]</span></p>
+<p>O intervalo de confiança binomial de 95% é:</p>
 <p><span class="math display">\[
-\text{Rotor (TPP):} \qquad I_b \ddot{\mu} + (C_\beta - 2 i I_b \Omega)
-\dot{\mu} + (K_{tot} - I_b \Omega^2 - i C_\beta \Omega) \mu = M
+IC_{95\%} = \hat{p}_{i,f} \pm 1{,}96 \cdot \sqrt{\frac{\hat{p}_{i,f}(1 -
+\hat{p}_{i,f})}{N}}
 \]</span></p>
-<h4
-id="1-caso-ideal-sem-amortecimento-e-sem-offset-c_beta--0-k_tot--i_b-omega2">1.
-Caso Ideal (Sem Amortecimento e Sem Offset: <span
-class="math inline">\(C_\beta = 0\)</span>, <span
-class="math inline">\(K_{tot} = I_b \Omega^2\)</span>)</h4>
+<p>Com <span class="math inline">\(N = 1.000.000\)</span>, a margem de
+erro máxima (95%) é <span class="math inline">\(\pm
+0{,}098\%\)</span>.</p>
+<hr />
+<h2 id="7-resultados">7. Resultados</h2>
+<h3 id="parâmetros-do-modelo-calibrado">Parâmetros do Modelo
+Calibrado</h3>
+<p>A tabela abaixo apresenta os seis parâmetros dos priors estimados por
+MLE, juntamente com sua interpretação e os valores derivados mais
+relevantes.</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 20%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Parâmetro</th>
+<th style="text-align: right;">Valor</th>
+<th style="text-align: left;">Interpretação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(a\)</span></td>
+<td style="text-align: right;">0,2394</td>
+<td style="text-align: left;"><span class="math inline">\(\lambda = e^a
+= 1{,}270\)</span> gols esperados por time em campo neutro com times
+iguais</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(b\)</span></td>
+<td style="text-align: right;">0,002074</td>
+<td style="text-align: left;">Sensibilidade linear: +100 pts ELO<span
+class="math inline">\(\Rightarrow\)</span> +23% gols esperados</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(c\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(-6{,}31
+\times 10^{-7}\)</span></td>
+<td style="text-align: left;">Curvatura quadrática (saturação para
+grandes diferenciais)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(h_{fit}\)</span></td>
+<td style="text-align: right;">100 pts ELO</td>
+<td style="text-align: left;">Vantagem de sede equivalente em pontos
+ELO</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\rho_0^{raw}\)</span></td>
+<td style="text-align: right;">0,6724</td>
+<td style="text-align: left;"><span class="math inline">\(\rho(\Delta=0)
+= 0{,}117\)</span> (correlação em jogo equilibrado)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\rho_1^{neg}\)</span></td>
+<td style="text-align: right;">0,4769</td>
+<td style="text-align: left;">Decaimento:<span
+class="math inline">\(\rho(\Delta=400) = 0{,}039\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>O painel de diagnóstico do modelo de priors é apresentado na figura
+abaixo:</p>
+<p><picture><source srcset="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig1.webp" type="image/webp"><img
+src="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig1.png"
+alt="Diagnóstico Dixon-Coles — Curvas de calibração, distribuições de placar observadas vs. modeladas, e parâmetros fitados" /></picture></p>
+<p><em>Figura 1. Diagnóstico do modelo Dixon-Coles: calibração, placares
+observados contra modelados e parâmetros ajustados.</em></p>
+<p>O painel contém doze sub-gráficos: (i) a curva <span
+class="math inline">\(\lambda \times \Delta\text{ELO}\)</span>,
+mostrando a relação exponencial simétrica entre diferencial e taxa
+esperada de gols; (ii) gols observados vs. modelados por bin de <span
+class="math inline">\(\Delta\text{ELO}\)</span>, confirmando boa
+aderência; (iii) taxa de vitória do mandante por diferencial, com e sem
+vantagem de sede; (iv–vi) distribuições de placar observadas, modeladas
+e resíduos; (vii) distribuição total de gols por jogo; (viii) a curva
+<span class="math inline">\(\rho(|\Delta\text{ELO}|)\)</span>; (ix)
+calibração de vitórias previstas vs. observadas; (x) pesos temporais;
+(xi) gols esperados em confrontos típicos; (xii) tabela de parâmetros
+fitados.</p>
+<h3 id="elo-e-fatores-k-por-seleção">ELO e Fatores K por Seleção</h3>
+<p>A tabela abaixo apresenta, para cada seleção participante da Copa
+2026, o rating ELO pré-torneio, os fatores <span
+class="math inline">\(K_{att}\)</span> e <span
+class="math inline">\(K_{def}\)</span> estimados pela GRU e o grupo de
+origem. As seleções estão ordenadas por ELO decrescente.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Seleção</th>
+<th>Gr</th>
+<th>Sede</th>
+<th style="text-align: right;">ELO</th>
+<th style="text-align: right;"><span
+class="math inline">\(K_{att}\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(K_{def}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Espanha</td>
+<td>H</td>
+<td></td>
+<td style="text-align: right;">2182</td>
+<td style="text-align: right;">0,9598</td>
+<td style="text-align: right;">1,0897</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Argentina</td>
+<td>J</td>
+<td></td>
+<td style="text-align: right;">2169</td>
+<td style="text-align: right;">0,9626</td>
+<td style="text-align: right;">1,0120</td>
+</tr>
+<tr>
+<td>3</td>
+<td>França</td>
+<td>I</td>
+<td></td>
+<td style="text-align: right;">2120</td>
+<td style="text-align: right;">0,9634</td>
+<td style="text-align: right;">1,0338</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Brasil</td>
+<td>C</td>
+<td></td>
+<td style="text-align: right;">2061</td>
+<td style="text-align: right;">0,9773</td>
+<td style="text-align: right;">0,9607</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Inglaterra</td>
+<td>L</td>
+<td></td>
+<td style="text-align: right;">2045</td>
+<td style="text-align: right;">0,9554</td>
+<td style="text-align: right;">0,9755</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Colômbia</td>
+<td>K</td>
+<td></td>
+<td style="text-align: right;">2042</td>
+<td style="text-align: right;">1,0070</td>
+<td style="text-align: right;">0,9672</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Portugal</td>
+<td>K</td>
+<td></td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">0,9861</td>
+<td style="text-align: right;">0,9831</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Holanda</td>
+<td>F</td>
+<td></td>
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">0,9863</td>
+<td style="text-align: right;">1,0112</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Equador</td>
+<td>E</td>
+<td></td>
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">0,9001</td>
+<td style="text-align: right;">0,8951</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Alemanha</td>
+<td>E</td>
+<td></td>
+<td style="text-align: right;">1985</td>
+<td style="text-align: right;">1,0084</td>
+<td style="text-align: right;">1,0281</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Japão</td>
+<td>F</td>
+<td></td>
+<td style="text-align: right;">1983</td>
+<td style="text-align: right;">0,9566</td>
+<td style="text-align: right;">0,9683</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Croácia</td>
+<td>L</td>
+<td></td>
+<td style="text-align: right;">1981</td>
+<td style="text-align: right;">0,9696</td>
+<td style="text-align: right;">1,0125</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Marrocos</td>
+<td>C</td>
+<td></td>
+<td style="text-align: right;">1968</td>
+<td style="text-align: right;">0,8865</td>
+<td style="text-align: right;">0,9876</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Uruguai</td>
+<td>H</td>
+<td></td>
+<td style="text-align: right;">1961</td>
+<td style="text-align: right;">0,9248</td>
+<td style="text-align: right;">0,9291</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Suíça</td>
+<td>B</td>
+<td></td>
+<td style="text-align: right;">1944</td>
+<td style="text-align: right;">1,0140</td>
+<td style="text-align: right;">1,0088</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Bélgica</td>
+<td>G</td>
+<td></td>
+<td style="text-align: right;">1944</td>
+<td style="text-align: right;">1,0133</td>
+<td style="text-align: right;">0,9968</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Noruega</td>
+<td>I</td>
+<td></td>
+<td style="text-align: right;">1932</td>
+<td style="text-align: right;">1,0454</td>
+<td style="text-align: right;">1,0505</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Turquia</td>
+<td>D</td>
+<td></td>
+<td style="text-align: right;">1928</td>
+<td style="text-align: right;">0,9629</td>
+<td style="text-align: right;">1,0212</td>
+</tr>
+<tr>
+<td>19</td>
+<td>México</td>
+<td>A</td>
+<td>✓</td>
+<td style="text-align: right;">1927</td>
+<td style="text-align: right;">0,9580</td>
+<td style="text-align: right;">0,9360</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Senegal</td>
+<td>I</td>
+<td></td>
+<td style="text-align: right;">1922</td>
+<td style="text-align: right;">0,9626</td>
+<td style="text-align: right;">0,9840</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Paraguai</td>
+<td>D</td>
+<td></td>
+<td style="text-align: right;">1893</td>
+<td style="text-align: right;">0,9604</td>
+<td style="text-align: right;">0,9399</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Áustria</td>
+<td>J</td>
+<td></td>
+<td style="text-align: right;">1888</td>
+<td style="text-align: right;">0,9704</td>
+<td style="text-align: right;">0,9822</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Austrália</td>
+<td>D</td>
+<td></td>
+<td style="text-align: right;">1886</td>
+<td style="text-align: right;">0,9659</td>
+<td style="text-align: right;">0,9670</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Canadá</td>
+<td>B</td>
+<td>✓</td>
+<td style="text-align: right;">1884</td>
+<td style="text-align: right;">0,9474</td>
+<td style="text-align: right;">0,9273</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Irã</td>
+<td>G</td>
+<td></td>
+<td style="text-align: right;">1880</td>
+<td style="text-align: right;">0,9669</td>
+<td style="text-align: right;">0,9610</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Coreia do Sul</td>
+<td>A</td>
+<td></td>
+<td style="text-align: right;">1861</td>
+<td style="text-align: right;">0,9664</td>
+<td style="text-align: right;">0,9854</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Argélia</td>
+<td>J</td>
+<td></td>
+<td style="text-align: right;">1861</td>
+<td style="text-align: right;">0,9643</td>
+<td style="text-align: right;">0,9846</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Panamá</td>
+<td>L</td>
+<td></td>
+<td style="text-align: right;">1822</td>
+<td style="text-align: right;">0,9573</td>
+<td style="text-align: right;">0,9954</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Uzbequistão</td>
+<td>K</td>
+<td></td>
+<td style="text-align: right;">1817</td>
+<td style="text-align: right;">0,9286</td>
+<td style="text-align: right;">0,9393</td>
+</tr>
+<tr>
+<td>30</td>
+<td>EUA</td>
+<td>D</td>
+<td>✓</td>
+<td style="text-align: right;">1809</td>
+<td style="text-align: right;">1,0980</td>
+<td style="text-align: right;">1,0510</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Costa do Marfim</td>
+<td>E</td>
+<td></td>
+<td style="text-align: right;">1798</td>
+<td style="text-align: right;">0,9496</td>
+<td style="text-align: right;">0,9357</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Egito</td>
+<td>G</td>
+<td></td>
+<td style="text-align: right;">1791</td>
+<td style="text-align: right;">0,9102</td>
+<td style="text-align: right;">0,9484</td>
+</tr>
+<tr>
+<td>33</td>
+<td>Escócia</td>
+<td>C</td>
+<td></td>
+<td style="text-align: right;">1791</td>
+<td style="text-align: right;">0,9927</td>
+<td style="text-align: right;">0,9502</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Suécia</td>
+<td>F</td>
+<td></td>
+<td style="text-align: right;">1783</td>
+<td style="text-align: right;">1,0876</td>
+<td style="text-align: right;">1,0779</td>
+</tr>
+<tr>
+<td>35</td>
+<td>Rep. Tcheca</td>
+<td>A</td>
+<td></td>
+<td style="text-align: right;">1782</td>
+<td style="text-align: right;">0,9809</td>
+<td style="text-align: right;">0,9980</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Tunísia</td>
+<td>F</td>
+<td></td>
+<td style="text-align: right;">1763</td>
+<td style="text-align: right;">0,9623</td>
+<td style="text-align: right;">0,9526</td>
+</tr>
+<tr>
+<td>37</td>
+<td>Jordânia</td>
+<td>J</td>
+<td></td>
+<td style="text-align: right;">1763</td>
+<td style="text-align: right;">1,0615</td>
+<td style="text-align: right;">1,0077</td>
+</tr>
+<tr>
+<td>38</td>
+<td>DR Congo</td>
+<td>K</td>
+<td></td>
+<td style="text-align: right;">1750</td>
+<td style="text-align: right;">0,9123</td>
+<td style="text-align: right;">0,9559</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Nova Zelândia</td>
+<td>G</td>
+<td></td>
+<td style="text-align: right;">1730</td>
+<td style="text-align: right;">1,1262</td>
+<td style="text-align: right;">0,9742</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Iraque</td>
+<td>I</td>
+<td></td>
+<td style="text-align: right;">1723</td>
+<td style="text-align: right;">0,9046</td>
+<td style="text-align: right;">0,9792</td>
+</tr>
+<tr>
+<td>41</td>
+<td>Haiti</td>
+<td>C</td>
+<td></td>
+<td style="text-align: right;">1676</td>
+<td style="text-align: right;">1,0296</td>
+<td style="text-align: right;">0,9933</td>
+</tr>
+<tr>
+<td>42</td>
+<td>Arábia Saudita</td>
+<td>H</td>
+<td></td>
+<td style="text-align: right;">1670</td>
+<td style="text-align: right;">0,9797</td>
+<td style="text-align: right;">0,9607</td>
+</tr>
+<tr>
+<td>43</td>
+<td>Cabo Verde</td>
+<td>H</td>
+<td></td>
+<td style="text-align: right;">1662</td>
+<td style="text-align: right;">0,9560</td>
+<td style="text-align: right;">0,9648</td>
+</tr>
+<tr>
+<td>44</td>
+<td>Bósnia-Herz.</td>
+<td>B</td>
+<td></td>
+<td style="text-align: right;">1651</td>
+<td style="text-align: right;">0,9969</td>
+<td style="text-align: right;">0,9442</td>
+</tr>
+<tr>
+<td>45</td>
+<td>África do Sul</td>
+<td>A</td>
+<td></td>
+<td style="text-align: right;">1645</td>
+<td style="text-align: right;">0,9919</td>
+<td style="text-align: right;">0,9906</td>
+</tr>
+<tr>
+<td>46</td>
+<td>Gana</td>
+<td>L</td>
+<td></td>
+<td style="text-align: right;">1626</td>
+<td style="text-align: right;">1,0234</td>
+<td style="text-align: right;">0,9977</td>
+</tr>
+<tr>
+<td>47</td>
+<td>Curaçao</td>
+<td>E</td>
+<td></td>
+<td style="text-align: right;">1586</td>
+<td style="text-align: right;">1,0269</td>
+<td style="text-align: right;">1,0280</td>
+</tr>
+<tr>
+<td>48</td>
+<td>Catar</td>
+<td>B</td>
+<td></td>
+<td style="text-align: right;">1553</td>
+<td style="text-align: right;">1,0263</td>
+<td style="text-align: right;">1,0561</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Leituras notáveis da tabela:</strong></p>
 <ul>
-<li>Giroscópio: <span class="math inline">\(I_T \ddot{\theta} - i I_P
-\Omega \dot{\theta} = M\)</span></li>
-<li>Rotor: <span class="math inline">\(I_b \ddot{\mu} - 2 i I_b \Omega
-\dot{\mu} = M\)</span></li>
+<li><strong>Espanha e Argentina</strong> lideram o ELO com vantagem
+clara sobre o campo. A Espanha apresenta <span
+class="math inline">\(K_{def} = 1{,}090\)</span>, indicando que seu
+estilo de posse e pressão alta gera mais gols sofridos do que o esperado
+para uma equipe de seu nível — o ELO puro subestimaria sua
+vulnerabilidade defensiva. A Argentina tem <span
+class="math inline">\(K_{def} = 1{,}012\)</span>, próximo ao
+neutro.</li>
+<li><strong>Colômbia</strong> (<span class="math inline">\(K_{att} =
+1{,}007\)</span>, <span class="math inline">\(K_{def} =
+0{,}967\)</span>) e <strong>Brasil</strong> (<span
+class="math inline">\(K_{def} = 0{,}961\)</span>) apresentam perfis
+defensivos sólidos, marcando menos e sofrendo menos do que o ELO
+preveria.</li>
+<li><strong>EUA</strong> (<span class="math inline">\(K_{att} =
+1{,}098\)</span>, <span class="math inline">\(K_{def} =
+1{,}051\)</span>) têm perfil de alta intensidade em ambos os sentidos,
+com os dois fatores acima de 1 — combinação que, em campo próprio com a
+vantagem de sede, produz jogos de alto volume de gols.</li>
+<li><strong>Marrocos</strong> (<span class="math inline">\(K_{att} =
+0{,}887\)</span>) e <strong>Equador</strong> (<span
+class="math inline">\(K_{att} = 0{,}900\)</span>) têm os menores
+multiplicadores de ataque entre os times de ELO mais alto, indicando
+estilo mais cauteloso ofensivamente.</li>
+<li><strong>Nova Zelândia</strong> (<span class="math inline">\(K_{att}
+= 1{,}126\)</span>) tem o maior multiplicador de ataque entre todas as
+seleções, mas com ELO baixo (1.730), o efeito na taxa esperada de gols
+final é limitado.</li>
 </ul>
-<p><strong>Demonstração da Identidade Exata</strong>:</p>
-<p>As duas equações são <strong>rigorosamente idênticas</strong> sob a
-correspondência de parâmetros:</p>
-<p><span class="math display">\[
-\Theta \Longleftrightarrow \mu = \beta_{1c} + i \beta_{1s}
-\]</span></p>
-<p><span class="math display">\[
-I_T \Longleftrightarrow I_b
-\]</span></p>
-<p><span class="math display">\[
-I_P \Longleftrightarrow 2 I_b
-\]</span></p>
-<p>Os polos do rotor no referencial fixo são <span
-class="math inline">\(s_1 = 0\)</span> e <span class="math inline">\(s_2
-= 2 i \Omega\)</span>, que correspondem exatamente aos polos do
-giroscópio com <span class="math inline">\(I_P = 2 I_T\)</span>.</p>
-<h4 id="2-caso-geral-com-amortecimento-e-rigidez">2. Caso Geral (Com
-Amortecimento e Rigidez)</h4>
-<p>Comparando termo a termo:</p>
-<table>
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 32%" />
-<col style="width: 38%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Parâmetro / Termo</th>
-<th style="text-align: left;">Giroscópio</th>
-<th style="text-align: left;">Rotor (Referencial Fixo)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Coordenada do Plano</strong></td>
-<td style="text-align: left;"><span class="math inline">\(\theta =
-\theta_x + i \theta_y\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\mu =
-\beta_{1c} + i \beta_{1s}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Inércia Transversal</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(I_T\)</span></td>
-<td style="text-align: left;"><span
-class="math inline">\(I_b\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Inércia Giroscópica</strong></td>
-<td style="text-align: left;"><span class="math inline">\(I_P
-\Omega\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(2 I_b \Omega
-\implies (I_P = 2 I_b)\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Amortecimento Direto</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(D\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(C_\beta =
-\frac{\gamma I_b \Omega}{8}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Rigidez Efetiva</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(K\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(K_{tot} - I_b
-\Omega^2\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Termo Residual</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(0\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(-i C_\beta
-\Omega\)</span></td>
-</tr>
-</tbody>
-</table>
-<p><strong>O Significado Físico do Termo Residual <span
-class="math inline">\(-i C_\beta \Omega\)</span></strong>:</p>
-<p>O termo <span class="math inline">\(-i C_\beta \Omega\)</span> surge
-porque o amortecimento aerodinâmico atua no referencial girante da pá.
-Quando transformado para o referencial fixo por Coleman, a rotação faz
-com que a força de amortecimento em um eixo acople com a posição angular
-do eixo ortogonal. Esse termo introduz um pequeno amortecimento cruzado
-que refina a resposta, mas não altera a estrutura fundamental de
-equivalência giroscópica.</p>
+<h3 id="probabilidades-de-título-e-progressão-por-fase">Probabilidades
+de Título e Progressão por Fase</h3>
+<p>O gráfico abaixo apresenta as probabilidades de título para as 32
+seleções mais favoritas, derivadas de 1.000.000 de simulações Monte
+Carlo:</p>
+<p><picture><source srcset="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig2.webp" type="image/webp"><img
+src="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig2.png"
+alt="Probabilidade de ganhar a Copa 2026 (%) — Top 32" /></picture></p>
+<p><em>Figura 2. Probabilidade de título por seleção, top 32, em um
+milhão de simulações.</em></p>
+<p>O heatmap a seguir mostra as probabilidades de avançar a cada fase
+para todas as 48 seleções:</p>
+<p><picture><source srcset="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig3.webp" type="image/webp"><img
+src="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig3.png"
+alt="Heatmap de probabilidade de avanço por fase" /></picture></p>
+<p><em>Figura 3. Probabilidade de avanço a cada fase para as 48
+seleções.</em></p>
 <hr />
-<h3 id="condições-de-validade-da-equivalência">Condições de Validade da
-Equivalência</h3>
-<p>A equivalência física e matemática entre o rotor e o giroscópio é
-válida sob as seguintes condições:</p>
-<ol type="1">
-<li><strong>Referencial Inercial Fixo</strong>: A comparação deve ser
-feita entre a orientação espacial do giroscópio <span
-class="math inline">\((\theta_x, \theta_y)\)</span> e os modos cíclicos
-do TPP <span class="math inline">\((\beta_{1c}, \beta_{1s})\)</span>,
-<strong>e não com a pá individual no referencial girante</strong>.</li>
-<li><strong>Hipótese de Pequenos Ângulos e Linearidade</strong>: Válida
-para pequenas inclinações de TPP e pequenos ângulos de batimento.</li>
-<li><strong>Mapeamento do Momento Polar</strong>: O rotor comporta-se
-como um giroscópio cujo momento de inércia polar efetivo é o dobro do
-momento de inércia de batimento de uma pá (<span
-class="math inline">\(I_P = 2 I_b\)</span>).</li>
-</ol>
-<hr />
-<h2 id="6-tabela-comparativa-geral-e-conclusão">6. Tabela Comparativa
-Geral e Conclusão</h2>
-<p>A Tabela 1 resume a correspondência estrutural entre as diferentes
-configurações de giroscópios e rotores.</p>
-<table>
-<colgroup>
-<col style="width: 15%" />
-<col style="width: 24%" />
-<col style="width: 26%" />
-<col style="width: 14%" />
-<col style="width: 18%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Configuração do Giroscópio</th>
-<th style="text-align: left;">Configuração do Rotor</th>
-<th style="text-align: left;">Equação de Movimento Unificada</th>
-<th style="text-align: left;">Polos Dominantes (<span
-class="math inline">\(s\)</span>)</th>
-<th style="text-align: left;">Resposta de Fase (<span
-class="math inline">\(\phi\)</span>)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Ideal no Vácuo</strong> (<span
-class="math inline">\(D=0, K=0\)</span>)</td>
-<td style="text-align: left;"><strong>Teetering/Articulado no
-Vácuo</strong> (<span class="math inline">\(C_\beta=0,
-e=0\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} -
-2i I \Omega \dot{x} = M\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(s_1 =
-0\)</span>, <span class="math inline">\(s_2 = 2i\Omega\)</span>
-(Marginal)</td>
-<td style="text-align: left;">Ressonância secular sem steady-state
-finito</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Amortecido em Fluido</strong>
-(<span class="math inline">\(D&gt;0, K=0\)</span>)</td>
-<td style="text-align: left;"><strong>Teetering/Articulado na
-Atmosfera</strong> (<span class="math inline">\(C_\beta&gt;0,
-e=0\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} +
-(C - 2i I \Omega)\dot{x} - iC\Omega x = M\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\Re(s) =
--\frac{C}{2I} &lt; 0\)</span> Estável</td>
-<td style="text-align: left;"><strong>Exatamente <span
-class="math inline">\(90^\circ\)</span></strong> (Quadratura Pura)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Com Molas Torsionais</strong>
-(<span class="math inline">\(D&gt;0, K&gt;0\)</span>)</td>
-<td style="text-align: left;"><strong>Hinge Offset / Hingeless</strong>
-(<span class="math inline">\(C_\beta&gt;0,
-K_{tot}&gt;I_b\Omega^2\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} +
-(C - 2i I \Omega)\dot{x} + (K_{\text{ef}} - iC\Omega)x = M\)</span></td>
-<td style="text-align: left;">Deslocados para a esquerda</td>
-<td style="text-align: left;"><strong>Menor que <span
-class="math inline">\(90^\circ\)</span></strong> (<span
-class="math inline">\(\phi &lt; 90^\circ\)</span>)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="conclusões">Conclusões</h3>
-<ol type="1">
-<li><strong>Unidade Matemática</strong>: A precessão giroscópica
-clássica e a resposta de batimento em <span
-class="math inline">\(1/\text{rev}\)</span> de um rotor articulado não
-são fenômenos distintos. São a mesma estrutura matemática vista sob
-referenciais diferentes (fixo vs. girante).</li>
-<li><strong>Papel da Transformação de Coleman</strong>: A Transformação
-de Coleman é o elo formal que demonstra que o Plano de Ponta de Pá
-(<span class="math inline">\(TPP\)</span>) no referencial inercial
-rege-se pelas mesmas equações de Euler de um giroscópio acoplado com
-<span class="math inline">\(I_P = 2 I_b\)</span>.</li>
-<li><strong>Origem da Fase de <span
-class="math inline">\(90^\circ\)</span></strong>: Em um rotor articulado
-ideal na atmosfera, a resposta de <span
-class="math inline">\(90^\circ\)</span> decorre do cancelamento exato
-entre os termos reativos (inercial e centrífugo) em <span
-class="math inline">\(1/\text{rev}\)</span>, deixando o amortecimento
-aerodinâmico como único regulador de potência no regime permanente.</li>
-<li><strong>Efeito da Rigidez Estrutural</strong>: Ligar molas a um
-giroscópio ou adicionar <em>hinge offset</em> / rigidez
-<em>hingeless</em> a um rotor produz o mesmo efeito físico: introduz
-rigidez líquida positiva em <span
-class="math inline">\(1/\text{rev}\)</span>, aumentando a frequência
-natural e reduzindo o atraso de fase para valores inferiores a <span
-class="math inline">\(90^\circ\)</span>.</li>
-</ol>
+<h2 id="8-conclusão">8. Conclusão</h2>
+<p>A equação central que resume o modelo é:</p>
+<p><span class="math display">\[
+\lambda_A = \underbrace{\exp(a + b\,\Delta_{eff} +
+c\,\Delta_{eff}^2)}_{\text{força histórica (ELO)}} \;\cdot\;
+\underbrace{K_{att}^A}_{\substack{\text{ataque recente} \\ \text{+
+perfil ofensivo}}} \;\cdot\;
+\underbrace{K_{def}^B}_{\substack{\text{defesa do adversário} \\ \text{+
+perfil defensivo}}}
+\]</span></p>
+<p>Este trabalho apresenta um modelo probabilístico para previsão de
+resultados na Copa do Mundo FIFA 2026, combinando três componentes que
+se complementam de forma coerente.</p>
+<p>O <strong>sistema ELO</strong> fornece a base estrutural. A diferença
+de rating entre dois times, calculada cronologicamente sobre décadas de
+futebol internacional, é convertida em taxas esperadas de gols por uma
+função exponencial quadrática estimada por MLE sobre partidas desde
+1990. Os parâmetros calibrados (<span class="math inline">\(a =
+0{,}239\)</span>, <span class="math inline">\(b = 0{,}00207\)</span>,
+<span class="math inline">\(c = -6{,}3 \times 10^{-7}\)</span>) são
+estatisticamente fundamentados e interpretáveis: a taxa esperada de 1,27
+gols por time por jogo em campo neutro, o efeito de +23% de gols para
+cada 100 pontos ELO de vantagem e a vantagem de sede de 100 pontos ELO
+equivalente são todos consistentes com a literatura empírica.</p>
+<p>Os <strong>fatores <span class="math inline">\(K_{att}\)</span> e
+<span class="math inline">\(K_{def}\)</span></strong>, estimados por uma
+rede neural GRU sobre os 20 jogos mais recentes de cada seleção,
+corrigem as duas limitações estruturais do ELO na modelagem de placares:
+a lentidão de adaptação à forma recente e a cegueira ao volume de gols.
+Os valores estimados revelam perfis de jogo distintos e empiricamente
+plausíveis: Espanha com defesa mais exposta do que seu ELO sugere (<span
+class="math inline">\(K_{def} = 1{,}09\)</span>), Brasil com defesa
+compacta (<span class="math inline">\(K_{def} = 0{,}96\)</span>), EUA
+com estilo de alta intensidade em ambos os sentidos, Marrocos e Equador
+com identidade ofensiva abaixo do ELO.</p>
+<p>O <strong>modelo de Dixon-Coles</strong> traduz as taxas esperadas de
+gols <span class="math inline">\(\lambda\)</span> em distribuições de
+probabilidade sobre placares, corrigindo o viés da dupla-Poisson
+independente nos placares baixos. A <strong>simulação Monte
+Carlo</strong> com <span class="math inline">\(N = 1.000.000\)</span> de
+iterações propaga essa distribuição por toda a estrutura do torneio com
+margem de erro inferior a <span class="math inline">\(\pm
+0{,}1\%\)</span>.</p>
+<p>O resultado central das simulações é a concentração de probabilidade
+entre Espanha e Argentina, cada uma com aproximadamente 20% de chance de
+título — reflexo de sua superioridade clara em ELO sobre o restante do
+campo. A França é a terceira favorita com 11,6%, seguida por Brasil
+(6,7%) e Colômbia (6,0%).</p>
 <hr />
 <h2 id="referências">Referências</h2>
-<p>[1] Bielawa, R. L., <em>Rotary Wing Structural Dynamics and
-Aeroelasticity</em>, AIAA Education Series, 2nd ed., 2006. — Tratado
-fundamental sobre aerodinâmica, aeroelasticidade e dinâmica de rotores.
-<a href="https://doi.org/10.2514/4.862373">Link</a></p>
-<p>[2] Bramwell, A. R. S., Done, G., e Balmford, D., <em>Bramwell’s
-Helicopter Dynamics</em>, 2ª ed., Butterworth-Heinemann, Oxford, 2001. —
-Referência clássica na formulação de voo e acoplamento de rotores de
-helicóptero.</p>
-<p>[3] Coleman, R. P., and Feingold, A. M., <em>Theory of Self-Excited
-Mechanical Oscillations of Helicopter Rotors with Hinged Blades</em>,
-NACA Report 1351, 1958. — Trabalho seminal que introduziu a
-Transformação de Coleman para coordenadas multi-pá. <a
-href="https://ntrs.nasa.gov/citations/19930092066">Link</a></p>
-<p>[4] Gessow, A., and Myers, G. C., <em>Aerodynamics of the
-Helicopter</em>, Macmillan, 1952. — Texto fundacional sobre teoria de
-elemento de pá e dinâmica de batimento. <a
-href="https://archive.org/details/aerodynamicsofhe0000gess">Link</a></p>
-<p>[5] Johnson, W., <em>Helicopter Theory</em>, Princeton University
-Press, Princeton, 1980. — Obra de referência abrangente em mecânica de
-voo e rotores de asas rotativas. <a
-href="https://archive.org/details/helicoptertheory0000john_y9s0">Link</a></p>
-<p>[6] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
-2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
-em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
-de batimento e teoria de esteira. <a
-href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
-<p>[7] Padfield, G. D., <em>Helicopter Flight Dynamics</em>, 2ª ed.,
-Blackwell Science, Oxford, 2007. — Referência abrangente sobre
-qualidades de voo e modelagem de dinâmica de helicópteros. <a
-href="https://en.wikipedia.org/wiki/Gareth_D._Padfield">Link</a></p>
+<p>[1] Cho, K., van Merrienboer, B., Gulcehre, C., Bahdanau, D.,
+Bougares, F., Schwenk, H., &amp; Bengio, Y. (2014). <em>Learning Phrase
+Representations using RNN Encoder-Decoder for Statistical Machine
+Translation</em>, Proceedings of EMNLP 2014. arXiv:1406.1078. <a
+href="https://arxiv.org/abs/1406.1078">Link</a></p>
+<p>[2] Chung, J., Gulcehre, C., Cho, K., &amp; Bengio, Y. (2014).
+<em>Empirical Evaluation of Gated Recurrent Neural Networks on Sequence
+Modeling</em>, arXiv:1412.3555. <a
+href="https://arxiv.org/abs/1412.3555">Link</a></p>
+<p>[3] Dixon, M. J., &amp; Coles, S. G. (1997). <em>Modelling
+Association Football Scores and Inefficiencies in the Football Betting
+Market</em>, Journal of the Royal Statistical Society: Series C (Applied
+Statistics), 46(2), 265–280. doi:10.1111/1467-9876.00065. <a
+href="https://doi.org/10.1111/1467-9876.00065">Link</a></p>
+<p>[4] Elo, A. E. (1978). <em>The Rating of Chessplayers, Past and
+Present</em>, Arco Publishing, New York. <a
+href="https://archive.org/details/ratingofchesspla00unse">Link</a></p>
+<p>[5] Gilch, L. A., &amp; Müller, S. (2018). <em>On Elo Based
+Prediction Models for the FIFA Worldcup 2018</em>, arXiv:1806.01930. <a
+href="https://arxiv.org/pdf/1806.01930">Link</a></p>
+<p>[6] Groll, A., Schauberger, G., &amp; Tutz, G. (2015). <em>Prediction
+of Major International Soccer Tournaments Based on Team-Specific
+Regularized Poisson Regression: An Application to the FIFA World Cup
+2014</em>, Journal of Quantitative Analysis in Sports, 11(2), 97–115. <a
+href="https://epub.ub.uni-muenchen.de/31579/1/Groll_Prediction.pdf">Link</a></p>
+<p>[7] Hvattum, L. M., &amp; Arntzen, H. (2010). <em>Using ELO Ratings
+for Match Result Prediction in Association Football</em>, International
+Journal of Forecasting, 26(3), 460–470.
+doi:10.1016/j.ijforecast.2009.10.002. <a
+href="https://doi.org/10.1016/j.ijforecast.2009.10.002">Link</a></p>
+<p>[8] Karlis, D., &amp; Ntzoufras, I. (2003). <em>Analysis of Sports
+Data by Using Bivariate Poisson Models</em>, Journal of the Royal
+Statistical Society: Series D (The Statistician), 52(3), 381–393.
+doi:10.1111/1467-9884.00366. <a
+href="https://doi.org/10.1111/1467-9884.00366">Link</a></p>
+<p>[9] Ley, C., Van de Wiele, T., &amp; Van Eetvelde, H. (2019).
+<em>Ranking Soccer Teams on the Basis of Their Current Strength: A
+Comparison of Maximum Likelihood Approaches</em>, Statistical Modelling,
+19(1), 55–73. doi:10.1177/1471082X18817650. <a
+href="https://doi.org/10.1177/1471082X18817650">Link</a></p>
+<p>[10] Maher, M. J. (1982). <em>Modelling Association Football
+Scores</em>, Statistica Neerlandica, 36(3), 109–118.
+doi:10.1111/j.1467-9574.1982.tb00782.x. <a
+href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">Link</a></p>
+<p>[11] McHale, I., &amp; Scarf, P. (2011). <em>Modelling the Dependence
+of Goals Scored by Opposing Teams in International Soccer Matches</em>,
+Statistical Modelling, 11(3), 219–236. doi:10.1177/1471082X1001100303.
+<a href="https://doi.org/10.1177/1471082X1001100303">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
   <div class="ornament">· · ·</div>
   <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
-    Second Brain · Gustavo Zambrano · Julho de 2026
+    Second Brain · Gustavo Zambrano · Maio de 2026
   </p>
 </footer>
 
@@ -2459,8 +2917,8 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   </nav>
 </header>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
-<div class="sb-tags"><span class="sb-tag">Dinâmica-de-Voo</span><span class="sb-tag">Rotores</span><span class="sb-tag">Giroscópio</span><span class="sb-tag">Aeroelasticidade</span><span class="sb-tag">Engenharia</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm.html"><strong>Dinâmica de Voo de um Rotor Teetering Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a><a class="sb-related-card" href="metodos-matematicos-e-computacionais-na-engenharia-aeroespacial.html"><strong>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</strong><span>Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</span></a></div></section>
+<div class="sb-tags"><span class="sb-tag">Estatística</span><span class="sb-tag">Futebol</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="campeoes-por-acaso.html"><strong>Campeões por Acaso — Por Que Atletas de Elite São Anomalias Estatísticas</strong><span>O status de atleta de elite obedece às mesmas leis que governam fenômenos aleatórios: o ensaio sustenta, com evidências de Efeito da Idade Relativa, herdabilidade genética, viés de sobrevivência e falácia do atirador de elite, que campeões são outliers estruturais de uma distribuição probabilística, não produtos de um método replicável. A indústria de palestras motivacionais vende ao público uma causalidade que a estatística não sustenta.</span></a><a class="sb-related-card" href="validacao-estocastica-de-dinamica-de-voo.html"><strong>Validação Estocástica de Dinâmica de Voo — De Hume ao p-value</strong><span>O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.</span></a></div></section>
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do essay">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>

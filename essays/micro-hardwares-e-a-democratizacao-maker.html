@@ -29,20 +29,19 @@
   --amber:#967030;
   /* Native Obsidian callout palette — dark theme. Each semantic type owns
      an explicit accent instead of borrowing a generic global color. */
-  --callout-note:#A2988A;
-  --callout-abstract:#B08B4F;
-  --callout-info:#B08B4F;
+  --callout-note:#63C7C2;
+  --callout-abstract:#5A9EAE;
+  --callout-info:#5E9FB8;
   --callout-todo:#B18A4A;
-  --callout-tip:#B08B4F;
+  --callout-tip:#A88B55;
   --callout-success:#63A37B;
-  --callout-question:#B08B4F;
-  --callout-warning:#B08B4F;
+  --callout-question:#B76550;
+  --callout-warning:#D66E5C;
   --callout-failure:#A95C4C;
   --callout-danger:#D06A58;
   --callout-bug:#C65F52;
-  --callout-example:#B08B4F;
-  --callout-quote:#8A857E;
-  --quote-bg:#1C1B1A;
+  --callout-example:#B96A50;
+  --callout-quote:#B08B4F;
   /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
      de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
      No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
@@ -66,20 +65,19 @@
   --amber:#7A5A18;
   /* Native Obsidian callout palette — light theme. Hues keep the same
      semantic identity, but luminance/saturation are tuned independently. */
-  --callout-note:#4A5C77;
-  --callout-abstract:#2F5FB0;
-  --callout-info:#2F5FB0;
+  --callout-note:#2D7775;
+  --callout-abstract:#2F7182;
+  --callout-info:#2F6E8A;
   --callout-todo:#7B5C22;
-  --callout-tip:#2F5FB0;
+  --callout-tip:#735B22;
   --callout-success:#2F7951;
-  --callout-question:#2F5FB0;
-  --callout-warning:#2F5FB0;
+  --callout-question:#8A4939;
+  --callout-warning:#A5483B;
   --callout-failure:#874238;
   --callout-danger:#A13F34;
   --callout-bug:#963A32;
-  --callout-example:#2F5FB0;
-  --callout-quote:#7A7A76;
-  --quote-bg:#F3F2F0;
+  --callout-example:#8C4A37;
+  --callout-quote:#735A23;
   --box-bg:var(--surface);
   --box-verdict-bg:var(--surface2);
 }
@@ -110,20 +108,19 @@
     --amber:#7A5A18;
   /* Native Obsidian callout palette — light theme. Hues keep the same
      semantic identity, but luminance/saturation are tuned independently. */
-  --callout-note:#4A5C77;
-  --callout-abstract:#2F5FB0;
-  --callout-info:#2F5FB0;
+  --callout-note:#2D7775;
+  --callout-abstract:#2F7182;
+  --callout-info:#2F6E8A;
   --callout-todo:#7B5C22;
-  --callout-tip:#2F5FB0;
+  --callout-tip:#735B22;
   --callout-success:#2F7951;
-  --callout-question:#2F5FB0;
-  --callout-warning:#2F5FB0;
+  --callout-question:#8A4939;
+  --callout-warning:#A5483B;
   --callout-failure:#874238;
   --callout-danger:#A13F34;
   --callout-bug:#963A32;
-  --callout-example:#2F5FB0;
-  --callout-quote:#7A7A76;
-  --quote-bg:#F3F2F0;
+  --callout-example:#8C4A37;
+  --callout-quote:#735A23;
     --box-bg:var(--surface);
     --box-verdict-bg:var(--surface2);
   }
@@ -448,7 +445,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 /* ------------------------------------------------------------------ */
 .quote{
   margin:2rem 0;padding:1.05rem 1.3rem;
-  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+  background:var(--surface2);border-left:2px solid var(--callout-quote);
 }
 .quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
@@ -456,7 +453,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .pull-quote{
   position:relative;
   margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
-  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+  background:var(--surface);border-left:3px solid var(--callout-quote);
 }
 /* As aspas gigantes (::before com " a 5rem) foram removidas:
    a pull-quote já se distingue por itálico, filete lateral e respiro. */
@@ -468,8 +465,11 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .pull-quote.epigraph::before{display:none;}
 .pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
-/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
-   posicao fazia o mesmo componente parecer dois componentes diferentes. */
+.pull-quote.epigraph p:last-child{
+  font-style:normal;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dim);margin-top:.9rem;
+}
 /* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
    nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
    diferentes). */
@@ -492,11 +492,11 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .quote{
   margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
-  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+  background:var(--surface2);border-left:2px solid var(--callout-quote);
 }
 .pull-quote{
   margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
-  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+  background:var(--surface);border-left:3px solid var(--callout-quote);
 }
 .quote-text{
   position:relative;
@@ -506,7 +506,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   position:absolute;
   font-family:var(--font-display);
   font-size:2.35rem;line-height:.85;
-  color:color-mix(in srgb,var(--callout-quote) 62%,transparent);
+  color:color-mix(in srgb,var(--callout-quote) 34%,transparent);
   pointer-events:none;
 }
 .quote-text::before{content:"“";left:.02rem;top:.08rem;}
@@ -524,7 +524,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   padding-top:.65rem;
   border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.8rem;line-height:1.55;letter-spacing:.035em;
+  font-size:.72rem;line-height:1.55;letter-spacing:.035em;
   color:var(--text-dim);font-style:normal;
 }
 .quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
@@ -537,7 +537,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .quote-label p{margin:0;}
 .pull-quote.epigraph .quote-text p{color:var(--text-dim);}
 .pull-quote.epigraph .quote-attribution{
-  text-align:center;border-top:none;margin-top:.55rem;
+  text-align:center;border-top:none;color:var(--callout-quote);margin-top:.45rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -574,8 +574,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > h3,.box > h4,.box > h5,.box > h6{
   padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
 }
-.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
-.box > h4{font-size:1rem;margin:1rem 0 1rem;}
+.box > h3{font-size:1.08rem;margin:1.2rem 0 .55rem;}
+.box > h4{font-size:1rem;margin:1rem 0 .45rem;}
 .box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
 .box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
 
@@ -623,7 +623,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--boxc);margin-bottom:.5rem;
+  color:var(--boxc);margin-bottom:.62rem;
 }
 
 /* Cards: filosofos e obras */
@@ -690,11 +690,9 @@ pre code{overflow-wrap:normal;}
 pre{
   background:var(--surface2);border:1px solid var(--border);
   padding:1em 1.2em;border-radius:6px;overflow-x:auto;
-  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
-     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
-     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
-     bloco de código saía menor justamente onde há mais espaço. */
-  font-size:.8em;line-height:1.55;
+  /* `.656em` e não `.8em` porque o `<code>` interno deixou de multiplicar o
+     seu próprio `.82em` — o corpo final na tela grande é exatamente o mesmo. */
+  font-size:.656em;line-height:1.55;
 }
 /* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
    multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
@@ -819,11 +817,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   pre{font-size:.88em;}
   code{font-size:.88em;}
   .quote,.card{padding:.95rem 1.05rem;}
-  /* Um gutter horizontal so por componente. A margem do celular somava ao
-     padding da tela grande e o corpo recuava mais que o proprio titulo. */
-  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
-  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
-  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
+  .box > p{margin-left:1.05rem;margin-right:1.05rem;font-size:1rem;}
   .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
   .box-title{padding:1rem 1.05rem .3rem;}
   .box-verdict{padding:.95rem 1.05rem 1rem;}
@@ -841,7 +835,6 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
-  .quote-attribution{font-size:.84rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
 }
 
@@ -859,26 +852,17 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   overflow:hidden;
 }
 .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
-  margin:0;padding:0 0 1.15rem;
+  margin:0;padding:0 0 .65rem;
 }
 .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
   display:inline-block;margin:-1px 0 0 -1px;
-  padding:.5rem 1.05rem .44rem;
+  padding:.58rem 1.05rem .55rem;
   border:0;border-radius:0;
-  border-bottom:2px solid var(--boxc);
-  background:color-mix(in srgb,var(--boxc) 14%,transparent);
-  color:var(--boxc);
+  background:var(--boxc);color:#fff;
   font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.72rem;font-weight:600;line-height:1.35;
-  letter-spacing:.15em;text-transform:uppercase;
+  font-size:.78rem;font-weight:600;line-height:1.35;
+  letter-spacing:.14em;text-transform:uppercase;
   font-variant:normal;
-}
-/* `info`/`abstract` afirmam um fato; `example`/`tip` propoem um cenario. A
-   faixa do segundo par pesa um pouco menos para marcar essa diferenca sem
-   trocar de cor — a familia visual continua a mesma. */
-.box:is(.callout-example,.callout-tip) > .box-title p{
-  border-bottom-width:1px;
-  background:color-mix(in srgb,var(--boxc) 7%,transparent);
 }
 .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
   color:var(--boxc);
@@ -888,24 +872,19 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 }
 
 /* NOTE — tonal block + strong rail, no tab. */
-/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
-   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
-   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
-   tabela e a mesma prosa de fora da caixa. As outras familias existem para
-   quando se QUER destacar. */
 .box.callout-note{
-  border:1px solid var(--border);border-radius:3px;
-  background:var(--surface2);
+  border:0;border-left:5px solid var(--boxc);border-radius:2px;
+  background:color-mix(in srgb,var(--boxc) 7%,var(--surface));
 }
-.box.callout-note > .box-title{padding:1.05rem 1.3rem .3rem;}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .35rem;}
 .box.callout-note > .box-title p{
   display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
-  color:var(--gold);
-  font-family:inherit;
-  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  color:var(--boxc);
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:1rem;font-weight:760;letter-spacing:.035em;line-height:1.38;
   text-transform:none;font-variant:normal;
 }
-.box.callout-note > p{font-family:inherit;line-height:1.72;}
+.box.callout-note > p{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.68;}
 
 /* ENTITY — explicit [!todo]; title=name, ####=metadata. */
 .box.callout-todo{
@@ -931,12 +910,12 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   border:1px solid var(--border);border-left:6px solid var(--boxc);
   border-radius:9px;background:var(--surface);overflow:hidden;
 }
-.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title{padding:1.38rem 1.3rem .45rem;}
 .box.callout-warning > .box-title p{
   display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
   color:var(--boxc);font-family:var(--font-display);
-  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
-  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+  font-size:clamp(2.7rem,9vw,4.4rem);font-weight:700;line-height:1.02;
+  letter-spacing:-.025em;text-transform:none;font-variant:normal;
 }
 .box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
 .box.callout-warning > .stat-divider{
@@ -1934,7 +1913,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
 </header>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
 <div class="sb-tags"><span class="sb-tag">Engenharia</span><span class="sb-tag">Computação</span><span class="sb-tag">Cultura-Maker</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="impressao-3d-como-microcosmo-da-engenharia.html"><strong>Engenharia em menos de um metro cúbico — A impressora 3D como microcosmo de um projeto de aeronave</strong><span>Uma impressora 3D de mesa comprime, em menos de um metro cúbico, uma parcela surpreendente das disciplinas de um projeto de aeronave. A escala, a criticidade e o rigor são radicalmente diferentes, mas as classes de problemas são reconhecíveis: mecanismos, estruturas, vibrações, controle, calor, escoamento, eletrônica, software, materiais, manufatura, ensaios e integração. A interação entre essas disciplinas, e não cada uma isoladamente, transforma a máquina em um pequeno laboratório de engenharia de sistemas.</span></a><a class="sb-related-card" href="lego-e-a-fisica-do-encaixe.html"><strong>Lego e a Física do Encaixe — Tolerâncias Micrométricas, Grade Discreta e a Poética da Restrição</strong><span>Nenhum concorrente alcançou o Lego depois que as patentes venceram, e o motivo não está no desenho do tijolo, está na metrologia. O ensaio parte das tolerâncias de micra que calibram a força de retenção, passa pela linha Technic e pela gramática construtiva discreta do sistema, e encontra no brinquedo a tese de que a criatividade nasce da restrição, não da liberdade ilimitada.</span></a><a class="sb-related-card" href="mente-aumentada.html"><strong>Mente Aumentada — Agentes LLM, Second Brain e a Fronteira da Cognição</strong><span>Da visão do Memex de Bush em 1945 aos agentes LLM modernos, o ensaio argumenta que wikis alimentadas por agentes não são apenas ferramentas de armazenamento: são instâncias reais da Extended Mind de Clark e Chalmers. O engenheiro que mantém uma base de conhecimento estruturada não está armazenando informação, está literalmente pensando fora do crânio.</span></a></div></section>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="engenharia-em-menos-de-um-metro-cubico.html"><strong>Engenharia em menos de um metro cúbico — A impressora 3D como microcosmo de um projeto de aeronave</strong><span>Uma impressora 3D de mesa comprime, em menos de um metro cúbico, uma parcela surpreendente das disciplinas de um projeto de aeronave. A escala, a criticidade e o rigor são radicalmente diferentes, mas as classes de problemas são reconhecíveis: mecanismos, estruturas, vibrações, controle, calor, escoamento, eletrônica, software, materiais, manufatura, ensaios e integração. A interação entre essas disciplinas, e não cada uma isoladamente, transforma a máquina em um pequeno laboratório de engenharia de sistemas.</span></a><a class="sb-related-card" href="lego-e-a-fisica-do-encaixe.html"><strong>Lego e a Física do Encaixe — Tolerâncias Micrométricas, Grade Discreta e a Poética da Restrição</strong><span>Nenhum concorrente alcançou o Lego depois que as patentes venceram, e o motivo não está no desenho do tijolo, está na metrologia. O ensaio parte das tolerâncias de micra que calibram a força de retenção, passa pela linha Technic e pela gramática construtiva discreta do sistema, e encontra no brinquedo a tese de que a criatividade nasce da restrição, não da liberdade ilimitada.</span></a><a class="sb-related-card" href="mente-aumentada.html"><strong>Mente Aumentada — Agentes LLM, Second Brain e a Fronteira da Cognição</strong><span>Da visão do Memex de Bush em 1945 aos agentes LLM modernos, o ensaio argumenta que wikis alimentadas por agentes não são apenas ferramentas de armazenamento: são instâncias reais da Extended Mind de Clark e Chalmers. O engenheiro que mantém uma base de conhecimento estruturada não está armazenando informação, está literalmente pensando fora do crânio.</span></a></div></section>
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do essay">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="14">
+<html lang="pt-BR" data-status="finalizado" data-minutes="18">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</title>
-<meta property="og:title" content="Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton">
-<meta property="og:description" content="O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.">
+<title>Dinâmica de Voo de um Rotor Teetering Controlado por RPM</title>
+<meta property="og:title" content="Dinâmica de Voo de um Rotor Teetering Controlado por RPM">
+<meta property="og:description" content="A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.">
 <meta property="og:type" content="article">
 <script defer="" src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -1252,1006 +1252,654 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <header class="masthead">
   <div class="stripe"></div>
   <div class="masthead-inner">
-    <h1 class="hero-title">Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</h1>
+    <h1 class="hero-title">Dinâmica de Voo de um Rotor <em>Teetering</em> Controlado por RPM</h1>
     <hr class="masthead-rule">
-    <p class="byline">Gustavo Zambrano · Julho de 2026</p>
-    <p class="cover-summary">O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.</p>
+    <p class="byline">Gustavo Zambrano · Abril de 2026</p>
+    <p class="cover-summary">A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</p>
   </div>
 </header>
 
 <main class="content">
+<p>Vamos considerar a dinâmica de malha aberta (<em>open-loop</em>) de
+um rotor <em>teetering</em> controlado exclusivamente por sua velocidade
+rotacional (<span class="math inline">\(\Omega\)</span>) em um
+escoamento livre com velocidade de avanço. Nesta arquitetura, o passo
+(<em>pitch</em>) das pás é fixo, e o mecanismo fundamental de controle
+depende inteiramente da modulação do RPM. Para compreender plenamente a
+dinâmica de voo resultante — e o acoplamento inerente entre tração
+(<em>thrust</em>), arfagem (<em>pitch</em>) e rolagem (<em>roll</em>) —
+é necessária uma análise rigorosa da interação entre as forças
+restauradoras inerciais e as assimetrias aerodinâmicas.</p>
+<p>Com base na compreensão aeromecânica desse rotor e sua influência na
+dinâmica malha aberta do veículo, poderemos extrapolar o entendimento
+para o veículo malha fechada como um todo, ou seja, compreender os
+desafios para leis de controle de uma configuração de rotores
+<em>teetering</em> de um <a
+href="https://en.wikipedia.org/wiki/EVTOL">eVTOL</a>.</p>
+<hr />
 <h2 id="sumário">Sumário</h2>
 <ul>
-<li><a href="#1-introdução-e-objetivo-do-trabalho">1. Introdução e
-Objetivo do Trabalho</a></li>
-<li><a href="#2-intuição-física-a-quadratura-e-a-massa-girante">2.
-Intuição Física: A Quadratura e a Massa Girante</a></li>
-<li><a href="#3-o-giroscópio-como-bloco-de-construção">3. O Giroscópio
-como Bloco de Construção</a></li>
-<li><a href="#4-o-rotor-de-asas-rotativas">4. O Rotor de Asas
-Rotativas</a></li>
+<li><a href="#o-equilíbrio-base-inércia-versus-aerodinâmica">O
+Equilíbrio Base: Inércia versus Aerodinâmica</a></li>
+<li><a href="#aceleração-à-frente-a-dominância-da-assimetria">Aceleração
+à Frente: A Dominância da Assimetria</a></li>
 <li><a
-href="#5-transformação-de-coleman-e-a-demonstração-da-equivalência">5.
-Transformação de Coleman e a Demonstração da Equivalência</a></li>
-<li><a href="#6-tabela-comparativa-geral-e-conclusão">6. Tabela
-Comparativa Geral e Conclusão</a></li>
+href="#controle-de-rpm-o-acoplamento-entre-tração-e-arfagem">Controle de
+RPM: O Acoplamento entre Tração e Arfagem</a></li>
+<li><a href="#mast-bumping-os-limites-da-folga-do-teetering">Mast
+Bumping: Os Limites da Folga do <em>Teetering</em></a></li>
+<li><a
+href="#intervenção-aeroelástica-o-acoplamento-passo-batimento-pitch-flap-delta_3">Intervenção
+Aeroelástica: O Acoplamento Passo-Batimento (<em>Pitch-Flap</em>) <span
+class="math inline">\(\delta_3\)</span></a></li>
+<li><a
+href="#intervenção-mecânica-a-mola-restauradora-no-cubo-hub-spring">Intervenção
+Mecânica: A Mola Restauradora no Cubo (<em>Hub Spring</em>)</a></li>
+<li><a href="#a-não-linearidade-das-derivadas-de-estabilidade">A
+Não-Linearidade das Derivadas de Estabilidade</a></li>
+<li><a href="#conclusão">Conclusão</a></li>
+<li><a href="#anexo---plots">Anexo - Plots</a></li>
 </ul>
 <hr />
-<h2 id="1-introdução-e-objetivo-do-trabalho">1. Introdução e Objetivo do
-Trabalho</h2>
-<p>Um dos tópicos mais desafiadores no ensino e na prática da dinâmica
-de rotores de asas rotativas é compreender a relação entre a resposta de
-batimento das pás e a precessão giroscópica de corpos rígidos. Na
-literatura introdutória, afirma-se frequentemente que o rotor de um
-helicóptero “comporta-se como um <a
-href="https://en.wikipedia.org/wiki/Gyroscope">giroscópio</a>”,
-precessando <span class="math inline">\(90^\circ\)</span> após a
-aplicação de uma força. Por outro lado, na dinâmica de estruturas e <a
-href="https://en.wikipedia.org/wiki/Aeroelasticity">aeroelasticidade</a>,
-demonstra-se que a pá de um rotor articulado é um oscilador harmônico
-excitado em sua frequência natural de rotação (<span
-class="math inline">\(1/\text{rev}\)</span>), cuja resposta ressonante
-em regime permanente apresenta um atraso de fase de <span
-class="math inline">\(90^\circ\)</span>.</p>
-<p>O objetivo principal deste trabalho é demonstrar formalmente que
-essas duas explicações não são visões concorrentes, mas sim <strong>duas
-leituras matemáticas da mesma equação de movimento</strong>, expressas
-em referenciais diferentes:</p>
+<h2 id="o-equilíbrio-base-inércia-versus-aerodinâmica">O Equilíbrio
+Base: Inércia versus Aerodinâmica</h2>
+<p><picture><source srcset="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig1.webp" type="image/webp"><img
+src="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig1.png"
+alt="Teetering Forces" /></picture></p>
+<p><picture><source srcset="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig2.webp" type="image/webp"><img
+src="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig2.png"
+alt="Teetering Flapping" /></picture></p>
+<p><em>Figura 1. Forças e batimento num rotor teetering ao longo do
+azimute: o equilíbrio entre inércia e aerodinâmica.</em></p>
+<p><strong>Visão Física:</strong></p>
+<p>Uma pá de rotor em um cubo <em>teetering</em> atua como um “pêndulo
+forçado”. À medida que gira, a massa da pá é submetida a um campo
+centrífugo. Essa tração para fora atua como uma mola inercial, tentando
+constantemente puxar a pá para que fique plana no plano de rotação.
+Opondo-se a essa mola estão as forças aerodinâmicas, que empurram a pá
+para cima ou para baixo com base no vento relativo local.</p>
+<p>Crucialmente, como a frequência da força aerodinâmica corresponde à
+frequência rotacional das pás, o rotor atua como um sistema rotativo
+operando em ressonância. Em qualquer sistema ressonante, o deslocamento
+máximo atrasa a função de força máxima em exatamente 90 graus (<em>phase
+lag</em>). Portanto, uma assimetria aerodinâmica que atinge o pico nas
+laterais do disco do rotor traduz-se fisicamente em um deslocamento
+máximo sobre o nariz e a cauda.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>A equação fundamental de movimento para o grau de liberdade de
+batimento (<em>flapping</em>) <span class="math inline">\(\beta\)</span>
+é governada pelo equilíbrio de momentos em torno da articulação
+<em>teetering</em>:</p>
+<p><span class="math display">\[I_\beta \ddot{\beta} + \Omega^2 I_\beta
+\beta = M_A\]</span></p>
+<p>A força centrífuga <span class="math inline">\(F_{CF}\)</span> em um
+elemento de massa diferencial <span class="math inline">\(dm\)</span> no
+raio <span class="math inline">\(r\)</span> é impulsionada pela
+velocidade rotacional:</p>
+<p><span class="math display">\[dF_{CF} = (\Omega^2 r) dm\]</span></p>
+<p>Quando a pá realiza o movimento de <em>flapping</em> para cima em um
+ângulo <span class="math inline">\(\beta\)</span>, essa força radial
+cria um momento restaurador <span class="math inline">\(M_{CF}\)</span>
+em torno da articulação. Integrando ao longo da envergadura obtemos o
+momento de enrijecimento centrífugo (<em>centrifugal
+stiffening</em>):</p>
+<p><span class="math display">\[M_{CF} = \int_0^R (\Omega^2 r)(\beta r)
+dm = \Omega^2 \beta \int_0^R r^2 dm = \Omega^2 I_\beta
+\beta\]</span></p>
+<p>Isso demonstra um princípio fundamental: <strong>o enrijecimento
+centrífugo é proporcional ao quadrado do RPM (<span
+class="math inline">\(\Omega^2\)</span>).</strong></p>
+<p>O momento de força aerodinâmica <span
+class="math inline">\(M_A\)</span> é impulsionado pela pressão dinâmica
+<span class="math inline">\(q = \frac{1}{2}\rho U_T^2\)</span>. A
+velocidade tangencial <span class="math inline">\(U_T\)</span> combina a
+rotação e a velocidade de avanço <span
+class="math inline">\(V\)</span>:</p>
+<p><span class="math display">\[U_T = \Omega r + V \sin\psi\]</span></p>
+<p>Portanto, a força de sustentação aerodinâmica em um elemento de pá é
+proporcional a <span class="math inline">\((\Omega r + V
+\sin\psi)^2\)</span>. A diferença na velocidade ao quadrado que
+impulsiona a assimetria entre a ponta da pá que avança (<span
+class="math inline">\(\psi = 90^\circ\)</span>) e a ponta que recua
+(<span class="math inline">\(\psi = 270^\circ\)</span>) é:</p>
+<p><span class="math display">\[\Delta U_T^2 = (\Omega R + V)^2 -
+(\Omega R - V)^2 = 4\Omega R V\]</span></p>
+<p>Isso estabelece a segunda relação fundamental: <strong>a assimetria
+aerodinâmica absoluta é proporcional ao produto do RPM e da velocidade
+de avanço (<span class="math inline">\(\Omega V\)</span>).</strong></p>
+<p>Para derivar uma relação simplificada para o ângulo de
+<em>flapping</em> em regime permanente (<em>steady-state</em>),
+equilibramos o momento aerodinâmico motriz com o momento restaurador
+centrífugo. Assumindo uma resposta de batimento harmônico <span
+class="math inline">\(\beta(\psi) = a_0 - a_1 \cos\psi - b_1
+\sin\psi\)</span>, os termos inerciais e centrífugos para o
+<em>flapping</em> cíclico se cancelam matematicamente na ressonância. A
+inclinação longitudinal <span class="math inline">\(a_1\)</span> é
+impulsionada pela assimetria aerodinâmica de <span
+class="math inline">\(1/\text{rev}\)</span>, que descobrimos ser
+proporcional a <span class="math inline">\(\Omega V\)</span>. Dividindo
+essa força aerodinâmica pela rigidez centrífuga (<span
+class="math inline">\(\Omega^2 I_\beta\)</span>), encontramos a
+proporcionalidade da amplitude do <em>flapping</em>:</p>
+<p><span class="math display">\[a_1 \propto \frac{\Omega V}{\Omega^2} =
+\frac{V}{\Omega}\]</span></p>
+<p>Esta razão é proporcional à <a
+href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>
+(<em>advance ratio</em>) <span class="math inline">\(\mu =
+\frac{V}{\Omega R}\)</span>. A integração formal dos momentos
+aerodinâmicos ao longo da pá, assumindo inflow <span
+class="math inline">\(\lambda\)</span> constante, produz a equação
+completa do <em>flapping</em> longitudinal em regime permanente:</p>
+<p><span class="math display">\[a_1 = \frac{2\mu \left(
+\frac{4}{3}\theta_0 - \lambda \right)}{1 - \frac{1}{2}\mu^2}\]</span>
+onde:</p>
+<ul>
+<li><p><strong><span class="math inline">\(a_1\)</span></strong> é o
+coeficiente de batimento longitudinal. Ele representa fisicamente o
+ângulo (em radianos) em que o plano das pontas das pás (<em>tip-path
+plane</em>) se inclina para trás em relação ao eixo do mastro, fenômeno
+conhecido como <em>blowback</em>.</p></li>
+<li><p><strong><span class="math inline">\(\mu\)</span></strong> é a
+razão de avanço (<em>advance ratio</em>). É um parâmetro adimensional
+que representa a “severidade” da velocidade de avanço, calculada
+dividindo a velocidade de voo do veículo (<span
+class="math inline">\(V\)</span>) pela velocidade tangencial da ponta da
+pá girando (<span class="math inline">\(\Omega R\)</span>).</p></li>
+<li><p><strong><span class="math inline">\(\theta_0\)</span></strong> é
+o ângulo de passo (<em>pitch</em>) geométrico fixo da pá. Nesta forma
+simplificada da equação, assume-se que a pá não possui torção ao longo
+da envergadura, operando com um ângulo de incidência raiz-ponta
+constante.</p></li>
+<li><p><strong><span class="math inline">\(\lambda\)</span></strong> é a
+razão de influxo (<em>inflow ratio</em>). Trata-se de um parâmetro
+adimensional que descreve o fluxo de ar atravessando o disco do rotor de
+cima para baixo. É calculado dividindo a velocidade axial total (a
+velocidade do ar induzida pelo próprio empuxo do rotor mais qualquer
+fluxo devido à velocidade vertical do veículo) pela velocidade
+tangencial da ponta da pá (<span class="math inline">\(\Omega
+R\)</span>).</p></li>
+</ul>
+<hr />
+<h2 id="aceleração-à-frente-a-dominância-da-assimetria">Aceleração à
+Frente: A Dominância da Assimetria</h2>
+<p><strong>Visão Física:</strong></p>
+<p>Ao acelerar o veículo para a frente (aumentando <span
+class="math inline">\(V\)</span>) enquanto se mantém a velocidade
+rotacional (<span class="math inline">\(\Omega\)</span>) constante, o
+equilíbrio dinâmico se rompe. A pá que avança encontra um vento relativo
+progressivamente mais rápido, e a pá que recua encontra um vento mais
+lento. Como o RPM está travado, a mola centrífuga que mantém o disco
+plano não pode se fortalecer. A crescente assimetria aerodinâmica força
+a pá que avança a realizar um <em>flapping</em> mais alto. Devido ao
+sistema rotativo operando em ressonância, esse pico de velocidade
+ascendente na posição de 3 horas manifesta-se como um deslocamento
+máximo para cima na posição de 12 horas, resultando em um
+<em>blowback</em> longitudinal.</p>
+<p>Em uma arquitetura eVTOL <em>lift-plus-cruise</em>, essa inclinação
+para trás se opõe à direção do voo. Durante a fase de transição, o
+veículo não pode simplesmente baixar o nariz (<em>pitch down</em>) para
+compensar, porque o ângulo de arfagem da fuselagem deve ser mantido
+exatamente no ângulo de ataque aerodinâmico que fornece a margem de
+sustentação necessária acima da velocidade de estol da asa (<span
+class="math inline">\(V_s\)</span>). Consequentemente, para manter a
+aceleração à frente contra a tração do rotor inclinada para trás, o
+sistema de controle de voo deve adicionar potência às hélices
+propulsoras (<em>pusher propellers</em>) para superar este vetor
+oposto.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>Com <span class="math inline">\(\Omega\)</span> fixo, o fator de
+assimetria aerodinâmica (<span class="math inline">\(4\Omega R
+V\)</span>) cresce linearmente com <span
+class="math inline">\(V\)</span>, enquanto a rigidez restauradora (<span
+class="math inline">\(\Omega^2 I_\beta\)</span>) permanece constante.
+Observando novamente a equação de <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> derivada para o equilíbrio base:</p>
+<p><span class="math display">\[a_1 = \frac{2\mu \left(
+\frac{4}{3}\theta_0 - \lambda \right)}{1 -
+\frac{1}{2}\mu^2}\]</span></p>
+<p>À medida que <span class="math inline">\(V\)</span> aumenta, a razão
+de avanço <span class="math inline">\(\mu\)</span> aumenta.
+Matematicamente, isso força <span class="math inline">\(a_1\)</span> a
+subir: o multiplicador <span class="math inline">\(\mu\)</span> no
+numerador cresce, o termo <span class="math inline">\(1 -
+\frac{1}{2}\mu^2\)</span> no denominador encolhe, e a razão de influxo
+(<em>inflow ratio</em>) <span class="math inline">\(\lambda\)</span> cai
+devido à <a
+href="https://en.wikipedia.org/wiki/Translational_lift">sustentação de
+translação</a> (<em>translational lift</em>). A força aerodinâmica
+supera a inércia centrífuga, inclinando o disco para trás.</p>
+<p>Vide Figura 4 em <a href="#anexo---plots">Anexo - Plots</a>.</p>
+<hr />
+<h2 id="controle-de-rpm-o-acoplamento-entre-tração-e-arfagem">Controle
+de RPM: O Acoplamento entre Tração e Arfagem</h2>
+<p><strong>Visão Física:</strong></p>
+<p>Comandar um aumento de tração girando o rotor mais rápido (aumentando
+<span class="math inline">\(\Omega\)</span>) a uma velocidade de avanço
+<span class="math inline">\(V\)</span> constante acopla a aceleração
+vertical com a dinâmica de arfagem. À medida que o RPM aumenta, a
+diferença absoluta na pressão dinâmica entre os lados esquerdo e direito
+do disco cresce (<span class="math inline">\(\propto \Omega V\)</span>).
+No entanto, a mola centrífuga endurece muito mais rápido (<span
+class="math inline">\(\propto \Omega^2\)</span>). A rigidez inercial
+domina a assimetria aerodinâmica, fazendo com que o disco
+<em>teetering</em> inerentemente se achate de volta em direção ao plano
+do cubo. Do seu estado anterior de <em>blowback</em>, o rotor inclina-se
+para a frente.</p>
+<p>Esse acoplamento dinâmico complica as leis de controle. Um requisito
+fundamental de um sistema de controle de voo (FCS) é a capacidade de
+desacoplar os comandos verticais (<em>heave</em>) dos comandos de
+atitude. Se o FCS comandar um aumento de RPM para alterar a trajetória
+de voo, os rotores inadvertidamente inclinarão o veículo para a frente,
+exigindo momentos contrários aplicados via <em>cross-feed</em>. Além do
+aumento da complexidade das leis de controle MIMO, esse acoplamento
+prejudica a manobrabilidade. Além disso, torna-se particularmente
+prejudicial em condições de voo assimétrico, como uma falha de motor,
+onde as respostas não comandadas de arfagem ou rolagem dos rotores
+remanescentes se cruzam com as correções de <em>heave</em> necessárias,
+desafiando a capacidade do sistema de manter o equilíbrio.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>Relembrando nossa derivação proporcional, a amplitude de
+<em>flapping</em> em regime permanente <span
+class="math inline">\(\beta\)</span> é a razão entre a função de força
+aerodinâmica e a rigidez:</p>
+<p><span class="math display">\[\beta \propto \frac{\Omega V}{\Omega^2}
+= \frac{V}{\Omega} \propto \mu\]</span></p>
+<p>À medida que <span class="math inline">\(\Omega\)</span> aumenta, a
+razão de avanço <span class="math inline">\(\mu\)</span> diminui
+estritamente. Voltando à equação <span
+class="math inline">\(a_1\)</span>, o termo motriz dominante é <span
+class="math inline">\(\frac{4}{3}\mu\theta_0\)</span>. Como o passo
+<span class="math inline">\(\theta_0\)</span> é fixo, a queda em <span
+class="math inline">\(\mu\)</span> impulsiona diretamente uma redução em
+<span class="math inline">\(a_1\)</span>. A força aerodinâmica absoluta
+é maior, mas sua autoridade relativa sobre a pá quadraticamente
+enrijecida diminui, achatando o disco.</p>
+<hr />
+<h2 id="mast-bumping-os-limites-da-folga-do-teetering">Mast Bumping: Os
+Limites da Folga do <em>Teetering</em></h2>
+<p><strong>Visão Física:</strong></p>
+<p>Uma articulação <em>teetering</em> depende de folga mecânica adequada
+para bater livremente. Se o plano do disco se inclinar muito em relação
+ao eixo do rotor, a estrutura do cubo entra em contato físico com o
+mastro, um evento conhecido como <a
+href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook"><em>mast
+bumping</em></a>. Como estabelecido, o disco sofre um <em>blowback</em>
+quando a velocidade de avanço aumenta. Por outro lado, reduzir a tração
+exige diminuir o RPM. Quando o RPM cai, a rigidez centrífuga que mantém
+a pá plana diminui muito mais rapidamente do que a assimetria
+aerodinâmica. Isso faz com que o disco se incline para trás.</p>
+<p>Se o sistema de controle de voo comandar uma rápida redução no RPM
+durante o voo à frente — talvez para iniciar uma descida ou para gerar
+um momento diferencial de rolagem ou arfagem — a queda localizada na
+rigidez centrífuga permite que as forças aerodinâmicas levem o disco do
+rotor a grandes ângulos de <em>flapping</em>. Em um eVTOL multirotor,
+uma manobra pode exigir um comando de tração diferencial que reduza o
+RPM em um rotor específico, tornando essa unidade individual
+excepcionalmente suscetível a um <em>mast bumping</em> localizado
+enquanto os outros permanecem bem dentro dos limites.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>A folga estrutural fornece um ângulo de <em>flapping</em> máximo
+permitido, <span class="math inline">\(\beta_{max}\)</span>. Como o
+coeficiente de batimento longitudinal <span
+class="math inline">\(a_1\)</span> é proporcional à razão de avanço:</p>
+<p><span class="math display">\[a_1 \propto \mu = \frac{V}{\Omega
+R}\]</span></p>
+<p>Existe uma razão de avanço crítica, <span
+class="math inline">\(\mu_{crit}\)</span>, correspondente ao limite
+mecânico <span class="math inline">\(\beta_{max}\)</span>. Para evitar a
+condição onde <span class="math inline">\(a_1 \ge \beta_{max}\)</span>,
+as leis de controle devem garantir que a razão de avanço nunca exceda
+este limite.</p>
+<p>Isso cria um limite inferior dinâmico na velocidade rotacional
+comandada. Para qualquer velocidade de avanço instantânea <span
+class="math inline">\(V\)</span>, o RPM é restrito por:</p>
+<p><span class="math display">\[\Omega_{min} = \frac{V}{\mu_{crit}
+R}\]</span></p>
+<p>Este limite matemático determina que, à medida que o veículo voa mais
+rápido, o sistema de controle de voo perde a autoridade para comandar
+baixos RPMs em qualquer rotor individual. A tração mínima permitida
+torna-se uma função da velocidade aerodinâmica, restringindo as margens
+de controle e exigindo que os algoritmos de proteção de envelope
+intervenham antes que um <em>mast bumping</em> localizado possa
+ocorrer.</p>
+<hr />
+<h2
+id="intervenção-aeroelástica-o-acoplamento-passo-batimento-pitch-flap-delta_3">Intervenção
+Aeroelástica: O Acoplamento Passo-Batimento (<em>Pitch-Flap</em>) <span
+class="math inline">\(\delta_3\)</span></h2>
+<p><picture><source srcset="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig3.webp" type="image/webp"><img
+src="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig3.png"
+alt="Delta 3 Coupling" /></picture></p>
+<p><em>Figura 2. Acoplamento passo-batimento <span
+class="math inline">\(\delta_3\)</span>: a articulação inclinada
+converte batimento em variação de passo.</em></p>
+<p><strong>Visão Física:</strong></p>
+<p>Para suprimir o <em>blowback</em>, uma inclinação geométrica (ângulo
+<span class="math inline">\(\delta_3\)</span>) pode ser adicionada à
+articulação <em>teetering</em>. Isso cria um acoplamento cinemático
+<em>pitch-flap</em>. À medida que as forças aerodinâmicas empurram a pá
+para cima, a geometria da articulação força mecanicamente a pá a reduzir
+o passo (<em>pitch down</em>). Isso diminui a sustentação e freia o
+movimento ascendente, atuando como uma mola aerodinâmica
+(<em>aerodynamic spring</em>).</p>
+<p>Como essa mola eleva a frequência natural efetiva da pá acima da
+frequência motriz de <span class="math inline">\(1/\text{rev}\)</span>,
+o rotor não é mais um sistema rotativo operando em perfeita ressonância.
+Consequentemente, o <em>phase lag</em> cai abaixo de 90 graus. Ao
+acelerar para a frente, o <em>blowback</em> é reduzido, mas o
+<em>flapping</em> se manifesta mais cedo na rotação, trocando o efeito
+de <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> por um efeito de <em>flapping</em>
+lateral <span class="math inline">\(b_1\)</span>.</p>
+<p>Vide Figura 5 em <a href="#anexo---plots">Anexo - Plots</a>.</p>
+<p>Em uma configuração multirrotor padrão, o deslocamento lateral de um
+disco é matematicamente compensado por um rotor oposto contrarrotativo.
+No entanto, em situações de falha de motor, essa simetria se rompe. Os
+rotores operacionais remanescentes gerarão momentos laterais não
+cancelados, exigindo mais potência total para restaurar o
+equilíbrio.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>O fator de acoplamento é <span class="math inline">\(K =
+\tan(\delta_3)\)</span>, produzindo uma redução de passo de <span
+class="math inline">\(\Delta\theta = -K\beta\)</span>.</p>
+<p>Ao deslocar a frequência natural, o <em>phase lag</em> ressonante
+<span class="math inline">\(\phi\)</span> torna-se:</p>
+<p><span class="math display">\[\phi =
+\arctan\left(\frac{1}{K}\right)\]</span></p>
+<p>Se <span class="math inline">\(\delta_3 = 45^\circ\)</span>, <span
+class="math inline">\(K = 1\)</span>, e o <em>phase lag</em> muda para
+<span class="math inline">\(45^\circ\)</span>, movendo o deslocamento
+máximo para fora do eixo longitudinal.</p>
+<p>Criticamente, quando <span class="math inline">\(\Omega\)</span> é
+modulado, a trajetória de achatamento permanece linear. A mola
+aerodinâmica restauradora gerada pela redução de passo <span
+class="math inline">\(\delta_3\)</span> depende da pressão dinâmica, que
+escala com <span class="math inline">\(\Omega^2\)</span>. Como a mola
+centrífuga também escala com <span
+class="math inline">\(\Omega^2\)</span>, a razão dessas duas molas
+permanece constante independentemente do RPM. Portanto, o <em>phase
+lag</em> <span class="math inline">\(\phi\)</span> é invariante às
+mudanças de velocidade de rotação.</p>
+<hr />
+<h2
+id="intervenção-mecânica-a-mola-restauradora-no-cubo-hub-spring">Intervenção
+Mecânica: A Mola Restauradora no Cubo (<em>Hub Spring</em>)</h2>
+<p><strong>Visão Física e a Não Linearidade de Controle:</strong></p>
+<p>Alternativamente, uma rigidez mecânica pura — uma <em>hub spring</em>
+(mola do cubo) — pode ser aplicada para resistir ao movimento
+<em>teetering</em>. Assim como a articulação <span
+class="math inline">\(\delta_3\)</span>, esta força restauradora extra
+empurra a frequência natural para cima da frequência de forçamento,
+reduzindo o <em>phase lag</em> para menos de 90 graus e introduzindo
+rolagem lateral durante o voo à frente.</p>
+<p><picture><source srcset="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig4.webp" type="image/webp"><img
+src="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig4.png"
+alt="Hub Spring" /></picture></p>
+<p><em>Figura 3. Mola do cubo resistindo ao movimento de
+teetering.</em></p>
+<p>Consequentemente, a <em>hub spring</em> é, em muitos aspectos,
+equivalente à articulação <span class="math inline">\(\delta_3\)</span>
+e sofre do mesmo problema de assimetria multirrotor: uma falha de motor
+deixa o veículo lutando contra momentos laterais não compensados.</p>
+<p>Vide Figura 6 em <a href="#anexo---plots">Anexo - Plots</a>.</p>
+<p>Além disso, a mola mecânica introduz uma não-linearidade de controle
+significativa. A rigidez física de uma mola mecânica é fixa, mas a
+rigidez centrífuga muda com o quadrado da velocidade do rotor. Isso cria
+um desequilíbrio. Em baixo RPM, a mola mecânica constante é a força
+dominante, enquanto em alto RPM, as forças centrífugas que crescem
+quadraticamente a superam. Como o acoplamento cruzado entre arfagem e
+rolagem é ditado pela proporção dessas duas molas, o <em>phase lag</em>
+do rotor não muda a uma taxa constante. Uma grande mudança no RPM em
+baixas velocidades causa um deslocamento significativo no ângulo de
+fase, enquanto a mesma mudança no RPM em altas velocidades mal o afeta.
+O <em>tip-path plane</em> varre continuamente seu vetor de inclinação em
+um arco assintótico e curvo através dos eixos de arfagem e rolagem
+conforme o comando de tração muda, tornando as derivadas de controle
+dependentes do RPM operacional instantâneo.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>A introdução de uma rigidez mecânica <span
+class="math inline">\(K_\beta\)</span> atualiza a equação de
+movimento:</p>
+<p><span class="math display">\[I_\beta \ddot{\beta} + (\Omega^2 I_\beta
++ K_\beta)\beta = M_A\]</span></p>
+<p>A frequência natural adimensional <span
+class="math inline">\(\nu\)</span> governa a dinâmica de
+ressonância:</p>
+<p><span class="math display">\[\nu = \sqrt{1 + \frac{K_\beta}{I_\beta
+\Omega^2}}\]</span></p>
+<p>O ângulo de fase <span class="math inline">\(\phi\)</span> é definido
+por:</p>
+<p><span class="math display">\[\phi = \arctan\left( \frac{\gamma /
+8}{\nu^2 - 1} \right)\]</span></p>
+<p>Substituindo a relação da frequência natural no denominador, o termo
+<span class="math inline">\(\nu^2 - 1\)</span> avalia exatamente para
+<span class="math inline">\(\frac{K_\beta}{I_\beta \Omega^2}\)</span>.
+Isso produz:</p>
+<p><span class="math display">\[\tan(\phi) = \frac{\gamma I_\beta
+\Omega^2}{8 K_\beta}\]</span></p>
+<p>Isso demonstra explicitamente a não-linearidade: a tangente do
+<em>phase lag</em> é diretamente proporcional a <span
+class="math inline">\(\Omega^2\)</span>. Como a mola mecânica <span
+class="math inline">\(K_\beta\)</span> permanece constante enquanto os
+fatores inerciais escalam quadraticamente, qualquer mudança no RPM
+altera ativamente e não-linearmente o eixo geométrico da resposta
+dinâmica do rotor, exigindo um escalonamento (<em>scheduling</em>)
+complexo e não-linear nas leis de controle de voo.</p>
+<p><strong>A Solução Não Linear:</strong></p>
+<p>Para contornar esse problema, uma escolha não linear de molas pode
+amenizar essas dificuldades relatadas. Em vez de uma rigidez constante,
+o sistema pode ser projetado de forma adaptativa. Nesse caso, a mola
+pode inibir os efeitos de <em>teetering</em> somente em alguns RPMs.
+Como demonstrado no design de rotores aplicados em eVTOLs e detalhado na
+patente norte-americana <a
+href="https://patents.google.com/patent/US11643196B1/en">US11643196B1</a>
+(<em>Teetering propulsor assembly of an electric vertical takeoff and
+landing aircraft</em>), a articulação pode atuar rigidamente em baixos
+RPMs para evitar o <em>mast bumping</em> (por exemplo, na aceleração
+inicial ou parada dos rotores) e, ao mesmo tempo, utilizar a força
+centrífuga para liberar o <em>teetering</em> em altas velocidades
+rotacionais. Isso permite que o mecanismo atue com mais liberdade para
+absorver assimetrias aerodinâmicas durante o voo à frente (quando as
+cargas aerodinâmicas forem maiores, por exemplo) e ao mesmo tempo mitiga
+o <em>blockback</em> em voo de transição quando o RPM baixar
+significativamente.</p>
+<hr />
+<h2 id="a-não-linearidade-das-derivadas-de-estabilidade">A
+Não-Linearidade das Derivadas de Estabilidade</h2>
+<p><strong>Visão Física:</strong></p>
+<p>A estabilidade natural de uma aeronave é frequentemente descrita por
+como ela reage a mudanças na velocidade em relação ao vento. Quando o
+disco do rotor se inclina (<span class="math inline">\(a_1\)</span>), o
+vetor de tração do rotor acompanha essa inclinação, gerando um momento
+de arfagem em relação ao centro de gravidade do veículo. Se a aeronave
+encontra uma rajada horizontal (<span class="math inline">\(u\)</span>)
+ou uma rajada vertical (<span class="math inline">\(w\)</span>), a
+assimetria aerodinâmica nas pás muda, alterando o ângulo de
+<em>flapping</em> e reorientando o vetor de tração.</p>
+<p>O grande desafio desta arquitetura é que a magnitude dessa reação
+depende da rigidez centrífuga do rotor. Como a rigidez é governada pelo
+RPM, a “firmeza” com que o veículo resiste a distúrbios atmosféricos
+muda dinamicamente com o comando de potência. Um rotor girando em alta
+rotação será menos afetado por uma rajada do que o mesmo rotor girando
+em baixa rotação.</p>
+<p><strong>Visão Matemática:</strong></p>
+<p>As derivadas de estabilidade de arfagem em relação à velocidade à
+frente (<span class="math inline">\(M_u\)</span>) e à velocidade
+vertical (<span class="math inline">\(M_w\)</span>) quantificam a
+variação do momento de arfagem devido a distúrbios lineares. Elas são
+fortemente dependentes da taxa de variação da inclinação do disco do
+rotor (<span class="math inline">\(\frac{\partial a_1}{\partial
+u}\)</span> e <span class="math inline">\(\frac{\partial a_1}{\partial
+w}\)</span>).</p>
+<p>Revisitando a dependência do <em>flapping</em> longitudinal com a
+razão de avanço (<span class="math inline">\(\mu = \frac{V}{\Omega
+R}\)</span>), notamos que qualquer derivada parcial de <span
+class="math inline">\(a_1\)</span> em relação à velocidade <span
+class="math inline">\(V\)</span> (ou sua perturbação <span
+class="math inline">\(u\)</span>) resultará em uma expressão onde o RPM
+(<span class="math inline">\(\Omega\)</span>) permanece no denominador.
+Por exemplo, de forma simplificada, a derivada <span
+class="math inline">\(\frac{\partial a_1}{\partial \mu}\)</span> é
+proporcional a <span class="math inline">\(\frac{1}{1 -
+\frac{1}{2}\mu^2}\)</span>.</p>
+<p>Isso estabelece que <span class="math inline">\(M_u\)</span> e <span
+class="math inline">\(M_w\)</span> não são valores constantes ou
+linearmente proporcionais à velocidade do ar. Eles são funções
+não-lineares que variam inversamente com a velocidade rotacional e são
+sensíveis ao quadrado da razão de avanço.</p>
+<p><strong>O Desafio para as Leis de Controle:</strong></p>
+<p>Na teoria clássica de controle de voo, o <a
+href="https://en.wikipedia.org/wiki/Gain_scheduling"><em>gain
+scheduling</em></a> (escalonamento de ganhos) mapeia as reações do
+controlador geralmente com base em uma única variável independente, como
+a velocidade calibrada (<em>airspeed</em>) ou a pressão dinâmica. No
+entanto, devido à forte não-linearidade geométrica explicada acima, a
+planta da aeronave (o modelo matemático que o controlador tenta
+governar) muda de forma contínua e não-linear com o RPM.</p>
+<p>Para manter características de manuseio previsíveis (<a
+href="https://en.wikipedia.org/wiki/Flying_qualities"><em>handling
+qualities</em></a>), as leis de controle exigem <em>schedules</em> muito
+mais complicados. Os ganhos do sistema devem ser interpolados em tabelas
+multidimensionais que monitoram simultaneamente a velocidade e o comando
+instantâneo de RPM de cada rotor. Omitir essa não-linearidade nos
+modelos de controle pode levar a respostas lentas em regimes de baixa
+tração ou a oscilações indesejadas quando os rotores operam próximos da
+velocidade máxima nominal.</p>
+<hr />
+<h2 id="conclusão">Conclusão</h2>
+<p>A dinâmica de voo em malha aberta de um rotor <em>teetering</em> de
+passo fixo controlado por RPM é governada por um equilíbrio contínuo
+entre a rigidez inercial e as forças aerodinâmicas. Como as forças
+restauradoras centrífugas escalam com o quadrado da velocidade
+rotacional (<span class="math inline">\(\Omega^2\)</span>) enquanto as
+assimetrias aerodinâmicas escalam com o produto do RPM e a velocidade de
+avanço (<span class="math inline">\(\Omega V\)</span>), variar a
+velocidade do rotor altera fundamentalmente o estado de equilíbrio do
+disco.</p>
+<p>Em resumo, os principais desafios de dinâmica de voo introduzidos por
+esta arquitetura incluem:</p>
 <ol type="1">
-<li>No <strong>referencial girante</strong> da pá, o fenômeno é visto
-como a resposta de um oscilador harmônico em ressonância (<span
-class="math inline">\(1/\text{rev}\)</span>) estabilizado por
-amortecimento aerodinâmico.</li>
-<li>No <strong>referencial fixo</strong> do helicóptero, a resposta
-coletiva de todas as pás forma o Plano de Ponta de Pá (<em>Tip-Path
-Plane</em> — TPP), cuja dinâmica diferencial é formalmente equivalente
-às <a
-href="https://en.wikipedia.org/wiki/Euler%27s_equations_(rigid_body_dynamics)">equações
-de Euler</a> de um giroscópio acoplado.</li>
+<li><p><strong>Acoplamento Tração-Atitude (<em>Thrust-Attitude
+Coupling</em>):</strong> Modular o RPM para controlar o <em>heave</em>
+induz inerentemente momentos de arfagem, exigindo <em>cross-feeding</em>
+contínuo nas leis de controle para manter uma trajetória de voo
+desacoplada.</p></li>
+<li><p><strong>Déficit de Tração na Transição:</strong> A tendência
+inerente do rotor de sofrer <em>blowback</em> durante a aceleração à
+frente inclina o vetor de tração para longe da direção do voo. Como a
+arfagem da fuselagem deve ser fixa para satisfazer o ângulo de ataque
+aerodinâmico para a asa, potência extra é exigida dos propulsores de
+cruzeiro para superar essa inclinação para trás.</p></li>
+<li><p><strong>Restrições de <em>Mast Bumping</em>:</strong> Como a
+redução do RPM aumenta a razão de avanço relativa, reduções localizadas
+na tração durante manobras em altas velocidades podem fazer com que um
+rotor individual atinja seus batentes mecânicos, necessitando de limites
+inferiores dinâmicos de RPM nas leis de controle.</p></li>
+<li><p><strong>Degradação do Voo Assimétrico:</strong> A introdução de
+acoplamentos aeroelásticos ou mecânicos lineares troca o
+<em>blowback</em> longitudinal por rolagem lateral. Embora esses
+momentos de rolagem se anulem em uma configuração multirotor simétrica e
+nominal, uma falha de motor deixa o sistema de controle lutando contra
+momentos laterais não compensados, o que drena as reservas críticas de
+potência.</p></li>
+<li><p><strong>Não-Linearidade de Controle:</strong> Ao contrário dos
+acoplamentos aeroelásticos, as molas mecânicas lineares (<em>hub
+springs</em>) criam um <em>phase lag</em> que varia quadraticamente com
+o RPM. O comportamento de acoplamento cruzado entre arfagem e rolagem
+muda continuamente com base na configuração instantânea de rotação,
+complicando fortemente o <em>scheduling</em> de controle.</p></li>
+<li><p><strong>Complexidade no Escalonamento de Ganhos (<em>Gain
+Scheduling</em>):</strong> Como a rigidez inercial do rotor frente a
+distúrbios depende do RPM, as derivadas de estabilidade geométrica da
+aeronave (como <span class="math inline">\(M_u\)</span> e <span
+class="math inline">\(M_w\)</span>) tornam-se fortemente não-lineares e
+acopladas com as próprias derivadas de controle, variando inversamente
+com a rotação e sendo sensíveis ao quadrado da razão de avanço. Isso
+impede o uso de malhas de controle lineares simples, exigindo tabelas de
+controle multidimensionais intrincadas para garantir que a aeronave
+mantenha qualidades de manuseio previsíveis em todo o envelope
+operacional.</p></li>
 </ol>
-<p>Para demonstrar essa equivalência sem saltos lógicos, este trabalho
-percorrerá o seguinte itinerário:</p>
+<p>Compreender esses princípios físicos fundamentais e as tecnologias de
+mitigação não lineares é essencial para o desenvolvimento das leis de
+controle em malha fechada necessárias para estabilizar, desacoplar e
+manobrar veículos que dependem do controle de RPM em uma configuração de
+multirrotores com articulação de <em>teetering</em>.</p>
+<hr />
+<h2 id="anexo---plots">Anexo - Plots</h2>
+<p>Os plots a seguir calculam o coeficiente de tração <span
+class="math inline">\(C_T\)</span>, o inflow ratio <span
+class="math inline">\(\lambda\)</span>, o ângulo de basculamento
+longitudinal <span class="math inline">\(a_1\)</span> e lateral <span
+class="math inline">\(b_1\)</span> para um rotor genérico e típico de
+eVTOL para várias velocidades à frente e vários RPMs. Três configurações
+são analisadas:</p>
 <ul>
-<li><strong>Intuição Física</strong>: Explicar por que uma força em
-<span class="math inline">\(\psi = 0^\circ\)</span> gera deslocamento
-máximo em <span class="math inline">\(\psi = 90^\circ\)</span>.</li>
-<li><strong>Modelagem do Giroscópio</strong>: Derivar passo a passo as
-equações no vácuo, com amortecimento e com rigidez torsional, analisando
-polos e ângulos de fase.</li>
-<li><strong>Modelagem do Rotor</strong>: Derivar de primeiros princípios
-a rigidez centrífuga, o amortecimento aerodinâmico, o <a
-href="https://en.wikipedia.org/wiki/Lock_number">Número de Lock</a> e o
-efeito de <em>hinge offset</em> / <em>hingeless</em>.</li>
-<li><strong>Demonstração da Equivalência via Transformação de
-Coleman</strong>: Mapear as equações do rotor para o referencial
-inercial e comparar termo a termo com o giroscópio.</li>
+<li>Sem mecanismo Delta-3 e sem mola restauradora</li>
+<li>Com mecanismo Delta-3</li>
+<li>Com mola restauradora</li>
 </ul>
-<hr />
-<h2 id="2-intuição-física-a-quadratura-e-a-massa-girante">2. Intuição
-Física: A Quadratura e a Massa Girante</h2>
-<h3 id="o-comportamento-da-massa-na-borda-do-disco">O Comportamento da
-Massa na Borda do Disco</h3>
-<p>Considere um disco rígido girando com velocidade angular constante
-<span class="math inline">\(\Omega\)</span>. Imagine uma massa pontual
-<span class="math inline">\(m\)</span> localizada na borda do disco em
-um raio <span class="math inline">\(R\)</span>. A posição azimutal da
-massa é dada por <span class="math inline">\(\psi(t) = \Omega
-t\)</span>.</p>
-<p>Suponha que essa massa seja submetida a uma força vertical
-descendente <span class="math inline">\(F_z(\psi)\)</span> que atinge
-seu valor máximo no azimute de referência <span
-class="math inline">\(\psi = 0^\circ\)</span> (força apontando para
-baixo) e varia harmonicamente com o azimute:</p>
-<p><span class="math display">\[
-F_z(t) = -F_0 \cos(\Omega t)
-\]</span></p>
-<p>A segunda lei de Newton na direção vertical <span
-class="math inline">\(z\)</span> fornece a aceleração instantânea da
-massa:</p>
-<p><span class="math display">\[
-\ddot{z}(t) = \frac{F_z(t)}{m} = -\frac{F_0}{m} \cos(\Omega t)
-\]</span></p>
-<p>A aceleração vertical atinge seu valor negativo máximo (para baixo)
-exatamente em <span class="math inline">\(\psi = 0^\circ\)</span> (<span
-class="math inline">\(t=0\)</span>). Integrando a aceleração em relação
-ao tempo, obtém-se a velocidade vertical <span
-class="math inline">\(v_z(t) = \dot{z}(t)\)</span>:</p>
-<p><span class="math display">\[
-v_z(t) = \int \ddot{z}(t) \, dt = -\frac{F_0}{m\Omega} \sin(\Omega t) =
-\frac{F_0}{m\Omega} \cos\left(\Omega t + \frac{\pi}{2}\right)
-\]</span></p>
-<p>A velocidade vertical não é máxima em <span
-class="math inline">\(\psi = 0^\circ\)</span>; em <span
-class="math inline">\(\psi = 0^\circ\)</span>, ela é nula (<span
-class="math inline">\(v_z = 0\)</span>). Conforme a massa gira de <span
-class="math inline">\(\psi = 0^\circ\)</span> até <span
-class="math inline">\(\psi = 90^\circ\)</span>, a força continua
-empurrando-a para baixo (com intensidade decrescente), acumulando
-velocidade descendente. A velocidade descendente atinge seu valor máximo
-exatamente em <span class="math inline">\(\psi = 90^\circ\)</span>
-(<span class="math inline">\(\Omega t = \pi/2\)</span>).</p>
-<p>Integrando a velocidade vertical mais uma vez, obtém-se o
-deslocamento vertical <span class="math inline">\(z(t)\)</span>:</p>
-<p><span class="math display">\[
-z(t) = \int v_z(t) \, dt = \frac{F_0}{m\Omega^2} \cos(\Omega t) =
--\frac{F_0}{m\Omega^2} \cos(\Omega t - \pi)
-\]</span></p>
-<p>O deslocamento vertical descendente máximo ocorre em <span
-class="math inline">\(\psi = 180^\circ\)</span> (<span
-class="math inline">\(\Omega t = \pi\)</span>).</p>
-<hr />
-<h3
-id="do-ponto-isolado-ao-disco-rígido-a-origem-da-precessão-espacial">Do
-Ponto Isolado ao Disco Rígido: A Origem da Precessão Espacial</h3>
-<p>Se o sistema consistisse em um único ponto livre sem restauração, o
-deslocamento máximo estaria <span
-class="math inline">\(180^\circ\)</span> defasado da força, agindo como
-um integrador duplo puro. Porém, em um disco rígido ou em um rotor de
-várias massas conectadas:</p>
-<ol type="1">
-<li>Em <span class="math inline">\(\psi = 90^\circ\)</span>, todas as
-massas que passam por esse ponto possuem a <strong>velocidade
-descendente máxima</strong>.</li>
-<li>No lado oposto (<span class="math inline">\(\psi =
-270^\circ\)</span>), as massas possuem a <strong>velocidade ascendente
-máxima</strong>.</li>
-<li>Em <span class="math inline">\(\psi = 0^\circ\)</span> e <span
-class="math inline">\(\psi = 180^\circ\)</span>, a velocidade vertical
-instantânea do disco é nula.</li>
-</ol>
-<p>Como o disco é um corpo rígido com ponto de apoio central, uma
-distribuição de velocidades verticais que é máxima na linha <span
-class="math inline">\(\psi = 90^\circ - 270^\circ\)</span> força o plano
-do disco a <strong>girar (inclinar-se) em torno do eixo <span
-class="math inline">\(\psi = 0^\circ - 180^\circ\)</span></strong>.</p>
-<p>Consequentemente, a inclinação máxima do plano do disco (o ponto mais
-baixo do disco) ocorre na região de <span class="math inline">\(\psi =
-90^\circ\)</span>. A força aplicada em <span class="math inline">\(\psi
-= 0^\circ\)</span> produz o deslocamento angular máximo do disco <span
-class="math inline">\(90^\circ\)</span> depois. Isso é a
-<strong>resposta em quadratura</strong> ou <strong>precessão
-espacial</strong>.</p>
-<p><picture><source srcset="../assets/media/rotores-e-giroscopios_fig1.webp" type="image/webp"><img src="../assets/media/rotores-e-giroscopios_fig1.jpeg"
-alt="Força descendente em uma pequena massa em um disco girante: as quatro fases do azimute, a variação temporal de força, aceleração, velocidade e deslocamento, e a consequência de precessão no disco rígido" /></picture></p>
-<p><em>Figura 1. Resposta de uma massa no disco girante a uma força
-descendente, ao longo das quatro fases do azimute.</em></p>
-<hr />
-<h2 id="3-o-giroscópio-como-bloco-de-construção">3. O Giroscópio como
-Bloco de Construção</h2>
-<p>Consideremos agora a modelagem dinâmica do giroscópio clássico como
-um corpo rígido simétrico girando a uma velocidade angular constante
-<span class="math inline">\(\Omega\)</span> em torno do seu eixo
-polar.</p>
-<h3 id="notação-e-parâmetros">Notação e Parâmetros</h3>
-<ul>
-<li><span class="math inline">\(I_T\)</span>: Momento de inércia
-transversal (em torno dos eixos de inclinação <span
-class="math inline">\(x\)</span> e <span
-class="math inline">\(y\)</span>).</li>
-<li><span class="math inline">\(I_P\)</span>: Momento de inércia polar
-(em torno do eixo de rotação <span
-class="math inline">\(z\)</span>).</li>
-<li><span class="math inline">\(\Omega\)</span>: Velocidade angular de
-rotação do giroscópio.</li>
-<li><span class="math inline">\(\theta_x, \theta_y\)</span>: Ângulos de
-inclinação (arfagem e rolamento) no referencial inercial/fixo.</li>
-<li><span class="math inline">\(M_x, M_y\)</span>: Momentos externos
-aplicados nos eixos <span class="math inline">\(x\)</span> e <span
-class="math inline">\(y\)</span>.</li>
-<li><span class="math inline">\(D\)</span>: Coeficiente de amortecimento
-viscoso torsional.</li>
-<li><span class="math inline">\(K\)</span>: Rigidez torsional externa
-aplicada aos eixos de inclinação.</li>
-</ul>
-<hr />
-<h3 id="giroscópio-ideal-no-vácuo-d--0-k--0">Giroscópio Ideal no Vácuo
-(<span class="math inline">\(D = 0, K = 0\)</span>)</h3>
-<p>No referencial inercial, para pequenas inclinações <span
-class="math inline">\(\theta_x\)</span> e <span
-class="math inline">\(\theta_y\)</span>, as equações de Euler
-linearizadas são:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + I_P \Omega \dot{\theta}_y = M_x \\
-I_T \ddot{\theta}_y - I_P \Omega \dot{\theta}_x = M_y
-\end{cases}
-\]</span></p>
-<p>O termo cruzado <span class="math inline">\(I_P \Omega
-\dot{\theta}\)</span> é a <strong>força/momento giroscópico
-acoplado</strong>, que converte uma taxa de inclinação no eixo <span
-class="math inline">\(y\)</span> em um momento no eixo <span
-class="math inline">\(x\)</span>, e vice-versa.</p>
-<h4 id="formulacao-complexa">Formulacao Complexa</h4>
-<p>Definimos a inclinação complexa <span class="math inline">\(\theta(t)
-= \theta_x(t) + i \theta_y(t)\)</span> e o momento complexo <span
-class="math inline">\(M(t) = M_x(t) + i M_y(t)\)</span>. Multiplicando a
-segunda equação por <span class="math inline">\(i\)</span> e somando à
-primeira:</p>
-<p><span class="math display">\[
-I_T (\ddot{\theta}_x + i \ddot{\theta}_y) - i I_P \Omega (\dot{\theta}_x
-+ i \dot{\theta}_y) = M_x + i M_y
-\]</span></p>
-<p><span class="math display">\[
-I_T \ddot{\theta} - i I_P \Omega \dot{\theta} = M
-\]</span></p>
-<h4 id="equação-característica-e-polos">Equação Característica e
-Polos</h4>
-<p>Para a equação homogênea (<span class="math inline">\(M =
-0\)</span>), assumindo solução do tipo <span
-class="math inline">\(\theta(t) = \Theta e^{st}\)</span>:</p>
-<p><span class="math display">\[
-I_T s^2 - i I_P \Omega s = 0 \implies s \left( I_T s - i I_P \Omega
-\right) = 0
-\]</span></p>
-<p>As raízes (polos do sistema) são:</p>
-<p><span class="math display">\[
-s_1 = 0 \qquad \text{e} \qquad s_2 = i \left( \frac{I_P}{I_T} \right)
-\Omega
-\]</span></p>
-<p><strong>Interpretação Física dos Polos</strong>:</p>
-<ul>
-<li><strong><span class="math inline">\(s_1 = 0\)</span></strong>:
-Corresponde ao modo de posição nula/constante. O giroscópio livre não
-possui força restauradora de posição; qualquer orientação angular
-alcançada permanece constante na ausência de momentos.</li>
-<li><strong><span class="math inline">\(s_2 = i \frac{I_P}{I_T}
-\Omega\)</span></strong>: Corresponde ao modo de precessão livre
-(nutação puramente senoidal sem amortecimento). Como a parte real é nula
-(<span class="math inline">\(\sigma = 0\)</span>), o giroscópio ideal no
-vácuo é <strong>marginalmente estável</strong>.</li>
-<li><strong>Resposta Forçada em Ressonância</strong>: Se aplicarmos um
-momento harmônico exatamente na frequência <span
-class="math inline">\(1/\text{rev}\)</span> (<span
-class="math inline">\(\omega = \Omega\)</span>), e para o caso de um
-disco fino onde <span class="math inline">\(I_P \approx 2 I_T\)</span>
-(ou <span class="math inline">\(I_P = I_T\)</span>), a excitação
-coincide com a frequência natural e, devido à ausência de amortecimento,
-a amplitude cresce secularmente sem limite no regime linear.</li>
-</ul>
-<hr />
-<h3 id="giroscópio-com-amortecimento-viscoso-d--0-k--0">Giroscópio com
-Amortecimento Viscoso (<span class="math inline">\(D &gt; 0, K =
-0\)</span>)</h3>
-<p>Adicionando um amortecimento viscoso <span
-class="math inline">\(D\)</span> que opõe às taxas de inclinação <span
-class="math inline">\(\dot{\theta}_x\)</span> e <span
-class="math inline">\(\dot{\theta}_y\)</span>:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + D \dot{\theta}_x + I_P \Omega \dot{\theta}_y = M_x
-\\
-I_T \ddot{\theta}_y + D \dot{\theta}_y - I_P \Omega \dot{\theta}_x = M_y
-\end{cases}
-\]</span></p>
-<p>Na forma complexa:</p>
-<p><span class="math display">\[
-I_T \ddot{\theta} + (D - i I_P \Omega) \dot{\theta} = M
-\]</span></p>
-<h4 id="equação-característica-e-polos-1">Equação Característica e
-Polos</h4>
-<p><span class="math display">\[
-I_T s^2 + (D - i I_P \Omega) s = 0 \implies s \left[ I_T s + (D - i I_P
-\Omega) \right] = 0
-\]</span></p>
-<p>Os polos são:</p>
-<p><span class="math display">\[
-s_1 = 0 \qquad \text{e} \qquad s_2 = -\frac{D}{I_T} + i \left(
-\frac{I_P}{I_T} \right) \Omega
-\]</span></p>
-<p><strong>Interpretação Física</strong>:</p>
-<p>O amortecimento viscoso introduz uma parte real negativa <span
-class="math inline">\(\sigma = -D/I_T\)</span> no modo oscilatório. A
-precessão livre agora é um movimento espiral decrescente no tempo
-(estável). O polo em <span class="math inline">\(s_1 = 0\)</span>
-permanece na origem pois ainda não há rigidez de posição.</p>
-<hr />
-<h3 id="giroscópio-com-rigidez-torsional-externa-d--0-k--0">Giroscópio
-com Rigidez Torsional Externa (<span class="math inline">\(D &gt; 0, K
-&gt; 0\)</span>)</h3>
-<p>Adicionando molas torsionais externas de rigidez <span
-class="math inline">\(K\)</span> em cada eixo:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_T \ddot{\theta}_x + D \dot{\theta}_x + I_P \Omega \dot{\theta}_y + K
-\theta_x = M_x \\
-I_T \ddot{\theta}_y + D \dot{\theta}_y - I_P \Omega \dot{\theta}_x + K
-\theta_y = M_y
-\end{cases}
-\]</span></p>
-<p>Na forma complexa unificada:</p>
-<p><span class="math display">\[
-I_T \ddot{\theta} + (D - i I_P \Omega) \dot{\theta} + K \theta = M
-\]</span></p>
-<h4 id="equação-característica-geral">Equação Característica Geral</h4>
-<p><span class="math display">\[
-I_T s^2 + (D - i I_P \Omega) s + K = 0
-\]</span></p>
-<p>Usando a fórmula quadrática:</p>
-<p><span class="math display">\[
-s = \frac{-(D - i I_P \Omega) \pm \sqrt{(D - i I_P \Omega)^2 - 4 I_T
-K}}{2 I_T}
-\]</span></p>
-<p>A presença de <span class="math inline">\(K &gt; 0\)</span> remove o
-polo da origem (<span class="math inline">\(s_1 \neq 0\)</span>),
-deslocando ambos os polos e estabelecendo uma posição de equilíbrio
-elástico estático.</p>
-<hr />
-<h3
-id="resposta-em-frequência-rigidez-efetiva-e-ângulo-de-fase">Resposta em
-Frequência, Rigidez Efetiva e Ângulo de Fase</h3>
-<p>Para avaliar a resposta forçada a uma excitação harmônica <span
-class="math inline">\(M(t) = M_0 e^{i \omega t}\)</span>, assumimos
-resposta permanente <span class="math inline">\(\theta(t) = \Theta e^{i
-\omega t}\)</span>:</p>
-<p><span class="math display">\[
-\left[ -I_T \omega^2 + i \omega (D - i I_P \Omega) + K \right] \Theta =
-M_0
-\]</span></p>
-<p><span class="math display">\[
-\left[ (K - I_T \omega^2 + \omega I_P \Omega) + i \omega D \right]
-\Theta = M_0
-\]</span></p>
-<p>Definimos a <strong>Rigidez Efetiva Giroscópica</strong> <span
-class="math inline">\(K_{\text{ef}}(\omega)\)</span> como a parte real
-do operador:</p>
-<p><span class="math display">\[
-K_{\text{ef}}(\omega) = K - I_T \omega^2 + \omega I_P \Omega
-\]</span></p>
-<p>A função de transferência de resposta em frequência é:</p>
-<p><span class="math display">\[
-\Theta(\omega) = \frac{M_0}{K_{\text{ef}}(\omega) + i \omega D}
-\]</span></p>
-<p>A amplitude <span class="math inline">\(|\Theta|\)</span> e o ângulo
-de fase <span class="math inline">\(\phi\)</span> são dados por:</p>
-<p><span class="math display">\[
-|\Theta| = \frac{|M_0|}{\sqrt{[K_{\text{ef}}(\omega)]^2 + (\omega D)^2}}
-\]</span></p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\omega D}{K_{\text{ef}}(\omega)} \right) =
-\arctan \left( \frac{\omega D}{K - I_T \omega^2 + \omega I_P \Omega}
-\right)
-\]</span></p>
-<p><strong>Análise do Ângulo de Fase <span
-class="math inline">\(\phi\)</span></strong>:</p>
-<ol type="1">
-<li><p><strong>Ressonância Giroscópica Pura (<span
-class="math inline">\(K_{\text{ef}}(\omega) = 0\)</span>)</strong>:
-Quando a rigidez efetiva se anula, a parte real do denominador
-desaparece. O ângulo de fase torna-se:</p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\omega D}{0} \right) = 90^\circ
-\]</span></p>
-<p>A resposta está exatamente em <strong>quadratura</strong> (<span
-class="math inline">\(90^\circ\)</span> atrasada em relação à força
-aplicada).</p></li>
-<li><p><strong>Efeito de Rigidez Dominante (<span
-class="math inline">\(K_{\text{ef}}(\omega) &gt; 0\)</span>)</strong>:
-Se a rigidez externa <span class="math inline">\(K\)</span> for grande
-de modo que <span class="math inline">\(K_{\text{ef}}(\omega) &gt;
-0\)</span>, o denominador possui parte real positiva:</p>
-<p><span class="math display">\[
-\phi &lt; 90^\circ
-\]</span></p>
-<p>A fase diminui, aproximando a resposta espacial do eixo de aplicação
-da força.</p></li>
-<li><p><strong>Efeito Inercial Dominante (<span
-class="math inline">\(K_{\text{ef}}(\omega) &lt; 0\)</span>)</strong>:
-Se o termo inercial ou de rotação dominar fazendo com que <span
-class="math inline">\(K_{\text{ef}}(\omega) &lt; 0\)</span>, a fase
-supera <span class="math inline">\(90^\circ\)</span>:</p>
-<p><span class="math display">\[
-90^\circ &lt; \phi \le 180^\circ
-\]</span></p></li>
-</ol>
-<hr />
-<h2 id="4-o-rotor-de-asas-rotativas">4. O Rotor de Asas Rotativas</h2>
-<p>Analisaremos agora a dinâmica de batimento (<em>flapping</em>) da pá
-de um rotor no referencial girante.</p>
-<h3 id="notação-e-parâmetros-1">Notação e Parâmetros</h3>
-<ul>
-<li><span class="math inline">\(I_b\)</span>: Momento de inércia de
-batimento da pá em relação à articulação (<span
-class="math inline">\(\int_0^R r^2 dm\)</span>).</li>
-<li><span class="math inline">\(\Omega\)</span>: Velocidade angular de
-rotação do rotor.</li>
-<li><span class="math inline">\(\psi\)</span>: Posição azimutal da pá
-(<span class="math inline">\(\psi = \Omega t\)</span>).</li>
-<li><span class="math inline">\(\beta\)</span>: Ângulo de batimento
-(<em>flap angle</em>) da pá.</li>
-<li><span class="math inline">\(C_\beta\)</span>: Coeficiente de
-amortecimento aerodinâmico de batimento.</li>
-<li><span class="math inline">\(K_{cf}\)</span>: Rigidez centrífuga de
-batimento (<span class="math inline">\(I_b \Omega^2\)</span>).</li>
-<li><span class="math inline">\(K_e\)</span>: Rigidez equivalente devida
-ao <em>hinge offset</em> (excentricidade da articulação <span
-class="math inline">\(e\)</span>).</li>
-<li><span class="math inline">\(K_s\)</span>: Rigidez elástica
-estrutural da raiz da pá (rotores <em>hingeless</em> /
-<em>bearingless</em>).</li>
-<li><span class="math inline">\(\gamma\)</span>: Número de Lock (<span
-class="math inline">\(\frac{\rho a c R^4}{I_b}\)</span>).</li>
-</ul>
-<hr />
-<h3 id="pá-articulada-no-vácuo-e-rigidez-centrífuga">Pá Articulada no
-Vácuo e Rigidez Centrífuga</h3>
-<p>Considere uma pá articulada na origem (<span
-class="math inline">\(e=0\)</span>) girando no vácuo (<span
-class="math inline">\(C_\beta = 0\)</span>, sem forças aerodinâmicas).
-Quando a pá se desloca do plano de rotação por um ângulo <span
-class="math inline">\(\beta\)</span>, a força centrífuga atuando em um
-elemento de massa <span class="math inline">\(dm\)</span> a uma
-distância <span class="math inline">\(r\)</span> desenvolve um momento
-restaurador em torno da articulação de batimento:</p>
-<p><span class="math display">\[
-d M_{cf} = -(r \Omega^2 dm) \cdot (r \sin \beta) \approx -r^2 \Omega^2
-\beta \, dm
-\]</span></p>
-<p>Integrando ao longo de toda a extensão da pá de <span
-class="math inline">\(0\)</span> a <span
-class="math inline">\(R\)</span>:</p>
-<p><span class="math display">\[
-M_{cf} = -\beta \Omega^2 \int_0^R r^2 dm = -I_b \Omega^2 \beta
-\]</span></p>
-<p>O termo <span class="math inline">\(K_{cf} = I_b \Omega^2\)</span>
-representa a <strong>Rigidez Centrífuga de Batimento</strong>. Esta
-rigidez não decorre de uma mola física, mas sim da geometria da
-rotação.</p>
-<p>A equação de movimento da pá no vácuo sob um momento excitador <span
-class="math inline">\(M_1 \cos(\Omega t)\)</span> é:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + I_b \Omega^2 \beta = M_1 \cos(\Omega t)
-\]</span></p>
-<p>Dividindo por <span class="math inline">\(I_b\)</span>:</p>
-<p><span class="math display">\[
-\ddot{\beta} + \Omega^2 \beta = \frac{M_1}{I_b} \cos(\Omega t)
-\]</span></p>
-<h4 id="frequência-natural-e-polos-no-vácuo">Frequência Natural e Polos
-no Vácuo</h4>
-<p>A frequência natural de batimento no vácuo é <span
-class="math inline">\(\omega_n = \sqrt{\frac{I_b \Omega^2}{I_b}} =
-\Omega\)</span>.</p>
-<p>O rotor articulado no vácuo possui uma frequência natural exatamente
-igual à frequência de rotação (<span
-class="math inline">\(1/\text{rev}\)</span>). A equação característica
-<span class="math inline">\(s^2 + \Omega^2 = 0\)</span> fornece os
-polos:</p>
-<p><span class="math display">\[
-s_{1,2} = \pm i \Omega
-\]</span></p>
-<h4 id="o-cancelamento-inercial-e-centrífugo">O “Cancelamento” Inercial
-e Centrífugo</h4>
-<p>Para uma resposta harmônica <span class="math inline">\(\beta(t) = B
-\cos(\Omega t - \phi)\)</span>:</p>
-<ul>
-<li>O termo inercial é: <span class="math inline">\(I_b \ddot{\beta} =
--I_b \Omega^2 \beta(t)\)</span></li>
-<li>O termo centrífugo é: <span class="math inline">\(K_{cf} \beta =
-+I_b \Omega^2 \beta(t)\)</span></li>
-</ul>
-<p>Somando ambos os termos reativos:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + I_b \Omega^2 \beta = -I_b \Omega^2 \beta(t) + I_b
-\Omega^2 \beta(t) \equiv 0
-\]</span></p>
-<p>Em rotação de <span class="math inline">\(1/\text{rev}\)</span>,
-<strong>o termo inercial e o termo centrífugo cancelam-se mutuamente a
-cada instante t</strong>. Na ausência de amortecimento (<span
-class="math inline">\(C_\beta = 0\)</span>), a solução para excitação
-exatamente na frequência ressonante <span
-class="math inline">\(\Omega\)</span> cresce linearmente com o
-tempo:</p>
-<p><span class="math display">\[
-\beta(t) = \frac{M_1}{2 I_b \Omega} t \sin(\Omega t)
-\]</span></p>
-<p>Assim como o giroscópio ideal no vácuo, o rotor no vácuo não possui
-amplitude estacionária finita em ressonância.</p>
-<hr />
-<h3 id="origem-do-amortecimento-aerodinâmico-e-número-de-lock">Origem do
-Amortecimento Aerodinâmico e Número de Lock</h3>
-<p>Quando o rotor opera na atmosfera, o movimento de batimento da pá
-<span class="math inline">\(\dot{\beta}\)</span> gera uma velocidade
-vertical relativa do ar no elemento de pá <span
-class="math inline">\(U_p = r \dot{\beta}\)</span>. Isso altera o ângulo
-de ataque local <span class="math inline">\(\alpha(r)\)</span>:</p>
-<p><span class="math display">\[
-\Delta \alpha(r) = -\frac{U_p}{U_t} = -\frac{r \dot{\beta}}{\Omega r} =
--\frac{\dot{\beta}}{\Omega}
-\]</span></p>
-<p>A variação correspondente na sustentação aerodinâmica gera um momento
-de amortecimento oposto à velocidade de batimento <span
-class="math inline">\(\dot{\beta}\)</span>. Integrando ao longo da
-pá:</p>
-<p><span class="math display">\[
-M_{aero\_damp} = -\int_0^R \frac{1}{2} \rho U_t^2 c a \left( \frac{r
-\dot{\beta}}{\Omega r} \right) r \, dr = -\frac{1}{8} \rho a c R^4
-\Omega \dot{\beta}
-\]</span></p>
-<p>Definindo o <strong>Número de Lock</strong> <span
-class="math inline">\(\gamma\)</span>, que quantifica a razão entre as
-forças aerodinâmicas e as forças inerciais da pá:</p>
-<p><span class="math display">\[
-\gamma = \frac{\rho a c R^4}{I_b}
-\]</span></p>
-<p>O coeficiente de amortecimento aerodinâmico <span
-class="math inline">\(C_\beta\)</span> torna-se:</p>
-<p><span class="math display">\[
-C_\beta = \frac{1}{8} \rho a c R^4 \Omega = \frac{\gamma I_b \Omega}{8}
-\]</span></p>
-<p>O amortecimento de batimento em um rotor de helicóptero é de origem
-<strong>puramente aerodinâmica</strong> e é diretamente proporcional ao
-Número de Lock <span class="math inline">\(\gamma\)</span> e à
-velocidade angular <span class="math inline">\(\Omega\)</span>.</p>
-<hr />
-<h3 id="rotor-articuladoteetering-na-atmosfera">Rotor
-Articulado/Teetering na Atmosfera</h3>
-<p>Incluindo o amortecimento aerodinâmico <span
-class="math inline">\(C_\beta\)</span>, a equação de batimento no
-referencial girante passa a ser:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + C_\beta \dot{\beta} + I_b \Omega^2 \beta = M_1
-\cos(\Omega t)
-\]</span></p>
-<p><span class="math display">\[
-\ddot{\beta} + \frac{\gamma \Omega}{8} \dot{\beta} + \Omega^2 \beta =
-\frac{M_1}{I_b} \cos(\Omega t)
-\]</span></p>
-<h4 id="polos-no-plano-completo-s">Polos no Plano Completo <span
-class="math inline">\(s\)</span></h4>
-<p>A equação característica <span class="math inline">\(s^2 +
-\frac{\gamma \Omega}{8} s + \Omega^2 = 0\)</span> possui as raízes:</p>
-<p><span class="math display">\[
-s_{1,2} = -\frac{\gamma \Omega}{16} \pm i \Omega \sqrt{1 -
-\left(\frac{\gamma}{16}\right)^2}
-\]</span></p>
-<p>Como <span class="math inline">\(\gamma &gt; 0\)</span> (tipicamente
-entre 5 e 10 para helicópteros), a parte real é estritamente negativa
-(<span class="math inline">\(\sigma = -\frac{\gamma
-\Omega}{16}\)</span>). O amortecimento aerodinâmico move os polos para o
-semiplano esquerdo, garantindo a <strong>estabilidade e a existência de
-um regime permanente estacionário de amplitude finita</strong>.</p>
-<h4 id="resposta-estacionária-e-ângulo-de-fase">Resposta Estacionária e
-Ângulo de Fase</h4>
-<p>Para <span class="math inline">\(\beta(t) = \Re\{ B e^{i \Omega t}
-\}\)</span>:</p>
-<p><span class="math display">\[
-\left[ -I_b \Omega^2 + i \Omega C_\beta + I_b \Omega^2 \right] B = M_1
-\implies i \Omega C_\beta B = M_1
-\]</span></p>
-<p><span class="math display">\[
-B = \frac{M_1}{i \Omega C_\beta} = \frac{M_1}{\Omega C_\beta} e^{-i
-\frac{\pi}{2}}
-\]</span></p>
-<p><span class="math display">\[
-\beta(t) = \frac{M_1}{\Omega C_\beta} \cos\left(\Omega t -
-90^\circ\right)
-\]</span></p>
-<p>Em um rotor articulado puro (<span
-class="math inline">\(e=0\)</span>), <strong>o cancelamento perfeito
-entre os termos inercial e centrífugo faz com que a resposta seja
-governada unicamente pelo amortecimento aerodinâmico</strong>,
-resultando em uma defasagem de fase estacionária de <strong>exatamente
-<span class="math inline">\(90^\circ\)</span></strong>.</p>
-<hr />
-<h3 id="rotores-com-hinge-offset-e-hingeless-omega_n--omega">Rotores com
-Hinge Offset e Hingeless (<span class="math inline">\(\omega_n &gt;
-\Omega\)</span>)</h3>
-<p>Em rotores reais com excentricidade da articulação (<em>hinge
-offset</em> <span class="math inline">\(e &gt; 0\)</span>) ou rotores
-rígidos/flexíveis sem articulação (<em>hingeless</em> /
-<em>bearingless</em>), surge uma rigidez mecânica ou geométrica
-adicional:</p>
-<ul>
-<li><span class="math inline">\(K_e\)</span>: Rigidez do <em>hinge
-offset</em> (<span class="math inline">\(K_e \approx \frac{3}{2}
-\frac{e}{R} I_b \Omega^2\)</span>).</li>
-<li><span class="math inline">\(K_s\)</span>: Rigidez elástica de mola
-na raiz da pá.</li>
-</ul>
-<p>A rigidez total de batimento <span
-class="math inline">\(K_{tot}\)</span> passa a ser:</p>
-<p><span class="math display">\[
-K_{tot} = K_{cf} + K_e + K_s = I_b \Omega^2 + K_e + K_s &gt; I_b
-\Omega^2
-\]</span></p>
-<p>A frequência natural não dimensional de batimento <span
-class="math inline">\(\nu_\beta = \frac{\omega_n}{\Omega}\)</span>
-torna-se maior que <span
-class="math inline">\(1.0/\text{rev}\)</span>:</p>
-<p><span class="math display">\[
-\nu_\beta = \sqrt{1 + \frac{K_e + K_s}{I_b \Omega^2}} &gt; 1.0
-\]</span></p>
-<p>(Tipicamente <span class="math inline">\(\nu_\beta \approx 1.03 -
-1.05\)</span> para rotores com <em>offset</em> e <span
-class="math inline">\(\nu_\beta \approx 1.10 - 1.20\)</span> para
-rotores <em>hingeless</em>).</p>
-<hr />
-<h3
-id="generalização-resposta-de-fase-e-amplitude-no-rotor">Generalização:
-Resposta de Fase e Amplitude no Rotor</h3>
-<p>A equação genérica de batimento para qualquer rotor é:</p>
-<p><span class="math display">\[
-I_b \ddot{\beta} + C_\beta \dot{\beta} + K_{tot} \beta = M_1 \cos(\omega
-t)
-\]</span></p>
-<p>A amplitude <span class="math inline">\(B\)</span> e o ângulo de
-atraso de fase <span class="math inline">\(\phi\)</span> para uma
-excitação em frequência <span class="math inline">\(\omega\)</span>
-são:</p>
-<p><span class="math display">\[
-B = \frac{M_1}{\sqrt{(K_{tot} - I_b \omega^2)^2 + (C_\beta \omega)^2}}
-\]</span></p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{C_\beta \omega}{K_{tot} - I_b \omega^2}
-\right)
-\]</span></p>
-<p>Para excitação de <span class="math inline">\(1/\text{rev}\)</span>
-(<span class="math inline">\(\omega = \Omega\)</span>), substituindo
-<span class="math inline">\(C_\beta = \frac{\gamma I_b
-\Omega}{8}\)</span>:</p>
-<p><span class="math display">\[
-\phi = \arctan \left( \frac{\frac{\gamma}{8} I_b \Omega^2}{K_{tot} - I_b
-\Omega^2} \right) = \arctan \left( \frac{\frac{\gamma}{8}}{\nu_\beta^2 -
-1} \right)
-\]</span></p>
-<p><strong>Análise do Ângulo de Fase no Rotor</strong>:</p>
-<ol type="1">
-<li><p><strong>Rotor Articulado Puro (<span
-class="math inline">\(\nu_\beta = 1.0\)</span>, <span
-class="math inline">\(K_{tot} = I_b \Omega^2\)</span>)</strong>:
-Denominador do argumento é zero <span class="math inline">\(\implies
-\phi = \arctan(\infty) = 90^\circ\)</span>.</p></li>
-<li><p><strong>Rotor com Hinge Offset ou Hingeless (<span
-class="math inline">\(\nu_\beta &gt; 1.0\)</span>, <span
-class="math inline">\(K_{tot} &gt; I_b \Omega^2\)</span>)</strong>: Como
-<span class="math inline">\(K_{tot} - I_b \Omega^2 &gt; 0\)</span>, o
-argumento do arcotangente é finito e positivo:</p>
-<p><span class="math display">\[
-\phi &lt; 90^\circ
-\]</span></p>
-<p>A resposta antecipa-se angularmente. O pico de batimento ocorre antes
-de <span class="math inline">\(90^\circ\)</span> (tipicamente <span
-class="math inline">\(80^\circ\)</span> a <span
-class="math inline">\(85^\circ\)</span> para <em>offset</em> e <span
-class="math inline">\(70^\circ\)</span> a <span
-class="math inline">\(75^\circ\)</span> para
-<em>hingeless</em>).</p></li>
-</ol>
-<hr />
-<h2 id="5-transformação-de-coleman-e-a-demonstração-da-equivalência">5.
-Transformação de Coleman e a Demonstração da Equivalência</h2>
-<p>Para provar rigorosamente a identidade matemática entre o rotor e o
-giroscópio, devemos transformar as equações de movimento do rotor
-(escritas para pás individuais no referencial girante) para o
-referencial inercial fixo.</p>
-<h3 id="as-coordenadas-multi-pá-de-coleman">As Coordenadas Multi-pá de
-Coleman</h3>
-<p>Consideremos um rotor de <span class="math inline">\(N\)</span> pás
-(<span class="math inline">\(N \ge 3\)</span>). O ângulo de batimento da
-<span class="math inline">\(i\)</span>-ésima pá no azimute <span
-class="math inline">\(\psi_i = \Omega t + \frac{2\pi(i-1)}{N}\)</span>
-pode ser expresso pela Transformação de Coleman (Coleman &amp; Feingold,
-1958):</p>
-<p><span class="math display">\[
-\beta_i(t) = \beta_0(t) + \beta_{1c}(t) \cos \psi_i + \beta_{1s}(t) \sin
-\psi_i + \dots
-\]</span></p>
-<p>onde:</p>
-<ul>
-<li><span class="math inline">\(\beta_0\)</span>: Modo de coning
-uniforme do rotor.</li>
-<li><span class="math inline">\(\beta_{1c}\)</span>: Inclinação
-longitudinal do Plano de Ponta de Pá (TPP) em relação ao referencial
-fixo (positiva para trás).</li>
-<li><span class="math inline">\(\beta_{1s}\)</span>: Inclinação lateral
-do TPP em relação ao referencial fixo (positiva para a direita).</li>
-</ul>
-<p>O vetor complexo do TPP no referencial fixo é definido como:</p>
-<p><span class="math display">\[
-\mu(t) = \beta_{1c}(t) + i \beta_{1s}(t)
-\]</span></p>
-<hr />
-<h3 id="dedução-das-equações-no-referencial-fixo">Dedução das Equações
-no Referencial Fixo</h3>
-<p>Derivando <span class="math inline">\(\beta_i(t)\)</span> em relação
-ao tempo e aplicando a regra da cadeia com <span
-class="math inline">\(\dot{\psi}_i = \Omega\)</span>:</p>
-<p><span class="math display">\[
-\dot{\beta}_i = \dot{\beta}_0 + (\dot{\beta}_{1c} + \Omega \beta_{1s})
-\cos \psi_i + (\dot{\beta}_{1s} - \Omega \beta_{1c}) \sin \psi_i
-\]</span></p>
-<p><span class="math display">\[
-\ddot{\beta}_i = \ddot{\beta}_0 + (\ddot{\beta}_{1c} + 2\Omega
-\dot{\beta}_{1s} - \Omega^2 \beta_{1c}) \cos \psi_i + (\ddot{\beta}_{1s}
-- 2\Omega \dot{\beta}_{1c} - \Omega^2 \beta_{1s}) \sin \psi_i
-\]</span></p>
-<p>Substituindo <span class="math inline">\(\beta_i, \dot{\beta}_i,
-\ddot{\beta}_i\)</span> na equação genérica de batimento <span
-class="math inline">\(I_b \ddot{\beta}_i + C_\beta \dot{\beta}_i +
-K_{tot} \beta_i = M_i(\psi_i)\)</span>, multiplicando por <span
-class="math inline">\(\cos \psi_i\)</span> e <span
-class="math inline">\(\sin \psi_i\)</span> e somando sobre todas as
-<span class="math inline">\(N\)</span> pás, isolam-se as equações
-desacopladas dos modos cíclicos do TPP no referencial fixo:</p>
-<p><span class="math display">\[
-\begin{cases}
-I_b \ddot{\beta}_{1c} + C_\beta \dot{\beta}_{1c} + (K_{tot} - I_b
-\Omega^2) \beta_{1c} + 2 I_b \Omega \dot{\beta}_{1s} + C_\beta \Omega
-\beta_{1s} = M_{1c} \\
-I_b \ddot{\beta}_{1s} + C_\beta \dot{\beta}_{1s} + (K_{tot} - I_b
-\Omega^2) \beta_{1s} - 2 I_b \Omega \dot{\beta}_{1c} - C_\beta \Omega
-\beta_{1c} = M_{1s}
-\end{cases}
-\]</span></p>
-<p>Multiplicando a segunda equação por <span
-class="math inline">\(i\)</span> e somando à primeira, obtém-se a
-<strong>Equação Complexa Unificada do Rotor no Referencial
-Fixo</strong>:</p>
-<p><span class="math display">\[
-I_b \ddot{\mu} + (C_\beta - 2 i I_b \Omega) \dot{\mu} + (K_{tot} - I_b
-\Omega^2 - i C_\beta \Omega) \mu = M
-\]</span></p>
-<hr />
-<h3 id="comparação-com-a-equação-do-giroscópio">Comparação com a Equação
-do Giroscópio</h3>
-<p>Colocando lado a lado a equação do giroscópio no referencial fixo
-(Seção 3.4) e a equação do rotor no referencial fixo derivada via
-Transformação de Coleman:</p>
-<p><span class="math display">\[
-\text{Giroscópio:} \qquad I_T \ddot{\theta} + (D - i I_P \Omega)
-\dot{\theta} + K \theta = M
-\]</span></p>
-<p><span class="math display">\[
-\text{Rotor (TPP):} \qquad I_b \ddot{\mu} + (C_\beta - 2 i I_b \Omega)
-\dot{\mu} + (K_{tot} - I_b \Omega^2 - i C_\beta \Omega) \mu = M
-\]</span></p>
-<h4
-id="1-caso-ideal-sem-amortecimento-e-sem-offset-c_beta--0-k_tot--i_b-omega2">1.
-Caso Ideal (Sem Amortecimento e Sem Offset: <span
-class="math inline">\(C_\beta = 0\)</span>, <span
-class="math inline">\(K_{tot} = I_b \Omega^2\)</span>)</h4>
-<ul>
-<li>Giroscópio: <span class="math inline">\(I_T \ddot{\theta} - i I_P
-\Omega \dot{\theta} = M\)</span></li>
-<li>Rotor: <span class="math inline">\(I_b \ddot{\mu} - 2 i I_b \Omega
-\dot{\mu} = M\)</span></li>
-</ul>
-<p><strong>Demonstração da Identidade Exata</strong>:</p>
-<p>As duas equações são <strong>rigorosamente idênticas</strong> sob a
-correspondência de parâmetros:</p>
-<p><span class="math display">\[
-\Theta \Longleftrightarrow \mu = \beta_{1c} + i \beta_{1s}
-\]</span></p>
-<p><span class="math display">\[
-I_T \Longleftrightarrow I_b
-\]</span></p>
-<p><span class="math display">\[
-I_P \Longleftrightarrow 2 I_b
-\]</span></p>
-<p>Os polos do rotor no referencial fixo são <span
-class="math inline">\(s_1 = 0\)</span> e <span class="math inline">\(s_2
-= 2 i \Omega\)</span>, que correspondem exatamente aos polos do
-giroscópio com <span class="math inline">\(I_P = 2 I_T\)</span>.</p>
-<h4 id="2-caso-geral-com-amortecimento-e-rigidez">2. Caso Geral (Com
-Amortecimento e Rigidez)</h4>
-<p>Comparando termo a termo:</p>
-<table>
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 32%" />
-<col style="width: 38%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Parâmetro / Termo</th>
-<th style="text-align: left;">Giroscópio</th>
-<th style="text-align: left;">Rotor (Referencial Fixo)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Coordenada do Plano</strong></td>
-<td style="text-align: left;"><span class="math inline">\(\theta =
-\theta_x + i \theta_y\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\mu =
-\beta_{1c} + i \beta_{1s}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Inércia Transversal</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(I_T\)</span></td>
-<td style="text-align: left;"><span
-class="math inline">\(I_b\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Inércia Giroscópica</strong></td>
-<td style="text-align: left;"><span class="math inline">\(I_P
-\Omega\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(2 I_b \Omega
-\implies (I_P = 2 I_b)\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Amortecimento Direto</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(D\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(C_\beta =
-\frac{\gamma I_b \Omega}{8}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Rigidez Efetiva</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(K\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(K_{tot} - I_b
-\Omega^2\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Termo Residual</strong></td>
-<td style="text-align: left;"><span
-class="math inline">\(0\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(-i C_\beta
-\Omega\)</span></td>
-</tr>
-</tbody>
-</table>
-<p><strong>O Significado Físico do Termo Residual <span
-class="math inline">\(-i C_\beta \Omega\)</span></strong>:</p>
-<p>O termo <span class="math inline">\(-i C_\beta \Omega\)</span> surge
-porque o amortecimento aerodinâmico atua no referencial girante da pá.
-Quando transformado para o referencial fixo por Coleman, a rotação faz
-com que a força de amortecimento em um eixo acople com a posição angular
-do eixo ortogonal. Esse termo introduz um pequeno amortecimento cruzado
-que refina a resposta, mas não altera a estrutura fundamental de
-equivalência giroscópica.</p>
-<hr />
-<h3 id="condições-de-validade-da-equivalência">Condições de Validade da
-Equivalência</h3>
-<p>A equivalência física e matemática entre o rotor e o giroscópio é
-válida sob as seguintes condições:</p>
-<ol type="1">
-<li><strong>Referencial Inercial Fixo</strong>: A comparação deve ser
-feita entre a orientação espacial do giroscópio <span
-class="math inline">\((\theta_x, \theta_y)\)</span> e os modos cíclicos
-do TPP <span class="math inline">\((\beta_{1c}, \beta_{1s})\)</span>,
-<strong>e não com a pá individual no referencial girante</strong>.</li>
-<li><strong>Hipótese de Pequenos Ângulos e Linearidade</strong>: Válida
-para pequenas inclinações de TPP e pequenos ângulos de batimento.</li>
-<li><strong>Mapeamento do Momento Polar</strong>: O rotor comporta-se
-como um giroscópio cujo momento de inércia polar efetivo é o dobro do
-momento de inércia de batimento de uma pá (<span
-class="math inline">\(I_P = 2 I_b\)</span>).</li>
-</ol>
-<hr />
-<h2 id="6-tabela-comparativa-geral-e-conclusão">6. Tabela Comparativa
-Geral e Conclusão</h2>
-<p>A Tabela 1 resume a correspondência estrutural entre as diferentes
-configurações de giroscópios e rotores.</p>
-<table>
-<colgroup>
-<col style="width: 15%" />
-<col style="width: 24%" />
-<col style="width: 26%" />
-<col style="width: 14%" />
-<col style="width: 18%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Configuração do Giroscópio</th>
-<th style="text-align: left;">Configuração do Rotor</th>
-<th style="text-align: left;">Equação de Movimento Unificada</th>
-<th style="text-align: left;">Polos Dominantes (<span
-class="math inline">\(s\)</span>)</th>
-<th style="text-align: left;">Resposta de Fase (<span
-class="math inline">\(\phi\)</span>)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Ideal no Vácuo</strong> (<span
-class="math inline">\(D=0, K=0\)</span>)</td>
-<td style="text-align: left;"><strong>Teetering/Articulado no
-Vácuo</strong> (<span class="math inline">\(C_\beta=0,
-e=0\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} -
-2i I \Omega \dot{x} = M\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(s_1 =
-0\)</span>, <span class="math inline">\(s_2 = 2i\Omega\)</span>
-(Marginal)</td>
-<td style="text-align: left;">Ressonância secular sem steady-state
-finito</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Amortecido em Fluido</strong>
-(<span class="math inline">\(D&gt;0, K=0\)</span>)</td>
-<td style="text-align: left;"><strong>Teetering/Articulado na
-Atmosfera</strong> (<span class="math inline">\(C_\beta&gt;0,
-e=0\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} +
-(C - 2i I \Omega)\dot{x} - iC\Omega x = M\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\Re(s) =
--\frac{C}{2I} &lt; 0\)</span> Estável</td>
-<td style="text-align: left;"><strong>Exatamente <span
-class="math inline">\(90^\circ\)</span></strong> (Quadratura Pura)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Com Molas Torsionais</strong>
-(<span class="math inline">\(D&gt;0, K&gt;0\)</span>)</td>
-<td style="text-align: left;"><strong>Hinge Offset / Hingeless</strong>
-(<span class="math inline">\(C_\beta&gt;0,
-K_{tot}&gt;I_b\Omega^2\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(I \ddot{x} +
-(C - 2i I \Omega)\dot{x} + (K_{\text{ef}} - iC\Omega)x = M\)</span></td>
-<td style="text-align: left;">Deslocados para a esquerda</td>
-<td style="text-align: left;"><strong>Menor que <span
-class="math inline">\(90^\circ\)</span></strong> (<span
-class="math inline">\(\phi &lt; 90^\circ\)</span>)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="conclusões">Conclusões</h3>
-<ol type="1">
-<li><strong>Unidade Matemática</strong>: A precessão giroscópica
-clássica e a resposta de batimento em <span
-class="math inline">\(1/\text{rev}\)</span> de um rotor articulado não
-são fenômenos distintos. São a mesma estrutura matemática vista sob
-referenciais diferentes (fixo vs. girante).</li>
-<li><strong>Papel da Transformação de Coleman</strong>: A Transformação
-de Coleman é o elo formal que demonstra que o Plano de Ponta de Pá
-(<span class="math inline">\(TPP\)</span>) no referencial inercial
-rege-se pelas mesmas equações de Euler de um giroscópio acoplado com
-<span class="math inline">\(I_P = 2 I_b\)</span>.</li>
-<li><strong>Origem da Fase de <span
-class="math inline">\(90^\circ\)</span></strong>: Em um rotor articulado
-ideal na atmosfera, a resposta de <span
-class="math inline">\(90^\circ\)</span> decorre do cancelamento exato
-entre os termos reativos (inercial e centrífugo) em <span
-class="math inline">\(1/\text{rev}\)</span>, deixando o amortecimento
-aerodinâmico como único regulador de potência no regime permanente.</li>
-<li><strong>Efeito da Rigidez Estrutural</strong>: Ligar molas a um
-giroscópio ou adicionar <em>hinge offset</em> / rigidez
-<em>hingeless</em> a um rotor produz o mesmo efeito físico: introduz
-rigidez líquida positiva em <span
-class="math inline">\(1/\text{rev}\)</span>, aumentando a frequência
-natural e reduzindo o atraso de fase para valores inferiores a <span
-class="math inline">\(90^\circ\)</span>.</li>
-</ol>
-<hr />
+<p><picture><source srcset="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig5.webp" type="image/webp"><img
+src="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig5.png"
+alt="Rotor Analysis 1" /></picture></p>
+<p><em>Figura 4. Variação do <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> e lateral <span
+class="math inline">\(b_1\)</span> com velocidade à frente e rotação.
+Sem mecanismo Delta-3. Sem mola restauradora.</em> <picture><source srcset="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig6.webp" type="image/webp"><img
+src="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig6.png"
+alt="Rotor Analysis 2" /></picture></p>
+<p><em>Figura 5. Variação do <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> e lateral <span
+class="math inline">\(b_1\)</span> com velocidade à frente e rotação.
+Com mecanismo Delta-3 de 30deg. Sem mola restauradora.</em> <picture><source srcset="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig7.webp" type="image/webp"><img
+src="../assets/media/dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm_fig7.png"
+alt="Rotor Analysis 3" /></picture></p>
+<h2
+id="figura-6-variação-do-flapping-longitudinal-a_1-e-lateral-b_1-com-velocidade-à-frente-e-rotação-sem-mecanismo-delta-3-com-mola-restauradora-nu_beta14"><em>Figura
+6. Variação do <em>flapping</em> longitudinal <span
+class="math inline">\(a_1\)</span> e lateral <span
+class="math inline">\(b_1\)</span> com velocidade à frente e rotação.
+Sem mecanismo Delta-3. Com mola restauradora, <span
+class="math inline">\(\nu_\beta=1.4\)</span>.</em></h2>
 <h2 id="referências">Referências</h2>
-<p>[1] Bielawa, R. L., <em>Rotary Wing Structural Dynamics and
-Aeroelasticity</em>, AIAA Education Series, 2nd ed., 2006. — Tratado
-fundamental sobre aerodinâmica, aeroelasticidade e dinâmica de rotores.
-<a href="https://doi.org/10.2514/4.862373">Link</a></p>
-<p>[2] Bramwell, A. R. S., Done, G., e Balmford, D., <em>Bramwell’s
-Helicopter Dynamics</em>, 2ª ed., Butterworth-Heinemann, Oxford, 2001. —
-Referência clássica na formulação de voo e acoplamento de rotores de
-helicóptero.</p>
-<p>[3] Coleman, R. P., and Feingold, A. M., <em>Theory of Self-Excited
-Mechanical Oscillations of Helicopter Rotors with Hinged Blades</em>,
-NACA Report 1351, 1958. — Trabalho seminal que introduziu a
-Transformação de Coleman para coordenadas multi-pá. <a
-href="https://ntrs.nasa.gov/citations/19930092066">Link</a></p>
-<p>[4] Gessow, A., and Myers, G. C., <em>Aerodynamics of the
-Helicopter</em>, Macmillan, 1952. — Texto fundacional sobre teoria de
-elemento de pá e dinâmica de batimento. <a
-href="https://archive.org/details/aerodynamicsofhe0000gess">Link</a></p>
-<p>[5] Johnson, W., <em>Helicopter Theory</em>, Princeton University
-Press, Princeton, 1980. — Obra de referência abrangente em mecânica de
-voo e rotores de asas rotativas. <a
-href="https://archive.org/details/helicoptertheory0000john_y9s0">Link</a></p>
-<p>[6] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
+<p>[1] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
 2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
 em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
 de batimento e teoria de esteira. <a
 href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
-<p>[7] Padfield, G. D., <em>Helicopter Flight Dynamics</em>, 2ª ed.,
+<p>[2] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. — Tratamento moderno e abrangente de
+aeromecânica de rotores, incluindo teoria do disco atuador, modelos de
+esteira e dinâmica de indução. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+<p>[3] Bramwell, A. R. S., Done, G., e Balmford, D., <em>Bramwell’s
+Helicopter Dynamics</em>, 2ª ed., Butterworth-Heinemann, Oxford, 2001. —
+Referência clássica na formulação de voo e acoplamento de rotores de
+helicóptero.</p>
+<p>[4] Prouty, R. W., <em>Helicopter Performance, Stability, and
+Control</em>, Krieger Publishing, Malabar, 2002. — Referência clássica
+sobre qualidades de voo e controle de helicópteros. <a
+href="https://archive.org/details/prouty-r.-w.-helicopter-performance-stability-and-control">Link</a></p>
+<p>[5] Padfield, G. D., <em>Helicopter Flight Dynamics</em>, 2ª ed.,
 Blackwell Science, Oxford, 2007. — Referência abrangente sobre
 qualidades de voo e modelagem de dinâmica de helicópteros. <a
 href="https://en.wikipedia.org/wiki/Gareth_D._Padfield">Link</a></p>
+<p>[6] US11643196B1, <em>Teetering propulsor assembly of an electric
+vertical takeoff and landing aircraft</em>, Google Patents — Patente
+descrevendo articulação teetering não-linear para eVTOLs. <a
+href="https://patents.google.com/patent/US11643196B1/en">Link</a></p>
+<p>[7] ADS-33E-PRF, <em>Aeronautical Design Standard, Performance
+Specification: Handling Qualities Requirements for Military
+Rotorcraft</em>, United States Army Aviation and Missile Command,
+Redstone Arsenal, 2000. — Critérios de qualidades de voo para aeronaves
+de asa rotativa. <a
+href="https://en.wikipedia.org/wiki/Flying_qualities">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
   <div class="ornament">· · ·</div>
   <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
-    Second Brain · Gustavo Zambrano · Julho de 2026
+    Second Brain · Gustavo Zambrano · Abril de 2026
   </p>
 </footer>
 
@@ -2459,8 +2107,8 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   </nav>
 </header>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
-<div class="sb-tags"><span class="sb-tag">Dinâmica-de-Voo</span><span class="sb-tag">Rotores</span><span class="sb-tag">Giroscópio</span><span class="sb-tag">Aeroelasticidade</span><span class="sb-tag">Engenharia</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm.html"><strong>Dinâmica de Voo de um Rotor Teetering Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a><a class="sb-related-card" href="metodos-matematicos-e-computacionais-na-engenharia-aeroespacial.html"><strong>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</strong><span>Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</span></a></div></section>
+<div class="sb-tags"><span class="sb-tag">Dinâmica-de-Voo</span><span class="sb-tag">Rotores</span><span class="sb-tag">Engenharia</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="efeito-da-solidez-sobre-os-parametros-aerodinamicos-fundamentais-de-um-rotor-a-tracao-constante.html"><strong>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</strong><span>A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.</span></a><a class="sb-related-card" href="dinamica-analitica-e-acoplamento-fisico-do-modo-dutch-roll.html"><strong>Dinâmica Analítica e Acoplamento Físico do Modo Dutch Roll</strong><span>O modo Dutch Roll de uma aeronave é examinado com foco em quais características da aeronave o estabilizam ou desestabilizam, e por quê. O ensaio constrói a intuição física do modo, identifica com rigor matemático os parâmetros mais sensíveis, e analisa as soluções de projeto passivas e ativas que a engenharia dispõe para controlá-lo.</span></a></div></section>
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do essay">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>
