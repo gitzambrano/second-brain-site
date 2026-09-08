@@ -1,0 +1,4588 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="revisao" data-minutes="23">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equações Analíticas para os Coeficientes Aerodinâmicos de um Rotor Rígido</title>
+<meta property="og:title" content="Equações Analíticas para os Coeficientes Aerodinâmicos de um Rotor Rígido">
+<meta property="og:description" content="Relações analíticas de teoria de elemento de pá e quantidade de movimento fornecem tração, torque, forças no plano do rotor, momentos e inflow de um rotor rígido sem batimento nem avanço-recuo. A formulação cobre distribuições radiais gerais, inflow uniforme e Coleman, reduções fechadas, tabelas de consulta e um exemplo numérico trimado.">
+<meta property="og:type" content="article">
+<script defer="" src="../assets/mathjax/tex-svg.js"
+type="text/javascript"></script>
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --callout-abstract:#B08B4F;
+  --callout-info:#98938A;
+  --callout-todo:#B18A4A;
+  --callout-tip:#B08B4F;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#85878C;
+  --quote-bg:#1B1C1F;
+  /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
+     de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
+     No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
+  --box-bg:rgba(176,139,79,.055);
+  /* No claro o acento e escuro sobre papel branco e 2,5% ja marcam.
+     No escuro o acento e mais claro que o fundo e a mesma proporcao
+     some: a mistura sobe ate dar o mesmo degrau de contraste. */
+  --tab-mix:9%;
+  --verdict-mix:10%;
+  --box-verdict-bg:rgba(176,139,79,.10);
+  /* Cabecalho de tabela: no escuro o cinza de superficie quase some
+     contra o corpo. Um tint de rust separa a primeira linha sem
+     precisar de regra mais pesada. No claro ele nao e necessario. */
+  --th-bg:color-mix(in srgb,var(--rust) 16%,var(--surface2));
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F7F9FC;
+  --surface2:#EDF2F8;
+  --border:#D6DEE9;
+  --text:#2B3645;
+  --text-dim:#66758A;
+  --text-bright:#0E1928;
+  --gold:#2F5FB0;
+  --gold-dim:#234A86;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#6E7684;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#6E7684;
+  --quote-bg:#F1F3F7;
+  --box-bg:var(--surface);
+  --tab-mix:3%;
+  --verdict-mix:4%;
+  --box-verdict-bg:var(--surface2);
+  --th-bg:var(--surface2);
+}
+@media (min-width:901px){
+  /* Desktop: coluna larga, mas com teto. 75vw sozinho dava 2580px de linha
+     num monitor de 3440px — largura de planilha, não de leitura. A prosa para
+     em 1180px; figuras, tabelas e blocos de código continuam podendo usar a
+     largura antiga, que é onde ela servia para alguma coisa. */
+  :root{
+    --wide-width:70.5vw;
+    --max-width:min(70.5vw,1109px);
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]){
+    --bg:#FFFFFF;
+    --surface:#F7F9FC;
+    --surface2:#EDF2F8;
+    --border:#D6DEE9;
+    --text:#2B3645;
+    --text-dim:#66758A;
+    --text-bright:#0E1928;
+    --gold:#2F5FB0;
+    --gold-dim:#234A86;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --callout-abstract:#2F5FB0;
+  --callout-info:#6E7684;
+  --callout-todo:#7B5C22;
+  --callout-tip:#2F5FB0;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#6E7684;
+  --quote-bg:#F1F3F7;
+    --box-bg:var(--surface);
+  --tab-mix:3%;
+  --verdict-mix:4%;
+    --box-verdict-bg:var(--surface2);
+    --th-bg:var(--surface2);
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  position:relative;
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+  transition:background .25s ease,color .25s ease;
+}
+/* Tema claro: capa branca nobre com brilho suave dourado */
+[data-theme="light"] .masthead,
+:root:not([data-theme="dark"]) .masthead{
+  background:#F3F5F7;
+  color:#171310;
+}
+[data-theme="light"] .masthead .hero-title,
+:root:not([data-theme="dark"]) .masthead .hero-title{
+  color:#15120E;
+}
+/* Tema escuro: capa preta editorial */
+[data-theme="dark"] .masthead,
+:root[data-theme="dark"] .masthead{
+  background:#0A0A0A;
+  color:#EDE8DF;
+}
+[data-theme="dark"] .masthead .hero-title,
+:root[data-theme="dark"] .masthead .hero-title{
+  color:#EDE8DF;
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+/* O filete é a borda superior da capa, não um ornamento do título. Como a
+   capa centraliza os filhos verticalmente, deixá-lo no fluxo o empurrava para
+   encostar no título; ancorado no topo ele volta a ser moldura. */
+.stripe{
+  position:absolute;top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold-dim) 0%,var(--gold) 50%,var(--gold-dim) 100%);
+}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+.cover-summary{
+  max-width:min(760px,92%);
+  margin:1.45rem auto 0;
+  color:color-mix(in srgb,var(--text) 88%,var(--text-dim));
+  font-size:clamp(.96rem,2vw,1.08rem);
+  line-height:1.58;
+  text-wrap:balance;
+}
+[data-theme="light"] .cover-summary,
+:root:not([data-theme="dark"]) .cover-summary{color:#435166;}
+[data-theme="dark"] .cover-summary,
+:root[data-theme="dark"] .cover-summary{color:#C8C2B8;}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+/* Escape da coluna de prosa para o que é figura, e não frase. Só vale quando
+   a tela é larga o bastante para haver o que escapar: abaixo disso a coluna
+   já ocupa quase tudo e o breakout não teria para onde ir. */
+@media (min-width:1400px){
+  /* Apenas figuras podem escapar da coluna de prosa. Tabelas permanecem na
+     coluna e, quando largas, rolam dentro do próprio elemento. */
+  .content > figure{
+    max-width:min(var(--wide-width),1500px);
+    margin-left:50%;
+    transform:translateX(-50%);
+  }
+}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;font-weight:400;letter-spacing:.14em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+h5{
+  font-family:var(--font-display);
+  font-size:1rem;font-weight:700;
+  margin:1.55rem 0 .5rem;
+  color:color-mix(in srgb,var(--text-bright) 58%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+  text-wrap:pretty;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+/* Bloco de codigo dentro de caixa: mesmo recuo dos paragrafos e respiro em
+   cima e embaixo. Sem isto o <pre> ia de borda a borda da caixa e encostava
+   nos paragrafos vizinhos — a regra de recuo existia para heading e lista,
+   nunca para codigo. */
+.box > pre,.card > pre,.quote > pre{margin:1.1rem 1.3rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;border-top:1px solid var(--border);
+  text-align:center;margin:2.8rem auto;line-height:1;opacity:0.35;
+}
+/* Losango (✦) apenas estritamente entre capitulos (## que nao seja sumario nem referencias) */
+.content hr.sb-hr-chapter,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias)){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-chapter::before,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias))::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referencias usa infinito */
+.content hr.sb-hr-references,
+.content hr:has(+ h2#referências),
+.content hr:has(+ h2#referencias){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-references::before,
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+/* Oculta divisores adjacentes ao sumario (o sumario ja possui bordas proprias) */
+.content hr:has(+ h2#sumário),
+.content hr:has(+ h2#sumario),
+.content #sumário + ul + hr,
+.content #sumário + ol + hr,
+.content #sumario + ul + hr,
+.content #sumario + ol + hr{
+  display:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.quote p{font-size:1rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--gold) 78%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:.96rem;line-height:1.5;letter-spacing:.005em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.76rem;line-height:1.35;letter-spacing:.06em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--box-bg);
+  overflow:hidden;
+}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-tip{--boxc:var(--callout-tip);}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);border-left-style:dashed;}
+.box.callout-danger{--boxc:var(--callout-danger);border-left-width:5px;}
+.box.callout-bug{--boxc:var(--callout-bug);border-left-style:double;}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.16rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1.08rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:1rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;font-size:1rem;}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--box-badge-c,var(--boxc));
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1.08rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:1rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;font-weight:600;letter-spacing:.05em;line-height:1.35;
+}
+
+.box-verdict{
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) var(--verdict-mix),var(--bg));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.98rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--boxc);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:1rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:100%;max-width:100%;
+  border-collapse:collapse;margin:2rem 0;font-size:.95rem;
+}
+th{
+  background:var(--th-bg);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
+}
+/* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
+   multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
+   abaixo do que o `pre` anuncia. O tamanho do bloco passa a ser só o do `pre`. */
+pre code{background:none;padding:0;font-size:inherit;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+  /* Numa equacao numerada o MathJax escreve `min-width` inline no proprio
+     container (o SVG interno usa width:100% e depende disso). `min-width`
+     ganha de `max-width`, entao o container ficava mais largo que a tela e
+     empurrava a pagina inteira no celular em vez de rolar por dentro. Zerar
+     so o do container, nunca o do SVG: o SVG guarda a largura real da formula,
+     que e justamente o que deve rolar aqui dentro. */
+  min-width:0 !important;
+}
+/* Formula no meio de uma frase: cabe na coluna ou rola dentro de si mesma.
+   Sem isto, uma equacao inline longa nao quebra e empurra o paragrafo — e com
+   ele a pagina inteira — alguns pixels para fora da tela no celular. */
+mjx-container:not([display="true"]){
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  vertical-align:.001em;
+  font-size:90%;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+/* Dentro de celula, `max-width:100%` era catastrofico: a tabela ja esta
+   limitada a 100% da coluna, o layout automatico espremia a celula, e a
+   formula encolhia junto — uma equacao de 35ex saia com 4px de altura no
+   celular. A tabela tem rolagem horizontal propria (regra de `table`), entao
+   aqui a formula fica no tamanho natural e quem rola e a tabela. */
+:is(td,th) mjx-container:not([display="true"]) svg{max-width:none;}
+:is(td,th) mjx-container:not([display="true"]){overflow:visible;}
+/* MathML assistivo: existe so para leitor de tela e ja vem `clip`ado pelo
+   MathJax — mas `clip` esconde sem encolher. A caixa continuava com a largura
+   real da formula (376px numa coluna de 356) e, absoluta dentro do container,
+   somava essa largura ao overflow rolavel de <p>, de .content e do documento:
+   era ela, e nao a equacao visivel, que empurrava a pagina no celular.
+   Reduzir a caixa a 1px e o padrao "visually hidden"; o conteudo continua na
+   arvore de acessibilidade e continua sendo lido. */
+/* Seletor com especificidade maior que `mjx-assistive-mml` sozinho: a folha do
+   MathJax entra no <head> DEPOIS desta e, com a mesma especificidade e o mesmo
+   `!important`, ganhava por ordem. */
+mjx-container > mjx-assistive-mml{
+  position:absolute !important;
+  width:1px !important;height:1px !important;
+  overflow:hidden !important;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+
+figure{margin:2.2rem 0;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+/* O Markdown do corpus preserva a legenda como o parágrafo em itálico logo
+   depois da imagem; `implicit_figures` fica desligado para não duplicar o alt
+   text. Trate esse par como uma figura visual sem exigir reescrever essays: a
+   imagem e sua legenda ficam centradas, mas somente nesse padrão estrito. */
+.content > p:has(> picture:only-child){text-align:center;margin-bottom:.55rem;}
+.content > p:has(> picture:only-child) img{display:block;margin-inline:auto;}
+/* Uma imagem solta num paragrafo e um bloco, nao uma palavra: como inline-block
+   ela ainda somava o espaco em branco vizinho e estourava a coluna por alguns
+   pixels. */
+.content p > img{display:block;margin-inline:auto;}
+img{max-width:100%;height:auto;}
+/* Visor de figura: o painel cientifico e legivel na coluna como panorama,
+   mas os eixos so se leem em tamanho natural. O toque abre o visor; o
+   conteudo da pagina nao muda. */
+.content img{cursor:zoom-in;}
+#lupa{
+  position:fixed;inset:0;z-index:200;display:none;
+  background:color-mix(in srgb,var(--bg) 94%,black);
+  overscroll-behavior:contain;touch-action:none;
+}
+#lupa[open]{display:block;}
+#lupa img{
+  position:absolute;top:50%;left:50%;
+  max-width:none;max-height:none;
+  transform-origin:center;border-radius:0;border:0;
+  will-change:transform;
+}
+#lupa-fechar{
+  position:fixed;top:.9rem;right:.9rem;z-index:201;
+  width:2.6rem;height:2.6rem;border-radius:50%;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--text-bright);font-size:1.35rem;line-height:1;
+  display:grid;place-items:center;cursor:pointer;
+}
+#lupa-dica{
+  position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%);
+  z-index:201;padding:.4rem .85rem;border-radius:999px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-dim);font-size:.76rem;
+  font-family:'JetBrains Mono',Consolas,monospace;letter-spacing:.06em;
+}
+
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda identificada semanticamente pelo JS do template. Um <em> no meio
+   da prosa pós-imagem nunca muda de display: isso evita quebrar frases como
+   "o modelo subestima o <em>sink rate</em> principalmente na cauda". */
+.content p.sb-image-caption{
+  text-align:center;font-size:.84em;color:var(--text-dim);
+  line-height:1.5;margin-bottom:2rem;
+}
+.content p.sb-image-caption > em{
+  display:inline;font-size:inherit;color:inherit;line-height:inherit;margin:0;
+}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  /* Equações em bloco ficam 10% menores só no celular. Fórmulas inline
+     preservam o corpo normal para não mudar a métrica da linha de texto. */
+  mjx-container[display="true"]{font-size:90%;}
+  /* Monoespaçada encolhe mais que a serifada no mesmo corpo: a `.72em` de
+     antes dava 11,9px no celular. Bloco e trecho inline sobem juntos. */
+  pre{font-size:.88em;}
+  code{font-size:.88em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
+  .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+  /* Pisos de legibilidade no celular. Na tela grande estas vozes menores
+     funcionam como hierarquia; a 375px viravam 10-12px, abaixo do que se le
+     confortavelmente. Só o piso sobe — a hierarquia continua. */
+  th{font-size:.82rem;}
+  .quote p{font-size:.93rem;}
+  .quote-text p{font-size:.95rem;}
+  .box-verdict p{font-size:.96rem;}
+  /* Vozes de rótulo — versalete espacejado em monoespaçada. A 375px elas
+     caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
+     leitura nesse corpo. */
+  .box-badge{font-size:.78rem;}
+  .verdict-tag{font-size:.78rem;}
+  .label-solo{font-size:.74rem;}
+  .card-meta{font-size:.78rem;}
+  .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.85rem;}
+  .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) var(--tab-mix),var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{
+  /* `line-height:0` no contentor: o rotulo e `inline-block` e sentava sobre a
+     linha de texto do pai, o que abria um fio sem tinta entre ele e a moldura. */
+  margin:0;padding:0 0 1.15rem;line-height:0;
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:0;
+  padding:.5rem 1.05rem .44rem;
+  /* Sem borda em cima nem a esquerda: quem faz esses dois lados e a propria
+     moldura da caixa. Com borda propria e recuo negativo, o `overflow:hidden`
+     da caixa cortava o recuo e sobravam duas linhas quase coincidentes. */
+  border:1px solid var(--boxc);border-top:0;border-left:0;border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 15%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.72rem;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato e a faixa vem cheia; `example`/`tip`
+   propoem um cenario e vem so contornada. Mesma cor, mesma tipografia,
+   mesma medida — o que muda e o preenchimento. */
+.box:is(.callout-example,.callout-tip) > .box-title p{
+  background:color-mix(in srgb,var(--boxc) 9%,transparent);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--surface2);
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .85rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.84rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+/* Estas quatro vinham com proporcao fixa e venciam a regra da familia, o
+   que prendia o preenchimento no valor calibrado para o tema claro. Passam
+   ao mesmo token: a diferenca entre os tipos vem do acento, nao daqui. */
+.box:is(.callout-abstract,.callout-info,.callout-tip,.callout-example){
+  background:color-mix(in srgb,var(--boxc) var(--tab-mix),var(--bg));
+}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-failure{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box.callout-danger{background:color-mix(in srgb,var(--boxc) 7%,var(--surface));border-left-width:6px;}
+.box.callout-bug{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+.box.callout-failure{border-left-style:dashed;}
+.box.callout-danger{border-left-style:solid;}
+.box.callout-bug{border-left-style:double;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 1.15rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.82rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<link rel="icon" href="../assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-light-512.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-dark-512.png" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t="light";document.documentElement.dataset.theme=t})();</script><style>@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../assets/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* ==========================================================================
+   Second Brain Atlas — public essay overlay
+
+   Contract:
+   - scripts/essay_template.html owns the essay body and components.
+   - This file only maps theme tokens and styles Atlas-only chrome.
+   - Light = white + Atlas blue.
+   - Dark = near-black + restrained gold.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]),
+:root[data-theme="light"] {
+  --bg:#ffffff;
+  --surface:#f7f9fc;
+  --surface2:#edf2f8;
+  --border:#d6dee9;
+  --text:#2b3645;
+  --text-dim:#66758a;
+  --text-bright:#0e1928;
+  --gold:#2f5fb0;
+  --gold-dim:#234a86;
+  --rust:#8e4636;
+  --rust-bright:#a04030;
+  --accent:#35708a;
+  --amber:#7a5a18;
+  /* Claro: a caixa de destaque continua neutra. */
+  --box-bg:var(--surface);
+  --box-verdict-bg:var(--surface2);
+
+  --sb-bg:#ffffff;
+  --sb-surface:#ffffff;
+  --sb-surface-soft:#f7f9fc;
+  --sb-text:#172235;
+  --sb-muted:#607087;
+  --sb-line:rgba(23,34,53,.14);
+  --sb-line-strong:rgba(23,34,53,.26);
+  --sb-primary:#2f5fb0;
+  --sb-primary-soft:rgba(47,95,176,.09);
+  --sb-shadow:0 18px 54px rgba(24,45,78,.12);
+}
+
+:root[data-theme="dark"] {
+  --bg:#090909;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#303030;
+  --text:#d8d4cd;
+  --text-dim:#979187;
+  --text-bright:#f2eee7;
+  --gold:#c9a45c;
+  --gold-dim:#8a6b33;
+  --rust:#9a4938;
+  --rust-bright:#bd5a42;
+  --accent:#5b95ac;
+  --amber:#a77a2e;
+  /* Escuro: ouro do Atlas em opacidade mínima, o mesmo gesto do export
+     standalone, só com o gold do site (#c9a45c) em vez do #b08b4f. */
+  --box-bg:rgba(201,164,92,.055);
+  --box-verdict-bg:rgba(201,164,92,.10);
+
+  --sb-bg:#090909;
+  --sb-surface:#121212;
+  --sb-surface-soft:#181818;
+  --sb-text:#f0ede7;
+  --sb-muted:#aaa39a;
+  --sb-line:rgba(240,237,231,.14);
+  --sb-line-strong:rgba(240,237,231,.25);
+  --sb-primary:#c9a45c;
+  --sb-primary-soft:rgba(201,164,92,.10);
+  --sb-shadow:0 24px 70px rgba(0,0,0,.46);
+}
+
+html,body{background:var(--bg);}
+body{padding-top:56px;}
+
+/* Public cover: the only intentional visual departure from standalone export. */
+:root:not([data-theme="dark"]) .masthead,
+:root[data-theme="light"] .masthead{
+  background:#ffffff !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="dark"] .masthead{
+  background:#090909 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+.masthead .hero-title{color:var(--text-bright) !important;}
+.masthead-rule{border-top-color:var(--gold) !important;}
+.stripe{
+  height:3px !important;
+  background:linear-gradient(90deg,
+    color-mix(in srgb,var(--gold) 20%,transparent),
+    var(--gold),
+    color-mix(in srgb,var(--gold) 20%,transparent)) !important;
+}
+
+/* Atlas owns these controls on public pages. */
+#sbThemeToggle,#sbToTop,body > .sb-progress > .sb-progress-fill{display:none !important;}
+
+.sb-bar{
+  position:fixed;inset:0 0 auto 0;z-index:60;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 clamp(16px,4vw,40px);
+  border-bottom:1px solid var(--sb-line);
+  background:color-mix(in srgb,var(--sb-bg) 90%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.sb-brand{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--sb-text) !important;font-weight:700;font-size:14px;
+  text-decoration:none !important;
+}
+.sb-mark{
+  display:grid;place-items:center;width:27px;height:27px;
+  border:1px solid color-mix(in srgb,var(--sb-primary) 42%,transparent);
+  border-radius:8px;color:var(--sb-primary);background:var(--sb-primary-soft);
+  font-size:10px;font-weight:800;
+}
+/* A marca dentro do chip, no mesmo gesto do cabeçalho do catálogo. Aqui a
+   folha é EMBUTIDA na página do essay, cuja base é `essays/`, então o caminho
+   sobe um nível — ao contrário do site.css, que é servido de dentro de
+   `assets/`. */
+.sb-mark{
+  background:url("../assets/icon-32.png") center / 18px 18px no-repeat, var(--sb-primary-soft);
+}
+:root[data-theme="dark"] .sb-mark{
+  background-image:url("../assets/icon-32-dark.png");
+}
+.sb-nav{display:flex;align-items:center;gap:16px;}
+.sb-nav a{color:var(--sb-muted) !important;font-size:13px;text-decoration:none !important;}
+.sb-nav a:hover{color:var(--sb-primary) !important;}
+.sb-nav button{
+  width:32px;height:32px;border:1px solid var(--sb-line);border-radius:9px;
+  background:transparent;color:var(--sb-primary);cursor:pointer;
+}
+.sb-nav button:hover{border-color:var(--sb-primary);}
+
+/* Public progress bar injected by render_public_essay.py. */
+body > .sb-progress:not(:has(.sb-progress-fill)){
+  position:fixed;top:56px;left:0;right:0;z-index:61;height:2px;background:transparent;
+}
+body > .sb-progress:not(:has(.sb-progress-fill)) span{
+  display:block;width:0;height:100%;background:var(--sb-primary);
+}
+
+.sb-toc-fab{
+  position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:61;
+  display:inline-flex;align-items:center;gap:8px;padding:10px 17px;
+  border:1px solid var(--sb-line-strong);border-radius:999px;
+  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);
+  color:var(--sb-text);box-shadow:var(--sb-shadow);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font:650 13px/1 Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer;
+}
+.sb-toc-fab:hover{border-color:var(--sb-primary);}
+.sb-toc-icon{color:var(--sb-primary);}
+
+.sb-toc{
+  position:fixed;right:clamp(16px,3vw,32px);
+  bottom:calc(clamp(16px,3vw,32px) + 54px);z-index:62;
+  width:min(380px,calc(100vw - 32px));max-height:min(65vh,600px);
+  display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--sb-line-strong);border-radius:16px;
+  background:color-mix(in srgb,var(--sb-surface) 98%,transparent);
+  box-shadow:var(--sb-shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-toc[hidden]{display:none !important;}
+.sb-toc header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 17px;border-bottom:1px solid var(--sb-line);color:var(--sb-text);font-size:13px;
+}
+.sb-toc header strong{color:inherit;}
+.sb-toc header button{border:0;background:transparent;color:var(--sb-muted);font-size:20px;cursor:pointer;}
+.sb-toc nav{display:flex;flex-direction:column;padding:9px 8px;overflow-y:auto;}
+.sb-toc a{
+  padding:8px 11px;border-left:2px solid transparent;border-radius:0 8px 8px 0;
+  color:var(--sb-muted) !important;font-size:12.5px;line-height:1.4;text-decoration:none !important;
+}
+.sb-toc a:hover{color:var(--sb-text) !important;background:var(--sb-primary-soft);}
+.sb-toc a.h3{padding-left:23px;font-size:11.5px;}
+.sb-toc a.active{
+  color:var(--sb-primary) !important;border-left-color:var(--sb-primary);background:var(--sb-primary-soft);
+}
+
+.sb-tags,.sb-related{
+  width:min(var(--max-width,760px),calc(100% - 48px));margin-inline:auto;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px;}
+.sb-tag{padding:4px 10px;border:1px solid var(--sb-line);border-radius:999px;color:var(--sb-muted);font-size:11px;}
+.sb-related{margin-top:42px;margin-bottom:76px;padding-top:28px;border-top:1px solid var(--sb-line);}
+.sb-related h2{
+  margin:0 0 16px;color:var(--sb-text);
+  font:700 18px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.sb-related-card{
+  display:flex;flex-direction:column;gap:7px;padding:15px 16px;
+  border:1px solid var(--sb-line);border-radius:13px;background:var(--sb-surface-soft);
+  color:var(--sb-text) !important;text-decoration:none !important;
+}
+.sb-related-card:hover{
+  border-color:color-mix(in srgb,var(--sb-primary) 55%,var(--sb-line));
+  background:var(--sb-primary-soft);
+}
+.sb-related-card strong{color:var(--sb-text);font-size:13px;}
+.sb-related-card span{color:var(--sb-muted);font-size:12px;line-height:1.45;}
+
+@media(max-width:720px){
+  .sb-bar{padding-inline:14px;}
+  .sb-nav{gap:10px;}
+  .sb-nav a{font-size:12px;}
+  .sb-brand{font-size:13px;}
+  .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
+  .sb-toc-text{display:none;}
+  .sb-related-grid{grid-template-columns:1fr;}
+}
+/* Duas palavras curtas cabem em qualquer telefone. Esconder a segunda tirava
+   o unico caminho para o mapa na tela onde ele mais importa. */
+@media(max-width:520px){
+  .sb-brand{gap:7px;font-size:0;}
+  .sb-nav{gap:14px;}
+  .sb-nav a{font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">Equações Analíticas para os Coeficientes Aerodinâmicos de um Rotor Rígido</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Setembro de 2026</p>
+    <p class="cover-summary">Relações analíticas de teoria de elemento de pá e quantidade de movimento fornecem tração, torque, forças no plano do rotor, momentos e inflow de um rotor rígido sem batimento nem avanço-recuo. A formulação cobre distribuições radiais gerais, inflow uniforme e Coleman, reduções fechadas, tabelas de consulta e um exemplo numérico trimado.</p>
+  </div>
+</header>
+
+<main class="content">
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a href="#1-introdução">1. Introdução</a></li>
+<li><a href="#2-hipóteses-sinais-e-adimensionalização">2. Hipóteses,
+sinais e adimensionalização</a></li>
+<li><a href="#3-cinemática-e-equações-elementares">3. Cinemática e
+equações elementares</a></li>
+<li><a href="#4-inflow-uniforme-e-inflow-de-coleman">4. Inflow uniforme
+e inflow de Coleman</a></li>
+<li><a
+href="#5-momentos-radiais-a-notação-que-compacta-todas-as-fórmulas">5.
+Momentos radiais: a notação que compacta todas as fórmulas</a></li>
+<li><a href="#6-coeficiente-de-tração-ct">6. Coeficiente de tração
+CT</a></li>
+<li><a href="#7-coeficiente-de-torque-induzido-cqi">7. Coeficiente de
+torque induzido CQi</a></li>
+<li><a href="#8-coeficiente-de-torque-de-perfil-cq0">8. Coeficiente de
+torque de perfil CQ0</a></li>
+<li><a href="#9-coeficiente-de-torque-total-cq">9. Coeficiente de torque
+total CQ</a></li>
+<li><a href="#10-coeficiente-de-força-longitudinal-induzida-chi">10.
+Coeficiente de força longitudinal induzida CHi</a></li>
+<li><a href="#11-coeficiente-de-força-longitudinal-de-perfil-ch0">11.
+Coeficiente de força longitudinal de perfil CH0</a></li>
+<li><a href="#12-coeficiente-de-força-longitudinal-total-ch">12.
+Coeficiente de força longitudinal total CH</a></li>
+<li><a href="#13-coeficiente-de-força-lateral-cy">13. Coeficiente de
+força lateral CY</a></li>
+<li><a href="#14-coeficiente-de-momento-de-arfagem-cmy">14. Coeficiente
+de momento de arfagem CMy</a></li>
+<li><a href="#15-coeficiente-de-momento-de-rolamento-cmx">15.
+Coeficiente de momento de rolamento CMx</a></li>
+<li><a href="#16-inflow-induzido-lambda_i">16. Inflow induzido
+lambda_i</a></li>
+<li><a href="#17-inflow-total-lambda">17. Inflow total lambda</a></li>
+<li><a href="#18-coeficiente-de-potência-cp">18. Coeficiente de potência
+CP</a></li>
+<li><a href="#19-figura-de-mérito">19. Figura de mérito</a></li>
+<li><a href="#20-tabela-de-fórmulas-para-inflow-uniforme">20. Tabela de
+fórmulas para inflow uniforme</a></li>
+<li><a href="#21-tabela-de-fórmulas-para-inflow-de-coleman">21. Tabela
+de fórmulas para inflow de Coleman</a></li>
+<li><a href="#22-exemplo-numérico-rotor-genérico-com-ct--002">22.
+Exemplo numérico: rotor genérico com CT = 0,02</a></li>
+<li><a href="#23-limites-de-validade">23. Limites de validade</a></li>
+<li><a href="#24-conclusão">24. Conclusão</a></li>
+</ul>
+<hr />
+<h2 id="1-introdução">1. Introdução</h2>
+<p>A estimativa preliminar de um rotor frequentemente exige resultados
+antes de existir um modelo de alta fidelidade. Com poucas entradas, é
+possível estimar a ordem de grandeza da tração, do torque, das forças no
+plano do rotor, dos momentos de cubo e do inflow a partir da <a
+href="https://en.wikipedia.org/wiki/Rotor_solidity">solidez</a>, do
+passo, da torção, da <a
+href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>,
+da incidência do disco e de um modelo simples de arrasto. A <a
+href="https://en.wikipedia.org/wiki/Blade_element_theory">teoria de
+elemento de pá</a> fornece a ligação entre a geometria da pá e essas
+cargas.</p>
+<p>Uma formulação de baixa ordem pode preservar a derivação física e
+ainda permitir estimativas rápidas. O nível mais geral compatível com
+integração analítica permite que solidez local, inclinação da curva de
+sustentação e passo variem com o raio. O inflow pode ser uniforme ou
+incluir o gradiente longitudinal de <a
+href="https://ntrs.nasa.gov/citations/19930093086">Coleman–Feingold</a>.
+As equações se reduzem em etapas para pá retangular, inclinação de
+sustentação constante, torção linear, corte de raiz arbitrário, ausência
+de corte de raiz e, por fim, pá sem torção.</p>
+<p>O rotor é deliberadamente rígido. Não há <a
+href="https://en.wikipedia.org/wiki/Flapping_hinge">batimento</a>,
+avanço-recuo, conicidade, deformação elástica ou movimento cíclico da
+pá. Essa escolha elimina a realimentação entre cargas aerodinâmicas e
+movimento da pá e isola a contribuição aerodinâmica direta. Como
+consequência, os momentos e as forças no plano do rotor não representam
+um rotor articulado ou flexível em equilíbrio, pois o batimento
+redistribui a carga azimutal nesses sistemas.</p>
+<p>A base matemática segue a organização clássica de <a
+href="https://doi.org/10.1017/CBO9781139235655">Johnson</a> [1]:
+cinemática local, elemento de pá, média azimutal e integração radial.
+Para o gradiente de inflow, usa-se a forma adotada pelo <a
+href="https://rotorcraft.arc.nasa.gov/ndarc/index.php/reports-and-papers">NDARC</a>
+[2], baseada no campo induzido de Coleman, Feingold e Stempin [3]. As
+reduções de baixa ordem também seguem a formulação clássica de <a
+href="https://archive.org/details/helicoptertheory0000john_y9s0"><em>Helicopter
+Theory</em></a> [4]. O fechamento entre tração e velocidade induzida vem
+da <a href="https://en.wikipedia.org/wiki/Momentum_theory">teoria de
+quantidade de movimento</a>.</p>
+<p>Quase todas as fórmulas relevantes podem ser escritas com três
+famílias de momentos radiais. Uma vez calculados esses momentos, alterar
+torção, afilamento de corda, corte de raiz ou distribuição de
+propriedades deixa de exigir uma nova derivação completa.</p>
+<h2 id="2-hipóteses-sinais-e-adimensionalização">2. Hipóteses, sinais e
+adimensionalização</h2>
+<p>Considere um rotor de raio <span class="math inline">\(R\)</span>,
+área de disco <span class="math inline">\(A=\pi R^2\)</span>, número de
+pás <span class="math inline">\(B\)</span> e velocidade angular <span
+class="math inline">\(\Omega\)</span>. A coordenada radial adimensional
+é</p>
+<p><span class="math display">\[
+x=\frac{r}{R}.
+\]</span></p>
+<p>A região aerodinâmica começa em <span
+class="math inline">\(x_0=r_0/R\)</span> e termina em <span
+class="math inline">\(x=1\)</span>.</p>
+<p>Para uma pá com distribuição radial de corda <span
+class="math inline">\(c(x)\)</span>, define-se a solidez local</p>
+<p><span class="math display">\[
+\boxed{
+\sigma(x)=\frac{B\,c(x)}{\pi R}.
+}
+\]</span></p>
+<p>As fórmulas fechadas usam uma solidez <span
+class="math inline">\(\sigma\)</span> associada a uma <strong>planform
+de referência</strong>. Essa planform ocupa <span
+class="math inline">\(0\leq x\leq1\)</span> e prolonga para dentro do
+corte de raiz a mesma lei radial de corda adotada na região
+aerodinâmica. Se a lei de corda não tiver continuação natural, a
+planform de referência deve ser especificada explicitamente.</p>
+<p>Se <span class="math inline">\(S_{\mathrm{ref}}\)</span> é a área
+total das <span class="math inline">\(B\)</span> pás da planform de
+referência,</p>
+<p><span class="math display">\[
+S_{\mathrm{ref}}
+=
+B\int_0^R c_{\mathrm{ref}}(r)\,dr,
+\]</span></p>
+<p>a solidez é</p>
+<p><span class="math display">\[
+\boxed{
+\sigma
+=\frac{S_{\mathrm{ref}}}{A}
+=\frac{S_{\mathrm{ref}}}{\pi R^2}.
+}
+\]</span></p>
+<p>Defina a corda média da planform de referência por</p>
+<p><span class="math display">\[
+\bar c_{\mathrm{ref}}
+=\frac{1}{R}\int_0^R c_{\mathrm{ref}}(r)\,dr.
+\]</span></p>
+<p>A mesma solidez pode ser escrita como</p>
+<p><span class="math display">\[
+\boxed{
+\sigma
+=\frac{B\bar c_{\mathrm{ref}}}{\pi R}.
+}
+\]</span></p>
+<p>A distribuição de corda da planform de referência pode ser
+normalizada por</p>
+<p><span class="math display">\[
+\hat c(x)
+=\frac{c_{\mathrm{ref}}(x)}{\bar c_{\mathrm{ref}}},
+\qquad
+\int_0^1\hat c(x)\,dx=1.
+\]</span></p>
+<p>Na região aerodinâmica,</p>
+<p><span class="math display">\[
+\boxed{
+\sigma(x)=\sigma\hat c(x),
+\qquad
+x_0\leq x\leq1.
+}
+\]</span></p>
+<p>O corte de raiz não altera <span
+class="math inline">\(\sigma\)</span>. Ele entra pelos limites de
+integração e, nas fórmulas para pá retangular, pelos fatores <span
+class="math inline">\(J_n\)</span>. Para uma planform retangular, <span
+class="math inline">\(c_{\mathrm{ref}}=c\)</span>, <span
+class="math inline">\(S_{\mathrm{ref}}=BcR\)</span> e</p>
+<p><span class="math display">\[
+\boxed{
+\sigma=\frac{Bc}{\pi R}.
+}
+\]</span></p>
+<p>A razão de avanço é</p>
+<p><span class="math display">\[
+\boxed{\mu=\frac{V_h}{\Omega R}},
+\]</span></p>
+<p>onde <span class="math inline">\(V_h\)</span> é a componente da
+velocidade do ar no plano do rotor. A componente axial externa é
+adimensionalizada por</p>
+<p><span class="math display">\[
+\boxed{\mu_z=\frac{V_z}{\Omega R}}.
+\]</span></p>
+<p>Adota-se <span class="math inline">\(\alpha&gt;0\)</span> para vento
+vindo de baixo. Para uma incidência <span
+class="math inline">\(\alpha\)</span> do escoamento,</p>
+<p><span class="math display">\[
+\boxed{\mu_z=-\mu\tan\alpha}.
+\]</span></p>
+<p>O inflow induzido médio é <span
+class="math inline">\(\lambda_i&gt;0\)</span> no sentido descendente
+através do disco em regime normal. O inflow total médio é</p>
+<p><span class="math display">\[
+\boxed{\lambda=\mu_z+\lambda_i}.
+\]</span></p>
+<p>Os coeficientes globais são</p>
+<p><span class="math display">\[
+C_T=\frac{T}{\rho A(\Omega R)^2},
+\qquad
+C_Q=\frac{Q}{\rho A(\Omega R)^2R},
+\]</span></p>
+<p><span class="math display">\[
+C_H=\frac{H}{\rho A(\Omega R)^2},
+\qquad
+C_Y=\frac{Y}{\rho A(\Omega R)^2},
+\]</span></p>
+<p><span class="math display">\[
+C_{Mx}=\frac{M_x}{\rho A(\Omega R)^2R},
+\qquad
+C_{My}=\frac{M_y}{\rho A(\Omega R)^2R}.
+\]</span></p>
+<p>Adota-se <span class="math inline">\(C_H&gt;0\)</span> para força
+longitudinal para trás, <span class="math inline">\(C_Y&gt;0\)</span>
+para a direita, <span class="math inline">\(C_{Mx}&gt;0\)</span> para
+rolamento que baixa a asa direita e <span
+class="math inline">\(C_{My}&gt;0\)</span> para arfagem de nariz para
+cima.</p>
+<p>As hipóteses aerodinâmicas usadas nas fórmulas fechadas são:</p>
+<ul>
+<li>sustentação bidimensional linear, <span
+class="math inline">\(C_l=a(x)\alpha_e\)</span></li>
+<li>pequenos ângulos de inflow</li>
+<li>sem estol e sem correção explícita de compressibilidade</li>
+<li><span class="math inline">\(C_{d0}\)</span> representando o arrasto
+de perfil médio</li>
+<li>sem gradiente lateral de inflow</li>
+<li>sem comandos cíclicos</li>
+<li>sem batimento e sem avanço-recuo.</li>
+</ul>
+<p>Quando uma fórmula integral de perfil é usada, a velocidade radial e
+o fluxo reverso são mantidos. Quando uma fórmula fechada simplificada é
+usada, a aproximação <span class="math inline">\(W\simeq u_T\)</span> é
+aplicada.</p>
+<h2 id="3-cinemática-e-equações-elementares">3. Cinemática e equações
+elementares</h2>
+<p>Com o azimute <span class="math inline">\(\psi\)</span> medido no
+sentido de rotação, a componente tangencial adimensional da velocidade
+relativa é</p>
+<p><span class="math display">\[
+\boxed{u_T=x+\mu\sin\psi}.
+\]</span></p>
+<p>A componente radial é</p>
+<p><span class="math display">\[
+\boxed{u_R=\mu\cos\psi}.
+\]</span></p>
+<p>A distribuição de passo é escrita como <span
+class="math inline">\(\theta(x)\)</span> e pode ser arbitrária.</p>
+<p>Para pequenos ângulos, o ângulo de inflow local é aproximadamente</p>
+<p><span class="math display">\[
+\phi\simeq\frac{\lambda_d}{u_T},
+\]</span></p>
+<p>e o ângulo de ataque efetivo é</p>
+<p><span class="math display">\[
+\alpha_e\simeq\theta(x)-\frac{\lambda_d}{u_T}.
+\]</span></p>
+<p>Com <span class="math inline">\(C_l=a(x)\alpha_e\)</span>, a força
+normal elementar adimensional torna-se</p>
+<p><span class="math display">\[
+\boxed{
+dC_N=
+\frac{\sigma(x)a(x)}{4\pi}
+\left[
+\theta(x)u_T^2-\lambda_d u_T
+\right]dx\,d\psi.
+}
+\]</span></p>
+<p>A integração de <span class="math inline">\(dC_N\)</span> fornece
+<span class="math inline">\(C_T\)</span>, <span
+class="math inline">\(C_{Mx}\)</span> e <span
+class="math inline">\(C_{My}\)</span>.</p>
+<p>A parcela tangencial associada à inclinação da sustentação pode ser
+escrita, na mesma ordem de aproximação, como</p>
+<p><span class="math display">\[
+\boxed{
+dC_{F,i}=
+\frac{\sigma(x)a(x)}{4\pi}
+\left[
+\theta(x)\lambda_d u_T-\lambda_d^2
+\right]dx\,d\psi.
+}
+\]</span></p>
+<p>Ela gera <span class="math inline">\(C_{Qi}\)</span>, <span
+class="math inline">\(C_{Hi}\)</span> e <span
+class="math inline">\(C_Y\)</span> na formulação BET simplificada.</p>
+<p>Para o perfil, a forma fechada mais simples usa</p>
+<p><span class="math display">\[
+\boxed{
+dC_{F,0}=
+\frac{\sigma(x)C_{d0}(x)}{4\pi}u_T^2\,dx\,d\psi.
+}
+\]</span></p>
+<p>Para manter velocidade radial, velocidade axial externa e fluxo
+reverso, usa-se</p>
+<p><span class="math display">\[
+\boxed{
+W=
+\sqrt{
+u_T^2+u_R^2+\mu_z^2
+}.
+}
+\]</span></p>
+<p>A formulação integral de perfil conserva o sinal de <span
+class="math inline">\(u_T\)</span>. Assim, a região de fluxo reverso não
+exige uma regra separada.</p>
+<p>As médias azimutais que aparecem repetidamente são</p>
+<p><span class="math display">\[
+\left\langle u_T^2\right\rangle
+=
+x^2+\frac{\mu^2}{2},
+\]</span></p>
+<p><span class="math display">\[
+\left\langle \lambda_d u_T\right\rangle
+=
+\lambda x,
+\]</span></p>
+<p><span class="math display">\[
+\left\langle \lambda_d^2\right\rangle
+=
+\lambda^2+\frac{L^2x^2}{2},
+\]</span></p>
+<p><span class="math display">\[
+\left\langle \lambda_d u_T\sin\psi\right\rangle
+=
+\frac{\lambda\mu}{2},
+\]</span></p>
+<p><span class="math display">\[
+\left\langle \lambda_d u_T\cos\psi\right\rangle
+=
+\frac{Lx^2}{2},
+\]</span></p>
+<p><span class="math display">\[
+\left\langle \lambda_d^2\cos\psi\right\rangle
+=
+\lambda Lx.
+\]</span></p>
+<p>Essas identidades explicam por que Coleman altera alguns coeficientes
+e deixa outros invariantes.</p>
+<h2 id="4-inflow-uniforme-e-inflow-de-coleman">4. Inflow uniforme e
+inflow de Coleman</h2>
+<h3 id="inflow-uniforme">Inflow uniforme</h3>
+<p>No modelo uniforme,</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_d(x,\psi)=\lambda.
+}
+\]</span></p>
+<p>Não existe primeiro harmônico longitudinal:</p>
+<p><span class="math display">\[
+\boxed{L=0}.
+\]</span></p>
+<p>Esse modelo preserva apenas o valor médio do inflow.</p>
+<h3 id="colemanfeingold">Coleman–Feingold</h3>
+<p>A aproximação longitudinal de Coleman escreve o campo como</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_d(x,\psi)=\lambda+Lx\cos\psi.
+}
+\]</span></p>
+<p>O primeiro harmônico é</p>
+<p><span class="math display">\[
+\boxed{L=K_x\lambda_i},
+\]</span></p>
+<p>com</p>
+<p><span class="math display">\[
+\boxed{
+K_x=
+\frac{15\pi}{32}
+\frac{\mu}
+{\sqrt{\mu^2+\lambda^2}+|\lambda|}.
+}
+\]</span></p>
+<p>O fator <span class="math inline">\(15\pi/32\)</span> e a dependência
+com o ângulo de inclinação da esteira vêm do campo induzido de Coleman,
+Feingold e Stempin. O NDARC usa essa estrutura como uma aproximação
+simples de inflow não uniforme.</p>
+<p><span class="math inline">\(\lambda_i\)</span> controla o nível médio
+de velocidade induzida, enquanto <span class="math inline">\(L\)</span>
+controla a assimetria longitudinal. Um coeficiente integrado pode
+depender de uma ou de ambas as grandezas.</p>
+<h2 id="5-momentos-radiais-a-notação-que-compacta-todas-as-fórmulas">5.
+Momentos radiais: a notação que compacta todas as fórmulas</h2>
+<p>A geometria geral pode ser absorvida em três famílias de
+integrais.</p>
+<p>Defina os momentos aerodinâmicos</p>
+<p><span class="math display">\[
+\boxed{
+\mathcal A_n=
+\int_{x_0}^{1}
+\sigma(x)a(x)x^n\,dx
+}
+\]</span></p>
+<p>e os momentos de passo</p>
+<p><span class="math display">\[
+\boxed{
+\mathcal T_n=
+\int_{x_0}^{1}
+\sigma(x)a(x)\theta(x)x^n\,dx.
+}
+\]</span></p>
+<p>Para o arrasto de perfil, defina</p>
+<p><span class="math display">\[
+\boxed{
+\mathcal D_n=
+\int_{x_0}^{1}
+\sigma(x)C_{d0}(x)x^n\,dx.
+}
+\]</span></p>
+<p>Essas três famílias bastam para as fórmulas fechadas.</p>
+<p>Para pá retangular, <span
+class="math inline">\(\sigma(x)=\sigma\)</span> na região aerodinâmica.
+Com <span class="math inline">\(a\)</span> e <span
+class="math inline">\(C_{d0}\)</span> constantes, define-se</p>
+<p><span class="math display">\[
+\boxed{
+J_n=
+\int_{x_0}^{1}x^n\,dx
+=
+\frac{1-x_0^{n+1}}{n+1}.
+}
+\]</span></p>
+<p>Então</p>
+<p><span class="math display">\[
+\mathcal A_n=\sigma aJ_n,
+\qquad
+\mathcal D_n=\sigma C_{d0}J_n.
+\]</span></p>
+<p>Torção linear corresponde a gradiente de torção constante:</p>
+<p><span class="math display">\[
+\boxed{
+\theta(x)=\theta_0+\theta_t x,
+\qquad
+\theta_t=\frac{d\theta}{dx}=\text{constante}.
+}
+\]</span></p>
+<p>Nesse caso,</p>
+<p><span class="math display">\[
+\boxed{
+\mathcal T_n=
+\sigma a
+\left(
+\theta_0J_n+\theta_tJ_{n+1}
+\right).
+}
+\]</span></p>
+<p>Sem corte de raiz, <span class="math inline">\(x_0=0\)</span> e</p>
+<p><span class="math display">\[
+J_0=1,\qquad
+J_1=\frac12,\qquad
+J_2=\frac13,\qquad
+J_3=\frac14,\qquad
+J_4=\frac15.
+\]</span></p>
+<p>Sem torção, <span class="math inline">\(\theta_t=0\)</span>.</p>
+<p>Essa notação permite derivar cada coeficiente uma única vez e aplicar
+as simplificações por substituição. Quando um degrau não altera
+determinado coeficiente, a etapa é mantida explicitamente e a expressão
+permanece inalterada.</p>
+<h3 id="escadas-independentes-de-simplificação">Escadas independentes de
+simplificação</h3>
+<p>A simplificação geométrica e a fidelidade aerodinâmica são
+independentes.</p>
+<p>A <strong>escada geométrica</strong> é:</p>
+<ol type="1">
+<li>distribuição radial arbitrária: <span
+class="math inline">\(\sigma(x)\)</span>, <span
+class="math inline">\(a(x)\)</span>, <span
+class="math inline">\(\theta(x)\)</span> e <span
+class="math inline">\(C_{d0}(x)\)</span>, condensadas em <span
+class="math inline">\(\mathcal A_n\)</span>, <span
+class="math inline">\(\mathcal T_n\)</span> e <span
+class="math inline">\(\mathcal D_n\)</span>.</li>
+<li>pá retangular, <span class="math inline">\(a\)</span> e <span
+class="math inline">\(C_{d0}\)</span> constantes, torção linear e corte
+de raiz arbitrário, condensados em <span
+class="math inline">\(J_n\)</span>.</li>
+<li>ausência de corte de raiz, ainda permitindo torção linear.</li>
+<li>ausência de torção, produzindo a fórmula de bolso mais curta.</li>
+</ol>
+<p>Para os termos de perfil existe uma <strong>escada de
+fidelidade</strong> de três níveis:</p>
+<ol type="1">
+<li>integral vetorial completa do arrasto, mantendo velocidade radial,
+velocidade axial externa e fluxo reverso.</li>
+<li>fechamento analítico de escoamento radial (<em>yawed flow</em> ou
+<em>spanwise flow</em>), com a integral de perda de perfil e sua redução
+de Bennett.</li>
+<li>BET tangencial mínima, com <span class="math inline">\(W\simeq
+u_T\)</span> e sem a contribuição de arrasto associada ao escoamento
+radial.</li>
+</ol>
+<p>Torção não aparece explicitamente em <span
+class="math inline">\(C_{Q0}\)</span> e <span
+class="math inline">\(C_{H0}\)</span> enquanto <span
+class="math inline">\(C_{d0}\)</span> for constante. Se uma polar <span
+class="math inline">\(C_d(\alpha,M,Re)\)</span> for usada, passo, torção
+e distribuição de carga voltam a alterar o arrasto local.</p>
+<h2 id="6-coeficiente-de-tração-ct">6. Coeficiente de tração CT</h2>
+<p>A tração é a integral da força normal:</p>
+<p><span class="math display">\[
+C_T=
+\int_0^{2\pi}
+\int_{x_0}^{1}
+dC_N.
+\]</span></p>
+<p>Substituindo a equação elementar e fazendo a média azimutal,</p>
+<p><span class="math display">\[
+C_T=
+\frac12
+\int_{x_0}^{1}
+\sigma a
+\left[
+\theta(x)
+\left(
+x^2+\frac{\mu^2}{2}
+\right)
+-\lambda x
+\right]dx.
+\]</span></p>
+<p>O termo de Coleman <span class="math inline">\(Lx\cos\psi\)</span>
+desaparece porque sua média com <span class="math inline">\(u_T\)</span>
+é nula. Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_T=
+\frac12
+\left[
+\mathcal T_2
++\frac{\mu^2}{2}\mathcal T_0
+-\lambda\mathcal A_1
+\right].
+}
+\]</span></p>
+<h3 id="inflow-uniforme-1">Inflow uniforme</h3>
+<p><span class="math display">\[
+\boxed{
+C_{T,\mathrm{unif}}=
+\frac12
+\left[
+\mathcal T_2
++\frac{\mu^2}{2}\mathcal T_0
+-\lambda\mathcal A_1
+\right].
+}
+\]</span></p>
+<h3 id="coleman">Coleman</h3>
+<p><span class="math display">\[
+\boxed{
+C_{T,\mathrm{Coleman}}=
+\frac12
+\left[
+\mathcal T_2
++\frac{\mu^2}{2}\mathcal T_0
+-\lambda\mathcal A_1
+\right].
+}
+\]</span></p>
+<p>Coleman modifica a distribuição local de tração, mas não a tração
+média nesta ordem de aproximação.</p>
+<h3 id="pá-retangular-com-torção-linear-e-corte-de-raiz">Pá retangular
+com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_T=
+\frac{\sigma a}{2}
+\left[
+\theta_0
+\left(
+J_2+\frac{\mu^2J_0}{2}
+\right)
++
+\theta_t
+\left(
+J_3+\frac{\mu^2J_1}{2}
+\right)
+-\lambda J_1
+\right].
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-com-torção-linear">Sem corte de raiz, com
+torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_T=
+\frac{\sigma a}{2}
+\left[
+\theta_0
+\left(
+\frac13+\frac{\mu^2}{2}
+\right)
++
+\theta_t
+\left(
+\frac14+\frac{\mu^2}{4}
+\right)
+-\frac{\lambda}{2}
+\right].
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-e-sem-torção">Sem corte de raiz e sem
+torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_T=
+\frac{\sigma a}{2}
+\left[
+\theta_0
+\left(
+\frac13+\frac{\mu^2}{2}
+\right)
+-\frac{\lambda}{2}
+\right].
+}
+\]</span></p>
+<p>Essa forma fornece uma estimativa fechada de baixa ordem.</p>
+<h3 id="inversão-para-o-coletivo">Inversão para o coletivo</h3>
+<p>Em problemas de trim, frequentemente a incógnita útil é o coletivo
+<span class="math inline">\(\theta_0\)</span>. Para pá retangular,
+torção linear e corte de raiz arbitrário,</p>
+<p><span class="math display">\[
+\boxed{
+\theta_0=
+\frac{
+\dfrac{2C_T}{\sigma a}
++\lambda J_1
+-\theta_t\left(J_3+\dfrac{\mu^2J_1}{2}\right)
+}
+{J_2+\dfrac{\mu^2J_0}{2}}.
+}
+\]</span></p>
+<p>Sem corte de raiz,</p>
+<p><span class="math display">\[
+\boxed{
+\theta_0=
+\frac{
+\dfrac{2C_T}{\sigma a}
++\dfrac{\lambda}{2}
+-\theta_t\left(\dfrac14+\dfrac{\mu^2}{4}\right)
+}
+{\dfrac13+\dfrac{\mu^2}{2}}.
+}
+\]</span></p>
+<p>Sem torção,</p>
+<p><span class="math display">\[
+\boxed{
+\theta_0=
+\frac{
+\dfrac{2C_T}{\sigma a}+\dfrac{\lambda}{2}
+}
+{\dfrac13+\dfrac{\mu^2}{2}}.
+}
+\]</span></p>
+<h2 id="7-coeficiente-de-torque-induzido-cqi">7. Coeficiente de torque
+induzido CQi</h2>
+<p>Na BET simplificada, o torque induzido vem da força tangencial
+induzida multiplicada pelo braço <span
+class="math inline">\(x\)</span>:</p>
+<p><span class="math display">\[
+C_{Qi}^{\mathrm{BET}}
+=
+\int x\,dC_{F,i}.
+\]</span></p>
+<p>Após a média azimutal,</p>
+<p><span class="math display">\[
+C_{Qi}^{\mathrm{BET}}
+=
+\frac12
+\int_{x_0}^{1}
+\sigma a
+\left[
+\theta\lambda x^2
+-\lambda^2x
+-\frac{L^2x^3}{2}
+\right]dx.
+\]</span></p>
+<p>Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{BET}}
+=
+\frac12
+\left[
+\lambda\mathcal T_2
+-\lambda^2\mathcal A_1
+-\frac{L^2}{2}\mathcal A_3
+\right].
+}
+\]</span></p>
+<p>O termo <span class="math inline">\(L^2\)</span> aparece porque o
+torque depende de <span class="math inline">\(\lambda_d^2\)</span>. Um
+primeiro harmônico de média zero pode desaparecer em <span
+class="math inline">\(C_T\)</span> e ainda contribuir para potência.</p>
+<h3 id="inflow-uniforme-2">Inflow uniforme</h3>
+<p>Com <span class="math inline">\(L=0\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Qi,\mathrm{unif}}^{\mathrm{BET}}
+=
+\frac12
+\left[
+\lambda\mathcal T_2
+-\lambda^2\mathcal A_1
+\right].
+}
+\]</span></p>
+<h3 id="coleman-1">Coleman</h3>
+<p>Com <span class="math inline">\(L=K_x\lambda_i\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Qi,\mathrm{Coleman}}^{\mathrm{BET}}
+=
+\frac12
+\left[
+\lambda\mathcal T_2
+-\lambda^2\mathcal A_1
+-\frac{(K_x\lambda_i)^2}{2}\mathcal A_3
+\right].
+}
+\]</span></p>
+<h3 id="bet-pá-retangular-com-torção-linear-e-corte-de-raiz">BET: pá
+retangular com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{BET}}
+=
+\frac{\sigma a}{2}
+\left[
+\lambda
+\left(
+\theta_0J_2+\theta_tJ_3
+\right)
+-\lambda^2J_1
+-\frac{L^2J_3}{2}
+\right].
+}
+\]</span></p>
+<h3 id="bet-sem-corte-de-raiz-com-torção-linear">BET: sem corte de raiz,
+com torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{BET}}
+=
+\frac{\sigma a}{2}
+\left[
+\lambda
+\left(
+\frac{\theta_0}{3}+\frac{\theta_t}{4}
+\right)
+-\frac{\lambda^2}{2}
+-\frac{L^2}{8}
+\right].
+}
+\]</span></p>
+<h3 id="bet-sem-corte-de-raiz-e-sem-torção">BET: sem corte de raiz e sem
+torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{BET}}
+=
+\frac{\sigma a}{2}
+\left[
+\frac{\theta_0\lambda}{3}
+-\frac{\lambda^2}{2}
+-\frac{L^2}{8}
+\right].
+}
+\]</span></p>
+<h3 id="forma-energética-geral">Forma energética geral</h3>
+<p>Para estimativa de potência, existe uma segunda forma útil, baseada
+em energia:</p>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{energia}}
+=
+K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\mu C_{Hi}.
+}
+\]</span></p>
+<p><span class="math inline">\(K_{\mathrm{ind}}\)</span> é um fator de
+potência induzida. O termo <span class="math inline">\(\mu_zC_T\)</span>
+representa trabalho associado à velocidade axial externa. O termo <span
+class="math inline">\(-\mu C_{Hi}\)</span> retira o trabalho
+translacional da corrente livre sobre a força longitudinal, isolando o
+torque de eixo.</p>
+<p>As duas formas não devem ser somadas. A forma BET explicita o termo
+<span class="math inline">\(L^2\)</span>. A forma de energia representa
+perdas não ideais por <span
+class="math inline">\(K_{\mathrm{ind}}\)</span> e é mais conveniente
+para estimativas de potência total.</p>
+<h3 id="forma-energética-por-momentos-radiais">Forma energética por
+momentos radiais</h3>
+<p>Substituindo <span class="math inline">\(C_{Hi}=\mu\lambda\mathcal
+T_0/4\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\mu^2\lambda}{4}\mathcal T_0.
+}
+\]</span></p>
+<h3
+id="energia-pá-retangular-com-torção-linear-e-corte-de-raiz">Energia: pá
+retangular com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\sigma a\mu^2\lambda}{4}
+(\theta_0J_0+\theta_tJ_1).
+}
+\]</span></p>
+<h3 id="energia-sem-corte-de-raiz-com-torção-linear">Energia: sem corte
+de raiz, com torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\sigma a\mu^2\lambda}{4}
+\left(\theta_0+\frac{\theta_t}{2}\right).
+}
+\]</span></p>
+<h3 id="energia-sem-corte-de-raiz-e-sem-torção">Energia: sem corte de
+raiz e sem torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\sigma a\theta_0\mu^2\lambda}{4}.
+}
+\]</span></p>
+<h2 id="8-coeficiente-de-torque-de-perfil-cq0">8. Coeficiente de torque
+de perfil CQ0</h2>
+<p>O arrasto de perfil produz simultaneamente torque de eixo e força
+longitudinal. Por isso, em voo à frente, é útil distinguir o
+<strong>torque de perfil</strong> <span
+class="math inline">\(C_{Q0}\)</span> da <strong>perda aerodinâmica
+total de perfil</strong>. Para <span
+class="math inline">\(\mu_z\simeq0\)</span>, defina</p>
+<p><span class="math display">\[
+\boxed{
+C_{E0}\equiv C_{Q0}+\mu C_{H0}.
+}
+\]</span></p>
+<p>Os termos de perfil admitem três níveis de fidelidade, que devem ser
+usados de forma consistente em <span class="math inline">\(C_Q\)</span>
+e <span class="math inline">\(C_H\)</span>.</p>
+<h3 id="nível-1-integral-vetorial-completa">Nível 1: integral vetorial
+completa</h3>
+<p>Mantendo velocidade radial, velocidade axial externa e fluxo
+reverso,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm{int}}
+=\frac12
+\int_{x_0}^{1}
+\sigma(x)C_{d0}(x)
+\left\langle W\,u_T\,x\right\rangle_\psi dx,
+}
+\]</span></p>
+<p><span class="math display">\[
+W=\sqrt{u_T^2+u_R^2+\mu_z^2}.
+\]</span></p>
+<p>A integral vetorial é indicada quando a geometria radial é
+arbitrária, <span class="math inline">\(\mu\)</span> é alto, <span
+class="math inline">\(\mu_z\)</span> não é desprezível ou existe região
+importante de fluxo reverso.</p>
+<h3 id="nível-2-escoamento-radial-sem-corte-de-raiz">Nível 2: escoamento
+radial sem corte de raiz</h3>
+<p>Glauert escreveu a perda de energia de perfil incluindo a componente
+radial da velocidade da seção [5]. Para pá retangular, <span
+class="math inline">\(C_{d0}\)</span> constante, sem corte de raiz e
+<span class="math inline">\(\mu_z\simeq0\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+C_{E0}=\frac{\sigma C_{d0}}8F_P(\mu).
+}
+\]</span></p>
+<p>Ignorando velocidade radial e fluxo reverso, a integração tangencial
+fornece</p>
+<p><span class="math display">\[
+\boxed{F_P^{\mathrm{tan}}=1+3\mu^2.}
+\]</span></p>
+<p>Mantendo a velocidade radial, a forma de Glauert é [5]</p>
+<p><span class="math display">\[
+\boxed{
+\begin{aligned}
+F_P^{\mathrm G}(\mu)
+={}&amp;\frac12(1+6\mu^2+\mu^4)
++\frac14(2+5\mu^2)\sqrt{1+\mu^2}\\
+&amp;+\frac38\mu^4
+\ln\!\left(
+\frac{\sqrt{1+\mu^2}+1}
+{\sqrt{1+\mu^2}-1}
+\right),
+\end{aligned}
+}
+\qquad 0&lt;\mu&lt;1.
+\]</span></p>
+<p>No limite de baixa velocidade, essa integral tende a <span
+class="math inline">\(F_P=1+4.5\mu^2+O(\mu^4)\)</span>. Bennett
+desenvolveu uma expansão de pequeno <span
+class="math inline">\(\mu\)</span> e verificou que ela é bem
+representada pela forma compacta [5]</p>
+<p><span class="math display">\[
+\boxed{
+F_P^{\mathrm B}\simeq1+4.65\mu^2.
+}
+\]</span></p>
+<p>Portanto, a diferença em relação à integração puramente tangencial
+é</p>
+<p><span class="math display">\[
+\boxed{4.65-3=1.65.}
+\]</span></p>
+<p>Esse <span class="math inline">\(1.65\mu^2\)</span> representa a
+correção de perda associada ao escoamento radial (<em>yawed flow</em> ou
+<em>spanwise flow</em>). Ele não é um fator de potência induzida.</p>
+<p>A decomposição clássica separa a força de perfil em <span
+class="math inline">\(H_1\)</span>, produzida pelo arrasto chordwise, e
+<span class="math inline">\(H_2\)</span>, produzida pelo arrasto viscoso
+associado ao escoamento radial. Definindo</p>
+<p><span class="math display">\[
+b\equiv\frac{\sigma C_{d0}}8,
+\]</span></p>
+<p>a integração chordwise dá</p>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{(1)}=b(1+\mu^2),
+\qquad
+C_{H1}=2b\mu.
+}
+\]</span></p>
+<p>O termo radial acrescenta</p>
+<p><span class="math display">\[
+\boxed{
+C_{H2}=1.65\,b\mu.
+}
+\]</span></p>
+<p>Como <span class="math inline">\(H_2\)</span> é uma força radial
+(<em>spanwise</em>) de perfil, ela não produz momento direto em torno do
+eixo do rotor. Assim,</p>
+<p><span class="math display">\[
+\boxed{
+C_{H0}^{\mathrm B}=C_{H1}+C_{H2}
+=3.65\,b\mu
+=\frac{3.65\,\sigma C_{d0}}8\mu,
+}
+\]</span></p>
+<p>enquanto</p>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm B}=b(1+\mu^2)
+=\frac{\sigma C_{d0}}8(1+\mu^2).
+}
+\]</span></p>
+<p>O balanço recupera a correção de Bennett:</p>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm B}+\mu C_{H0}^{\mathrm B}
+=b(1+4.65\mu^2).
+}
+\]</span></p>
+<p>O coeficiente <span class="math inline">\(4.65\)</span> é, portanto,
+uma aproximação fechada da integral de perda com escoamento radial.
+Johnson registra erro inferior a <span
+class="math inline">\(1\%\)</span> até aproximadamente <span
+class="math inline">\(\mu=0.35\)</span> e cerca de <span
+class="math inline">\(4\%\)</span> até <span
+class="math inline">\(\mu=0.5\)</span> para a expansão de Bennett
+[5].</p>
+<p>A forma <span class="math inline">\(1.65\)</span>, <span
+class="math inline">\(3.65\)</span> e <span
+class="math inline">\(4.65\)</span> pressupõe a normalização clássica de
+pá retangular, <span class="math inline">\(C_{d0}\)</span> constante e
+sem corte de raiz. Para afilamento, corte de raiz ou <span
+class="math inline">\(C_{d0}(x)\)</span> variável, não é rigoroso
+transportar o número <span class="math inline">\(1.65\)</span> sem
+refazer a integral de arrasto radial.</p>
+<h3 id="nível-3-bet-tangencial-mínima">Nível 3: BET tangencial
+mínima</h3>
+<h4 id="831-forma-geral">8.3.1 Forma geral</h4>
+<p>Para geometria radial arbitrária, a forma mínima usa <span
+class="math inline">\(W\simeq u_T\)</span> e arrasto puramente
+tangencial:</p>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm{min}}
+=\frac12\left[
+\mathcal D_3+\frac{\mu^2}{2}\mathcal D_1
+\right].
+}
+\]</span></p>
+<h4 id="832-pá-retangular-com-corte-de-raiz">8.3.2 Pá retangular com
+corte de raiz</h4>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm{min}}
+=\frac{\sigma C_{d0}}2
+\left(J_3+\frac{\mu^2J_1}{2}\right).
+}
+\]</span></p>
+<h4 id="833-sem-corte-de-raiz">8.3.3 Sem corte de raiz</h4>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm{min}}
+=\frac{\sigma C_{d0}}8(1+\mu^2).
+}
+\]</span></p>
+<h4 id="834-sem-corte-de-raiz-e-sem-torção">8.3.4 Sem corte de raiz e
+sem torção</h4>
+<p>Com <span class="math inline">\(C_{d0}\)</span> constante, a torção
+não entra no termo de perfil. Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm{min}}
+=\frac{\sigma C_{d0}}8(1+\mu^2).
+}
+\]</span></p>
+<p>A coincidência entre a última expressão e <span
+class="math inline">\(C_{Q0}^{\mathrm B}\)</span> não significa que os
+modelos de perfil sejam iguais. A diferença aparece em <span
+class="math inline">\(C_{H0}\)</span> e, consequentemente, na perda
+total <span class="math inline">\(C_{E0}\)</span>.</p>
+<h3 id="geometria-corda-e-torção">Geometria, corda e torção</h3>
+<p>Para <span class="math inline">\(C_{d0}\)</span> constante, a torção
+não aparece em <span class="math inline">\(C_{Q0}\)</span>: ela altera
+sustentação, mas não o arrasto de perfil assumido constante. A corda
+entra por <span class="math inline">\(\mathcal D_n\)</span> ou <span
+class="math inline">\(J_n\)</span>. Assim, afilamento e corte de raiz
+são tratados naturalmente no nível 1 e no nível 3.</p>
+<p>No nível 2, o número <span class="math inline">\(1.65\)</span> deve
+ser visto como a redução fechada do caso clássico retangular. Para outra
+distribuição de corda, a opção consistente é integrar o modelo radial
+correspondente, em vez de aplicar <span
+class="math inline">\(1.65\)</span> como constante universal.</p>
+<h2 id="9-coeficiente-de-torque-total-cq">9. Coeficiente de torque total
+CQ</h2>
+<p>O torque de eixo é</p>
+<p><span class="math display">\[
+\boxed{C_Q=C_{Qi}+C_{Q0}.}
+\]</span></p>
+<p>O termo induzido pode ser obtido pela BET ou pela forma energética. O
+termo de perfil deve usar um único nível de fidelidade de forma
+consistente.</p>
+<h3 id="forma-bet-geral">Forma BET geral</h3>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{BET}}
+=\frac12\left[
+\lambda\mathcal T_2
+-\lambda^2\mathcal A_1
+-\frac{L^2}{2}\mathcal A_3
+\right]+C_{Q0}.
+}
+\]</span></p>
+<p>Para inflow uniforme, <span class="math inline">\(L=0\)</span>. Para
+Coleman, <span class="math inline">\(L=K_x\lambda_i\)</span>.</p>
+<h3 id="bet-pá-retangular-com-torção-linear-e-corte-de-raiz-1">BET: pá
+retangular com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{BET}}
+=\frac{\sigma a}{2}
+\left[
+\lambda(\theta_0J_2+\theta_tJ_3)
+-\lambda^2J_1
+-\frac{L^2J_3}{2}
+\right]
++C_{Q0}.
+}
+\]</span></p>
+<h3 id="bet-sem-corte-de-raiz-com-torção-linear-1">BET: sem corte de
+raiz, com torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{BET}}
+=\frac{\sigma a}{2}
+\left[
+\lambda\left(\frac{\theta_0}{3}+\frac{\theta_t}{4}\right)
+-\frac{\lambda^2}{2}
+-\frac{L^2}{8}
+\right]
++C_{Q0}.
+}
+\]</span></p>
+<h3 id="bet-sem-corte-de-raiz-e-sem-torção-1">BET: sem corte de raiz e
+sem torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{BET}}
+=\frac{\sigma a}{2}
+\left[
+\frac{\theta_0\lambda}{3}
+-\frac{\lambda^2}{2}
+-\frac{L^2}{8}
+\right]
++C_{Q0}.
+}
+\]</span></p>
+<p>Nas seções 9.2 a 9.4, <span class="math inline">\(C_{Q0}\)</span>
+deve ser avaliado no mesmo nível geométrico e de fidelidade adotado para
+o termo de perfil.</p>
+<h3 id="forma-energética-geral-1">Forma energética geral</h3>
+<p>Quando a perda de perfil é escrita como <span
+class="math inline">\(C_{E0}\)</span>, a forma energética usa a força
+longitudinal total:</p>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\mu C_H
++C_{E0}.
+}
+\]</span></p>
+<p>Como</p>
+<p><span class="math display">\[
+C_H=C_{Hi}+C_{H0},
+\qquad
+C_{E0}=C_{Q0}+\mu C_{H0},
+\]</span></p>
+<p>os termos em <span class="math inline">\(\mu C_{H0}\)</span> cancelam
+e resulta</p>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\mu C_{Hi}
++C_{Q0}.
+}
+\]</span></p>
+<p>A relação <span class="math inline">\(1+4.65\mu^2\)</span> representa
+a perda total de perfil com <em>yawed flow</em>. Ela não deve ser somada
+diretamente a <span class="math inline">\(C_{Q0}\)</span> sem
+contabilizar também <span class="math inline">\(C_{H0}\)</span>.</p>
+<h3 id="forma-energética-por-momentos-radiais-1">Forma energética por
+momentos radiais</h3>
+<p>Substituindo <span class="math inline">\(C_{Hi}=\mu\lambda\mathcal
+T_0/4\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\mu^2\lambda}{4}\mathcal T_0
++C_{Q0}.
+}
+\]</span></p>
+<h3
+id="energia-pá-retangular-com-torção-linear-e-corte-de-raiz-1">Energia:
+pá retangular com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\sigma a\mu^2\lambda}{4}
+(\theta_0J_0+\theta_tJ_1)
++C_{Q0}.
+}
+\]</span></p>
+<h3 id="energia-sem-corte-de-raiz-com-torção-linear-1">Energia: sem
+corte de raiz, com torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\sigma a\mu^2\lambda}{4}
+\left(\theta_0+\frac{\theta_t}{2}\right)
++C_{Q0}.
+}
+\]</span></p>
+<h3 id="energia-sem-corte-de-raiz-e-sem-torção-1">Energia: sem corte de
+raiz e sem torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm{energia}}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\sigma a\theta_0\mu^2\lambda}{4}
++C_{Q0}.
+}
+\]</span></p>
+<h3 id="fechamento-de-bolso-com-bennett">Fechamento de bolso com
+Bennett</h3>
+<p>Para pá retangular, <span class="math inline">\(C_{d0}\)</span>
+constante, sem corte de raiz e sem torção, substituindo <span
+class="math inline">\(C_{Q0}^{\mathrm B}=\sigma
+C_{d0}(1+\mu^2)/8\)</span> em 9.9,</p>
+<p><span class="math display">\[
+\boxed{
+C_Q^{\mathrm B}
+=K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\frac{\sigma a\theta_0\mu^2\lambda}{4}
++\frac{\sigma C_{d0}}8(1+\mu^2).
+}
+\]</span></p>
+<p>O <span class="math inline">\(1.65\)</span> não aparece
+explicitamente nessa expressão porque sua contribuição é a força <span
+class="math inline">\(H_2\)</span>, sem torque direto. Ela aparece em
+<span class="math inline">\(C_H\)</span> e em <span
+class="math inline">\(C_{E0}\)</span> e cancela na transformação de
+perda total para torque de eixo.</p>
+<h2 id="10-coeficiente-de-força-longitudinal-induzida-chi">10.
+Coeficiente de força longitudinal induzida CHi</h2>
+<p>A força longitudinal induzida é a projeção da sustentação inclinada
+no plano do rotor. A média relevante é</p>
+<p><span class="math display">\[
+\left\langle
+\lambda_d u_T\sin\psi
+\right\rangle
+=
+\frac{\lambda\mu}{2}.
+\]</span></p>
+<p>Logo,</p>
+<p><span class="math display">\[
+C_{Hi}
+=
+\frac14
+\mu\lambda
+\int_{x_0}^{1}
+\sigma a\theta(x)\,dx.
+\]</span></p>
+<p>Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Hi}
+=
+\frac{\mu\lambda}{4}\mathcal T_0.
+}
+\]</span></p>
+<h3 id="inflow-uniforme-3">Inflow uniforme</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Hi,\mathrm{unif}}
+=
+\frac{\mu\lambda}{4}\mathcal T_0.
+}
+\]</span></p>
+<h3 id="coleman-2">Coleman</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Hi,\mathrm{Coleman}}
+=
+\frac{\mu\lambda}{4}\mathcal T_0.
+}
+\]</span></p>
+<p>O primeiro harmônico de Coleman não contribui porque é ortogonal ao
+termo em <span class="math inline">\(\sin\psi\)</span> que produz a
+força longitudinal média.</p>
+<h3 id="pá-retangular-com-torção-linear-e-corte-de-raiz-1">Pá retangular
+com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Hi}
+=
+\frac{\sigma a\mu\lambda}{4}
+\left(
+\theta_0J_0+\theta_tJ_1
+\right).
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-com-torção-linear-1">Sem corte de raiz, com
+torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Hi}
+=
+\frac{\sigma a\mu\lambda}{4}
+\left(
+\theta_0+\frac{\theta_t}{2}
+\right).
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-e-sem-torção-1">Sem corte de raiz e sem
+torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Hi}
+=
+\frac{\sigma a\theta_0\mu\lambda}{4}.
+}
+\]</span></p>
+<h2 id="11-coeficiente-de-força-longitudinal-de-perfil-ch0">11.
+Coeficiente de força longitudinal de perfil CH0</h2>
+<p>A força longitudinal de perfil é onde a correção de escoamento radial
+aparece diretamente.</p>
+<h3 id="nível-1-integral-vetorial-completa-1">Nível 1: integral vetorial
+completa</h3>
+<p>Como</p>
+<p><span class="math display">\[
+u_T\sin\psi+u_R\cos\psi=x\sin\psi+\mu,
+\]</span></p>
+<p>segue</p>
+<p><span class="math display">\[
+\boxed{
+C_{H0}^{\mathrm{int}}
+=\frac12
+\int_{x_0}^{1}
+\sigma(x)C_{d0}(x)
+\left\langle
+W(x\sin\psi+\mu)
+\right\rangle_\psi dx.
+}
+\]</span></p>
+<h3 id="nível-2-decomposição-h1--h2">Nível 2: decomposição H1 + H2</h3>
+<p>Para a pá retangular clássica, sem corte de raiz,</p>
+<p><span class="math display">\[
+\boxed{
+C_{H1}=\frac{\sigma C_{d0}}4\mu
+=2b\mu,
+}
+\]</span></p>
+<p>e a correção de escoamento radial associada a Bennett é</p>
+<p><span class="math display">\[
+\boxed{
+C_{H2}=\frac{1.65\,\sigma C_{d0}}8\mu
+=1.65\,b\mu.
+}
+\]</span></p>
+<p>Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_{H0}^{\mathrm B}
+=\frac{3.65\,\sigma C_{d0}}8\mu.
+}
+\]</span></p>
+<p>A potência de perda associada a <span
+class="math inline">\(H_2\)</span> é</p>
+<p><span class="math display">\[
+\boxed{
+\mu C_{H2}
+=\frac{1.65\,\sigma C_{d0}}8\mu^2,
+}
+\]</span></p>
+<p>que é exatamente o incremento que leva <span
+class="math inline">\(F_P\)</span> de <span
+class="math inline">\(1+3\mu^2\)</span> para <span
+class="math inline">\(1+4.65\mu^2\)</span>.</p>
+<h3 id="nível-3-bet-tangencial-mínima-1">Nível 3: BET tangencial
+mínima</h3>
+<h4 id="1131-forma-geral">11.3.1 Forma geral</h4>
+<p>Para distribuição radial arbitrária,</p>
+<p><span class="math display">\[
+\boxed{
+C_{H0}^{\mathrm{min}}
+=\frac{\mu}{2}\mathcal D_1.
+}
+\]</span></p>
+<h4 id="1132-pá-retangular-com-corte-de-raiz">11.3.2 Pá retangular com
+corte de raiz</h4>
+<p><span class="math display">\[
+\boxed{
+C_{H0}^{\mathrm{min}}
+=\frac{\sigma C_{d0}\mu J_1}{2}.
+}
+\]</span></p>
+<h4 id="1133-sem-corte-de-raiz">11.3.3 Sem corte de raiz</h4>
+<p><span class="math display">\[
+\boxed{
+C_{H0}^{\mathrm{min}}
+=\frac{\sigma C_{d0}\mu}{4}.
+}
+\]</span></p>
+<h4 id="1134-sem-corte-de-raiz-e-sem-torção">11.3.4 Sem corte de raiz e
+sem torção</h4>
+<p>Com <span class="math inline">\(C_{d0}\)</span> constante, a torção
+não altera o termo de perfil. Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_{H0}^{\mathrm{min}}
+=\frac{\sigma C_{d0}\mu}{4}.
+}
+\]</span></p>
+<h3 id="limite-da-forma-365">Limite da forma 3.65</h3>
+<p>A expressão <span class="math inline">\(3.65\,\sigma
+C_{d0}\mu/8\)</span> é uma fórmula de bolso para a geometria clássica
+usada na derivação de Bennett. Para corda variável, corte de raiz ou
+<span class="math inline">\(C_{d0}(x)\)</span>, mantenha <span
+class="math inline">\(\mathcal D_n\)</span> para <span
+class="math inline">\(H_1\)</span> e use a integral radial completa para
+obter <span class="math inline">\(H_2\)</span>. Não trate <span
+class="math inline">\(1.65\)</span> como universal para qualquer
+planforma.</p>
+<h2 id="12-coeficiente-de-força-longitudinal-total-ch">12. Coeficiente
+de força longitudinal total CH</h2>
+<p>Por definição,</p>
+<p><span class="math display">\[
+\boxed{C_H=C_{Hi}+C_{H0}.}
+\]</span></p>
+<h3 id="geometria-geral">Geometria geral</h3>
+<p>Com o perfil integral,</p>
+<p><span class="math display">\[
+\boxed{
+C_H^{\mathrm{int}}
+=\frac{\mu\lambda}{4}\mathcal T_0
++\frac12
+\int_{x_0}^{1}
+\sigma C_{d0}
+\left\langle W(x\sin\psi+\mu)\right\rangle_\psi dx.
+}
+\]</span></p>
+<p>Com a BET tangencial mínima,</p>
+<p><span class="math display">\[
+\boxed{
+C_H^{\mathrm{min}}
+=\frac{\mu\lambda}{4}\mathcal T_0
++\frac{\mu}{2}\mathcal D_1.
+}
+\]</span></p>
+<p>Nesta ordem, inflow uniforme e Coleman produzem a mesma expressão
+para <span class="math inline">\(C_H\)</span> quando o mesmo <span
+class="math inline">\(\lambda\)</span> médio é usado.</p>
+<h3
+id="nível-mínimo-pá-retangular-com-torção-linear-e-corte-de-raiz">Nível
+mínimo: pá retangular com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_H^{\mathrm{min}}
+=\frac{\sigma a\mu\lambda}{4}
+(\theta_0J_0+\theta_tJ_1)
++\frac{\sigma C_{d0}\mu J_1}{2}.
+}
+\]</span></p>
+<h3 id="nível-mínimo-sem-corte-de-raiz-com-torção-linear">Nível mínimo:
+sem corte de raiz, com torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_H^{\mathrm{min}}
+=\frac{\sigma a\mu\lambda}{4}
+\left(\theta_0+\frac{\theta_t}{2}\right)
++\frac{\sigma C_{d0}\mu}{4}.
+}
+\]</span></p>
+<h3 id="nível-mínimo-sem-corte-de-raiz-e-sem-torção">Nível mínimo: sem
+corte de raiz e sem torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_H^{\mathrm{min}}
+=\frac{\sigma a\theta_0\mu\lambda}{4}
++\frac{\sigma C_{d0}\mu}{4}.
+}
+\]</span></p>
+<p>A torção aparece apenas em <span
+class="math inline">\(C_{Hi}\)</span> enquanto <span
+class="math inline">\(C_{d0}\)</span> permanecer constante.</p>
+<h3 id="bennett-sem-corte-de-raiz-com-torção-linear">Bennett: sem corte
+de raiz, com torção linear</h3>
+<p>Para a geometria clássica em que o fechamento de Bennett é
+aplicável,</p>
+<p><span class="math display">\[
+\boxed{
+C_H^{\mathrm B}
+=\frac{\sigma a\mu\lambda}{4}
+\left(\theta_0+\frac{\theta_t}{2}\right)
++\frac{3.65\,\sigma C_{d0}}8\mu.
+}
+\]</span></p>
+<h3 id="bennett-sem-corte-de-raiz-e-sem-torção">Bennett: sem corte de
+raiz e sem torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_H^{\mathrm B}
+=\frac{\sigma a\theta_0\mu\lambda}{4}
++\frac{3.65\,\sigma C_{d0}}8\mu.
+}
+\]</span></p>
+<p>Sem a correção radial, o segundo termo seria <span
+class="math inline">\(2\,\sigma C_{d0}\mu/8\)</span>. A diferença é
+<span class="math inline">\(1.65\,\sigma C_{d0}\mu/8\)</span>.</p>
+<h2 id="13-coeficiente-de-força-lateral-cy">13. Coeficiente de força
+lateral CY</h2>
+<p>A força lateral direta aparece quando o inflow possui um primeiro
+harmônico longitudinal. A projeção relevante usa <span
+class="math inline">\(\cos\psi\)</span>.</p>
+<p>A média do primeiro termo é</p>
+<p><span class="math display">\[
+\left\langle
+\theta\lambda_du_T\cos\psi
+\right\rangle
+=
+\theta\frac{Lx^2}{2},
+\]</span></p>
+<p>enquanto</p>
+<p><span class="math display">\[
+\left\langle
+\lambda_d^2\cos\psi
+\right\rangle
+=
+\lambda Lx.
+\]</span></p>
+<p>Integrando,</p>
+<p><span class="math display">\[
+\boxed{
+C_Y
+=
+-\frac{L}{4}
+\left(
+\mathcal T_2
+-2\lambda\mathcal A_1
+\right).
+}
+\]</span></p>
+<h3 id="inflow-uniforme-4">Inflow uniforme</h3>
+<p>Com <span class="math inline">\(L=0\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Y,\mathrm{unif}}=0.
+}
+\]</span></p>
+<h3 id="coleman-3">Coleman</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Y,\mathrm{Coleman}}
+=
+-\frac{K_x\lambda_i}{4}
+\left(
+\mathcal T_2
+-2\lambda\mathcal A_1
+\right).
+}
+\]</span></p>
+<h3 id="pá-retangular-com-torção-linear-e-corte-de-raiz-2">Pá retangular
+com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Y,\mathrm{Coleman}}
+=
+-\frac{\sigma aK_x\lambda_i}{4}
+\left[
+\theta_0J_2+\theta_tJ_3
+-2\lambda J_1
+\right].
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-com-torção-linear-2">Sem corte de raiz, com
+torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Y,\mathrm{Coleman}}
+=
+-\frac{\sigma aK_x\lambda_i}{4}
+\left(
+\frac{\theta_0}{3}
++\frac{\theta_t}{4}
+-\lambda
+\right).
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-e-sem-torção-2">Sem corte de raiz e sem
+torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Y,\mathrm{Coleman}}
+=
+-\frac{\sigma aK_x\lambda_i}{4}
+\left(
+\frac{\theta_0}{3}
+-\lambda
+\right).
+}
+\]</span></p>
+<p>A existência de <span class="math inline">\(C_Y\)</span> é uma
+consequência direta da quebra da simetria frente-trás.</p>
+<h2 id="14-coeficiente-de-momento-de-arfagem-cmy">14. Coeficiente de
+momento de arfagem CMy</h2>
+<p>Com a convenção de nariz para cima positivo,</p>
+<p><span class="math display">\[
+C_{My}
+=
+-\int x\cos\psi\,dC_N.
+\]</span></p>
+<p>Os termos uniformes desaparecem na média. O termo de Coleman
+sobrevive:</p>
+<p><span class="math display">\[
+\boxed{
+C_{My}
+=
+\frac{L}{4}\mathcal A_3.
+}
+\]</span></p>
+<h3 id="inflow-uniforme-5">Inflow uniforme</h3>
+<p><span class="math display">\[
+\boxed{
+C_{My,\mathrm{unif}}=0.
+}
+\]</span></p>
+<h3 id="coleman-4">Coleman</h3>
+<p><span class="math display">\[
+\boxed{
+C_{My,\mathrm{Coleman}}
+=
+\frac{K_x\lambda_i}{4}\mathcal A_3.
+}
+\]</span></p>
+<h3 id="pá-retangular-com-corte-de-raiz">Pá retangular com corte de
+raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_{My,\mathrm{Coleman}}
+=
+\frac{\sigma aK_x\lambda_iJ_3}{4}.
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz">Sem corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_{My,\mathrm{Coleman}}
+=
+\frac{\sigma aK_x\lambda_i}{16}.
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-e-sem-torção-3">Sem corte de raiz e sem
+torção</h3>
+<p>A torção não aparece em <span class="math inline">\(C_{My}\)</span>
+nesta aproximação. Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_{My,\mathrm{Coleman}}
+=
+\frac{\sigma aK_x\lambda_i}{16}.
+}
+\]</span></p>
+<p>A independência explícita de <span
+class="math inline">\(\theta\)</span> é característica desta
+aproximação. O momento surge da assimetria de inflow aplicada à força
+normal linearizada.</p>
+<h2 id="15-coeficiente-de-momento-de-rolamento-cmx">15. Coeficiente de
+momento de rolamento CMx</h2>
+<p>Com rolamento positivo baixando a asa direita,</p>
+<p><span class="math display">\[
+C_{Mx}
+=
+-\int x\sin\psi\,dC_N.
+\]</span></p>
+<p>A média azimutal de <span
+class="math inline">\(u_T^2\sin\psi\)</span> é <span
+class="math inline">\(x\mu\)</span>, e a média de <span
+class="math inline">\(\lambda_du_T\sin\psi\)</span> é <span
+class="math inline">\(\lambda\mu/2\)</span>. Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Mx}
+=
+-\frac{\mu}{2}
+\left(
+\mathcal T_2
+-\frac{\lambda}{2}\mathcal A_1
+\right).
+}
+\]</span></p>
+<h3 id="inflow-uniforme-6">Inflow uniforme</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Mx,\mathrm{unif}}
+=
+-\frac{\mu}{2}
+\left(
+\mathcal T_2
+-\frac{\lambda}{2}\mathcal A_1
+\right).
+}
+\]</span></p>
+<h3 id="coleman-5">Coleman</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Mx,\mathrm{Coleman}}
+=
+-\frac{\mu}{2}
+\left(
+\mathcal T_2
+-\frac{\lambda}{2}\mathcal A_1
+\right).
+}
+\]</span></p>
+<p>O primeiro harmônico longitudinal de Coleman não altera <span
+class="math inline">\(C_{Mx}\)</span> nesta ordem, porque o rolamento
+direto é produzido pela assimetria avançante-recuante proporcional a
+<span class="math inline">\(\sin\psi\)</span>.</p>
+<h3 id="pá-retangular-com-torção-linear-e-corte-de-raiz-3">Pá retangular
+com torção linear e corte de raiz</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Mx}
+=
+-\frac{\sigma a\mu}{2}
+\left[
+\theta_0J_2+\theta_tJ_3
+-\frac{\lambda J_1}{2}
+\right].
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-com-torção-linear-3">Sem corte de raiz, com
+torção linear</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Mx}
+=
+-\frac{\sigma a\mu}{2}
+\left(
+\frac{\theta_0}{3}
++\frac{\theta_t}{4}
+-\frac{\lambda}{4}
+\right).
+}
+\]</span></p>
+<h3 id="sem-corte-de-raiz-e-sem-torção-4">Sem corte de raiz e sem
+torção</h3>
+<p><span class="math display">\[
+\boxed{
+C_{Mx}
+=
+-\frac{\sigma a\mu}{2}
+\left(
+\frac{\theta_0}{3}
+-\frac{\lambda}{4}
+\right).
+}
+\]</span></p>
+<p>Em um rotor real com batimento livre, grande parte desse momento
+aerodinâmico direto é convertida em resposta de batimento. Por isso esta
+expressão deve ser interpretada como resultado de um disco rígido.</p>
+<h2 id="16-inflow-induzido-lambda_i">16. Inflow induzido lambda_i</h2>
+<p>A teoria de quantidade de movimento fornece o fechamento entre tração
+e velocidade induzida média. Para voo oblíquo em regime normal,</p>
+<p><span class="math display">\[
+T=
+2\rho A v_i
+\sqrt{
+V_h^2+(V_z+v_i)^2
+}.
+\]</span></p>
+<p>Dividindo por <span class="math inline">\(\rho A(\Omega
+R)^2\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+C_T=
+2\lambda_i
+\sqrt{
+\mu^2+(\mu_z+\lambda_i)^2
+}.
+}
+\]</span></p>
+<p>Como <span
+class="math inline">\(\lambda=\mu_z+\lambda_i\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+C_T=
+2\lambda_i
+\sqrt{
+\mu^2+\lambda^2
+}.
+}
+\]</span></p>
+<p>Equivalentemente,</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i=
+\frac{C_T}
+{2\sqrt{\mu^2+(\mu_z+\lambda_i)^2}}.
+}
+\]</span></p>
+<p>A equação é implícita porque <span
+class="math inline">\(\lambda_i\)</span> aparece também dentro da raiz.
+O modelo de Coleman não altera essa relação média. Ele redistribui o
+inflow depois que <span class="math inline">\(\lambda_i\)</span> é
+determinado.</p>
+<h3 id="voo-nivelado-solução-explícita">Voo nivelado: solução
+explícita</h3>
+<p>Para <span class="math inline">\(\mu_z=0\)</span>, tem-se <span
+class="math inline">\(\lambda=\lambda_i\)</span> e</p>
+<p><span class="math display">\[
+C_T=2\lambda_i\sqrt{\mu^2+\lambda_i^2}.
+\]</span></p>
+<p>Resolvendo a quadrática em <span
+class="math inline">\(\lambda_i^2\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i=
+\sqrt{
+\frac{\sqrt{\mu^4+C_T^2}-\mu^2}{2}
+}
+\qquad(\mu_z=0).
+}
+\]</span></p>
+<h3 id="voo-pairado">Voo pairado</h3>
+<p>Com <span class="math inline">\(\mu=0\)</span> e <span
+class="math inline">\(\mu_z=0\)</span>, a solução anterior se reduz
+a</p>
+<p><span class="math display">\[
+C_T=2\lambda_i^2,
+\]</span></p>
+<p>logo</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i=
+\sqrt{\frac{C_T}{2}}.
+}
+\]</span></p>
+<h3 id="escoamento-externo-dominante">Escoamento externo dominante</h3>
+<p>Se <span class="math inline">\(\lambda_i\)</span> for pequeno diante
+da velocidade externa resultante,</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i\simeq
+\frac{C_T}{2\sqrt{\mu^2+\mu_z^2}}.
+}
+\]</span></p>
+<h3 id="voo-à-frente-com-mu-dominante">Voo à frente com mu
+dominante</h3>
+<p>Se, além disso, <span
+class="math inline">\(|\mu_z|\ll\mu\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i
+\simeq
+\frac{C_T}{2\mu}.
+}
+\]</span></p>
+<p>A última expressão é a redução de alta razão de avanço da aproximação
+de escoamento externo dominante.</p>
+<h2 id="17-inflow-total-lambda">17. Inflow total lambda</h2>
+<p>O inflow total médio é a soma da velocidade axial externa com a
+parcela induzida:</p>
+<p><span class="math display">\[
+\boxed{
+\lambda=\mu_z+\lambda_i.
+}
+\]</span></p>
+<h3 id="inflow-uniforme-7">Inflow uniforme</h3>
+<p><span class="math display">\[
+\boxed{
+\lambda_{d,\mathrm{unif}}(x,\psi)
+=
+\mu_z+\lambda_i.
+}
+\]</span></p>
+<h3 id="coleman-6">Coleman</h3>
+<p><span class="math display">\[
+\boxed{
+\lambda_{d,\mathrm{Coleman}}(x,\psi)
+=
+\mu_z+\lambda_i
++
+K_x\lambda_i x\cos\psi.
+}
+\]</span></p>
+<p>Substituindo <span class="math inline">\(K_x\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_{d,\mathrm{Coleman}}
+=
+\mu_z+\lambda_i
++
+\left[
+\frac{15\pi}{32}
+\frac{\mu}
+{\sqrt{\mu^2+(\mu_z+\lambda_i)^2}+|\mu_z+\lambda_i|}
+\right]
+\lambda_i x\cos\psi.
+}
+\]</span></p>
+<p>O valor médio <span class="math inline">\(\lambda\)</span> pode
+tornar-se negativo em uma condição com velocidade axial externa oposta
+suficientemente grande, mesmo enquanto <span
+class="math inline">\(\lambda_i\)</span> permanece positivo. Essa
+distinção é importante em incidência do disco e voo axial.</p>
+<h2 id="18-coeficiente-de-potência-cp">18. Coeficiente de potência
+CP</h2>
+<p>A potência de eixo é</p>
+<p><span class="math display">\[
+P=Q\Omega.
+\]</span></p>
+<p>Usando as definições de <span class="math inline">\(C_Q\)</span> e
+<span class="math inline">\(C_P\)</span>,</p>
+<p><span class="math display">\[
+C_P=
+\frac{P}{\rho A(\Omega R)^3}
+=
+\frac{Q\Omega}{\rho A(\Omega R)^3}
+=
+\frac{Q}{\rho A(\Omega R)^2R}.
+\]</span></p>
+<p>Portanto,</p>
+<p><span class="math display">\[
+\boxed{
+C_P=C_Q.
+}
+\]</span></p>
+<h3 id="escada-de-simplificação">Escada de simplificação</h3>
+<p>Como <span class="math inline">\(C_P=C_Q\)</span>, a potência herda
+exatamente a escada geométrica do capítulo 9: forma geral, pá retangular
+com torção linear e corte de raiz, ausência de corte de raiz com torção
+linear e ausência de torção. Não surge uma redução geométrica
+independente para <span class="math inline">\(C_P\)</span>.</p>
+<p>A decomposição também é imediata:</p>
+<p><span class="math display">\[
+\boxed{
+C_P=C_{Pi}+C_{P0}
+=
+C_{Qi}+C_{Q0}.
+}
+\]</span></p>
+<p>Na forma energética,</p>
+<p><span class="math display">\[
+\boxed{
+C_P=
+K_{\mathrm{ind}}\lambda_iC_T
++\mu_zC_T
+-\mu C_{Hi}
++C_{Q0}.
+}
+\]</span></p>
+<p>A equação separa a potência induzida, o trabalho axial externo, o
+trabalho translacional associado a <span
+class="math inline">\(H_i\)</span> e o arrasto de perfil.</p>
+<h3 id="torque-de-eixo-versus-perda-total-de-perfil">Torque de eixo
+versus perda total de perfil</h3>
+<p>A igualdade <span class="math inline">\(C_P=C_Q\)</span> refere-se à
+potência de eixo. A grandeza</p>
+<p><span class="math display">\[
+C_{E0}=C_{Q0}+\mu C_{H0}
+\]</span></p>
+<p>é a perda aerodinâmica total de perfil relativa ao ar para <span
+class="math inline">\(\mu_z\simeq0\)</span>. Na forma de Bennett, <span
+class="math inline">\(C_{E0}=\sigma C_{d0}(1+4.65\mu^2)/8\)</span>, mas
+o torque direto de perfil permanece <span
+class="math inline">\(C_{Q0}=\sigma C_{d0}(1+\mu^2)/8\)</span>. A
+transformação energética usa <span class="math inline">\(-\mu
+C_H+C_{E0}\)</span> e, portanto, não conta duas vezes o trabalho
+associado a <span class="math inline">\(H\)</span>.</p>
+<h2 id="19-figura-de-mérito">19. Figura de mérito</h2>
+<p>A figura de mérito clássica é uma métrica de voo pairado. A potência
+ideal do disco atuador é</p>
+<p><span class="math display">\[
+C_{P,\mathrm{ideal}}
+=
+C_T\lambda_i
+=
+C_T\sqrt{\frac{C_T}{2}}
+=
+\frac{C_T^{3/2}}{\sqrt2}.
+\]</span></p>
+<p>Assim,</p>
+<p><span class="math display">\[
+\boxed{
+FM=
+\frac{C_T^{3/2}}
+{\sqrt2\,C_P}
+}
+\qquad
+(\mu=0,\ \mu_z=0).
+\]</span></p>
+<p>Fora do voo pairado, essa expressão deixa de representar diretamente
+uma eficiência física. A corrente livre pode fornecer ou retirar
+trabalho do rotor, o que altera a interpretação energética.</p>
+<p>Para comparar as perdas em função de <span
+class="math inline">\(\mu\)</span> sem estender a definição de figura de
+mérito, adota-se um índice de mérito aerodinâmico generalizado,</p>
+<p><span class="math display">\[
+\boxed{
+FM^\dagger
+=
+\frac{C_T\lambda_i}
+{K_{\mathrm{ind}}C_T\lambda_i+C_{Q0}}.
+}
+\]</span></p>
+<p>O numerador é a potência induzida ideal de quantidade de movimento. O
+denominador contém apenas as parcelas dissipativas representadas no
+modelo: potência induzida corrigida e potência de perfil. Os termos
+reversíveis associados ao trabalho da corrente livre, <span
+class="math inline">\(\mu_zC_T-\mu C_{Hi}\)</span>, são excluídos.</p>
+<p>Em voo pairado,</p>
+<p><span class="math display">\[
+\boxed{
+FM^\dagger=FM.
+}
+\]</span></p>
+<p>Em avanço, <span class="math inline">\(FM^\dagger\)</span> é um
+índice comparativo de perdas, não a definição clássica de figura de
+mérito.</p>
+<p>A geometria da pá não cria uma escada própria para <span
+class="math inline">\(FM\)</span>. Ela entra por <span
+class="math inline">\(C_P\)</span> na figura de mérito clássica e por
+<span class="math inline">\(C_{Q0}\)</span> em <span
+class="math inline">\(FM^\dagger\)</span>. As reduções geométricas são,
+portanto, as mesmas já aplicadas a esses coeficientes.</p>
+<h2 id="20-tabela-de-fórmulas-para-inflow-uniforme">20. Tabela de
+fórmulas para inflow uniforme</h2>
+<p>Para inflow uniforme,</p>
+<p><span class="math display">\[
+L=0,
+\qquad
+\lambda=\mu_z+\lambda_i.
+\]</span></p>
+<p>A coluna “geral” usa os momentos radiais. A coluna com corte de raiz
+assume pá retangular, <span class="math inline">\(a\)</span> e <span
+class="math inline">\(C_{d0}\)</span> constantes e torção linear. A
+coluna seguinte fixa <span class="math inline">\(x_0=0\)</span>, mas
+preserva <span class="math inline">\(\theta_t\)</span>. Somente a última
+coluna também impõe <span class="math inline">\(\theta_t=0\)</span>.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Saída</th>
+<th>Forma geral</th>
+<th>Pá retangular + torção linear + corte de raiz</th>
+<th>Sem corte de raiz + torção linear</th>
+<th>Sem corte de raiz + sem torção</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(C_T\)</span></td>
+<td><span class="math inline">\(\frac12[\mathcal
+T_2+\frac{\mu^2}{2}\mathcal T_0-\lambda\mathcal A_1]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\theta_0(J_2+\frac{\mu^2J_0}{2})+\theta_t(J_3+\frac{\mu^2J_1}{2})-\lambda
+J_1]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\theta_0(\frac13+\frac{\mu^2}{2})+\theta_t(\frac14+\frac{\mu^2}{4})-\frac{\lambda}{2}]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\theta_0(\frac13+\frac{\mu^2}{2})-\frac{\lambda}{2}]\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Qi}^{BET}\)</span></td>
+<td><span class="math inline">\(\frac12[\lambda\mathcal
+T_2-\lambda^2\mathcal A_1]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\lambda(\theta_0J_2+\theta_tJ_3)-\lambda^2J_1]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\lambda(\frac{\theta_0}{3}+\frac{\theta_t}{4})-\frac{\lambda^2}{2}]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\frac{\theta_0\lambda}{3}-\frac{\lambda^2}{2}]\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Q0}^{min}\)</span></td>
+<td><span class="math inline">\(\frac12[\mathcal
+D_3+\frac{\mu^2}{2}\mathcal D_1]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}2[J_3+\frac{\mu^2J_1}{2}]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+\mu^2)\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+\mu^2)\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Q0}^{B}\)</span></td>
+<td>não aplicável como constante universal</td>
+<td>não aplicável como constante universal</td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+\mu^2)\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+\mu^2)\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{E0}^{B}\)</span></td>
+<td>não aplicável como constante universal</td>
+<td>não aplicável como constante universal</td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+4.65\mu^2)\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+4.65\mu^2)\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_Q\)</span></td>
+<td><span class="math inline">\(C_{Qi}+C_{Q0}\)</span></td>
+<td>usar o nível de <span class="math inline">\(C_{Q0}\)</span>
+escolhido acima</td>
+<td>usar o nível de <span class="math inline">\(C_{Q0}\)</span>
+escolhido acima</td>
+<td>idem</td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Hi}\)</span></td>
+<td><span class="math inline">\(\frac{\mu\lambda}{4}\mathcal
+T_0\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0J_0+\theta_tJ_1)\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0+\frac{\theta_t}{2})\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\theta_0\mu\lambda}{4}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{H0}^{min}\)</span></td>
+<td><span class="math inline">\(\frac{\mu}{2}\mathcal D_1\)</span></td>
+<td><span class="math inline">\(\frac{\sigma C_{d0}\mu
+J_1}{2}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma C_{d0}\mu}{4}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma C_{d0}\mu}{4}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{H0}^{B}\)</span></td>
+<td>não aplicável como constante universal</td>
+<td>não aplicável como constante universal</td>
+<td><span class="math inline">\(\frac{3.65\,\sigma
+C_{d0}}8\mu\)</span></td>
+<td><span class="math inline">\(\frac{3.65\,\sigma
+C_{d0}}8\mu\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_H^{min}\)</span></td>
+<td><span class="math inline">\(\frac{\mu\lambda}{4}\mathcal
+T_0+\frac{\mu}{2}\mathcal D_1\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0J_0+\theta_tJ_1)+\frac{\sigma C_{d0}\mu
+J_1}{2}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0+\frac{\theta_t}{2})+\frac{\sigma
+C_{d0}\mu}{4}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\theta_0\mu\lambda}{4}+\frac{\sigma C_{d0}\mu}{4}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_H^{B}\)</span></td>
+<td>não aplicável como constante universal</td>
+<td>não aplicável como constante universal</td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0+\frac{\theta_t}{2})+\frac{3.65\,\sigma
+C_{d0}}8\mu\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\theta_0\mu\lambda}{4}+\frac{3.65\,\sigma C_{d0}}8\mu\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_Y\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{My}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Mx}\)</span></td>
+<td><span class="math inline">\(-\frac{\mu}{2}[\mathcal
+T_2-\frac{\lambda}{2}\mathcal A_1]\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+a\mu}{2}[\theta_0J_2+\theta_tJ_3-\frac{\lambda J_1}{2}]\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+a\mu}{2}(\frac{\theta_0}{3}+\frac{\theta_t}{4}-\frac{\lambda}{4})\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+a\mu}{2}(\frac{\theta_0}{3}-\frac{\lambda}{4})\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\lambda_i\)</span></td>
+<td><span
+class="math inline">\(C_T=2\lambda_i\sqrt{\mu^2+(\mu_z+\lambda_i)^2}\)</span></td>
+<td>igual</td>
+<td>igual</td>
+<td>igual</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(\mu_z+\lambda_i\)</span></td>
+<td>igual</td>
+<td>igual</td>
+<td>igual</td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_P\)</span></td>
+<td><span class="math inline">\(C_Q\)</span></td>
+<td><span class="math inline">\(C_Q\)</span></td>
+<td><span class="math inline">\(C_Q\)</span></td>
+<td><span class="math inline">\(C_Q\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(FM\)</span> em voo pairado</td>
+<td><span
+class="math inline">\(\frac{C_T^{3/2}}{\sqrt2C_P}\)</span></td>
+<td>igual</td>
+<td>igual</td>
+<td>igual</td>
+</tr>
+</tbody>
+</table>
+<p>Para estimativa energética de torque, substitua a linha de <span
+class="math inline">\(C_{Qi}^{BET}\)</span> por</p>
+<p><span class="math display">\[
+C_{Qi}^{energia}
+=
+K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T-\mu C_{Hi},
+\]</span></p>
+<p>e use o <span class="math inline">\(C_{Q0}\)</span> integral quando
+desejado.</p>
+<h2 id="21-tabela-de-fórmulas-para-inflow-de-coleman">21. Tabela de
+fórmulas para inflow de Coleman</h2>
+<p>Para inflow de Coleman,</p>
+<p><span class="math display">\[
+L=K_x\lambda_i,
+\]</span></p>
+<p><span class="math display">\[
+K_x=
+\frac{15\pi}{32}
+\frac{\mu}
+{\sqrt{\mu^2+\lambda^2}+|\lambda|}.
+\]</span></p>
+<p>A coluna sem corte de raiz fixa <span
+class="math inline">\(x_0=0\)</span>, mas preserva <span
+class="math inline">\(\theta_t\)</span>. Somente a última coluna também
+impõe <span class="math inline">\(\theta_t=0\)</span>.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Saída</th>
+<th>Forma geral</th>
+<th>Pá retangular + torção linear + corte de raiz</th>
+<th>Sem corte de raiz + torção linear</th>
+<th>Sem corte de raiz + sem torção</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(C_T\)</span></td>
+<td><span class="math inline">\(\frac12[\mathcal
+T_2+\frac{\mu^2}{2}\mathcal T_0-\lambda\mathcal A_1]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\theta_0(J_2+\frac{\mu^2J_0}{2})+\theta_t(J_3+\frac{\mu^2J_1}{2})-\lambda
+J_1]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\theta_0(\frac13+\frac{\mu^2}{2})+\theta_t(\frac14+\frac{\mu^2}{4})-\frac{\lambda}{2}]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\theta_0(\frac13+\frac{\mu^2}{2})-\frac{\lambda}{2}]\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Qi}^{BET}\)</span></td>
+<td><span class="math inline">\(\frac12[\lambda\mathcal
+T_2-\lambda^2\mathcal A_1-\frac{L^2}{2}\mathcal A_3]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\lambda(\theta_0J_2+\theta_tJ_3)-\lambda^2J_1-\frac{L^2J_3}{2}]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\lambda(\frac{\theta_0}{3}+\frac{\theta_t}{4})-\frac{\lambda^2}{2}-\frac{L^2}{8}]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a}{2}[\frac{\theta_0\lambda}{3}-\frac{\lambda^2}{2}-\frac{L^2}{8}]\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Q0}^{min}\)</span></td>
+<td><span class="math inline">\(\frac12[\mathcal
+D_3+\frac{\mu^2}{2}\mathcal D_1]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}2[J_3+\frac{\mu^2J_1}{2}]\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+\mu^2)\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+\mu^2)\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Q0}^{B}\)</span></td>
+<td>não aplicável como constante universal</td>
+<td>não aplicável como constante universal</td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+\mu^2)\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+\mu^2)\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{E0}^{B}\)</span></td>
+<td>não aplicável como constante universal</td>
+<td>não aplicável como constante universal</td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+4.65\mu^2)\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+C_{d0}}8(1+4.65\mu^2)\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_Q\)</span></td>
+<td><span class="math inline">\(C_{Qi}+C_{Q0}\)</span></td>
+<td>usar o nível de <span class="math inline">\(C_{Q0}\)</span>
+escolhido acima</td>
+<td>usar o nível de <span class="math inline">\(C_{Q0}\)</span>
+escolhido acima</td>
+<td>idem</td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Hi}\)</span></td>
+<td><span class="math inline">\(\frac{\mu\lambda}{4}\mathcal
+T_0\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0J_0+\theta_tJ_1)\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0+\frac{\theta_t}{2})\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\theta_0\mu\lambda}{4}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{H0}^{min}\)</span></td>
+<td><span class="math inline">\(\frac{\mu}{2}\mathcal D_1\)</span></td>
+<td><span class="math inline">\(\frac{\sigma C_{d0}\mu
+J_1}{2}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma C_{d0}\mu}{4}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma C_{d0}\mu}{4}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{H0}^{B}\)</span></td>
+<td>não aplicável como constante universal</td>
+<td>não aplicável como constante universal</td>
+<td><span class="math inline">\(\frac{3.65\,\sigma
+C_{d0}}8\mu\)</span></td>
+<td><span class="math inline">\(\frac{3.65\,\sigma
+C_{d0}}8\mu\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_H^{min}\)</span></td>
+<td><span class="math inline">\(\frac{\mu\lambda}{4}\mathcal
+T_0+\frac{\mu}{2}\mathcal D_1\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0J_0+\theta_tJ_1)+\frac{\sigma C_{d0}\mu
+J_1}{2}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0+\frac{\theta_t}{2})+\frac{\sigma
+C_{d0}\mu}{4}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\theta_0\mu\lambda}{4}+\frac{\sigma C_{d0}\mu}{4}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_H^{B}\)</span></td>
+<td>não aplicável como constante universal</td>
+<td>não aplicável como constante universal</td>
+<td><span class="math inline">\(\frac{\sigma
+a\mu\lambda}{4}(\theta_0+\frac{\theta_t}{2})+\frac{3.65\,\sigma
+C_{d0}}8\mu\)</span></td>
+<td><span class="math inline">\(\frac{\sigma
+a\theta_0\mu\lambda}{4}+\frac{3.65\,\sigma C_{d0}}8\mu\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_Y\)</span></td>
+<td><span class="math inline">\(-\frac{L}{4}(\mathcal
+T_2-2\lambda\mathcal A_1)\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+aL}{4}[\theta_0J_2+\theta_tJ_3-2\lambda J_1]\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+aL}{4}(\frac{\theta_0}{3}+\frac{\theta_t}{4}-\lambda)\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+aL}{4}(\frac{\theta_0}{3}-\lambda)\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{My}\)</span></td>
+<td><span class="math inline">\(\frac{L}{4}\mathcal A_3\)</span></td>
+<td><span class="math inline">\(\frac{\sigma aLJ_3}{4}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma aL}{16}\)</span></td>
+<td><span class="math inline">\(\frac{\sigma aL}{16}\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_{Mx}\)</span></td>
+<td><span class="math inline">\(-\frac{\mu}{2}[\mathcal
+T_2-\frac{\lambda}{2}\mathcal A_1]\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+a\mu}{2}[\theta_0J_2+\theta_tJ_3-\frac{\lambda J_1}{2}]\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+a\mu}{2}(\frac{\theta_0}{3}+\frac{\theta_t}{4}-\frac{\lambda}{4})\)</span></td>
+<td><span class="math inline">\(-\frac{\sigma
+a\mu}{2}(\frac{\theta_0}{3}-\frac{\lambda}{4})\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\lambda_i\)</span></td>
+<td><span
+class="math inline">\(C_T=2\lambda_i\sqrt{\mu^2+(\mu_z+\lambda_i)^2}\)</span></td>
+<td>igual</td>
+<td>igual</td>
+<td>igual</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(\mu_z+\lambda_i\)</span></td>
+<td>igual</td>
+<td>igual</td>
+<td>igual</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\lambda_d\)</span></td>
+<td><span class="math inline">\(\lambda+Lx\cos\psi\)</span></td>
+<td>igual</td>
+<td>igual</td>
+<td>igual</td>
+</tr>
+<tr>
+<td><span class="math inline">\(C_P\)</span></td>
+<td><span class="math inline">\(C_Q\)</span></td>
+<td><span class="math inline">\(C_Q\)</span></td>
+<td><span class="math inline">\(C_Q\)</span></td>
+<td><span class="math inline">\(C_Q\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(FM\)</span> em voo pairado</td>
+<td><span
+class="math inline">\(\frac{C_T^{3/2}}{\sqrt2C_P}\)</span></td>
+<td>igual</td>
+<td>igual</td>
+<td>igual</td>
+</tr>
+</tbody>
+</table>
+<p>A tabela evidencia a estrutura do modelo. Coleman entra diretamente
+em <span class="math inline">\(C_Y\)</span> e <span
+class="math inline">\(C_{My}\)</span>, entra quadraticamente no <span
+class="math inline">\(C_{Qi}^{BET}\)</span> e desaparece de <span
+class="math inline">\(C_T\)</span>, <span
+class="math inline">\(C_{Hi}\)</span> e <span
+class="math inline">\(C_{Mx}\)</span>.</p>
+<h2 id="22-exemplo-numérico-rotor-genérico-com-ct--002">22. Exemplo
+numérico: rotor genérico com CT = 0,02</h2>
+<p>Considere um rotor com:</p>
+<ul>
+<li><span class="math inline">\(B=4\)</span> pás</li>
+<li><span class="math inline">\(\sigma=0{,}20\)</span></li>
+<li><span class="math inline">\(C_T=0{,}020\)</span> trimado em todos os
+pontos</li>
+<li><span class="math inline">\(C_{d0}=0{,}030\)</span></li>
+<li><span class="math inline">\(a=5{,}7\ \mathrm{rad}^{-1}\)</span></li>
+<li><span class="math inline">\(x_0=0\)</span></li>
+<li>pá sem torção</li>
+<li><span class="math inline">\(K_{\mathrm{ind}}=1{,}15\)</span></li>
+<li><span class="math inline">\(\alpha=-5^\circ,\ 0^\circ,\
++5^\circ\)</span></li>
+<li><span class="math inline">\(0\leq\mu\leq0{,}60\)</span>.</li>
+</ul>
+<p>Como <span class="math inline">\(B\)</span> e <span
+class="math inline">\(\sigma\)</span> são fornecidos, a corda relativa
+de uma pá retangular é</p>
+<p><span class="math display">\[
+\boxed{
+\frac{c}{R}
+=
+\frac{\pi\sigma}{B}
+=
+0{,}1571.
+}
+\]</span></p>
+<p>O número de pás não aparece separadamente nas fórmulas de baixa ordem
+porque sua contribuição já está contida em <span
+class="math inline">\(\sigma\)</span>.</p>
+<h3 id="estratégia-de-trim">Estratégia de trim</h3>
+<p>O valor <span class="math inline">\(C_T=0{,}02\)</span> será mantido
+constante ao longo de <span class="math inline">\(\mu\)</span>. Primeiro
+resolve-se</p>
+<p><span class="math display">\[
+0{,}02=
+2\lambda_i
+\sqrt{
+\mu^2+(\mu_z+\lambda_i)^2
+}.
+\]</span></p>
+<p>Depois calcula-se <span
+class="math inline">\(\lambda=\mu_z+\lambda_i\)</span>.</p>
+<p>Sem torção e sem corte de raiz, a equação de tração fornece
+diretamente o coletivo requerido:</p>
+<p><span class="math display">\[
+C_T=
+\frac{\sigma a}{2}
+\left[
+\theta_0
+\left(
+\frac13+\frac{\mu^2}{2}
+\right)
+-\frac{\lambda}{2}
+\right].
+\]</span></p>
+<p>Isolando <span class="math inline">\(\theta_0\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+\theta_0=
+\frac{
+\dfrac{2C_T}{\sigma a}
++\dfrac{\lambda}{2}
+}
+{
+\dfrac13+\dfrac{\mu^2}{2}
+}.
+}
+\]</span></p>
+<p>Em voo pairado,</p>
+<p><span class="math display">\[
+\lambda_i=\sqrt{\frac{0{,}02}{2}}=0{,}10
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+\boxed{
+\theta_0=14{,}63^\circ.
+}
+\]</span></p>
+<p>A potência usa a forma energética de <span
+class="math inline">\(C_{Qi}\)</span> e o <strong>nível 1</strong>, isto
+é, a integral vetorial completa de perfil. O inflow de Coleman é
+aplicado a <span class="math inline">\(C_Y\)</span> e <span
+class="math inline">\(C_{My}\)</span>. Como a forma energética não soma
+explicitamente o termo <span class="math inline">\(L^2\)</span>, <span
+class="math inline">\(C_Q\)</span> é igual nos modelos uniforme e
+Coleman para os parâmetros adotados.</p>
+<h3 id="trim-e-inflow">Trim e inflow</h3>
+<p><img
+src="../assets/media/equacoes-analiticas-coeficientes-aerodinamicos-rotor_fig1.svg"
+alt="Coletivo, inflow induzido e inflow total em função da razão de avanço" /></p>
+<p><em>Figura 1: Coletivo requerido para manter <span
+class="math inline">\(C_T=0{,}02\)</span>, inflow induzido <span
+class="math inline">\(\lambda_i\)</span> e inflow total <span
+class="math inline">\(\lambda\)</span> para <span
+class="math inline">\(\alpha=-5^\circ\)</span>, <span
+class="math inline">\(0^\circ\)</span> e <span
+class="math inline">\(+5^\circ\)</span>.</em></p>
+<p>O comportamento de <span class="math inline">\(\lambda_i\)</span> é
+dominado pela quantidade de movimento. À medida que <span
+class="math inline">\(\mu\)</span> cresce, uma mesma tração pode ser
+produzida com menor velocidade induzida média. Em <span
+class="math inline">\(\alpha=0^\circ\)</span>, <span
+class="math inline">\(\lambda_i\)</span> cai de <span
+class="math inline">\(0{,}10\)</span> em voo pairado para
+aproximadamente <span class="math inline">\(0{,}0167\)</span> em <span
+class="math inline">\(\mu=0{,}6\)</span>.</p>
+<p>A incidência altera principalmente o inflow total. Para <span
+class="math inline">\(\alpha=+5^\circ\)</span>, <span
+class="math inline">\(\mu_z&lt;0\)</span>. Em avanço alto, a parcela
+axial externa supera <span class="math inline">\(\lambda_i\)</span> e
+<span class="math inline">\(\lambda\)</span> torna-se negativo, embora
+<span class="math inline">\(\lambda_i\)</span> permaneça positivo. Isso
+não é uma contradição: <span class="math inline">\(\lambda_i\)</span>
+mede o incremento induzido pelo rotor, enquanto <span
+class="math inline">\(\lambda\)</span> mede a soma desse incremento com
+o escoamento externo.</p>
+<p>O coletivo cai com <span class="math inline">\(\mu\)</span> porque a
+pressão dinâmica média das pás cresce. Para <span
+class="math inline">\(\alpha=0^\circ\)</span>, ele passa de <span
+class="math inline">\(14{,}63^\circ\)</span> em voo pairado para cerca
+de <span class="math inline">\(4{,}85^\circ\)</span> em <span
+class="math inline">\(\mu=0{,}6\)</span>.</p>
+<h3 id="torque-e-potência">Torque e potência</h3>
+<p><img
+src="../assets/media/equacoes-analiticas-coeficientes-aerodinamicos-rotor_fig2.svg"
+alt="Torque total, torque induzido e torque de perfil em função da razão de avanço" /></p>
+<p><em>Figura 2: <span class="math inline">\(C_Q=C_P\)</span>, <span
+class="math inline">\(C_{Qi}\)</span> e <span
+class="math inline">\(C_{Q0}\)</span> usando a forma energética para
+torque induzido e a integral completa de perfil.</em></p>
+<p>Em voo pairado, a potência induzida domina. À medida que <span
+class="math inline">\(\mu\)</span> cresce, <span
+class="math inline">\(\lambda_i\)</span> diminui e a parcela induzida
+cai. A parcela de perfil passa a representar fração crescente da
+potência.</p>
+<p>A incidência modifica o torque de eixo porque a corrente livre
+realiza trabalho sobre o rotor. Por isso <span
+class="math inline">\(C_Q\)</span> não pode ser interpretado apenas como
+<span class="math inline">\(C_T\lambda_i+C_{Q0}\)</span> quando <span
+class="math inline">\(\mu_z\)</span> e <span
+class="math inline">\(C_H\)</span> são diferentes de zero.</p>
+<h3 id="força-longitudinal">Força longitudinal</h3>
+<p><img
+src="../assets/media/equacoes-analiticas-coeficientes-aerodinamicos-rotor_fig3.svg"
+alt="Força longitudinal total, induzida e de perfil em função da razão de avanço" /></p>
+<p><em>Figura 3: Decomposição <span
+class="math inline">\(C_H=C_{Hi}+C_{H0}\)</span>.</em></p>
+<p><span class="math inline">\(C_{H0}\)</span> cresce com <span
+class="math inline">\(\mu\)</span> porque o rotor apresenta arrasto de
+perfil ao escoamento no plano do disco. <span
+class="math inline">\(C_{Hi}\)</span> depende de <span
+class="math inline">\(\mu\lambda\)</span> e do coletivo. A combinação
+pode mudar de importância relativa com a incidência.</p>
+<h3 id="força-lateral-e-momentos">Força lateral e momentos</h3>
+<p><img
+src="../assets/media/equacoes-analiticas-coeficientes-aerodinamicos-rotor_fig4.svg"
+alt="Força lateral e momentos de arfagem e rolamento" /></p>
+<p><em>Figura 4: <span class="math inline">\(C_Y\)</span>, <span
+class="math inline">\(C_{My}\)</span> e <span
+class="math inline">\(C_{Mx}\)</span>. As curvas de <span
+class="math inline">\(C_Y\)</span> e <span
+class="math inline">\(C_{My}\)</span> são de Coleman. Com inflow
+uniforme, ambos são nulos nesta formulação. <span
+class="math inline">\(C_{Mx}\)</span> é igual nos dois modelos.</em></p>
+<p>O momento de rolamento cresce em módulo com <span
+class="math inline">\(\mu\)</span> porque a assimetria
+avançante-recuante cresce. Como o rotor foi artificialmente impedido de
+bater, essa assimetria aparece diretamente como momento de cubo.</p>
+<p><span class="math inline">\(C_{My}\)</span> é uma assinatura direta
+do gradiente longitudinal de Coleman. O mesmo vale para <span
+class="math inline">\(C_Y\)</span>. No inflow uniforme, a simetria
+frente-trás força ambos a zero.</p>
+<p>O sinal de <span class="math inline">\(C_Y\)</span> pode mudar
+conforme a combinação entre passo e inflow muda. A expressão</p>
+<p><span class="math display">\[
+C_Y
+=
+-\frac{\sigma aL}{4}
+\left(
+\frac{\theta_0}{3}-\lambda
+\right)
+\]</span></p>
+<p>mostra a condição em que essa inversão ocorre.</p>
+<h3 id="figura-de-mérito-e-índice-generalizado">Figura de mérito e
+índice generalizado</h3>
+<p>A figura de mérito clássica em voo pairado é</p>
+<p><span class="math display">\[
+FM=
+\frac{0{,}02^{3/2}}
+{\sqrt2\,C_P}.
+\]</span></p>
+<p>Com os parâmetros adotados,</p>
+<p><span class="math display">\[
+\boxed{
+FM_{\mathrm{pairado}}\simeq0{,}656.
+}
+\]</span></p>
+<p>Para comparar perdas fora do voo pairado, usa-se <span
+class="math inline">\(FM^\dagger\)</span>.</p>
+<p><img
+src="../assets/media/equacoes-analiticas-coeficientes-aerodinamicos-rotor_fig5.svg"
+alt="Índice de mérito aerodinâmico generalizado em função da razão de avanço" /></p>
+<p><em>Figura 5: <span
+class="math inline">\(FM^\dagger=C_T\lambda_i/(K_{\mathrm{ind}}C_T\lambda_i+C_{Q0})\)</span>.
+Em <span class="math inline">\(\mu=0\)</span> ele coincide com a figura
+de mérito clássica. Em avanço é apenas um índice comparativo de
+perdas.</em></p>
+<p>O índice cai com <span class="math inline">\(\mu\)</span> neste rotor
+porque a potência induzida ideal diminui enquanto o custo de perfil
+passa a representar parcela maior do orçamento de perdas.</p>
+<h3 id="valores-selecionados">Valores selecionados</h3>
+<p>A tabela abaixo usa Coleman e a formulação energética de torque. Os
+coeficientes comuns ao modelo uniforme possuem os mesmos valores. No
+modelo uniforme, <span class="math inline">\(C_Y=C_{My}=0\)</span>.</p>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: right;"><span
+class="math inline">\(\alpha\)</span> [graus]</th>
+<th style="text-align: right;"><span
+class="math inline">\(\mu\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(\theta_0\)</span> [graus]</th>
+<th style="text-align: right;"><span
+class="math inline">\(\lambda_i\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(\lambda\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(C_Q\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(C_H\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(C_Y\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(C_{My}\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(C_{Mx}\)</span></th>
+<th style="text-align: right;"><span
+class="math inline">\(FM^\dagger\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">-5</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">14.626</td>
+<td style="text-align: right;">0.10000</td>
+<td style="text-align: right;">0.10000</td>
+<td style="text-align: right;">0.00305</td>
+<td style="text-align: right;">-0.00000</td>
+<td style="text-align: right;">0.0000e+00</td>
+<td style="text-align: right;">0.0000e+00</td>
+<td style="text-align: right;">-0.0000e+00</td>
+<td style="text-align: right;">0.656</td>
+</tr>
+<tr>
+<td style="text-align: right;">-5</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">10.964</td>
+<td style="text-align: right;">0.04755</td>
+<td style="text-align: right;">0.06505</td>
+<td style="text-align: right;">0.00210</td>
+<td style="text-align: right;">0.00118</td>
+<td style="text-align: right;">1.8298e-05</td>
+<td style="text-align: right;">3.6236e-03</td>
+<td style="text-align: right;">-5.4175e-03</td>
+<td style="text-align: right;">0.504</td>
+</tr>
+<tr>
+<td style="text-align: right;">-5</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">9.003</td>
+<td style="text-align: right;">0.02473</td>
+<td style="text-align: right;">0.05972</td>
+<td style="text-align: right;">0.00176</td>
+<td style="text-align: right;">0.00210</td>
+<td style="text-align: right;">6.5675e-05</td>
+<td style="text-align: right;">2.2358e-03</td>
+<td style="text-align: right;">-8.5380e-03</td>
+<td style="text-align: right;">0.332</td>
+</tr>
+<tr>
+<td style="text-align: right;">-5</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">7.770</td>
+<td style="text-align: right;">0.01656</td>
+<td style="text-align: right;">0.06905</td>
+<td style="text-align: right;">0.00158</td>
+<td style="text-align: right;">0.00334</td>
+<td style="text-align: right;">1.4774e-04</td>
+<td style="text-align: right;">1.5488e-03</td>
+<td style="text-align: right;">-9.5557e-03</td>
+<td style="text-align: right;">0.222</td>
+</tr>
+<tr>
+<td style="text-align: right;">+0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">14.626</td>
+<td style="text-align: right;">0.10000</td>
+<td style="text-align: right;">0.10000</td>
+<td style="text-align: right;">0.00305</td>
+<td style="text-align: right;">-0.00000</td>
+<td style="text-align: right;">0.0000e+00</td>
+<td style="text-align: right;">0.0000e+00</td>
+<td style="text-align: right;">-0.0000e+00</td>
+<td style="text-align: right;">0.656</td>
+</tr>
+<tr>
+<td style="text-align: right;">+0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">9.629</td>
+<td style="text-align: right;">0.04859</td>
+<td style="text-align: right;">0.04859</td>
+<td style="text-align: right;">0.00182</td>
+<td style="text-align: right;">0.00093</td>
+<td style="text-align: right;">-1.1916e-04</td>
+<td style="text-align: right;">4.0078e-03</td>
+<td style="text-align: right;">-5.0015e-03</td>
+<td style="text-align: right;">0.508</td>
+</tr>
+<tr>
+<td style="text-align: right;">+0</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">6.593</td>
+<td style="text-align: right;">0.02495</td>
+<td style="text-align: right;">0.02495</td>
+<td style="text-align: right;">0.00136</td>
+<td style="text-align: right;">0.00136</td>
+<td style="text-align: right;">-1.3191e-04</td>
+<td style="text-align: right;">2.4598e-03</td>
+<td style="text-align: right;">-7.3233e-03</td>
+<td style="text-align: right;">0.334</td>
+</tr>
+<tr>
+<td style="text-align: right;">+0</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">4.846</td>
+<td style="text-align: right;">0.01666</td>
+<td style="text-align: right;">0.01666</td>
+<td style="text-align: right;">0.00135</td>
+<td style="text-align: right;">0.00197</td>
+<td style="text-align: right;">-7.8435e-05</td>
+<td style="text-align: right;">1.7002e-03</td>
+<td style="text-align: right;">-8.2177e-03</td>
+<td style="text-align: right;">0.223</td>
+</tr>
+<tr>
+<td style="text-align: right;">+5</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">14.626</td>
+<td style="text-align: right;">0.10000</td>
+<td style="text-align: right;">0.10000</td>
+<td style="text-align: right;">0.00305</td>
+<td style="text-align: right;">-0.00000</td>
+<td style="text-align: right;">0.0000e+00</td>
+<td style="text-align: right;">0.0000e+00</td>
+<td style="text-align: right;">-0.0000e+00</td>
+<td style="text-align: right;">0.656</td>
+</tr>
+<tr>
+<td style="text-align: right;">+5</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">8.274</td>
+<td style="text-align: right;">0.04938</td>
+<td style="text-align: right;">0.03188</td>
+<td style="text-align: right;">0.00153</td>
+<td style="text-align: right;">0.00073</td>
+<td style="text-align: right;">-2.8750e-04</td>
+<td style="text-align: right;">4.4204e-03</td>
+<td style="text-align: right;">-4.5793e-03</td>
+<td style="text-align: right;">0.512</td>
+</tr>
+<tr>
+<td style="text-align: right;">+5</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">4.170</td>
+<td style="text-align: right;">0.02499</td>
+<td style="text-align: right;">-0.01000</td>
+<td style="text-align: right;">0.00083</td>
+<td style="text-align: right;">0.00095</td>
+<td style="text-align: right;">-3.5055e-04</td>
+<td style="text-align: right;">2.5575e-03</td>
+<td style="text-align: right;">-6.1021e-03</td>
+<td style="text-align: right;">0.334</td>
+</tr>
+<tr>
+<td style="text-align: right;">+5</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">1.915</td>
+<td style="text-align: right;">0.01664</td>
+<td style="text-align: right;">-0.03586</td>
+<td style="text-align: right;">0.00057</td>
+<td style="text-align: right;">0.00153</td>
+<td style="text-align: right;">-3.0914e-04</td>
+<td style="text-align: right;">1.6444e-03</td>
+<td style="text-align: right;">-6.8765e-03</td>
+<td style="text-align: right;">0.222</td>
+</tr>
+</tbody>
+</table>
+<p>A tabela mostra três tendências úteis para estimativa preliminar.
+Primeiro, <span class="math inline">\(\lambda_i\)</span> cai rapidamente
+com <span class="math inline">\(\mu\)</span> para tração fixa. Segundo,
+o coletivo necessário também cai. Terceiro, os momentos rígidos não
+seguem a mesma tendência da potência: <span
+class="math inline">\(|C_{Mx}|\)</span> pode continuar crescendo mesmo
+enquanto <span class="math inline">\(C_Q\)</span> diminui.</p>
+<h2 id="23-limites-de-validade">23. Limites de validade</h2>
+<p>As fórmulas são deliberadamente de baixa ordem e devem ser usadas
+dentro das hipóteses que sustentam a derivação.</p>
+<p>A sustentação foi linearizada como <span
+class="math inline">\(C_l=a\alpha_e\)</span>. Portanto, o modelo não
+captura <a
+href="https://en.wikipedia.org/wiki/Retreating_blade_stall">estol da pá
+recuante</a>, curvatura de <span class="math inline">\(C_l\)</span>,
+dependência forte de Reynolds ou efeitos tridimensionais locais.</p>
+<p>O arrasto foi representado principalmente por <span
+class="math inline">\(C_{d0}\)</span>. O modelo não contém polar
+completa <span class="math inline">\(C_d(\alpha,M,Re)\)</span>,
+divergência de arrasto por compressibilidade ou incremento de arrasto
+associado à carga. Para potência em avanço alto, esses efeitos podem ser
+maiores que a diferença entre duas variantes de inflow de baixa
+ordem.</p>
+<p>O modelo impõe batimento nulo. Em um rotor articulado, basculante
+(<em>teetering</em>) ou flexível, a pá responde ao primeiro harmônico de
+carga e redistribui parte dos momentos que aqui aparecem diretamente no
+cubo. Assim, <span class="math inline">\(C_{Mx}\)</span> e <span
+class="math inline">\(C_{My}\)</span> devem ser interpretados como
+momentos aerodinâmicos de um rotor cinematicamente rígido.</p>
+<p>O modelo também impõe avanço-recuo nulo. As forças no plano do disco
+não alimentam movimento de avanço-recuo, amortecimento no plano nem
+acoplamentos entre batimento e avanço-recuo.</p>
+<p>Coleman é um modelo de primeiro harmônico. Ele não representa
+estrutura radial de ordem superior, gradiente lateral, inflow dinâmico
+ou memória temporal da esteira. Para esses fenômenos, modelos como
+Drees, Pitt–Peters e Peters–He preservam informações adicionais.</p>
+<p>A relação de quantidade de movimento usada para <span
+class="math inline">\(\lambda_i\)</span> descreve o regime normal de
+operação. Regimes de descida profunda, <a
+href="https://en.wikipedia.org/wiki/Vortex_ring_state">estado de anel de
+vórtice</a> e condições de esteira altamente distorcida exigem
+tratamento específico.</p>
+<p>As fórmulas fechadas de perfil usam aproximações mais fortes que as
+integrais completas. A forma fechada serve para entendimento e
+estimativa inicial, enquanto a integral de perfil refina <span
+class="math inline">\(C_Q\)</span> e <span
+class="math inline">\(C_H\)</span> quando <span
+class="math inline">\(\mu\)</span> cresce.</p>
+<h2 id="24-conclusão">24. Conclusão</h2>
+<p>As cargas aerodinâmicas básicas de um rotor rígido podem ser
+organizadas em um conjunto pequeno de relações.</p>
+<p>A tração depende dos momentos de passo <span
+class="math inline">\(\mathcal T_0\)</span> e <span
+class="math inline">\(\mathcal T_2\)</span> e do momento aerodinâmico
+<span class="math inline">\(\mathcal A_1\)</span>. O torque induzido
+acrescenta <span class="math inline">\(\mathcal A_3\)</span> quando
+Coleman é mantido. A força longitudinal depende de <span
+class="math inline">\(\mathcal T_0\)</span> e do momento de arrasto
+<span class="math inline">\(\mathcal D_1\)</span>. A força lateral e o
+momento de arfagem são assinaturas diretas do primeiro harmônico
+longitudinal <span class="math inline">\(L\)</span>. O momento de
+rolamento permanece ligado à assimetria avançante-recuante e não recebe
+contribuição direta de Coleman nesta ordem.</p>
+<p>A notação por momentos radiais torna o conjunto reutilizável. Uma pá
+com afilamento de corda, torção ou propriedades aerodinâmicas radiais
+diferentes altera <span class="math inline">\(\mathcal A_n\)</span>,
+<span class="math inline">\(\mathcal T_n\)</span> e <span
+class="math inline">\(\mathcal D_n\)</span>, mas não exige refazer toda
+a lógica. Para uma pá retangular, esses momentos se reduzem aos <span
+class="math inline">\(J_n\)</span> e produzem as fórmulas fechadas das
+duas tabelas.</p>
+<p>Para uso rápido, a sequência mínima é: calcular <span
+class="math inline">\(\mu_z\)</span>, resolver <span
+class="math inline">\(\lambda_i\)</span> pela quantidade de movimento,
+formar <span class="math inline">\(\lambda\)</span>, calcular <span
+class="math inline">\(K_x\)</span> e <span
+class="math inline">\(L\)</span> se Coleman for necessário, avaliar os
+momentos radiais e então aplicar as expressões tabuladas. O mesmo
+encadeamento serve desde uma estimativa manual até um código compacto de
+desempenho preliminar.</p>
+<h2 id="referências">Referências</h2>
+<p>[1] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. <a
+href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
+<p>[2] Johnson, W. R., <em>NDARC — NASA Design and Analysis of
+Rotorcraft</em>, NASA/TP-2009-215402, NASA Ames Research Center, Moffett
+Field, 2009. <a
+href="https://ntrs.nasa.gov/citations/20100021405">Link</a></p>
+<p>[3] Coleman, R. P., Feingold, A. M., e Stempin, C. W., <em>Evaluation
+of the Induced-Velocity Field of an Idealized Helicopter Rotor</em>,
+NACA Wartime Report L-126 (ARR L5E10), Langley Memorial Aeronautical
+Laboratory, Hampton, 1945. <a
+href="https://ntrs.nasa.gov/citations/19930093086">Link</a></p>
+<p>[4] Johnson, W., <em>Helicopter Theory</em>, Princeton University
+Press, Princeton, 1980. <a
+href="https://archive.org/details/helicoptertheory0000john_y9s0">Link</a></p>
+<p>[5] Johnson, W., <em>Milestones in Rotorcraft Aeromechanics</em>,
+NASA/TP-2011-215971, NASA Ames Research Center, Moffett Field, 2011. <a
+href="https://rotorcraft.arc.nasa.gov/Johnson_TP-2011-215971_final.pdf">Link</a></p>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Setembro de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
+     claro no desktop, escuro no mobile) e persiste a escolha. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(a)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  tgl.addEventListener("click",function(){
+    var next=effectiveTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  if(toTop){toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Legendas de figura: só o parágrafo inteiramente em itálico ou um prefixo
+   explícito Fig./Figura/Tira é legenda. Itálico incidental em prosa continua
+   inline, inclusive quando o parágrafo vem imediatamente depois da imagem. */
+function isImageCaption(paragraph){
+  var nodes=[].slice.call(paragraph.childNodes).filter(function(node){
+    return !(node.nodeType===3&&!node.textContent.trim());
+  });
+  var pureEmphasis=nodes.length===1&&nodes[0].nodeType===1&&nodes[0].tagName==='EM';
+  var explicitCaption=/^(fig(?:ura)?\.?\s*\d+\b|tira\b)/i.test(paragraph.textContent.trim());
+  return pureEmphasis||explicitCaption;
+}
+document.querySelectorAll('.content p').forEach(function(paragraph){
+  var previous=paragraph.previousElementSibling;
+  if(!previous||previous.tagName!=='P')return;
+  if(!previous.querySelector(':scope > img, :scope > picture'))return;
+  if(isImageCaption(paragraph))paragraph.classList.add('sb-image-caption');
+});
+  /* Identifica e classifica divisores de capitulo: o losango so aparece onde ha capitulo real */
+  document.querySelectorAll(".content hr").forEach(function(hr){
+    var next=hr.nextElementSibling;
+    while(next&&next.nodeType===1&&next.tagName==="P"&&!next.textContent.trim()){
+      next=next.nextElementSibling;
+    }
+    if(next&&next.tagName==="H2"){
+      var id=(next.id||"").toLowerCase();
+      if(id.indexOf("sum")===0){
+        hr.style.display="none";
+      }else if(id.indexOf("ref")===0){
+        hr.classList.add("sb-hr-references");
+      }else{
+        hr.classList.add("sb-hr-chapter");
+      }
+    }
+  });
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        // A conta tem que bater com a do catalogo (build_site.reading_minutes):
+        // mesma velocidade, 220 ppm, e matematica fora da contagem. Antes eram
+        // 200 ppm E o texto renderizado das formulas entrava como palavra, de
+        // modo que o MESMO essay anunciava 81 min aqui e 73 no catalogo — e o
+        // erro crescia justamente no essay tecnico, que e onde a formula pesa.
+        // `cloneNode` para nao mexer no DOM que o leitor esta vendo.
+        //
+        // O numero PRONTO chega do servidor em `data-minutes`, calculado por
+        // site_common.reading_minutes \u2014 a mesma funcao do catalogo, entao as
+        // duas superficies nunca divergem. Contar aqui era adivinhar duas
+        // vezes: media antes de o MathJax tipografar, com o LaTeX cru ainda no
+        // DOM como texto, e cada formula entrava como um punhado de palavras.
+        //
+        // A contagem local fica como plano B para um HTML antigo, gerado antes
+        // de o template passar a receber a variavel.
+        var servidor=parseInt(document.documentElement.getAttribute("data-minutes"),10);
+        var mins;
+        if(servidor>0){
+          mins=servidor;
+        }else{
+          var copia=content.cloneNode(true);
+          copia.querySelectorAll("mjx-container,.MathJax,math,script[type^='math/tex']")
+               .forEach(function(n){n.remove();});
+          var words=(copia.innerText||copia.textContent||"").trim().split(/\s+/).filter(Boolean).length;
+          mins=Math.max(1,Math.round(words/220));
+        }
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+<script>
+/* Visor de figura. Arrasta com um dedo ou com o mouse; a pinca de dois
+   dedos e a roda dao zoom. Fecha no botao, no Esc ou no toque fora. */
+(function(){
+  var alvo = document.querySelectorAll('.content img');
+  if (!alvo.length) return;
+  var visor = document.createElement('div');
+  visor.id = 'lupa';
+  visor.innerHTML =
+    '<button id="lupa-fechar" aria-label="Fechar">\u00d7</button>' +
+    '<span id="lupa-dica">arraste para mover \u00b7 pin\u00e7a ou roda para ampliar</span>';
+  document.body.appendChild(visor);
+  // O <img> existe fora do documento ate a primeira abertura: com src
+  // vazio mas presente no DOM ele conta como imagem quebrada na checagem
+  // de render, mesmo escondido por CSS.
+  var img = document.createElement('img');
+  img.alt = '';
+  var esc = 1, x = 0, y = 0, base = 1;
+
+  function aplica(){
+    img.style.transform =
+      'translate(-50%,-50%) translate(' + x + 'px,' + y + 'px) scale(' + esc + ')';
+  }
+  function abre(src, alt){
+    img.src = src; img.alt = alt || '';
+    if (!img.isConnected) visor.insertBefore(img, visor.firstChild);
+    img.onload = function(){
+      // Comeca enquadrando a figura inteira; dai o leitor amplia onde quiser.
+      var cx = innerWidth / img.naturalWidth, cy = innerHeight / img.naturalHeight;
+      base = Math.min(cx, cy) * 0.94;
+      esc = base; x = 0; y = 0; aplica();
+    };
+    visor.setAttribute('open', '');
+    document.body.style.overflow = 'hidden';
+  }
+  function fecha(){
+    visor.removeAttribute('open');
+    document.body.style.overflow = '';
+  }
+  alvo.forEach(function(n){
+    n.addEventListener('click', function(){ abre(n.currentSrc || n.src, n.alt); });
+  });
+  visor.querySelector('#lupa-fechar').addEventListener('click', fecha);
+  visor.addEventListener('click', function(e){ if (e.target === visor) fecha(); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') fecha(); });
+
+  var arrastando = false, px = 0, py = 0, dedos = {}, dist0 = 0, esc0 = 1;
+  visor.addEventListener('pointerdown', function(e){
+    if (e.target === img) {
+      dedos[e.pointerId] = [e.clientX, e.clientY];
+      var ids = Object.keys(dedos);
+      if (ids.length === 1) { arrastando = true; px = e.clientX; py = e.clientY; }
+      else if (ids.length === 2) {
+        arrastando = false;
+        var a = dedos[ids[0]], b = dedos[ids[1]];
+        dist0 = Math.hypot(a[0]-b[0], a[1]-b[1]); esc0 = esc;
+      }
+      img.setPointerCapture(e.pointerId);
+    }
+  });
+  visor.addEventListener('pointermove', function(e){
+    if (!(e.pointerId in dedos)) return;
+    dedos[e.pointerId] = [e.clientX, e.clientY];
+    var ids = Object.keys(dedos);
+    if (ids.length >= 2) {
+      var a = dedos[ids[0]], b = dedos[ids[1]];
+      var d = Math.hypot(a[0]-b[0], a[1]-b[1]);
+      if (dist0) { esc = Math.max(base * 0.5, Math.min(esc0 * d / dist0, base * 12)); aplica(); }
+    } else if (arrastando) {
+      x += e.clientX - px; y += e.clientY - py;
+      px = e.clientX; py = e.clientY; aplica();
+    }
+  });
+  function solta(e){ delete dedos[e.pointerId]; arrastando = false; dist0 = 0; }
+  visor.addEventListener('pointerup', solta);
+  visor.addEventListener('pointercancel', solta);
+  visor.addEventListener('wheel', function(e){
+    if (!visor.hasAttribute('open')) return;
+    e.preventDefault();
+    esc = Math.max(base * 0.5, Math.min(esc * (e.deltaY < 0 ? 1.12 : 0.89), base * 12));
+    aplica();
+  }, {passive:false});
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark" aria-hidden="true"></span>Second Brain Atlas</a>
+  <nav class="sb-nav">
+    <a href="../index.html">Essays</a>
+    <a href="../graph.html">Grafo</a>
+    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
+  </nav>
+</header>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Rotores</span><span class="sb-tag">Engenharia</span><span class="sb-tag">Dinâmica-de-Voo</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="cy-inflow-uniforme-coleman.html"><strong>Força Lateral de um Rotor em Voo à Frente: Inflow Uniforme e Coleman</strong><span>Com inflow uniforme, a teoria de elemento de pá prevê força lateral média nula, porque as contribuições da frente e da traseira do disco se cancelam exatamente. O estudo deriva esse cancelamento a partir da cinemática azimutal, mostra que o gradiente longitudinal de Coleman quebra a simetria frente-trás e obtém uma expressão fechada para o coeficiente de força lateral, com o sinal, o lado do rotor e um exemplo numérico.</span></a><a class="sb-related-card" href="efeito-da-solidez-em-rotores.html"><strong>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</strong><span>A partir de primeiros princípios físicos e com rigor matemático, o white paper descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com voo com velocidade à frente.</span></a><a class="sb-related-card" href="parametros-adimensionais-esteira-rotores.html"><strong>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</strong><span>Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</span></a><a class="sb-related-card" href="dinamica-de-voo-rotor-teetering.html"><strong>Dinâmica de Voo de um Rotor Teetering Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a></div></section>
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
+        aria-controls="sbToc" title="Sumário do essay">
+  <span class="sb-toc-icon" aria-hidden="true">☰</span>
+  <span class="sb-toc-text">Sumário</span>
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do essay">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=ad4f677f"></script>
+<script src="../assets/essay.js?v=f51be804"></script>
+</body>
+</html>
