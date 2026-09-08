@@ -53,6 +53,10 @@
   --tab-mix:9%;
   --verdict-mix:10%;
   --box-verdict-bg:rgba(176,139,79,.10);
+  /* Cabecalho de tabela: no escuro o cinza de superficie quase some
+     contra o corpo. Um tint de rust separa a primeira linha sem
+     precisar de regra mais pesada. No claro ele nao e necessario. */
+  --th-bg:color-mix(in srgb,var(--rust) 16%,var(--surface2));
   --max-width:700px;
 }
 [data-theme="light"]{
@@ -89,6 +93,7 @@
   --tab-mix:3%;
   --verdict-mix:4%;
   --box-verdict-bg:var(--surface2);
+  --th-bg:var(--surface2);
 }
 @media (min-width:901px){
   /* Desktop: coluna larga, mas com teto. 75vw sozinho dava 2580px de linha
@@ -96,8 +101,8 @@
      em 1180px; figuras, tabelas e blocos de código continuam podendo usar a
      largura antiga, que é onde ela servia para alguma coisa. */
   :root{
-    --wide-width:75vw;
-    --max-width:min(75vw,1180px);
+    --wide-width:70.5vw;
+    --max-width:min(70.5vw,1109px);
   }
   /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
      escuro para quem preferir. Playfair permanece em todos os temas */
@@ -135,6 +140,7 @@
   --tab-mix:3%;
   --verdict-mix:4%;
     --box-verdict-bg:var(--surface2);
+    --th-bg:var(--surface2);
   }
 }
 
@@ -459,7 +465,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   margin:2rem 0;padding:1.05rem 1.3rem;
   background:var(--quote-bg);border-left:2px solid var(--callout-quote);
 }
-.quote p{font-size:.97rem;color:var(--text);margin-bottom:1rem;}
+.quote p{font-size:1rem;color:var(--text);margin-bottom:1rem;}
 .quote p:last-child{margin-bottom:0;}
 
 .pull-quote{
@@ -500,8 +506,8 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   overflow:hidden;
 }
 .quote{
-  margin:2.35rem 0;padding:1.25rem 1.45rem 1.2rem;
-  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
 }
 .pull-quote{
   margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
@@ -533,7 +539,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   padding-top:.65rem;
   border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
   font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
-  font-size:.9rem;line-height:1.5;letter-spacing:.005em;
+  font-size:.96rem;line-height:1.5;letter-spacing:.005em;
   color:var(--text-dim);font-style:normal;
 }
 .quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
@@ -583,10 +589,10 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 .box > h3,.box > h4,.box > h5,.box > h6{
   padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
 }
-.box > h3{font-size:1.08rem;margin:1.2rem 0 1.05rem;}
-.box > h4{font-size:1rem;margin:1rem 0 1rem;}
-.box > h5,.box > h6{font-size:.94rem;margin:.9rem 0 .4rem;}
-.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;}
+.box > h3{font-size:1.16rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1.08rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:1rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;font-size:1rem;}
 
 /* Badge: versalete espacejado sem retângulo preenchido */
 .box-badge{
@@ -599,10 +605,10 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
 }
 .box-title{
   font-family:var(--font-display);font-weight:700;
-  font-size:1rem;line-height:1.35;color:var(--text-bright);
+  font-size:1.08rem;line-height:1.35;color:var(--text-bright);
   padding:1rem 1.3rem .3rem;
 }
-.box > p{font-size:.95rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p{font-size:1rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
 .box > p:last-of-type{margin-bottom:1.2rem;}
 .box-title p,.box-badge p{margin:0;padding:0;}
 
@@ -628,7 +634,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   background:color-mix(in srgb,var(--boxc) var(--verdict-mix),var(--bg));
   border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
 }
-.box-verdict p{margin:0 0 .7rem;font-size:.92rem;color:var(--text-bright);}
+.box-verdict p{margin:0 0 .7rem;font-size:.98rem;color:var(--text-bright);}
 .verdict-tag{
   display:block;font-family:'JetBrains Mono',Consolas,monospace;
   font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
@@ -647,7 +653,7 @@ li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
   font-size:.78rem;letter-spacing:.05em;
   color:var(--text-dim);margin:.25rem 0 .75rem;
 }
-.card p{font-size:.95rem;line-height:1.7;margin-bottom:.7rem;}
+.card p{font-size:1rem;line-height:1.7;margin-bottom:.7rem;}
 .card p:last-child{margin-bottom:0;}
 
 /* Rotulo solto / ornamento */
@@ -676,7 +682,7 @@ table{
   border-collapse:collapse;margin:2rem 0;font-size:.95rem;
 }
 th{
-  background:var(--surface2);color:var(--gold);text-align:left;
+  background:var(--th-bg);color:var(--gold);text-align:left;
   font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
   font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
   padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
@@ -871,7 +877,8 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
      funcionam como hierarquia; a 375px viravam 10-12px, abaixo do que se le
      confortavelmente. Só o piso sobe — a hierarquia continua. */
   th{font-size:.82rem;}
-  .quote p{font-size:1rem;}
+  .quote p{font-size:.93rem;}
+  .quote-text p{font-size:.95rem;}
   .box-verdict p{font-size:.96rem;}
   /* Vozes de rótulo — versalete espacejado em monoespaçada. A 375px elas
      caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
@@ -881,7 +888,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   .label-solo{font-size:.74rem;}
   .card-meta{font-size:.78rem;}
   .pq-cite{font-size:.9rem;}
-  .quote-attribution{font-size:.88rem;}
+  .quote-attribution{font-size:.85rem;}
   .pull-quote.epigraph p:last-child{font-size:.78rem;}
 }
 
@@ -965,7 +972,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 .box.callout-todo > h4.entity-meta{
   margin:.42rem 0 .9rem;padding:0 1.3rem;
   color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
-  font-size:.82rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  font-size:.84rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
   text-transform:uppercase;
 }
 
@@ -1023,7 +1030,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 .box.callout-bug{border-left-style:double;}
 
 @media (max-width:640px){
-  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 .6rem;}
+  .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title{padding:0 0 1.15rem;}
   .box:is(.callout-example,.callout-tip,.callout-info,.callout-abstract) > .box-title p{
     padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
   }
@@ -1032,7 +1039,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
   .box.callout-warning > .box-title,
   .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
   .box.callout-todo > .box-title p{font-size:1.15rem;}
-  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.82rem;}
   .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
   .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
 }
@@ -1437,7 +1444,7 @@ e Lee (2007)</a> revisam estudos lexicais conduzidos em múltiplos
 idiomas e encontram, de forma recorrente, um sexto fator —
 Honestidade-Humildade — que o modelo anterior simplesmente não
 capturava.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1490,7 +1497,7 @@ atinge <code>α = .98</code>, e a estabilidade teste-reteste, calculada
 com 298 participantes reavaliados após um intervalo médio de 22 dias,
 foi de <code>r = .96</code> — valores próximos ao teto teórico da escala
 de confiabilidade.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1550,7 +1557,7 @@ pelo instrumento.</p>
 href="https://doi.org/10.1037/0033-2909.124.2.262">Schmidt e Hunter
 (1998)</a>, que reuniu 85 anos de pesquisa sobre 19 métodos distintos de
 seleção de pessoal.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1585,7 +1592,7 @@ para “restrição de faixa” (o fenômeno pelo qual amostras de candidatos
 já pré-selecionados reduzem artificialmente a variância observada) foram
 aplicadas na literatura clássica, e recalcularam a validade da GMA para
 baixo.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1602,7 +1609,7 @@ e validade corrigida de <code>r = .22</code> — uma estimativa mais
 conservadora ainda, que alguns autores atribuem à crescente importância
 de competências interpessoais em ambientes de trabalho contemporâneos,
 menos dominados por tarefas manufatureiras isoladas.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1663,7 +1670,7 @@ entre 6 a 8 opções, a peça que falta. Não há limite de tempo na versão
 padrão. Por depender quase exclusivamente de raciocínio abstrato e
 memória operacional, encontra-se entre os testes com maior carga no
 fator g de toda a psicometria.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1687,7 +1694,7 @@ vocabulário, matemática e lógica, respondidas em apenas
 <code>12 minutos</code> — a pressão de tempo é parte deliberada do
 desenho do instrumento. Produz um escore bruto único, de 0 a 50,
 altamente correlacionado com o QI medido por escalas mais longas.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1706,7 +1713,7 @@ quarterbacks e seu desempenho em campo — um lembrete de que a validade
 de um teste cognitivo é sempre relativa ao critério que está sendo
 predito, e desempenho atlético especializado depende de capacidades que
 um teste cognitivo geral simplesmente não mede.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1747,7 +1754,7 @@ a intermediária de <code>100 itens</code> (a mais usada em pesquisa) e a
 curta de <code>60 itens</code> (10 por fator, com ao menos 2 itens por
 faceta). Cada um dos seis fatores se divide em 4 facetas, totalizando 24
 facetas na versão completa.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1758,7 +1765,7 @@ confiabilidade teste-reteste do HEXACO-100, <em>PLOS ONE</em>
 ao nível dos 6 fatores e <strong>r = .81</strong> ao nível de facetas,
 em intervalo de 12 dias (n = 416).</p>
 </div>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1793,7 +1800,7 @@ administrar emoções. É pontuado por consenso (a resposta “correta” é a
 mais frequentemente escolhida por uma amostra normativa ou por
 especialistas), o que é, em si, uma das críticas metodológicas mais
 discutidas sobre o instrumento.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1809,7 +1816,7 @@ baseados em autorrelato (em vez de tarefas de habilidade objetiva)
 mostram-se, na prática, dificilmente distinguíveis de inventários de
 personalidade — o que levanta uma questão legítima sobre se estão
 medindo algo genuinamente novo.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1848,7 +1855,7 @@ determinantes formais, conteúdo temático. Essa complexidade de
 codificação é, ironicamente, uma das fontes centrais de sua fragilidade
 psicométrica: poucas variáveis mostram validade robusta quando testadas
 contra critérios externos.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1860,7 +1867,7 @@ psiquiátrico), as variáveis do Sistema Compreensivo alcançaram validade
 média de <strong>r = .27</strong>; quando correlacionadas a critérios de
 autorrelato, a validade média caiu para <strong>r = .08</strong>.</p>
 </div>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1891,7 +1898,7 @@ Sua estrutura tipológica (nove ou quatro categorias discretas) também
 herda o mesmo problema estrutural do MBTI: força em categorias binárias
 ou discretas traços que a evidência acumulada sugere serem
 contínuos.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1916,7 +1923,7 @@ pode ser afirmado com confiança: testes de QI predizem, de forma
 consistente, desempenho escolar e desempenho em treinamento
 profissional. O que eles não predizem bem é criatividade, sabedoria
 prática, qualidade dos relacionamentos ou bem-estar subjetivo.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1960,7 +1967,7 @@ se transfere automaticamente para indivíduos, tampouco para comparações
 entre populações distintas.</p>
 <p>Um achado contraintuitivo, denominado <strong>Efeito Wilson</strong>,
 é que a herdabilidade do QI <em>aumenta</em> com a idade.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1972,7 +1979,7 @@ et al. (2010), <em>Molecular Psychiatry</em></a></p>
 pares de gêmeos</strong> de 4 países (Reino Unido, Holanda, Austrália e
 Estados Unidos).</p>
 </div>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -1993,7 +2000,7 @@ consolidado sobre herdabilidade do QI</a>).</p>
 <p>Estimativas equivalentes existem para os traços de personalidade. Um
 dos estudos de gêmeos mais citados da área mediu especificamente a
 herdabilidade dos Cinco Grandes fatores usando o NEO-PI-R.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2005,7 +2012,7 @@ herdabilidade dos Cinco Grandes fatores usando o NEO-PI-R.</p>
 (Conscienciosidade), com 123 pares de gêmeos idênticos e 127 pares de
 gêmeos fraternos.</p>
 </div>
-<div class="box callout-note">
+<div class="box callout-danger">
 <div class="box-title">
 <p>Ponto crítico</p>
 </div>
@@ -2035,7 +2042,7 @@ psicometria. Em Ellis Island, Henry Goddard aplicou versões apressadas
 da escala Binet-Simon em imigrantes recém-chegados — muitos deles
 exaustos, sem domínio do inglês, avaliados por meio de tradutores
 improvisados.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência histórica</p>
 </div>
@@ -2056,7 +2063,7 @@ consequência jurídica mais grave sobreveio em 1927, no caso <em>Buck v.
 Bell</em>, quando a Suprema Corte dos Estados Unidos legitimou a
 esterilização compulsória de pessoas classificadas como “deficientes
 mentais”.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência histórica</p>
 </div>
@@ -2095,7 +2102,7 @@ validade e confiabilidade suficientes, mas circulam com linguagem
 científica. O caso mais estudado é o MBTI, cuja arquitetura de escolha
 forçada — descrita no Capítulo 4 — já antecipa boa parte do
 problema.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2106,7 +2113,7 @@ href="https://www.researchgate.net/publication/237675975_Measuring_the_MBTI_and_
 recebem um tipo de quatro letras diferente ao refazer o MBTI dentro de
 apenas <strong>cinco semanas</strong>.</p>
 </div>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2120,7 +2127,7 @@ analisado.</p>
 <p>Quanto ao poder preditivo ocupacional — o critério que mais importa
 para decisões de contratação — a literatura converge para o mesmo
 veredito.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2137,7 +2144,7 @@ explicam.</p>
 <p>O contraste com o HEXACO é instrutivo. Uma metanálise recente
 comparou diretamente os seis fatores do modelo com desvio de conduta no
 trabalho — furto, sabotagem, absenteísmo não justificado, assédio.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2187,7 +2194,7 @@ escolar, classe social e idioma nativo. Adaptar um teste para outro
 idioma exige revalidação completa: não basta traduzir palavras, é
 necessário reconfirmar a estrutura fatorial e renormatizar a
 população-alvo.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2204,7 +2211,7 @@ exigem recalibração cultural.</p>
 <p>O fenômeno mais fascinante nessa área é o <strong>Efeito
 Flynn</strong>: ao longo do século XX, os escores brutos de QI subiram
 de forma consistente em praticamente todos os países estudados.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2222,7 +2229,7 @@ recentes.</p>
 recrutamento militar norueguês, o que permitiu isolar a variação
 <em>dentro da mesma família</em> — controlando qualquer explicação de
 natureza genética populacional.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2309,7 +2316,7 @@ para decisões consequentes</td>
 </table>
 <p>A própria metanálise de Schmidt e Hunter já continha essa lição:
 nenhum método isolado é suficiente.</p>
-<div class="box callout-note">
+<div class="box callout-info">
 <div class="box-title">
 <p>Evidência</p>
 </div>
@@ -2343,7 +2350,7 @@ composta ultrapassa <code>0,60</code>.</li>
 de conduta no trabalho (<code>ρ = −0,42</code>, Pletzer et al., 2019) —
 dimensão que um teste puramente cognitivo não captura.</li>
 </ul>
-<div class="box callout-note">
+<div class="box callout-failure">
 <div class="box-title">
 <p>O que evitar</p>
 </div>
