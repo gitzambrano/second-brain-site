@@ -1,0 +1,60 @@
+name: Promote sealed snapshot temp
+
+on:
+  push:
+    branches: [publish/sealed-snapshot-2026-09-09]
+    paths:
+      - '.github/workflows/promote-sealed-snapshot-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    env:
+      SNAPSHOT_URL: 'https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-62ac-820e-bc1b-3e5efacfa873/raw?se=2026-09-09T23%3A21%3A42Z&sp=r&sv=2026-02-06&sr=b&scid=da49b4d6-1a89-5c73-9b9a-0de5f8dd6eac&skoid=db6dad9e-03ee-465b-aef6-ce0f63a161dc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-09T19%3A58%3A48Z&ske=2026-09-10T19%3A58%3A48Z&sks=b&skv=2026-02-06&sig=mgESInAIb1KJ4pkPKtm/nheJsSOJSlzbYoWypaq1LoI%3D'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: publish/sealed-snapshot-2026-09-09
+          fetch-depth: 2
+
+      - name: Download verified sealed snapshot
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 "$SNAPSHOT_URL" -o /tmp/sealed-site.zip
+          rm -rf /tmp/sealed-site
+          mkdir /tmp/sealed-site
+          unzip -q /tmp/sealed-site.zip -d /tmp/sealed-site
+
+      - name: Verify seal before replacing branch
+        run: |
+          set -euo pipefail
+          cd /tmp/sealed-site
+          rm -rf _site
+          mkdir _site
+          rsync -a \
+            --exclude='/_site' \
+            --exclude='/.git' \
+            --exclude='/.github' \
+            --exclude='/README.md' \
+            --exclude='/.gitignore' \
+            --exclude='/.second-brain-site' \
+            --exclude='__pycache__/' \
+            ./ _site/
+          python .github/scripts/check_artifact.py _site --mode artifact
+          rm -rf _site
+
+      - name: Replace branch with sealed snapshot
+        run: |
+          set -euo pipefail
+          rsync -a --delete --exclude='/.git' /tmp/sealed-site/ ./
+          test ! -e .github/ALLOW_UNSEALED_DEPLOY
+          test ! -e .github/workflows/promote-sealed-snapshot-temp.yml
+          git config user.name 'Second Brain Publisher'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'Publicação selada do site: 2026-09-09'
+          git push origin HEAD:publish/sealed-snapshot-2026-09-09
