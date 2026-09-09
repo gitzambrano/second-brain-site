@@ -55,16 +55,9 @@ jobs:
           test -f _site/.nojekyll
           find _site -type f | sort
       # A portaria roda sobre `_site/`, não sobre o checkout: o que ela aprova
-      # é exatamente o que o upload empacota. O marcador abaixo é um bypass
-      # explícito e temporário, autorizado para publicar a integração da
-      # newsletter sem regenerar o selo enquanto os runners estão saturados.
+      # é exatamente o que o upload empacota.
       - name: Gate — allowlist, vazamento e orçamento
-        run: |
-          if [ -f .github/ALLOW_UNSEALED_DEPLOY ]; then
-            echo '::warning::Deploy sem selo explicitamente autorizado por .github/ALLOW_UNSEALED_DEPLOY'
-          else
-            python .github/scripts/check_artifact.py _site --mode artifact
-          fi
+        run: python .github/scripts/check_artifact.py _site --mode artifact
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
