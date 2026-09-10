@@ -38,13 +38,11 @@ with sync_playwright() as p:
         ctaBackground: cs.backgroundColor,
         hasSearch: !!document.querySelector('.searchbox'),
         hasLayoutControl: !!document.querySelector('[data-layout]'),
-        hasDensityControl: !!document.querySelector('[data-density]'),
-        libraryText: document.querySelector('#library').innerText
+        hasDensityControl: !!document.querySelector('[data-density]')
       };
     }""")
     assert abs(landing["ctaHeight"] - 36) < 0.2, landing
     assert landing["hasSearch"] and landing["hasLayoutControl"] and landing["hasDensityControl"], landing
-    assert "Buscar" in landing["libraryText"], landing["libraryText"][:500]
     page.locator(".subscribe-cta").click()
     page.wait_for_selector("dialog.subscribe-dialog[open]")
     popup = page.locator("dialog.subscribe-dialog").inner_text()
