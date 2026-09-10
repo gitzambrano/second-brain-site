@@ -1,0 +1,97 @@
+name: Temporary PDF visual audit
+
+on:
+  push:
+    branches:
+      - audit/pdf-visual-2026-09-10
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/pdf-visual-2026-09-10
+          path: site
+
+      - name: Snapshot public engine
+        run: |
+          git clone --depth 1 https://github.com/gitzambrano/second-brain-engine.git engine
+          rm -rf engine/.git site/.git
+
+      - name: Install browser
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Generate all essay PDFs and screenshots
+        working-directory: site
+        run: |
+          mkdir -p ../audit-out/pdfs ../audit-out/screenshots
+          python -m http.server 8765 >/tmp/sb-http.log 2>&1 &
+          echo $! >/tmp/sb-http.pid
+          sleep 2
+          cat > /tmp/render.py <<'PY'
+          import asyncio, pathlib
+          from playwright.async_api import async_playwright
+
+          ROOT = pathlib.Path.cwd()
+          OUT = ROOT.parent / 'audit-out'
+          essays = sorted((ROOT / 'essays').glob('*.html'))
+
+          async def main():
+              async with async_playwright() as p:
+                  browser = await p.chromium.launch()
+                  page = await browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
+                  for html in essays:
+                      slug = html.stem
+                      url = f'http://127.0.0.1:8765/essays/{html.name}'
+                      await page.goto(url, wait_until='networkidle')
+                      await page.emulate_media(media='screen')
+                      await page.pdf(path=str(OUT/'pdfs'/f'{slug}.pdf'), format='A4', print_background=True,
+                                     margin={"top":"14mm","right":"13mm","bottom":"14mm","left":"13mm"})
+                      await page.screenshot(path=str(OUT/'screenshots'/f'{slug}-desktop.png'), full_page=True)
+                  # representative home + essay at mobile for responsive audit
+                  for name, url in [
+                      ('home', 'http://127.0.0.1:8765/'),
+                      ('essay', f'http://127.0.0.1:8765/essays/{essays[0].name}')]:
+                      m = await browser.new_page(viewport={"width":390,"height":844}, device_scale_factor=1)
+                      await m.goto(url, wait_until='networkidle')
+                      await m.screenshot(path=str(OUT/'screenshots'/f'{name}-mobile.png'), full_page=True)
+                      await m.close()
+                  await browser.close()
+          asyncio.run(main())
+          PY
+          python /tmp/render.py
+          kill $(cat /tmp/sb-http.pid) || true
+          printf 'site_commit=' > ../audit-out/versions.txt
+          git rev-parse HEAD >> ../audit-out/versions.txt || true
+          printf 'engine_commit=' >> ../audit-out/versions.txt
+          git -C ../engine rev-parse HEAD >> ../audit-out/versions.txt || true
+
+      - name: Upload audit bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: second-brain-visual-audit
+          path: |
+            audit-out
+            engine
+            site
+          retention-days: 1
+          compression-level: 6
+
+      - name: Remove temporary workflow from branch
+        if: always()
+        working-directory: site
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm -f .github/workflows/audit-pdf-temp.yml || true
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(audit): remove temporary workflow [skip ci]'
+            git push origin HEAD:audit/pdf-visual-2026-09-10
+          fi
