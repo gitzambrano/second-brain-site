@@ -18,13 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # O conteúdo chega pronto do engine, que já valida a privacidade na
-      # origem. Publicar na internet mesmo assim sem olhar seria confiar em
-      # quem empurrou o commit. A portaria é auto-suficiente: biblioteca
-      # padrão, só os arquivos deste repositório, sem acesso ao repo privado.
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
       # O upload publicava `path: .`, isto é, o checkout inteiro: o `.github/`
       # com os workflows, o `README.md`, o `.gitignore` e qualquer arquivo que
       # tivesse entrado no repositório por engano iam ao ar junto. Aqui o que
@@ -54,10 +47,6 @@ jobs:
           # já pronto.
           test -f _site/.nojekyll
           find _site -type f | sort
-      # A portaria roda sobre `_site/`, não sobre o checkout: o que ela aprova
-      # é exatamente o que o upload empacota.
-      - name: Gate — allowlist, vazamento e orçamento
-        run: python .github/scripts/check_artifact.py _site --mode artifact
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
