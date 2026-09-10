@@ -5,11 +5,12 @@ on:
     branches: [main]
     paths:
       - .github/workflows/final-ui-publish-once.yml
+      - .github/scripts/audit_final_ui_publish_once.py
 
 permissions:
   contents: write
 
-# Revision 4: mobile search is icon-only; existence is asserted structurally.
+# Revision 5: mobile search is icon-only and progress starts at zero width.
 jobs:
   publish:
     runs-on: ubuntu-latest
