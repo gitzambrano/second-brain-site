@@ -20,6 +20,19 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Normalize projection helper for complete legacy PNG cleanup
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('.github/scripts/publish_final_ui_once.py')
+          text = p.read_text(encoding='utf-8')
+          old = 'graph = replace_between(graph, "const EXPORT_SCALE = 3;", "// ---- Exportar SVG", png_block, "graph PNG export")'
+          new = 'graph = replace_between(graph, "// ---- Exportar PNG", "// ---- Exportar SVG", png_block, "graph PNG export")'
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one old PNG projection boundary, got {text.count(old)}')
+          p.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+
       - name: Apply final engine UI projection
         run: python .github/scripts/publish_final_ui_once.py
 
