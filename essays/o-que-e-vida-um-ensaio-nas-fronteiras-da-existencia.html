@@ -281,6 +281,9 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-
   content:"";flex:1;height:1px;
   background:color-mix(in srgb,var(--border) 82%,transparent);
 }
+:root[data-theme="dark"] .sb-kicker::after{
+  background:color-mix(in srgb,var(--gold) 34%,var(--border));
+}
 .content h2#sumário{display:none;}
 /* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
    O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
@@ -301,6 +304,12 @@ h4{
   font-size:1.05rem;font-weight:700;
   margin:1.8rem 0 .55rem;
   color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+:root[data-theme="dark"] h3{
+  font-size:1.3rem;
+  color:color-mix(in srgb,var(--text-bright) 82%,var(--text-dim));
+  border-bottom:1px solid color-mix(in srgb,var(--gold) 24%,transparent);
+  padding-bottom:.38rem;
 }
 h5{
   font-family:var(--font-display);
@@ -1296,6 +1305,28 @@ body{padding-top:56px;}
   outline:2px solid color-mix(in srgb,var(--sb-primary) 58%,transparent);
   outline-offset:2px;
 }
+.sb-nav .sb-subscribe{
+  width:auto;height:32px;padding:0 10px;
+  border-color:color-mix(in srgb,var(--sb-primary) 42%,var(--sb-line));border-radius:999px;
+  background:var(--sb-primary-soft);color:var(--sb-primary);font:650 12px/1 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-subscribe-dialog{
+  width:min(430px,calc(100% - 28px));margin:auto;padding:0;border:1px solid var(--sb-line-strong);
+  border-radius:16px;background:var(--sb-surface);color:var(--sb-text);overflow:auto;
+}
+.sb-subscribe-dialog::backdrop{background:rgba(0,0,0,.54);}
+.sb-subscribe-dialog-head{position:relative;padding:24px 52px 0 24px;}
+.sb-subscribe-eyebrow{margin:0 0 5px;color:var(--sb-primary);font:700 9.5px/1 JetBrains Mono,monospace;letter-spacing:.17em;text-transform:uppercase;}
+.sb-subscribe-dialog h2{margin:0 0 7px;color:var(--sb-text);font:600 1.55rem/1.22 Source Serif 4,serif;letter-spacing:-.025em;}
+.sb-subscribe-dialog-head > p:last-of-type{margin:0;color:var(--sb-muted);font:13.5px/1.5 Inter,ui-sans-serif,system-ui,sans-serif;}
+.sb-subscribe-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border:1px solid var(--sb-line);border-radius:9px;background:transparent;color:var(--sb-muted);font-size:19px;line-height:1;cursor:pointer;}
+.sb-subscribe-embed{min-width:0;padding:18px 24px 24px;}
+.sb-subscribe-embed .formkit-form{max-width:none!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
+.sb-subscribe-embed .formkit-header,.sb-subscribe-embed .formkit-subheader,.sb-subscribe-embed [data-element="header"],.sb-subscribe-embed [data-element="subheader"]{display:none!important;}
+.sb-subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;}
+.sb-subscribe-embed .formkit-field{margin:0!important;}
+.sb-subscribe-embed .formkit-input{width:100%!important;min-height:44px!important;margin:0!important;padding:0 13px!important;border:1px solid var(--sb-line-strong)!important;border-radius:10px!important;outline:0!important;background:var(--sb-surface-soft)!important;color:var(--sb-text)!important;font:13.5px Inter,ui-sans-serif,system-ui,sans-serif!important;}
+.sb-subscribe-embed .formkit-submit{width:100%!important;min-height:44px!important;margin:0!important;padding:0 16px!important;border:1px solid transparent!important;border-radius:10px!important;background:var(--sb-primary)!important;color:var(--sb-bg)!important;font:700 13px Inter,ui-sans-serif,system-ui,sans-serif!important;cursor:pointer!important;}
 
 /* Public progress bar injected by render_public_essay.py. */
 body > .sb-progress:not(:has(.sb-progress-fill)){
@@ -1376,6 +1407,7 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
   .sb-nav a{font-size:12px;}
   .sb-brand{font-size:13px;}
   .sb-nav button{width:44px;height:44px;}
+  .sb-subscribe{display:none;}
   .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
   .sb-toc-text{display:none;}
   .sb-toc a{font-size:13px;padding:8px 11px;}
@@ -2551,7 +2583,7 @@ químico. Sua taxa de ‘tempo interno’ é um milhão de vezes mais rápida
 que a humana. Forward calculou sua biologia usando equações reais de
 física nuclear — é ficção científica como experimento mental
 rigoroso.</p>
-<p><em>Os Próprios Deuses</em> (<a
+<p><strong>Os Próprios Deuses</strong> (<a
 href="https://en.wikipedia.org/wiki/Isaac_Asimov">Isaac Asimov</a>,
 1972) — seres de um universo paralelo com leis de interação nuclear
 forte assimétricas desenvolvem bioquímica radicalmente distinta,
@@ -2561,15 +2593,15 @@ parâmetros físicos alternativos, demonstrando que a vida pode ser uma
 consequência de qualquer conjunto de leis que permita gradientes de
 energia e armazenamento de informação — independentemente da natureza
 específica dessas forças.</p>
-<p><em>2010: Odisseia Dois</em> (Arthur C. Clarke, 1982) — a vida que
-emerge na atmosfera de Júpiter (transformado em estrela no romance) é
-estruturada exclusivamente por correntes de convecção dinâmicas, sem
-componentes líquidos ou sólidos. Organismos puramente atmosféricos,
-mantidos por gradientes de temperatura e pressão, constituem um
-caso-limite para a definição termodinâmica: satisfazem o critério de
-estrutura dissipativa far-from-equilibrium, mas desafiam qualquer
-definição que exija substrato químico ou membranas materiais. Clarke
-exemplifica que vida sistémica pode emergir de padrões de fluxo
+<p><strong>2010: Odisseia Dois</strong> (Arthur C. Clarke, 1982) — a
+vida que emerge na atmosfera de Júpiter (transformado em estrela no
+romance) é estruturada exclusivamente por correntes de convecção
+dinâmicas, sem componentes líquidos ou sólidos. Organismos puramente
+atmosféricos, mantidos por gradientes de temperatura e pressão,
+constituem um caso-limite para a definição termodinâmica: satisfazem o
+critério de estrutura dissipativa far-from-equilibrium, mas desafiam
+qualquer definição que exija substrato químico ou membranas materiais.
+Clarke exemplifica que vida sistémica pode emergir de padrões de fluxo
 puro.</p>
 <p><strong>The Dark Forest</strong> (<a
 href="https://en.wikipedia.org/wiki/Liu_Cixin">Liu Cixin</a>, 2008) —
@@ -3489,9 +3521,23 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <nav class="sb-nav">
     <a href="../index.html">Essays</a>
     <a href="../graph.html">Grafo</a>
+    <button class="sb-subscribe" type="button" id="sbSubscribe" aria-haspopup="dialog"
+            aria-controls="sbSubscribeDialog">Assinar</button>
     <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
   </nav>
 </header>
+<dialog class="sb-subscribe-dialog" id="sbSubscribeDialog" aria-labelledby="sbSubscribeTitle">
+  <div class="sb-subscribe-dialog-head">
+    <p class="sb-subscribe-eyebrow">Ensaios · Second Brain</p>
+    <h2 id="sbSubscribeTitle">Novos ensaios, quando houver.</h2>
+    <p>Receba um e-mail quando eu publicar um novo ensaio no Second Brain.</p>
+    <form method="dialog"><button class="sb-subscribe-close" type="submit" aria-label="Fechar">×</button></form>
+  </div>
+  <div class="sb-subscribe-embed" aria-label="Assinar a newsletter do Second Brain">
+    <div id="sbKitEmbedMount" data-uid="4fd36350af"
+         data-src="https://gustavo-jose-zambrano.kit.com/4fd36350af/index.js"></div>
+  </div>
+</dialog>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
 <div class="sb-tags"><span class="sb-tag">Biologia</span><span class="sb-tag">Filosofia</span><span class="sb-tag">Exobiologia</span></div>
 <section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="o-grande-filtro-do-antropocentrismo.html"><strong>O Grande Filtro do Antropocentrismo</strong><span>O silêncio cósmico do Paradoxo de Fermi é reinterpretado não como evidência de ausência de vida, mas como sintoma do antropocentrismo da busca: procuramos sinais que se parecem conosco, com uma definição de vida que só reconhece o que já conhecemos. O ensaio percorre Terra Rara, Grande Filtro e Floresta Escura antes de perguntar se não estaríamos procurando pelas coisas erradas.</span></a><a class="sb-related-card" href="o-principio-antropico.html"><strong>O Princípio Antrópico</strong><span>O ensaio refuta sistematicamente o argumento do ajuste fino como evidência de design cosmológico, sem recorrer ao conforto do multiverso físico. Cada pressuposto é destruído (a centralidade dos observadores, a especificidade de universos com vida), substituído por análise rigorosa do viés antrópico, do biocentrismo e do cognocentrismo que estruturam nossa intuição de espanto.</span></a></div></section>
@@ -3506,6 +3552,6 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <nav id="sbTocList"></nav>
 </aside>
 <script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=ceddd9e2"></script>
+<script src="../assets/essay.js?v=169bdccd"></script>
 </body>
 </html>

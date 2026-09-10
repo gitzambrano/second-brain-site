@@ -281,6 +281,9 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-
   content:"";flex:1;height:1px;
   background:color-mix(in srgb,var(--border) 82%,transparent);
 }
+:root[data-theme="dark"] .sb-kicker::after{
+  background:color-mix(in srgb,var(--gold) 34%,var(--border));
+}
 .content h2#sumário{display:none;}
 /* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
    O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
@@ -301,6 +304,12 @@ h4{
   font-size:1.05rem;font-weight:700;
   margin:1.8rem 0 .55rem;
   color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+:root[data-theme="dark"] h3{
+  font-size:1.3rem;
+  color:color-mix(in srgb,var(--text-bright) 82%,var(--text-dim));
+  border-bottom:1px solid color-mix(in srgb,var(--gold) 24%,transparent);
+  padding-bottom:.38rem;
 }
 h5{
   font-family:var(--font-display);
@@ -1296,6 +1305,28 @@ body{padding-top:56px;}
   outline:2px solid color-mix(in srgb,var(--sb-primary) 58%,transparent);
   outline-offset:2px;
 }
+.sb-nav .sb-subscribe{
+  width:auto;height:32px;padding:0 10px;
+  border-color:color-mix(in srgb,var(--sb-primary) 42%,var(--sb-line));border-radius:999px;
+  background:var(--sb-primary-soft);color:var(--sb-primary);font:650 12px/1 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-subscribe-dialog{
+  width:min(430px,calc(100% - 28px));margin:auto;padding:0;border:1px solid var(--sb-line-strong);
+  border-radius:16px;background:var(--sb-surface);color:var(--sb-text);overflow:auto;
+}
+.sb-subscribe-dialog::backdrop{background:rgba(0,0,0,.54);}
+.sb-subscribe-dialog-head{position:relative;padding:24px 52px 0 24px;}
+.sb-subscribe-eyebrow{margin:0 0 5px;color:var(--sb-primary);font:700 9.5px/1 JetBrains Mono,monospace;letter-spacing:.17em;text-transform:uppercase;}
+.sb-subscribe-dialog h2{margin:0 0 7px;color:var(--sb-text);font:600 1.55rem/1.22 Source Serif 4,serif;letter-spacing:-.025em;}
+.sb-subscribe-dialog-head > p:last-of-type{margin:0;color:var(--sb-muted);font:13.5px/1.5 Inter,ui-sans-serif,system-ui,sans-serif;}
+.sb-subscribe-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border:1px solid var(--sb-line);border-radius:9px;background:transparent;color:var(--sb-muted);font-size:19px;line-height:1;cursor:pointer;}
+.sb-subscribe-embed{min-width:0;padding:18px 24px 24px;}
+.sb-subscribe-embed .formkit-form{max-width:none!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
+.sb-subscribe-embed .formkit-header,.sb-subscribe-embed .formkit-subheader,.sb-subscribe-embed [data-element="header"],.sb-subscribe-embed [data-element="subheader"]{display:none!important;}
+.sb-subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;}
+.sb-subscribe-embed .formkit-field{margin:0!important;}
+.sb-subscribe-embed .formkit-input{width:100%!important;min-height:44px!important;margin:0!important;padding:0 13px!important;border:1px solid var(--sb-line-strong)!important;border-radius:10px!important;outline:0!important;background:var(--sb-surface-soft)!important;color:var(--sb-text)!important;font:13.5px Inter,ui-sans-serif,system-ui,sans-serif!important;}
+.sb-subscribe-embed .formkit-submit{width:100%!important;min-height:44px!important;margin:0!important;padding:0 16px!important;border:1px solid transparent!important;border-radius:10px!important;background:var(--sb-primary)!important;color:var(--sb-bg)!important;font:700 13px Inter,ui-sans-serif,system-ui,sans-serif!important;cursor:pointer!important;}
 
 /* Public progress bar injected by render_public_essay.py. */
 body > .sb-progress:not(:has(.sb-progress-fill)){
@@ -1376,6 +1407,7 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
   .sb-nav a{font-size:12px;}
   .sb-brand{font-size:13px;}
   .sb-nav button{width:44px;height:44px;}
+  .sb-subscribe{display:none;}
   .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
   .sb-toc-text{display:none;}
   .sb-toc a{font-size:13px;padding:8px 11px;}
@@ -1511,9 +1543,6 @@ falha.</p>
 </div>
 <p>Com esse mapa em mãos, começamos pelo candidato mais óbvio ao
 critério de identidade: o próprio corpo.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="a-teoria-do-corpo-e-seus-limites">A Teoria do Corpo: <em>e seus
 Limites</em></h2>
@@ -1583,9 +1612,6 @@ seu corpo abstrato, mas o <em>animal biológico</em> que você é.
 Retomaremos esse argumento com toda a seriedade que merece. Por ora, o
 veredito é claro: a Teoria do Corpo na sua forma simples não sobrevive.
 Precisamos ir mais fundo.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="a-teoria-do-cérebro-onde-o-eu-mora">A Teoria do Cérebro:
 <em>Onde o Eu Mora?</em></h2>
@@ -1704,9 +1730,6 @@ perspectiva, e se metade dele pode preservar identidade plena — então
 talvez a identidade não seja necessariamente singular. Talvez o eu possa
 ramificar-se. Essa ideia parecerá estranha agora. Ao chegar à seção
 sobre bifurcação e teletransporte, ela parecerá inevitável.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="a-teoria-dos-dados-locke-e-a-memória">A Teoria dos Dados:
 <em>Locke e a Memória</em></h2>
@@ -1883,9 +1906,6 @@ natureza não-consciente de competências procedimentais. O passo seguinte
 como o que ela é: um sistema com uma arquitetura muito mais ampla do que
 a memória, onde o critério de identidade reside na continuidade de algo
 que ainda precisamos nomear com precisão.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="derek-parfit-e-o-fim-do-eu-substancial">Derek Parfit: <em>e o
 Fim do Eu Substancial</em></h2>
@@ -1974,9 +1994,6 @@ respondê-la.</p>
 foi descartado e por quê. Uma tese só ganha a força que merece quando o
 leitor já viu, com seus próprios olhos, o cemitério que ela deixa para
 trás.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="quatro-teorias-três-descartadas">Quatro Teorias, <em>Três
 Descartadas</em></h2>
@@ -2097,9 +2114,6 @@ cria</td>
 </table>
 <p>A última linha ainda não foi justificada. É o que fazemos a
 seguir.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="continuidade-informacional-dos-dados-a-tese">Continuidade
 Informacional dos Dados: <em>A Tese</em></h2>
@@ -2566,9 +2580,6 @@ dimensão que ele, por si só, não captura: o que é a identidade como ela
 é <em>vivida</em> de dentro — não descrita de fora como continuidade de
 dados, mas experimentada como promessa, como história, como
 responsabilidade. Essa dimensão exige um ângulo diferente.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="ricoeur-budismo-e-a-identidade-como-promessa">Ricoeur, Budismo:
 <em>e a Identidade como Promessa</em></h2>
@@ -2691,9 +2702,6 @@ distorcido os fatos.</p>
 objeções que atacam nossa tese com uma precisão que o apelo à narrativa
 não dissolve. É hora de dar a palavra aos adversários mais sérios — e
 respondê-los com toda a clareza que eles merecem.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="contra-nossa-tese-os-ataques-respondidos">Contra Nossa Tese:
 <em>Os Ataques Respondidos</em></h2>
@@ -2861,9 +2869,6 @@ de responsabilidade se apoia.</p>
 argumentos que mostram onde cada um comete um erro de perspectiva, de
 escopo, ou de método. A tese permanece. Não porque seja perfeita. Porque
 é a que fica quando tudo o mais é retirado.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="consciência-simulação-e-a-bifurcação-do-eu">Consciência,
 Simulação: <em>e a Bifurcação do Eu</em></h2>
@@ -3132,9 +3137,6 @@ em todos os casos, o critério é o mesmo e a resposta é a mesma. O
 mecanismo que produziu o padrão é irrelevante. A fidelidade do padrão é
 tudo. O que se segue é diferente: esses cenários começando a virar
 questões de engenharia.</p>
-<div class="ornament">
-· · ·
-</div>
 <hr />
 <h2 id="ia-upload-mental-e-os-futuros-do-eu">IA, Upload Mental: <em>e os
 Futuros do Eu</em></h2>
@@ -3312,9 +3314,6 @@ existindo.</p>
 distinção técnica determina se o que persiste é uma persona ou um
 eu.</p>
 </div>
-</div>
-<div class="ornament">
-· · ·
 </div>
 <hr />
 <h2 id="uma-gramática-defeituosa-o-eu-como-equívoco-linguístico">Uma
@@ -3789,9 +3788,23 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <nav class="sb-nav">
     <a href="../index.html">Essays</a>
     <a href="../graph.html">Grafo</a>
+    <button class="sb-subscribe" type="button" id="sbSubscribe" aria-haspopup="dialog"
+            aria-controls="sbSubscribeDialog">Assinar</button>
     <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
   </nav>
 </header>
+<dialog class="sb-subscribe-dialog" id="sbSubscribeDialog" aria-labelledby="sbSubscribeTitle">
+  <div class="sb-subscribe-dialog-head">
+    <p class="sb-subscribe-eyebrow">Ensaios · Second Brain</p>
+    <h2 id="sbSubscribeTitle">Novos ensaios, quando houver.</h2>
+    <p>Receba um e-mail quando eu publicar um novo ensaio no Second Brain.</p>
+    <form method="dialog"><button class="sb-subscribe-close" type="submit" aria-label="Fechar">×</button></form>
+  </div>
+  <div class="sb-subscribe-embed" aria-label="Assinar a newsletter do Second Brain">
+    <div id="sbKitEmbedMount" data-uid="4fd36350af"
+         data-src="https://gustavo-jose-zambrano.kit.com/4fd36350af/index.js"></div>
+  </div>
+</dialog>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
 <div class="sb-tags"><span class="sb-tag">Filosofia</span><span class="sb-tag">Identidade</span><span class="sb-tag">Metafísica</span><span class="sb-tag">Consciência</span></div>
 <section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="compatibilismo-o-livre-arbitrio-como-propriedade-de-um-sistema-natural.html"><strong>Compatibilismo — o livre-arbítrio como propriedade de um sistema natural</strong><span>O ensaio defende que livre-arbítrio e determinismo causal não são opostos: o cérebro, o corpo e a história de vida compõem o mesmo sistema que gera as ações humanas, não obstáculos externos à liberdade. Percorre o Demônio de Laplace, por que a mecânica quântica não salva o libertarianismo, e os limites gödelianos da auto-previsão.</span></a><a class="sb-related-card" href="neo-chauvinismo-da-cognicao-antropocentrica.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a><a class="sb-related-card" href="chatgpts-e-zumbis-filosoficos-uma-reflexao-sobre-consciencia-e-inteligencia-artificial.html"><strong>ChatGPTs e Zumbis Filosóficos — Uma Reflexão Sobre Consciência e Inteligência Artificial</strong><span>O experimento mental do zumbi filosófico é aplicado aos modelos de linguagem para revelar por que o Teste de Turing é epistemicamente insuficiente como critério de consciência. Percorrendo Chalmers, Searle, Tononi e Dennett, o ensaio conclui que essa insuficiência é simétrica: vale para as máquinas exatamente como vale para humanos ao observarem outros humanos.</span></a><a class="sb-related-card" href="o-que-e-vida-um-ensaio-nas-fronteiras-da-existencia.html"><strong>O Que É Vida? Um Ensaio nas Fronteiras da Existência</strong><span>Catorze perspectivas sobre vida (da bioquímica ao princípio da energia livre de Friston, da autopoiese ao panpsiquismo e à ficção científica de Lem) são tratadas como estratégias complementares, não rivais. Cada fronteira traçada inclui ou exclui candidatos à consideração do que é vida, do vírus à inteligência artificial.</span></a></div></section>
@@ -3806,6 +3819,6 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <nav id="sbTocList"></nav>
 </aside>
 <script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=ceddd9e2"></script>
+<script src="../assets/essay.js?v=169bdccd"></script>
 </body>
 </html>

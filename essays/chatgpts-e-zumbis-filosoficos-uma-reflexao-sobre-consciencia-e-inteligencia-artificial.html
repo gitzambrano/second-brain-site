@@ -281,6 +281,9 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-
   content:"";flex:1;height:1px;
   background:color-mix(in srgb,var(--border) 82%,transparent);
 }
+:root[data-theme="dark"] .sb-kicker::after{
+  background:color-mix(in srgb,var(--gold) 34%,var(--border));
+}
 .content h2#sumário{display:none;}
 /* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
    O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
@@ -301,6 +304,12 @@ h4{
   font-size:1.05rem;font-weight:700;
   margin:1.8rem 0 .55rem;
   color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+:root[data-theme="dark"] h3{
+  font-size:1.3rem;
+  color:color-mix(in srgb,var(--text-bright) 82%,var(--text-dim));
+  border-bottom:1px solid color-mix(in srgb,var(--gold) 24%,transparent);
+  padding-bottom:.38rem;
 }
 h5{
   font-family:var(--font-display);
@@ -1296,6 +1305,28 @@ body{padding-top:56px;}
   outline:2px solid color-mix(in srgb,var(--sb-primary) 58%,transparent);
   outline-offset:2px;
 }
+.sb-nav .sb-subscribe{
+  width:auto;height:32px;padding:0 10px;
+  border-color:color-mix(in srgb,var(--sb-primary) 42%,var(--sb-line));border-radius:999px;
+  background:var(--sb-primary-soft);color:var(--sb-primary);font:650 12px/1 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-subscribe-dialog{
+  width:min(430px,calc(100% - 28px));margin:auto;padding:0;border:1px solid var(--sb-line-strong);
+  border-radius:16px;background:var(--sb-surface);color:var(--sb-text);overflow:auto;
+}
+.sb-subscribe-dialog::backdrop{background:rgba(0,0,0,.54);}
+.sb-subscribe-dialog-head{position:relative;padding:24px 52px 0 24px;}
+.sb-subscribe-eyebrow{margin:0 0 5px;color:var(--sb-primary);font:700 9.5px/1 JetBrains Mono,monospace;letter-spacing:.17em;text-transform:uppercase;}
+.sb-subscribe-dialog h2{margin:0 0 7px;color:var(--sb-text);font:600 1.55rem/1.22 Source Serif 4,serif;letter-spacing:-.025em;}
+.sb-subscribe-dialog-head > p:last-of-type{margin:0;color:var(--sb-muted);font:13.5px/1.5 Inter,ui-sans-serif,system-ui,sans-serif;}
+.sb-subscribe-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border:1px solid var(--sb-line);border-radius:9px;background:transparent;color:var(--sb-muted);font-size:19px;line-height:1;cursor:pointer;}
+.sb-subscribe-embed{min-width:0;padding:18px 24px 24px;}
+.sb-subscribe-embed .formkit-form{max-width:none!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
+.sb-subscribe-embed .formkit-header,.sb-subscribe-embed .formkit-subheader,.sb-subscribe-embed [data-element="header"],.sb-subscribe-embed [data-element="subheader"]{display:none!important;}
+.sb-subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;}
+.sb-subscribe-embed .formkit-field{margin:0!important;}
+.sb-subscribe-embed .formkit-input{width:100%!important;min-height:44px!important;margin:0!important;padding:0 13px!important;border:1px solid var(--sb-line-strong)!important;border-radius:10px!important;outline:0!important;background:var(--sb-surface-soft)!important;color:var(--sb-text)!important;font:13.5px Inter,ui-sans-serif,system-ui,sans-serif!important;}
+.sb-subscribe-embed .formkit-submit{width:100%!important;min-height:44px!important;margin:0!important;padding:0 16px!important;border:1px solid transparent!important;border-radius:10px!important;background:var(--sb-primary)!important;color:var(--sb-bg)!important;font:700 13px Inter,ui-sans-serif,system-ui,sans-serif!important;cursor:pointer!important;}
 
 /* Public progress bar injected by render_public_essay.py. */
 body > .sb-progress:not(:has(.sb-progress-fill)){
@@ -1376,6 +1407,7 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
   .sb-nav a{font-size:12px;}
   .sb-brand{font-size:13px;}
   .sb-nav button{width:44px;height:44px;}
+  .sb-subscribe{display:none;}
   .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
   .sb-toc-text{display:none;}
   .sb-toc a{font-size:13px;padding:8px 11px;}
@@ -2510,9 +2542,23 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <nav class="sb-nav">
     <a href="../index.html">Essays</a>
     <a href="../graph.html">Grafo</a>
+    <button class="sb-subscribe" type="button" id="sbSubscribe" aria-haspopup="dialog"
+            aria-controls="sbSubscribeDialog">Assinar</button>
     <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false">◐</button>
   </nav>
 </header>
+<dialog class="sb-subscribe-dialog" id="sbSubscribeDialog" aria-labelledby="sbSubscribeTitle">
+  <div class="sb-subscribe-dialog-head">
+    <p class="sb-subscribe-eyebrow">Ensaios · Second Brain</p>
+    <h2 id="sbSubscribeTitle">Novos ensaios, quando houver.</h2>
+    <p>Receba um e-mail quando eu publicar um novo ensaio no Second Brain.</p>
+    <form method="dialog"><button class="sb-subscribe-close" type="submit" aria-label="Fechar">×</button></form>
+  </div>
+  <div class="sb-subscribe-embed" aria-label="Assinar a newsletter do Second Brain">
+    <div id="sbKitEmbedMount" data-uid="4fd36350af"
+         data-src="https://gustavo-jose-zambrano.kit.com/4fd36350af/index.js"></div>
+  </div>
+</dialog>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
 <div class="sb-tags"><span class="sb-tag">Filosofia</span><span class="sb-tag">Inteligência-Artificial</span><span class="sb-tag">Consciência</span><span class="sb-tag">Epistemologia</span></div>
 <section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="neo-chauvinismo-da-cognicao-antropocentrica.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a><a class="sb-related-card" href="godel-turing-e-os-limites-da-computacao.html"><strong>Gödel, Turing e os Limites da Computação</strong><span>Gödel mostrou que qualquer sistema aritmético consistente contém verdades indemonstráveis; Turing mostrou que existem problemas bem-definidos que nenhuma máquina pode resolver. O ensaio conecta esses resultados à complexidade de Kolmogorov, a P vs. NP e às implicações para IA, argumentando que a modéstia epistêmica que eles impõem é uma virtude, não uma derrota.</span></a><a class="sb-related-card" href="instanciar-e-simular-uma-investigacao-sobre-a-natureza-das-leis-naturais.html"><strong>Instanciar e Simular — uma investigação sobre a natureza das leis naturais</strong><span>O ensaio investiga a &quot;portabilidade estrutural&quot; das leis naturais (a propriedade que permite que a lei da gravidade funcione igualmente em simulações e na realidade), percorrendo dezesseis posições de Aristóteles a Bostrom. Apenas leis genuínas suportam contrafactuais e são portáveis para substratos alternativos, com implicações diretas para a hipótese da simulação e a filosofia da mente.</span></a><a class="sb-related-card" href="autopoiese-consciencia-e-os-limites-do-vivo.html"><strong>Autopoiese, Consciência e os Limites do Vivo</strong><span>A autopoiese (a auto-produção contínua dos próprios componentes como marca definitória da vida) é examinada em profundidade e projetada sobre o debate da consciência artificial. Se a vida é um processo e não uma substância, o que isso exige de um sistema artificial para ser considerado cognoscente?</span></a><a class="sb-related-card" href="xadrez-computacional-do-brute-force-as-redes-neurais.html"><strong>Xadrez Computacional — do Brute-Force às Redes Neurais</strong><span>O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).</span></a><a class="sb-related-card" href="epistemologia-e-os-limites-do-conhecimento-de-platao-a-mecanica-quantica.html"><strong>Epistemologia e os Limites do Conhecimento — de Platão à Mecânica Quântica</strong><span>O arco completo da epistemologia ocidental (de Platão a Hume, Popper, Quine, Gödel e às implicações da mecânica quântica) é percorrido para mostrar que os limites do conhecimento não são curiosidades acadêmicas: são restrições ativas sobre o tipo de ciência que podemos fazer e o tipo de universo que podemos conhecer.</span></a><a class="sb-related-card" href="ontologia-e-metafisica-da-existencia-de-deus-a-existencia-do-universo.html"><strong>Ontologia e Metafísica — Da Existência de Deus à Existência do Universo</strong><span>A pergunta de Leibniz (&quot;por que existe algo em vez de nada?&quot;) conecta os argumentos clássicos para a existência de Deus ao Fine-Tuning Problem, ao Princípio Antrópico e ao Universo Matemático de Tegmark. O ensaio argumenta que a ciência reformulou essas questões sem respondê-las, e que o agnosticismo intelectual rigoroso é a posição mais honesta disponível.</span></a><a class="sb-related-card" href="cerebros-de-boltzmann-epistemologia-e-o-limite-ontologico-da-fisica.html"><strong>Cérebros de Boltzmann, Epistemologia e o Limite Ontológico da Física</strong><span>A possibilidade termodinâmica de que uma mente surja espontaneamente de uma flutuação entrópica é usada como bisturi filosófico para examinar onde epistemologia e ontologia se fundem. Percorrendo Hume, Kant e a cosmologia contemporânea, o ensaio mostra que a hipótese não é uma curiosidade: é um critério eliminatório de modelos cosmológicos inteiros.</span></a><a class="sb-related-card" href="mente-aumentada-agentes-llm-second-brain-e-a-fronteira-da-cognicao.html"><strong>Mente Aumentada — Agentes LLM, Second Brain e a Fronteira da Cognição</strong><span>Da visão do Memex de Bush em 1945 aos agentes LLM modernos, o ensaio argumenta que wikis alimentadas por agentes não são apenas ferramentas de armazenamento: são instâncias reais da Extended Mind de Clark e Chalmers. O engenheiro que mantém uma base de conhecimento estruturada não está armazenando informação, está literalmente pensando fora do crânio.</span></a><a class="sb-related-card" href="metodos-matematicos-e-computacionais-na-engenharia-aeroespacial.html"><strong>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</strong><span>Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</span></a><a class="sb-related-card" href="compatibilismo-o-livre-arbitrio-como-propriedade-de-um-sistema-natural.html"><strong>Compatibilismo — o livre-arbítrio como propriedade de um sistema natural</strong><span>O ensaio defende que livre-arbítrio e determinismo causal não são opostos: o cérebro, o corpo e a história de vida compõem o mesmo sistema que gera as ações humanas, não obstáculos externos à liberdade. Percorre o Demônio de Laplace, por que a mecânica quântica não salva o libertarianismo, e os limites gödelianos da auto-previsão.</span></a></div></section>
@@ -2527,6 +2573,6 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <nav id="sbTocList"></nav>
 </aside>
 <script src="../assets/theme.js?v=ad4f677f"></script>
-<script src="../assets/essay.js?v=ceddd9e2"></script>
+<script src="../assets/essay.js?v=169bdccd"></script>
 </body>
 </html>
