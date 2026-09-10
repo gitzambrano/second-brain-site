@@ -1,0 +1,76 @@
+name: Patch public subscribe alignment once
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/patch-subscribe-align-public-once.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch published popup HTML
+        shell: python
+        run: |
+          from pathlib import Path
+
+          files = [Path('index.html'), *sorted(Path('essays').glob('*.html'))]
+          touched = 0
+          for p in files:
+              s = p.read_text(encoding='utf-8')
+              old = s
+              s = s.replace('Marque o email como confiável.', 'Marque o email como <u>confiável</u>.')
+
+              s = s.replace(
+                  '.subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;width:100%!important}',
+                  '.subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;margin:0!important;width:100%!important}'
+              )
+              s = s.replace(
+                  '.subscribe-embed .formkit-field,.subscribe-embed [data-element="submit"]{width:100%!important;max-width:100%!important;margin:0!important;align-self:stretch!important}',
+                  '.subscribe-embed .formkit-field,.subscribe-embed [data-element="submit"]{box-sizing:border-box!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;align-self:stretch!important;flex:0 0 auto!important}'
+              )
+              s = s.replace(
+                  '.subscribe-embed .formkit-submit{width:100%!important;min-height:44px!important;',
+                  '.subscribe-embed .formkit-submit{box-sizing:border-box!important;width:100%!important;min-width:100%!important;max-width:none!important;align-self:stretch!important;min-height:44px!important;'
+              )
+
+              s = s.replace(
+                  '.sb-subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;width:100%!important;}',
+                  '.sb-subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;margin:0!important;width:100%!important;}'
+              )
+              s = s.replace(
+                  '.sb-subscribe-embed .formkit-field,.sb-subscribe-embed [data-element="submit"]{width:100%!important;max-width:100%!important;margin:0!important;align-self:stretch!important;}',
+                  '.sb-subscribe-embed .formkit-field,.sb-subscribe-embed [data-element="submit"]{box-sizing:border-box!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;align-self:stretch!important;flex:0 0 auto!important;}'
+              )
+              s = s.replace(
+                  '.sb-subscribe-embed .formkit-submit{width:100%!important;min-height:44px!important;',
+                  '.sb-subscribe-embed .formkit-submit{box-sizing:border-box!important;width:100%!important;min-width:100%!important;max-width:none!important;align-self:stretch!important;min-height:44px!important;'
+              )
+
+              if s != old:
+                  p.write_text(s, encoding='utf-8')
+                  touched += 1
+
+          assert touched == len(files), (touched, len(files))
+          home = Path('index.html').read_text(encoding='utf-8')
+          assert '<u>confiável</u>' in home
+          assert 'align-items:stretch!important' in home
+          assert 'padding:0!important;align-self:stretch!important;flex:0 0 auto!important' in home
+          assert 'min-width:100%!important' in home
+          for p in Path('essays').glob('*.html'):
+              s = p.read_text(encoding='utf-8')
+              assert '<u>confiável</u>' in s, p
+              assert 'align-items:stretch!important' in s, p
+              assert 'min-width:100%!important' in s, p
+          print(f'patched {touched} public pages')
+      - name: Minimal checks, commit and self-clean
+        run: |
+          set -euo pipefail
+          git diff --check
+          rm .github/workflows/patch-subscribe-align-public-once.yml
+          git config user.name second-brain-bot
+          git config user.email actions@users.noreply.github.com
+          git add index.html essays .github/workflows/patch-subscribe-align-public-once.yml
+          git commit -m 'Publicação do site: fix subscribe mobile alignment'
+          git push
