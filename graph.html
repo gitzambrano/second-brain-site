@@ -26,9 +26,9 @@
     --entity: #e8b657;
     --insight: #b48ce8;
     --reference: #8a8f96;
-    --edge: #9aa0a8;
+    --edge: #858b93;
     --edge-ref: #5a5f66;
-    --edge-opacity: 0.55;
+    --edge-opacity: 0.28;
     --radius-base: 5;
     --radius-scale: 3;
     --label-size: 10px;
@@ -638,8 +638,8 @@ const STYLE_VARS = {
 const STYLE_KEY = "sb-graph-style-v1";
 const FACTORY_STYLE = data.defaultStyle || {
   colors: { essay: "#4fa8ff", concept: "#5fd3c4", entity: "#e8b657", insights: "#b48ce8",
-    reference: "#8a8f96", edge: "#9aa0a8", background: "#1b1e21" },
-  edgeOpacity: 0.35, edgeVisibility: "auto", radiusBase: 5, radiusScale: 3, labelSize: 10,
+    reference: "#8a8f96", edge: "#858b93", background: "#1b1e21" },
+  edgeOpacity: 0.28, edgeVisibility: "auto", radiusBase: 5, radiusScale: 3, labelSize: 10,
   glow: "leve", labels: "auto", starfield: true, gradient: true, sizeMode: "degree",
   spacing: 1.8, performance: "alta", collision: true,
   linkStrength: 3.5, chargeStrength: 2.5, friction: 0.65, homeStrength: 0.25,
@@ -1015,8 +1015,8 @@ data.nodes.forEach(n => {
 // no zoom (abaixo) e recalculado toda vez que spacing/performance mudam.
 let currentTier = PERFORMANCE_TIERS[resolvePerformanceTier(styleConfig)];
 let labelsShown = false;
-const LABEL_SHOW_AT = 1.55;
-const LABEL_HIDE_AT = 1.45;
+const LABEL_SHOW_AT = 1.40;
+const LABEL_HIDE_AT = 1.32;
 
 // Some com os rótulos quando o tier não é "sempre mostrar" e o zoom está
 // afastado — em wikis de centenas de nós, texto é de longe a coisa mais
@@ -3356,7 +3356,7 @@ if (window.visualViewport) {
   #sb-back {
     position: fixed; left: 16px; bottom: 16px; z-index: 8;
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 9px 15px; border-radius: 999px;
+    min-height: 36px; padding: 9px 15px; border-radius: 999px;
     border: 1px solid rgba(255,255,255,.16);
     background: rgba(9,9,9,.88); backdrop-filter: blur(10px);
     color: #e8eef7; font: 600 14px/1 Inter, system-ui, sans-serif;
@@ -3368,7 +3368,7 @@ if (window.visualViewport) {
     display: inline-flex; gap: 8px;
   }
   #sb-map-switch a {
-    padding: 9px 15px; border-radius: 999px;
+    min-height: 36px; padding: 9px 15px; border-radius: 999px;
     border: 1px solid rgba(255,255,255,.16);
     background: rgba(9,9,9,.88); backdrop-filter: blur(10px);
     color: #e8eef7; font: 600 14px/1 Inter, system-ui, sans-serif;
@@ -3376,7 +3376,7 @@ if (window.visualViewport) {
   }
   #sb-map-switch a:hover, #sb-theme:hover { border-color: rgba(255,255,255,.4); }
   #sb-theme {
-    padding: 9px 13px; border-radius: 999px;
+    min-height: 36px; padding: 9px 13px; border-radius: 999px;
     border: 1px solid rgba(255,255,255,.16);
     background: rgba(9,9,9,.88); backdrop-filter: blur(10px);
     color: #e8eef7; font: 600 14px/1 Inter, system-ui, sans-serif; cursor: pointer;
@@ -3394,14 +3394,14 @@ if (window.visualViewport) {
   /* The options panel must end above the floating chrome, never behind it —
      the detail card now grows with the connection lists, so its last row
      would otherwise sit under the "Second Brain Atlas" pill. */
-  #panel { padding-bottom: 56px; }
+  #panel { padding-bottom: 60px; }
   @media (max-width: 760px) {
     /* No celular o painel e uma folha colada no rodape — e o cromo flutuante
        ficava POR CIMA dela, cobrindo o fim do cartao de detalhe. Levantar a
        folha acima do cromo e a unica correcao que nao esconde nenhum dos dois. */
-    #panel { bottom: 58px; border-radius: 14px; }
+    #panel { bottom: calc(64px + env(safe-area-inset-bottom)); border-radius: 14px; }
     #panel, .panel, aside { padding-bottom: 12px; }
-    #sb-back, #sb-map-switch a, #sb-theme { padding: 7px 11px; font-size: 12px; }
+    #sb-back, #sb-map-switch a, #sb-theme { min-height:36px; padding:8px 12px; font-size:13px; }
   }
   /* Tema claro: o fundo e os controles do mapa seguem o tema do site. O
      fundo do canvas também é pintado por JS (ver script ao final), então
@@ -3412,7 +3412,7 @@ if (window.visualViewport) {
     --panel-border: #d7dde4;
     --ink: #1a1f24;
     --ink-dim: #5b6570;
-    --edge: #5b6570;
+    --edge: #a7b0ba;
     --edge-ref: #b0b8c0;
     --reference: #6b7280;
   }
@@ -3448,7 +3448,9 @@ if (window.visualViewport) {
         // estilo salvo (cores de nó, raio, glow) continua valendo.
         if (typeof styleConfig !== 'undefined' && typeof applyStyle === 'function') {
           styleConfig.colors.background = theme === 'light' ? '#ffffff' : '#090909';
-          styleConfig.colors.edge = theme === 'light' ? '#8a99aa' : '#9aa0a8';
+          styleConfig.colors.edge = theme === 'light' ? '#a7b0ba' : '#858b93';
+          // Migrate only the legacy factory opacity; explicit user choices survive.
+          if (styleConfig.edgeOpacity === 0.35) styleConfig.edgeOpacity = 0.28;
           applyStyle(styleConfig, { silent: true });
         }
       } catch (e) {}
