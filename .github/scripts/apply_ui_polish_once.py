@@ -7,22 +7,29 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def patch_text(text: str, old: str, new: str, *, label: str, count: int = 1) -> str:
+def replace_exact(text: str, old: str, new: str, *, label: str, count: int = 1) -> str:
+    """Replace an expected generated fragment, while allowing an already-patched rerun."""
     found = text.count(old)
-    if found != count:
-        raise SystemExit(f"{label}: expected {count} occurrence(s), found {found}: {old[:100]!r}")
-    return text.replace(old, new)
+    if found == count:
+        return text.replace(old, new)
+    if found == 0 and new in text:
+        return text
+    raise SystemExit(f"{label}: expected {count} old occurrence(s) or patched form; found {found}: {old[:110]!r}")
 
 
 def patch_file(rel: str, changes: list[tuple[str, str, int]]) -> None:
     path = ROOT / rel
     text = path.read_text(encoding="utf-8")
     for old, new, count in changes:
-        text = patch_text(text, old, new, label=rel, count=count)
+        text = replace_exact(text, old, new, label=rel, count=count)
     path.write_text(text, encoding="utf-8")
 
 
-# Landing CSS and CTA.
+# Landing/header. The library toolbar starts below the popup and must remain byte-identical.
+index_path = ROOT / "index.html"
+index_before = index_path.read_text(encoding="utf-8")
+library_before = index_before.split('<section class="library shell" id="library">', 1)[1]
+
 patch_file(
     "assets/site.css",
     [
@@ -38,6 +45,7 @@ patch_file(
         ),
     ],
 )
+
 patch_file(
     "index.html",
     [
@@ -52,24 +60,48 @@ patch_file(
             1,
         ),
         (
+            ".subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important}",
+            ".subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;width:100%!important}\n.subscribe-embed .formkit-field,.subscribe-embed [data-element=\"submit\"]{width:100%!important;max-width:100%!important;margin:0!important;align-self:stretch!important}\n.subscribe-embed .formkit-submit{display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important}",
+            1,
+        ),
+        (
             "@media(max-width:760px){.topnav .nav-link.active{display:none}.subscribe-cta{min-height:32px;padding-inline:10px;font-size:12px}",
             "@media(max-width:760px){.topnav .nav-link.active{display:none}.subscribe-cta{min-height:36px;padding-inline:10px;font-size:12px}",
+            1,
+        ),
+        (
+            '<h2 id="subscribeTitle">Novos ensaios, quando houver.</h2>',
+            '<h2 id="subscribeTitle">Novos ensaios por e-mail.</h2>',
+            1,
+        ),
+        (
+            '<p class="subscribe-dialog-lede">Receba um e-mail quando eu publicar um novo ensaio no Second Brain. Sem frequência fixa, sem mensagens entre uma publicação e outra.</p>',
+            '<p class="subscribe-dialog-lede">Só quando houver publicação nova.</p>',
+            1,
+        ),
+        (
+            '<p class="subscribe-dialog-note"><strong>Depois de assinar:</strong> confirme seu endereço no e-mail enviado pelo Kit. Ele pode cair em <strong>Spam</strong> ou <strong>Promoções</strong>; procure por “Second Brain”, marque como “Não é spam” e então confirme.</p>',
+            '<p class="subscribe-dialog-note"><strong>Importante:</strong> confira também a pasta de <strong>Spam</strong> e confirme o e-mail.</p>',
             1,
         ),
     ],
 )
 
-# Update the cache-busting fingerprint exactly as build_site.py does.
+# Cache-busting fingerprint exactly as build_site.py does.
 site_css = ROOT / "assets" / "site.css"
 digest = hashlib.sha256(site_css.read_bytes()).hexdigest()[:8]
-index_path = ROOT / "index.html"
 index = index_path.read_text(encoding="utf-8")
 index, n = re.subn(r"assets/site\.css\?v=[0-9a-f]{8}", f"assets/site.css?v={digest}", index, count=1)
 if n != 1:
     raise SystemExit("index.html: site.css fingerprint not found exactly once")
 index_path.write_text(index, encoding="utf-8")
 
-# Every public essay is the same generated reader shell; patch that shell, not authored content.
+library_after = index_path.read_text(encoding="utf-8").split('<section class="library shell" id="library">', 1)[1]
+if library_before != library_after:
+    raise SystemExit("index.html: library toolbar/content changed unexpectedly")
+
+
+# Every public essay shares the same generated reader shell. Patch only shell literals.
 essay_changes = [
     ("  --callout-note:#A2988A;\n", "  --callout-note:#A2988A;\n  --note-bg:color-mix(in srgb,var(--callout-note) 7%,var(--surface2));\n", 1),
     ("  --callout-note:#4A5C77;\n", "  --callout-note:#4A5C77;\n  --note-bg:var(--surface2);\n", 2),
@@ -83,6 +115,7 @@ essay_changes = [
     (".sb-nav button{\n  width:32px;height:32px;border:1px solid var(--sb-line);border-radius:9px;", ".sb-nav button{\n  width:36px;height:36px;border:1px solid var(--sb-line);border-radius:10px;", 1),
     (".sb-nav .sb-subscribe{\n  width:auto;height:32px;padding:0 10px;\n  border-color:color-mix(in srgb,var(--sb-primary) 42%,var(--sb-line));border-radius:999px;\n  background:var(--sb-primary-soft);color:var(--sb-primary);font:650 12px/1 Inter,ui-sans-serif,system-ui,sans-serif;\n}", ".sb-nav .sb-subscribe{\n  width:auto;height:36px;padding:0 12px;\n  border-color:var(--sb-line);border-radius:999px;\n  background:color-mix(in srgb,var(--sb-primary) 13%,var(--sb-surface));color:var(--sb-primary);font:650 12.5px/1 Inter,ui-sans-serif,system-ui,sans-serif;\n}", 1),
     ("#sbTheme{border-color:color-mix(in srgb,var(--sb-primary) 42%,var(--sb-line));}", "#sbTheme{border-color:var(--sb-line);}", 1),
+    (".sb-subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;}", ".sb-subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;gap:8px!important;margin:0!important;width:100%!important;}\n.sb-subscribe-embed .formkit-field,.sb-subscribe-embed [data-element=\"submit\"]{width:100%!important;max-width:100%!important;margin:0!important;align-self:stretch!important;}\n.sb-subscribe-embed .formkit-submit{display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;}", 1),
     ("position:fixed;top:56px;left:0;right:0;z-index:61;height:2px;background:transparent;", "position:fixed;top:68px;left:0;right:0;z-index:61;height:2px;background:transparent;", 1),
     ("border:1px solid var(--sb-line-strong);border-radius:999px;\n  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);", "border:1px solid var(--sb-line);border-radius:999px;\n  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);", 1),
     ("  .sb-bar{padding-inline:14px;}", "  .sb-bar{height:60px;padding-inline:14px;}\n  body{padding-top:60px;}\n  body > .sb-progress:not(:has(.sb-progress-fill)){top:60px;}", 1),
@@ -95,15 +128,22 @@ essay_changes = [
     ("  .sb-nav{gap:14px;}", "  .sb-nav{gap:8px;}", 1),
     ("  .sb-nav a{font-size:12.5px;}", "  .sb-nav a{font-size:13px;}", 1),
     ('<span class="sb-mark" aria-hidden="true"></span>Second Brain Atlas</a>', '<span class="sb-mark" aria-hidden="true"></span>Second Brain</a>', 1),
+    ('<h2 id="sbSubscribeTitle">Novos ensaios, quando houver.</h2>', '<h2 id="sbSubscribeTitle">Novos ensaios por e-mail.</h2>', 1),
+    ('<p>Receba um e-mail quando eu publicar um novo ensaio no Second Brain.</p>', '<p>Só quando houver publicação nova.</p>', 1),
+    ('<p class="sb-subscribe-note"><strong>Depois de assinar:</strong> confirme seu endereço no e-mail enviado pelo Kit. Ele pode cair em <strong>Spam</strong> ou <strong>Promoções</strong>; procure por “Second Brain”, marque como “Não é spam” e então confirme.</p>', '<p class="sb-subscribe-note"><strong>Importante:</strong> confira também a pasta de <strong>Spam</strong> e confirme o e-mail.</p>', 1),
 ]
+
 essays = sorted((ROOT / "essays").glob("*.html"))
 if not essays:
     raise SystemExit("no public essays found")
 for path in essays:
     text = path.read_text(encoding="utf-8")
     for old, new, count in essay_changes:
-        text = patch_text(text, old, new, label=path.name, count=count)
+        text = replace_exact(text, old, new, label=path.name, count=count)
+    if 'id="sbProgressFill"' not in text:
+        raise SystemExit(f"{path.name}: reading-progress marker lost")
     path.write_text(text, encoding="utf-8")
+
 
 # Shared public map chrome in graph and globe.
 def patch_map_chrome(path: Path) -> None:
@@ -122,33 +162,46 @@ def patch_map_chrome(path: Path) -> None:
         ("    --edge: #5b6570;", "    --edge: #a7b0ba;", 1),
         ("          styleConfig.colors.edge = theme === 'light' ? '#8a99aa' : '#9aa0a8';\n          applyStyle(styleConfig, { silent: true });", "          styleConfig.colors.edge = theme === 'light' ? '#a7b0ba' : '#858b93';\n          // Migrate only the legacy factory opacity; explicit user choices survive.\n          if (styleConfig.edgeOpacity === 0.35) styleConfig.edgeOpacity = 0.28;\n          applyStyle(styleConfig, { silent: true });", 1),
     ]:
-        chrome = patch_text(chrome, old, new, label=path.name + " chrome", count=count)
+        chrome = replace_exact(chrome, old, new, label=path.name + " chrome", count=count)
     path.write_text(core + chrome, encoding="utf-8")
 
 
 for map_name in ("graph.html", "sphere.html"):
     patch_map_chrome(ROOT / map_name)
 
-# Core graph defaults and label threshold. Patch the generated graph only.
+# Core graph defaults and label threshold, independent of JSON whitespace.
 graph_path = ROOT / "graph.html"
 graph = graph_path.read_text(encoding="utf-8")
-for old, new in [
-    ('"edge": "#9aa0a8"', '"edge": "#858b93"'),
-    ('"edgeOpacity": 0.35', '"edgeOpacity": 0.28'),
-    ('edge: "#9aa0a8"', 'edge: "#858b93"'),
-    ('edgeOpacity: 0.35', 'edgeOpacity: 0.28'),
-    ("const LABEL_SHOW_AT = 1.55;", "const LABEL_SHOW_AT = 1.40;"),
-    ("const LABEL_HIDE_AT = 1.45;", "const LABEL_HIDE_AT = 1.32;"),
-]:
-    if old not in graph:
-        raise SystemExit(f"graph.html: expected generated token missing: {old}")
-    graph = graph.replace(old, new)
+
+def sub_once_or_done(pattern: str, replacement: str, done: str, label: str) -> None:
+    global graph
+    updated, n = re.subn(pattern, replacement, graph, count=1)
+    if n == 1:
+        graph = updated
+    elif done not in graph:
+        raise SystemExit(f"graph.html: {label} pattern missing")
+
+sub_once_or_done(r'("edge"\s*:\s*)"#9aa0a8"', r'\1"#858b93"', '"edge": "#858b93"', "default edge color")
+sub_once_or_done(r'("edgeOpacity"\s*:\s*)0\.35', r'\g<1>0.28', '"edgeOpacity": 0.28', "default edge opacity")
+sub_once_or_done(r'(reference:\s*"#8a8f96",\s*edge:\s*)"#9aa0a8"', r'\1"#858b93"', 'edge: "#858b93"', "factory edge color")
+sub_once_or_done(r'(edgeOpacity:\s*)0\.35', r'\g<1>0.28', 'edgeOpacity: 0.28', "factory edge opacity")
+graph = replace_exact(graph, "const LABEL_SHOW_AT = 1.55;", "const LABEL_SHOW_AT = 1.40;", label="graph labels show", count=1)
+graph = replace_exact(graph, "const LABEL_HIDE_AT = 1.45;", "const LABEL_HIDE_AT = 1.32;", label="graph labels hide", count=1)
+graph = replace_exact(graph, "    --edge: #9aa0a8;", "    --edge: #858b93;", label="graph css edge", count=1)
 graph_path.write_text(graph, encoding="utf-8")
 
-# Static deployment invariants.
-assert "assets/site.css?v=" + digest in (ROOT / "index.html").read_text(encoding="utf-8")
-assert all("id=\"sbProgressFill\"" in p.read_text(encoding="utf-8") for p in essays)
+# Final structural invariants.
+index = index_path.read_text(encoding="utf-8")
+assert "assets/site.css?v=" + digest in index
+assert "Novos ensaios por e-mail." in index
+assert "Promoções" not in index and "Não é spam" not in index
+assert '.subscribe-embed .formkit-field,.subscribe-embed [data-element="submit"]' in index
+assert all('id="sbProgressFill"' in p.read_text(encoding="utf-8") for p in essays)
 assert all(".sb-nav a:first-child{display:none;}" in p.read_text(encoding="utf-8") for p in essays)
+assert all("Novos ensaios por e-mail." in p.read_text(encoding="utf-8") for p in essays)
+graph = graph_path.read_text(encoding="utf-8")
 assert "const LABEL_SHOW_AT = 1.40;" in graph
+assert "const LABEL_HIDE_AT = 1.32;" in graph
+assert '"edgeOpacity": 0.28' in graph
 assert "bottom: calc(64px + env(safe-area-inset-bottom))" in graph
 print(f"patched {len(essays)} essays; site.css fingerprint={digest}")
