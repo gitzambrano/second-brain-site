@@ -20,17 +20,75 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Normalize projection helper for complete legacy PNG cleanup
+      - name: Normalize projection helper for current public format
         run: |
           python - <<'PY'
           from pathlib import Path
+
           p = Path('.github/scripts/publish_final_ui_once.py')
           text = p.read_text(encoding='utf-8')
-          old = 'graph = replace_between(graph, "const EXPORT_SCALE = 3;", "// ---- Exportar SVG", png_block, "graph PNG export")'
-          new = 'graph = replace_between(graph, "// ---- Exportar PNG", "// ---- Exportar SVG", png_block, "graph PNG export")'
-          if text.count(old) != 1:
-              raise SystemExit(f'expected one old PNG projection boundary, got {text.count(old)}')
-          p.write_text(text.replace(old, new), encoding='utf-8')
+
+          # Public graph/sphere payloads are base64 + raw DEFLATE and use
+          # id="sb-graph-data". Normalize the one-shot helper to that actual format.
+          if 'import gzip\n' not in text:
+              raise SystemExit('stale gzip helper import not found')
+          text = text.replace('import gzip\n', 'import zlib\n', 1)
+
+          old_png = 'graph = replace_between(graph, "const EXPORT_SCALE = 3;", "// ---- Exportar SVG", png_block, "graph PNG export")'
+          new_png = 'graph = replace_between(graph, "// ---- Exportar PNG", "// ---- Exportar SVG", png_block, "graph PNG export")'
+          if text.count(old_png) != 1:
+              raise SystemExit(f'expected one old PNG projection boundary, got {text.count(old_png)}')
+          text = text.replace(old_png, new_png, 1)
+
+          start = text.find('def patch_compressed_default_style')
+          end = text.find('\n\n# Landing CTA only.', start)
+          if start < 0 or end < 0:
+              raise SystemExit('compressed-style helper boundaries not found')
+          replacement = r'''def patch_compressed_default_style(text: str, label: str) -> str:
+              pattern = re.compile(
+                  r''' + "'''" + r'''(<script\b(?=[^>]*\bid=["']sb-graph-data["'])[^>]*>)(?P<body>.*?)(</script>)''' + "'''" + r''',
+                  re.S | re.I,
+              )
+              match = pattern.search(text)
+              if not match:
+                  raise SystemExit(f"{label}: compressed sb-graph-data payload not found")
+              try:
+                  compressed = base64.b64decode(match.group("body").strip())
+                  raw = zlib.decompress(compressed, wbits=-zlib.MAX_WBITS).decode("utf-8")
+                  payload = json.loads(raw)
+              except Exception as exc:
+                  raise SystemExit(f"{label}: cannot decode sb-graph-data: {exc}") from exc
+              if not isinstance(payload, dict):
+                  raise SystemExit(f"{label}: graph-data must be an object")
+              style = payload.get("defaultStyle")
+              if not isinstance(style, dict):
+                  raise SystemExit(f"{label}: defaultStyle missing; keys={sorted(payload.keys())}")
+              colors = style.setdefault("colors", {})
+              if not isinstance(colors, dict):
+                  raise SystemExit(f"{label}: defaultStyle.colors must be an object")
+              colors["edge"] = "#858b93"
+              style["edgeOpacity"] = 0.28
+
+              encoded_raw = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+              compressor = zlib.compressobj(level=9, wbits=-zlib.MAX_WBITS)
+              encoded_bytes = compressor.compress(encoded_raw) + compressor.flush()
+              encoded = base64.b64encode(encoded_bytes).decode("ascii")
+              text = text[:match.start("body")] + encoded + text[match.end("body"):]
+
+              verify = pattern.search(text)
+              if not verify:
+                  raise SystemExit(f"{label}: compressed payload disappeared after rewrite")
+              decoded_raw = zlib.decompress(
+                  base64.b64decode(verify.group("body").strip()),
+                  wbits=-zlib.MAX_WBITS,
+              ).decode("utf-8")
+              decoded = json.loads(decoded_raw)
+              vstyle = decoded["defaultStyle"]
+              if vstyle.get("edgeOpacity") != 0.28 or vstyle.get("colors", {}).get("edge") != "#858b93":
+                  raise SystemExit(f"{label}: compressed style verification failed")
+              return text'''
+          text = text[:start] + replacement + text[end:]
+          p.write_text(text, encoding='utf-8')
           PY
 
       - name: Apply final engine UI projection
@@ -39,15 +97,20 @@ jobs:
       - name: Validate generated source contracts
         run: |
           python - <<'PY'
-          import base64, gzip, json, re, subprocess
+          import base64, json, re, subprocess, zlib
           from pathlib import Path
 
+          payload_pattern = re.compile(
+              r'''(<script\b(?=[^>]*\bid=["']sb-graph-data["'])[^>]*>)(?P<body>.*?)(</script>)''',
+              re.S | re.I,
+          )
           for filename in ('graph.html', 'sphere.html'):
               text = Path(filename).read_text(encoding='utf-8')
-              m = re.search(r'<script id="graph-data" type="application/json" data-encoding="gzip-base64">(.*?)</script>', text, re.S)
+              m = payload_pattern.search(text)
               if not m:
-                  raise SystemExit(f'{filename}: compressed payload missing')
-              payload = json.loads(gzip.decompress(base64.b64decode(m.group(1).strip())).decode('utf-8'))
+                  raise SystemExit(f'{filename}: compressed sb-graph-data payload missing')
+              compressed = base64.b64decode(m.group('body').strip())
+              payload = json.loads(zlib.decompress(compressed, wbits=-zlib.MAX_WBITS).decode('utf-8'))
               style = payload['defaultStyle']
               assert style['colors']['edge'] == '#858b93', (filename, style['colors'].get('edge'))
               assert style['edgeOpacity'] == 0.28, (filename, style.get('edgeOpacity'))
@@ -59,7 +122,9 @@ jobs:
               scripts = []
               for idx, sm in enumerate(re.finditer(r'<script(?P<attrs>[^>]*)>(?P<body>.*?)</script>', text, re.S | re.I)):
                   attrs = sm.group('attrs')
-                  if re.search(r'type=["\']application/(?:json|ld\+json)["\']', attrs, re.I):
+                  if re.search(r'''\bid=["']sb-(?:graph|reader)-data["']''', attrs, re.I):
+                      continue
+                  if re.search(r'''type=["']application/(?:json|ld\+json)["']''', attrs, re.I):
                       continue
                   body = sm.group('body')
                   if not body.strip():
