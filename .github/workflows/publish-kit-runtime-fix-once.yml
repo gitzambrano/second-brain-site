@@ -1,0 +1,63 @@
+name: Publish Kit runtime fix once
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/publish-kit-runtime-fix-once.yml
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Update shared runtime and cache buster
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/gitzambrano/second-brain-engine/main/scripts/site_src/theme.js -o assets/theme.js
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, re
+
+          theme = Path('assets/theme.js').read_bytes()
+          version = hashlib.sha256(theme).hexdigest()[:8]
+
+          index = Path('index.html')
+          text = index.read_text(encoding='utf-8')
+          text, n = re.subn(r'assets/theme\.js(?:\?v=[0-9a-f]+)?', f'assets/theme.js?v={version}', text)
+          if n < 1:
+              raise SystemExit('index theme reference not found')
+          if '<u>confiável</u>' not in text:
+              raise SystemExit('trusted underline missing from public index')
+          index.write_text(text, encoding='utf-8')
+
+          essays = list(Path('essays').glob('*.html'))
+          if not essays:
+              raise SystemExit('no public essays found')
+          touched = 0
+          for path in essays:
+              body = path.read_text(encoding='utf-8')
+              new, count = re.subn(r'\.\./assets/theme\.js(?:\?v=[0-9a-f]+)?', f'../assets/theme.js?v={version}', body)
+              if count:
+                  path.write_text(new, encoding='utf-8')
+                  touched += 1
+          if touched != len(essays):
+              raise SystemExit(f'theme reference updated in {touched}/{len(essays)} essays')
+          print(f'theme version={version}; essays={touched}')
+          PY
+      - name: Minimal checks and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check assets/theme.js
+          grep -q 'MutationObserver' assets/theme.js
+          grep -q 'formkit-guarantee' assets/theme.js
+          rm .github/workflows/publish-kit-runtime-fix-once.yml
+          git config user.name second-brain-bot
+          git config user.email actions@users.noreply.github.com
+          git add assets/theme.js index.html essays .github/workflows/publish-kit-runtime-fix-once.yml
+          git commit -m 'Publicação do site: enforce subscribe alignment after Kit load'
+          git push origin HEAD:main
