@@ -52,13 +52,14 @@ with sync_playwright() as p:
     page.screenshot(path=str(OUT / "landing-mobile.png"), full_page=True)
     page.close()
 
-    # Representative essay — progress indicator must still react to scrolling.
+    # Representative essay — progress starts at zero width, so wait for DOM
+    # attachment rather than Playwright's visibility definition.
     essay_path = next(iter(sorted((ROOT / "essays").glob("*.html"))))
     page = browser.new_page(viewport={"width": 390, "height": 844})
     errors = []
     page.on("pageerror", lambda exc: errors.append(str(exc)))
     page.goto(essay_path.resolve().as_uri(), wait_until="load")
-    page.wait_for_selector("#sbProgressFill")
+    page.wait_for_selector("#sbProgressFill", state="attached")
     before = page.locator("#sbProgressFill").evaluate("el => el.getBoundingClientRect().width")
     page.evaluate("window.scrollTo(0, Math.max(600, document.documentElement.scrollHeight * 0.55))")
     page.wait_for_timeout(200)
