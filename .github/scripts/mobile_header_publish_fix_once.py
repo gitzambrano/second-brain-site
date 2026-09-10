@@ -29,7 +29,7 @@ replace_once(
 replace_once(
     index,
     "@media(max-width:760px){.topnav .nav-link.active{display:none}.subscribe-cta{min-height:36px;padding-inline:10px;font-size:12px}.subscribe-dialog-head{padding:22px 48px 0 20px}.subscribe-embed{padding:16px 20px 20px}.subscribe-dialog h2{font-size:1.4rem}}",
-    "@media(max-width:760px){.topnav .nav-link.active{display:none}.topnav .nav-link{line-height:1.6}.subscribe-cta{height:36px;min-height:36px;padding-inline:10px;font-size:12px;line-height:1}#themeToggle>span{width:100%;height:100%;display:grid;place-items:center;font-size:21px;line-height:1;transform:translateY(-.5px)}.subscribe-dialog-head{padding:22px 48px 0 20px}.subscribe-embed{padding:16px 20px 20px}.subscribe-dialog h2{font-size:1.4rem}}",
+    "@media(max-width:760px){.topnav .nav-link.active{display:none}.topnav .nav-link{line-height:1.6}.subscribe-cta{height:36px;min-height:36px;padding-inline:10px;font-size:12px;line-height:1}#themeToggle>span{width:100%;height:100%;display:grid;place-items:center;font-size:21px;line-height:1}.subscribe-dialog-head{padding:22px 48px 0 20px}.subscribe-embed{padding:16px 20px 20px}.subscribe-dialog h2{font-size:1.4rem}}",
 )
 replace_once(
     index,
@@ -59,7 +59,7 @@ essay_replacements = [
     ),
     (
         "  .sb-nav #sbTheme > span{display:block;font-size:1.28rem;line-height:1;}\n  .sb-nav .sb-subscribe{height:36px;min-height:36px;padding-inline:10px;font-size:12px;line-height:normal;}",
-        "  .sb-nav #sbTheme > span{width:100%;height:100%;display:grid;place-items:center;font-size:21px;line-height:1;transform:translateY(-.5px);}\n  .sb-nav .sb-subscribe{height:36px;min-height:36px;padding-inline:10px;font-size:12px;line-height:1;}",
+        "  .sb-nav #sbTheme > span{width:100%;height:100%;display:grid;place-items:center;font-size:21px;line-height:1;}\n  .sb-nav .sb-subscribe{height:36px;min-height:36px;padding-inline:10px;font-size:12px;line-height:1;}",
     ),
 ]
 
