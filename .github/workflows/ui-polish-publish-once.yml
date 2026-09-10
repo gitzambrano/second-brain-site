@@ -20,6 +20,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Correct generated-graph patch syntax
+        run: python .github/scripts/prepare_ui_polish_runner_v2.py
       - name: Apply generated projection changes
         run: python .github/scripts/apply_ui_polish_once.py
       - name: Install browser audit
