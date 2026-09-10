@@ -20,6 +20,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Prepare generated graph patch
+        run: python .github/scripts/prepare_ui_polish_runner_v3.py
       - name: Apply generated projection changes
         run: python .github/scripts/apply_ui_polish_once.py
       - name: Install browser audit
@@ -41,7 +43,7 @@ jobs:
         run: |
           git config user.name "second-brain-bot"
           git config user.email "actions@users.noreply.github.com"
-          git rm -f .github/workflows/ui-polish-publish-once.yml .github/scripts/apply_ui_polish_once.py .github/scripts/validate_ui_polish.py
+          git rm -f .github/workflows/ui-polish-publish-once.yml .github/scripts/apply_ui_polish_once.py .github/scripts/validate_ui_polish.py .github/scripts/prepare_ui_polish_runner_v3.py
           git add index.html assets/site.css graph.html sphere.html essays
           git diff --cached --check
           git commit -m "Publicação do site: 2026-09-10 — UI polish"
