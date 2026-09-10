@@ -1,0 +1,47 @@
+name: Apply and validate UI polish once
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/ui-polish-publish-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply generated projection changes
+        run: python .github/scripts/apply_ui_polish_once.py
+      - name: Install browser audit
+        run: |
+          python -m pip install -q playwright
+          python -m playwright install --with-deps chromium
+          git clone --depth 1 https://github.com/gitzambrano/second-brain-engine.git /tmp/second-brain-engine
+      - name: Run official representative browser audits
+        env:
+          SECOND_BRAIN_SITE_ROOT: ${{ github.workspace }}
+        run: |
+          python /tmp/second-brain-engine/scripts/check_site_pages.py index.html --max-seconds 120
+          python /tmp/second-brain-engine/scripts/check_site_pages.py dinamica-analitica-e-acoplamento-fisico-do-modo-dutch-roll.html --max-seconds 120
+          python /tmp/second-brain-engine/scripts/check_site_pages.py graph.html --max-seconds 120
+          python /tmp/second-brain-engine/scripts/check_site_pages.py sphere.html --max-seconds 120
+      - name: Run UI-specific browser regressions
+        run: python .github/scripts/validate_ui_polish.py
+      - name: Commit public projection
+        run: |
+          git config user.name "second-brain-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html assets/site.css graph.html sphere.html essays
+          git diff --cached --check
+          git commit -m "Publicação do site: 2026-09-10 — UI polish"
+          git push origin HEAD:main
