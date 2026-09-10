@@ -1,0 +1,116 @@
+name: Final validated UI publication once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/final-ui-publish-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Apply final engine UI projection
+        run: python .github/scripts/publish_final_ui_once.py
+
+      - name: Validate generated source contracts
+        run: |
+          python - <<'PY'
+          import base64, gzip, json, re, subprocess
+          from pathlib import Path
+
+          for filename in ('graph.html', 'sphere.html'):
+              text = Path(filename).read_text(encoding='utf-8')
+              m = re.search(r'<script id="graph-data" type="application/json" data-encoding="gzip-base64">(.*?)</script>', text, re.S)
+              if not m:
+                  raise SystemExit(f'{filename}: compressed payload missing')
+              payload = json.loads(gzip.decompress(base64.b64decode(m.group(1).strip())).decode('utf-8'))
+              style = payload['defaultStyle']
+              assert style['colors']['edge'] == '#858b93', (filename, style['colors'].get('edge'))
+              assert style['edgeOpacity'] == 0.28, (filename, style.get('edgeOpacity'))
+              if filename == 'sphere.html':
+                  assert style.get('edgeVisibility') == 'sempre', style.get('edgeVisibility')
+
+              out = Path('visual-audit-final') / f'js-{filename[:-5]}'
+              out.mkdir(parents=True, exist_ok=True)
+              scripts = []
+              for idx, sm in enumerate(re.finditer(r'<script(?P<attrs>[^>]*)>(?P<body>.*?)</script>', text, re.S | re.I)):
+                  attrs = sm.group('attrs')
+                  if re.search(r'type=["\']application/(?:json|ld\+json)["\']', attrs, re.I):
+                      continue
+                  body = sm.group('body')
+                  if not body.strip():
+                      continue
+                  p = out / f'inline-{idx}.js'
+                  p.write_text(body, encoding='utf-8')
+                  scripts.append(p)
+              if not scripts:
+                  raise SystemExit(f'{filename}: no JavaScript extracted')
+              for p in scripts:
+                  subprocess.run(['node', '--check', str(p)], check=True)
+              print(filename, 'node --check PASS', len(scripts))
+
+          graph = Path('graph.html').read_text(encoding='utf-8')
+          assert 'const LABEL_SHOW_AT = DEVICE_IS_MOBILE ? 0.62 : 0.78;' in graph
+          assert 'const LABEL_HIDE_AT = DEVICE_IS_MOBILE ? 0.56 : 0.72;' in graph
+          for token in ('EXPORT_SCALE', 'export-svg-popover', 'btn-export-svg-completo', 'btn-export-svg-simples', 'ensureC2S'):
+              assert token not in graph, token
+          assert 'canvas.toBlob' in graph
+          assert 'function buildSvgExport()' in graph
+
+          index = Path('index.html').read_text(encoding='utf-8')
+          assert 'background:var(--accent-soft);' in index
+          assert '<section class="library shell" id="library">' in index
+          for token in ('searchbox', 'data-layout', 'data-density'):
+              assert token in index, token
+
+          essays = list(Path('essays').glob('*.html'))
+          assert essays
+          for p in essays:
+              t = p.read_text(encoding='utf-8')
+              assert 'background:var(--sb-primary-soft);' in t, p.name
+              assert t.count('id="sbProgressFill"') == 1, p.name
+          print('public source contracts PASS; essays=', len(essays))
+          PY
+          git diff --check
+
+      - name: Install Chromium audit dependencies
+        run: |
+          python -m pip install -q playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Run final browser audit
+        run: python .github/scripts/audit_final_ui_publish_once.py
+
+      - name: Upload final visual audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-ui-publication-audit
+          path: visual-audit-final/
+          retention-days: 3
+
+      - name: Commit public site and self-clean
+        run: |
+          set -euo pipefail
+          git config user.name "second-brain-bot"
+          git config user.email "actions@users.noreply.github.com"
+          rm -rf visual-audit-final
+          git rm -f .github/workflows/final-ui-publish-once.yml
+          git rm -f .github/scripts/publish_final_ui_once.py .github/scripts/audit_final_ui_publish_once.py
+          git add -A
+          git diff --cached --check
+          test ! -e .github/workflows/final-ui-publish-once.yml
+          test ! -e .github/scripts/publish_final_ui_once.py
+          test ! -e .github/scripts/audit_final_ui_publish_once.py
+          git commit -m "Publicação do site: 2026-09-10 — final UI fixes"
+          git push origin HEAD:main
