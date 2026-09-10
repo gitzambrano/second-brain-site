@@ -11,6 +11,15 @@ def replace_once(path: Path, old: str, new: str) -> None:
     path.write_text(text.replace(old, new, 1), encoding="utf-8")
 
 
+def replace_one_of(path: Path, olds: tuple[str, ...], new: str) -> None:
+    text = path.read_text(encoding="utf-8")
+    matches = [old for old in olds if text.count(old) == 1]
+    if len(matches) != 1:
+        found = [(old[:80], text.count(old)) for old in olds]
+        raise SystemExit(f"{path}: expected exactly one supported variant, got {found}")
+    path.write_text(text.replace(matches[0], new, 1), encoding="utf-8")
+
+
 index = ROOT / "index.html"
 replace_once(
     index,
@@ -38,7 +47,10 @@ essay_replacements = [
         ".sb-nav a{color:var(--sb-muted) !important;font-size:14px;font-weight:500;line-height:1.6;text-decoration:none !important;}",
     ),
     (
-        ".sb-nav button{\n  width:36px;height:36px;display:grid;place-items:center;\n  border:1px solid var(--sb-line);border-radius:10px;\n  background:transparent;color:var(--sb-primary);cursor:pointer;\n  transition:border-color .16s cubic-bezier(.22,.61,.36,1);\n}",
+        (
+            ".sb-nav button{\n  width:36px;height:36px;display:grid;place-items:center;\n  border:1px solid var(--sb-line);border-radius:10px;\n  background:transparent;color:var(--sb-primary);cursor:pointer;\n  transition:border-color .16s cubic-bezier(.22,.61,.36,1);\n}",
+            ".sb-nav button{\n  width:36px;height:36px;display:grid;place-items:center;font:inherit;\n  border:1px solid var(--sb-line);border-radius:10px;\n  background:transparent;color:var(--sb-primary);cursor:pointer;\n  transition:border-color .16s cubic-bezier(.22,.61,.36,1);\n}",
+        ),
         ".sb-nav button{\n  box-sizing:border-box;width:36px;height:36px;padding:0;display:grid;place-items:center;\n  border:1px solid var(--sb-line);border-radius:10px;\n  background:transparent;color:var(--sb-primary);cursor:pointer;\n  font-family:Inter,ui-sans-serif,system-ui,-apple-system,\"Segoe UI\",sans-serif;line-height:1;\n  transition:border-color .16s cubic-bezier(.22,.61,.36,1);\n}",
     ),
     (
@@ -56,7 +68,10 @@ if not essays:
     raise SystemExit("no published essays found")
 for essay in essays:
     for old, new in essay_replacements:
-        replace_once(essay, old, new)
+        if isinstance(old, tuple):
+            replace_one_of(essay, old, new)
+        else:
+            replace_once(essay, old, new)
 
 # Reveal labels materially earlier than the current public graph.
 graph = ROOT / "graph.html"
