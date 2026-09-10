@@ -1,0 +1,31 @@
+name: Patch public subscribe popup once
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/patch-subscribe-popup-public-once.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply public popup patch
+        run: python .github/scripts/patch_subscribe_popup_public_once.py
+      - name: Minimal checks
+        run: |
+          git diff --check
+          grep -q 'Receba novos ensaios por email.' index.html
+          grep -q '<u>caixa de spam</u>' index.html
+          grep -q 'box-sizing:border-box!important;width:100%!important;min-height:44px' index.html
+      - name: Commit public site and self-clean
+        run: |
+          set -euo pipefail
+          git config user.name "second-brain-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git rm -f .github/workflows/patch-subscribe-popup-public-once.yml .github/scripts/patch_subscribe_popup_public_once.py
+          git add index.html essays/
+          git diff --cached --check
+          git commit -m "Publicação do site: refine subscribe popup"
+          git push origin HEAD:main
