@@ -82,9 +82,12 @@ with sync_playwright() as p, server() as base:
         page.locator("#subscribeDialog").evaluate("el => el.showModal()")
         inject_form(page, "#kitEmbedMount")
         assert_form_alignment(page, ".subscribe-embed .formkit-input", ".subscribe-embed .formkit-submit")
+        page.locator("#subscribeDialog").evaluate("el => el.close()")
 
-        page.evaluate("localStorage.setItem('sb-theme','dark'); location.reload()")
-        page.wait_for_load_state("load")
+        # The official audit already exercises persisted light/dark navigation.
+        # Here we only need the CSS invariant, so switch the attribute directly
+        # and avoid racing a reload against Playwright's execution context.
+        page.evaluate("document.documentElement.setAttribute('data-theme','dark')")
         borders = page.locator(".brand-mark, #subscribeOpen, #themeToggle").evaluate_all(
             "els => els.map(el => getComputedStyle(el).borderTopColor)"
         )
@@ -151,7 +154,7 @@ with sync_playwright() as p, server() as base:
         source = (ROOT / "graph.html").read_text(encoding="utf-8")
         assert "const LABEL_SHOW_AT = 1.40;" in source
         assert "const LABEL_HIDE_AT = 1.32;" in source
-        assert '"edgeOpacity": 0.28' in source
+        assert 'edgeOpacity: 0.28' in source or '"edgeOpacity": 0.28' in source
         page.locator("#btn-style").click()
         page.wait_for_timeout(120)
         modal_z = int(page.locator("#modal").evaluate("el => parseInt(getComputedStyle(el).zIndex || '0', 10)"))
