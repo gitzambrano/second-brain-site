@@ -1366,7 +1366,7 @@ body{padding-top:56px;}
   width:32px;height:32px;border:1px solid var(--sb-line);border-radius:9px;
   background:transparent;color:var(--sb-primary);cursor:pointer;
 }
-.sb-nav button:hover{border-color:var(--sb-primary);}
+.sb-nav button:hover{border-color:var(--sb-line-strong);}
 .sb-nav button:focus-visible{
   outline:2px solid color-mix(in srgb,var(--sb-primary) 58%,transparent);
   outline-offset:2px;
@@ -1376,6 +1376,7 @@ body{padding-top:56px;}
   border-color:color-mix(in srgb,var(--sb-primary) 42%,var(--sb-line));border-radius:999px;
   background:var(--sb-primary-soft);color:var(--sb-primary);font:650 12px/1 Inter,ui-sans-serif,system-ui,sans-serif;
 }
+#sbTheme{border-color:color-mix(in srgb,var(--sb-primary) 42%,var(--sb-line));}
 .sb-subscribe-dialog{
   width:min(430px,calc(100% - 28px));margin:auto;padding:0;border:1px solid var(--sb-line-strong);
   border-radius:16px;background:var(--sb-surface);color:var(--sb-text);overflow:auto;
@@ -1385,6 +1386,8 @@ body{padding-top:56px;}
 .sb-subscribe-eyebrow{margin:0 0 5px;color:var(--sb-primary);font:700 9.5px/1 JetBrains Mono,monospace;letter-spacing:.17em;text-transform:uppercase;}
 .sb-subscribe-dialog h2{margin:0 0 7px;color:var(--sb-text);font:600 1.55rem/1.22 Source Serif 4,serif;letter-spacing:-.025em;}
 .sb-subscribe-dialog-head > p:last-of-type{margin:0;color:var(--sb-muted);font:13.5px/1.5 Inter,ui-sans-serif,system-ui,sans-serif;}
+.sb-subscribe-note{margin:-4px 24px 24px!important;padding:0;color:var(--sb-muted)!important;font:11.5px/1.5 Inter,ui-sans-serif,system-ui,sans-serif!important;}
+.sb-subscribe-note strong{color:var(--sb-text);font-weight:650;}
 .sb-subscribe-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border:1px solid var(--sb-line);border-radius:9px;background:transparent;color:var(--sb-muted);font-size:19px;line-height:1;cursor:pointer;}
 .sb-subscribe-embed{min-width:0;padding:18px 24px 24px;}
 .sb-subscribe-embed .formkit-form{max-width:none!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
@@ -1473,6 +1476,7 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
   .sb-nav a{font-size:12px;}
   .sb-brand{font-size:13px;}
   .sb-nav button{width:44px;height:44px;}
+  .sb-nav #sbTheme{font-size:1.25rem;}
   .sb-subscribe{display:none;}
   .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
   .sb-toc-text{display:none;}
@@ -3373,9 +3377,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a h
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x_upd, P_upd</span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="fl">1.0</span>, <span class="fl">0.1</span>], [<span class="fl">0.0</span>, <span class="fl">1.0</span>]])</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> np.array(referência interna)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> np.array([[<span class="fl">1.0</span>, <span class="fl">0.0</span>]])</span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> np.diag([<span class="fl">1e-3</span>, <span class="fl">1e-2</span>])</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.array(referência interna)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.array([[<span class="fl">0.5</span>]])</span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="fl">0.0</span>, <span class="fl">2.0</span>])</span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> np.eye(<span class="dv">2</span>)</span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>medidas <span class="op">=</span> [<span class="fl">0.3</span>, <span class="fl">0.55</span>, <span class="fl">0.78</span>, <span class="fl">1.02</span>, <span class="fl">1.19</span>, <span class="fl">1.38</span>]</span>
@@ -3684,7 +3688,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a h
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> np.array([[<span class="fl">0.0</span>], [<span class="fl">3.0</span>]])                <span class="co"># profundor atua na taxa de arfagem</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>E <span class="op">=</span> np.array([[<span class="fl">1.0</span>], [<span class="fl">0.0</span>]])                <span class="co"># rajada entra direto no angulo de ataque</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> np.diag([<span class="fl">10.0</span>, <span class="fl">1.0</span>])</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.array(referência interna)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.array([[<span class="fl">1.0</span>]])</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">3.0</span>                                 <span class="co"># ganho maximo tolerado de rajada para erro</span></span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>B_aug <span class="op">=</span> np.hstack([B, E])                   <span class="co"># combina controle e perturbacao</span></span>
@@ -5510,7 +5514,7 @@ href="https://doi.org/10.1016/0167-2789(93)90009-P">Link</a></p>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
   <div class="ornament">· · ·</div>
-  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
     Second Brain · Gustavo Zambrano · Julho de 2026
   </p>
 </footer>
@@ -5815,6 +5819,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <div id="sbKitEmbedMount" data-uid="4fd36350af"
          data-src="https://gustavo-jose-zambrano.kit.com/4fd36350af/index.js"></div>
   </div>
+  <p class="sb-subscribe-note"><strong>Depois de assinar:</strong> confirme seu endereço no e-mail enviado pelo Kit. Ele pode cair em <strong>Spam</strong> ou <strong>Promoções</strong>; procure por “Second Brain”, marque como “Não é spam” e então confirme.</p>
 </dialog>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
 <div class="sb-tags"><span class="sb-tag">Engenharia</span><span class="sb-tag">Matemática</span><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Dinâmica-de-Voo</span><span class="sb-tag">Estatística</span><span class="sb-tag">Computação</span></div>
