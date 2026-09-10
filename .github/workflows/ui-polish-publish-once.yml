@@ -20,13 +20,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Correct generated-graph patch syntax
-        run: python .github/scripts/prepare_ui_polish_runner_v2.py
       - name: Apply generated projection changes
         run: python .github/scripts/apply_ui_polish_once.py
       - name: Install browser audit
         run: |
-          python -m pip install -q playwright
+          python -m pip install -q playwright pyyaml
           python -m playwright install --with-deps chromium
           git clone --depth 1 https://github.com/gitzambrano/second-brain-engine.git /tmp/second-brain-engine
       - name: Run official representative browser audits
@@ -39,10 +37,11 @@ jobs:
           python /tmp/second-brain-engine/scripts/check_site_pages.py sphere.html --max-seconds 120
       - name: Run UI-specific browser regressions
         run: python .github/scripts/validate_ui_polish.py
-      - name: Commit public projection
+      - name: Commit public projection and clean temporary helpers
         run: |
           git config user.name "second-brain-bot"
           git config user.email "actions@users.noreply.github.com"
+          git rm -f .github/workflows/ui-polish-publish-once.yml .github/scripts/apply_ui_polish_once.py .github/scripts/validate_ui_polish.py
           git add index.html assets/site.css graph.html sphere.html essays
           git diff --cached --check
           git commit -m "Publicação do site: 2026-09-10 — UI polish"
