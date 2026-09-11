@@ -1,0 +1,73 @@
+name: Promote sealed snapshot now
+
+on:
+  push:
+    branches: [publish/sealed-snapshot-2026-09-11]
+    paths:
+      - '.github/workflows/promote-sealed-snapshot-now.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    env:
+      SNAPSHOT_URL: 'https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-e960-820e-b4c7-0c181e4e161f/raw?se=2026-09-11T23%3A45%3A22Z&sp=r&sv=2026-02-06&sr=b&scid=735062ba-1b4c-5686-8839-89c5b2a6f7e8&skoid=fbc53507-c13f-4907-b4dd-0e03c91f5ad8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-11T19%3A27%3A26Z&ske=2026-09-12T19%3A27%3A26Z&sks=b&skv=2026-02-06&sig=y2CAA/8gLnljVXSgenSzrqxkmkTZtD8MS1fDN0GAGJ0%3D'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: publish/sealed-snapshot-2026-09-11
+          fetch-depth: 5
+
+      - name: Download exact sealed snapshot
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 "$SNAPSHOT_URL" -o /tmp/artifact.zip
+          rm -rf /tmp/artifact /tmp/sealed-site
+          mkdir -p /tmp/artifact /tmp/sealed-site
+          unzip -q /tmp/artifact.zip -d /tmp/artifact
+          test -f /tmp/artifact/sealed-site.zip
+          unzip -q /tmp/artifact/sealed-site.zip -d /tmp/sealed-site
+          test -f /tmp/sealed-site/site-manifest.json
+
+      - name: Verify sealed Pages artifact
+        run: |
+          set -euo pipefail
+          cd /tmp/sealed-site
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path('site-manifest.json').read_text(encoding='utf-8'))
+          seal = m.get('seal') or {}
+          assert seal.get('gates') == ['privacy', 'budget', 'pages'], seal
+          assert seal.get('engine', {}).get('dirty') is False, seal
+          assert m.get('count') == 44, m.get('count')
+          print('sealed manifest:', seal.get('artifact_digest'))
+          PY
+          rm -rf _site
+          mkdir _site
+          rsync -a \
+            --exclude='/_site' \
+            --exclude='/.git' \
+            --exclude='/.github' \
+            --exclude='/README.md' \
+            --exclude='/.gitignore' \
+            --exclude='/.second-brain-site' \
+            --exclude='__pycache__/' \
+            ./ _site/
+          python .github/scripts/check_artifact.py _site --mode artifact
+          rm -rf _site
+
+      - name: Replace branch with sealed snapshot
+        run: |
+          set -euo pipefail
+          rsync -a --delete --exclude='/.git' /tmp/sealed-site/ ./
+          test ! -e .github/ALLOW_UNSEALED_DEPLOY
+          test ! -e .github/workflows/promote-sealed-snapshot-now.yml
+          git config user.name 'Second Brain Publisher'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'Publicação do site: 2026-09-11'
+          git push origin HEAD:publish/sealed-snapshot-2026-09-11
