@@ -1,0 +1,101 @@
+name: Publish Portuguese UI once
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish-ui-translation-once.yml']
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Translate visible public UI
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, re
+
+          maps = [Path('graph.html'), Path('sphere.html')]
+          replacements = [
+              ('Buscar por título ou tag…', 'Buscar por título ou tema…'),
+              ('> Essay</div>', '> Ensaio</div>'),
+              ('> Concept</div>', '> Conceito</div>'),
+              ('> Entity</div>', '> Entidade</div>'),
+              ('> Insight</div>', '> Ideia</div>'),
+              ('> Reference</div>', '> Referência</div>'),
+              ('essay: "Essays", concept: "Concepts", entity: "Entities",\n  insights: "Insights", reference: "Referências",',
+               'essay: "Ensaios", concept: "Conceitos", entity: "Entidades",\n  insights: "Ideias", reference: "Referências",'),
+              ('essay: "Essay", concept: "Concept", entity: "Entity",\n  insights: "Insight", reference: "Referência",',
+               'essay: "Ensaio", concept: "Conceito", entity: "Entidade",\n  insights: "Ideia", reference: "Referência",'),
+              ('essay: "Essay", concept: "Concept", entity: "Entity", insights: "Insight",\n  reference: "Reference", edge: "Arestas", background: "Fundo",',
+               'essay: "Ensaio", concept: "Conceito", entity: "Entidade", insights: "Ideia",\n  reference: "Referência", edge: "Arestas", background: "Fundo",'),
+              ('Gaps entre tags', 'Lacunas entre temas'),
+              ('>Tags</th>', '>Temas</th>'),
+              ('data-label="Tags"', 'data-label="Temas"'),
+              ('[data-label="Tags"]', '[data-label="Temas"]'),
+              ('não mexe em cor/glow.', 'não altera cor nem brilho.'),
+          ]
+          for path in maps:
+              text = path.read_text(encoding='utf-8')
+              original = text
+              for old, new in replacements:
+                  text = text.replace(old, new)
+              if text == original:
+                  raise SystemExit(f'no translations applied to {path}')
+              path.write_text(text, encoding='utf-8')
+
+          theme = Path('assets/theme.js')
+          t = theme.read_text(encoding='utf-8')
+          old = "    var input = mount.querySelector('.formkit-input');\n    var submit = mount.querySelector('.formkit-submit');"
+          new = "    var input = mount.querySelector('.formkit-input');\n    if (input) { input.placeholder = 'E-mail'; input.setAttribute('aria-label', 'E-mail'); }\n    mount.querySelectorAll('.formkit-powered-by-convertkit-container').forEach(function (el) { el.remove(); });\n    var submit = mount.querySelector('.formkit-submit');"
+          if old in t:
+              t = t.replace(old, new, 1)
+          elif "input.placeholder = 'E-mail'" not in t:
+              raise SystemExit('theme.js input signature not found')
+          theme.write_text(t, encoding='utf-8')
+          theme_v = hashlib.sha256(t.encode('utf-8')).hexdigest()[:8]
+
+          index = Path('index.html')
+          s = index.read_text(encoding='utf-8')
+          s = s.replace('aria-label="Assinar a newsletter do Second Brain"', 'aria-label="Assinar o boletim do Second Brain"')
+          s = re.sub(r'assets/theme\.js(?:\?v=[0-9a-f]+)?', f'assets/theme.js?v={theme_v}', s)
+          index.write_text(s, encoding='utf-8')
+
+          for path in Path('essays').glob('*.html'):
+              s = path.read_text(encoding='utf-8')
+              s = s.replace('aria-label="Assinar a newsletter do Second Brain"', 'aria-label="Assinar o boletim do Second Brain"')
+              s = s.replace('Sumário do essay', 'Sumário do ensaio')
+              s = re.sub(r'\.\./assets/theme\.js(?:\?v=[0-9a-f]+)?', f'../assets/theme.js?v={theme_v}', s)
+              path.write_text(s, encoding='utf-8')
+          PY
+      - name: Minimal checks
+        shell: bash
+        run: |
+          node --check assets/theme.js
+          for f in graph.html sphere.html; do
+            grep -q '> Ensaio</div>' "$f"
+            grep -q '> Conceito</div>' "$f"
+            grep -q '> Entidade</div>' "$f"
+            grep -q '> Ideia</div>' "$f"
+            grep -q '> Referência</div>' "$f"
+            grep -q 'essay: "Ensaios", concept: "Conceitos", entity: "Entidades"' "$f"
+            grep -q '>Temas</th>' "$f"
+            grep -q 'Lacunas entre temas' "$f"
+            ! grep -q '> Essay</div>\|> Concept</div>\|> Entity</div>\|> Insight</div>\|> Reference</div>' "$f"
+          done
+          grep -q "placeholder = 'E-mail'" assets/theme.js
+          ! grep -q 'Assinar a newsletter do Second Brain' index.html
+          ! grep -R -q 'Sumário do essay\|Assinar a newsletter do Second Brain' essays
+      - name: Commit and self-clean
+        shell: bash
+        run: |
+          rm .github/workflows/publish-ui-translation-once.yml
+          git config user.name second-brain-bot
+          git config user.email actions@users.noreply.github.com
+          git add graph.html sphere.html index.html essays assets/theme.js .github/workflows/publish-ui-translation-once.yml
+          git commit -m 'Publicação do site: traduz interface para português'
+          git push origin HEAD:main
