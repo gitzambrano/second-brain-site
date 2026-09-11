@@ -1,0 +1,55 @@
+name: Reseal current site once
+
+on:
+  push:
+    branches: [maintenance/reseal-current-engine-2026-09-11]
+    paths: ['.github/workflows/reseal-temp.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  reseal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout site
+        uses: actions/checkout@v4
+        with:
+          path: site
+          fetch-depth: 0
+
+      - name: Checkout engine
+        uses: actions/checkout@v4
+        with:
+          repository: gitzambrano/second-brain-engine
+          ref: b3bcfe392ba523feb5ba2bfa5b69b5bb8193a57a
+          path: engine
+          fetch-depth: 0
+
+      - name: Reseal exact site bytes with current engine
+        shell: bash
+        env:
+          SECOND_BRAIN_SITE_ROOT: ${{ github.workspace }}/site
+        run: |
+          python "$GITHUB_WORKSPACE/engine/scripts/seal_publication.py" "$GITHUB_WORKSPACE/site"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path('site/site-manifest.json').read_text(encoding='utf-8'))
+          expected = 'b3bcfe392ba523feb5ba2bfa5b69b5bb8193a57a'
+          assert m['seal']['engine']['sha'] == expected, m['seal']['engine']
+          assert m['seal']['engine']['dirty'] is False, m['seal']['engine']
+          assert m['seal']['gates'] == ['privacy', 'budget', 'pages'], m['seal']['gates']
+          print('seal verified:', m['seal']['engine']['sha'], m['seal']['artifact_digest'])
+          PY
+
+      - name: Commit reseal and self-clean
+        shell: bash
+        run: |
+          cd site
+          rm .github/workflows/reseal-temp.yml
+          git config user.name second-brain-bot
+          git config user.email actions@users.noreply.github.com
+          git add site-manifest.json .github/newsletter-manifest.json .github/workflows/reseal-temp.yml
+          git commit -m 'chore: reseal site with current engine'
+          git push origin HEAD:maintenance/reseal-current-engine-2026-09-11
