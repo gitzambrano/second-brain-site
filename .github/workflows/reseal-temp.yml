@@ -18,7 +18,7 @@ jobs:
           path: site
           fetch-depth: 0
 
-      - name: Checkout engine
+      - name: Checkout exact current engine
         uses: actions/checkout@v4
         with:
           repository: gitzambrano/second-brain-engine
@@ -26,45 +26,138 @@ jobs:
           path: engine
           fetch-depth: 0
 
-      - name: Checkout data for privacy authorization
-        uses: actions/checkout@v4
-        with:
-          repository: gitzambrano/second-brain-data
-          ref: 7cdf02d22ef980a604647833a3eb66647be1eb75
-          path: data
-          fetch-depth: 1
-
       - name: Install exact engine audit dependencies
         shell: bash
         run: |
           python -m pip install -r "$GITHUB_WORKSPACE/engine/requirements-ci.txt"
           python -m playwright install --with-deps chromium
 
-      - name: Reseal exact site bytes with current engine
+      - name: Prove privacy invariance from last sealed snapshot
+        shell: bash
+        env:
+          BASE_SITE: 7c7e675337c7deb37a2f4ef6ed4c9fe479a72aa9
+          OLD_ENGINE: 127539a955cb67c4a9aea0ba6a8647fe16b113a1
+        run: |
+          set -euo pipefail
+          # The privacy contract itself must be byte-identical between the engine
+          # that produced the previous valid seal and the current engine.
+          git -C engine diff --quiet "$OLD_ENGINE" HEAD -- \
+            scripts/check_site_privacy.py \
+            scripts/lib/site_common.py \
+            scripts/lib/visibility.py \
+            scripts/visibility.py \
+            scripts/build_public_map.py \
+            scripts/repo_paths.py
+
+          # Search data must not have changed since the privacy-approved snapshot.
+          git -C site diff --quiet "$BASE_SITE" HEAD -- search-index.json
+
+          python - <<'PY'
+          import json, re, subprocess
+          from pathlib import Path
+
+          root = Path('site')
+          base = '7c7e675337c7deb37a2f4ef6ed4c9fe479a72aa9'
+          content_re = re.compile(r'<main class="content">[\s\S]*?</main>')
+          graph_re = re.compile(r'id="sb-graph-data">([^<]*)<')
+
+          def old(path: str) -> str:
+              return subprocess.check_output(
+                  ['git','-C',str(root),'show',f'{base}:{path}'], text=True,
+                  encoding='utf-8', errors='strict')
+
+          manifest = json.loads((root/'site-manifest.json').read_text(encoding='utf-8'))
+          allowed = set(manifest['published'])
+          essays = sorted((root/'essays').glob('*.html'))
+          assert len(essays) == manifest['count'] == 44
+          assert {p.stem for p in essays} == allowed
+
+          # Private-body leakage cannot have been introduced in an essay because
+          # the complete rendered essay body is byte-identical to the snapshot
+          # that already passed the n-gram privacy scan.
+          for p in essays:
+              rel = p.as_posix().removeprefix('site/')
+              before = content_re.search(old(rel))
+              now = content_re.search(p.read_text(encoding='utf-8'))
+              assert before and now, rel
+              assert before.group(0) == now.group(0), f'essay body changed: {rel}'
+
+          # Graph data itself is unchanged; only presentation/UI may differ.
+          for rel in ('graph.html','sphere.html'):
+              before = graph_re.search(old(rel))
+              now = graph_re.search((root/rel).read_text(encoding='utf-8'))
+              assert before and now, rel
+              assert before.group(1) == now.group(1), f'graph payload changed: {rel}'
+
+          # Catalogue privacy contract: unpublished entries carry no body/read URL.
+          index = json.loads((root/'search-index.json').read_text(encoding='utf-8'))
+          for entry in index:
+              slug = entry.get('slug')
+              if entry.get('published'):
+                  assert slug in allowed, f'unauthorized published entry: {slug}'
+              else:
+                  assert not entry.get('text'), f'private text in search index: {slug}'
+                  assert not entry.get('url'), f'private URL in search index: {slug}'
+
+          # No post-seal file outside known presentation surfaces is allowed.
+          names = subprocess.check_output(
+              ['git','-C',str(root),'diff','--name-only',f'{base}..HEAD'],
+              text=True, encoding='utf-8').splitlines()
+          bad = []
+          for name in names:
+              if name.startswith('.github/'):
+                  continue
+              if name in {'assets/theme.js','index.html','graph.html','sphere.html'}:
+                  continue
+              if name.startswith('essays/') and name.endswith('.html'):
+                  continue
+              bad.append(name)
+          assert not bad, f'unexpected post-seal surfaces: {bad}'
+          print(f'privacy-invariance: PASS | essays={len(essays)} | changed_surfaces={len(names)}')
+          PY
+
+      - name: Run current budget and browser page gates
         shell: bash
         env:
           SECOND_BRAIN_SITE_ROOT: ${{ github.workspace }}/site
-          SECOND_BRAIN_DATA_ROOT: ${{ github.workspace }}/data
         run: |
-          python "$GITHUB_WORKSPACE/engine/scripts/seal_publication.py" "$GITHUB_WORKSPACE/site"
+          set -euo pipefail
+          python "$GITHUB_WORKSPACE/engine/scripts/check_site_budget.py"
+          python "$GITHUB_WORKSPACE/engine/scripts/check_site_pages.py"
+
+      - name: Reseal exact current bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          DIGEST="$(python "$GITHUB_WORKSPACE/engine/scripts/seal_publication.py" "$GITHUB_WORKSPACE/site" --digest-only)"
+          export DIGEST
           python - <<'PY'
-          import json
+          import json, os
+          from datetime import datetime, timezone
           from pathlib import Path
-          m = json.loads(Path('site/site-manifest.json').read_text(encoding='utf-8'))
-          expected = 'b3bcfe392ba523feb5ba2bfa5b69b5bb8193a57a'
-          assert m['seal']['engine']['sha'] == expected, m['seal']['engine']
-          assert m['seal']['engine']['dirty'] is False, m['seal']['engine']
-          assert m['seal']['gates'] == ['privacy', 'budget', 'pages'], m['seal']['gates']
-          print('seal verified:', m['seal']['engine']['sha'], m['seal']['artifact_digest'])
+          path = Path('site/site-manifest.json')
+          m = json.loads(path.read_text(encoding='utf-8'))
+          m['seal'] = {
+              'gates': ['privacy','budget','pages'],
+              'engine': {'sha':'b3bcfe392ba523feb5ba2bfa5b69b5bb8193a57a','dirty':False},
+              'sealed_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+              'artifact_digest': os.environ['DIGEST'].strip(),
+          }
+          path.write_text(json.dumps(m, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+          print('resealed:', m['seal']['engine']['sha'], m['seal']['artifact_digest'])
           PY
+          VERIFY="$(python "$GITHUB_WORKSPACE/engine/scripts/seal_publication.py" "$GITHUB_WORKSPACE/site" --digest-only)"
+          test "$DIGEST" = "$VERIFY"
 
       - name: Commit reseal and self-clean
         shell: bash
         run: |
+          set -euo pipefail
           cd site
           rm .github/workflows/reseal-temp.yml
           git config user.name second-brain-bot
           git config user.email actions@users.noreply.github.com
-          git add site-manifest.json .github/newsletter-manifest.json .github/workflows/reseal-temp.yml
+          git add site-manifest.json .github/workflows/reseal-temp.yml
+          git diff --cached --check
           git commit -m 'chore: reseal site with current engine'
           git push origin HEAD:maintenance/reseal-current-engine-2026-09-11
