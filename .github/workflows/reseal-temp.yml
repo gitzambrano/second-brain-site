@@ -26,6 +26,14 @@ jobs:
           path: engine
           fetch-depth: 0
 
+      - name: Checkout data for privacy authorization
+        uses: actions/checkout@v4
+        with:
+          repository: gitzambrano/second-brain-data
+          ref: 7cdf02d22ef980a604647833a3eb66647be1eb75
+          path: data
+          fetch-depth: 1
+
       - name: Install exact engine audit dependencies
         shell: bash
         run: |
@@ -36,6 +44,7 @@ jobs:
         shell: bash
         env:
           SECOND_BRAIN_SITE_ROOT: ${{ github.workspace }}/site
+          SECOND_BRAIN_DATA_ROOT: ${{ github.workspace }}/data
         run: |
           python "$GITHUB_WORKSPACE/engine/scripts/seal_publication.py" "$GITHUB_WORKSPACE/site"
           python - <<'PY'
