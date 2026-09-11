@@ -1,0 +1,172 @@
+name: Publish Campeoes once
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish-campeoes-once.yml']
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      SLUG: campeoes-por-acaso-por-que-atletas-de-elite-sao-anomalias-estatisticas
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Prepare current engine and isolated data fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          ENGINE="$RUNNER_TEMP/second-brain-engine"
+          DATA="$RUNNER_TEMP/second-brain-data"
+          git clone --depth 1 https://github.com/gitzambrano/second-brain-engine.git "$ENGINE"
+          mkdir -p "$DATA/wiki/essays"
+          cp ".github/publish-input/$SLUG.md" "$DATA/wiki/essays/$SLUG.md"
+          grep -q '^updated: 2026-06-16$' "$DATA/wiki/essays/$SLUG.md"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'second-brain-data' / 'wiki' / 'essays'
+          slug = os.environ['SLUG']
+          manifest = json.loads(Path('site-manifest.json').read_text(encoding='utf-8'))
+          for other in manifest['published']:
+              if other == slug:
+                  continue
+              (root / f'{other}.md').write_text(
+                  '---\nvisibility: public\ncreated: 2026-01-01\nupdated: 2026-01-01\nstatus: finalizado\nsummary: fixture de publicação\n---\n'
+                  f'# {other}\n', encoding='utf-8')
+          PY
+
+      - name: Install renderer dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet pyyaml unidecode playwright
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq pandoc
+          python -m playwright install --with-deps chromium
+
+      - name: Render only the approved essay
+        shell: bash
+        run: |
+          set -euo pipefail
+          export SECOND_BRAIN_DATA_ROOT="$RUNNER_TEMP/second-brain-data"
+          export SECOND_BRAIN_SITE_ROOT="$GITHUB_WORKSPACE"
+          python "$RUNNER_TEMP/second-brain-engine/scripts/render_public_essay.py" \
+            "$SLUG" --output "$GITHUB_WORKSPACE/essays/$SLUG.html"
+          grep -q 'Este ensaio examina um dos mitos mais persistentes' "essays/$SLUG.html"
+          grep -q 'O mecanismo é cumulativo' "essays/$SLUG.html"
+          grep -q 'Com os mecanismos filosóficos, estatísticos e psicológicos já estabelecidos' "essays/$SLUG.html"
+          ! grep -q 'Existe uma indústria multibilionária construída sobre uma premissa falsa' "essays/$SLUG.html"
+          ! grep -q 'Pagar R\$ 200.000 para ouvir um deles' "essays/$SLUG.html"
+
+      - name: Synchronize reading-time metadata without changing essay date
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          slug = os.environ['SLUG']
+          html_path = Path('essays') / f'{slug}.html'
+          html = html_path.read_text(encoding='utf-8')
+          m = re.search(r'<html[^>]*data-minutes="(\d+)"', html)
+          if not m:
+              raise SystemExit('rendered essay has no data-minutes')
+          minutes = int(m.group(1))
+
+          search_path = Path('search-index.json')
+          entries = json.loads(search_path.read_text(encoding='utf-8'))
+          entry = next(e for e in entries if e.get('slug') == slug)
+          if entry.get('updated') != '2026-06-16':
+              raise SystemExit(f"essay date changed in search index: {entry.get('updated')}")
+          entry['minutes'] = minutes
+          search_path.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          index_path = Path('index.html')
+          page = index_path.read_text(encoding='utf-8')
+          needle = f'href="essays/{slug}.html"'
+          pos = page.index(needle)
+          start = page.rfind('<article', 0, pos)
+          end = page.find('</article>', pos)
+          if start < 0 or end < 0:
+              raise SystemExit('essay card not found')
+          end += len('</article>')
+          card = page[start:end]
+          if '2026-06-16' not in card:
+              raise SystemExit('essay date changed in index card')
+          card = re.sub(r'data-minutes="\d+"', f'data-minutes="{minutes}"', card, count=1)
+          card = re.sub(r'<span>\d+ min de leitura</span>', f'<span>{minutes} min de leitura</span>', card, count=1)
+          index_path.write_text(page[:start] + card + page[end:], encoding='utf-8')
+          print(f'reading minutes: {minutes}')
+          PY
+
+      - name: Validate publication delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          export SECOND_BRAIN_DATA_ROOT="$RUNNER_TEMP/second-brain-data"
+          export SECOND_BRAIN_SITE_ROOT="$GITHUB_WORKSPACE"
+          ENGINE="$RUNNER_TEMP/second-brain-engine"
+          python "$ENGINE/scripts/check_site_privacy.py"
+          python "$ENGINE/scripts/check_site_budget.py"
+          python "$ENGINE/scripts/check_site_pages.py" "$SLUG" --max-seconds 180
+
+      - name: Reseal generated artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, os, subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+          root = Path('.')
+          manifest_path = root / 'site-manifest.json'
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          excluded_top = {'README.md', '.gitignore', '.second-brain-site', 'site-manifest.json'}
+          text_suffixes = {'.html','.json','.js','.css','.txt','.md','.xml','.svg'}
+          h = hashlib.sha256()
+          files = []
+          for p in root.rglob('*'):
+              if not p.is_file():
+                  continue
+              parts = p.relative_to(root).parts
+              if '.git' in parts or '.github' in parts:
+                  continue
+              if len(parts) == 1 and p.name in excluded_top:
+                  continue
+              files.append(p)
+          for p in sorted(files, key=lambda x: x.relative_to(root).as_posix()):
+              data = p.read_bytes()
+              if p.suffix.lower() in text_suffixes:
+                  data = data.replace(b'\r\n', b'\n')
+              h.update(p.relative_to(root).as_posix().encode('utf-8'))
+              h.update(b'\0')
+              h.update(hashlib.sha256(data).digest())
+          engine = Path(os.environ['RUNNER_TEMP']) / 'second-brain-engine'
+          engine_sha = subprocess.check_output(['git','-C',str(engine),'rev-parse','HEAD'], text=True).strip()
+          manifest['seal'] = {
+              'gates': ['privacy','budget','pages'],
+              'engine': {'sha': engine_sha, 'dirty': False},
+              'sealed_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+              'artifact_digest': h.hexdigest(),
+          }
+          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print('seal digest', h.hexdigest())
+          PY
+
+      - name: Commit publication and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/publish-campeoes-once.yml
+          rm -f ".github/publish-input/$SLUG.md"
+          rmdir .github/publish-input 2>/dev/null || true
+          git config user.name second-brain-bot
+          git config user.email actions@users.noreply.github.com
+          git add "essays/$SLUG.html" index.html search-index.json site-manifest.json \
+                  .github/workflows/publish-campeoes-once.yml ".github/publish-input/$SLUG.md"
+          git commit -m 'Publicação do site: atualiza Campeões por Acaso'
+          git push origin HEAD:main
