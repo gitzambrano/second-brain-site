@@ -26,6 +26,12 @@ jobs:
           path: engine
           fetch-depth: 0
 
+      - name: Install exact engine audit dependencies
+        shell: bash
+        run: |
+          python -m pip install -r "$GITHUB_WORKSPACE/engine/requirements-ci.txt"
+          python -m playwright install --with-deps chromium
+
       - name: Reseal exact site bytes with current engine
         shell: bash
         env:
