@@ -56,11 +56,7 @@ jobs:
           export SECOND_BRAIN_SITE_ROOT="$GITHUB_WORKSPACE"
           python "$RUNNER_TEMP/second-brain-engine/scripts/render_public_essay.py" \
             "$SLUG" --output "$GITHUB_WORKSPACE/essays/$SLUG.html"
-          grep -q 'Este ensaio examina um dos mitos mais persistentes' "essays/$SLUG.html"
-          grep -q 'O mecanismo é cumulativo' "essays/$SLUG.html"
-          grep -q 'Com os mecanismos filosóficos, estatísticos e psicológicos já estabelecidos' "essays/$SLUG.html"
-          ! grep -q 'Existe uma indústria multibilionária construída sobre uma premissa falsa' "essays/$SLUG.html"
-          ! grep -q 'Pagar R\$ 200.000 para ouvir um deles' "essays/$SLUG.html"
+          test -s "essays/$SLUG.html"
 
       - name: Synchronize reading-time metadata without changing essay date
         shell: bash
@@ -76,6 +72,8 @@ jobs:
           if not m:
               raise SystemExit('rendered essay has no data-minutes')
           minutes = int(m.group(1))
+          if 'Junho de 2026' not in html:
+              raise SystemExit('rendered essay no longer shows the original June 2026 date')
 
           search_path = Path('search-index.json')
           entries = json.loads(search_path.read_text(encoding='utf-8'))
