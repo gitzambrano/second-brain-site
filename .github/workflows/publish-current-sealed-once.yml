@@ -26,7 +26,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          URL='https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-f638-820e-82c4-c91f2bde1ac3/raw?se=2026-09-12T13%3A42%3A52Z&sp=r&sv=2026-02-06&sr=b&scid=fb651447-b059-5e3e-b26d-3a7125336fe3&skoid=fbc53507-c13f-4907-b4dd-0e03c91f5ad8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-12T11%3A57%3A25Z&ske=2026-09-13T11%3A57%3A25Z&sks=b&skv=2026-02-06&sig=j/e7glMfkkVAPuz%2BSJRmP28VXJZFM4Q8DVdGMjw26lo%3D'
+          URL='https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-d944-820e-a92a-228eedc55763/raw?se=2026-09-12T13%3A48%3A21Z&sp=r&sv=2026-02-06&sr=b&scid=c8c8056c-6541-53c5-a1bc-afd95ff0a4df&skoid=fbc53507-c13f-4907-b4dd-0e03c91f5ad8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-12T13%3A39%3A33Z&ske=2026-09-13T13%3A39%3A33Z&sks=b&skv=2026-02-06&sig=wbAkqthVMyolOG8Xhf50VWsyuqT5jwrmurKVS67TRBU%3D'
           curl --fail --location --retry 3 --max-time 180 "$URL" -o /tmp/public-site.zip
           echo 'd4919ed21bb542bc82c121a205811e38074ea9ec0f65e10f1674c99ff1df2c1f  /tmp/public-site.zip' | sha256sum -c -
           mkdir -p /tmp/site
@@ -40,7 +40,7 @@ jobs:
         run: |
           set -euo pipefail
           python - <<'PY'
-          import base64, hashlib, json, re, zlib
+          import base64, json, re, zlib
           from pathlib import Path
 
           root = Path('/tmp/site')
