@@ -22,45 +22,58 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Download and verify sealed projection
+      - name: Resolve, download and verify sealed projection
         shell: bash
         run: |
           set -euo pipefail
           BASE='https://temp.sh/fHNox/sealed-site.zip'
           EXPECTED='1f8798483b23b0afffd013d63bd47b4a2ed176b9d130ca55235d92159ea8fa1f'
           curl --fail --silent --show-error --location --retry 3 --max-time 60 "$BASE" -o /tmp/landing.html
+          echo '--- temp.sh landing page ---'
+          cat /tmp/landing.html
+          echo '--- extracted attributes / URLs ---'
           BASE="$BASE" python - <<'PY' > /tmp/candidates.txt
-          import os
+          import os, re
           from html.parser import HTMLParser
           from urllib.parse import urljoin
-          base = os.environ['BASE']
+          base=os.environ['BASE']
+          text=open('/tmp/landing.html',encoding='utf-8',errors='ignore').read()
+          vals=[]
           class P(HTMLParser):
-              def __init__(self):
-                  super().__init__(); self.hrefs=[]
               def handle_starttag(self, tag, attrs):
-                  if tag.lower() == 'a':
-                      d=dict(attrs)
-                      if d.get('href'): self.hrefs.append(d['href'])
-          p=P(); p.feed(open('/tmp/landing.html', encoding='utf-8', errors='ignore').read())
-          seen=set()
-          for h in p.hrefs:
-              u=urljoin(base,h)
-              if u not in seen:
-                  seen.add(u); print(u)
-          for u in [base+'?download=1', base+'?dl=1',
+                  d=dict(attrs)
+                  for k,v in d.items():
+                      if v and (k in {'href','src','action','value','data-url','data-href','data-download','download'} or 'url' in k or 'download' in k):
+                          vals.append((tag,k,v))
+          P().feed(text)
+          for tag,k,v in vals:
+              print(f'# {tag} {k}={v}')
+          found=[]
+          for _,_,v in vals:
+              if v.startswith(('http://','https://','/','./','../')):
+                  found.append(urljoin(base,v))
+          for u in re.findall(r'https?://[^\"\'<>\\s]+', text):
+              found.append(u)
+          for m in re.finditer(r'(?i)(?:download|file)[^\n]{0,180}', text):
+              print('# context:', m.group(0))
+          for u in [base, base+'?download=1', base+'?dl=1',
                     'https://temp.sh/download/fHNox/sealed-site.zip',
                     'https://temp.sh/d/fHNox/sealed-site.zip']:
+              found.append(u)
+          seen=set()
+          for u in found:
+              u=u.rstrip(').,;')
               if u not in seen:
                   seen.add(u); print(u)
           PY
-          echo 'Download candidates:'
           cat /tmp/candidates.txt
           FOUND=0
           while IFS= read -r URL; do
-            [ -n "$URL" ] || continue
+            [[ "$URL" == http* ]] || continue
             rm -f /tmp/candidate.zip
-            if curl --fail --silent --show-error --location --retry 2 --max-time 180 "$URL" -o /tmp/candidate.zip; then
+            if curl --fail --silent --show-error --location --retry 1 --max-time 90 "$URL" -o /tmp/candidate.zip; then
               GOT="$(sha256sum /tmp/candidate.zip | awk '{print $1}')"
+              echo "candidate $GOT $URL"
               if [ "$GOT" = "$EXPECTED" ]; then
                 mv /tmp/candidate.zip /tmp/sealed-site.zip
                 echo "Verified direct download: $URL"
@@ -76,13 +89,13 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          m = json.loads(Path('/tmp/site/site-manifest.json').read_text(encoding='utf-8'))
-          seal = m.get('seal') or {}
-          assert m.get('generated') == '2026-09-12', m.get('generated')
-          assert m.get('count') == 44, m.get('count')
-          assert set(seal.get('gates') or []) == {'privacy','budget','pages'}, seal.get('gates')
-          assert seal.get('artifact_digest') == 'c1185f3de6cb29300ecbd03a63d6a560b117e157fc95df36a2502c5668a2b80c', seal.get('artifact_digest')
-          print('canonical seal validated:', seal['artifact_digest'])
+          m=json.loads(Path('/tmp/site/site-manifest.json').read_text(encoding='utf-8'))
+          seal=m.get('seal') or {}
+          assert m.get('generated')=='2026-09-12'
+          assert m.get('count')==44
+          assert set(seal.get('gates') or [])=={'privacy','budget','pages'}
+          assert seal.get('artifact_digest')=='c1185f3de6cb29300ecbd03a63d6a560b117e157fc95df36a2502c5668a2b80c'
+          print('canonical seal validated:',seal['artifact_digest'])
           PY
 
       - name: Apply exact generated delta
@@ -108,8 +121,6 @@ jobs:
           sphere.html
           EOF
           sort -o /tmp/expected.txt /tmp/expected.txt
-          echo 'Generated delta:'
-          cat /tmp/actual.txt
           diff -u /tmp/expected.txt /tmp/actual.txt
 
       - name: Commit publication and clean temporary workflows
@@ -125,6 +136,5 @@ jobs:
           git config user.email 'actions@users.noreply.github.com'
           git add -A
           git diff --cached --check
-          git status --short
           git commit -m 'Publicação do site: 2026-09-12'
           git push origin HEAD:main
