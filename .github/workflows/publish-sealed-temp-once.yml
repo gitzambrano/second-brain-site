@@ -26,17 +26,57 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --retry 3 --max-time 180 \
-            'https://temp.sh/fHNox/sealed-site.zip' \
-            -o /tmp/sealed-site.zip
-          echo '1f8798483b23b0afffd013d63bd47b4a2ed176b9d130ca55235d92159ea8fa1f  /tmp/sealed-site.zip' | sha256sum -c -
+          BASE='https://temp.sh/fHNox/sealed-site.zip'
+          EXPECTED='1f8798483b23b0afffd013d63bd47b4a2ed176b9d130ca55235d92159ea8fa1f'
+          curl --fail --silent --show-error --location --retry 3 --max-time 60 "$BASE" -o /tmp/landing.html
+          BASE="$BASE" python - <<'PY' > /tmp/candidates.txt
+          import os
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin
+          base = os.environ['BASE']
+          class P(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.hrefs=[]
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() == 'a':
+                      d=dict(attrs)
+                      if d.get('href'): self.hrefs.append(d['href'])
+          p=P(); p.feed(open('/tmp/landing.html', encoding='utf-8', errors='ignore').read())
+          seen=set()
+          for h in p.hrefs:
+              u=urljoin(base,h)
+              if u not in seen:
+                  seen.add(u); print(u)
+          for u in [base+'?download=1', base+'?dl=1',
+                    'https://temp.sh/download/fHNox/sealed-site.zip',
+                    'https://temp.sh/d/fHNox/sealed-site.zip']:
+              if u not in seen:
+                  seen.add(u); print(u)
+          PY
+          echo 'Download candidates:'
+          cat /tmp/candidates.txt
+          FOUND=0
+          while IFS= read -r URL; do
+            [ -n "$URL" ] || continue
+            rm -f /tmp/candidate.zip
+            if curl --fail --silent --show-error --location --retry 2 --max-time 180 "$URL" -o /tmp/candidate.zip; then
+              GOT="$(sha256sum /tmp/candidate.zip | awk '{print $1}')"
+              if [ "$GOT" = "$EXPECTED" ]; then
+                mv /tmp/candidate.zip /tmp/sealed-site.zip
+                echo "Verified direct download: $URL"
+                FOUND=1
+                break
+              fi
+            fi
+          done < /tmp/candidates.txt
+          test "$FOUND" = 1
+          echo "$EXPECTED  /tmp/sealed-site.zip" | sha256sum -c -
           mkdir -p /tmp/site
           unzip -q /tmp/sealed-site.zip -d /tmp/site
           python - <<'PY'
           import json
           from pathlib import Path
-          p = Path('/tmp/site/site-manifest.json')
-          m = json.loads(p.read_text(encoding='utf-8'))
+          m = json.loads(Path('/tmp/site/site-manifest.json').read_text(encoding='utf-8'))
           seal = m.get('seal') or {}
           assert m.get('generated') == '2026-09-12', m.get('generated')
           assert m.get('count') == 44, m.get('count')
