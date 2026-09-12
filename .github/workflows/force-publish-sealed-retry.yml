@@ -1,0 +1,79 @@
+name: Force publish sealed projection retry
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/force-publish-sealed-retry.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: force-publish-sealed-projection-retry
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Recover validated snapshot URL and download
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="$(grep -o "https://sdmntprbrazilsouth.oaiusercontent.com[^']*" .github/workflows/force-publish-sealed-once.yml | head -1)"
+          test -n "$URL"
+          curl --fail --location --retry 3 "$URL" --output /tmp/sealed-site-artifact.zip
+          mkdir -p /tmp/export /tmp/site
+          unzip -q /tmp/sealed-site-artifact.zip -d /tmp/export
+          unzip -q /tmp/export/sealed-site.zip -d /tmp/site
+          cat /tmp/export/publish-changed.txt
+
+      - name: Promote sealed public files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -a --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            /tmp/site/ ./
+
+      - name: Validate promoted artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir _site
+          rsync -a \
+            --exclude='/_site' \
+            --exclude='/.git' \
+            --exclude='/.github' \
+            --exclude='/README.md' \
+            --exclude='/.gitignore' \
+            --exclude='/.second-brain-site' \
+            --exclude='__pycache__/' \
+            ./ _site/
+          python .github/scripts/check_artifact.py _site --mode artifact
+          grep -q 'Problema de autovalor' graph.html
+          grep -q 'Linearização' graph.html
+          grep -q 'Teorema de Stokes' graph.html
+          rm -rf _site
+
+      - name: Commit publication and clean temporary workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/force-publish-sealed-once.yml
+          rm -f .github/workflows/force-publish-sealed-retry.yml
+          git config user.name 'Second Brain Publisher'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git status --short
+          git diff --cached --check
+          git commit -m 'Publicação forçada do site: 2026-09-12'
+          git push origin HEAD:main
