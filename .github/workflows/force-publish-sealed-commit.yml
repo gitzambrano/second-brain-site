@@ -1,0 +1,85 @@
+name: Force publish exact sealed delta
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/force-publish-sealed-commit.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: force-publish-exact-sealed-delta
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Recover sealed snapshot and apply public files
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="$(grep -o "https://sdmntprbrazilsouth.oaiusercontent.com[^']*" .github/workflows/force-publish-sealed-once.yml | head -1)"
+          test -n "$URL"
+          curl --fail --location --retry 3 "$URL" --output /tmp/sealed-site-artifact.zip
+          mkdir -p /tmp/export /tmp/site
+          unzip -q /tmp/sealed-site-artifact.zip -d /tmp/export
+          unzip -q /tmp/export/sealed-site.zip -d /tmp/site
+          rsync -a --delete --exclude='.git/' --exclude='.github/' /tmp/site/ ./
+
+      - name: Validate exact sealed delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('site-manifest.json').read_text(encoding='utf-8'))
+          seal = manifest.get('seal') or {}
+          gates = set(seal.get('gates') or [])
+          required = {'privacy', 'budget', 'pages'}
+          assert required.issubset(gates), (required, gates)
+          assert seal.get('artifact_digest') == 'c1185f3de6cb29300ecbd03a63d6a560b117e157fc95df36a2502c5668a2b80c'
+          assert manifest.get('generated') == '2026-09-12'
+          print('sealed artifact validated:', seal['artifact_digest'])
+          PY
+          for f in \
+            assets/cover-dark.png \
+            assets/cover-light.png \
+            graph.html \
+            index.html \
+            search-index.json \
+            site-manifest.json \
+            sphere.html; do
+            test -s "$f"
+          done
+          git diff --check
+          git status --porcelain=v1 > /tmp/actual-changed.txt
+          echo 'Expected:'
+          cat /tmp/export/publish-changed.txt
+          echo 'Actual:'
+          cat /tmp/actual-changed.txt
+          diff -u /tmp/export/publish-changed.txt /tmp/actual-changed.txt
+
+      - name: Commit publication and remove temporary workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/force-publish-sealed-once.yml
+          rm -f .github/workflows/force-publish-sealed-retry.yml
+          rm -f .github/workflows/force-publish-sealed-final.yml
+          rm -f .github/workflows/force-publish-sealed-commit.yml
+          git config user.name 'Second Brain Publisher'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git status --short
+          git commit -m 'Publicação forçada do site: 2026-09-12'
+          git push origin HEAD:main
