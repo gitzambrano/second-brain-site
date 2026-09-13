@@ -1,0 +1,62 @@
+name: Publish sealed site once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-sealed-site-once.yml"
+
+permissions:
+  contents: write
+
+env:
+  ARTIFACT_URL: "https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-5c0c-820e-a006-5edd13ff4e4e/raw?se=2026-09-13T11%3A53%3A03Z&sp=r&sv=2026-02-06&sr=b&scid=33c72766-3091-5d05-83a1-b51b1e3a3dbf&skoid=fbc53507-c13f-4907-b4dd-0e03c91f5ad8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-13T10%3A26%3A15Z&ske=2026-09-14T10%3A26%3A15Z&sks=b&skv=2026-02-06&sig=ZXjLD9DGFGcyrvRI3ee%2B0SaiqAtLqEwmrIKulWOOco4%3D"
+  ARTIFACT_SHA256: "0cf803b0c53f1ea324ac0bdc3077c7c10205de04d0e9f5846f95cb845931d104"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout public site
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download and verify sealed artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 "$ARTIFACT_URL" -o /tmp/public-site.zip
+          echo "$ARTIFACT_SHA256  /tmp/public-site.zip" | sha256sum --check --strict
+          rm -rf /tmp/public-site
+          mkdir -p /tmp/public-site
+          unzip -q /tmp/public-site.zip -d /tmp/public-site
+          test -f /tmp/public-site/.nojekyll
+          test -f /tmp/public-site/index.html
+          test -f /tmp/public-site/site-manifest.json
+          ESSAY=/tmp/public-site/essays/a-fisica-da-sustentacao-uma-multidao-um-perfil-e-um-campo-de-pressao.html
+          FIG=/tmp/public-site/assets/media/a-fisica-da-sustentacao-uma-multidao-um-perfil-e-um-campo-de-pressao_fig1.svg
+          test -f "$ESSAY"
+          test -f "$FIG"
+          grep -Fq '<title>A Física da Sustentação — Uma Multidão, um Perfil e um Campo de Pressão</title>' "$ESSAY"
+          ! grep -Fq 'revisado-v6' "$ESSAY"
+          grep -Eiq 'mathjax' "$ESSAY"
+
+      - name: Publish exact sealed tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -a --delete --exclude=.git /tmp/public-site/ ./
+          rm -f .github/workflows/publish-sealed-site-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git status --short
+          if git diff --cached --quiet; then
+            echo "Sealed public tree already matches main."
+            exit 0
+          fi
+          git commit -m "Publish normalized lift essay"
+          git push origin HEAD:main
