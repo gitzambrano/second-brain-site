@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="revisao" data-minutes="11">
+<html lang="pt-BR" data-status="finalizado" data-minutes="13">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A Física da Sustentação — Uma Multidão, um Perfil e um Campo de Pressão</title>
-<meta property="og:title" content="A Física da Sustentação — Uma Multidão, um Perfil e um Campo de Pressão">
-<meta property="og:description" content="Uma explicação fisicamente intuitiva e correta da sustentação, construída a partir de uma analogia entre o escoamento ao redor de um perfil e uma multidão em uma sala atravessada por um carro. O ensaio acompanha, em ordem causal, como o corpo perturba o campo de pressão, como essas diferenças de pressão aceleram e curvam o fluido e como sua integração sobre a superfície produz sustentação.">
+<title>A Física da Sustentação – Kutta que pariu?</title>
+<meta property="og:title" content="A Física da Sustentação – Kutta que pariu?">
+<meta property="og:description" content="Uma explicação fisicamente intuitiva da sustentação, construída com a analogia de uma multidão em uma sala atravessada por um carro. O ensaio critica explicações causais incompletas baseadas em Bernoulli, momentum ou circulação e mostra como pressão e velocidade se estabelecem reciprocamente ao redor do perfil.">
 <meta property="og:type" content="article">
 <script src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -1451,10 +1451,10 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <header class="masthead">
   <div class="stripe"></div>
   <div class="masthead-inner">
-    <h1 class="hero-title">A Física da Sustentação — Uma Multidão, um Perfil e um Campo de Pressão</h1>
+    <h1 class="hero-title">A Física da Sustentação – Kutta que pariu?</h1>
     <hr class="masthead-rule">
     <p class="byline">Gustavo Zambrano · Setembro de 2026</p>
-    <p class="cover-summary">Uma explicação fisicamente intuitiva e correta da sustentação, construída a partir de uma analogia entre o escoamento ao redor de um perfil e uma multidão em uma sala atravessada por um carro. O ensaio acompanha, em ordem causal, como o corpo perturba o campo de pressão, como essas diferenças de pressão aceleram e curvam o fluido e como sua integração sobre a superfície produz sustentação.</p>
+    <p class="cover-summary">Uma explicação fisicamente intuitiva da sustentação, construída com a analogia de uma multidão em uma sala atravessada por um carro. O ensaio critica explicações causais incompletas baseadas em Bernoulli, momentum ou circulação e mostra como pressão e velocidade se estabelecem reciprocamente ao redor do perfil.</p>
   </div>
 </header>
 
@@ -1474,30 +1474,74 @@ href="#5-o-que-circulação-vorticidade-e-viscosidade-acrescentam">5. O
 Que Circulação, Vorticidade e Viscosidade Acrescentam</a></li>
 <li><a href="#6-conclusão">6. Conclusão</a></li>
 </ul>
+<hr />
 <h2 id="introdução">Introdução</h2>
 <p>Este ensaio pretende explicar de forma fisicamente intuitiva e
-correta o mecanismo da sustentação aerodinâmica, seguindo a abordagem de
-McLean [<a href="#referências">1</a>][<a href="#referências">2</a>][<a
-href="#referências">3</a>]. A ideia central é acompanhar a cadeia física
-completa — pressão, força, aceleração e velocidade — sem transformar
-Bernoulli, circulação ou qualquer outra relação matemática em uma causa
-isolada da sustentação.</p>
-<p>Imagine uma sala bidimensional densamente ocupada por uma multidão.
-Inicialmente, todos permanecem em equilíbrio e cada pessoa exerce sobre
-os vizinhos uma pressão de fundo aproximadamente igual em todas as
-direções. Em seguida, um carro com a forma de um perfil aerodinâmico
-atravessa a sala. Cada pessoa representará uma parcela material de
-fluido; os empurrões entre vizinhos representarão as forças associadas
-ao campo de pressão; e o carro representará o corpo impermeável que o
-escoamento precisa contornar. A mesma analogia será usada ao longo de
-todo o ensaio.</p>
-<p>A analogia também permite explicitar um ponto fundamental de McLean:
-pressão e velocidade não formam uma cadeia causal unidirecional. Uma
-diferença de pressão acelera o fluido e modifica seu campo de
-velocidades; esse novo movimento modifica, por sua vez, o campo de
-pressão, que produz novas acelerações. O escoamento estabelecido é o
-resultado simultâneo desse acoplamento, sujeito à geometria do corpo e à
-conservação de massa.</p>
+correta o mecanismo da <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-3/">sustentação
+aerodinâmica</a>, seguindo a abordagem de McLean [<a
+href="#referências">1</a>][<a href="#referências">2</a>][<a
+href="#referências">3</a>]. O objetivo não é apenas reproduzir relações
+capazes de calcular a força, mas explicar como o campo de escoamento se
+estabelece e quais relações físicas de causa e efeito sustentam esse
+processo.</p>
+<p>Várias explicações clássicas são matematicamente corretas sem
+constituírem, por si só, uma explicação causal. <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/">Bernoulli</a>
+relaciona pressão e velocidade, mas dizer que o ar passa mais rápido
+sobre o extradorso e por isso a pressão cai não explica por que ele
+ganhou velocidade. O <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/momentum-effects/">balanço
+de quantidade de movimento</a> mostra corretamente que o escoamento
+recebe momento para baixo, mas não explica sozinho como a asa produz
+essa deflexão nem como a força é transmitida através de uma região de
+fluido muito maior que a superfície que ela toca. A hipótese dos
+“caminhos iguais”, por sua vez, é simplesmente incorreta: parcelas
+separadas no bordo de ataque não precisam se reencontrar no bordo de
+fuga [<a href="#referências">4</a>].</p>
+<p><img
+src="../assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig1.gif"
+alt="Escoamento potencial ao redor de um perfil Kármán–Trefftz com partículas marcadas acompanhando o fluxo" /></p>
+<p><em>Figura 1. Escoamento potencial incompressível ao redor de um
+perfil Kármán–Trefftz. As partículas sobre o extradorso ganham mais
+velocidade e não se reencontram no bordo de fuga com as partículas
+correspondentes do intradorso. Fonte: Kraaiennest, Wikimedia Commons, CC
+BY-SA 3.0 [<a href="#referências">8</a>].</em></p>
+<p>O mesmo cuidado vale para <a
+href="https://pt.wikipedia.org/wiki/Teorema_de_Kutta_Joukowski">Kutta–Joukowski</a>.
+O teorema relaciona de forma precisa circulação e sustentação, mas dizer
+que a asa sustenta porque existe circulação apenas desloca a pergunta
+para a origem dessa <a
+href="https://en.wikipedia.org/wiki/Circulation_%28physics%29">circulação</a>.
+A <a
+href="https://pt.wikipedia.org/wiki/Condi%C3%A7%C3%A3o_de_Kutta">condição
+de Kutta</a> também não deve ser confundida com o mecanismo físico da
+sustentação. Na teoria de <a
+href="https://en.wikipedia.org/wiki/Potential_flow">escoamento
+potencial</a>, ela seleciona uma entre múltiplas soluções invíscidas
+matematicamente admissíveis e representa, de forma eficaz, parte da
+física viscosa omitida pelo modelo, sobretudo na região do bordo de
+fuga. Ela fecha o problema matemático, mas não substitui a explicação
+física de como pressão, velocidade e trajetória se estabelecem no
+escoamento [<a href="#referências">1</a>].</p>
+<p>O ponto central de McLean é que pressão e velocidade não formam uma
+cadeia causal unidirecional. Gradientes de pressão produzem forças,
+essas forças aceleram o fluido e modificam seu campo de velocidades. O
+movimento resultante modifica, por sua vez, o campo de pressão, que
+produz novas acelerações. Esse acoplamento é uma característica das
+próprias <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/navier-strokes-equation/">equações
+de Navier–Stokes</a>: pressão e velocidade pertencem a uma mesma solução
+do escoamento, não a duas etapas independentes.</p>
+<p>Para tornar esse mecanismo visível, imagine uma sala bidimensional
+densamente ocupada por uma multidão. Inicialmente, todos permanecem em
+equilíbrio e cada pessoa exerce sobre os vizinhos uma pressão de fundo
+aproximadamente igual em todas as direções. Em seguida, um carro com a
+forma de um perfil aerodinâmico atravessa a sala. Cada pessoa
+representará uma parcela material de fluido, os empurrões entre vizinhos
+representarão as forças associadas ao campo de pressão e o carro
+representará o corpo impermeável que o escoamento precisa contornar. A
+mesma analogia será usada ao longo de todo o ensaio.</p>
 <h2 id="1-antes-da-asa-uma-pessoa-na-multidão">1. Antes da Asa, uma
 Pessoa na Multidão</h2>
 <p>Antes da chegada do carro, cada pessoa exerce sobre os vizinhos uma
@@ -1514,18 +1558,20 @@ desequilíbrio entre forças de contato.</p>
 uma parcela. A aceleração aparece quando a pressão varia no espaço,
 produzindo uma força resultante sobre o elemento material.</p>
 <p>A figura abaixo representa o caso unidimensional mais simples. Uma
-parcela recebe pressão (P) em uma face e (P+P) na face oposta. A
+parcela recebe pressão <span class="math inline">\(P\)</span> em uma
+face e <span class="math inline">\(P+\Delta P\)</span> na face oposta. A
 representação foi redesenhada para este ensaio a partir de <em>Pressure
 on a particle in a fluid</em>, do Wikimedia Commons [<a
 href="#referências">7</a>].</p>
 <p><img
-src="../assets/media/a-fisica-da-sustentacao-uma-multidao-um-perfil-e-um-campo-de-pressao_fig1.svg"
+src="../assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig2.svg"
 alt="Parcela de fluido com pressão P em uma face e P mais delta P na face oposta, produzindo aceleração para o lado de menor pressão" /></p>
-<p><em>Figura 1. Uma diferença de pressão entre faces opostas deixa uma
+<p><em>Figura 2. Uma diferença de pressão entre faces opostas deixa uma
 força resultante e acelera a parcela para o lado de menor pressão.
 Redesenho didático baseado em Jean Biz Hertzberg, Wikimedia Commons, CC
 BY 4.0 [<a href="#referências">7</a>].</em></p>
-<p>Se a área das faces for (A), as forças de pressão têm módulos</p>
+<p>Se a área das faces for <span class="math inline">\(A\)</span>, as
+forças de pressão têm módulos</p>
 <p><span class="math display">\[
 F_1=PA,
 \]</span></p>
@@ -1537,7 +1583,8 @@ F_2=(P+\Delta P)A.
 <p><span class="math display">\[
 \Delta F=\Delta P\,A.
 \]</span></p>
-<p>Se a parcela tiver espessura (x), sua massa será</p>
+<p>Se a parcela tiver espessura <span class="math inline">\(\Delta
+x\)</span>, sua massa será</p>
 <p><span class="math display">\[
 m=\rho A\Delta x,
 \]</span></p>
@@ -1557,11 +1604,10 @@ passam a exercer forças maiores sobre os vizinhos. Forma-se, diante do
 carro, uma região de maior pressão de contato.</p>
 <p>Esse aumento de pressão não é um postulado adicional da analogia: ele
 decorre do próprio mecanismo. O carro interrompe parte do movimento
-existente enquanto novas pessoas continuam chegando por inércia, e é
-esse acúmulo que eleva a pressão de contato. O desequilíbrio de forças
-que se forma desvia a multidão antes mesmo de cada pessoa tocar a
-lataria, pois a perturbação é transmitida através dos contatos entre
-vizinhos.</p>
+existente enquanto novas pessoas continuam chegando por inércia,
+elevando as forças de contato na região frontal. O desequilíbrio que se
+forma desvia a multidão antes mesmo de cada pessoa tocar a lataria, pois
+a perturbação é transmitida através dos contatos entre vizinhos.</p>
 <p>No ar ocorre o mesmo mecanismo. Próximo ao ponto de estagnação, o
 escoamento é desacelerado e desviado, e a pressão aumenta. Perturbações
 de pressão propagam-se pelo gás a velocidade finita, próxima à
@@ -1596,9 +1642,19 @@ transversal resultante exerce uma força em direção ao centro de
 curvatura e desvia continuamente a parcela. É por isso que, enquanto o
 escoamento permanece aderido, ele não simplesmente segue reto sobre o
 extradorso.</p>
+<p><img
+src="../assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig3.svg"
+alt="Linhas de corrente ao redor de um perfil identificando os tubos de corrente sobre extradorso e intradorso" /></p>
+<p><em>Figura 3. Linhas de corrente de um escoamento potencial ao redor
+de um perfil, com os tubos de corrente superior e inferior
+identificados. A figura evidencia que a trajetória sobre o extradorso
+precisa ser continuamente desviada em relação à tendência inercial de
+seguir reta. Fonte: Michael Belisle, Wikimedia Commons, domínio público
+[<a href="#referências">9</a>].</em></p>
 <p>A relação pode ser escrita a partir da mesma diferença de pressão
-usada na Seção 1. Para uma parcela de espessura normal (n) e área
-(A),</p>
+usada na Seção 1. Para uma parcela de espessura normal <span
+class="math inline">\(\Delta n\)</span> e área <span
+class="math inline">\(A\)</span>,</p>
 <p><span class="math display">\[
 \Delta F_n=\Delta P\,A.
 \]</span></p>
@@ -1606,8 +1662,9 @@ usada na Seção 1. Para uma parcela de espessura normal (n) e área
 <p><span class="math display">\[
 m=\rho A\Delta n,
 \]</span></p>
-<p>a força necessária para uma trajetória de velocidade (V) e raio local
-(R) é a força centrípeta</p>
+<p>a força necessária para uma trajetória de velocidade <span
+class="math inline">\(V\)</span> e raio local <span
+class="math inline">\(R\)</span> é a força centrípeta</p>
 <p><span class="math display">\[
 F_n=m\frac{V^2}{R}.
 \]</span></p>
@@ -1653,18 +1710,19 @@ da baixa pressão.</p>
 Viram Sustentação</h2>
 <p>A assimetria entre extradorso e intradorso já está contida no
 mecanismo da Seção 3. Sobre o carro, a tendência inercial de seguir reto
-afasta a multidão do teto, reduzindo a força de contato ali. Sob o
-carro, ocorre o oposto: a superfície incide diretamente sobre a
-trajetória das pessoas, comprimindo-as contra o contorno e mantendo
-forças de contato maiores. O resultado é uma distribuição assimétrica de
-pressão sobre a lataria.</p>
+afasta a multidão do teto e reduz as forças de contato junto à
+superfície. Sob o carro, a geometria desvia as pessoas de outra maneira
+e a lataria recebe forças de contato comparativamente maiores. O
+resultado é uma distribuição assimétrica de pressão sobre o veículo.</p>
 <p>No fluido ocorre o mesmo. Em uma condição sustentadora típica, grande
 parte do extradorso apresenta pressão abaixo da referência do escoamento
 não perturbado, enquanto partes importantes do intradorso apresentam
 pressão maior. A contribuição do extradorso para a sustentação pode ser
 dominante não porque exista ali uma força de atração, mas porque uma
-redução de pressão atua sobre uma área extensa da superfície
-superior.</p>
+redução de pressão atua sobre uma área extensa da superfície superior. A
+região de baixa pressão não puxa a asa para cima: ela exerce um empurrão
+para baixo menor, enquanto a pressão mais elevada no intradorso exerce
+um empurrão para cima maior.</p>
 <p>A pressão exerce sobre cada elemento da superfície uma força
 normal,</p>
 <p><span class="math display">\[
@@ -1685,11 +1743,12 @@ externo, pois as linhas de corrente acima do perfil também são desviadas
 e participam da mesma estrutura de acelerações e gradientes de pressão
 [<a href="#referências">1</a>][<a href="#referências">3</a>].</p>
 <p><img
-src="../assets/media/Pressure-distribution-near-an-airfoil.png"
+src="../assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig4.png"
 alt="Campo de pressão e linhas de corrente ao redor de um perfil, mostrando que a perturbação se estende ao campo externo" /></p>
 <p><em>Figura 4. Campo de pressão e velocidade ao redor de um perfil. A
 perturbação associada ao extradorso ocupa uma região finita do campo
-externo, não apenas a superfície do perfil.</em></p>
+externo, não apenas a superfície do perfil. Fonte: Ertunc, Wikimedia
+Commons, CC BY-SA 4.0 [<a href="#referências">10</a>].</em></p>
 <p>O balanço global de quantidade de movimento descreve a mesma
 interação em outra escala. Se o perfil recebe uma força líquida para
 cima, o fluido recebe, no balanço global, uma força líquida para baixo.
@@ -1698,12 +1757,17 @@ global, mas incompleto como explicação local: é o campo de pressão que
 transmite as forças responsáveis tanto pela deflexão do fluido quanto
 pela sustentação [<a href="#referências">2</a>][<a
 href="#referências">3</a>].</p>
-<p>A hipótese dos “caminhos iguais” é desnecessária. Duas pessoas que
-passam por lados diferentes do carro não precisam reencontrar-se na
-traseira; cada uma responde às forças encontradas ao longo de sua
-própria trajetória. Parcelas de ar sobre extradorso e intradorso, da
-mesma forma, não possuem qualquer obrigação física de apresentar tempos
-de trânsito iguais [<a href="#referências">4</a>].</p>
+<p>Na analogia, mudar a orientação do carro em relação ao movimento
+médio da multidão modifica a assimetria dos desvios e das forças de
+contato entre suas faces. No perfil, essa variável é o <a
+href="https://www.grc.nasa.gov/www/k-12/VirtualAero/BottleRocket/airplane/incline.html">ângulo
+de ataque</a>. Alterá-lo modifica o campo de pressão e, portanto, a
+sustentação; aumentar a velocidade do escoamento, mantidos o regime e um
+padrão de escoamento semelhante, também aumenta a escala das diferenças
+de pressão necessárias para curvar as trajetórias, como indica a
+dependência com <span class="math inline">\(V^2\)</span> obtida na Seção
+3. Assim, ângulo de ataque e velocidade controlam a magnitude da
+sustentação sem introduzir um mecanismo físico diferente.</p>
 <h2 id="5-o-que-circulação-vorticidade-e-viscosidade-acrescentam">5. O
 Que Circulação, Vorticidade e Viscosidade Acrescentam</h2>
 <p>A explicação elementar da força pode ser construída sem começar por
@@ -1712,41 +1776,45 @@ descrevem de maneira compacta propriedades do campo de escoamento, não
 porque substituam a dinâmica local de força e aceleração.</p>
 <p>Na multidão, a inércia de cada pessoa é indispensável: para alterar
 sua velocidade é necessária força. No fluido ocorre o mesmo. A escala de
-diferença de pressão necessária para produzir uma aceleração (a) ao
-longo de uma distância (x) é</p>
+diferença de pressão necessária para produzir uma aceleração <span
+class="math inline">\(a\)</span> ao longo de uma distância <span
+class="math inline">\(\Delta x\)</span> é</p>
 <p><span class="math display">\[
 \Delta P\approx \rho a\Delta x.
 \]</span></p>
 <p>Sem massa específica, não haveria inércia a ser acelerada nem força
 aerodinâmica finita associada ao mecanismo.</p>
-<p>A viscosidade desempenha outro papel. Na analogia, o mecanismo básico
-de pressão continuaria existindo mesmo que os contatos transmitissem
-apenas forças normais, sem atrito tangencial. De modo análogo, um fluido
-ideal pode apresentar linhas de corrente curvas e diferenças de pressão.
-No fluido real, entretanto, a viscosidade estabelece a camada limite e
-participa da seleção do estado de escoamento efetivamente realizado. Ela
-é essencial para compreender aderência, separação e o processo pelo qual
-o escoamento real estabelece a circulação observada [<a
-href="#referências">6</a>].</p>
+<p>A viscosidade desempenha um papel mais específico. Ela não é a força
+que “cola” o escoamento ao extradorso nem a causa primária da curvatura
+das linhas de corrente; esse desvio é produzido pelo campo de pressão
+também no escoamento externo quase invíscido. No fluido real, porém, a
+viscosidade estabelece a <a
+href="https://en.wikipedia.org/wiki/Boundary_layer">camada limite</a>,
+governa aderência e separação e é decisiva na região do bordo de fuga,
+onde o escoamento real seleciona o estado compatível com uma saída suave
+[<a href="#referências">1</a>][<a href="#referências">6</a>].</p>
 <p>Circulação é uma medida global do campo de velocidades ao redor do
 perfil. Ela permite representar de forma compacta a assimetria do
 escoamento sustentador e relacioná-la quantitativamente à força por meio
 de resultados como Kutta–Joukowski. Essa descrição não substitui a
 história mecânica de cada parcela: localmente, sua velocidade muda
-porque forças atuam sobre uma massa.</p>
-<p>Vorticidade, por sua vez, é uma grandeza local definida pelo
-rotacional do campo de velocidades. No escoamento externo
-aproximadamente potencial, grande parte da região fora da camada limite
-pode permanecer quase irrotacional, embora o escoamento possua
-circulação global. A vorticidade relevante concentra-se principalmente
-na camada limite e na esteira.</p>
+porque forças atuam sobre uma massa. Interpretar a circulação como causa
+primária da sustentação apenas deslocaria a pergunta para a origem da
+própria circulação.</p>
+<p><a href="https://en.wikipedia.org/wiki/Vorticity">Vorticidade</a>,
+por sua vez, é uma grandeza local definida pelo rotacional do campo de
+velocidades. No escoamento externo aproximadamente potencial, grande
+parte da região fora da camada limite pode permanecer quase
+irrotacional, embora o escoamento possua circulação global. A
+vorticidade relevante concentra-se principalmente na camada limite e na
+esteira.</p>
 <p>A condição de Kutta entra em um nível formal posterior. Na teoria
 potencial de um perfil com bordo de fuga agudo, ela seleciona, entre
 múltiplas soluções invíscidas matematicamente admissíveis, aquela
 compatível com a forma como o escoamento real deixa o bordo de fuga. Com
 isso, fixa a circulação da solução idealizada. É uma ferramenta
-fundamental para o cálculo, mas não é necessária para compreender o
-mecanismo elementar descrito neste ensaio.</p>
+fundamental para o cálculo, mas não substitui o mecanismo físico
+descrito neste ensaio.</p>
 <h2 id="6-conclusão">6. Conclusão</h2>
 <p>A analogia da multidão permite acompanhar o mecanismo da sustentação
 sem introduzir uma causa ad hoc. Antes da chegada do carro, a pressão de
@@ -1767,13 +1835,16 @@ direção causal: a pressão modifica o movimento, o movimento modifica a
 pressão, e ambos se estabelecem reciprocamente como partes do mesmo
 escoamento.</p>
 <p>A sustentação é a força resultante exercida por esse campo sobre o
-perfil. Circulação, vorticidade, viscosidade e condição de Kutta
-completam e formalizam a descrição, mas não substituem sua estrutura
-mecânica elementar: pressão produz força, força acelera massa, e o
-movimento resultante reorganiza novamente o campo de pressão.</p>
+perfil. Bernoulli, o balanço de quantidade de movimento e a circulação
+descrevem aspectos ou balanços desse mesmo fenômeno; nenhum deles,
+isoladamente, constitui toda a explicação causal. Circulação,
+vorticidade, viscosidade e condição de Kutta completam e formalizam a
+descrição, mas não substituem sua estrutura mecânica elementar: pressão
+produz força, força acelera massa, e o movimento resultante reorganiza
+novamente o campo de pressão.</p>
 <h2 id="referências">Referências</h2>
 <p>[1] McLean, D., <em>Understanding Aerodynamics: Arguing from the Real
-Physics</em>, 1st ed., John Wiley &amp; Sons, 2012. <a
+Physics</em>, 1st ed., John Wiley &amp; Sons, 2013. <a
 href="https://onlinelibrary.wiley.com/doi/book/10.1002/9781118454190">Link</a></p>
 <p>[2] McLean, D., <em>Aerodynamic Lift, Part 1: The Science</em>, The
 Physics Teacher, Vol. 56, No. 8, pp. 516–520, 2018. <a
@@ -1794,6 +1865,15 @@ href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/boundary-layer/">
 <p>[7] Hertzberg, J. B., <em>Pressure on a particle in a fluid</em>,
 Wikimedia Commons, 2024, CC BY 4.0. <a
 href="https://commons.wikimedia.org/wiki/File:Pressure_on_a_particle_in_a_fluid.svg">Link</a></p>
+<p>[8] Kraaiennest, <em>Karman trefftz.gif</em>, Wikimedia Commons,
+2009, CC BY-SA 3.0. <a
+href="https://commons.wikimedia.org/wiki/File:Karman_trefftz.gif">Link</a></p>
+<p>[9] Belisle, M., <em>Streamlines around a NACA 0012.svg</em>,
+Wikimedia Commons, 2008, domínio público. <a
+href="https://commons.wikimedia.org/wiki/File:Streamlines_around_a_NACA_0012.svg">Link</a></p>
+<p>[10] Ertunc, <em>Velocity and pressure field around an
+airfoil.png</em>, Wikimedia Commons, 2023, CC BY-SA 4.0. <a
+href="https://commons.wikimedia.org/wiki/File:Velocity_and_pressure_field_around_an_airfoil.png">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
