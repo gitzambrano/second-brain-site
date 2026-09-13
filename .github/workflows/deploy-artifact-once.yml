@@ -1,0 +1,47 @@
+name: Deploy sealed site artifact once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/deploy-artifact-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Download sealed artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL 'https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-36dc-820e-bfe5-897b45f8e331/raw?se=2026-09-13T14%3A03%3A47Z&sp=r&sv=2026-02-06&sr=b&scid=5a2ac785-dcb8-5e35-867b-a0fa82d08a2e&skoid=fbc53507-c13f-4907-b4dd-0e03c91f5ad8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-13T13%3A03%3A15Z&ske=2026-09-14T13%3A03%3A15Z&sks=b&skv=2026-02-06&sig=KSHzJKc3dobQi4xuroePMtzTquNwtoyil1AmIsnI3KM%3D' -o /tmp/site.zip
+          rm -rf /tmp/site
+          mkdir -p /tmp/site
+          unzip -q /tmp/site.zip -d /tmp/site
+          test -f /tmp/site/essays/a-fisica-da-sustentacao-kutta-que-pariu.html
+          test -f /tmp/site/assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig2.gif
+          test -f /tmp/site/assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig3.svg
+          test -f /tmp/site/assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig4.webp
+          grep -q 'a-fisica-da-sustentacao-kutta-que-pariu' /tmp/site/.github/newsletter-manifest.json
+          test "$(find /tmp/site/.github/workflows -maxdepth 1 -type f -printf '%f\n' | sort | tr '\n' ' ')" = 'newsletter.yml pages.yml '
+
+      - name: Publish artifact to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -a --delete --exclude='/.git/' /tmp/site/ ./
+          test ! -e .github/workflows/deploy-artifact-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Publish finalized lift essay with Wikimedia figures'
+          git push origin HEAD:main
