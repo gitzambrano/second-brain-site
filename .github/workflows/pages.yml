@@ -1,38 +1,36 @@
-name: Deploy Pages
+name: Publish site
+
 on:
   push:
     branches: [main]
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: pages
   cancel-in-progress: true
+
 jobs:
-  deploy:
+  publish:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # O upload publicava `path: .`, isto é, o checkout inteiro: o `.github/`
-      # com os workflows, o `README.md`, o `.gitignore` e qualquer arquivo que
-      # tivesse entrado no repositório por engano iam ao ar junto. Aqui o que
-      # sobe é uma pasta montada de propósito.
-      #
-      # A cópia é por exclusão e a conferência é por allowlist, nessa ordem e
-      # não o contrário: copiar só o que a allowlist conhece faria um arquivo
-      # gerado novo desaparecer em silêncio do site, enquanto copiar tudo menos
-      # o administrativo entrega o intruso à portaria, que reprova o deploy
-      # dizendo o nome dele. Falhar alto é melhor do que publicar incompleto.
-      - name: Montar _site/ (só o que vai ao ar)
+
+      - name: Privacy gate
+        run: python .github/scripts/check_artifact.py
+
+      - name: Prepare public artifact
         run: |
           set -euo pipefail
           rm -rf _site
-          mkdir -p _site
+          mkdir _site
           rsync -a \
             --exclude='/_site' \
             --exclude='/.git' \
@@ -40,13 +38,11 @@ jobs:
             --exclude='/README.md' \
             --exclude='/.gitignore' \
             --exclude='/.second-brain-site' \
+            --exclude='/site-manifest.json' \
             --exclude='__pycache__/' \
             ./ _site/
-          # `.nojekyll` vai junto de propósito: sem ele o Pages roda Jekyll,
-          # que ignora diretórios iniciados por underscore e reprocessa o HTML
-          # já pronto.
           test -f _site/.nojekyll
-          find _site -type f | sort
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
@@ -54,5 +50,3 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-
-# deployment trigger: 2026-09-13 normalized lift essay
