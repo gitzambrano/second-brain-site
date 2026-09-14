@@ -1,47 +1,77 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560">
-
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480">
   <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#263238"/>
-    </marker>
-    <marker id="redarrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#b42318"/>
-    </marker>
     <style>
-      text{font-family:Arial,Helvetica,sans-serif;fill:#1f2937}
-      .panel{font-size:22px;font-weight:700}
-      .lab{font-size:18px}
-      .eq{font-size:18px;font-family:"DejaVu Sans",Arial,sans-serif}
-      .line{stroke:#374151;stroke-width:3;fill:none}
-      .thin{stroke:#64748b;stroke-width:2;fill:none}
-      .guide{stroke:#94a3b8;stroke-width:1.6;fill:none;stroke-dasharray:7 6}
-      .vec{stroke:#263238;stroke-width:3;fill:none;marker-end:url(#arrow)}
-      .rvec{stroke:#b42318;stroke-width:3;fill:none;marker-end:url(#redarrow)}
-      .box{fill:#f8fafc;stroke:#64748b;stroke-width:2}
+      .bg { fill: #ffffff; }
+      .card { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 14px; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 19px; font-weight: 700; fill: #0f172a; }
+      .formula { font-family: "DejaVu Sans", "Lucida Console", monospace, sans-serif; font-size: 15px; font-weight: 700; }
+      .dim-text { font-family: "DejaVu Sans", "Lucida Console", monospace, sans-serif; font-size: 13px; font-weight: 600; fill: #475569; }
     </style>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 1 L 7 4 L 0 7 z" fill="#0284c7"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 1 L 7 4 L 0 7 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr-axis" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 1 L 7 4 L 0 7 z" fill="#64748b"/>
+    </marker>
   </defs>
 
-<rect width="1100" height="560" fill="white"/>
-<rect x="360" y="150" width="380" height="220" rx="10" fill="#eef5fb" stroke="#263238" stroke-width="3"/>
-<text x="550" y="245" text-anchor="middle" class="panel">dV = A Δx</text>
-<text x="550" y="290" text-anchor="middle" class="eq">dm = ρ A Δx</text>
+  <rect width="960" height="480" class="bg"/>
+  <rect x="20" y="20" width="920" height="440" class="card"/>
 
-<line x1="110" y1="260" x2="345" y2="260" class="vec"/>
-<text x="210" y="220" text-anchor="middle" class="panel">P</text>
-<text x="210" y="315" text-anchor="middle" class="eq">F_L = P A</text>
+  <!-- Título e formulação -->
+  <text x="50" y="55" class="title">Desequilíbrio de Pressão e Aceleração de uma Parcela Material</text>
+  <text x="50" y="80" class="formula" fill="#0369a1">f_x = −∂P/∂x  ⟹  a_x = −(1/ρ) ∂P/∂x</text>
 
-<line x1="990" y1="260" x2="755" y2="260" class="vec"/>
-<text x="890" y="220" text-anchor="middle" class="panel">P + ΔP</text>
-<text x="890" y="315" text-anchor="middle" class="eq">F_R = (P + ΔP)A</text>
+  <!-- PARCELA 3D SÓLIDA FECHADA -->
+  <g transform="translate(60, 40)">
+    <!-- Força Resultante / Aceleração no topo (Comprimento = 140px) -->
+    <line x1="510" y1="85" x2="370" y2="85" stroke="#dc2626" stroke-width="2.8" marker-end="url(#arr-red)"/>
+    <text x="440" y="70" text-anchor="middle" class="formula" fill="#dc2626">ΣF_x = −ΔP · A</text>
 
-<line x1="670" y1="95" x2="430" y2="95" class="rvec"/>
-<text x="550" y="70" text-anchor="middle" class="eq">ΣFₓ = −ΔP A</text>
-<text x="550" y="125" text-anchor="middle" class="eq">aₓ = −ΔP/(ρ Δx)</text>
+    <!-- FACE ESQUERDA (Área A) -->
+    <polygon points="300,200 370,150 370,290 300,340" fill="#e0f2fe" stroke="#0284c7" stroke-width="2.2"/>
+    <text x="335" y="245" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#0284c7">Área A</text>
 
-<line x1="360" y1="430" x2="740" y2="430" class="thin"/>
-<line x1="360" y1="410" x2="360" y2="450" class="thin"/>
-<line x1="740" y1="410" x2="740" y2="450" class="thin"/>
-<text x="550" y="480" text-anchor="middle" class="eq">Δx</text>
-<line x1="300" y1="520" x2="820" y2="520" class="thin" marker-end="url(#arrow)"/>
-<text x="835" y="526" class="lab">x</text>
+    <!-- TAMPA SUPERIOR (Sólida fechada) -->
+    <polygon points="300,200 520,200 590,150 370,150" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+
+    <!-- FACE FRONTAL (Sólida fechada) -->
+    <polygon points="300,200 520,200 520,340 300,340" fill="#ffffff" stroke="#334155" stroke-width="2.2"/>
+
+    <!-- FACE DIREITA (Área A oposta) -->
+    <polygon points="520,200 590,150 590,290 520,340" fill="#fee2e2" fill-opacity="0.85" stroke="#dc2626" stroke-width="2"/>
+
+    <!-- Rótulos no centro da parcela -->
+    <text x="410" y="260" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#0f172a">dV = A Δx</text>
+    <text x="410" y="285" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#64748b">dm = ρ A Δx</text>
+
+    <!-- FORÇA DE PRESSÃO ENTRANTE F1 = P * A (Esquerda, azul, Comprimento = 140px) -->
+    <g stroke="#0284c7" stroke-width="2.8">
+      <line x1="150" y1="240" x2="290" y2="240" marker-end="url(#arr-blue)"/>
+      <line x1="150" y1="270" x2="290" y2="270" marker-end="url(#arr-blue)"/>
+    </g>
+    <text x="210" y="225" text-anchor="middle" class="formula" fill="#0284c7">P</text>
+    <text x="210" y="305" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#0284c7">F₁ = P · A</text>
+
+    <!-- FORÇA DE PRESSÃO OPONENTE F2 = (P + Delta P) * A (Direita, vermelha, Comprimento = 140px) -->
+    <g stroke="#dc2626" stroke-width="2.8">
+      <line x1="735" y1="225" x2="595" y2="225" marker-end="url(#arr-red)"/>
+      <line x1="735" y1="255" x2="595" y2="255" marker-end="url(#arr-red)"/>
+    </g>
+    <text x="675" y="205" text-anchor="middle" class="formula" fill="#dc2626">P + ΔP</text>
+    <text x="675" y="295" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#dc2626">F₂ = (P + ΔP) A</text>
+
+    <!-- COTA DE ESPESSURA Delta x -->
+    <line x1="300" y1="365" x2="520" y2="365" stroke="#64748b" stroke-width="1.8"/>
+    <line x1="300" y1="355" x2="300" y2="375" stroke="#64748b" stroke-width="1.8"/>
+    <line x1="520" y1="355" x2="520" y2="375" stroke="#64748b" stroke-width="1.8"/>
+    <text x="410" y="388" text-anchor="middle" class="dim-text">Δx</text>
+
+    <!-- EIXO DE COORDENADAS +x (Comprimento = 140px) -->
+    <line x1="340" y1="415" x2="480" y2="415" stroke="#64748b" stroke-width="2" marker-end="url(#arr-axis)"/>
+    <text x="495" y="420" class="dim-text">+x</text>
+  </g>
 </svg>

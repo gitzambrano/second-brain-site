@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="560" viewBox="0 0 1140 560">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .card { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 12px; }
+      .inner-card { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.2; rx: 8px; }
+      .title { font-family: system-ui, -apple-system, sans-serif; font-size: 20px; font-weight: 800; fill: #0f172a; }
+      .panel-title { font-family: system-ui, -apple-system, sans-serif; font-size: 17px; font-weight: 700; fill: #0f172a; }
+      .formula { font-family: "DejaVu Sans", Consolas, Monaco, monospace; font-size: 15px; font-weight: 700; }
+      .label { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 600; fill: #334155; }
+      .label-bold { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; }
+      .label-dim { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #64748b; }
+      .cota-line { stroke: #64748b; stroke-width: 1.2; }
+      .cota-ext { stroke: #94a3b8; stroke-width: 1.0; stroke-dasharray: 3 2; }
+    </style>
+    <!-- Sleek, smaller, engineering-grade arrowheads -->
+    <marker id="arr-blue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arr-green" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#059669"/>
+    </marker>
+    <marker id="arr-red" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr-purple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arr-slate" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#475569"/>
+    </marker>
+
+    <!-- CAD Dimension ticks (cota) -->
+    <marker id="cota-arr-start" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto">
+      <path d="M 5 0.8 L 0 3 L 5 5.2 z" fill="#475569"/>
+    </marker>
+    <marker id="cota-arr-end" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect width="1140" height="560" class="bg"/>
+  <text x="30" y="38" class="title">Origem da Força Lateral no Rotor: Cancelamento vs. Quebra por Coleman</text>
+  
+  <!-- Card 1: Inflow Uniforme -->
+  <rect x="25" y="55" width="535" height="475" class="card"/>
+  <text x="45" y="90" class="panel-title">1. Inflow Uniforme: Cancelamento Lateral</text>
+
+  <g transform="translate(292, 280)">
+    <!-- Rotor tip-path disc (Radius 125) -->
+    <circle cx="0" cy="0" r="125" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="6 4"/>
+    <line x1="-140" y1="0" x2="140" y2="0" stroke="#cbd5e1" stroke-width="1.2"/>
+    <line x1="0" y1="-140" x2="0" y2="140" stroke="#cbd5e1" stroke-width="1.2"/>
+
+    <!-- Flight direction V_inf -->
+    <line x1="0" y1="-135" x2="0" y2="-175" stroke="#2563eb" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <text x="10" y="-165" class="label-bold" fill="#2563eb">V∞</text>
+
+    <!-- Rotation arrow (CCW) right near the edge of the disc (Radius 112), NO text -->
+    <path d="M -35 -106 A 112 112 0 0 0 -106 -35" fill="none" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-blue)"/>
+
+    <!-- Sector labels - concise 'Recuo' and 'Avanço' -->
+    <text x="-135" y="-10" text-anchor="end" class="label-bold" fill="#64748b">Recuo</text>
+    <text x="135" y="-10" text-anchor="start" class="label-bold" fill="#64748b">Avanço</text>
+
+    <!-- Blades at psi = 180 (front) and psi = 0 (tail) -->
+    <rect x="-7" y="-115" width="14" height="90" rx="3" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.6"/>
+    <rect x="-7" y="25" width="14" height="90" rx="3" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.6"/>
+
+    <!-- Center Hub (Clean, no resultant arrow) -->
+    <circle cx="0" cy="0" r="9" fill="#0f172a"/>
+    <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+
+    <!-- Forces Y_frente and Y_tras -->
+    <line x1="7" y1="-65" x2="70" y2="-65" stroke="#059669" stroke-width="2.4" marker-end="url(#arr-green)"/>
+    <text x="40" y="-76" text-anchor="middle" class="label-bold" fill="#059669">Y_frente</text>
+
+    <line x1="-7" y1="65" x2="-70" y2="65" stroke="#dc2626" stroke-width="2.4" marker-end="url(#arr-red)"/>
+    <text x="-40" y="55" text-anchor="middle" class="label-bold" fill="#dc2626">Y_trás</text>
+
+    <!-- Azimuth labels positioned cleanly -->
+    <text x="16" y="-100" class="label-dim">ψ = 180°</text>
+    <text x="16" y="110" class="label-dim">ψ = 0°</text>
+  </g>
+
+  <!-- Bottom Resultant Box - Fully Enclosed -->
+  <rect x="55" y="460" width="475" height="42" rx="8" class="inner-card"/>
+  <text x="292" y="487" text-anchor="middle" class="formula" fill="#059669">Cancelamento: |Y_trás| = |Y_frente|  ⟹  C_Y = 0</text>
+
+
+  <!-- Card 2: Gradiente de Coleman -->
+  <rect x="580" y="55" width="535" height="475" class="card"/>
+  <text x="600" y="90" class="panel-title">2. Gradiente de Coleman: Quebra de Simetria</text>
+
+  <g transform="translate(847, 280)">
+    <!-- Rotor tip-path disc with Coleman skew shading (Radius 125) -->
+    <circle cx="0" cy="0" r="125" fill="#fefce8" stroke="#d97706" stroke-width="1.8" stroke-dasharray="6 4"/>
+    <line x1="-140" y1="0" x2="140" y2="0" stroke="#cbd5e1" stroke-width="1.2"/>
+    <line x1="0" y1="-140" x2="0" y2="140" stroke="#cbd5e1" stroke-width="1.2"/>
+
+    <!-- Flight direction V_inf -->
+    <line x1="0" y1="-135" x2="0" y2="-175" stroke="#2563eb" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <text x="10" y="-165" class="label-bold" fill="#2563eb">V∞</text>
+
+    <!-- Rotation arrow (CCW) near the edge of the disc (Radius 112), NO text -->
+    <path d="M -35 -106 A 112 112 0 0 0 -106 -35" fill="none" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-blue)"/>
+
+    <!-- Sector labels - concise 'Recuo' and 'Avanço' -->
+    <text x="-135" y="-10" text-anchor="end" class="label-bold" fill="#64748b">Recuo</text>
+    <text x="135" y="-10" text-anchor="start" class="label-bold" fill="#64748b">Avanço</text>
+
+    <!-- Blades -->
+    <rect x="-7" y="-115" width="14" height="90" rx="3" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.6"/>
+    <rect x="-7" y="25" width="14" height="90" rx="3" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.6"/>
+
+    <!-- Center Hub (Clean, NO purple arrow or text) -->
+    <circle cx="0" cy="0" r="9" fill="#0f172a"/>
+    <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+
+    <!-- Force Y_frente (reduced) -->
+    <line x1="7" y1="-65" x2="42" y2="-65" stroke="#059669" stroke-width="2.2" marker-end="url(#arr-green)"/>
+    <text x="25" y="-76" text-anchor="middle" class="label-bold" fill="#059669">Y_frente</text>
+
+    <!-- Force Y_tras (augmented) -->
+    <line x1="-7" y1="65" x2="-98" y2="65" stroke="#dc2626" stroke-width="2.8" marker-end="url(#arr-red)"/>
+    <text x="-52" y="55" text-anchor="middle" class="label-bold" fill="#dc2626">|Y_trás|</text>
+
+    <!-- Azimuth labels -->
+    <text x="16" y="-100" class="label-dim">ψ = 180°</text>
+    <text x="16" y="110" class="label-dim">ψ = 0°</text>
+  </g>
+
+  <!-- Bottom Resultant Box - Fully Enclosed -->
+  <rect x="610" y="460" width="475" height="42" rx="8" fill="#fef2f2" stroke="#fecaca" stroke-width="1.2"/>
+  <text x="847" y="487" text-anchor="middle" class="formula" fill="#dc2626">Assimetria: |Y_trás| &gt; Y_frente  ⟹  C_Y &lt; 0</text>
+
+</svg>

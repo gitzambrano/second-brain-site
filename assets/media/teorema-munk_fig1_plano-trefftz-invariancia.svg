@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="560" viewBox="0 0 1140 560">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .card { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 12px; }
+      .inner-card { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.2; rx: 8px; }
+      .title { font-family: system-ui, -apple-system, sans-serif; font-size: 20px; font-weight: 800; fill: #0f172a; }
+      .panel-title { font-family: system-ui, -apple-system, sans-serif; font-size: 17px; font-weight: 700; fill: #0f172a; }
+      .formula { font-family: "DejaVu Sans", Consolas, Monaco, monospace; font-size: 15px; font-weight: 700; }
+      .label { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 600; fill: #334155; }
+      .label-bold { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; }
+      .label-dim { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #64748b; }
+      .cota-line { stroke: #64748b; stroke-width: 1.2; }
+      .cota-ext { stroke: #94a3b8; stroke-width: 1.0; stroke-dasharray: 3 2; }
+    </style>
+    <!-- Sleek, smaller, engineering-grade arrowheads -->
+    <marker id="arr-blue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arr-green" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#059669"/>
+    </marker>
+    <marker id="arr-red" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr-purple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arr-slate" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#475569"/>
+    </marker>
+
+    <!-- CAD Dimension ticks (cota) -->
+    <marker id="cota-arr-start" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto">
+      <path d="M 5 0.8 L 0 3 L 5 5.2 z" fill="#475569"/>
+    </marker>
+    <marker id="cota-arr-end" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M 0 0.8 L 5 3 L 0 5.2 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect width="1140" height="560" class="bg"/>
+  <text x="30" y="38" class="title">O Teorema do Stagger de Munk no Plano de Trefftz (y-z)</text>
+  
+  <!-- Card 1: Trefftz Plane Projection -->
+  <rect x="25" y="55" width="535" height="475" class="card"/>
+  <text x="45" y="90" class="panel-title">1. Projeção no Plano de Trefftz (x → ∞)</text>
+
+  <!-- Flight Direction V_inf -->
+  <line x1="45" y1="120" x2="105" y2="120" stroke="#2563eb" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+  <text x="115" y="125" class="label-bold" fill="#2563eb">V∞</text>
+
+  <!-- Wing 1 (Forward, Upper) at y = 195 -->
+  <g transform="translate(180, 195)">
+    <rect x="-60" y="-7" width="120" height="14" rx="3" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.8"/>
+    <text x="0" y="26" text-anchor="middle" class="label-bold">Asa 1 (x₁)</text>
+    <line x1="0" y1="-7" x2="0" y2="-55" stroke="#059669" stroke-width="2.5" marker-end="url(#arr-green)"/>
+    <text x="12" y="-40" class="label-bold" fill="#059669">L₁</text>
+  </g>
+
+  <!-- Wing 2 (Aft, Lower) at y = 335 -->
+  <g transform="translate(285, 335)">
+    <rect x="-60" y="-7" width="120" height="14" rx="3" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.8"/>
+    <text x="0" y="26" text-anchor="middle" class="label-bold">Asa 2 (x₂)</text>
+    <line x1="0" y1="-7" x2="0" y2="-55" stroke="#059669" stroke-width="2.5" marker-end="url(#arr-green)"/>
+    <text x="12" y="-40" class="label-bold" fill="#059669">L₂</text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- COTA DE GAP (h): Linhas de Chamada e Cota  -->
+  <!-- ========================================== -->
+  <line x1="120" y1="195" x2="65" y2="195" class="cota-ext"/>
+  <line x1="225" y1="335" x2="65" y2="335" class="cota-ext"/>
+  <line x1="75" y1="195" x2="75" y2="335" class="cota-line" marker-start="url(#cota-arr-start)" marker-end="url(#cota-arr-end)"/>
+  <rect x="50" y="253" width="50" height="24" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="75" y="270" text-anchor="middle" class="label-bold" fill="#0f172a">h</text>
+
+  <!-- ========================================== -->
+  <!-- COTA DE STAGGER (s): Linhas de Chamada e Cota -->
+  <!-- ========================================== -->
+  <line x1="180" y1="202" x2="180" y2="415" class="cota-ext"/>
+  <line x1="285" y1="342" x2="285" y2="415" class="cota-ext"/>
+  <line x1="180" y1="405" x2="285" y2="405" class="cota-line" marker-start="url(#cota-arr-start)" marker-end="url(#cota-arr-end)"/>
+  <rect x="207" y="393" width="50" height="24" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="232" y="410" text-anchor="middle" class="label-bold" fill="#0f172a">s</text>
+
+
+  <!-- Trefftz Plane (Perspective projection) -->
+  <polygon points="415,115 465,150 465,435 415,400" fill="#f1f5f9" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="440" y="98" text-anchor="middle" class="label-bold" fill="#2563eb">Plano de Trefftz</text>
+
+  <!-- ========================================================================= -->
+  <!-- Wake projection lines: 100% HORIZONTAIS e PARALELAS (y1 = y2 exatamente)   -->
+  <!-- ========================================================================= -->
+  <!-- Line 1: exactly y=195 from Wing 1 (x=240) straight to Trefftz plane (x=432.5) -->
+  <line x1="240" y1="195" x2="432" y2="195" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 3"/>
+
+  <!-- Line 2: exactly y=335 from Wing 2 (x=345) straight to Trefftz plane (x=432.5) -->
+  <line x1="345" y1="335" x2="432" y2="335" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 3"/>
+
+  <!-- Traces on Trefftz plane centered at y=195 and y=335 -->
+  <!-- Trace 1 (centered at y=195): from (420, 187) to (445, 203) -->
+  <line x1="420" y1="187" x2="445" y2="203" stroke="#dc2626" stroke-width="3.5"/>
+  <text x="470" y="200" class="label-bold" fill="#dc2626">Traço 1</text>
+
+  <!-- Trace 2 (centered at y=335): from (420, 327) to (445, 343) -->
+  <line x1="420" y1="327" x2="445" y2="343" stroke="#2563eb" stroke-width="3.5"/>
+  <text x="470" y="340" class="label-bold" fill="#2563eb">Traço 2</text>
+
+
+  <!-- Card 2: Invariance Graph & Formula -->
+  <rect x="580" y="55" width="535" height="475" class="card"/>
+  <text x="600" y="90" class="panel-title">2. Invariância do Arrasto Induzido com Stagger</text>
+
+  <!-- Top Formula Badge -->
+  <rect x="600" y="115" width="495" height="52" rx="8" class="inner-card"/>
+  <text x="847" y="147" text-anchor="middle" class="formula" fill="#0f172a">D_i = (1/πq) [ L₁²/b₁² + 2σ L₁L₂/(b₁b₂) + L₂²/b₂² ]</text>
+
+  <!-- Coordinate system & Flat Invariance Line -->
+  <g transform="translate(847, 335)">
+    <!-- X-axis: s -->
+    <line x1="-190" y1="65" x2="190" y2="65" stroke="#475569" stroke-width="1.8" marker-end="url(#arr-slate)"/>
+    <text x="200" y="70" class="label-bold">s (Stagger)</text>
+
+    <!-- Y-axis: D_i -->
+    <line x1="0" y1="90" x2="0" y2="-90" stroke="#475569" stroke-width="1.8" marker-end="url(#arr-slate)"/>
+    <text x="10" y="-95" class="label-bold">D_i</text>
+
+    <!-- Invariant Line D_i(s) = const -->
+    <line x1="-160" y1="-25" x2="160" y2="-25" stroke="#059669" stroke-width="3.5"/>
+    <text x="45" y="-38" class="formula" fill="#059669" font-size="15">D_i(s) = Constante</text>
+
+    <!-- Tick marks -->
+    <line x1="-110" y1="60" x2="-110" y2="70" stroke="#475569" stroke-width="1.8"/>
+    <text x="-110" y="92" text-anchor="middle" class="label-bold">-s (Recuado)</text>
+
+    <line x1="0" y1="60" x2="0" y2="70" stroke="#475569" stroke-width="1.8"/>
+    <text x="0" y="92" text-anchor="middle" class="label-bold">s = 0</text>
+
+    <line x1="110" y1="60" x2="110" y2="70" stroke="#475569" stroke-width="1.8"/>
+    <text x="110" y="92" text-anchor="middle" class="label-bold">+s (Avançado)</text>
+
+    <!-- Dashed guides -->
+    <line x1="-110" y1="60" x2="-110" y2="-25" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <line x1="110" y1="60" x2="110" y2="-25" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+  </g>
+
+</svg>
