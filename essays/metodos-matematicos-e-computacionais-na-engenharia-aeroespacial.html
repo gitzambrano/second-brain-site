@@ -1600,11 +1600,11 @@ href="https://en.wikipedia.org/wiki/Apollo_Guidance_Computer">Apollo
 11</a>: aqueles foram alarmes de sobrecarga executiva do Apollo Guidance
 Computer, associados ao fluxo inesperado de dados do rendezvous radar.
 Os dois episódios pertencem à mesma história de engenharia embarcada sob
-limites, mas não à mesma falha [1]. David Mindell documenta em
-<em>Digital Apollo</em> essa negociação entre humano e máquina, e ela
-ilustra que a representação da atitude dentro do computador é uma
-decisão de projeto tão crítica quanto qualquer superfície
-aerodinâmica.</p>
+limites, mas não à mesma falha [<a href="#referências">1</a>]. David
+Mindell documenta em <em>Digital Apollo</em> essa negociação entre
+humano e máquina, e ela ilustra que a representação da atitude dentro do
+computador é uma decisão de projeto tão crítica quanto qualquer
+superfície aerodinâmica.</p>
 <p>Quaternions e <a
 href="https://en.wikipedia.org/wiki/Geometric_algebra">álgebra
 geométrica</a> resolvem o problema pelo caminho certo, que é abandonar a
@@ -1616,14 +1616,14 @@ de divisão em três dimensões, que não existe, e descobriu que em quatro
 ela existe. <a
 href="https://en.wikipedia.org/wiki/William_Kingdon_Clifford">William
 Clifford</a> generalizou a construção em 1878, mostrando que quaternions
-são apenas a subálgebra par da álgebra geométrica de três dimensões [2].
-A escolha aqui não é estética: quaternions são uma das formas mais
-eficientes de propagar atitude sem singularidades de coordenadas.
-Matrizes de rotação também representam <span
-class="math inline">\(SO(3)\)</span> globalmente sem gimbal lock, mas
-usam nove componentes e exigem preservar restrições de ortogonalidade;
-os quatro componentes do quaternion oferecem um compromisso compacto e
-suave.</p>
+são apenas a subálgebra par da álgebra geométrica de três dimensões [<a
+href="#referências">2</a>]. A escolha aqui não é estética: quaternions
+são uma das formas mais eficientes de propagar atitude sem
+singularidades de coordenadas. Matrizes de rotação também representam
+<span class="math inline">\(SO(3)\)</span> globalmente sem gimbal lock,
+mas usam nove componentes e exigem preservar restrições de
+ortogonalidade; os quatro componentes do quaternion oferecem um
+compromisso compacto e suave.</p>
 <h4 id="formulação-matemática">Formulação Matemática</h4>
 <p>Um quaternion unitário codifica uma rotação de ângulo <span
 class="math inline">\(\theta\)</span> em torno do eixo unitário <span
@@ -1748,12 +1748,13 @@ esticar vetores que deveria apenas girar.</p>
 <p>Um segundo uso, menos óbvio, é a interpolação. O <a
 href="https://en.wikipedia.org/wiki/Slerp">SLERP</a>, <a
 href="https://dl.acm.org/doi/10.1145/325165.325242">proposto</a> por <a
-href="https://en.wikipedia.org/wiki/Ken_Shoemake">Ken Shoemake</a> [3],
-interpola entre duas atitudes ao longo do arco de círculo máximo da
-esfera unitária, com velocidade angular constante. É o que permite gerar
-trajetórias de referência de atitude para um controlador de transição de
-eVTOL sem gerar picos de taxa artificiais, que é exatamente o que a
-interpolação linear de ângulos de Euler produz.</p>
+href="https://en.wikipedia.org/wiki/Ken_Shoemake">Ken Shoemake</a> [<a
+href="#referências">3</a>], interpola entre duas atitudes ao longo do
+arco de círculo máximo da esfera unitária, com velocidade angular
+constante. É o que permite gerar trajetórias de referência de atitude
+para um controlador de transição de eVTOL sem gerar picos de taxa
+artificiais, que é exatamente o que a interpolação linear de ângulos de
+Euler produz.</p>
 <h4 id="limites-de-validade">Limites de Validade</h4>
 <p>O recobrimento duplo, que resolve a singularidade, cria o problema do
 sinal. Como <span class="math inline">\(q\)</span> e <span
@@ -1774,8 +1775,8 @@ publicadas, todas defensáveis, e misturar duas delas produz um código
 que funciona para rotações pequenas e falha em manobras agressivas.
 Fixar a <a
 href="https://press.princeton.edu/books/paperback/9780691102986/quaternions-and-rotation-sequences">convenção</a>
-por escrito [4] no início do projeto custa dez minutos e economiza
-semanas.</p>
+por escrito [<a href="#referências">4</a>] no início do projeto custa
+dez minutos e economiza semanas.</p>
 <p>Por fim, a atitude é apenas metade do problema de corpo rígido.
 Posição e orientação juntas vivem em <span
 class="math inline">\(SE(3)\)</span>, e há situações, notadamente
@@ -1804,12 +1805,13 @@ href="https://en.wikipedia.org/wiki/Sophus_Lie">Sophus Lie</a> e chegou
 ao controle pelos <a
 href="https://link.springer.com/book/10.1007/978-1-84628-615-5">trabalhos</a>
 de <a href="https://en.wikipedia.org/wiki/Alberto_Isidori">Alberto
-Isidori</a> [5] e pela sistematização de Slotine e Li [6]. Ele é a
-linguagem certa quando o modelo é genuinamente não linear e a
-linearização em torno de um ponto de operação deixa de bastar, o que em
-aeronáutica acontece cedo: transição de eVTOL, envelope de alto ângulo
-de ataque e acoplamento entre eixos são todos regimes onde o jacobiano
-num ponto conta uma parte pequena da história.</p>
+Isidori</a> [<a href="#referências">5</a>] e pela sistematização de
+Slotine e Li [<a href="#referências">6</a>]. Ele é a linguagem certa
+quando o modelo é genuinamente não linear e a linearização em torno de
+um ponto de operação deixa de bastar, o que em aeronáutica acontece
+cedo: transição de eVTOL, envelope de alto ângulo de ataque e
+acoplamento entre eixos são todos regimes onde o jacobiano num ponto
+conta uma parte pequena da história.</p>
 <h4 id="formulação-matemática-1">Formulação Matemática</h4>
 <p>Para um campo vetorial <span class="math inline">\(f: \mathbb{R}^n
 \to \mathbb{R}^n\)</span> e uma função escalar <span
@@ -2018,7 +2020,8 @@ correlação decai, é uma afirmação sobre o escoamento, não sobre
 estatística.</p>
 <h4 id="formulação-matemática-2">Formulação Matemática</h4>
 <p>Um processo gaussiano é uma distribuição sobre funções, definida por
-uma função média e uma função de covariância [7]:</p>
+uma função média e uma função de covariância [<a
+href="#referências">7</a>]:</p>
 <p><span class="math display">\[f(x) \sim \mathcal{GP}\big(m(x),\, k(x,
 x&#39;)\big),\]</span></p>
 <p>com a propriedade de que qualquer coleção finita de valores <span
@@ -2171,10 +2174,11 @@ de convergência assintótica.</p>
 href="https://en.wikipedia.org/wiki/Harold_J._Kushner">Harold
 Kushner</a>, nos anos sessenta, e ganhou a forma moderna com o <a
 href="https://link.springer.com/article/10.1023/A:1008306431147">algoritmo
-EGO</a> de Jones, Schonlau e Welch em 1998 [8]. A estrutura tem duas
-peças: um modelo probabilístico substituto, quase sempre um processo
-gaussiano, e uma função de aquisição que transforma média e variância
-desse modelo numa decisão sobre onde amostrar em seguida.</p>
+EGO</a> de Jones, Schonlau e Welch em 1998 [<a
+href="#referências">8</a>]. A estrutura tem duas peças: um modelo
+probabilístico substituto, quase sempre um processo gaussiano, e uma
+função de aquisição que transforma média e variância desse modelo numa
+decisão sobre onde amostrar em seguida.</p>
 <h4 id="formulação-matemática-3">Formulação Matemática</h4>
 <p>O laço é curto. A cada iteração, ajusta-se o surrogate aos dados
 <span class="math inline">\(D_n = \{(x_i, y_i)\}_{i=1}^{n}\)</span> e
@@ -2210,9 +2214,10 @@ cujo parâmetro <span class="math inline">\(\kappa\)</span> controla
 explicitamente a agressividade da exploração e para o qual existem
 garantias teóricas de arrependimento sublinear. Uma <a
 href="https://ieeexplore.ieee.org/document/7352306">terceira família</a>
-baseada em teoria da informação [9] escolhe o ponto que mais reduz a
-entropia da distribuição sobre a localização do ótimo, o que é
-conceitualmente mais direto e computacionalmente mais caro.</p>
+baseada em teoria da informação [<a href="#referências">9</a>] escolhe o
+ponto que mais reduz a entropia da distribuição sobre a localização do
+ótimo, o que é conceitualmente mais direto e computacionalmente mais
+caro.</p>
 <h4 id="interpretação-física-3">Interpretação Física</h4>
 <p>O que a otimização bayesiana faz, na prática de projeto, é formalizar
 o que um projetista experiente faz por intuição: não gastar a próxima
@@ -2386,15 +2391,15 @@ class="math inline">\(\varepsilon\)</span> diminui, cruzando o limiar
 prático da precisão dupla.</p>
 <p>Esse é o <a
 href="https://link.springer.com/article/10.1007/BF02432002">dilema da
-precisão mal condicionada</a>, formulado por Robert Schaback [10]: os
-valores de <span class="math inline">\(\varepsilon\)</span> que dariam
-melhor aproximação teórica são exatamente os que tornam o sistema linear
-insolúvel em aritmética de ponto flutuante. Não é um defeito de
-implementação, é uma propriedade estrutural do método. As saídas
-conhecidas passam por algoritmos que evitam formar <span
-class="math inline">\(A\)</span> explicitamente, como o RBF-QR, ou por
-aceitar uma base sem parâmetro de forma e viver com a convergência
-algébrica.</p>
+precisão mal condicionada</a>, formulado por Robert Schaback [<a
+href="#referências">10</a>]: os valores de <span
+class="math inline">\(\varepsilon\)</span> que dariam melhor aproximação
+teórica são exatamente os que tornam o sistema linear insolúvel em
+aritmética de ponto flutuante. Não é um defeito de implementação, é uma
+propriedade estrutural do método. As saídas conhecidas passam por
+algoritmos que evitam formar <span class="math inline">\(A\)</span>
+explicitamente, como o RBF-QR, ou por aceitar uma base sem parâmetro de
+forma e viver com a convergência algébrica.</p>
 <h4 id="exemplo-aeronáutico-4">Exemplo Aeronáutico</h4>
 <p>A aplicação canônica em aeronáutica não é interpolação de polar, e
 sim deformação de malha. Num acoplamento aeroelástico, a estrutura
@@ -2404,7 +2409,7 @@ diferente, precisa ser deformada de forma consistente. As RBF fazem essa
 transferência sem exigir qualquer correspondência entre as duas malhas,
 o que é a razão de serem o <a
 href="https://onlinelibrary.wiley.com/doi/10.1002/nme.2219">padrão da
-indústria</a> [11] nessa tarefa.</p>
+indústria</a> [<a href="#referências">11</a>] nessa tarefa.</p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.interpolate <span class="im">import</span> RBFInterpolator</span>
@@ -2438,9 +2443,9 @@ Para as dezenas de milhares de centros de um problema de deformação de
 malha industrial isso é proibitivo na forma direta, e a prática é usar
 bases de suporte compacto, as <a
 href="https://www.cambridge.org/core/books/scattered-data-approximation/980EEC9B0DBF62CEB2E1129FE0FF1C4E">funções
-de Wendland</a> [12], que produzem matrizes esparsas, ou métodos de
-decomposição hierárquica que aproximam blocos distantes por posto
-baixo.</p>
+de Wendland</a> [<a href="#referências">12</a>], que produzem matrizes
+esparsas, ou métodos de decomposição hierárquica que aproximam blocos
+distantes por posto baixo.</p>
 <p>A ausência de estimativa de incerteza é uma limitação e não um
 detalhe. A RBF devolve um número e nada mais, e nada no método sinaliza
 quando a consulta caiu numa região sem dados. Existe uma ponte formal,
@@ -2461,7 +2466,8 @@ tipicamente por validação cruzada.</p>
 <h3 id="redes-neurais--gps-e-deep-kernel-learning">Redes Neurais + GPs e
 Deep Kernel Learning</h3>
 <p>O problema que o <a href="https://arxiv.org/abs/1511.02222">deep
-kernel learning</a> [13] (DKL) resolve é o de construir um <a
+kernel learning</a> [<a href="#referências">13</a>] (DKL) resolve é o de
+construir um <a
 href="https://en.wikipedia.org/wiki/Gaussian_process">processo
 gaussiano</a> sobre entradas que não têm uma métrica óbvia, como a
 geometria completa de um aerofólio ou de uma pá de rotor descrita por
@@ -2475,14 +2481,14 @@ o processo gaussiano existe para transformar essa métrica em uma
 predição calibrada, com banda de incerteza.</p>
 <p>A origem remonta a <a
 href="http://www.cs.toronto.edu/~radford/ftp/thesis.pdf">Radford
-Neal</a> [14], que mostrou em 1996 que uma rede neural de uma camada,
-com largura tendendo a infinito, converge para um processo gaussiano
-exato. O resultado pressupõe largura infinita e, portanto, não é
-diretamente aplicável a uma rede de projeto real. Em 2016, Wilson, Hu,
-Salakhutdinov e Xing transformaram a ideia em uma ferramenta prática:
-uma rede finita, de largura comum, aprende a representação, enquanto a
-camada gaussiana final fornece a parte que precisa de incerteza
-calibrada.</p>
+Neal</a> [<a href="#referências">14</a>], que mostrou em 1996 que uma
+rede neural de uma camada, com largura tendendo a infinito, converge
+para um processo gaussiano exato. O resultado pressupõe largura infinita
+e, portanto, não é diretamente aplicável a uma rede de projeto real. Em
+2016, Wilson, Hu, Salakhutdinov e Xing transformaram a ideia em uma
+ferramenta prática: uma rede finita, de largura comum, aprende a
+representação, enquanto a camada gaussiana final fornece a parte que
+precisa de incerteza calibrada.</p>
 <h4 id="formulação-matemática-5">Formulação Matemática</h4>
 <p>A rede mapeia a entrada bruta, por exemplo o vetor de coordenadas de
 controle de uma spline de aerofólio, para um espaço latente de dimensão
@@ -2517,11 +2523,11 @@ decompõe essa derivada em duas partes calculáveis separadamente,</p>
 \cdot \frac{\partial \phi(x;\theta)}{\partial \theta_j}.\]</span></p>
 <p>O segundo fator é exatamente o que a <a
 href="https://en.wikipedia.org/wiki/Backpropagation">retropropagação</a>
-[15] já sabe calcular para qualquer rede. Isso é o que torna o DKL
-prático: a verossimilhança marginal do processo gaussiano funciona como
-uma função de perda comum, e o treinamento conjunto de rede e kernel não
-exige nenhuma maquinaria nova além do que já existe para treinar
-redes.</p>
+[<a href="#referências">15</a>] já sabe calcular para qualquer rede.
+Isso é o que torna o DKL prático: a verossimilhança marginal do processo
+gaussiano funciona como uma função de perda comum, e o treinamento
+conjunto de rede e kernel não exige nenhuma maquinaria nova além do que
+já existe para treinar redes.</p>
 <h4 id="interpretação-física-5">Interpretação Física</h4>
 <p>O espaço latente <span class="math inline">\(z\)</span> é, na
 prática, uma representação comprimida da geometria que preserva o que
@@ -2614,20 +2620,21 @@ através de um modelo para obter a distribuição completa da saída sem
 repetir Monte Carlo ingênuo milhares de vezes.</p>
 <p>A ideia remonta ao caos homogêneo de <a
 href="https://en.wikipedia.org/wiki/Norbert_Wiener">Norbert Wiener</a>,
-de 1938, formulado para entradas gaussianas [16], e só foi generalizada
-para qualquer distribuição de entrada por <a
+de 1938, formulado para entradas gaussianas [<a
+href="#referências">16</a>], e só foi generalizada para qualquer
+distribuição de entrada por <a
 href="https://doi.org/10.1137/S1064827501387826">Xiu e Karniadakis em
-2002</a> [17], que mostraram qual família de polinômios ortogonais
-corresponde a cada distribuição comum: Hermite para gaussiana, Legendre
-para uniforme, Laguerre para exponencial. Essa correspondência é o que
-torna o método aplicável a variáveis de engenharia, que raramente são
-gaussianas.</p>
+2002</a> [<a href="#referências">17</a>], que mostraram qual família de
+polinômios ortogonais corresponde a cada distribuição comum: Hermite
+para gaussiana, Legendre para uniforme, Laguerre para exponencial. Essa
+correspondência é o que torna o método aplicável a variáveis de
+engenharia, que raramente são gaussianas.</p>
 <h4 id="formulação-matemática-6">Formulação Matemática</h4>
 <p>A resposta aleatória <span class="math inline">\(Y\)</span>, saída de
 um modelo aerodinâmico ou de desempenho sob uma entrada incerta <span
 class="math inline">\(\xi\)</span>, é expandida numa base de polinômios
 ortogonais escolhida de acordo com a distribuição de <span
-class="math inline">\(\xi\)</span> [18],</p>
+class="math inline">\(\xi\)</span> [<a href="#referências">18</a>],</p>
 <p><span class="math display">\[Y = \sum_{k=0}^{P} \alpha_k
 \Psi_k(\xi),\]</span></p>
 <p>com a base satisfazendo a condição de ortonormalidade sob a medida de
@@ -2655,7 +2662,8 @@ class="math inline">\(\Psi_{k_1,k_2}(\xi_1,\xi_2) =
 \Psi_{k_1}(\xi_1)\Psi_{k_2}(\xi_2)\)</span>, e a mesma ortogonalidade
 separa a variância total por fonte de incerteza, dando o <a
 href="https://en.wikipedia.org/wiki/Variance-based_sensitivity_analysis">índice
-de Sobol</a> [19] de primeira ordem de cada entrada,</p>
+de Sobol</a> [<a href="#referências">19</a>] de primeira ordem de cada
+entrada,</p>
 <p><span class="math display">\[S_i = \frac{\sum_{k_i&gt;0,\;
 k_j=0\;(j\neq i)} \alpha_k^2}{\text{Var}(Y)}.\]</span></p>
 <p>Isso é uma análise de sensibilidade completa obtida como subproduto
@@ -2666,9 +2674,10 @@ medida que o número de variáveis incertas simultâneas cresce, porque o
 número de nós é o produto do número de nós por dimensão. A alternativa
 não intrusiva, batizada de colocação por pontos por <a
 href="https://doi.org/10.2514/6.2006-891">Hosder, Walters e Perez em
-2006</a> [20], troca a integração por quadratura por um ajuste de
-mínimos quadrados: avalia-se o modelo caro num conjunto de pontos
-amostrados, por hipercubo latino ou aleatório, e resolve-se</p>
+2006</a> [<a href="#referências">20</a>], troca a integração por
+quadratura por um ajuste de mínimos quadrados: avalia-se o modelo caro
+num conjunto de pontos amostrados, por hipercubo latino ou aleatório, e
+resolve-se</p>
 <p><span class="math display">\[\hat{\alpha} = (\Psi^\top \Psi)^{-1}
 \Psi^\top \mathbf{Y}, \qquad \Psi_{ij} =
 \Psi_j\big(\xi^{(i)}\big),\]</span></p>
@@ -2823,7 +2832,8 @@ volume esperado dessa caixa,</p>
 \right|,\]</span></p>
 <p>e a <a
 href="https://en.wikipedia.org/wiki/Koksma%E2%80%93Hlawka_inequality">desigualdade
-de Koksma-Hlawka</a> liga esse valor ao erro de integração [21],</p>
+de Koksma-Hlawka</a> liga esse valor ao erro de integração [<a
+href="#referências">21</a>],</p>
 <p><span class="math display">\[\left| \frac{1}{N}\sum_{i=1}^{N} f(x_i)
 - \int f \, dx \right| \le V(f)\, D_N^*,\]</span></p>
 <p>onde <span class="math inline">\(V(f)\)</span> é a variação total da
@@ -2878,8 +2888,9 @@ de fato todas as <span class="math inline">\(d\)</span> dimensões da
 mesma forma. A <a
 href="https://www.semanticscholar.org/paper/Valuation-of-mortgage-backed-securities-using-to-Caflisch-Morokoff/6ac7497e941375197034be07842f1dd38c9f95e3">dimensão
 efetiva</a> no sentido de superposição, formalizada por Caflisch,
-Morokoff e Owen em 1997 [22], mede quantas variáveis, na prática, bastam
-para explicar quase toda a variância da resposta,</p>
+Morokoff e Owen em 1997 [<a href="#referências">22</a>], mede quantas
+variáveis, na prática, bastam para explicar quase toda a variância da
+resposta,</p>
 <p><span class="math display">\[d_S = \min\left\{ s \;:\; \sum_{|u| \le
 s} \sigma_u^2 \;\ge\; 0.99\, \text{Var}(f) \right\},\]</span></p>
 <p>onde <span class="math inline">\(\sigma_u^2\)</span> é a parcela de
@@ -2994,13 +3005,14 @@ gradiente exato simplesmente não têm gradiente para usar, e onde a
 superfície de custo pode ter múltiplos mínimos locais rasos separados
 por platôs. A origem é heterogênea: o recozimento simulado nasceu em
 1983 de uma analogia direta com a física estatística do resfriamento de
-metais [23], enquanto CMA-ES, DE e PSO surgiram entre o fim dos anos
-oitenta e os anos noventa dentro da comunidade de computação evolutiva,
-sem relação direta com nenhuma física preexistente.</p>
+metais [<a href="#referências">23</a>], enquanto CMA-ES, DE e PSO
+surgiram entre o fim dos anos oitenta e os anos noventa dentro da
+comunidade de computação evolutiva, sem relação direta com nenhuma
+física preexistente.</p>
 <h4 id="formulação-matemática-8">Formulação Matemática</h4>
 <p>O <a href="https://en.wikipedia.org/wiki/CMA-ES">CMA-ES</a> amostra
 uma população a partir de uma gaussiana cuja média e covariância são
-adaptadas a cada geração [24],</p>
+adaptadas a cada geração [<a href="#referências">24</a>],</p>
 <p><span class="math display">\[x_{k+1} \sim m_k + \sigma_k\,
 \mathcal{N}(0, C_k),\]</span></p>
 <p>de modo que a matriz de covariância <span
@@ -3009,10 +3021,10 @@ otimização, alongando-se na direção em que a função custo varia
 pouco.</p>
 <p>A <a
 href="https://en.wikipedia.org/wiki/Differential_evolution">evolução
-diferencial</a> [25] (DE) segue uma lógica mais simples, sem estimar
-covariância nenhuma: cada novo candidato nasce de uma mutação que soma a
-um membro da população a diferença escalada entre outros dois membros,
-escolhidos ao acaso na mesma geração,</p>
+diferencial</a> [<a href="#referências">25</a>] (DE) segue uma lógica
+mais simples, sem estimar covariância nenhuma: cada novo candidato nasce
+de uma mutação que soma a um membro da população a diferença escalada
+entre outros dois membros, escolhidos ao acaso na mesma geração,</p>
 <p><span class="math display">\[v_i = x_{r_1} + F\,(x_{r_2} - x_{r_3}),
 \qquad r_1 \neq r_2 \neq r_3 \neq i,\]</span></p>
 <p>e o vetor mutante é então combinado com o indivíduo original por um
@@ -3034,11 +3046,12 @@ em cada direção.</p>
 href="https://en.wikipedia.org/wiki/Particle_swarm_optimization">enxame
 de partículas</a> (PSO), proposto por <a
 href="https://doi.org/10.1109/ICNN.1995.488968">Kennedy e Eberhart em
-1995</a> [26], parte de uma ideia diferente, inspirada em bandos de
-pássaros: cada partícula carrega uma velocidade que é atualizada por
-três forças, a inércia do movimento anterior, a atração pela melhor
-posição que a própria partícula já visitou, e a atração pela melhor
-posição já vista por qualquer partícula do enxame,</p>
+1995</a> [<a href="#referências">26</a>], parte de uma ideia diferente,
+inspirada em bandos de pássaros: cada partícula carrega uma velocidade
+que é atualizada por três forças, a inércia do movimento anterior, a
+atração pela melhor posição que a própria partícula já visitou, e a
+atração pela melhor posição já vista por qualquer partícula do
+enxame,</p>
 <p><span class="math display">\[v_{k+1} = w\,v_k + c_1
 r_1\,(p_{\text{best}} - x_k) + c_2 r_2\,(g_{\text{best}} - x_k), \qquad
 x_{k+1} = x_k + v_{k+1},\]</span></p>
@@ -3071,7 +3084,8 @@ class="math inline">\(x&#39;\)</span> iguale o fluxo inverso,</p>
 class="math inline">\(P(x\to x&#39;)/P(x&#39;\to x) =
 e^{-(J(x&#39;)-J(x))/T}\)</span>, e a escolha de <a
 href="https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm">Metropolis</a>
-[27] que satisfaz essa razão da forma mais simples possível é</p>
+[<a href="#referências">27</a>] que satisfaz essa razão da forma mais
+simples possível é</p>
 <p><span class="math display">\[P(\text{aceitar } x&#39;) =
 \min\left(1,\; e^{-\Delta J / T}\right), \qquad \Delta J = J(x&#39;) -
 J(x),\]</span></p>
@@ -3319,10 +3333,11 @@ a atitude, a velocidade ou o ângulo de ataque no instante presente. O <a
 href="https://en.wikipedia.org/wiki/Kalman_filter">filtro de Kalman</a>,
 publicado por <a
 href="https://en.wikipedia.org/wiki/Rudolf_E._K%C3%A1lm%C3%A1n">Rudolf
-Kálmán</a> em 1960 [28] e adotado quase imediatamente pelo programa
-Apollo para navegação inercial, existe para combinar as duas fontes de
-informação, modelo e medida, numa estimativa melhor do que qualquer uma
-isolada, e para dizer o quanto se pode confiar nela.</p>
+Kálmán</a> em 1960 [<a href="#referências">28</a>] e adotado quase
+imediatamente pelo programa Apollo para navegação inercial, existe para
+combinar as duas fontes de informação, modelo e medida, numa estimativa
+melhor do que qualquer uma isolada, e para dizer o quanto se pode
+confiar nela.</p>
 <h4 id="formulação-matemática-10">Formulação Matemática</h4>
 <p>No caso linear gaussiano, o estado evolui segundo <span
 class="math inline">\(x_{k+1} = Ax_k + Bu_k + w_k\)</span>, com <span
@@ -3461,10 +3476,11 @@ informação útil sobre o estado de voo, e a <a
 href="https://en.wikipedia.org/wiki/Information_theory">teoria da
 informação</a> que <a
 href="https://en.wikipedia.org/wiki/Claude_Shannon">Claude Shannon</a>
-formulou em 1948 para telecomunicações [29] oferece a linguagem exata
-para decidir quais medidas realmente importam antes de gastar peso,
-custo ou banda instalando mais um sensor, ou antes de desenhar um ensaio
-em voo caro demais para se dar ao luxo de medir a coisa errada.</p>
+formulou em 1948 para telecomunicações [<a href="#referências">29</a>]
+oferece a linguagem exata para decidir quais medidas realmente importam
+antes de gastar peso, custo ou banda instalando mais um sensor, ou antes
+de desenhar um ensaio em voo caro demais para se dar ao luxo de medir a
+coisa errada.</p>
 <h4 id="formulação-matemática-11">Formulação Matemática</h4>
 <p>A entropia de uma variável aleatória discreta mede a incerteza média
 associada a ela,</p>
@@ -3486,8 +3502,8 @@ simétrica: o quanto <span class="math inline">\(Y\)</span> informa sobre
 class="math inline">\(X\)</span> informa sobre <span
 class="math inline">\(Y\)</span>. A divergência de <a
 href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler</a>
-quantifica a distância, não simétrica, entre duas distribuições
-[30],</p>
+quantifica a distância, não simétrica, entre duas distribuições [<a
+href="#referências">30</a>],</p>
 <p><span class="math display">\[D_{KL}(p\,\|\,q) = \sum_x
 p(x)\log\frac{p(x)}{q(x)},\]</span></p>
 <p>e entre duas gaussianas univariadas tem forma fechada,</p>
@@ -3611,13 +3627,14 @@ física do voo permite. A formalização matemática começou em 1944, quando
 Neumann</a> e <a
 href="https://en.wikipedia.org/wiki/Oskar_Morgenstern">Oskar
 Morgenstern</a> publicaram a teoria dos jogos cooperativos e não
-cooperativos [31], <a
+cooperativos [<a href="#referências">31</a>], <a
 href="https://en.wikipedia.org/wiki/John_Forbes_Nash_Jr.">John Nash</a>
-generalizou o conceito de equilíbrio em 1950 [32], e <a
+generalizou o conceito de equilíbrio em 1950 [<a
+href="#referências">32</a>], e <a
 href="https://en.wikipedia.org/wiki/Rufus_Isaacs_(game_theorist)">Rufus
-Isaacs</a> estendeu tudo isso para o tempo contínuo em 1965 [33],
-criando os jogos diferenciais a partir de problemas de perseguição e
-fuga estudados para a <a
+Isaacs</a> estendeu tudo isso para o tempo contínuo em 1965 [<a
+href="#referências">33</a>], criando os jogos diferenciais a partir de
+problemas de perseguição e fuga estudados para a <a
 href="https://en.wikipedia.org/wiki/RAND_Corporation">RAND
 Corporation</a>.</p>
 <h4 id="formulação-matemática-12">Formulação Matemática</h4>
@@ -3645,9 +3662,10 @@ interessa diretamente ao projetista de leis de controle é que a síntese
 de <a
 href="https://en.wikipedia.org/wiki/H-infinity_methods_in_control_theory">controle
 robusto H-infinito</a> é um caso particular exato dessa equação,
-desenvolvida em forma de jogo por Basar e Bernhard [34]. Para uma planta
-linear <span class="math inline">\(\dot{x} = Ax + Bu + Ed\)</span>, com
-custo quadrático em horizonte infinito <span class="math inline">\(J =
+desenvolvida em forma de jogo por Basar e Bernhard [<a
+href="#referências">34</a>]. Para uma planta linear <span
+class="math inline">\(\dot{x} = Ax + Bu + Ed\)</span>, com custo
+quadrático em horizonte infinito <span class="math inline">\(J =
 \int_0^\infty (x^T Q x + u^T R u - \gamma^2 d^T d)\,dt\)</span>, o
 controlador minimiza <span class="math inline">\(J\)</span> e a
 perturbação <span class="math inline">\(d\)</span> o maximiza, tentando
@@ -3673,24 +3691,25 @@ matemático.</p>
 <p>O equilíbrio de Nash estático organiza uma tensão que existe de fato
 no sistema físico: um rotor que reduz sua própria carga térmica
 aumentando torque pode empurrar carga excessiva para o rotor vizinho,
-acoplamento bem documentado na dinâmica de rotores de helicóptero [35],
-e o ponto de operação globalmente melhor nem sempre coincide com o ótimo
-local de cada subsistema isolado. Já a leitura em jogo diferencial da
-equação de Riccati acima é mais sutil e mais útil na prática: o
-parâmetro <span class="math inline">\(\gamma\)</span> deixa de ser um
-número abstrato de sintonia e passa a ser o pior fator de amplificação
-que uma rajada de vento, uma folga estrutural ou um erro de modelagem
-pode produzir no erro de estado antes que o controlador a rejeite.
-Projetar contra o pior <span class="math inline">\(d\)</span> possível,
-em vez de contra uma perturbação nominal, é a diferença entre uma lei de
-controle que funciona no simulador e uma que sobrevive a uma rajada real
-que ninguém enumerou explicitamente na especificação. A mesma pergunta,
-feita família a família em vez de projeto a projeto, organiza
-<em>Comparação de Dinâmica de Voo entre Aeronaves de Asa Fixa e
-Rotativa</em>: lá a perturbação relevante mora na própria matriz de
-estabilidade, nos termos que o rotor com batimento introduz e nenhuma
-asa fixa reproduz, e a comparação só fecha porque os dois lados são
-postos diante do mesmo adversário.</p>
+acoplamento bem documentado na dinâmica de rotores de helicóptero [<a
+href="#referências">35</a>], e o ponto de operação globalmente melhor
+nem sempre coincide com o ótimo local de cada subsistema isolado. Já a
+leitura em jogo diferencial da equação de Riccati acima é mais sutil e
+mais útil na prática: o parâmetro <span
+class="math inline">\(\gamma\)</span> deixa de ser um número abstrato de
+sintonia e passa a ser o pior fator de amplificação que uma rajada de
+vento, uma folga estrutural ou um erro de modelagem pode produzir no
+erro de estado antes que o controlador a rejeite. Projetar contra o pior
+<span class="math inline">\(d\)</span> possível, em vez de contra uma
+perturbação nominal, é a diferença entre uma lei de controle que
+funciona no simulador e uma que sobrevive a uma rajada real que ninguém
+enumerou explicitamente na especificação. A mesma pergunta, feita
+família a família em vez de projeto a projeto, organiza <em>Comparação
+de Dinâmica de Voo entre Aeronaves de Asa Fixa e Rotativa</em>: lá a
+perturbação relevante mora na própria matriz de estabilidade, nos termos
+que o rotor com batimento introduz e nenhuma asa fixa reproduz, e a
+comparação só fecha porque os dois lados são postos diante do mesmo
+adversário.</p>
 <h4 id="exemplo-aeronáutico-12">Exemplo Aeronáutico</h4>
 <p>Considere o modo de período curto de uma aeronave, com estado <span
 class="math inline">\(x = [\alpha, q]^T\)</span> (ângulo de ataque e
@@ -3789,11 +3808,11 @@ turbulentos, e a <a
 href="https://en.wikipedia.org/wiki/Dynamic_mode_decomposition">decomposição
 dinâmica de modos</a> (DMD), formalizada por <a
 href="https://doi.org/10.1017/S0022112010001217">Peter Schmid</a> em
-2010 [36] e sistematizada com a POD no livro de Kutz e colaboradores
-[37], resolveu o problema seguinte: a POD ordena modos por energia, não
-por comportamento no tempo, e um projetista de aeronave frequentemente
-precisa saber não qual modo carrega mais energia, mas qual modo está
-crescendo.</p>
+2010 [<a href="#referências">36</a>] e sistematizada com a POD no livro
+de Kutz e colaboradores [<a href="#referências">37</a>], resolveu o
+problema seguinte: a POD ordena modos por energia, não por comportamento
+no tempo, e um projetista de aeronave frequentemente precisa saber não
+qual modo carrega mais energia, mas qual modo está crescendo.</p>
 <h4 id="formulação-matemática-13">Formulação Matemática</h4>
 <p>Dado um conjunto de instantâneos do escoamento organizados em duas
 matrizes defasadas de um passo de tempo, <span
@@ -3837,20 +3856,20 @@ t}, \qquad \text{Re}(\omega_j) = \text{taxa de crescimento}, \qquad
 href="https://en.wikipedia.org/wiki/Composition_operator#Koopman_operator">operador
 de Koopman</a>, proposto por <a
 href="https://doi.org/10.1073/pnas.17.5.315">Bernard Koopman</a> já em
-1931 [38], generaliza essa ideia inteira: em vez de linearizar o estado
-<span class="math inline">\(x\)</span> diretamente, ele age linearmente
-sobre um dicionário de funções observáveis <span
-class="math inline">\(g(x)\)</span> do estado, <span
+1931 [<a href="#referências">38</a>], generaliza essa ideia inteira: em
+vez de linearizar o estado <span class="math inline">\(x\)</span>
+diretamente, ele age linearmente sobre um dicionário de funções
+observáveis <span class="math inline">\(g(x)\)</span> do estado, <span
 class="math inline">\(\mathcal{K}g = g \circ F\)</span>, o que é exato
 mesmo quando a dinâmica subjacente <span
 class="math inline">\(F\)</span> é fortemente não linear, ao custo de o
 operador <span class="math inline">\(\mathcal{K}\)</span> viver num
 espaço de dimensão infinita. A <a
-href="https://doi.org/10.1007/s00332-015-9258-5">extended DMD</a> [39]
-aproxima <span class="math inline">\(\mathcal{K}\)</span> em dimensão
-finita escolhendo um dicionário <span class="math inline">\(\Psi(x) =
-[\psi_1(x), \dots, \psi_k(x)]\)</span> e resolvendo o problema de
-mínimos quadrados</p>
+href="https://doi.org/10.1007/s00332-015-9258-5">extended DMD</a> [<a
+href="#referências">39</a>] aproxima <span
+class="math inline">\(\mathcal{K}\)</span> em dimensão finita escolhendo
+um dicionário <span class="math inline">\(\Psi(x) = [\psi_1(x), \dots,
+\psi_k(x)]\)</span> e resolvendo o problema de mínimos quadrados</p>
 <p><span class="math display">\[G = \Psi(X_2)\,
 \Psi(X_1)^{+},\]</span></p>
 <p>onde <span class="math inline">\(\Psi(X_1)^{+}\)</span> é a
@@ -3957,16 +3976,17 @@ separa um sistema seguro de um sistema que colapsa em oscilação
 sustentada assim que um parâmetro cruza um limiar. <a
 href="https://en.wikipedia.org/wiki/Aleksandr_Lyapunov">Aleksandr
 Lyapunov</a> formalizou a noção de estabilidade de trajetórias no final
-do século dezenove [40], a teoria da <a
+do século dezenove [<a href="#referências">40</a>], a teoria da <a
 href="https://en.wikipedia.org/wiki/Bifurcation_theory">bifurcação</a>
 catalogou as mudanças qualitativas de comportamento quando um parâmetro
-varia continuamente [41], e o caos, tornado célebre pelo trabalho de <a
+varia continuamente [<a href="#referências">41</a>], e o caos, tornado
+célebre pelo trabalho de <a
 href="https://en.wikipedia.org/wiki/Edward_Norton_Lorenz">Edward
 Lorenz</a> sobre <a
 href="https://doi.org/10.1175/1520-0469(1963)020%3C0130:DNF%3E2.0.CO;2">convecção
-atmosférica em 1963</a> [42], descreve sensibilidade extrema a condições
-iniciais mesmo em sistemas totalmente determinísticos, sem nenhum termo
-aleatório na equação.</p>
+atmosférica em 1963</a> [<a href="#referências">42</a>], descreve
+sensibilidade extrema a condições iniciais mesmo em sistemas totalmente
+determinísticos, sem nenhum termo aleatório na equação.</p>
 <h4 id="formulação-matemática-14">Formulação Matemática</h4>
 <p>O expoente de Lyapunov mede a taxa média de separação exponencial
 entre duas trajetórias vizinhas,</p>
@@ -4013,11 +4033,11 @@ amplitude da oscilação sustentada cresce com a raiz quadrada da
 distância ao limiar, não linearmente. Quando não há forma fechada
 disponível, o expoente dominante ainda pode ser estimado numericamente
 pelo algoritmo de reescala de <a
-href="https://doi.org/10.1007/BF02128236">Benettin</a> [43]: duas
-trajetórias próximas são integradas por um passo <span
-class="math inline">\(\Delta t\)</span>, a distância entre elas <span
-class="math inline">\(d_k\)</span> é medida e a trajetória perturbada é
-reescalada de volta à separação inicial <span
+href="https://doi.org/10.1007/BF02128236">Benettin</a> [<a
+href="#referências">43</a>]: duas trajetórias próximas são integradas
+por um passo <span class="math inline">\(\Delta t\)</span>, a distância
+entre elas <span class="math inline">\(d_k\)</span> é medida e a
+trajetória perturbada é reescalada de volta à separação inicial <span
 class="math inline">\(d_0\)</span> na mesma direção, acumulando</p>
 <p><span class="math display">\[\lambda \approx \frac{1}{N\Delta t}
 \sum_{k=1}^{N} \log \frac{d_k}{d_0}.\]</span></p>
@@ -4113,16 +4133,17 @@ bom substituto identificado a partir de dados) para poder integrar a
 trajetória perturbada, o que nem sempre está disponível em campo.</p>
 <p>Para séries medidas, a alternativa consolidada é o <a
 href="https://doi.org/10.1016/0167-2789(93)90009-P">método de
-Rosenstein</a> [59], que dispensa o modelo: reconstrói o espaço de
-estados por defasagem temporal, acompanha a divergência média entre cada
-ponto e seu vizinho mais próximo ao longo do tempo e extrai <span
-class="math inline">\(\lambda_1\)</span> da inclinação dessa curva. É o
-estimador adequado para a série do acelerômetro de um ensaio de voo, e
-rodá-lo antes do Benettin sobre um modelo identificado funciona como
-verificação cruzada: divergência grande entre os dois costuma denunciar
-embedding mal dimensionado ou janela curta demais, não física nova.
-Kantz e Schreiber documentam essas armadilhas práticas, e as correções
-de rotina, em <em>Nonlinear Time Series Analysis</em> [44].</p>
+Rosenstein</a> [<a href="#referências">59</a>], que dispensa o modelo:
+reconstrói o espaço de estados por defasagem temporal, acompanha a
+divergência média entre cada ponto e seu vizinho mais próximo ao longo
+do tempo e extrai <span class="math inline">\(\lambda_1\)</span> da
+inclinação dessa curva. É o estimador adequado para a série do
+acelerômetro de um ensaio de voo, e rodá-lo antes do Benettin sobre um
+modelo identificado funciona como verificação cruzada: divergência
+grande entre os dois costuma denunciar embedding mal dimensionado ou
+janela curta demais, não física nova. Kantz e Schreiber documentam essas
+armadilhas práticas, e as correções de rotina, em <em>Nonlinear Time
+Series Analysis</em> [<a href="#referências">44</a>].</p>
 <p>A forma normal de Hopf, por sua vez, só descreve corretamente a
 amplitude do ciclo limite muito perto do limiar <span
 class="math inline">\(\mu = 0\)</span>: longe dele, termos de ordem
@@ -4162,7 +4183,7 @@ multiagente quanto as <a
 href="https://en.wikipedia.org/wiki/Graph_neural_network">redes neurais
 em grafo</a> (GNN), sistematizadas por <a
 href="https://arxiv.org/abs/1609.02907">Kipf e Welling</a> a partir de
-2016 [45].</p>
+2016 [<a href="#referências">45</a>].</p>
 <h4 id="formulação-matemática-15">Formulação Matemática</h4>
 <p>Um grafo com <span class="math inline">\(n\)</span> nós é definido
 por uma matriz de adjacência <span class="math inline">\(A\)</span>, em
@@ -4299,16 +4320,16 @@ garantia de convergência do consenso passa a depender de a união dos
 grafos ao longo do tempo permanecer conectada, a condição de
 conectividade conjunta estabelecida por <a
 href="https://doi.org/10.1109/TAC.2003.812781">Jadbabaie, Lin e
-Morse</a> [46]; um enlace instantaneamente desconectado não quebra a
-convergência, mas uma sequência de topologias que nunca, em conjunto,
-conecta todos os veículos, quebra. Grafos muito grandes ou densos sofrem
-de um segundo efeito, o <em>over-smoothing</em>: a agregação de
-vizinhança em muitas camadas de GNN tende a suavizar excessivamente as
-representações dos nós até que todos convirjam para um estado quase
-idêntico, perdendo capacidade discriminativa. A resposta usual é limitar
-a profundidade da rede, usar conexões residuais entre camadas, ou
-construir pesos de aresta a partir de um modelo físico simplificado em
-vez de aprendê-los do zero.</p>
+Morse</a> [<a href="#referências">46</a>]; um enlace instantaneamente
+desconectado não quebra a convergência, mas uma sequência de topologias
+que nunca, em conjunto, conecta todos os veículos, quebra. Grafos muito
+grandes ou densos sofrem de um segundo efeito, o
+<em>over-smoothing</em>: a agregação de vizinhança em muitas camadas de
+GNN tende a suavizar excessivamente as representações dos nós até que
+todos convirjam para um estado quase idêntico, perdendo capacidade
+discriminativa. A resposta usual é limitar a profundidade da rede, usar
+conexões residuais entre camadas, ou construir pesos de aresta a partir
+de um modelo físico simplificado em vez de aprendê-los do zero.</p>
 <hr />
 <h3 id="decomposição-tensorial-cptuckertt-e-postos-baixos">Decomposição
 Tensorial (CP/Tucker/TT) e Postos Baixos</h3>
@@ -4323,12 +4344,13 @@ inviável rapidamente, mesmo quando cada dimensão individual tem poucos
 níveis.</p>
 <p>A <a
 href="https://en.wikipedia.org/wiki/Tensor_rank_decomposition">decomposição
-CP</a> [47] (CANDECOMP/PARAFAC), a decomposição de <a
+CP</a> [<a href="#referências">47</a>] (CANDECOMP/PARAFAC), a
+decomposição de <a
 href="https://en.wikipedia.org/wiki/Tucker_decomposition">Tucker</a> e,
 mais recentemente, o formato <em>tensor train</em> de <a
-href="https://doi.org/10.1137/090752286">Ivan Oseledets</a> [48], vieram
-da álgebra multilinear aplicada a dados de alta dimensão, generalizando
-para tensores a ideia que a <a
+href="https://doi.org/10.1137/090752286">Ivan Oseledets</a> [<a
+href="#referências">48</a>], vieram da álgebra multilinear aplicada a
+dados de alta dimensão, generalizando para tensores a ideia que a <a
 href="https://en.wikipedia.org/wiki/Singular_value_decomposition">decomposição
 em valores singulares</a> já explorava para matrizes desde o século
 dezenove.</p>
@@ -4359,8 +4381,8 @@ fatias ao longo desse eixo,</p>
 dominantes de <span class="math inline">\(\mathcal{X}_{(n)} = U^{(n)}
 \Sigma^{(n)} V^{(n)T}\)</span>, exatamente a mesma SVD usada em POD,
 aplicada modo a modo na formulação de De Lathauwer, De Moor e Vandewalle
-[49]. O núcleo é então obtido projetando o tensor original nesses
-fatores,</p>
+[<a href="#referências">49</a>]. O núcleo é então obtido projetando o
+tensor original nesses fatores,</p>
 <p><span class="math display">\[\mathcal{G} = \mathcal{X} \times_1
 U^{(1)T} \times_2 U^{(2)T} \times_3 U^{(3)T}.\]</span></p>
 <p>Para tensores de ordem muito alta, em que o núcleo de Tucker <span
@@ -4483,7 +4505,7 @@ tornaram-se o padrão de fato dos métodos espectrais pela estabilidade
 numérica e pela distribuição não uniforme de seus nós, sistematizados em
 textos de referência como o de <a
 href="https://people.maths.ox.ac.uk/trefethen/spectral.html">Lloyd
-Trefethen</a> [50].</p>
+Trefethen</a> [<a href="#referências">50</a>].</p>
 <h4 id="formulação-matemática-17">Formulação Matemática</h4>
 <p>Uma função suave <span class="math inline">\(u(x)\)</span> no
 intervalo <span class="math inline">\([-1, 1]\)</span> é expandida em
@@ -4728,13 +4750,14 @@ href="https://en.wikipedia.org/wiki/Jean_Morlet">Jean Morlet</a> em
 prospecção sísmica e na formalização matemática posterior de <a
 href="https://en.wikipedia.org/wiki/Yves_Meyer">Yves Meyer</a> e <a
 href="https://en.wikipedia.org/wiki/Ingrid_Daubechies">Ingrid
-Daubechies</a> [52], que estabeleceram as condições sob as quais uma
-família de wavelets forma uma base ortogonal completa.</p>
+Daubechies</a> [<a href="#referências">52</a>], que estabeleceram as
+condições sob as quais uma família de wavelets forma uma base ortogonal
+completa.</p>
 <h4 id="formulação-matemática-18">Formulação Matemática</h4>
 <p>A transformada contínua projeta o sinal <span
 class="math inline">\(x(t)\)</span> sobre versões deslocadas e
 reescaladas de uma função-mãe <span class="math inline">\(\psi\)</span>
-[51]:</p>
+[<a href="#referências">51</a>]:</p>
 <p><span class="math display">\[W_x(a,b) = \frac{1}{\sqrt{a}} \int
 x(t)\, \psi^*\!\left(\frac{t-b}{a}\right) dt,\]</span></p>
 <p>em que <span class="math inline">\(a\)</span> é a escala
@@ -4879,16 +4902,16 @@ estacionário.</p>
 <p>Historicamente, a SSA nasceu da álgebra linear aplicada a séries
 temporais geofísicas nos anos oitenta; a EMD e a HHT foram propostas por
 <a href="https://en.wikipedia.org/wiki/Norden_E._Huang">Norden Huang</a>
-e colaboradores em 1998 [53] justamente para decompor sinais não
-lineares e não estacionários em funções de modo intrínseco, sem exigir
-uma base predefinida como a de Fourier.</p>
+e colaboradores em 1998 [<a href="#referências">53</a>] justamente para
+decompor sinais não lineares e não estacionários em funções de modo
+intrínseco, sem exigir uma base predefinida como a de Fourier.</p>
 <h4 id="formulação-matemática-19">Formulação Matemática</h4>
 <p>A SSA embute o sinal <span class="math inline">\(x(t)\)</span>, de
 comprimento <span class="math inline">\(N\)</span>, numa matriz de
-trajetória (Hankel) [54] <span class="math inline">\(X \in \mathbb{R}^{L
-\times K}\)</span>, com <span class="math inline">\(K = N - L +
-1\)</span>, cujas colunas são janelas deslizantes do sinal. Sua
-decomposição em valores singulares,</p>
+trajetória (Hankel) [<a href="#referências">54</a>] <span
+class="math inline">\(X \in \mathbb{R}^{L \times K}\)</span>, com <span
+class="math inline">\(K = N - L + 1\)</span>, cujas colunas são janelas
+deslizantes do sinal. Sua decomposição em valores singulares,</p>
 <p><span class="math display">\[X = U \Sigma V^{T} = \sum_{i=1}^{L}
 \sigma_i\, u_i v_i^{T},\]</span></p>
 <p>separa o sinal numa soma de componentes elementares ordenadas por
@@ -5027,10 +5050,11 @@ apenas seus valores médios, carrega informação.</p>
 <p>Historicamente, a homologia persistente vem da topologia algébrica
 aplicada a nuvens de pontos e séries temporais, formalizada por <a
 href="https://en.wikipedia.org/wiki/Herbert_Edelsbrunner">Herbert
-Edelsbrunner</a> [55] e colaboradores no final dos anos noventa,
-enquanto o aprendizado de variedades ganhou força com métodos como o <a
+Edelsbrunner</a> [<a href="#referências">55</a>] e colaboradores no
+final dos anos noventa, enquanto o aprendizado de variedades ganhou
+força com métodos como o <a
 href="https://en.wikipedia.org/wiki/Isomap">Isomap</a> de Tenenbaum, de
-Silva e Langford em 2000 [56].</p>
+Silva e Langford em 2000 [<a href="#referências">56</a>].</p>
 <h4 id="formulação-matemática-20">Formulação Matemática</h4>
 <p>Dada uma nuvem de pontos <span class="math inline">\(X = \{x_1,
 \dots, x_n\}\)</span>, constrói-se para cada raio <span
@@ -5058,10 +5082,10 @@ estruturas de dimensão <span class="math inline">\(k\)</span> existem
 naquele raio, e a persistência de uma estrutura, isto é, o intervalo
 <span class="math inline">\([\epsilon_{\text{nasc}},
 \epsilon_{\text{morte}})\)</span> em que ela sobrevive, é o que separa
-sinal de ruído, na síntese de Carlsson [57]: uma estrutura que nasce e
-morre quase no mesmo <span class="math inline">\(\epsilon\)</span> é
-artefato de amostragem, uma que persiste por um intervalo longo é
-geometria real dos dados.</p>
+sinal de ruído, na síntese de Carlsson [<a href="#referências">57</a>]:
+uma estrutura que nasce e morre quase no mesmo <span
+class="math inline">\(\epsilon\)</span> é artefato de amostragem, uma
+que persiste por um intervalo longo é geometria real dos dados.</p>
 <p>Já o aprendizado de variedades assume que a resposta observada é uma
 função suave definida sobre uma variedade de dimensão bem menor que o
 espaço ambiente,</p>
@@ -5174,7 +5198,8 @@ deixaram de ser disciplinas separadas dentro do ciclo de projeto
 aeroespacial e passaram a compartilhar a mesma base de dados e o mesmo
 critério de decisão, movimento que <a
 href="http://databookuw.com/">Brunton e Kutz</a> sistematizaram sob o
-nome de engenharia orientada a dados [58].</p>
+nome de engenharia orientada a dados [<a
+href="#referências">58</a>].</p>
 <h4 id="formulação-matemática-21">Formulação Matemática</h4>
 <p>O fluxo pode ser descrito como uma cadeia de transformações,</p>
 <p><span class="math display">\[\text{dado bruto} \xrightarrow{\ \phi\ }
