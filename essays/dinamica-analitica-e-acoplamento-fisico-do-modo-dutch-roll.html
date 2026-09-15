@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="5">
+<html lang="pt-BR" data-status="finalizado" data-minutes="6">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1461,9 +1461,15 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <main class="content">
 <p>O <a href="https://en.wikipedia.org/wiki/Dutch_roll">Dutch Roll</a> é
 um modo oscilatório látero-direcional caracterizado pelo acoplamento
-complexo entre rolagem (roll), guinada (yaw) e derrapagem (sideslip). A
-compreensão profunda desse modo exige transitar da cinemática básica
-para a análise da matriz de estado completa. Este documento detalha a
+complexo entre rolagem (<em>roll</em>), guinada (<em>yaw</em>) e <a
+href="https://en.wikipedia.org/wiki/Sideslip_angle">derrapagem</a>
+(<em>sideslip</em>). A compreensão profunda desse modo exige transitar
+da cinemática básica para a análise da <a
+href="https://en.wikipedia.org/wiki/State-space_representation">matriz
+de estado</a> completa em dinâmica de voo [<a
+href="#referências">1</a>], cujos princípios se aplicam tanto a
+aeronaves convencionais quanto a configurações avançadas de asas
+rotativas [<a href="#referências">5</a>]. Este documento detalha a
 dedução matemática e a intuição física por trás da estabilidade desse
 modo.</p>
 <p>A análise demonstra matematicamente que o amortecimento natural
@@ -1473,12 +1479,15 @@ de guinada (<span class="math inline">\(r\)</span>). O texto expande as
 equações de frequência e amortecimento, avalia os efeitos de primeira
 ordem (<span class="math inline">\(C_{n_\beta}\)</span>, <span
 class="math inline">\(C_{n_r}\)</span>, <span
-class="math inline">\(I_z\)</span>), os complexos acoplamentos inerciais
-(<span class="math inline">\(I_{xz}\)</span>) e aerodinâmicos (<span
-class="math inline">\(C_{l_\beta}\)</span>), finalizando com a
-otimização estrutural via ventral fin e a arquitetura ideal de controle
-ativo (yaw damper baseado em <span
-class="math inline">\(\dot{\beta}\)</span>).</p>
+class="math inline">\(I_z\)</span>), os complexos <a
+href="https://en.wikipedia.org/wiki/Inertia_coupling">acoplamentos
+inerciais</a> (<span class="math inline">\(I_{xz}\)</span>) e
+aerodinâmicos (<span class="math inline">\(C_{l_\beta}\)</span>),
+finalizando com a otimização estrutural via <a
+href="https://en.wikipedia.org/wiki/Ventral_fin">ventral fin</a> e a
+arquitetura ideal de controle ativo (<a
+href="https://en.wikipedia.org/wiki/Yaw_damper">yaw damper</a> baseado
+em <span class="math inline">\(\dot{\beta}\)</span>).</p>
 <hr />
 <h2 id="sumário">Sumário</h2>
 <ul>
@@ -1508,16 +1517,17 @@ class="math inline">\(\dot{\beta}\)</span></a></li>
 <h2 id="1-a-matriz-de-estado-e-o-acoplamento-inercial-i_xz">1. A Matriz
 de Estado e o Acoplamento Inercial (<span
 class="math inline">\(I_{xz}\)</span>)</h2>
-<p>Para modelar o <a
-href="https://en.wikipedia.org/wiki/Dutch_roll">Dutch Roll</a> sem perda
-de fidelidade, utilizamos o vetor de estado látero-direcional <span
-class="math inline">\(x = [\beta, p, r, \phi]^T\)</span>. A matriz de
-estado linearizada <span class="math inline">\(A\)</span> (onde <span
+<p>Para modelar o Dutch Roll sem perda de fidelidade, utilizamos o vetor
+de estado látero-direcional <span class="math inline">\(x = [\beta, p,
+r, \phi]^T\)</span>. A matriz de estado linearizada <span
+class="math inline">\(A\)</span> (onde <span
 class="math inline">\(\dot{x} = Ax\)</span>) é expressa utilizando as <a
 href="https://en.wikipedia.org/wiki/Stability_derivatives">derivadas
-dimensionais com linha</a> (<em>primed derivatives</em>), essenciais
-para não desprezar o produto de inércia <span
-class="math inline">\(I_{xz}\)</span>:</p>
+dimensionais com linha</a> (<em>primed derivatives</em>) desenvolvidas
+por Etkin e Reid [<a href="#referências">1</a>] e detalhadas por Roskam
+[<a href="#referências">3</a>], essenciais para não desprezar o <a
+href="https://en.wikipedia.org/wiki/Moment_of_inertia#Inertia_tensor">produto
+de inércia</a> <span class="math inline">\(I_{xz}\)</span>:</p>
 <p><span class="math display">\[A = \begin{bmatrix} \frac{Y_\beta}{V}
 &amp; \frac{Y_p}{V} &amp; \left(\frac{Y_r}{V} - 1\right) &amp;
 \frac{g\cos\theta_0}{V} \\ L_\beta&#39; &amp; L_p&#39; &amp; L_r&#39;
@@ -1548,11 +1558,13 @@ na aerodinâmica pura.</p>
 <h2 id="2-a-natureza-de-dotbeta-o-verdadeiro-amortecedor">2. A Natureza
 de <span class="math inline">\(\dot{\beta}\)</span>: O Verdadeiro
 Amortecedor</h2>
-<p>A extração das propriedades do <a
-href="https://en.wikipedia.org/wiki/Dutch_roll">Dutch Roll</a> advém da
-solução do polinômio característico da matriz A. Isolando o par de
-autovalores complexos conjugados, obtemos as equações analíticas para
-frequência e amortecimento.</p>
+<p>A extração das propriedades do Dutch Roll advém da solução do <a
+href="https://en.wikipedia.org/wiki/Characteristic_polynomial">polinômio
+característico</a> da matriz A [<a href="#referências">2</a>]. Isolando
+o par de <a
+href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">autovalores</a>
+complexos conjugados, obtemos as equações analíticas aproximadas para
+frequência natural e amortecimento:</p>
 <p><strong>Frequência Natural (<span
 class="math inline">\(\omega_{n_{DR}}\)</span>)</strong>:</p>
 <p><span class="math display">\[\omega_{n_{DR}} \approx
@@ -1565,7 +1577,8 @@ class="math inline">\(\zeta_{DR}\)</span>)</strong>:</p>
 \right] + \frac{L_\beta&#39; N_p&#39;}{N_\beta&#39;}
 \right)\]</span></p>
 <p>A equação diferencial que rege a oscilação assume a forma canônica de
-um oscilador harmônico:</p>
+um <a href="https://en.wikipedia.org/wiki/Harmonic_oscillator">oscilador
+harmônico</a>:</p>
 <p><span class="math display">\[
 \ddot{\beta} + \underbrace{(-Y_\beta/V)}_{\text{amortecimento}}
 \dot{\beta} + \underbrace{(N_\beta)}_{\text{mola}} \beta = 0
@@ -1578,14 +1591,19 @@ class="math inline">\(\dot{\beta}\)</span>). A aeronave não é amortecida
 puramente pela sua rotação no <a
 href="https://en.wikipedia.org/wiki/Inertial_frame_of_reference">espaço
 inercial</a> (<span class="math inline">\(r\)</span>), mas sim pela
-velocidade com que o vento relativo lateral muda.</p>
+velocidade com que o vento relativo lateral muda. O cumprimento de
+critérios regulatórios de <a
+href="https://en.wikipedia.org/wiki/Flying_qualities">qualidades de
+voo</a> estipulados por normas como a MIL-STD-1797A [<a
+href="#referências">4</a>] depende crucialmente desse valor mínimo de
+<span class="math inline">\(\zeta_{DR}\)</span>.</p>
 <hr />
 <h2 id="3-efeitos-de-primeira-ordem-c_n_beta-c_n_r-e-i_z">3. Efeitos de
 Primeira Ordem: <span class="math inline">\(C_{n_\beta}\)</span>, <span
 class="math inline">\(C_{n_r}\)</span> e <span
 class="math inline">\(I_z\)</span></h2>
-<h3 id="a-estabilidade-direcional-c_n_beta--a-mola">A Estabilidade
-Direcional (<span class="math inline">\(C_{n_\beta}\)</span>) — A
+<h3 id="a-estabilidade-direcional-c_n_beta-a-mola">A Estabilidade
+Direcional (<span class="math inline">\(C_{n_\beta}\)</span>): A
 Mola</h3>
 <p>É o efeito cata-vento (<em>weathercock</em>). O estabilizador
 vertical gera uma força de restauração proporcional à posição da
@@ -1593,15 +1611,15 @@ perturbação (<span class="math inline">\(\beta\)</span>). Uma mola
 direcional rígida eleva a frequência natural (<span
 class="math inline">\(\omega_n\)</span>) e blinda a aeronave contra
 injeções de energia parasita causadas pelo rolamento.</p>
-<h3 id="o-amortecimento-de-guinada-c_n_r--o-amortecedor-viscoso">O
-Amortecimento de Guinada (<span class="math inline">\(C_{n_r}\)</span>)
-— O Amortecedor Viscoso</h3>
+<h3 id="o-amortecimento-de-guinada-c_n_r-o-amortecedor-viscoso">O
+Amortecimento de Guinada (<span class="math inline">\(C_{n_r}\)</span>):
+O Amortecedor Viscoso</h3>
 <p>É o componente rotacional que resiste à variação <span
 class="math inline">\(\dot{\beta}\)</span>. Presente diretamente no
 coeficiente dimensional, é o sorvedouro primário de energia do
 sistema.</p>
-<h3 id="o-momento-de-inércia-i_z--a-massa-rotacional">O Momento de
-Inércia (<span class="math inline">\(I_z\)</span>) — A Massa
+<h3 id="o-momento-de-inércia-i_z-a-massa-rotacional">O Momento de
+Inércia (<span class="math inline">\(I_z\)</span>): A Massa
 Rotacional</h3>
 <p>Um aumento no <span class="math inline">\(I_z\)</span> reduz
 instantaneamente a “mola” dimensional <span
@@ -1627,25 +1645,24 @@ causando rápida rolagem. Dois mecanismos degradam o amortecimento:</p>
 <h3 id="cenário-a-aeronave-estável-direcionalmente-c_n_beta--0">Cenário
 A: Aeronave Estável Direcionalmente (<span
 class="math inline">\(C_{n_\beta} &gt; 0\)</span>)</h3>
-<ul>
-<li><strong>Inercial</strong>: A aceleração de rolagem interage com
-<span class="math inline">\(I_{xz}\)</span>, subtraindo <a
+<p>Dois mecanismos degradam o amortecimento quando a aeronave é estável
+direcionalmente: no aspecto inercial, a aceleração de rolagem interage
+com <span class="math inline">\(I_{xz}\)</span>, subtraindo <a
 href="https://en.wikipedia.org/wiki/Directional_stability">estabilidade
-direcional</a> aparente e abaixando a frequência</li>
-<li><strong>Aerodinâmico</strong>: A alta taxa de rolagem gera guinada
-adversa (<span class="math inline">\(C_{n_p}\)</span>), injetando
-energia cinética no movimento oscilatório</li>
-</ul>
+direcional</a> aparente e reduzindo a frequência natural do modo. No
+aspecto aerodinâmico, a alta taxa de rolagem gera guinada adversa (<span
+class="math inline">\(C_{n_p}\)</span>), injetando energia cinética no
+movimento oscilatório.</p>
 <p><strong>Conclusão</strong>: Aumentar o efeito diedro estabilizante em
 aeronave com <span class="math inline">\(C_{n_\beta} &gt; 0\)</span>
-destrói progressivamente o amortecimento do <a
-href="https://en.wikipedia.org/wiki/Dutch_roll">Dutch Roll</a>.</p>
+destrói progressivamente o amortecimento do Dutch Roll.</p>
 <p><picture><source srcset="../assets/media/dinamica-analitica-e-acoplamento-fisico-do-modo-dutch-roll_fig1.webp" type="image/webp"><img
 src="../assets/media/dinamica-analitica-e-acoplamento-fisico-do-modo-dutch-roll_fig1.png"
 alt="Root Locus do Dutch Roll com Acoplamento Inercial (Ixz ≠ 0) — Caso 1" /></picture></p>
-<p><em>Figura 1. Root Locus do Dutch Roll com acoplamento inercial
-(<span class="math inline">\(I_{xz} \neq 0\)</span>): variação dos
-autovalores com o incremento do efeito diedro (<span
+<p><em>Figura 1. <a href="https://en.wikipedia.org/wiki/Root_locus">Root
+Locus</a> do Dutch Roll com acoplamento inercial (<span
+class="math inline">\(I_{xz} \neq 0\)</span>): variação dos autovalores
+com o incremento do efeito diedro (<span
 class="math inline">\(C_{l_\beta}\)</span> de 0.0 a −0.2) para cinco
 níveis de estabilidade direcional (<span
 class="math inline">\(C_{n_\beta}\)</span>). Região à esquerda do eixo
@@ -1667,28 +1684,29 @@ colapsada).</p>
 <hr />
 <h2 id="6-o-papel-estratégico-do-ventral-fin">6. O Papel Estratégico do
 Ventral Fin</h2>
-<p>Quando a aeronave sofre com <a
-href="https://en.wikipedia.org/wiki/Dutch_roll">Dutch Roll</a>
-subamortecido associado a excesso de rolagem, ampliar o estabilizador
-vertical convencional pode agravar o cenário (piora o diedro). A solução
-ótima é o <strong>ventral fin</strong> (aleta inferior):</p>
-<p>Por estar posicionado abaixo do CG, otimiza três <a
-href="https://en.wikipedia.org/wiki/Stability_derivatives">derivadas</a>
-simultaneamente:</p>
-<ol type="1">
-<li><strong>Aumento de <span class="math inline">\(C_{n_\beta}\)</span>
-e <span class="math inline">\(C_{n_r}\)</span></strong>: Reforça mola e
-amortecedor</li>
-<li><strong>Redução do efeito diedro</strong>: Força lateral abaixo do
-eixo de rolagem gera momento de rolagem positivo, mitigando o <span
-class="math inline">\(C_{l_\beta}\)</span> negativo e impedindo a
-injeção fatal de energia via rolagem</li>
-</ol>
+<p>Quando a aeronave sofre com Dutch Roll subamortecido associado a
+excesso de rolagem, ampliar o estabilizador vertical convencional pode
+agravar o cenário pelo aumento concomitante do diedro efetivo. A solução
+de projeto ótima é a instalação de um <a
+href="https://en.wikipedia.org/wiki/Ventral_fin">ventral fin</a> (aleta
+inferior):</p>
+<p>Por estar posicionado abaixo do CG, ele otimiza três <a
+href="https://en.wikipedia.org/wiki/Stability_derivatives">derivadas de
+estabilidade</a> simultaneamente: eleva <span
+class="math inline">\(C_{n_\beta}\)</span> e <span
+class="math inline">\(C_{n_r}\)</span>, reforçando rigidez e
+amortecimento, e reduz o efeito diedro adverso, visto que a força
+lateral abaixo do eixo de rolagem gera momento de rolagem positivo,
+mitigando o <span class="math inline">\(C_{l_\beta}\)</span> negativo e
+impedindo a injeção excessiva de energia via rolagem.</p>
 <hr />
 <h2 id="7-controle-ativo-a-supremacia-do-dotbeta">7. Controle Ativo: A
 Supremacia do <span class="math inline">\(\dot{\beta}\)</span></h2>
-<p>Quando a aerodinâmica passiva não atende, injeta-se amortecimento
-artificial via <strong>Yaw Damper</strong>.</p>
+<p>Quando a aerodinâmica passiva não atende aos requisitos de qualidades
+de voo [<a href="#referências">4</a>], injeta-se amortecimento
+artificial via <a href="https://en.wikipedia.org/wiki/Yaw_damper">Yaw
+Damper</a>, cuja síntese analítica clássica é desenvolvida por Roskam
+[<a href="#referências">3</a>].</p>
 <h3 id="por-que-dotbeta-não-r">Por que <span
 class="math inline">\(\dot{\beta}\)</span>, não <span
 class="math inline">\(r\)</span></h3>
@@ -1702,15 +1720,13 @@ class="math inline">\(r\)</span> (<span class="math inline">\(\delta_r =
 K_r r\)</span>) injeta inadvertidamente três comandos:</p>
 <p><span class="math display">\[\delta_r = -K_r \dot{\beta} + K_r
 \frac{Y_\beta}{V}\beta + K_r \frac{g}{V}\phi\]</span></p>
-<ol type="1">
-<li><strong><span class="math inline">\(\dot{\beta}\)</span></strong>: O
-termo fisicamente correto — replica o amortecimento natural</li>
-<li><strong><span class="math inline">\(\beta\)</span></strong>:
-Modifica artificialmente a mola direcional, deformando a frequência</li>
-<li><strong><span class="math inline">\(\phi\)</span></strong>: Acopla
+<p>O primeiro termo (<span class="math inline">\(\dot{\beta}\)</span>) é
+fisicamente correto e replica o amortecimento natural da aeronave. O
+segundo termo (<span class="math inline">\(\beta\)</span>) modifica
+artificialmente a mola direcional, alterando a frequência natural. O
+terceiro termo (<span class="math inline">\(\phi\)</span>) acopla
 espuriamente o leme à atitude de rolagem, induzindo guinada
-desnecessária em curvas (<em>turn coordination interference</em>)</li>
-</ol>
+desnecessária em curvas (<em>turn coordination interference</em>).</p>
 <h3 id="a-defasagem-dinâmica">A Defasagem Dinâmica</h3>
 <p>Como o sinal de <span class="math inline">\(r\)</span> carrega
 informações espúrias de posição estática, seu pico ocorre <strong>fora
@@ -1727,29 +1743,22 @@ manobrabilidade de regime permanente.</p>
 <hr />
 <h2 id="referências">Referências</h2>
 <p>[1] Etkin, B., e Reid, L. D., <em>Dynamics of Flight: Stability and
-Control</em>, 3ª ed., John Wiley &amp; Sons, New York, 1996. — Derivação
-da <a
-href="https://en.wikipedia.org/wiki/State-space_representation">matriz
-de estado</a> látero-direcional e modos naturais. <a
+Control</em>, 3ª ed., John Wiley &amp; Sons, New York, 1996. (acesso em
+15 mar. 2026). <a
 href="https://bcs.wiley.com/he-bcs/Books?action=index&amp;bcsId=4983&amp;itemId=0471034185">Link</a></p>
 <p>[2] Nelson, R. C., <em>Flight Stability and Automatic Control</em>,
-2ª ed., McGraw-Hill, New York, 1998. — Tratamento introdutório do Dutch
-Roll e das derivadas de estabilidade. <a
+2ª ed., McGraw-Hill, New York, 1998. (acesso em 15 mar. 2026). <a
 href="https://archive.org/details/flightstabilitya0000nels">Link</a></p>
-<p>[3] Roskam, J. <em>Airplane Flight Dynamics and Automatic Flight
-Controls</em>, DAR Corporation, 2001. — Análise detalhada de <a
-href="https://en.wikipedia.org/wiki/Inertia_coupling">acoplamento
-inercial</a> <span class="math inline">\(I_{xz}\)</span> e design de <a
-href="https://en.wikipedia.org/wiki/Yaw_damper">yaw dampers</a>. <a
+<p>[3] Roskam, J., <em>Airplane Flight Dynamics and Automatic Flight
+Controls</em>, DAR Corporation, Lawrence, KS, 2001. (acesso em 15 mar.
+2026). <a
 href="https://archive.org/details/airplaneflightdy0000rosk_y7x2">Link</a></p>
-<p>[4] MIL-STD-1797A, <em>Flying Qualities of Piloted Aircraft</em>, US
-DoD, 1990. — Requisitos de <a
-href="https://en.wikipedia.org/wiki/Flying_qualities">qualidades de
-voo</a> para modos látero-direcionais. <a
+<p>[4] Department of Defense, <em>MIL-STD-1797A: Flying Qualities of
+Piloted Aircraft</em>, US DoD, Washington, D.C., 1990. (acesso em 15
+mar. 2026). <a
 href="https://quicksearch.dla.mil/qsDocDetails.aspx?ident_number=70037">Link</a></p>
 <p>[5] Padfield, G. D., <em>Helicopter Flight Dynamics</em>, 2ª ed.,
-Blackwell Science, Oxford, 2007. — Referência abrangente sobre
-qualidades de voo e modelagem de dinâmica de helicópteros. <a
+Blackwell Science, Oxford, 2007. <a
 href="https://doi.org/10.1002/9780470691847">Link</a></p>
 </main>
 

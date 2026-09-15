@@ -1486,45 +1486,46 @@ interpretação</a></li>
 </ul>
 <hr />
 <h2 id="introdução">Introdução</h2>
-<p>Um rotor em voo à frente possui uma assimetria aerodinâmica forte
+<p>Um rotor em voo à frente possui uma assimetria aerodinâmica marcante
 entre os lados avançante e recuante. A velocidade relativa é maior no
 lado avançante e menor no recuante. Essa diferença domina o carregamento
-azimutal e aparece com clareza tanto na força normal quanto na força
-tangencial.</p>
-<p>Essa assimetria, porém, não produz sozinha uma força lateral média.
-Com inflow uniforme, uma <a
-href="https://ntrs.nasa.gov/citations/19810057419">teoria de elemento de
-pá</a> (BET, <em>Blade Element Theory</em>) ideal produz uma força
-longitudinal no plano do rotor, mas as contribuições laterais da frente
-e da traseira se cancelam. O resultado é <span class="math display">\[
+azimutal e aparece com clareza tanto na <a
+href="https://en.wikipedia.org/wiki/Normal_force">força normal</a>
+quanto na força tangencial.</p>
+<p>Essa assimetria, porém, não produz sozinha uma <a
+href="https://en.wikipedia.org/wiki/Side_force">força lateral</a> média.
+Com inflow uniforme, a <a
+href="https://en.wikipedia.org/wiki/Blade_element_theory">teoria de
+elemento de pá</a> (BET, <em>Blade Element Theory</em>) ideal em
+formulações clássicas de asas rotativas [<a href="#referências">4</a>]
+produz uma força longitudinal no plano do rotor, mas as contribuições
+laterais da frente e da traseira se cancelam exatamente. O resultado é
+<span class="math display">\[
 C_Y=0.
 \]</span> O quadro muda quando o inflow possui um gradiente
-longitudinal. O <a
-href="https://ntrs.nasa.gov/citations/19930093086">modelo de
-Coleman–Feingold</a> introduz exatamente essa assimetria frente-trás. O
-vetor de sustentação de cada elemento de pá passa a ter inclinação
-diferente na traseira e na frente do disco. O cancelamento lateral deixa
-de ser exato e aparece um pequeno <span
-class="math inline">\(C_Y\)</span> direto.</p>
+longitudinal. O modelo de Coleman–Feingold [<a
+href="#referências">1</a>] introduz exatamente essa assimetria
+frente-trás. O vetor de <a
+href="https://en.wikipedia.org/wiki/Lift_(force)">sustentação</a> de
+cada elemento de pá passa a ter inclinação diferente na traseira e na
+frente do disco. O cancelamento lateral deixa de ser exato e aparece um
+pequeno <span class="math inline">\(C_Y\)</span> direto.</p>
 <p>Para o rotor considerado aqui, que gira no sentido anti-horário visto
 de cima, essa força aponta normalmente para o lado recuante ao longo da
-maior parte do voo à frente. Muito perto do hover, porém, o sinal pode
-inverter porque o inflow altera simultaneamente a inclinação e a
-magnitude da sustentação.</p>
+maior parte do voo à frente. Muito perto do <a
+href="https://en.wikipedia.org/wiki/Hover_(helicopter)">hover</a>,
+porém, o sinal pode inverter porque o inflow altera simultaneamente a
+inclinação e a magnitude da sustentação.</p>
 <h2 id="convenção-de-azimute-e-sinais">Convenção de azimute e
 sinais</h2>
-<p>O rotor é visto de cima e avança para o norte. Usaremos a mesma
-convenção das figuras BEMT:</p>
-<ul>
-<li><span class="math inline">\(\psi=0^\circ\)</span>: traseira do
-rotor;</li>
-<li><span class="math inline">\(\psi=90^\circ\)</span>: lado direito, pá
-avançante;</li>
-<li><span class="math inline">\(\psi=180^\circ\)</span>: frente do
-rotor;</li>
-<li><span class="math inline">\(\psi=270^\circ\)</span>: lado esquerdo,
-pá recuante.</li>
-</ul>
+<p>O rotor é visto de cima e avança para o norte. Na convenção azimutal
+adotada nas análises BEMT, <span
+class="math inline">\(\psi=0^\circ\)</span> corresponde à traseira do
+rotor, <span class="math inline">\(\psi=90^\circ\)</span> ao lado
+direito da pá avançante, <span
+class="math inline">\(\psi=180^\circ\)</span> à frente do rotor e <span
+class="math inline">\(\psi=270^\circ\)</span> ao lado esquerdo da pá
+recuante.</p>
 <p>O eixo lateral de corpo <span class="math inline">\(+Y\)</span>
 aponta para a direita. Portanto, uma força dirigida para o lado
 recuante, à esquerda, possui <span
@@ -1534,11 +1535,13 @@ frente e <span class="math inline">\(Y\)</span> positivo para a direita.
 A tração normal ao disco é <span class="math inline">\(T\)</span>. A
 força longitudinal no plano do rotor é <span
 class="math inline">\(H\)</span> e será tomada positiva para trás, isto
-é, na direção de arrasto do rotor. A força lateral é <span
-class="math inline">\(Y\)</span>. Assim, em voo à frente usual, <span
-class="math inline">\(C_H&gt;0\)</span>, enquanto uma força lateral para
-a esquerda tem <span class="math inline">\(C_Y&lt;0\)</span>. Os
-coeficientes usados ao longo do texto são <span class="math display">\[
+é, na direção de <a
+href="https://en.wikipedia.org/wiki/Drag_(physics)">arrasto</a> do
+rotor. A força lateral é <span class="math inline">\(Y\)</span>. Assim,
+em voo à frente usual, <span class="math inline">\(C_H&gt;0\)</span>,
+enquanto uma força lateral para a esquerda tem <span
+class="math inline">\(C_Y&lt;0\)</span>. Os coeficientes adimensionais
+usados ao longo do texto são <span class="math display">\[
 C_T=\frac{T}{\rho A(\Omega R)^2},
 \qquad
 C_H=\frac{H}{\rho A(\Omega R)^2},
@@ -1547,15 +1550,18 @@ C_Y=\frac{Y}{\rho A(\Omega R)^2},
 \]</span> onde <span class="math inline">\(A=\pi R^2\)</span> é a área
 do disco, <span class="math inline">\(R\)</span> é o raio do rotor,
 <span class="math inline">\(\rho\)</span> é a densidade do ar e <span
-class="math inline">\(\Omega\)</span> é a velocidade angular.</p>
+class="math inline">\(\Omega\)</span> é a <a
+href="https://en.wikipedia.org/wiki/Angular_velocity">velocidade
+angular</a>.</p>
 <p>Com essa definição, a velocidade tangencial normalizada de um
 elemento de pá é <span class="math display">\[
 u_T=\bar r+\mu\sin\psi,
 \]</span> onde <span class="math inline">\(\bar r=r/R\)</span> é a
 posição radial normalizada e <span class="math inline">\(\mu=V/(\Omega
 R)\)</span> é a <a
-href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>.
-Aqui, <span class="math inline">\(V\)</span> é a velocidade de voo.</p>
+href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>
+(<em>advance ratio</em>). Aqui, <span class="math inline">\(V\)</span> é
+a velocidade de voo.</p>
 <p>Se <span class="math inline">\(w\)</span> é a componente da
 velocidade relativa normal ao disco, definimos o inflow adimensional
 como <span class="math inline">\(\lambda=w/(\Omega R)\)</span>. O
@@ -1582,22 +1588,27 @@ u_T=\bar r-\mu.
 \]</span> A diferença entre esses dois lados é a principal assimetria do
 voo à frente.</p>
 <h2 id="o-que-o-bemt-mostra">O que o BEMT mostra</h2>
-<p>As quatro figuras abaixo foram obtidas com o mesmo <a
-href="https://ntrs.nasa.gov/citations/19790013868">modelo de elemento de
-pá acoplado à teoria de quantidade de movimento</a> (BEMT, <em>Blade
-Element Momentum Theory</em>), em <span
-class="math inline">\(\mu=0{,}19\)</span>, usando inflow de Coleman.
-Neste estudo, o BEMT fornece o campo local mostrado nas figuras. A
-dedução analítica de <span class="math inline">\(C_Y\)</span>, por sua
-vez, usa o BET com o inflow prescrito pelo modelo de Coleman.</p>
+<p>As quatro figuras abaixo foram obtidas com o modelo de elemento de pá
+acoplado à <a
+href="https://en.wikipedia.org/wiki/Blade_element_momentum_theory">teoria
+de quantidade de movimento</a> (BEMT, <em>Blade Element Momentum
+Theory</em>) [<a href="#referências">5</a>], estruturado segundo a
+formulação de aeromecânica de Wayne Johnson [<a
+href="#referências">3</a>], em <span
+class="math inline">\(\mu=0{,}19\)</span>, usando o modelo de inflow de
+Coleman. Neste estudo, o BEMT fornece o campo local mostrado nas
+figuras. A dedução analítica de <span
+class="math inline">\(C_Y\)</span>, por sua vez, usa o BET com o inflow
+prescrito pelo modelo de Coleman.</p>
 <p><picture><source srcset="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig1.webp" type="image/webp"><img
 src="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig1.png"
 style="width:43.0%"
 alt="Distribuição de força normal no disco do rotor" /></picture></p>
 <p><em>Figura 1. Distribuição de força normal. O lado avançante, à
 direita, é muito mais carregado que o lado recuante.</em></p>
-<p>A força normal evidencia a assimetria avançante–recuante. Como a
-pressão dinâmica varia aproximadamente com <span
+<p>A força normal evidencia a assimetria avançante–recuante. Como a <a
+href="https://en.wikipedia.org/wiki/Dynamic_pressure">pressão
+dinâmica</a> varia aproximadamente com <span
 class="math inline">\(u_T^2\)</span>, o aumento de velocidade relativa
 no lado avançante produz uma diferença grande de carregamento.</p>
 <p><picture><source srcset="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig2.webp" type="image/webp"><img
@@ -1618,14 +1629,15 @@ style="width:48.0%"
 alt="Distribuição do inflow total sobre o disco" /></picture></p>
 <p><em>Figura 3. Inflow total. O campo não uniforme modifica o
 carregamento local ao longo do azimute. Coleman impõe um gradiente de
-inflow entre a frente e a traseira do disco</em></p>
+inflow entre a frente e a traseira do disco.</em></p>
 <p><picture><source srcset="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig4.webp" type="image/webp"><img
 src="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig4.png"
 style="width:48.0%"
 alt="Distribuição de ângulo de ataque sobre o disco" /></picture></p>
 <p><em>Figura 4. Ângulo de ataque. A variação de inflow altera
-simultaneamente o ângulo de ataque e a orientação da força aerodinâmica
-local.</em></p>
+simultaneamente o <a
+href="https://en.wikipedia.org/wiki/Angle_of_attack">ângulo de
+ataque</a> e a orientação da força aerodinâmica local.</em></p>
 <p>As Figuras 3 e 4 mostram uma distinção importante. O inflow não
 modifica apenas a magnitude da sustentação. Ele altera também a direção
 do escoamento relativo visto pela seção e, portanto, a direção do
@@ -1658,11 +1670,14 @@ recuante. O que permanece simétrico, no modelo de inflow uniforme, é
 especificamente o par frente–trás que determina a força lateral.</p>
 <h2 id="coleman-a-simetria-frente-trás-é-quebrada">Coleman: a simetria
 frente-trás é quebrada</h2>
-<p>O <a
-href="https://rotorcraft.arc.nasa.gov/ndarc/index.php/reports-and-papers">NDARC,
-da NASA</a>, representa a variação linear do inflow sobre o disco por um
-primeiro harmônico, isto é, por uma variação azimutal proporcional a
-<span class="math inline">\(\cos\psi\)</span>. Para voo puramente
+<p>O modelo <a
+href="https://ntrs.nasa.gov/citations/20100021405">NDARC</a> (<em>NASA
+Design and Analysis of Rotorcraft</em>) [<a href="#referências">2</a>]
+representa a variação linear do inflow sobre o disco por um primeiro
+harmônico de <a
+href="https://en.wikipedia.org/wiki/Fourier_series">série de
+Fourier</a>, isto é, por uma variação azimutal proporcional a <span
+class="math inline">\(\cos\psi\)</span>. Para voo puramente
 longitudinal, a contribuição de Coleman–Feingold pode ser escrita, na
 convenção deste estudo, como <span class="math display">\[
 \boxed{
@@ -1715,7 +1730,7 @@ K_x=
 \]</span> Essa desigualdade é o ingrediente que não existia no modelo
 uniforme.</p>
 <p><img
-src="../assets/media/forca-lateral-rotor_fig1_cancelamento-vs-coleman.svg"
+src="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig5.svg"
 alt="Origem da força lateral no rotor: cancelamento no modelo uniforme versus quebra de simetria pelo gradiente de Coleman" /></p>
 <p><em>Figura 5. Origem da força lateral no rotor: cancelamento no
 modelo uniforme versus quebra de simetria pelo gradiente de
@@ -2155,8 +2170,8 @@ C_Y
 }.
 \]</span> O primeiro gráfico mostra exatamente os dois mecanismos
 discutidos no capítulo anterior:</p>
-<p><picture><source srcset="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig5.webp" type="image/webp"><img
-src="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig5.png"
+<p><picture><source srcset="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig6.webp" type="image/webp"><img
+src="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig6.png"
 alt="Contribuições para CY de Coleman em função da razão de avanço" /></picture></p>
 <p><em>Figura 6. <span class="math inline">\(C_Y\)</span> decomposto
 entre o efeito da inclinação da sustentação, a redução de sua magnitude
@@ -2170,8 +2185,8 @@ C_X=-C_H,
 arrasto. Assim, <span class="math inline">\(C_X\)</span> e o <span
 class="math inline">\(C_Y\)</span> dirigido para o lado recuante
 aparecem com o mesmo sinal.</p>
-<p><picture><source srcset="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig6.webp" type="image/webp"><img
-src="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig6.png"
+<p><picture><source srcset="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig7.webp" type="image/webp"><img
+src="../assets/media/forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman_fig7.png"
 alt="Comparação entre CX e CY em função da razão de avanço" /></picture></p>
 <p><em>Figura 7. Comparação entre <span
 class="math inline">\(C_X=-C_H\)</span> e <span
@@ -2194,18 +2209,20 @@ associada ao inflow longitudinal.</p>
 <p>A expressão de <span class="math inline">\(C_Y\)</span> considera a
 componente tangencial gerada pela inclinação da sustentação e assume
 pequenos ângulos, aerodinâmica linear, passo e corda constantes. Um BEMT
-completo também inclui a polar real do aerofólio, variação radial de
-geometria, <a
-href="https://ntrs.nasa.gov/citations/19860008819">compressibilidade em
-voo à frente</a>, <a
-href="https://en.wikipedia.org/wiki/Retreating_blade_stall">estol</a> e
-escoamento reverso quando aplicáveis.</p>
-<p>Também não foi incluída a <a
-href="https://ntrs.nasa.gov/citations/19810057419">resposta de flap e a
-dinâmica do rotor</a>. Um gradiente longitudinal de inflow modifica o
-carregamento de primeiro harmônico e pode inclinar o plano descrito
-pelas pontas das pás. Essa inclinação reorienta o vetor de tração e pode
-acrescentar outra parcela de força lateral.</p>
+completo também inclui a polar real do <a
+href="https://en.wikipedia.org/wiki/Airfoil">aerofólio</a>, variação
+radial de geometria, <a
+href="https://en.wikipedia.org/wiki/Compressibility">compressibilidade</a>
+em voo à frente [<a href="#referências">6</a>], <a
+href="https://en.wikipedia.org/wiki/Retreating_blade_stall">estol da pá
+recuante</a> e escoamento reverso quando aplicáveis.</p>
+<p>Também não foi incluída a dinâmica de batimento de pá
+(<em>flapping</em>) e aeroelasticidade do rotor [<a
+href="#referências">4</a>]. Um gradiente longitudinal de inflow modifica
+o carregamento de primeiro harmônico e pode inclinar o <a
+href="https://en.wikipedia.org/wiki/Tip-path_plane">plano do caminho da
+ponta da pá</a> (<em>tip-path plane</em>). Essa inclinação reorienta o
+vetor de tração e pode acrescentar outra parcela de força lateral.</p>
 <h2 id="conclusão">Conclusão</h2>
 <p>O voo à frente cria primeiro uma forte assimetria avançante–recuante:
 <span class="math display">\[

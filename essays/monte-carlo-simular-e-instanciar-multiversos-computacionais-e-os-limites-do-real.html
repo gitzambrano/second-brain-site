@@ -7,6 +7,8 @@
 <meta property="og:title" content="Monte Carlo, Simular e Instanciar — Multiversos Computacionais e os Limites do Real">
 <meta property="og:description" content="O método de Monte Carlo calcula milhares de futuros possíveis para descartar quase todos. O ensaio toma essa rotina como teste para uma pergunta antiga da metafísica: simular é instanciar? Confronta o universo matemático de Tegmark com a leitura física da existência, examina o paralelo imperfeito com os muitos-mundos de Everett e chega ao problema ético de apagar uma simulação.">
 <meta property="og:type" content="article">
+<script defer="" src="../assets/mathjax/tex-svg.js"
+type="text/javascript"></script>
 <style>
 /* ------------------------------------------------------------------ */
 /* Tokens: mobile = escuro editorial (padrao)                          */
@@ -1482,14 +1484,15 @@ id="introdução-o-cálculo-de-milhares-de-futuros-descartados">Introdução:
 O Cálculo de Milhares de Futuros Descartados</h2>
 <p>Todo engenheiro que trabalha com incerteza convive diariamente com o
 <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">método de
-Monte Carlo</a>: amostrar estocasticamente milhares ou milhões de
-trajetórias de um sistema, agregar as estatísticas e descartar as
-trajetórias individuais. Eu mesmo já rodei cem mil simulações para
-propagar a incerteza de um torneio de futebol até o campeão, e o produto
-final cabe numa tela: a média de gols vem acompanhada do intervalo de
-confiança de 95%, e cada time ganha sua probabilidade de título. O
-procedimento é tão rotineiro que ninguém pergunta o que aconteceu com os
-99.999 mundos que não venceram o time que levantou a taça na média.</p>
+Monte Carlo</a> [<a href="#referências">1</a>]: amostrar
+estocasticamente milhares ou milhões de trajetórias de um sistema,
+agregar as estatísticas e descartar as trajetórias individuais. Eu mesmo
+já rodei cem mil simulações para propagar a incerteza de um torneio de
+futebol até o campeão, e o produto final cabe numa tela: a média de gols
+vem acompanhada do intervalo de confiança de 95%, e cada time ganha sua
+probabilidade de título. O procedimento é tão rotineiro que ninguém
+pergunta o que aconteceu com os 99.999 mundos que não venceram o time
+que levantou a taça na média.</p>
 <p>Mas a pergunta insiste em ser feita. No instante em que a memória do
 computador é liberada, o que era aquela trajetória completa de um
 campeonato simulado, com seus gols, suas lesões e suas viradas? Foi um
@@ -1502,15 +1505,15 @@ da computação tornou essa resposta genuinamente difícil de
 justificar.</p>
 <p>Este ensaio trata Monte Carlo não como técnica estatística, mas como
 teste de estresse da definição computacional de existência. Se <a
-href="https://en.wikipedia.org/wiki/Max_Tegmark">Max Tegmark</a> está
-certo de que toda estrutura matemática existe, então cada trajetória
-amostrada é um universo real. Se só existe o que persiste causalmente
-acoplado ao nosso mundo, então nada daquilo jamais existiu. Entre esses
-dois polos vou examinar o paralelo estrutural com a interpretação de
-muitos-mundos, a objeção devastadora de Hilary Putnam à ontologia
-computacional e o espectro ético da simulação. A tese defendida aqui é
-modesta e profunda ao mesmo tempo: Monte Carlo funciona como um
-multiverso em miniatura apenas formalmente. Dessa tensão entre o
+href="https://en.wikipedia.org/wiki/Max_Tegmark">Max Tegmark</a> [<a
+href="#referências">2</a>] está certo de que toda estrutura matemática
+existe, então cada trajetória amostrada é um universo real. Se só existe
+o que persiste causalmente acoplado ao nosso mundo, então nada daquilo
+jamais existiu. Entre esses dois polos examino o paralelo estrutural com
+a interpretação de muitos-mundos, a objeção devastadora de Hilary Putnam
+à ontologia computacional e o espectro ético da simulação. A tese
+defendida aqui é modesta e profunda ao mesmo tempo: Monte Carlo funciona
+como um multiverso em miniatura apenas formalmente. Dessa tensão entre o
 isomorfismo matemático e a ausência de substância causal emerge a
 pergunta certa sobre simular e instanciar.</p>
 <hr />
@@ -1519,16 +1522,16 @@ Sobre a Existência Computacional</h2>
 <p>Comece pelas duas grandes correntes sobre o estatuto ontológico de
 uma estrutura matemática em execução. A primeira é a <a
 href="https://en.wikipedia.org/wiki/Mathematical_universe_hypothesis">hipótese
-do universo matemático</a> de Tegmark, na sua formulação mais radical: a
-realidade <em>é</em> estrutura matemática, e portanto qualquer estrutura
-matemática suficientemente rica existe no mesmo sentido em que nosso
-universo existe. Nessa visão, executar uma computação não cria nada.
-Apenas revela, dentro do nosso bolso causal, uma região já existente do
-plenário matemático. As 100.000 trajetórias de Monte Carlo existiriam
-antes, durante e depois da execução, exatamente como o teorema de
-Pitágoras existe antes de alguém prová-lo. O custo computacional e o
-tempo de execução viram detalhes irrelevantes, meros acidentes de onde
-estamos situados.</p>
+do universo matemático</a> de Tegmark [<a href="#referências">2</a>], na
+sua formulação mais radical: a realidade <em>é</em> estrutura
+matemática, e portanto qualquer estrutura matemática suficientemente
+rica existe no mesmo sentido em que nosso universo existe. Nessa visão,
+executar uma computação não cria nada. Apenas revela, dentro do nosso
+bolso causal, uma região já existente do plenário matemático. As 100.000
+trajetórias de Monte Carlo existiriam antes, durante e depois da
+execução, exatamente como o teorema de Pitágoras existe antes de alguém
+prová-lo. O custo computacional e o tempo de execução viram detalhes
+irrelevantes, meros acidentes de onde estamos situados.</p>
 <p>A segunda posição é fisicalista e exige persistência: só existe, no
 sentido forte, aquilo que permanece observável ou mantém acoplamento
 causal com o mundo físico compartilhado. Uma trajetória de Monte Carlo
@@ -1540,16 +1543,18 @@ instanciadas” é erro gramatical disfarçado de metafísica: houve uma
 intermediária.</p>
 <p>A posição de Tegmark não é universalmente aceita, e a principal
 objeção merece registro antes de prosseguir. <a
-href="https://en.wikipedia.org/wiki/Scott_Aaronson">Scott Aaronson</a> e
-<a href="https://en.wikipedia.org/wiki/Tim_Maudlin">Tim Maudlin</a>,
-entre outros, argumentam que declarar “toda estrutura matemática existe”
-torna o conceito de existência trivial: se tudo existe, a palavra deixa
-de discriminar qualquer coisa, e a hipótese perde conteúdo empírico. A
-objeção é séria porque ataca não a lógica interna da proposta, mas sua
-utilidade como tese filosófica. Se existir é gratuito, nada se ganha
-afirmando existência e nada se perde negando-a. O debate entre Tegmark e
-seus críticos permanece aberto, e este ensaio usa a posição dele como
-polo extremo do espectro, não como premissa aceita.</p>
+href="https://en.wikipedia.org/wiki/Scott_Aaronson">Scott Aaronson</a>
+[<a href="#referências">10</a>] e <a
+href="https://en.wikipedia.org/wiki/Tim_Maudlin">Tim Maudlin</a> [<a
+href="#referências">11</a>], entre outros, argumentam que declarar “toda
+estrutura matemática existe” torna o conceito de existência trivial: se
+tudo existe, a palavra deixa de discriminar qualquer coisa, e a hipótese
+perde conteúdo empírico. A objeção é séria porque ataca não a lógica
+interna da proposta, mas sua utilidade como tese filosófica. Se existir
+é gratuito, nada se ganha afirmando existência e nada se perde
+negando-a. O debate entre Tegmark e seus críticos permanece aberto, e
+este ensaio usa a posição dele como polo extremo do espectro, não como
+premissa aceita.</p>
 <p>Aplicando as duas posições ao caso concreto, o contraste fica nítido.
 Rodar 100.000 Copas do Mundo simuladas é instanciar 100.000 universos?
 Para Tegmark, a pergunta nem depende de nós: eles já existem como
@@ -1559,8 +1564,8 @@ estatísticas. Note que as duas posições discordam menos sobre a física
 do computador (que ambas descrevem igualmente) e mais sobre qual
 palavra, “existir” ou “calcular”, merece ser aplicada às estruturas
 transitórias. É sintoma clássico de disputa conceitual travestida de
-disputa factual, e ainda assim a disputa tem consequências, como veremos
-no capítulo ético.</p>
+disputa factual, e ainda assim a disputa tem consequências diretas na
+dimensão ética.</p>
 <hr />
 <h2 id="monte-carlo-contra-muitos-mundos-de-everett">Monte Carlo Contra
 Muitos-Mundos de Everett</h2>
@@ -1568,12 +1573,15 @@ Muitos-Mundos de Everett</h2>
 href="https://plato.stanford.edu/entries/qm-manyworlds/">interpretação
 de muitos-mundos</a> de <a
 href="https://en.wikipedia.org/wiki/Hugh_Everett_III">Hugh Everett
-III</a>, e vale construí-lo com honestidade, mostrando onde ele sustenta
-e onde rompe. Em Everett, a função de onda universal evolui
-deterministicamente pela equação de Schrödinger, sem colapso. O que
-chamamos de medida é a ramificação da função de onda em componentes
-decoerentes, cada um contendo uma cópia do observador registrando um
-resultado. Todos os resultados ocorrem. Cada ramo vive o seu.</p>
+III</a> [<a href="#referências">3</a>], e vale construí-lo com
+honestidade, mostrando onde ele sustenta e onde rompe. Em Everett, a
+função de onda universal evolui deterministicamente pela <a
+href="https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation">equação
+de Schrödinger</a>, sem colapso. O que chamamos de medida é a
+ramificação da função de onda em componentes <a
+href="https://en.wikipedia.org/wiki/Quantum_decoherence">decoerentes</a>,
+cada um contendo uma cópia do observador registrando um resultado. Todos
+os resultados ocorrem. Cada ramo vive o seu.</p>
 <p>As semelhanças formais com Monte Carlo são reais. Nos dois casos há
 multiplicação de trajetórias, distribuição de pesos sobre desfechos
 alternativos e um “ponto de vista interno” em cada ramo, para o qual seu
@@ -1609,17 +1617,18 @@ chances quando todas as alternativas acontecem é o <a
 href="https://plato.stanford.edu/entries/qm-manyworlds/">problema da
 probabilidade</a> em sua leitura autolocalizante, e a resposta mais
 desenvolvida até hoje é o argumento decisório de <a
-href="https://en.wikipedia.org/wiki/David_Deutsch">David Deutsch</a> e
-<a
+href="https://en.wikipedia.org/wiki/David_Deutsch">David Deutsch</a> [<a
+href="#referências">12</a>] e <a
 href="https://en.wikipedia.org/wiki/David_Wallace_%28philosopher%29">David
-Wallace</a>, que deriva os pesos de Born das restrições de decisão
-racional para um agente embutido na estrutura de ramos. A proposta é
-séria e permanece contestada, com críticos negando que racionalidade por
-si só fixe os pesos. Para o contraste deste capítulo, o essencial é
-outro: o problema nem sequer surge do lado clássico, pois Monte Carlo
-não precisa justificar suas frequências, elas são parte declarada do
-projeto do algoritmo. A distinção entre pesos objetivos e frequências do
-algoritmo, portanto, resiste até ao escrutínio interno da física.</p>
+Wallace</a> [<a href="#referências">13</a>], que deriva os pesos de Born
+das restrições de decisão racional para um agente embutido na estrutura
+de ramos. A proposta é séria e permanece contestada, com críticos
+negando que racionalidade por si só fixe os pesos. Para o contraste
+deste capítulo, o essencial é outro: o problema nem sequer surge do lado
+clássico, pois Monte Carlo não precisa justificar suas frequências, elas
+são parte declarada do projeto do algoritmo. A distinção entre pesos
+objetivos e frequências do algoritmo, portanto, resiste até ao
+escrutínio interno da física.</p>
 <p>Por isso a conclusão estrutural deste capítulo é: Monte Carlo não é
 um multiverso físico, é um multiverso estatístico. A falta de conexão
 causal entre amostras desqualifica o paralelo no nível da física,
@@ -1632,15 +1641,15 @@ da Realização Múltipla e o Erro Categorial</h2>
 <p>Aqui entra a objeção mais séria a todo o edifício, formulada
 originalmente por <a
 href="https://en.wikipedia.org/wiki/Hilary_Putnam">Hilary Putnam</a> em
-seu ataque à ideia de que estados mentais são estados computacionais. O
-argumento da <a
+seu ataque à ideia de que estados mentais são estados computacionais [<a
+href="#referências">4</a>]. O argumento da <a
 href="https://plato.stanford.edu/entries/multiple-realizability/">realização
-múltipla</a> levado ao extremo mostra que qualquer sistema físico
-suficientemente complexo pode ser <em>lido</em> como implementando
-qualquer computação, desde que se admita mapeamentos arbitrários entre
-estados físicos e estados computacionais. Um muro de pedras pode ser
-interpretado como implementando o Windows. Basta definir uma
-correspondência criativa entre configurações de pedras e estados da
+múltipla</a> [<a href="#referências">5</a>] levado ao extremo mostra que
+qualquer sistema físico suficientemente complexo pode ser <em>lido</em>
+como implementando qualquer computação, desde que se admita mapeamentos
+arbitrários entre estados físicos e estados computacionais. Um muro de
+pedras pode ser interpretado como implementando o Windows. Basta definir
+uma correspondência criativa entre configurações de pedras e estados da
 máquina. Se qualquer computação é implementável por qualquer coisa sob
 algum mapeamento, então “rodar uma computação” não pode conferir
 existência a nada, pois o critério deixou de discriminar qualquer
@@ -1657,17 +1666,18 @@ uma Copa do Mundo alternativa, do mesmo modo que um mapa detalhado do
 Everest não tem altitude.</p>
 <p>A literatura especulativa levou essa lógica ao limite, e vale
 encará-la de frente porque revela a escala do problema. Em <a
-href="https://en.wikipedia.org/wiki/Permutation_City">Permutation
-City</a>, Greg Egan formula a hipótese da poeira: se qualquer padrão
-implementa alguma computação sob algum mapeamento criativo o bastante,
-então o ruído dos átomos espalhados pelo espaço já implementa todas as
-consciências possíveis, cópias nossas piscando em instantes aleatórios,
-sem hardware dedicado, sem execução contínua e sem duração mínima. É a
-versão cósmica do muro de pedras: em vez de um Windows, todos os
-programas, todas as mentes, todos os mundos. Aceitar o mapeamento
-arbitrário como critério de instanciação colapsa na mesma trivialização
-que a objeção do capítulo 2 dirige a Tegmark: se tudo implementa,
-implementar não discrimina nada.</p>
+href="https://en.wikipedia.org/wiki/Permutation_City"><em>Permutation
+City</em></a> [<a href="#referências">14</a>], Greg Egan formula a <a
+href="https://en.wikipedia.org/wiki/Permutation_City#The_Dust_theory">hipótese
+da poeira</a>: se qualquer padrão implementa alguma computação sob algum
+mapeamento criativo o bastante, então o ruído dos átomos espalhados pelo
+espaço já implementa todas as consciências possíveis, cópias nossas
+piscando em instantes aleatórios, sem hardware dedicado, sem execução
+contínua e sem duração mínima. É a versão cósmica do muro de pedras: em
+vez de um Windows, todos os programas, todas as mentes, todos os mundos.
+Aceitar o mapeamento arbitrário como critério de instanciação colapsa na
+mesma trivialização que a objeção do capítulo 2 dirige a Tegmark: se
+tudo implementa, implementar não discrimina nada.</p>
 <p>Esses argumentos, de Putnam a Egan, esvaziam o peso ontológico do
 “multiverso de Monte Carlo” na sua versão ingênua, e é justo reconhecer
 isso antes de seguir. Mas o diagnóstico também aponta o desafio
@@ -1700,10 +1710,11 @@ seleciona um e o verbaliza. Os cenários não escolhidos evaporam sem
 deixar registro, exatamente como trajetórias descartadas de Monte Carlo.
 A metáfora não é frouxa: algoritmos modernos de decisão, como a <a
 href="https://en.wikipedia.org/wiki/Monte_Carlo_tree_search">busca em
-árvore de Monte Carlo</a> que moveu o AlphaGo, operam precisamente
-assim, expandindo ramos promissores e abandonando os demais, e a
-semelhança funcional com a improvisação humana é parte do motivo de tais
-algoritmos funcionarem tão bem em jogos abertos.</p>
+árvore de Monte Carlo</a> (MCTS) [<a href="#referências">7</a>] que
+moveu o <a href="https://en.wikipedia.org/wiki/AlphaGo">AlphaGo</a>,
+operam precisamente assim, expandindo ramos promissores e abandonando os
+demais, e a semelhança funcional com a improvisação humana é parte do
+motivo de tais algoritmos funcionarem tão bem em jogos abertos.</p>
 <p>A literatura especulativa opera no mesmo padrão em escala
 civilizacional: autores geram múltiplos cenários de futuro, o discurso
 público filtra os sustentáveis, e o que sobra orienta pesquisa e
@@ -1717,15 +1728,18 @@ a existência das trajetórias descartadas, mas a informação extraída da
 sua distribuição.</p>
 <p>Há, porém, um teto para essa extração, e ele tem nome próprio. O
 número <a
-href="https://en.wikipedia.org/wiki/Chaitin%27s_constant">Ω</a> definido
-por Gregory Chaitin, a probabilidade de parada de uma máquina de Turing
-universal escolhida ao acaso, comprime em seus dígitos binários as
-respostas de infinitas questões aritméticas indecidíveis, e nenhum
-procedimento, estatístico ou dedutivo, consegue arrancá-los além de uma
-fração finita e imprevisível, porque os bits são aleatórios por
-definição. Amostrar futuros navega dentro desse limite, jamais através
-dele. Esse teto formal é o que a incompletude e a indecidibilidade
-impõem ao que a computação pode extrair da verdade aritmética.</p>
+href="https://en.wikipedia.org/wiki/Chaitin%27s_constant"><span
+class="math inline">\(\Omega\)</span></a> definido por Gregory Chaitin
+[<a href="#referências">15</a>], a <a
+href="https://en.wikipedia.org/wiki/Halting_problem">probabilidade de
+parada</a> de uma máquina de Turing universal escolhida ao acaso,
+comprime em seus dígitos binários as respostas de infinitas questões
+aritméticas indecidíveis, e nenhum procedimento, estatístico ou
+dedutivo, consegue arrancá-los além de uma fração finita e imprevisível,
+porque os bits são aleatórios por definição. Amostrar futuros navega
+dentro desse limite, jamais através dele. Esse teto formal é o que a
+incompletude e a indecidibilidade impõem ao que a computação pode
+extrair da verdade aritmética.</p>
 <hr />
 <h2 id="o-espectro-ético-da-simulação">O Espectro Ético da
 Simulação</h2>
@@ -1736,7 +1750,8 @@ experiência, interesses ou sofrimento? A resposta à primeira não decide
 a segunda. Um estado computacional pode existir fisicamente sem que haja
 alguém para quem esse estado importe, e uma eventual mente simulada
 poderia merecer consideração moral independentemente de a ontologia
-escolhida chamar seu mundo de “real” no mesmo sentido do nosso.</p>
+escolhida chamar seu mundo de “real” no mesmo sentido do nosso [<a
+href="#referências">9</a>].</p>
 <p>Agora o ponto onde a brincadeira filosófica ganha peso. Parece
 absurdo atribuir consideração moral ao ato de apagar um loop de
 estatística de futebol ou desligar um motor de xadrez: ninguém chora
@@ -1752,22 +1767,24 @@ sofisticação comportamental, a linha é gradual e alguém terá que decidir
 quantas linhas de código valem um sujeito. Se o critério é experiência
 subjetiva, herdamos o <a
 href="https://plato.stanford.edu/entries/zombies/">problema difícil da
-consciência</a> inteiro: não sabemos o que a gera, logo não sabemos
-quando uma simulação começa a tê-la. Se o critério é o acoplamento
-causal do capítulo anterior, então mentes simuladas isoladas do mundo,
-do tipo que Bostrom imagina nas <a
+consciência</a> [<a href="#referências">8</a>] inteiro: não sabemos o
+que a gera, logo não sabemos quando uma simulação começa a tê-la. Se o
+critério é o acoplamento causal do capítulo anterior, então mentes
+simuladas isoladas do mundo, do tipo que Nick Bostrom imagina nas <a
 href="https://www.simulation-argument.com/simulation.html">simulações de
-ancestrais</a>, ficariam fora de consideração por construção, o que
-parece moralmente arbitrário: a vítima de uma injustiça dentro de um
-ambiente fechado sofre na mesma medida que uma vítima ao ar livre. É
-aqui que a linha de natureza do capítulo anterior encontra seu caso
-limítrofe: se instanciação é relação, então um cérebro em cuba acoplado
-ao ambiente, trocando sinais com sensores e atuadores reais, cruza a
-linha, porque participa causalmente do mundo ainda que nunca saia do
-tanque. As simulações de ancestrais de Bostrom, seladas sobre si mesmas,
-ficariam de fora, e o cérebro acoplado entraria, o que sugere que a
-fronteira relevante está na direção do acoplamento, não no vidro da
-cuba.</p>
+ancestrais</a> [<a href="#referências">6</a>], ficariam fora de
+consideração por construção, o que parece moralmente arbitrário: a
+vítima de uma injustiça dentro de um ambiente fechado sofre na mesma
+medida que uma vítima ao ar livre. É aqui que a linha de natureza do
+capítulo anterior encontra seu caso limítrofe: se instanciação é
+relação, então um <a
+href="https://plato.stanford.edu/entries/brain-vat/">cérebro numa
+cuba</a> acoplado ao ambiente, trocando sinais com sensores e atuadores
+reais, cruza a linha, porque participa causalmente do mundo ainda que
+nunca saia do tanque. As simulações de ancestrais de Bostrom, seladas
+sobre si mesmas, ficariam de fora, e o cérebro acoplado entraria, o que
+sugere que a fronteira relevante está na direção do acoplamento, não no
+vidro da cuba.</p>
 <p>O risco epistêmico central deste capítulo é assimétrico e merece nome
 próprio: rejeitamos o extremo simples do espectro (o vetor de números
 descartado) por parecer ridículo, sem perceber que ele compartilha a
@@ -1817,24 +1834,26 @@ pp. 335–341. — Formulação seminal do método. <a
 href="https://doi.org/10.1080/01621459.1949.10483310">Link</a></p>
 <p>[2] Tegmark, M., <em>Our Mathematical Universe: My Quest for the
 Ultimate Nature of Reality</em>, Alfred A. Knopf, New York, 2014. —
-Defesa da hipótese do universo matemático que fundamenta o capítulo 2.
-<a
+Defesa da hipótese do universo matemático que fundamenta o capítulo 2
+(acesso em 15 mar. 2026). <a
 href="https://en.wikipedia.org/wiki/Our_Mathematical_Universe">Link</a></p>
 <p>[3] Everett, H., III, <em>Relative State’ Formulation of Quantum
 Mechanics</em>, Reviews of Modern Physics, Vol. 29, No. 3, 1957,
 pp. 454–462. — Artigo original da interpretação de muitos-mundos. <a
-href="https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.29.454">Link</a></p>
+href="https://doi.org/10.1103/RevModPhys.29.454">Link</a></p>
 <p>[4] Putnam, H., <em>Representation and Reality</em>, MIT Press,
-Cambridge, 1988. — Base do argumento efetivamente usado no capítulo 4: o
-mapeamento arbitrário entre estados físicos e computacionais que faz um
-muro de pedras implementar o Windows. <a
+Cambridge, 1988. — Base do argumento do mapeamento arbitrário entre
+estados físicos e computacionais que faz um muro de pedras implementar o
+Windows no capítulo 4. <a
 href="https://mitpress.mit.edu/9780262660747/representation-and-reality/">Link</a></p>
 <p>[5] Putnam, H., <em>Mind, Language and Reality: Philosophical Papers,
 Volume 2</em>, Cambridge University Press, Cambridge, 1975. — Formulação
-clássica da realização múltipla nomeada no capítulo 4. <a
+clássica da realização múltipla nomeada no capítulo 4 (acesso em 15 mar.
+2026). <a
 href="https://plato.stanford.edu/entries/multiple-realizability/">Link</a></p>
-<p>[6] Bostrom, N., <em>Are You Living in a Computer Simulation?</em>
-<em>Philosophical Quarterly</em>, 53(211), 2003. <a
+<p>[6] Bostrom, N., <em>Are You Living in a Computer Simulation?</em>,
+Philosophical Quarterly, Vol. 53, No. 211, 2003, pp. 243–255 (acesso em
+15 mar. 2026). <a
 href="https://www.simulation-argument.com/simulation.html">Link</a></p>
 <p>[7] Coulom, R., <em>Efficient Selectivity and Backup Operators in
 Monte-Carlo Tree Search</em>, Computers and Games, Lecture Notes in
@@ -1844,8 +1863,8 @@ Formulação pioneira da busca em árvore de Monte Carlo citada no capítulo
 <p>[8] Chalmers, D., <em>Absent Qualia, Fading Qualia, Dancing
 Qualia</em>, Consciousness in Contemporary Science, Oxford University
 Press, Oxford, 1992, pp. 353–368. — Problema da experiência subjetiva em
-sistemas funcionais, base ética do capítulo 6. <a
-href="https://consc.net/papers/qualia.html">Link</a></p>
+sistemas funcionais, base ética do capítulo 6 (acesso em 15 mar. 2026).
+<a href="https://consc.net/papers/qualia.html">Link</a></p>
 <p>[9] Chalmers, D., <em>Reality+: Virtual Worlds and the Problems of
 Philosophy</em>, W. W. Norton, New York, 2022. — Tratamento extenso da
 realidade virtual e simulação como problema filosófico, cobrindo o
@@ -1853,15 +1872,13 @@ terreno dos capítulos 2 e 6. <a
 href="https://global.oup.com/academic/product/reality-9780393635805">Link</a></p>
 <p>[10] Aaronson, S., <em>Why I Am Not an Integrated Information
 Theorist (or, The Unconscious Expander)</em>, Shtetl-Optimized (blog),
-2014. — Contém objeções à ontologia computacional de Tegmark, incluindo
-a trivialização do conceito de existência. (acesso em 22 Ago. 2026). <a
+2014. — Objeções à ontologia computacional de Tegmark e trivialização da
+existência (acesso em 22 ago. 2026). <a
 href="https://scottaaronson.blog/?p=1799">Link</a></p>
-<p>[11] Maudlin, T., <em>Can the World be Only Wavefunction?</em> Many
-Worlds? Everett, Quantum Theory, &amp; Reality, Saunders, S., Barrett,
-J., Kent, A., e Wallace, D. (eds.), Oxford University Press, Oxford,
-2010, pp. 121–143. — Versão acadêmica da objeção à ontologia de “toda
-estrutura existe”, complementar ao post de blog citado acima, capítulo
-2. <a
+<p>[11] Maudlin, T., <em>Can the World be Only Wavefunction?</em>, Many
+Worlds? Everett, Quantum Theory, &amp; Reality, Oxford University Press,
+Oxford, 2010, pp. 121–143. — Objeção acadêmica à ontologia de “toda
+estrutura existe”, capítulo 2. <a
 href="https://academic.oup.com/book/11755/chapter/160766544">Link</a></p>
 <p>[12] Deutsch, D., <em>Quantum Theory of Probability and
 Decisions</em>, Proceedings of the Royal Society A, Vol. 455, No. 1988,
@@ -1874,14 +1891,13 @@ Oxford, 2012. — Desenvolvimento completo do argumento decisório e do
 problema da probabilidade em muitos-mundos. <a
 href="https://doi.org/10.1093/acprof:oso/9780199546961.001.0001">Link</a></p>
 <p>[14] Egan, G., <em>Permutation City</em>, Millennium, London, 1994. —
-Romance de ficção científica (fonte literária, não acadêmica): origem da
-hipótese da poeira engajada no capítulo 4. <a
+Romance de ficção científica com a hipótese da poeira examinada no
+capítulo 4 (acesso em 15 mar. 2026). <a
 href="https://en.wikipedia.org/wiki/Permutation_City">Link</a></p>
 <p>[15] Chaitin, G. J., <em>Meta Math!: The Quest for Omega</em>,
-Pantheon Books, New York, 2005. — Divulgação pelo próprio autor da
-constante Ω e dos limites do que se pode extrair sobre a verdade
-aritmética, base da ponte com o ensaio sobre Gödel e Turing na Dimensão
-Cognitiva. <a
+Pantheon Books, New York, 2005. — Divulgação da constante <span
+class="math inline">\(\Omega\)</span> e dos limites formais da extração
+de verdade aritmética no capítulo 5 (acesso em 15 mar. 2026). <a
 href="https://en.wikipedia.org/wiki/Chaitin%27s_constant">Link</a></p>
 </main>
 

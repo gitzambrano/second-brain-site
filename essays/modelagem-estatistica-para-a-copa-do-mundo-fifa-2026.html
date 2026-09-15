@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="23">
+<html lang="pt-BR" data-status="finalizado" data-minutes="24">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1484,24 +1484,25 @@ Carlo do Torneio</a></li>
 Geral e Processo de Inferência Estatística</h2>
 <h3 id="o-problema">O Problema</h3>
 <p>Prever o vencedor de uma Copa do Mundo é essencialmente um problema
-de <strong>inferência probabilística sobre um sistema estocástico com
-estrutura hierárquica</strong>. O torneio é composto de dezenas de
-partidas interdependentes — o resultado de um jogo determina quem
-participa dos seguintes — e cada partida é, por si só, um evento de alta
-variância: equipes inferiores vencem equipes superiores com frequência
-não negligenciável. Modelar esse sistema corretamente exige responder a
-três perguntas distintas:</p>
-<ol type="1">
-<li><strong>Qual é a força relativa de cada seleção?</strong> — pergunta
-de <em>estimação de parâmetros</em></li>
-<li><strong>Dado o par de times, qual é a distribuição de probabilidade
-sobre os possíveis placares?</strong> — pergunta de <em>modelagem
-probabilística</em></li>
-<li><strong>Dada a distribuição sobre placares individuais, qual é a
-probabilidade de cada time vencer o torneio inteiro?</strong> — pergunta
-de <em>propagação de incerteza</em> por uma estrutura combinatória
-complexa</li>
-</ol>
+de <a
+href="https://pt.wikipedia.org/wiki/Infer%C3%AAncia_estat%C3%ADstica">inferência
+estatística</a> sobre um <a
+href="https://pt.wikipedia.org/wiki/Processo_estoc%C3%A1stico">processo
+estocástico</a> com estrutura hierárquica. O torneio é composto de
+dezenas de partidas interdependentes — o resultado de um jogo determina
+quem participa dos seguintes — e cada partida é, por si só, um evento de
+alta <a
+href="https://pt.wikipedia.org/wiki/Vari%C3%A2ncia">variância</a>:
+equipes inferiores vencem equipes superiores com frequência não
+negligenciável. Modelar esse sistema corretamente exige responder a três
+perguntas distintas:</p>
+<p>Primeiro, qual é a força relativa de cada seleção? Trata-se de uma
+pergunta de estimação de parâmetros. Segundo, dado o par de times, qual
+é a distribuição de probabilidade sobre os possíveis placares? É uma
+pergunta de modelagem probabilística. Terceiro, dada a distribuição
+sobre placares individuais, qual é a probabilidade de cada time vencer o
+torneio inteiro? Configura-se como um problema de propagação de
+incerteza por uma estrutura combinatória complexa.</p>
 <p>O modelo desenvolvido neste trabalho responde a cada uma dessas
 perguntas com uma abordagem específica e fundamentada na literatura
 estatística.</p>
@@ -1514,64 +1515,65 @@ cronologicamente sobre todo o histórico de partidas internacionais desde
 class="math inline">\(\Delta_{eff}\)</span>) serve como variável
 explicativa fundamental: é a partir dela que se derivam as taxas
 esperadas de gols (<span class="math inline">\(\lambda\)</span>) via uma
-função exponencial quadrática cujos parâmetros são estimados por máxima
-verossimilhança (MLE) sobre partidas desde 1990. O ELO captura a
-<strong>força estrutural e histórica</strong> de cada seleção.</p>
+função exponencial quadrática cujos parâmetros são estimados por <a
+href="https://pt.wikipedia.org/wiki/M%C3%A1xima_verossimilhan%C3%A7a">máxima
+verossimilhança</a> (<em>MLE</em>) sobre partidas desde 1990. O ELO
+captura a força estrutural e histórica de cada seleção.</p>
 <p><strong>Etapa 2 — Correção pela forma recente e pelo perfil de
 jogo.</strong> As taxas esperadas de gols derivadas do ELO representam a
 expectativa de longo prazo, mas o ELO não observa o <em>volume</em> de
 gols — apenas o resultado final (vitória, empate, derrota). Para
-incorporar tanto o <strong>desempenho ofensivo e defensivo
-recente</strong> quanto o <strong>perfil de jogo estrutural</strong> de
-cada seleção, dois fatores adimensionais são estimados por time: <span
-class="math inline">\(K_{att}\)</span> (multiplicador de ataque) e <span
-class="math inline">\(K_{def}\)</span> (multiplicador de defesa). Esses
-fatores são produzidos por uma rede neural recorrente do tipo GRU (<a
-href="https://arxiv.org/abs/1406.1078">Cho et al., 2014</a>) treinada
-sobre os últimos <span class="math inline">\(T = 20\)</span> jogos de
-cada seleção, com decaimento exponencial por posição na sequência
-(meia-vida de 7 jogos). A taxa final é <span
-class="math inline">\(\lambda_A = \lambda^{home} \cdot K_{att}^A \cdot
-K_{def}^B\)</span>, integrando força histórica, identidade ofensiva
-própria e vulnerabilidade defensiva do adversário.</p>
+incorporar tanto o desempenho ofensivo e defensivo recente quanto o
+perfil de jogo estrutural de cada seleção, dois fatores adimensionais
+são estimados por time: <span class="math inline">\(K_{att}\)</span>
+(multiplicador de ataque) e <span class="math inline">\(K_{def}\)</span>
+(multiplicador de defesa). Esses fatores são produzidos por uma <a
+href="https://pt.wikipedia.org/wiki/Rede_neural_recorrente">rede neural
+recorrente</a> do tipo <a
+href="https://en.wikipedia.org/wiki/Gated_recurrent_unit">GRU</a>
+(<em>Gated Recurrent Unit</em>), proposta por Cho et al. [<a
+href="#referências">1</a>], treinada sobre os últimos <span
+class="math inline">\(T = 20\)</span> jogos de cada seleção, com <a
+href="https://pt.wikipedia.org/wiki/Decaimento_exponencial">decaimento
+exponencial</a> por posição na sequência (meia-vida de 7 jogos). A taxa
+final é <span class="math inline">\(\lambda_A = \lambda^{home} \cdot
+K_{att}^A \cdot K_{def}^B\)</span>, integrando força histórica,
+identidade ofensiva própria e vulnerabilidade defensiva do
+adversário.</p>
 <p><strong>Etapa 3 — Distribuição de placares e propagação de
 incerteza.</strong> As taxas finais esperadas de gols <span
 class="math inline">\(\lambda_A\)</span> e <span
-class="math inline">\(\lambda_B\)</span> alimentam o modelo de <a
-href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles, 1997</a>,
-que constrói uma distribuição de probabilidade conjunta sobre todos os
-placares possíveis (até 8 gols por time). O torneio completo é então
-simulado <span class="math inline">\(N = 1.000.000\)</span> de vezes via
-Monte Carlo, e as frequências observadas em cada fase constituem as
-estimativas finais de probabilidade.</p>
-<p>O fluxo completo pode ser resumido em:</p>
-<ul>
-<li><strong>Cálculo do Rating ELO</strong> através do histórico de todas
-as partidas de todas as seleções.</li>
-<li><strong>Taxa esperada de gols <span
-class="math inline">\(\lambda\)</span></strong> como função da diferença
-de rating ELO entre as duas equipes (utilizando MLE sobre todos os jogos
-desde 1990).</li>
-<li><strong>Correção por <span
+class="math inline">\(\lambda_B\)</span> alimentam o modelo bivariado de
+Dixon e Coles [<a href="#referências">3</a>], que constrói uma <a
+href="https://pt.wikipedia.org/wiki/Distribui%C3%A7%C3%A3o_de_probabilidade_conjunta">distribuição
+de probabilidade conjunta</a> sobre todos os placares possíveis (até 8
+gols por time). O torneio completo é então simulado <span
+class="math inline">\(N = 1.000.000\)</span> de vezes via <a
+href="https://pt.wikipedia.org/wiki/M%C3%A9todo_de_Monte_Carlo">método
+de Monte Carlo</a>, e as frequências observadas em cada fase constituem
+as estimativas finais de probabilidade.</p>
+<p>O fluxo estrutural sintetiza-se no encadeamento de cinco operações
+essenciais: o cálculo do rating ELO através do histórico de partidas
+internacionais; a determinação da taxa esperada de gols <span
+class="math inline">\(\lambda\)</span> como função da diferença ELO via
+MLE sobre jogos desde 1990; a correção dinâmica por <span
 class="math inline">\(K_{\mathrm{att}}\)</span> e <span
-class="math inline">\(K_{\mathrm{def}}\)</span>:</strong> forma recente
-e estilo de jogo calculados utilizando uma rede neural GRU treinada
-sobre dados recentes.</li>
-<li><strong>Distribuição de placares via Poisson modificada por
-Dixon-Coles.</strong></li>
-<li><strong>Simulação Monte Carlo: propagação de incerteza pelo
-torneio.</strong></li>
-</ul>
+class="math inline">\(K_{\mathrm{def}}\)</span> via rede neural GRU com
+dados recentes; a modelagem da distribuição de placares via Poisson
+modificada por Dixon-Coles; e a simulação Monte Carlo final para
+propagação sistemática de incerteza pelo chaveamento completo.</p>
 <h3 id="o-processo-de-inferência-estatística-em-detalhe">O Processo de
 Inferência Estatística em Detalhe</h3>
 <p>Formalmente, o modelo define dois conjuntos de parâmetros:</p>
-<p><strong>Parâmetros dos priors</strong> <span
-class="math inline">\(\theta = \{a, b, c, h, \rho_0, \rho_1\}\)</span>:
-governam como a diferença ELO se traduz em taxas esperadas de gols e
-correlação. São estimados por <strong>máxima verossimilhança
-(MLE)</strong> sobre partidas internacionais desde 1990, com ponderação
-temporal por recência (meia-vida de 4 anos) e por importância do
-torneio. A função de log-verossimilhança maximizada é:</p>
+<p><strong>Parâmetros dos <a
+href="https://pt.wikipedia.org/wiki/Probabilidade_a_priori">priors</a></strong>
+<span class="math inline">\(\theta = \{a, b, c, h, \rho_0,
+\rho_1\}\)</span>: governam como a diferença ELO se traduz em taxas
+esperadas de gols e correlação. São estimados por máxima verossimilhança
+sobre partidas internacionais desde 1990, com ponderação temporal por
+recência (meia-vida de 4 anos) e por importância do torneio. A <a
+href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_de_verossimilhan%C3%A7a">função
+de verossimilhança</a> logarítmica maximizada é:</p>
 <p><span class="math display">\[
 \hat{\theta} = \arg\max_{\theta} \sum_{i=1}^{N_{hist}} w_i^{temp} \cdot
 \log P_{\theta}(X_i, Y_i \mid \Delta_{eff,i})
@@ -1584,11 +1586,15 @@ observado.</p>
 class="math inline">\(\phi\)</span>: pesos da GRU que mapeiam sequências
 de resultados recentes em fatores <span
 class="math inline">\(K_{att}\)</span> e <span
-class="math inline">\(K_{def}\)</span>. São estimados por
-<strong>descida de gradiente</strong> (otimizador AdamW, <span
-class="math inline">\(\eta = 2 \times 10^{-4}\)</span>) minimizando a
-log-verossimilhança negativa (NLL) Dixon-Coles ponderada, com
-regularização L2 sobre <span class="math inline">\(\log K\)</span>:</p>
+class="math inline">\(K_{def}\)</span>. São estimados por <a
+href="https://pt.wikipedia.org/wiki/Gradiente_descendente">descida de
+gradiente</a> com o <a
+href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent#Adam">otimizador
+AdamW</a> (<span class="math inline">\(\eta = 2 \times 10^{-4}\)</span>)
+minimizando a log-verossimilhança negativa (NLL) Dixon-Coles ponderada,
+com <a
+href="https://pt.wikipedia.org/wiki/Regulariza%C3%A7%C3%A3o_%28matem%C3%A1tica%29">regularização
+L2</a> sobre <span class="math inline">\(\log K\)</span>:</p>
 <p><span class="math display">\[
 \hat{\phi} = \arg\min_{\phi} \left[ -\sum_{i} w_i \cdot \log P_{\theta,
 \phi}(X_i, Y_i) \;+\; \lambda_{reg} \cdot \mathbb{E}\!\left[(\log
@@ -1606,11 +1612,11 @@ funcional.</p>
 <h2 id="2-o-sistema-elo-como-proxy-de-força-relativa">2. O Sistema ELO
 como Proxy de Força Relativa</h2>
 <h3 id="origem-e-princípio">Origem e Princípio</h3>
-<p>O sistema ELO foi proposto pelo físico húngaro-americano Arpad Elo
-como método de rating para xadrez (<a
-href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo, 1978</a>).
-Sua ideia central é que a força de um competidor pode ser representada
-por um único número real, e que a diferença entre dois números codifica
+<p>O <a href="https://pt.wikipedia.org/wiki/Rating_Elo">sistema ELO</a>
+foi proposto pelo físico húngaro-americano Arpad Elo como método de
+rating para xadrez (Elo [<a href="#referências">4</a>]). Sua ideia
+central é que a força de um competidor pode ser representada por um
+único número real, e que a diferença entre dois números codifica
 diretamente a probabilidade de vitória de um sobre o outro. A
 atualização do rating após cada partida segue a regra:</p>
 <p><span class="math display">\[
@@ -1629,7 +1635,9 @@ G = \begin{cases} 1{,}0 &amp; \text{se } |S_{home} - S_{away}| \leq 1 \\
 1{,}5 &amp; \text{se } |S_{home} - S_{away}| = 2 \\ \frac{11 + |S_{home}
 - S_{away}|}{8} &amp; \text{caso contrário} \end{cases}
 \]</span></p>
-<p>A probabilidade de vitória prevista é dada pela função logística:</p>
+<p>A probabilidade de vitória prevista é dada pela <a
+href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_log%C3%ADstica">função
+logística</a>:</p>
 <p><span class="math display">\[
 \hat{p}_A = \frac{1}{1 + 10^{-\Delta_{eff}/400}}
 \]</span></p>
@@ -1656,27 +1664,27 @@ Esse ruído de curto prazo não pode ser eliminado pelo ELO por
 construção, o que torna indispensáveis as etapas posteriores do modelo —
 a correção pela GRU e a correção de Dixon-Coles — para mitigar esses
 efeitos em escala de partida individual.</p>
-<p><a href="https://doi.org/10.1016/j.ijforecast.2009.10.002">Hvattum e
-Arntzen (2010)</a> compararam o ELO com seis métodos alternativos de
-previsão em futebol associativo e concluíram que o sistema ELO produz
-previsões competitivas — e em vários cenários superiores — quando usado
-como covariável em modelos de regressão. A principal virtude do ELO é
-sua capacidade de comparar times de diferentes confederações e épocas a
-partir de um histórico unificado de resultados.</p>
-<p><a href="https://doi.org/10.1177/1471082X18817650">Ley, Van de Wiele
-e Van Eetvelde (2019)</a> apresentaram uma comparação sistemática de dez
-modelos estatísticos para ranking de seleções, incluindo variantes do
-ELO e modelos Poisson bivariados. Os autores demonstram que modelos
-baseados em ELO têm desempenho preditivo comparável aos modelos
-estruturais mais complexos, especialmente quando combinados com
-ponderação temporal e por importância do torneio — exatamente as
-características incorporadas ao nosso pipeline.</p>
-<p><a href="https://arxiv.org/pdf/1806.01930">Gilch e Müller (2018)</a>
-aplicaram modelos de regressão Poisson com covariáveis ELO para prever a
-Copa do Mundo de 2018, utilizando simulação Monte Carlo para estimar
-probabilidades de classificação em cada fase. Esse trabalho é
-metodologicamente análogo ao nosso e serve como referência de validação
-da abordagem.</p>
+<p>Hvattum e Arntzen [<a href="#referências">7</a>] compararam o ELO com
+seis métodos alternativos de previsão em futebol associativo e
+concluíram que o sistema ELO produz previsões competitivas — e em vários
+cenários superiores — quando usado como covariável em modelos de
+regressão. A principal virtude do ELO é sua capacidade de comparar times
+de diferentes confederações e épocas a partir de um histórico unificado
+de resultados.</p>
+<p>Ley, Van de Wiele e Van Eetvelde [<a href="#referências">9</a>]
+apresentaram uma comparação sistemática de dez modelos estatísticos para
+ranking de seleções, incluindo variantes do ELO e modelos Poisson
+bivariados. Os autores demonstram que modelos baseados em ELO têm
+desempenho preditivo comparável aos modelos estruturais mais complexos,
+especialmente quando combinados com ponderação temporal e por
+importância do torneio — exatamente as características incorporadas ao
+nosso pipeline.</p>
+<p>Gilch e Müller [<a href="#referências">5</a>] aplicaram modelos de <a
+href="https://pt.wikipedia.org/wiki/Regress%C3%A3o_de_Poisson">regressão
+Poisson</a> com covariáveis ELO para prever a Copa do Mundo de 2018,
+utilizando simulação Monte Carlo para estimar probabilidades de
+classificação em cada fase. Esse trabalho é metodologicamente análogo ao
+nosso e serve como referência de validação da abordagem.</p>
 <p>Em síntese, o ELO não é uma medida perfeita — ignora escalação,
 lesões e características táticas específicas — mas é um <strong>proxy
 estatisticamente bem fundamentado</strong> para a força relativa de
@@ -1773,9 +1781,11 @@ tudo o mais constante.</p>
 Diferenças ELO às Taxas Esperadas de Gols</h2>
 <h3 id="por-que-modelar-gols-como-poisson">Por que Modelar Gols como
 Poisson?</h3>
-<p>A distribuição de Poisson descreve o número de ocorrências de um
-evento raro em um intervalo fixo de tempo ou espaço, sob a hipótese de
-que os eventos ocorrem a uma taxa média constante <span
+<p>A <a
+href="https://pt.wikipedia.org/wiki/Distribui%C3%A7%C3%A3o_de_Poisson">distribuição
+de Poisson</a> descreve o número de ocorrências de um evento raro em um
+intervalo fixo de tempo ou espaço, sob a hipótese de que os eventos
+ocorrem a uma taxa média constante <span
 class="math inline">\(\lambda\)</span> e de forma (aproximadamente)
 independente entre si. A probabilidade de observar exatamente <span
 class="math inline">\(k\)</span> eventos é:</p>
@@ -1784,19 +1794,18 @@ P(X = k \mid \lambda) = \frac{\lambda^k \, e^{-\lambda}}{k!}, \quad k =
 0, 1, 2, \ldots
 \]</span></p>
 <p>A adequação do modelo de Poisson para gols no futebol foi
-estabelecida empiricamente por <a
-href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">Maher
-(1982)</a>. Maher incorporou parâmetros de ataque e defesa por equipe e
-mostrou, por meio de testes de aderência (<span
-class="math inline">\(\chi^2\)</span>), que o modelo de Poisson
-independente descreve adequadamente as frequências de placares no
-futebol inglês, embora com pequenos desvios sistemáticos nos placares
-baixos — um problema que Dixon e Coles resolveriam quinze anos depois. O
-modelo de Poisson para gols tornou-se, desde então, o ponto de partida
-padrão na literatura de estatística esportiva (<a
-href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles, 1997</a>;
-<a href="https://doi.org/10.1111/1467-9884.00366">Karlis e Ntzoufras,
-2003</a>).</p>
+estabelecida empiricamente por Maher [<a href="#referências">10</a>].
+Maher incorporou parâmetros de ataque e defesa por equipe e mostrou, por
+meio de <a
+href="https://pt.wikipedia.org/wiki/Teste_qui-quadrado_de_Pearson">testes
+de qui-quadrado</a> (<span class="math inline">\(\chi^2\)</span>), que o
+modelo de Poisson independente descreve adequadamente as frequências de
+placares no futebol inglês, embora com pequenos desvios sistemáticos nos
+placares baixos — um problema que Dixon e Coles resolveriam quinze anos
+depois. O modelo de Poisson para gols tornou-se, desde então, o ponto de
+partida padrão na literatura de estatística esportiva (Dixon e Coles [<a
+href="#referências">3</a>]; Karlis e Ntzoufras [<a
+href="#referências">8</a>]).</p>
 <h3 id="da-diferença-elo-à-taxa-esperada-de-gols">Da Diferença ELO à
 Taxa Esperada de Gols</h3>
 <p>Para converter <span class="math inline">\(\Delta_{eff}\)</span> em
@@ -1880,16 +1889,16 @@ desequilibradas têm menor dependência entre os gols.</p>
 <p>Os valores calibrados foram <span class="math inline">\(\rho_0^{raw}
 = 0{,}6724\)</span> e <span class="math inline">\(\rho_1^{neg} =
 0{,}4769\)</span>, resultando em:</p>
-<ul>
-<li><span class="math inline">\(\rho(\Delta_{eff} = 0) =
-0{,}117\)</span> — correlação em jogo equilibrado</li>
-<li><span class="math inline">\(\rho(\Delta_{eff} = 400) =
-0{,}039\)</span> — correlação em jogo com 400 pts de diferença</li>
-</ul>
-<p>Esses valores são coerentes com a estimativa original de <a
-href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles (1997)</a>,
+<p>Os valores calibrados foram <span class="math inline">\(\rho_0^{raw}
+= 0{,}6724\)</span> e <span class="math inline">\(\rho_1^{neg} =
+0{,}4769\)</span>, resultando em <span
+class="math inline">\(\rho(\Delta_{eff} = 0) = 0{,}117\)</span> para a
+correlação em jogo equilibrado e <span
+class="math inline">\(\rho(\Delta_{eff} = 400) = 0{,}039\)</span> para
+confrontos com 400 pontos de diferença. Esses valores são coerentes com
+a estimativa original de Dixon e Coles [<a href="#referências">3</a>],
 que obtiveram <span class="math inline">\(\rho \approx -0{,}13\)</span>
-(com sinal oposto por diferença de convenção) para o futebol inglês.</p>
+(com sinal oposto por convenção) para o futebol inglês.</p>
 <hr />
 <h2 id="4-os-fatores-de-correção-k_att-e-k_def">4. Os Fatores de
 Correção <span class="math inline">\(K_{att}\)</span> e <span
@@ -1911,13 +1920,13 @@ ofensiva.</strong> O ELO é cego ao <em>como</em> uma equipe vence ou
 perde: ele registra apenas o resultado (vitória, empate, derrota), não o
 placar. Dois times com ELO idêntico podem ter perfis de jogo
 radicalmente diferentes. Uma seleção de estilo ofensivo pode vencer por
-4–2 e perder por 1–3, acumulando muitos gols nos dois lados; outra, de
-estilo defensivo e pragmático, pode vencer por 1–0 e empatar por 0–0,
-com poucos gols em ambos os sentidos. Para o ELO, os dois comportamentos
-são indistinguíveis. Contudo, para a modelagem de placares via Poisson,
-a diferença é fundamental: a taxa esperada de gols <span
-class="math inline">\(\lambda\)</span> de cada time é muito diferente
-entre os dois perfis, mesmo com força igual.</p>
+4 a 2 e perder por 1 a 3, acumulando muitos gols nos dois lados; outra,
+de estilo defensivo e pragmático, pode vencer por 1 a 0 e empatar por 0
+a 0, com poucos gols em ambos os sentidos. Para o ELO, os dois
+comportamentos são indistinguíveis. Contudo, para a modelagem de
+placares via Poisson, a diferença é substancial: a taxa esperada de gols
+<span class="math inline">\(\lambda\)</span> de cada time é muito
+diferente entre os dois perfis, mesmo com força igual.</p>
 <p>Os fatores <span class="math inline">\(K_{att}\)</span> e <span
 class="math inline">\(K_{def}\)</span> corrigem ambas as limitações
 simultaneamente, pois são estimados a partir dos gols marcados e
@@ -1960,11 +1969,9 @@ reduz ao prior puro, baseado apenas no diferencial ELO.</p>
 <p>Os fatores <span class="math inline">\(K_{att}\)</span> e <span
 class="math inline">\(K_{def}\)</span> são produzidos por uma
 <strong>rede neural recorrente do tipo GRU</strong> (<em>Gated Recurrent
-Unit</em>), introduzida por <a
-href="https://arxiv.org/abs/1406.1078">Cho et al. (2014)</a> e
-empiricamente avaliada por <a
-href="https://arxiv.org/abs/1412.3555">Chung et al. (2014)</a>. A GRU
-processa a sequência dos últimos <span class="math inline">\(T =
+Unit</em>), introduzida por Cho et al. [<a href="#referências">1</a>] e
+empiricamente avaliada por Chung et al. [<a href="#referências">2</a>].
+A GRU processa a sequência dos últimos <span class="math inline">\(T =
 20\)</span> jogos de cada seleção. Para cada jogo <span
 class="math inline">\(t\)</span> da sequência, são extraídas seis
 variáveis (<span class="math inline">\(F = 6\)</span>):</p>
@@ -2031,13 +2038,14 @@ class="math inline">\(K_{def}\)</span> que refletem o perfil corrente da
 seleção sem se deixar enganar por ruído.</p>
 <p>O estado oculto final <span class="math inline">\(h_T\)</span> é
 projetado por uma rede <em>feedforward</em> com uma camada oculta de 32
-neurônios com ativação ReLU:</p>
+neurônios com ativação <a
+href="https://pt.wikipedia.org/wiki/Retificador_%28redes_neurais%29">ReLU</a>:</p>
 <p><span class="math display">\[
 k^{raw} = W_2 \cdot \text{ReLU}(W_1 h_T + b_1) + b_2 \in \mathbb{R}^2
 \]</span></p>
 <p>Os escalares brutos são então mapeados para os fatores <span
-class="math inline">\(K\)</span> positivos pela função
-<strong>softplus</strong>:</p>
+class="math inline">\(K\)</span> positivos pela função <a
+href="https://en.wikipedia.org/wiki/Rectifier_%28neural_networks%29#Softplus"><strong>softplus</strong></a>:</p>
 <p><span class="math display">\[
 K_{att} = \ln(1 + e^{k_{att}^{raw}}) + \varepsilon, \quad K_{def} =
 \ln(1 + e^{k_{def}^{raw}}) + \varepsilon
@@ -2062,7 +2070,8 @@ K_{att})^2 + (\log K_{def})^2\right]
 <p>com <span class="math inline">\(\lambda_{reg} = 0{,}5\)</span>. Como
 <span class="math inline">\(\log(1) = 0\)</span>, essa regularização
 penaliza desvios de <span class="math inline">\(K = 1\)</span> de forma
-quadrática na escala logarítmica — equivalente a um prior log-normal
+quadrática na escala logarítmica — equivalente a um prior <a
+href="https://pt.wikipedia.org/wiki/Distribui%C3%A7%C3%A3o_log-normal">log-normal</a>
 centrado em 1. Times com histórico recente pouco informativo regridem ao
 referencial do ELO (<span class="math inline">\(K \approx
 1\)</span>).</p>
@@ -2074,14 +2083,20 @@ Placares: Dixon-Coles sobre Poisson</h2>
 class="math inline">\(A\)</span> e <span
 class="math inline">\(B\)</span> como variáveis independentes com
 parâmetros <span class="math inline">\(\lambda_A\)</span> e <span
-class="math inline">\(\lambda_B\)</span> — seria a escolha mais simples.
-Contudo, <a href="https://doi.org/10.1111/1467-9876.00065">Dixon e Coles
-(1997)</a> observaram empiricamente que esse modelo subestima
-sistematicamente a frequência dos placares 0-0, 1-0, 0-1 e 1-1, e
-superestima outros placares próximos. A causa é a dependência tática
-entre os times: o estado do placar influencia as escolhas de jogo de
-ambas as equipes, quebrando a hipótese de independência dos gols,
-especialmente em placares baixos.</p>
+class="math inline">\(\lambda_B\)</span> — seria a escolha mais simples,
+tal como formalizado por Maher [<a href="#referências">10</a>]. Contudo,
+Dixon e Coles [<a href="#referências">3</a>] observaram empiricamente
+que esse modelo subestima sistematicamente a frequência dos placares 0 a
+0, 1 a 0, 0 a 1 e 1 a 1, e superestima outros placares próximos. A causa
+é a dependência tática entre os times: o estado do placar influencia as
+escolhas de jogo de ambas as equipes, quebrando a hipótese de
+independência dos gols, especialmente em contagens baixas. Essa
+estrutura de dependência em contagens esportivas foi examinada com
+detalhes em formulações bivariadas por Karlis e Ntzoufras [<a
+href="#referências">8</a>], McHale e Scarf [<a
+href="#referências">11</a>] e em modelos de Poisson regularizado
+aplicados a torneios por Groll, Schauberger e Tutz [<a
+href="#referências">6</a>].</p>
 <h3 id="a-correção-de-dixon-coles">A Correção de Dixon-Coles</h3>
 <p>Dixon e Coles propuseram uma correção multiplicativa aplicada
 exclusivamente aos quatro placares baixos:</p>
@@ -2161,8 +2176,9 @@ exigiria somar as probabilidades de todas as trajetórias possíveis pelo
 chaveamento — um espaço combinatório intratável. A simulação Monte Carlo
 resolve isso pela amostragem estocástica: em vez de enumerar, simula-se
 o torneio completo <span class="math inline">\(N\)</span> vezes, e as
-frequências convergem às probabilidades verdadeiras pela Lei dos Grandes
-Números.</p>
+frequências convergem às probabilidades verdadeiras pela <a
+href="https://pt.wikipedia.org/wiki/Lei_dos_grandes_n%C3%BAmeros">Lei
+dos Grandes Números</a>.</p>
 <h3 id="pré-computação-das-matrizes-de-placar">Pré-Computação das
 Matrizes de Placar</h3>
 <p>Para cada par ordenado de seleções <span class="math inline">\((i,
@@ -2194,9 +2210,10 @@ ordenados por pontos, saldo de gols e gols marcados. Os 8 melhores
 avançam, completando os 32 classificados.</p>
 <p><strong>Fase eliminatória:</strong> Em cada confronto, sorteia-se um
 placar de <span class="math inline">\(M_{ij}\)</span>. Em caso de
-empate, decide-se nos pênaltis por uma Bernoulli com <span
-class="math inline">\(p = \lambda_A / (\lambda_A +
-\lambda_B)\)</span>.</p>
+empate, decide-se nos pênaltis por uma <a
+href="https://pt.wikipedia.org/wiki/Distribui%C3%A7%C3%A3o_de_Bernoulli">distribuição
+de Bernoulli</a> com <span class="math inline">\(p = \lambda_A /
+(\lambda_A + \lambda_B)\)</span>.</p>
 <h3
 id="estimativa-das-probabilidades-e-intervalos-de-confiança">Estimativa
 das Probabilidades e Intervalos de Confiança</h3>
@@ -2207,14 +2224,18 @@ simulações, a estimativa da probabilidade de cada time atingir uma fase
 \hat{p}_{i,f} = \frac{\text{número de simulações em que o time } i
 \text{ atingiu a fase } f}{N}
 \]</span></p>
-<p>O intervalo de confiança binomial de 95% é:</p>
+<p>O <a
+href="https://pt.wikipedia.org/wiki/Intervalo_de_confian%C3%A7a">intervalo
+de confiança</a> <a
+href="https://pt.wikipedia.org/wiki/Distribui%C3%A7%C3%A3o_binomial">binomial</a>
+de 95% é:</p>
 <p><span class="math display">\[
 IC_{95\%} = \hat{p}_{i,f} \pm 1{,}96 \cdot \sqrt{\frac{\hat{p}_{i,f}(1 -
 \hat{p}_{i,f})}{N}}
 \]</span></p>
-<p>Com <span class="math inline">\(N = 1.000.000\)</span>, a margem de
-erro máxima (95%) é <span class="math inline">\(\pm
-0{,}098\%\)</span>.</p>
+<p>Com <span class="math inline">\(N = 1.000.000\)</span>, a <a
+href="https://pt.wikipedia.org/wiki/Margem_de_erro">margem de erro</a>
+máxima (95%) é <span class="math inline">\(\pm 0{,}098\%\)</span>.</p>
 <hr />
 <h2 id="7-resultados">7. Resultados</h2>
 <h3 id="parâmetros-do-modelo-calibrado">Parâmetros do Modelo
@@ -2757,36 +2778,32 @@ class="math inline">\(K_{def}\)</span></th>
 </tbody>
 </table>
 <p><strong>Leituras notáveis da tabela:</strong></p>
-<ul>
-<li><strong>Espanha e Argentina</strong> lideram o ELO com vantagem
-clara sobre o campo. A Espanha apresenta <span
-class="math inline">\(K_{def} = 1{,}090\)</span>, indicando que seu
-estilo de posse e pressão alta gera mais gols sofridos do que o esperado
-para uma equipe de seu nível — o ELO puro subestimaria sua
-vulnerabilidade defensiva. A Argentina tem <span
-class="math inline">\(K_{def} = 1{,}012\)</span>, próximo ao
-neutro.</li>
-<li><strong>Colômbia</strong> (<span class="math inline">\(K_{att} =
-1{,}007\)</span>, <span class="math inline">\(K_{def} =
-0{,}967\)</span>) e <strong>Brasil</strong> (<span
+<p>Entre as leituras notáveis da tabela, observa-se que Espanha e
+Argentina lideram o ELO com vantagem clara sobre o campo. A Espanha
+apresenta <span class="math inline">\(K_{def} = 1{,}090\)</span>,
+indicando que seu estilo de posse e pressão alta gera mais gols sofridos
+do que o esperado para uma equipe de seu nível — o ELO puro subestimaria
+sua vulnerabilidade defensiva; a Argentina exibe <span
+class="math inline">\(K_{def} = 1{,}012\)</span>, muito próximo da
+neutralidade.</p>
+<p>Colômbia (<span class="math inline">\(K_{att} = 1{,}007\)</span>,
+<span class="math inline">\(K_{def} = 0{,}967\)</span>) e Brasil (<span
 class="math inline">\(K_{def} = 0{,}961\)</span>) apresentam perfis
-defensivos sólidos, marcando menos e sofrendo menos do que o ELO
-preveria.</li>
-<li><strong>EUA</strong> (<span class="math inline">\(K_{att} =
-1{,}098\)</span>, <span class="math inline">\(K_{def} =
-1{,}051\)</span>) têm perfil de alta intensidade em ambos os sentidos,
-com os dois fatores acima de 1 — combinação que, em campo próprio com a
-vantagem de sede, produz jogos de alto volume de gols.</li>
-<li><strong>Marrocos</strong> (<span class="math inline">\(K_{att} =
-0{,}887\)</span>) e <strong>Equador</strong> (<span
-class="math inline">\(K_{att} = 0{,}900\)</span>) têm os menores
-multiplicadores de ataque entre os times de ELO mais alto, indicando
-estilo mais cauteloso ofensivamente.</li>
-<li><strong>Nova Zelândia</strong> (<span class="math inline">\(K_{att}
-= 1{,}126\)</span>) tem o maior multiplicador de ataque entre todas as
-seleções, mas com ELO baixo (1.730), o efeito na taxa esperada de gols
-final é limitado.</li>
-</ul>
+defensivos sólidos, marcando e sofrendo menos gols do que o ELO isolado
+preveria. Por outro lado, os Estados Unidos (<span
+class="math inline">\(K_{att} = 1{,}098\)</span>, <span
+class="math inline">\(K_{def} = 1{,}051\)</span>) mantêm perfil de alta
+intensidade em ambos os sentidos, com os dois fatores acima da unidade —
+combinação que, aliada à vantagem de jogar em casa, tende a produzir
+partidas de alto volume de gols.</p>
+<p>Por fim, Marrocos (<span class="math inline">\(K_{att} =
+0{,}887\)</span>) e Equador (<span class="math inline">\(K_{att} =
+0{,}900\)</span>) exibem os menores multiplicadores de ataque entre os
+times de ELO superior, denotando postura ofensiva mais cautelosa. Já a
+Nova Zelândia (<span class="math inline">\(K_{att} = 1{,}126\)</span>)
+registra o maior multiplicador de ataque da amostragem, mas com ELO
+modesto (1.730), o efeito líquido sobre a taxa esperada de gols final
+permanece atenuado.</p>
 <h3 id="probabilidades-de-título-e-progressão-por-fase">Probabilidades
 de Título e Progressão por Fase</h3>
 <p>O gráfico abaixo apresenta as probabilidades de título para as 32
@@ -2797,8 +2814,9 @@ src="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig2.p
 alt="Probabilidade de ganhar a Copa 2026 (%) — Top 32" /></picture></p>
 <p><em>Figura 2. Probabilidade de título por seleção, top 32, em um
 milhão de simulações.</em></p>
-<p>O heatmap a seguir mostra as probabilidades de avançar a cada fase
-para todas as 48 seleções:</p>
+<p>O <a href="https://pt.wikipedia.org/wiki/Mapa_de_calor">mapa de
+calor</a> consolida as probabilidades de avançar a cada fase para todas
+as 48 seleções:</p>
 <p><picture><source srcset="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig3.webp" type="image/webp"><img
 src="../assets/media/modelagem-estatistica-para-a-copa-do-mundo-fifa-2026_fig3.png"
 alt="Heatmap de probabilidade de avanço por fase" /></picture></p>
@@ -2856,53 +2874,52 @@ campo. A França é a terceira favorita com 11,6%, seguida por Brasil
 <hr />
 <h2 id="referências">Referências</h2>
 <p>[1] Cho, K., van Merrienboer, B., Gulcehre, C., Bahdanau, D.,
-Bougares, F., Schwenk, H., &amp; Bengio, Y. (2014). <em>Learning Phrase
+Bougares, F., Schwenk, H., e Bengio, Y., <em>Learning Phrase
 Representations using RNN Encoder-Decoder for Statistical Machine
-Translation</em>, Proceedings of EMNLP 2014. arXiv:1406.1078. <a
+Translation</em>, Proceedings of EMNLP 2014, arXiv:1406.1078. <a
 href="https://arxiv.org/abs/1406.1078">Link</a></p>
-<p>[2] Chung, J., Gulcehre, C., Cho, K., &amp; Bengio, Y. (2014).
-<em>Empirical Evaluation of Gated Recurrent Neural Networks on Sequence
-Modeling</em>, arXiv:1412.3555. <a
+<p>[2] Chung, J., Gulcehre, C., Cho, K., e Bengio, Y., <em>Empirical
+Evaluation of Gated Recurrent Neural Networks on Sequence Modeling</em>,
+arXiv:1412.3555, 2014. <a
 href="https://arxiv.org/abs/1412.3555">Link</a></p>
-<p>[3] Dixon, M. J., &amp; Coles, S. G. (1997). <em>Modelling
-Association Football Scores and Inefficiencies in the Football Betting
-Market</em>, Journal of the Royal Statistical Society: Series C (Applied
-Statistics), 46(2), 265–280. doi:10.1111/1467-9876.00065. <a
+<p>[3] Dixon, M. J., e Coles, S. G., <em>Modelling Association Football
+Scores and Inefficiencies in the Football Betting Market</em>, Journal
+of the Royal Statistical Society: Series C (Applied Statistics),
+vol. 46, nº 2, 1997, pp. 265–280. <a
 href="https://doi.org/10.1111/1467-9876.00065">Link</a></p>
-<p>[4] Elo, A. E. (1978). <em>The Rating of Chessplayers, Past and
-Present</em>, Arco Publishing, New York. <a
+<p>[4] Elo, A. E., <em>The Rating of Chessplayers, Past and
+Present</em>, Arco Publishing, New York, 1978. (acesso em 15 mar. 2026).
+<a
 href="https://archive.org/details/ratingofchesspla00unse">Link</a></p>
-<p>[5] Gilch, L. A., &amp; Müller, S. (2018). <em>On Elo Based
-Prediction Models for the FIFA Worldcup 2018</em>, arXiv:1806.01930. <a
-href="https://arxiv.org/pdf/1806.01930">Link</a></p>
-<p>[6] Groll, A., Schauberger, G., &amp; Tutz, G. (2015). <em>Prediction
-of Major International Soccer Tournaments Based on Team-Specific
-Regularized Poisson Regression: An Application to the FIFA World Cup
-2014</em>, Journal of Quantitative Analysis in Sports, 11(2), 97–115. <a
+<p>[5] Gilch, L. A., e Müller, S., <em>On Elo Based Prediction Models
+for the FIFA Worldcup 2018</em>, arXiv:1806.01930, 2018. <a
+href="https://arxiv.org/abs/1806.01930">Link</a></p>
+<p>[6] Groll, A., Schauberger, G., e Tutz, G., <em>Prediction of Major
+International Soccer Tournaments Based on Team-Specific Regularized
+Poisson Regression: An Application to the FIFA World Cup 2014</em>,
+Journal of Quantitative Analysis in Sports, vol. 11, nº 2, 2015,
+pp. 97–115. (acesso em 15 mar. 2026). <a
 href="https://epub.ub.uni-muenchen.de/31579/1/Groll_Prediction.pdf">Link</a></p>
-<p>[7] Hvattum, L. M., &amp; Arntzen, H. (2010). <em>Using ELO Ratings
-for Match Result Prediction in Association Football</em>, International
-Journal of Forecasting, 26(3), 460–470.
-doi:10.1016/j.ijforecast.2009.10.002. <a
+<p>[7] Hvattum, L. M., e Arntzen, H., <em>Using ELO Ratings for Match
+Result Prediction in Association Football</em>, International Journal of
+Forecasting, vol. 26, nº 3, 2010, pp. 460–470. <a
 href="https://doi.org/10.1016/j.ijforecast.2009.10.002">Link</a></p>
-<p>[8] Karlis, D., &amp; Ntzoufras, I. (2003). <em>Analysis of Sports
-Data by Using Bivariate Poisson Models</em>, Journal of the Royal
-Statistical Society: Series D (The Statistician), 52(3), 381–393.
-doi:10.1111/1467-9884.00366. <a
+<p>[8] Karlis, D., e Ntzoufras, I., <em>Analysis of Sports Data by Using
+Bivariate Poisson Models</em>, Journal of the Royal Statistical Society:
+Series D (The Statistician), vol. 52, nº 3, 2003, pp. 381–393. <a
 href="https://doi.org/10.1111/1467-9884.00366">Link</a></p>
-<p>[9] Ley, C., Van de Wiele, T., &amp; Van Eetvelde, H. (2019).
-<em>Ranking Soccer Teams on the Basis of Their Current Strength: A
-Comparison of Maximum Likelihood Approaches</em>, Statistical Modelling,
-19(1), 55–73. doi:10.1177/1471082X18817650. <a
+<p>[9] Ley, C., Van de Wiele, T., e Van Eetvelde, H., <em>Ranking Soccer
+Teams on the Basis of Their Current Strength: A Comparison of Maximum
+Likelihood Approaches</em>, Statistical Modelling, vol. 19, nº 1, 2019,
+pp. 55–73. <a
 href="https://doi.org/10.1177/1471082X18817650">Link</a></p>
-<p>[10] Maher, M. J. (1982). <em>Modelling Association Football
-Scores</em>, Statistica Neerlandica, 36(3), 109–118.
-doi:10.1111/j.1467-9574.1982.tb00782.x. <a
+<p>[10] Maher, M. J., <em>Modelling Association Football Scores</em>,
+Statistica Neerlandica, vol. 36, nº 3, 1982, pp. 109–118. <a
 href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">Link</a></p>
-<p>[11] McHale, I., &amp; Scarf, P. (2011). <em>Modelling the Dependence
-of Goals Scored by Opposing Teams in International Soccer Matches</em>,
-Statistical Modelling, 11(3), 219–236. doi:10.1177/1471082X1001100303.
-<a href="https://doi.org/10.1177/1471082X1001100303">Link</a></p>
+<p>[11] McHale, I., e Scarf, P., <em>Modelling the Dependence of Goals
+Scored by Opposing Teams in International Soccer Matches</em>,
+Statistical Modelling, vol. 11, nº 3, 2011, pp. 219–236. <a
+href="https://doi.org/10.1177/1471082X1001100303">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">

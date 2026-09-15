@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="6">
+<html lang="pt-BR" data-status="finalizado" data-minutes="7">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1476,22 +1476,27 @@ Equacionamento do Rotor Coaxial em Voo Avançado</a></li>
 <hr />
 <h2 id="resumo-executivo">Resumo Executivo</h2>
 <p>Este documento apresenta uma formulação analítica detalhada do
-Teorema de Munk (Munk’s Stagger Theorem), um postulado basilar da teoria
-clássica da <a
-href="https://en.wikipedia.org/wiki/Lifting-line_theory">linha
-sustentadora</a> (Lifting-Line Theory). Originalmente deduzido para a
-avaliação do <a
+Teorema de Munk (<em>Munk’s Stagger Theorem</em>) [<a
+href="#referências">1</a>], um postulado basilar da teoria clássica da
+<a href="https://en.wikipedia.org/wiki/Lifting-line_theory">linha
+sustentadora</a> (<em>Lifting-Line Theory</em>). Originalmente deduzido
+para a avaliação do <a
 href="https://en.wikipedia.org/wiki/Lift-induced_drag">arrasto
-induzido</a> em configurações biplanas, o teorema estabelece
-rigorosamente que o arrasto induzido total de um sistema contendo
-múltiplas superfícies sustentadoras é função exclusiva da distribuição
-de sustentação transversal e do espaçamento vertical (gap) entre as
-superfícies, demonstrando invariância em relação ao defasamento
-longitudinal (stagger).</p>
-<p>Este paper delineia a demonstração físico-matemática para asas fixas
-e estende a validade do teorema para rotores nas configurações em tandem
-e coaxial operando em voo avançado, evidenciando as equivalências no
-balanço de energia e no cálculo da potência induzida.</p>
+induzido</a> em configurações <a
+href="https://pt.wikipedia.org/wiki/Biplano">biplanas</a>, o teorema
+estabelece rigorosamente que o arrasto induzido total de um sistema
+contendo múltiplas superfícies sustentadoras é função exclusiva da
+distribuição de sustentação transversal e do espaçamento vertical
+(<em>gap</em>) entre as superfícies, demonstrando invariância em relação
+ao defasamento longitudinal (<a
+href="https://en.wikipedia.org/wiki/Stagger_(aeronautics)">stagger</a>).</p>
+<p>Este documento delineia a demonstração físico-matemática para asas
+fixas e estende a validade do teorema para rotores nas configurações em
+<a href="https://en.wikipedia.org/wiki/Tandem_rotors">tandem</a> e <a
+href="https://en.wikipedia.org/wiki/Coaxial_rotors">coaxial</a> operando
+em <a href="https://en.wikipedia.org/wiki/Translational_flight">voo de
+translação</a>, evidenciando as equivalências no balanço de energia e no
+cálculo da potência induzida.</p>
 <hr />
 <h2
 id="1-a-teoria-para-asas-fixas-física-e-equacionamento-matemático">1. A
@@ -1499,9 +1504,12 @@ Teoria para Asas Fixas: Física e Equacionamento Matemático</h2>
 <h3 id="intuição-física-no-plano-de-trefftz">Intuição Física no Plano de
 Trefftz</h3>
 <p>O fundamento físico do Teorema de <a
-href="https://en.wikipedia.org/wiki/Max_Munk">Munk</a> baseia-se na
-aplicação do princípio da conservação de energia e na análise do campo
-de escoamento potencial no <strong><a
+href="https://en.wikipedia.org/wiki/Max_Munk">Munk</a> [<a
+href="#referências">1</a>] baseia-se na aplicação do princípio da <a
+href="https://pt.wikipedia.org/wiki/Conserva%C3%A7%C3%A3o_da_energia">conservação
+da energia</a> e na análise do campo de <a
+href="https://pt.wikipedia.org/wiki/Escoamento_potencial">escoamento
+potencial</a> no <strong><a
 href="https://en.wikipedia.org/wiki/Trefftz_plane">Plano de
 Trefftz</a></strong> — um plano transversal (<span
 class="math inline">\(y\)</span>–<span class="math inline">\(z\)</span>)
@@ -1509,31 +1517,41 @@ localizado a uma distância infinita a jusante (<span
 class="math inline">\(x \to \infty\)</span>) do sistema
 aerodinâmico.</p>
 <p>Pela teoria de <a
-href="https://en.wikipedia.org/wiki/Ludwig_Prandtl">Prandtl</a>, o <a
+href="https://en.wikipedia.org/wiki/Ludwig_Prandtl">Prandtl</a> [<a
+href="#referências">2</a>], o <a
 href="https://en.wikipedia.org/wiki/Lift-induced_drag">arrasto
 induzido</a> <span class="math inline">\(D_i\)</span> corresponde ao
 trabalho mecânico realizado pelo sistema de propulsão da aeronave para
-fornecer energia cinética ao fluido na forma de velocidade induzida
-vertical (downwash). No Plano de Trefftz, a esteira vorticosa assume sua
-configuração final, estendendo-se teoricamente até o infinito. A energia
-cinética depositada no escoamento depende estritamente do traço
-geométrico bidimensional dessa esteira no plano <span
-class="math inline">\(y\)</span>–<span class="math inline">\(z\)</span>
-e da distribuição da circulação <span
-class="math inline">\(\Gamma(y)\)</span>.</p>
+fornecer <a
+href="https://pt.wikipedia.org/wiki/Energia_cin%C3%A9tica">energia
+cinética</a> ao fluido na forma de velocidade induzida vertical (<a
+href="https://en.wikipedia.org/wiki/Downwash">downwash</a>). No Plano de
+Trefftz, a <a
+href="https://pt.wikipedia.org/wiki/V%C3%B3rtice_de_ponta_de_asa">esteira
+de vórtices</a> assume sua configuração final, estendendo-se
+teoricamente até o infinito. A energia cinética depositada no escoamento
+depende estritamente do traço geométrico bidimensional dessa esteira no
+plano <span class="math inline">\(y\)</span>–<span
+class="math inline">\(z\)</span> e da distribuição da <a
+href="https://en.wikipedia.org/wiki/Circulation_(fluid_dynamics)">circulação</a>
+<span class="math inline">\(\Gamma(y)\)</span>.</p>
 <p>Transladar uma asa ao longo do eixo longitudinal <span
-class="math inline">\(x\)</span> (modificar o stagger) altera
-significativamente os campos de velocidade induzida locais na vizinhança
-imediata das asas. Contudo, os vórtices de fuga (trailing vortices)
-emitidos por ambas as superfícies estendem-se a jusante e, no infinito,
-compõem exatamente a mesma topologia de esteira bidimensional,
-independentemente das coordenadas <span class="math inline">\(x\)</span>
-de origem da sustentação. Uma vez que o estado termodinâmico e
-cinemático do fluido no Plano de Trefftz é idêntico, a energia cinética
-total integrada é inalterada. Logo, o arrasto induzido sistêmico
-permanece invariante à variação de stagger.</p>
+class="math inline">\(x\)</span> (modificar o <a
+href="https://en.wikipedia.org/wiki/Stagger_(aeronautics)">stagger</a>)
+altera significativamente os campos de velocidade induzida locais na
+vizinhança imediata das asas. Contudo, os <a
+href="https://en.wikipedia.org/wiki/Wingtip_vortices">vórtices de
+fuga</a> (<em>trailing vortices</em>) emitidos por ambas as superfícies
+estendem-se a jusante e, no infinito, compõem exatamente a mesma
+topologia de esteira bidimensional, independentemente das coordenadas
+<span class="math inline">\(x\)</span> de origem da <a
+href="https://pt.wikipedia.org/wiki/Sustenta%C3%A7%C3%A3o">sustentação</a>.
+Uma vez que o estado termodinâmico e cinemático do fluido no Plano de
+Trefftz é idêntico, a energia cinética total integrada é inalterada.
+Logo, o arrasto induzido sistêmico permanece invariante à variação de
+stagger.</p>
 <p><img
-src="../assets/media/teorema-munk_fig1_plano-trefftz-invariancia.svg"
+src="../assets/media/o-teorema-do-stagger-de-munk-e-sua-universalidade-em-sistemas-aerodinamicos-de-multiplas-superficies_fig1.svg"
 alt="O Teorema do Stagger de Munk no Plano de Trefftz e a invariância do arrasto induzido" /></p>
 <p><em>Figura 1. O Teorema do Stagger de Munk no Plano de Trefftz e a
 invariância do arrasto induzido.</em></p>
@@ -1544,26 +1562,25 @@ class="math inline">\(D_i\)</span> é a superposição linear dos arrastos
 auto-induzidos e das interferências aerodinâmicas mútuas:</p>
 <p><span class="math display">\[D_i = D_{i11} + D_{i22} + D_{i12} +
 D_{i21}\]</span></p>
-<p>Sendo:</p>
-<ul>
-<li><span class="math inline">\(D_{i11}\)</span> e <span
-class="math inline">\(D_{i22}\)</span>: arrastos auto-induzidos das Asas
-1 e 2</li>
-<li><span class="math inline">\(D_{i12}\)</span>: arrasto induzido na
-Asa 1 pelo downwash de interferência <span
-class="math inline">\(w_2(y)\)</span> gerado pela Asa 2</li>
-<li><span class="math inline">\(D_{i21}\)</span>: arrasto induzido na
-Asa 2 pelo downwash de interferência <span
-class="math inline">\(w_1(y)\)</span> gerado pela Asa 1</li>
-</ul>
+<p>Nessa formulação, <span class="math inline">\(D_{i11}\)</span> e
+<span class="math inline">\(D_{i22}\)</span> representam os arrastos
+auto-induzidos das Asas 1 e 2, enquanto <span
+class="math inline">\(D_{i12}\)</span> denota o arrasto induzido na Asa
+1 pelo <a href="https://en.wikipedia.org/wiki/Downwash">downwash</a> de
+interferência <span class="math inline">\(w_2(y)\)</span> gerado pela
+Asa 2, e <span class="math inline">\(D_{i21}\)</span> corresponde ao
+arrasto induzido na Asa 2 pelo downwash de interferência <span
+class="math inline">\(w_1(y)\)</span> gerado pela Asa 1.</p>
 <p>O termo de interferência imposto à Asa 1 é definido por:</p>
 <p><span class="math display">\[D_{i12} = \int_{-b_1/2}^{+b_1/2}
 \frac{w_2(y)}{V_\infty}\, dL_1(y)\]</span></p>
-<p>Munk provou analiticamente, através do seu <strong>teorema do fluxo
-reverso</strong> e da teoria do escoamento potencial, que a
-interferência mútua é simétrica: <span class="math inline">\(D_{i12} =
-D_{i21}\)</span>. Portanto, a parcela de arrasto de interferência total
-do sistema é <span class="math inline">\(2D_{i12}\)</span>.</p>
+<p>Munk [<a href="#referências">1</a>] provou analiticamente, através do
+seu <a href="https://en.wikipedia.org/wiki/Reciprocal_theorem">teorema
+de reciprocidade</a> de fluxo reverso e da teoria do escoamento
+potencial, que a interferência mútua é simétrica: <span
+class="math inline">\(D_{i12} = D_{i21}\)</span>. Portanto, a parcela de
+arrasto de interferência total do sistema é <span
+class="math inline">\(2D_{i12}\)</span>.</p>
 <p><strong>A Prova da Independência do Stagger</strong>: Pela <a
 href="https://en.wikipedia.org/wiki/Biot%E2%80%93Savart_law">Lei de
 Biot-Savart</a>, assumindo a hipótese de pequenas perturbações, os
@@ -1587,19 +1604,23 @@ class="math inline">\(x\)</span>.</p>
 <span class="math inline">\(\phi\)</span> na seção transversal do Plano
 de Trefftz são rigorosamente independentes da coordenada <span
 class="math inline">\(x\)</span>.</p>
-<p>O arrasto induzido total reduz-se à clássica equação de Prandtl:</p>
+<p>O arrasto induzido total reduz-se à clássica equação de Prandtl [<a
+href="#referências">2</a>]:</p>
 <p><span class="math display">\[D_i = \frac{1}{\pi q} \left[
 \frac{L_1^2}{b_1^2} + 2\sigma \frac{L_1 L_2}{b_1 b_2} +
 \frac{L_2^2}{b_2^2} \right]\]</span></p>
 <p>Onde <span class="math inline">\(q = \frac{1}{2}\rho
-V_\infty^2\)</span> é a pressão dinâmica, <span
-class="math inline">\(b\)</span> é a envergadura e <span
+V_\infty^2\)</span> é a <a
+href="https://pt.wikipedia.org/wiki/Press%C3%A3o_din%C3%A2mica">pressão
+dinâmica</a>, <span class="math inline">\(b\)</span> é a <a
+href="https://pt.wikipedia.org/wiki/Envergadura">envergadura</a> e <span
 class="math inline">\(\sigma\)</span> é o <strong>fator de interferência
 de Prandtl</strong> — unicamente uma função da razão entre o gap
 vertical e a envergadura (<span class="math inline">\(h/b\)</span>).</p>
 <p>Fica matematicamente provado que <span
-class="math inline">\(\sigma\)</span> é resultante de uma expansão em
-séries de Fourier da circulação restrita ao plano <span
+class="math inline">\(\sigma\)</span> é resultante de uma expansão em <a
+href="https://pt.wikipedia.org/wiki/S%C3%A9rie_de_Fourier">séries de
+Fourier</a> da circulação restrita ao plano <span
 class="math inline">\(y\)</span>–<span class="math inline">\(z\)</span>.
 O stagger (<span class="math inline">\(s\)</span>) não possui
 representação matemática na condição de contorno no infinito,
@@ -1607,28 +1628,25 @@ comprovando a teoria.</p>
 <hr />
 <h2 id="2-exemplo-prático-asas-fixas-com-stagger-variável">2. Exemplo
 Prático: Asas Fixas com Stagger Variável</h2>
-<p>Consideremos um biplano com asas de mesma envergadura (<span
-class="math inline">\(b_1 = b_2 = 10\)</span> m), sustentação
-simetricamente distribuída (<span class="math inline">\(L_1 = L_2 =
-10\,000\)</span> N) e um gap vertical constante de <span
-class="math inline">\(h = 2\)</span> m. Mantém-se a velocidade de voo e
-a densidade fixas para garantir um <span
-class="math inline">\(q\)</span> constante:</p>
-<ul>
-<li><strong>Caso A</strong> (Sem stagger, <span class="math inline">\(s
-= 0\)</span>): Os bordos de ataque de ambas as asas estão alinhados
-verticalmente.</li>
-<li><strong>Caso B</strong> (Stagger positivo, <span
-class="math inline">\(s = +2\)</span> m): A asa superior está avançada 2
-m em relação à inferior.</li>
-<li><strong>Caso C</strong> (Stagger negativo, <span
-class="math inline">\(s = -2\)</span> m): A asa superior está recuada 2
-m em relação à inferior.</li>
-</ul>
+<p>Consideremos um <a
+href="https://pt.wikipedia.org/wiki/Biplano">biplano</a> com asas de
+mesma envergadura (<span class="math inline">\(b_1 = b_2 = 10\)</span>
+m), sustentação simetricamente distribuída (<span
+class="math inline">\(L_1 = L_2 = 10\,000\)</span> N) e um gap vertical
+constante de <span class="math inline">\(h = 2\)</span> m. Mantém-se a
+velocidade de voo e a densidade fixas para garantir um <span
+class="math inline">\(q\)</span> constante. No Caso A (sem stagger,
+<span class="math inline">\(s = 0\)</span>), os bordos de ataque de
+ambas as asas estão alinhados verticalmente. No Caso B (stagger
+positivo, <span class="math inline">\(s = +2\)</span> m), a asa superior
+está avançada 2 m em relação à inferior. No Caso C (stagger negativo,
+<span class="math inline">\(s = -2\)</span> m), a asa superior
+encontra-se recuada 2 m em relação à inferior.</p>
 <p>No Caso B, a asa traseira (inferior) está imersa no intenso campo de
 downwash da asa dianteira. Consequentemente, <span
 class="math inline">\(D_{i21}\)</span> cresce substancialmente. Em
-contrapartida, a asa dianteira opera no campo de upwash induzido a
+contrapartida, a asa dianteira opera no campo de <a
+href="https://en.wikipedia.org/wiki/Upwash">upwash</a> induzido a
 montante, resultando em empuxo aparente (<span
 class="math inline">\(D_{i12}\)</span> assume valor negativo). No Caso
 C, a fenomenologia inverte-se.</p>
@@ -1648,40 +1666,50 @@ Aplicação em Rotores em Tandem e a Analogia da Asa Circular</h2>
 <h3 id="a-equivalência-com-a-asa-circular">A Equivalência com a Asa
 Circular</h3>
 <p>Em regimes de translação significativos (<span
-class="math inline">\(\mu = V_\infty/\Omega R \gg 0\)</span>), um rotor
-comporta-se matemática e aerodinamicamente como uma asa de planta
-circular, possuindo uma envergadura efetiva <span
-class="math inline">\(b = 2R\)</span> e baixo alongamento (<span
-class="math inline">\(AR = 4/\pi\)</span>). Assim como em uma asa fixa,
-o gradiente radial de circulação força a emissão de vorticidade livre,
-formando um sistema clássico de vórtices de ferradura (horseshoe
-vortices). Portanto, a modelagem de Munk aplica-se perfeitamente aos
-discos de rotor.</p>
+class="math inline">\(\mu = V_\infty/\Omega R \gg 0\)</span>), com <a
+href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>
+<span class="math inline">\(\mu\)</span>, um rotor comporta-se
+matemática e aerodinamicamente como uma asa de planta circular [<a
+href="#referências">3</a>], possuindo uma envergadura efetiva <span
+class="math inline">\(b = 2R\)</span> e baixo <a
+href="https://pt.wikipedia.org/wiki/Alongamento_(aerodin%C3%A2mica)">alongamento</a>
+(<span class="math inline">\(AR = 4/\pi\)</span>). Assim como em uma asa
+fixa, o gradiente radial de circulação força a emissão de vorticidade
+livre, formando um sistema clássico de <a
+href="https://en.wikipedia.org/wiki/Horseshoe_vortex">vórtices de
+ferradura</a> (<em>horseshoe vortices</em>). Portanto, a modelagem de
+Munk aplica-se perfeitamente aos discos de rotor sob a formulação
+clássica de dinâmica de rotores estabelecida por Johnson [<a
+href="#referências">3</a>] e Leishman [<a
+href="#referências">4</a>].</p>
 <h3 id="o-equacionamento-de-potência-induzida">O Equacionamento de
 Potência Induzida</h3>
-<p>O mapeamento entre asas fixas e rotores é direto:</p>
-<ul>
-<li>Sustentação da Asa (<span class="math inline">\(L\)</span>) → Tração
-do Rotor (<span class="math inline">\(T\)</span>)</li>
-<li><a href="https://en.wikipedia.org/wiki/Lift-induced_drag">Arrasto
-Induzido</a> (<span class="math inline">\(D_i\)</span>) → Potência
-Induzida (<span class="math inline">\(P_i\)</span>) escalada por <span
-class="math inline">\(V_\infty\)</span></li>
-</ul>
-<p>A potência induzida sistêmica para configuração em tandem:</p>
+<p>O mapeamento entre asas fixas e rotores em translação fundamenta-se
+nos preceitos da <a
+href="https://en.wikipedia.org/wiki/Momentum_theory">teoria do
+momento</a>: a sustentação da asa (<span
+class="math inline">\(L\)</span>) projeta-se na tração do rotor (<span
+class="math inline">\(T\)</span>), enquanto o <a
+href="https://en.wikipedia.org/wiki/Lift-induced_drag">arrasto
+induzido</a> (<span class="math inline">\(D_i\)</span>) converte-se em
+potência induzida (<span class="math inline">\(P_i\)</span>) escalada
+pela velocidade da corrente livre <span
+class="math inline">\(V_\infty\)</span>.</p>
+<p>A potência induzida sistêmica para a configuração de <a
+href="https://en.wikipedia.org/wiki/Tandem_rotors">rotores em tandem</a>
+expressa-se pela soma:</p>
 <p><span class="math display">\[P_{i_{total}} = P_{i1} + P_{i2} +
 P_{i12} + P_{i21}\]</span></p>
-<p>Sendo:</p>
-<ul>
-<li><span class="math inline">\(P_{i1} = T_1 v_{i1}\)</span> e <span
-class="math inline">\(P_{i2} = T_2 v_{i2}\)</span>: potências
-auto-induzidas</li>
-<li><span class="math inline">\(P_{i12} = T_1 v_{i12}\)</span>:
-incremento de potência no rotor 1 induzido pelo rotor 2</li>
-<li><span class="math inline">\(P_{i21} = T_2 v_{i21}\)</span>:
-incremento de potência no rotor 2 induzido pela esteira do rotor 1</li>
-</ul>
-<p>Aplicando o Teorema de Munk:</p>
+<p>Nessa relação, <span class="math inline">\(P_{i1} = T_1
+v_{i1}\)</span> e <span class="math inline">\(P_{i2} = T_2
+v_{i2}\)</span> constituem as potências auto-induzidas de cada rotor
+isolado, <span class="math inline">\(P_{i12} = T_1 v_{i12}\)</span>
+expressa o incremento de potência induzido no primeiro rotor pelo
+segundo, e <span class="math inline">\(P_{i21} = T_2 v_{i21}\)</span>
+quantifica o incremento gerado no segundo rotor pela esteira do
+primeiro.</p>
+<p>Aplicando o Teorema de Munk [<a href="#referências">1</a>], a
+potência induzida total assume a forma analítica:</p>
 <p><span class="math display">\[P_{i_{total}} = \frac{1}{2\rho\pi R^2
 V_\infty} \left[ T_1^2 + T_2^2 + 2\sigma_r T_1 T_2 \right]\]</span></p>
 <p>O fator de interferência do rotor <span
@@ -1691,29 +1719,35 @@ longitudinal entre os eixos dos rotores desaparece da formulação
 macroscópica da energia.</strong></p>
 <h3 id="consequências-físicas-e-de-projeto-para-o-tandem">Consequências
 Físicas e de Projeto para o Tandem</h3>
-<ol type="1">
-<li>O rotor dianteiro experimenta um escoamento fracamente perturbado,
-operando próximo às condições de rotor isolado.</li>
-<li>O rotor traseiro é fortemente imerso na esteira desenvolvida do
-rotor dianteiro, exigindo incremento severo no passo coletivo.</li>
-<li><strong>O princípio de Munk dita que afastar os mastros
+<p>Três consequências práticas emergem diretamente da análise de
+Leishman [<a href="#referências">4</a>] e da teoria clássica:</p>
+<p>Primeiro, o rotor dianteiro experimenta um escoamento fracamente
+perturbado, operando próximo às condições de rotor isolado.</p>
+<p>Segundo, o rotor traseiro fica fortemente imerso na esteira
+desenvolvida do rotor dianteiro, exigindo incremento severo no <a
+href="https://pt.wikipedia.org/wiki/Rotor_de_helic%C3%B3ptero#Controle_de_passo_coletivo">passo
+coletivo</a>.</p>
+<p>Terceiro, <strong>o princípio de Munk dita que afastar os mastros
 longitudinalmente não mitigará o consumo sistêmico de potência
-induzida.</strong> A redução efetiva requer maximização do espaçamento
+induzida.</strong> A redução efetiva requer a maximização do espaçamento
 vertical <span class="math inline">\(h\)</span> entre os planos dos
-discos.</li>
-</ol>
+discos.</p>
 <hr />
 <h2 id="4-o-equacionamento-do-rotor-coaxial-em-voo-avançado">4. O
 Equacionamento do Rotor Coaxial em Voo Avançado</h2>
 <p>A implicação mais profunda da independência do stagger manifesta-se
-na análise teórica das configurações coaxiais. Um sistema coaxial
+na análise teórica das configurações com <a
+href="https://en.wikipedia.org/wiki/Coaxial_rotors">rotor coaxial</a>
+[<a href="#referências">3</a>, [#Referências|[4]]]. Um sistema coaxial
 caracteriza-se por separação vertical <span
 class="math inline">\(h\)</span> e stagger matematicamente nulo (<span
 class="math inline">\(s = 0\)</span>).</p>
 <p>Dado que o Teorema de Munk erradica a dependência de <span
 class="math inline">\(s\)</span>: <strong>um rotor coaxial em alta razão
 de avanço é analítica e aerodinamicamente equivalente a um rotor em
-tandem em voo avançado.</strong></p>
+tandem em <a
+href="https://en.wikipedia.org/wiki/Translational_flight">voo de
+translação</a>.</strong></p>
 <p>Ambos obedecem à mesma matriz de equacionamento de interferência no
 Plano de Trefftz. A esteira superposta deixada por um par de rotores
 coaxiais separados por uma distância vertical <span
@@ -1721,8 +1755,8 @@ class="math inline">\(h\)</span> varrerá exatamente a mesma seção de
 controle e carreará o mesmo fluxo de energia cinética que a esteira de
 um sistema em tandem cujos mastros estejam distanciados
 longitudinalmente, contanto que o gap <span
-class="math inline">\(h\)</span> e os diâmetros efetivos sejam
-idênticos.</p>
+class="math inline">\(h\)</span> e os diâmetros efetivos sejam idênticos
+[<a href="#referências">3</a>].</p>
 <p>Esta demonstração impõe uma diretriz de projeto rigorosa para <a
 href="https://en.wikipedia.org/wiki/Electric_vertical_takeoff_and_landing">eVTOLs</a>:
 em voo de cruzeiro, a eficiência propulsiva induzida de arranjos
@@ -1730,19 +1764,17 @@ coaxiais e arranjos em tandem alinhados com o escoamento são
 fenomenologicamente idênticas.</p>
 <hr />
 <h2 id="referências">Referências</h2>
-<p>[1] Munk, M. M. — <em>The Minimum Induced Drag of Aerofoils</em>
-(NACA Report 121, 1923). <a
+<p>[1] Munk, M. M., <em>The Minimum Induced Drag of Aerofoils</em>, NACA
+Report 121, 1923. (acesso em 15 mar. 2026). <a
 href="https://ntrs.nasa.gov/citations/19930091456">Link</a></p>
-<p>[2] Prandtl, L. — <em>Applications of Modern Hydrodynamics to
-Aeronautics</em> (NACA Report 116, 1921). <a
+<p>[2] Prandtl, L., <em>Applications of Modern Hydrodynamics to
+Aeronautics</em>, NACA Report 116, 1921. (acesso em 15 mar. 2026). <a
 href="https://ntrs.nasa.gov/citations/19930091180">Link</a></p>
 <p>[3] Johnson, W., <em>Helicopter Theory</em>, Princeton University
 Press, Princeton, 1980. <a
 href="https://archive.org/details/helicoptertheory0000john_y9s0">Link</a></p>
 <p>[4] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
-2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
-em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
-de batimento e teoria de esteira. <a
+2ª ed., Cambridge University Press, Cambridge, 2006. <a
 href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
 </main>
 

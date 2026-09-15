@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="59">
+<html lang="pt-BR" data-status="finalizado" data-minutes="60">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1542,12 +1542,13 @@ que é um LLM e por que ele importa na gestão de projetos</h3>
 <p>Um <strong><a
 href="https://pt.wikipedia.org/wiki/Modelo_de_linguagem_grande">LLM
 (Large Language Model)</a></strong>, modelo de linguagem de grande
-escala, é uma rede neural treinada em enormes volumes de texto para
-compreender e gerar linguagem humana com alta fluência e capacidade de
-raciocínio. Modelos de ponta como ChatGPT, Claude Opus ou Gemini são
-capazes de ler documentos técnicos, resumir reuniões, responder a
-perguntas em linguagem natural, detectar padrões em texto não
-estruturado e gerar rascunhos de documentos.</p>
+escala fundamentado na arquitetura Transformer [<a
+href="#referências">3</a>], é uma rede neural treinada em enormes
+volumes de texto para compreender e gerar linguagem humana com alta
+fluência e capacidade de raciocínio. Modelos de ponta como ChatGPT,
+Claude Opus ou Gemini são capazes de ler documentos técnicos, resumir
+reuniões, responder a perguntas em linguagem natural, detectar padrões
+em texto não estruturado e gerar rascunhos de documentos.</p>
 <p>O que torna os LLMs particularmente valiosos para gestão de projetos
 é precisamente sua capacidade de lidar com <strong>conteúdo não
 estruturado</strong>: os comentários do <a
@@ -1566,10 +1567,11 @@ que entram as técnicas de <strong>contextualização</strong>: RAG,
 knowledge base e treinamento específico.</p>
 <h3 id="o-que-é-rag--retrieval-augmented-generation">O que é RAG —
 Retrieval-Augmented Generation</h3>
-<p><strong>Retrieval-Augmented Generation (RAG)</strong> é a técnica de
-ampliar as respostas de um LLM com informações recuperadas dinamicamente
-de uma base de dados externa, no momento em que a pergunta é feita. O
-processo funciona em três etapas:</p>
+<p><strong>Retrieval-Augmented Generation (RAG)</strong> [<a
+href="#referências">4</a>] é a técnica de ampliar as respostas de um LLM
+com informações recuperadas dinamicamente de uma base de dados externa,
+no momento em que a pergunta é feita. O processo funciona em três
+etapas:</p>
 <ol type="1">
 <li><strong>Recuperação:</strong> quando o usuário faz uma pergunta, um
 mecanismo de busca (geralmente por similaridade semântica) encontra os
@@ -1600,8 +1602,9 @@ repositório estruturado ou semi-estruturado de informações que serve
 como memória persistente e consultável para um sistema de IA. Ela pode
 conter:</p>
 <ul>
-<li>Documentos técnicos e normativos (DO-178C, ARP4754A, procedimentos
-internos)</li>
+<li>Documentos técnicos e normativos (DO-178C [<a
+href="#referências">6</a>], ARP4754A [<a href="#referências">5</a>],
+procedimentos internos)</li>
 <li>Histórico de projetos anteriores (lições aprendidas, dados da CCPM e
 JIRA de projetos passados, WBS executadas, dados de duração real de
 tarefas)</li>
@@ -1688,7 +1691,7 @@ sofisticados a partir de componentes simples.</p>
 <h3 id="treinamento-em-base-de-dados-proprietária">Treinamento em Base
 de Dados Proprietária</h3>
 <p>Além de RAG e knowledge base, existe a opção de <strong><a
-href="https://en.wikipedia.org/wiki/Fine-tuning_(deep_learning)">fine-tuning</a></strong>,
+href="https://en.wikipedia.org/wiki/Fine-tuning_%28deep_learning%29">fine-tuning</a></strong>,
 retreinar um modelo de linguagem nos dados específicos da organização.
 Isso cria um modelo que incorpora o vocabulário, os padrões e o
 conhecimento da empresa diretamente nos seus pesos, sem depender de
@@ -1710,12 +1713,14 @@ entre IA e sistemas existentes</h3>
 <strong><a
 href="https://pt.wikipedia.org/wiki/Interface_de_programa%C3%A7%C3%A3o_de_aplica%C3%A7%C3%B5es">APIs</a></strong>,
 interfaces de programação que permitem que sistemas diferentes troquem
-dados programaticamente. O JIRA tem uma API REST madura e bem
+dados programaticamente. O JIRA tem uma <a
+href="https://pt.wikipedia.org/wiki/REST">API REST</a> madura e bem
 documentada que permite leitura e escrita de praticamente qualquer
 elemento do sistema: issues, comentários, status, campos personalizados,
-sprints. Sistemas PLM como Windchill têm APIs similares. A CCPM,
-dependendo da implementação, pode expor dados via API ou via integração
-de banco de dados.</p>
+sprints. Sistemas <a
+href="https://pt.wikipedia.org/wiki/Gest%C3%A3o_do_ciclo_de_vida_do_produto">PLM</a>
+como Windchill têm APIs similares. A CCPM, dependendo da implementação,
+pode expor dados via API ou via integração de banco de dados.</p>
 <p>A integração via API significa que um agente de IA pode:</p>
 <ul>
 <li><strong>Ler</strong> o estado atual de todas as tarefas da cadeia
@@ -1757,10 +1762,13 @@ não pode fazer.</li>
 CCPM com recursos, tempo e área executora. A CCPM calcula
 automaticamente prioridades com base na corrente crítica. No nível de
 execução, supervisores e colaboradores carregam atividades no JIRA
-durante a abertura do sprint, preenchendo remaining duration e story
-points. Toda essa riqueza de dados, que é atualizada continuamente
-durante a execução, é o combustível que os agentes de IA consomem para
-gerar inteligência em tempo real.</p>
+durante a abertura do <a
+href="https://pt.wikipedia.org/wiki/Scrum#Sprint">sprint</a>,
+preenchendo remaining duration e <a
+href="https://en.wikipedia.org/wiki/Story_point">story points</a>. Toda
+essa riqueza de dados, que é atualizada continuamente durante a
+execução, é o combustível que os agentes de IA consomem para gerar
+inteligência em tempo real.</p>
 <hr />
 <h2
 id="introdução-um-novo-paradigma-para-a-gestão-de-projetos-complexos">Introdução:
@@ -1772,13 +1780,20 @@ equipes multidisciplinares distribuídas e reguladores que exigem
 rastreabilidade absoluta de cada decisão. O custo de um único dia de
 atraso pode superar dezenas de milhares de dólares, sem contar os
 impactos em cadeia sobre fornecedores e clientes.</p>
-<p>A <strong>Critical Chain Project Management</strong> (CCPM),
-desenvolvida por <strong><a
+<p>A <a
+href="https://en.wikipedia.org/wiki/Critical_chain_project_management"><strong>Critical
+Chain Project Management</strong> (CCPM)</a>, desenvolvida por
+<strong><a
 href="https://en.wikipedia.org/wiki/Eliyahu_M._Goldratt">Eliyahu
-Goldratt</a></strong> como aplicação da <a
+Goldratt</a></strong> [<a href="#referências">1</a>] como aplicação da
+<a
 href="https://pt.wikipedia.org/wiki/Teoria_das_restri%C3%A7%C3%B5es">Teoria
 das Restrições</a> ao gerenciamento de projetos, oferece uma resposta
-elegante a essa complexidade: eliminar o desperdício nas estimativas
+elegante a essa complexidade em contraste com os modelos tradicionais
+baseados no <a
+href="https://pt.wikipedia.org/wiki/M%C3%A9todo_do_caminho_cr%C3%ADtico">caminho
+crítico</a> do <a href="https://www.pmi.org/standards/pmbok">PMBOK</a>
+[<a href="#referências">2</a>]: eliminar o desperdício nas estimativas
 individuais, concentrar as folgas em buffers estratégicos e gerir o
 projeto pelo consumo desses buffers — não pelo cumprimento de datas
 intermediárias. O JIRA, por sua vez, tornou-se a língua franca do
@@ -1981,7 +1996,7 @@ diretamente para o executante e seu supervisor, com contexto
 acionável:</p>
 <div class="box callout-example">
 <div class="box-title">
-<p>Alerta ao gerente de projetos, ao supervisor e/ou ao executante</p>
+<p>Alerta ao gerente de projetos, ao supervisor ou ao executante</p>
 </div>
 <p><em>“Atenção: a área de Aviônica apresenta tendência de atraso em 3
 tarefas ativas da cadeia crítica do programa X nas últimas 72 horas.
@@ -2028,10 +2043,13 @@ iniciada e não consegue evoluir é que a dependência se revela, ao custo
 máximo de buffer e retrabalho.</p>
 <h3 id="a-abordagem-com-ia-2">A Abordagem com IA</h3>
 <p>Um LLM com <strong>knowledge base</strong> de normas aeronáuticas,
-lista de inputs críticos passados, critérios de PDR ou CDR e com o
-histórico de projetos anteriores pode analisar o backlog de tarefas em
-linguagem natural e identificar dependências implícitas que nenhuma
-ferramenta de agendamento convencional detectaria. Isso é
+lista de inputs críticos passados, critérios de <a
+href="https://en.wikipedia.org/wiki/Preliminary_design_review">PDR</a>
+ou <a
+href="https://en.wikipedia.org/wiki/Critical_design_review">CDR</a> e
+com o histórico de projetos anteriores pode analisar o backlog de
+tarefas em linguagem natural e identificar dependências implícitas que
+nenhuma ferramenta de agendamento convencional detectaria. Isso é
 qualitativamente diferente de qualquer abordagem tradicional — exige
 simultaneamente conhecimento de norma, compreensão do que cada tarefa
 faz e raciocínio sobre implicações.</p>
@@ -2194,7 +2212,7 @@ janela de 15 a 30 de maio. Projetos afetados: Projeto X (ensaio
 vibratório, Atividade XXX), Projeto Y (ensaio de fadiga, Atividade YYY)
 e Projeto Z (ensaio de cargas estáticas, Atividade ZZZ). O programa de
 maior prioridade de portfólio (Projeto X) tem apenas 8 dias de folga
-nessa janela. Sugestões: (1) antecipar a Atividade XXX para 10-14 de
+nessa janela. Sugestões: (1) antecipar a Atividade XXX para 10 a 14 de
 maio — libera a janela crítica, consome 0% de buffer adicional; (2)
 postergar Atividade ZZZ para junho — impacto moderado em Projeto Z.”</p>
 </div>
@@ -2326,9 +2344,10 @@ a cadeia crítica. Por fim, a IA pode sugerir realocação de recursos
 dentro do próprio sprint, auxiliando o supervisor a tomar decisões mais
 rápidas e embasadas no que realmente afeta o todo. O supervisor entra na
 reunião com uma visão estruturada do que precisa de atenção, sem ter que
-varrer manualmente o burndown do JIRA e sua conexão com projetos
-críticos da CCPM, transformando a reunião de uma coleta de status em uma
-tomada de decisão.</p>
+varrer manualmente o <a
+href="https://pt.wikipedia.org/wiki/Burndown_chart">burndown</a> do JIRA
+e sua conexão com projetos críticos da CCPM, transformando a reunião de
+uma coleta de status em uma tomada de decisão.</p>
 <p>O copiloto usa uma combinação de: <strong>agente de
 monitoramento</strong> que coleta o estado atual; <strong>RAG sobre
 histórico de projetos</strong> para contextualizar tendências;
@@ -2429,9 +2448,10 @@ são exatamente onde a IA tem vantagem comparativa. Via <strong>RAG sobre
 o histórico de projetos</strong>, o agente conhece quais tipos de tarefa
 historicamente aceitam compressão com poucos efeitos colaterais, quais
 aceitam paralelismo sem retrabalho excessivo, e quais são as atividades
-onde fast-tracking aumentou significativamente o risco de retrabalho.
-Esse contexto histórico enriquece cada opção de recuperação
-apresentada.</p>
+onde <a
+href="https://en.wikipedia.org/wiki/Schedule_compression#Fast_tracking">fast-tracking</a>
+aumentou significativamente o risco de retrabalho. Esse contexto
+histórico enriquece cada opção de recuperação apresentada.</p>
 <div class="box callout-example">
 <div class="box-title">
 <p>Opções de recuperação geradas automaticamente</p>
@@ -2446,7 +2466,7 @@ retrabalho.</em></p>
 Iniciar Atividade X com entregável parcial. Recupera 5 dias. Risco
 aumentado de retrabalho: médio. <em>Histórico: em 2 casos similares, o
 fast-tracking nessa fase gerou retrabalho médio de 2 dias: ganho líquido
-de ~3 dias.</em></p>
+de aproximadamente 3 dias.</em></p>
 <p><strong>Opção C — Descope da documentação de suporte
 (não-certificação):</strong> Postergar relatórios de suporte para fase
 pós-entrega. Recupera 6 dias. Sem impacto regulatório identificado.</p>
@@ -2662,7 +2682,9 @@ natural, IA modifica o modelo e calcula impacto</li>
 <li>RAG sobre histórico para estimar probabilidade de cada cenário
 alternativo com base em casos reais</li>
 <li>Identificação automática das variáveis com maior alavancagem sobre o
-resultado (análise de sensibilidade)</li>
+resultado (<a
+href="https://pt.wikipedia.org/wiki/An%C3%A1lise_de_sensibilidade">análise
+de sensibilidade</a>)</li>
 <li>Registro dos cenários explorados para documentação do processo de
 decisão</li>
 </ul>
@@ -2670,7 +2692,9 @@ decisão</li>
 <h2 id="ideia-14--geração-automatizada-de-wbs-para-novos-projetos">Ideia
 14 — Geração Automatizada de WBS para Novos Projetos</h2>
 <h3 id="o-problema-13">O Problema</h3>
-<p>Criar a Work Breakdown Structure de um novo projeto é um processo que
+<p>Criar a <a
+href="https://pt.wikipedia.org/wiki/Estrutura_anal%C3%ADtica_do_projeto">Work
+Breakdown Structure</a> (WBS) de um novo projeto é um processo que
 mistura conhecimento técnico de domínio, experiência em projetos
 similares e conformidade com processos organizacionais e regulatórios.
 Em organizações maduras, existe um WBS genérico como ponto de partida,
@@ -2691,10 +2715,12 @@ costumam ser esquecidos em projetos desse tipo.</p>
 sistema de entretenimento a bordo em aeronave regional, regulação
 ANAC/FAA, prazo contratual 18 meses.”</p>
 <p><strong>Saída da IA:</strong> WBS com 127 pacotes de trabalho
-distribuídos em 8 fases, incluindo flags para: análise de impacto em STC
-existente, atualização de FMEA de sistemas elétricos, testes de
-compatibilidade eletromagnética — com estimativas de duração baseadas em
-3 projetos de STC anteriores da organização.</p>
+distribuídos em 8 fases, incluindo flags para: análise de impacto em <a
+href="https://en.wikipedia.org/wiki/Supplemental_type_certificate">STC</a>
+existente, atualização de <a
+href="https://pt.wikipedia.org/wiki/FMEA">FMEA</a> de sistemas
+elétricos, testes de compatibilidade eletromagnética — com estimativas
+de duração baseadas em 3 projetos de STC anteriores da organização.</p>
 </div>
 <p>Além do WBS em si, a IA pode sugerir uma <strong>estimativa inicial
 para o tamanho do buffer</strong> baseado no histórico de consumo de
@@ -2803,7 +2829,7 @@ sem priorização.</p>
 17 — Detecção de Gold Plating e Definição de Pronto</h2>
 <h3 id="o-problema-16">O Problema</h3>
 <p><a
-href="https://en.wikipedia.org/wiki/Gold_plating_(project_management)">Gold
+href="https://en.wikipedia.org/wiki/Gold_plating_%28project_management%29">Gold
 plating</a> é o hábito de adicionar melhorias não solicitadas a um
 entregável: testar além do necessário, documentar além do exigido,
 refinar uma análise que já estava suficientemente completa. Em
@@ -2812,7 +2838,7 @@ virtude de segurança, esse comportamento é culturalmente reforçado e
 gerencialmente invisível até que o buffer desapareça sem causa
 aparente.</p>
 <p>O problema complementar é a ausência de uma <strong><a
-href="https://en.wikipedia.org/wiki/Scrum_(project_management)#Definition_of_Done_(DoD)">Definition
+href="https://en.wikipedia.org/wiki/Scrum_%28project_management%29#Definition_of_Done_%28DoD%29">Definition
 of Done</a></strong> (Definição de Pronto) clara e consistente para cada
 tipo de tarefa. Sem saber o que “pronto” significa de forma objetiva,
 cada engenheiro define à sua maneira, alguns com padrões mais altos (e
@@ -2855,7 +2881,7 @@ Orquestrador de Revisões Técnicas Formais</h2>
 Design Review e Design Evidence, são eventos críticos em programas
 aeronáuticos. Elas envolvem dezenas de participantes, centenas de action
 items, materiais de apresentação que precisam refletir o estado real do
-projeto, e um processo de entrada/saída com critérios rigorosos.
+projeto, e um processo de entrada e saída com critérios rigorosos.
 Organizar uma CDR em um programa grande pode consumir quatro a seis
 semanas de trabalho de coordenação.</p>
 <p>O critério fundamental que a IA pode verificar automaticamente é:
@@ -2999,8 +3025,8 @@ diferentes velocidades por diferentes áreas da organização.</p>
 <h3 id="nível-1-reativo">Nível 1: Reativo</h3>
 <p>A IA responde a perguntas pontuais sobre o estado do projeto.
 Interface em linguagem natural com o JIRA e a CCPM, geração de
-relatórios sob demanda. <strong>Tecnologia:</strong> LLM + API do
-JIRA/CCPM. Baixo risco, alto valor imediato, nenhuma mudança de processo
+relatórios sob demanda. <strong>Tecnologia:</strong> LLM + API do JIRA e
+CCPM. Baixo risco, alto valor imediato, nenhuma mudança de processo
 necessária. Este é o nível mais acessível: praticamente qualquer equipe
 pode começar aqui sem infraestrutura adicional significativa. É também
 onde as resistências começam a ser quebradas: quem usa a IA no cotidiano
@@ -3190,39 +3216,36 @@ Rovo</strong></a> — Agentes AI integrados ao JIRA.</p></li>
 </ul>
 <hr />
 <h2 id="referências">Referências</h2>
-<p>[1] Goldratt, E. M. <em>Critical Chain</em>, North River Press, 1997.
-— Fundamentos da <a
-href="https://en.wikipedia.org/wiki/Critical_chain_project_management">CCPM</a>
-e <a href="https://en.wikipedia.org/wiki/Theory_of_constraints">Teoria
-das Restrições</a>. <a
+<p>[1] Goldratt, E. M., <em>Critical Chain</em>, North River Press,
+Great Barrington, 1997. — Fundamentos da CCPM e da Teoria das Restrições
+aplicadas a cronogramas com buffers. (acesso em 15 mar. 2026). <a
 href="https://archive.org/details/criticalchain0000gold">Link</a></p>
-<p>[2] PMI. <em>A Guide to the Project Management Body of Knowledge
-(PMBOK® Guide)</em>, 7ª ed. Project Management Institute, 2021. —
-Framework de <a
-href="https://en.wikipedia.org/wiki/Project_management">gestão de
-projetos</a>. <a href="https://www.pmi.org/standards/pmbok">Link</a></p>
+<p>[2] PMI, <em>A Guide to the Project Management Body of Knowledge
+(PMBOK Guide)</em>, 7ª ed., Project Management Institute, Newtown
+Square, 2021. — Framework e padrões globais de gestão de projetos.
+(acesso em 15 mar. 2026). <a
+href="https://www.pmi.org/standards/pmbok">Link</a></p>
 <p>[3] Vaswani, A. et al., <em>Attention Is All You Need</em>, Advances
 in Neural Information Processing Systems 30, Curran Associates, Red
-Hook, 2017, pp. 5998–6008. — Arquitetura <a
-href="https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture)">Transformer</a>
-base dos <a
-href="https://en.wikipedia.org/wiki/Large_language_model">LLMs</a>. <a
-href="https://arxiv.org/abs/1706.03762">Link</a></p>
+Hook, 2017, pp. 5998–6008. — Arquitetura Transformer, mecanismo de
+autoatenção e base dos modelos de linguagem de grande escala. (acesso em
+15 mar. 2026). <a href="https://arxiv.org/abs/1706.03762">Link</a></p>
 <p>[4] Lewis, P. et al., <em>Retrieval-Augmented Generation for
 Knowledge-Intensive NLP Tasks</em>, Advances in Neural Information
 Processing Systems 33, Curran Associates, Red Hook, 2020, pp. 9459–9474.
-— Framework <a
-href="https://en.wikipedia.org/wiki/Retrieval-augmented_generation">RAG</a>.
-<a href="https://arxiv.org/abs/2005.11401">Link</a></p>
-<p>[5] SAE International. <em>ARP4754A: Guidelines for Development of
-Civil Aircraft and Systems</em>, 2010. — <a
-href="https://en.wikipedia.org/wiki/ARP4754">Desenvolvimento de sistemas
-aeronáuticos</a>. <a
-href="https://doi.org/10.4271/ARP4754A">Link</a></p>
+— Formulação canônica do framework de geração aumentada por recuperação
+semântica em bases externas. (acesso em 15 mar. 2026). <a
+href="https://arxiv.org/abs/2005.11401">Link</a></p>
+<p>[5] SAE International, <em>ARP4754A: Guidelines for Development of
+Civil Aircraft and Systems</em>, SAE International, Warrendale, 2010. —
+Diretrizes internacionais de engenharia de sistemas e segurança para
+aeronaves civis. <a href="https://doi.org/10.4271/ARP4754A">Link</a></p>
 <p>[6] RTCA, <em>DO-178C: Software Considerations in Airborne Systems
-and Equipment Certification</em>, 2011. — <a
-href="https://en.wikipedia.org/wiki/DO-178C">Certificação de software
-aeronáutico</a>. <a href="https://www.rtca.org/do-178/">Link</a></p>
+and Equipment Certification</em>, Radio Technical Commission for
+Aeronautics, Washington, D.C., 2011. — Critérios e objetivos
+regulatórios para certificação de software em sistemas aviônicos.
+(acesso em 15 mar. 2026). <a
+href="https://www.rtca.org/do-178/">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">

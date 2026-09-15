@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="30">
+<html lang="pt-BR" data-status="finalizado" data-minutes="31">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1519,10 +1519,13 @@ para que ela faça isso bem?”. A resposta passa por mecanismos,
 estruturas, vibrações, controle, transferência de calor, escoamento de
 ar, eletrônica, software, materiais, manufatura, metrologia, ensaios e
 integração.</p>
-<p>Neste ensaio, “impressão 3D” significa sobretudo FFF/FDM: deposição
-de filamento termoplástico em camadas. Outras famílias de manufatura
-aditiva levantam problemas distintos e não estão no centro da
-analogia.</p>
+<p>Aqui, “impressão 3D” significa sobretudo <a
+href="https://en.wikipedia.org/wiki/Fused_filament_fabrication">FFF</a>
+(<a
+href="https://en.wikipedia.org/wiki/Fused_deposition_modeling">FDM</a>):
+deposição de filamento termoplástico em camadas [<a
+href="#referências">1</a>]. Outras famílias de manufatura aditiva
+levantam problemas distintos e não estão no centro da analogia.</p>
 <p>Esse conjunto cria uma analogia útil com o desenvolvimento de uma
 aeronave. A escala, a energia envolvida, as consequências de uma falha e
 o rigor de desenvolvimento, verificação e certificação são muito
@@ -1559,11 +1562,13 @@ id="engenharia-de-sistemas-o-problema-está-nas-interfaces">Engenharia de
 sistemas: o problema está nas interfaces</h2>
 <p>A <a
 href="https://www.incose.org/about-systems-engineering/system-and-se-definition">engenharia
-de sistemas</a> começa quando o desempenho de um produto deixa de
-depender de um componente e passa a depender das relações entre vários
-componentes. Uma impressora 3D é um exemplo compacto. O extrusor pode
-ter força suficiente, a estrutura pode ser rígida, o hotend pode
-alcançar a temperatura correta e os motores podem executar todos os
+de sistemas</a> [<a href="#referências">14</a>] começa quando o
+desempenho de um produto deixa de depender de um componente e passa a
+depender das relações entre vários componentes. Uma impressora 3D é um
+exemplo compacto. O extrusor pode ter força suficiente, a estrutura pode
+ser rígida, o <a
+href="https://en.wikipedia.org/wiki/3D_printer_extruder#Hot_end">hotend</a>
+pode alcançar a temperatura correta e os motores podem executar todos os
 passos comandados. Ainda assim, a peça pode sair ruim porque essas
 partes não funcionam bem juntas nas condições escolhidas.</p>
 <p>Considere uma alteração aparentemente local: aumentar a aceleração
@@ -1663,9 +1668,10 @@ sentido de aproximação.</p>
 que comprimem e empurram o filamento. A força precisa vencer a
 resistência do caminho até o bico sem esmagar o material nem permitir
 escorregamento. No eixo vertical, fusos transformam rotação em
-deslocamento linear pequeno. A relação entre passo do motor,
-microstepping, transmissão e passo do fuso define a conversão entre
-comando elétrico e posição mecânica.</p>
+deslocamento linear pequeno. A relação entre passo do motor, <a
+href="https://en.wikipedia.org/wiki/Microstepping">microstepping</a>,
+transmissão e passo do fuso define a conversão entre comando elétrico e
+posição mecânica.</p>
 <p>O paralelismo com uma aeronave aparece em mecanismos aparentemente
 muito diferentes. Flaps e slats precisam percorrer trajetórias definidas
 por trilhos, links e atuadores. O trem de pouso combina articulações,
@@ -1764,8 +1770,10 @@ O defeito registra o movimento residual.</p>
 de comando também participam de modos estruturais. A diferença é que o
 escoamento aerodinâmico pode interagir com esses modos. Quando forças
 aerodinâmicas, inércia e elasticidade se acoplam, surge o campo da
-aeroelasticidade. O <em>flutter</em> é um caso limite no qual a
-interação pode fornecer energia ao movimento em vez de dissipá-la.</p>
+aeroelasticidade. O <a
+href="https://en.wikipedia.org/wiki/Aeroelasticity#Flutter"><em>flutter</em></a>
+é um caso limite no qual a interação pode fornecer energia ao movimento
+em vez de dissipá-la.</p>
 <p>A comparação exige cuidado. O <em>ringing</em> de uma impressora não
 é <em>flutter</em>. Na impressora, o problema usual é vibração
 estrutural forçada por comandos de movimento. Na aeronave, uma
@@ -1774,15 +1782,16 @@ escoamento. O elo didático está antes disso: ambos exigem conhecer
 frequências, formas modais, amortecimento e fontes de excitação.</p>
 <p>Helicópteros acrescentam outro paralelo. <a
 href="https://ntrs.nasa.gov/citations/19820020406">Absorvedores
-pendulares</a> instalados no rotor podem ser sintonizados perto de
-frequências de excitação para reduzir cargas vibratórias transmitidas ao
-cubo. Em algumas arquiteturas, o princípio aparece em absorvedores
-bifilares montados no rotor. Eles alteram a resposta mecânica do sistema
-por meio de massas que oscilam no campo centrífugo. A impressora pode
-atacar seu problema por outro caminho, modificando o comando antes que a
-estrutura seja excitada. As técnicas são diferentes, mas ambas dependem
-da mesma ideia: uma vibração só pode ser tratada de forma específica
-quando sua frequência e sua relação de fase são conhecidas.</p>
+pendulares</a> [<a href="#referências">8</a>] instalados no rotor podem
+ser sintonizados perto de frequências de excitação para reduzir cargas
+vibratórias transmitidas ao cubo. Em algumas arquiteturas, o princípio
+aparece em absorvedores bifilares montados no rotor. Eles alteram a
+resposta mecânica do sistema por meio de massas que oscilam no campo
+centrífugo. A impressora pode atacar seu problema por outro caminho,
+modificando o comando antes que a estrutura seja excitada. As técnicas
+são diferentes, mas ambas dependem da mesma ideia: uma vibração só pode
+ser tratada de forma específica quando sua frequência e sua relação de
+fase são conhecidas.</p>
 <hr />
 <h2 id="metrologia-conhecer-a-máquina-antes-de-corrigi-la">Metrologia:
 conhecer a máquina antes de corrigi-la</h2>
@@ -1827,8 +1836,9 @@ suficiente apenas pela geometria e pelos dados de projeto, mede-se o
 sistema real. A impressora moderna faz isso de maneira explícita em
 ensaios de ressonância. O <a
 href="https://www.klipper3d.org/Measuring_Resonances.html">Klipper
-permite usar acelerômetros</a> montados em partes móveis para excitar os
-eixos, registrar aceleração e estimar frequências dominantes.</p>
+permite usar acelerômetros</a> [<a href="#referências">6</a>] montados
+em partes móveis para excitar os eixos, registrar aceleração e estimar
+frequências dominantes.</p>
 <p>O procedimento contém os elementos de um ensaio dinâmico. Existe uma
 entrada conhecida, uma resposta medida e um processamento que tenta
 identificar propriedades do sistema. A excitação percorre uma faixa de
@@ -1838,13 +1848,13 @@ intensidade. O resultado serve depois para escolher parâmetros de
 compensação.</p>
 <p>O paralelo aeronáutico é direto com o <a
 href="https://ntrs.nasa.gov/citations/19840026368">Ground Vibration
-Test</a>, ou GVT. Em um ensaio de vibração em solo, a aeronave é
-excitada e sua resposta estrutural é medida para identificar frequências
-modais, formas modais e amortecimento. Esses dados permitem comparar o
-comportamento real com o modelo estrutural usado em análises
-posteriores. A NASA também descreve GVTs empregados para correlacionar
-modelos de elementos finitos e apoiar a compreensão do comportamento
-aeroelástico de asas experimentais.</p>
+Test</a> [<a href="#referências">7</a>], ou GVT. Em um ensaio de
+vibração em solo, a aeronave é excitada e sua resposta estrutural é
+medida para identificar frequências modais, formas modais e
+amortecimento. Esses dados permitem comparar o comportamento real com o
+modelo estrutural usado em análises posteriores. A NASA também descreve
+GVTs empregados para correlacionar modelos de elementos finitos e apoiar
+a compreensão do comportamento aeroelástico de asas experimentais.</p>
 <p>A escala do ensaio muda radicalmente. Uma impressora pode usar um
 acelerômetro barato e alguns minutos de excitação automática. Uma
 aeronave exige instrumentação distribuída, planejamento de configuração,
@@ -1867,10 +1877,14 @@ corrigir erros sem lutar contra a física</h2>
 <p>A impressão 3D contém vários problemas de controle, e eles não são
 todos do mesmo tipo. O controle de temperatura é um problema de
 realimentação. A compensação de vibração por <em>input shaping</em> é
-uma modificação antecipada do comando. O <em>pressure advance</em>
-antecipa parte da dinâmica de extrusão. Separar esses mecanismos ajuda a
-entender o que cada técnica pode e não pode fazer.</p>
-<p>O hotend pode ser controlado por um laço PID. A lei clássica é</p>
+uma modificação antecipada do comando. O <a
+href="https://www.klipper3d.org/Pressure_Advance.html"><em>pressure
+advance</em></a> antecipa parte da dinâmica de extrusão. Separar esses
+mecanismos ajuda a entender o que cada técnica pode e não pode
+fazer.</p>
+<p>O hotend pode ser controlado por um laço <a
+href="https://en.wikipedia.org/wiki/Proportional%E2%80%93integral%E2%80%93derivative_controller">PID</a>
+[<a href="#referências">4</a>]. A lei clássica é</p>
 <p><span class="math display">\[
 u(t)=K_p e(t)+K_i\int_0^t e(\tau)\,d\tau+K_d\frac{de}{dt},
 \]</span></p>
@@ -1879,17 +1893,18 @@ temperatura desejada e medida. O termo proporcional reage ao erro atual.
 O termo integral acumula erro e reduz desvio persistente. O termo
 derivativo responde à tendência de variação. Firmwares como o Marlin
 oferecem <a href="https://marlinfw.org/docs/gcode/M303.html">autoajuste
-de PID</a> para estimar ganhos adequados ao conjunto térmico
-instalado.</p>
+de PID</a> [<a href="#referências">13</a>] para estimar ganhos adequados
+ao conjunto térmico instalado.</p>
 <p>O <em>input shaping</em> resolve um problema diferente. A técnica
 clássica de <a href="https://doi.org/10.1115/1.2894142">Singer e
-Seering</a> modifica o comando para reduzir vibração residual. Em vez de
-mandar para a estrutura a transição original, o comando é distribuído no
-tempo de forma que respostas vibratórias geradas por partes diferentes
-do comando tendam a se cancelar. Em impressoras, o <a
+Seering</a> [<a href="#referências">3</a>] modifica o comando para
+reduzir vibração residual. Em vez de mandar para a estrutura a transição
+original, o comando é distribuído no tempo de forma que respostas
+vibratórias geradas por partes diferentes do comando tendam a se
+cancelar. Em impressoras, o <a
 href="https://www.klipper3d.org/Resonance_Compensation.html">Klipper
-implementa compensação de ressonância</a> com frequências sintonizadas
-para os eixos.</p>
+implementa compensação de ressonância</a> [<a href="#referências">5</a>]
+com frequências sintonizadas para os eixos.</p>
 <p>Esse método é essencialmente antecipatório. Ele não mede a vibração
 durante cada canto para então mandar um comando corretivo em malha
 fechada. Usa um modelo identificado previamente para evitar excitar a
@@ -1966,9 +1981,9 @@ chega quente sobre material que já começou a esfriar. O histórico de
 temperatura altera contração, união entre camadas e deformação global. A
 pesquisa do <a
 href="https://www.nist.gov/publications/weld-formation-during-material-extrusion-additive-manufacturing">NIST
-sobre formação de interfaces em manufatura por extrusão</a> mostra
-justamente a ligação entre ciclo térmico e desenvolvimento da
-resistência entre camadas.</p>
+sobre formação de interfaces em manufatura por extrusão</a> [<a
+href="#referências">9</a>] mostra justamente a ligação entre ciclo
+térmico e desenvolvimento da resistência entre camadas.</p>
 <p>Uma aeronave possui redes térmicas muito maiores, mas a mesma
 contabilidade de energia. Calor é gerado por pessoas, aviônicos,
 baterias, motores, inversores, atrito e processos de compressão. Precisa
@@ -2040,9 +2055,11 @@ potência e atuadores</h2>
 <p>A impressora é uma máquina eletromecânica. Uma fonte converte energia
 da rede para os níveis usados pelo equipamento. A placa controladora
 distribui potência e sinais. Drivers modulam corrente em motores de
-passo. MOSFETs chaveiam aquecedores. Termistores convertem temperatura
-em grandezas elétricas. Fins de curso e sondas fornecem referências
-geométricas. Acelerômetros observam dinâmica.</p>
+passo. <a href="https://en.wikipedia.org/wiki/MOSFET">MOSFETs</a>
+chaveiam aquecedores. <a
+href="https://en.wikipedia.org/wiki/Thermistor">Termistores</a>
+convertem temperatura em grandezas elétricas. Fins de curso e sondas
+fornecem referências geométricas. Acelerômetros observam dinâmica.</p>
 <p>Cada componente ocupa uma posição na cadeia entre informação e
 energia. Um termistor produz informação sobre temperatura, mas não
 consegue alterá-la. O aquecedor altera o estado térmico, mas não sabe
@@ -2084,13 +2101,14 @@ quando leituras são adquiridas, filtradas e transformadas em comandos de
 potência. Sensores de referência só protegem a geometria se seus estados
 forem interpretados no contexto certo.</p>
 <p>A arquitetura do <a
-href="https://www.klipper3d.org/Code_Overview.html">Klipper</a> torna
-essa divisão especialmente visível. Parte do processamento ocorre em um
-computador hospedeiro e parte em microcontroladores próximos ao
-hardware. O sistema calcula movimentos, agenda eventos futuros e
-transmite comandos temporizados. O microcontrolador executa eventos com
-referência ao próprio relógio. O problema central não é apenas calcular
-valores corretos. É fazer a ação correta no instante correto.</p>
+href="https://www.klipper3d.org/Code_Overview.html">Klipper</a> [<a
+href="#referências">12</a>] torna essa divisão especialmente visível.
+Parte do processamento ocorre em um computador hospedeiro e parte em
+microcontroladores próximos ao hardware. O sistema calcula movimentos,
+agenda eventos futuros e transmite comandos temporizados. O
+microcontrolador executa eventos com referência ao próprio relógio. O
+problema central não é apenas calcular valores corretos. É fazer a ação
+correta no instante correto.</p>
 <p>Essa noção aproxima a impressora de sistemas embarcados aeronáuticos.
 Em uma aeronave, um algoritmo de controle pode estar matematicamente
 correto e ainda assim produzir comportamento inadequado se atrasos,
@@ -2120,10 +2138,12 @@ do CAD ao movimento da máquina</h2>
 <p>Antes de qualquer motor girar, a peça já atravessou várias
 representações. O projeto começa como geometria em CAD. A geometria é
 convertida para uma representação adequada ao fluxo de manufatura,
-frequentemente uma malha ou formato 3MF. O <em>slicer</em> divide o
-volume em camadas, escolhe perímetros, preenchimentos, suportes,
-velocidades e trajetórias. O resultado vira comandos que o firmware
-transforma em movimentos temporizados.</p>
+frequentemente uma malha ou formato <a
+href="https://3mf.io/specification/">3MF</a>. O <a
+href="https://en.wikipedia.org/wiki/Slicer_(3D_printing)"><em>slicer</em></a>
+divide o volume em camadas, escolhe perímetros, preenchimentos,
+suportes, velocidades e trajetórias. O resultado vira comandos que o
+firmware transforma em movimentos temporizados.</p>
 <p>Cada transformação perde algumas informações e cria outras. O CAD
 conhece superfícies e dimensões de projeto. A malha aproxima superfícies
 por elementos discretos. O <em>slicer</em> conhece restrições do
@@ -2163,7 +2183,9 @@ dos cordões, a união entre camadas, vazios, temperatura de deposição,
 altura de camada e história térmica alteram a resposta mecânica.</p>
 <p>Medições publicadas pelo <a
 href="https://www.nist.gov/publications/amb2018-03-benchmark-physical-property-measurements-material-extrusion-additive">NIST</a>
-mostram que peças produzidas por extrusão podem apresentar anisotropia e
+[<a href="#referências">10</a>] mostram que peças produzidas por
+extrusão podem apresentar <a
+href="https://en.wikipedia.org/wiki/Anisotropy">anisotropia</a> e
 degradação de propriedades associadas a poros, interfaces entre cordões
 e condições de processamento. O material nominal é apenas uma parte da
 definição. A peça real resulta da combinação entre matéria-prima,
@@ -2179,9 +2201,10 @@ dependem de liga, tratamento térmico, conformação, direção de laminação,
 soldagem e tensões residuais. Em compósitos, a direção das fibras e a
 sequência de lâminas fazem parte do próprio projeto estrutural. A <a
 href="https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentID/99693">orientação
-da FAA para estruturas aeronáuticas em compósitos</a> trata materiais
-reforçados nos quais orientação e arquitetura das fibras fazem parte da
-definição estrutural.</p>
+da FAA para estruturas aeronáuticas em compósitos</a> [<a
+href="#referências">11</a>] trata materiais reforçados nos quais
+orientação e arquitetura das fibras fazem parte da definição
+estrutural.</p>
 <p>A comparação com compósitos é didática, mas não deve ser levada longe
 demais. Um cordão de polímero depositado não é equivalente a uma lâmina
 de compósito de fibra contínua. Os mecanismos de carga e falha são
@@ -2203,12 +2226,13 @@ horizontal pode sair diferente de um furo vertical. Uma parede fina pode
 aproximar-se do limite de largura de extrusão. Uma orientação pode
 reduzir suporte e aumentar tempo. Outra pode melhorar resistência em uma
 direção e piorar acabamento em outra.</p>
-<p>Esse modo de pensar é a essência do <em>Design for Additive
-Manufacturing</em>. A liberdade geométrica da manufatura aditiva é
-grande, mas não infinita. O processo ainda possui direção de construção,
-largura de deposição, espessura de camada, aceleração limitada,
-tolerâncias e restrições térmicas. Geometrias que existem perfeitamente
-no CAD podem ser más escolhas de fabricação.</p>
+<p>Esse modo de pensar é a essência do <a
+href="https://en.wikipedia.org/wiki/Design_for_additive_manufacturing"><em>Design
+for Additive Manufacturing</em></a>. A liberdade geométrica da
+manufatura aditiva é grande, mas não infinita. O processo ainda possui
+direção de construção, largura de deposição, espessura de camada,
+aceleração limitada, tolerâncias e restrições térmicas. Geometrias que
+existem perfeitamente no CAD podem ser más escolhas de fabricação.</p>
 <p>A manufatura aeronáutica segue a mesma regra em um conjunto muito
 mais amplo de processos. Peças usinadas precisam permitir acesso de
 ferramenta. Chapas conformadas precisam respeitar raios e sequências de
@@ -2257,13 +2281,13 @@ com deformação. Uma hipótese sobre vibração pode ser testada com
 acelerômetro. Uma ideia sobre duto pode ser avaliada na peça. O custo
 baixo de fabricação encurta o caminho entre modelo e observação.</p>
 <p>A história do <a
-href="https://doi.org/10.1017/S026357471000069X">projeto RepRap</a>
-ajuda a explicar por que essa capacidade se espalhou. A combinação de
-hardware acessível, projetos abertos e componentes padronizados reduziu
-a barreira para que usuários modificassem a própria máquina e
-produzissem novas peças com ela. A impressora passou a participar do
-desenvolvimento de seus próprios acessórios, ferramentas e
-sucessoras.</p>
+href="https://doi.org/10.1017/S026357471000069X">projeto RepRap</a> [<a
+href="#referências">2</a>] ajuda a explicar por que essa capacidade se
+espalhou. A combinação de hardware acessível, projetos abertos e
+componentes padronizados reduziu a barreira para que usuários
+modificassem a própria máquina e produzissem novas peças com ela. A
+impressora passou a participar do desenvolvimento de seus próprios
+acessórios, ferramentas e sucessoras.</p>
 <p>O paralelo com a indústria aeronáutica precisa respeitar escala e
 processo. Um programa de aeronave não pode substituir análise,
 configuração controlada e verificação por ciclos informais de tentativa.
@@ -2310,7 +2334,7 @@ projetar sistemas complexos.</p>
 Technologies: 3D Printing, Rapid Prototyping, and Direct Digital
 Manufacturing</em>, 2nd ed., Springer, New York, 2015. <a
 href="https://doi.org/10.1007/978-1-4939-2113-3">Link</a></p>
-<p>[2] Jones, R., Haufe, P., Sells, E., et al., <em>RepRap — The
+<p>[2] Jones, R., Haufe, P., Sells, E., et al., <em>RepRap: The
 Replicating Rapid Prototyper</em>, Robotica, Vol. 29, No. 1, 2011,
 pp. 177–191. <a
 href="https://doi.org/10.1017/S026357471000069X">Link</a></p>
@@ -2351,7 +2375,7 @@ href="https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/d
 <p>[12] <em>Code Overview</em>, Klipper Documentation. Acesso em 5 set.
 2026. <a
 href="https://www.klipper3d.org/Code_Overview.html">Link</a></p>
-<p>[13] <em>PID Autotune — M303</em>, Marlin Firmware Documentation.
+<p>[13] <em>PID Autotune (M303)</em>, Marlin Firmware Documentation.
 Acesso em 5 set. 2026. <a
 href="https://marlinfw.org/docs/gcode/M303.html">Link</a></p>
 <p>[14] <em>Systems Engineering and System Definition</em>,

@@ -1498,11 +1498,15 @@ Estabilidade Longitudinal: Asa Fixa vs. Multi-rotor</a></li>
 <hr />
 <h2 id="1-o-princípio-físico-fundamental-conservação-de-momento">1. O
 Princípio Físico Fundamental: Conservação de Momento</h2>
-<p>A geração de força vertical obedece à conservação de momento linear
-no volume de controle. A superfície aerodinâmica deflete um fluxo de
-massa de ar (<span class="math inline">\(\dot{m}\)</span>) impondo uma
-variação de velocidade (velocidade induzida, <span
-class="math inline">\(v_i\)</span> ou <span
+<p>A geração de força vertical obedece à <a
+href="https://pt.wikipedia.org/wiki/Momento_linear">conservação de
+momento linear</a> no <a
+href="https://pt.wikipedia.org/wiki/Volume_de_controle">volume de
+controle</a>. A superfície aerodinâmica deflete um fluxo de massa de ar
+(<span class="math inline">\(\dot{m}\)</span>) impondo uma variação de
+velocidade (<a
+href="https://en.wikipedia.org/wiki/Induced_velocity">velocidade
+induzida</a>, <span class="math inline">\(v_i\)</span> ou <span
 class="math inline">\(w\)</span>):</p>
 <p><span class="math display">\[F \approx \dot{m} \cdot
 2v_i\]</span></p>
@@ -1513,41 +1517,44 @@ class="math inline">\(\dot{m}\)</span>) que interage com a aeronave
 cresce substancialmente. Sendo <span class="math inline">\(F\)</span>
 constante, a superfície deve operar impondo uma velocidade induzida
 (<span class="math inline">\(v_i\)</span>) progressivamente menor ao
-fluido.</p>
-<ul>
-<li>Na <strong>asa fixa</strong>: o aumento de fluxo se reflete na
-redução do ângulo de ataque para manter voo nivelado</li>
-<li>Na <strong>asa rotativa</strong>: se reflete na redução do ângulo de
-passo das pás</li>
-</ul>
+fluido. Na asa fixa, o aumento de fluxo se reflete na redução do ângulo
+de ataque para manter o voo nivelado; na asa rotativa, manifesta-se na
+redução do ângulo de <a
+href="https://pt.wikipedia.org/wiki/Rotor_de_helic%C3%B3ptero#Controle_de_passo_coletivo">passo
+coletivo</a> das pás.</p>
 <hr />
 <h2 id="2-asa-fixa-esteira-em-ferradura-e-a-ausência-de-estagnação">2.
 Asa Fixa: Esteira em Ferradura e a Ausência de Estagnação</h2>
-<p>Na asa fixa, a capacidade de gerar força é adimensionalizada pela
-pressão dinâmica do fluxo livre (<span class="math inline">\(q_\infty =
+<p>Na asa fixa, a capacidade de gerar força é adimensionalizada pela <a
+href="https://pt.wikipedia.org/wiki/Press%C3%A3o_din%C3%A2mica">pressão
+dinâmica</a> do fluxo livre (<span class="math inline">\(q_\infty =
 \frac{1}{2}\rho V_\infty^2\)</span>):</p>
 <p><span class="math display">\[L = \frac{1}{2}\rho V^2 S
 C_L\]</span></p>
 <p>A esteira é modelada como sistema de <a
-href="https://en.wikipedia.org/wiki/Lift_(force)">vórtices em
+href="https://en.wikipedia.org/wiki/Horseshoe_vortex">vórtices em
 ferradura</a> (<em>horseshoe vortex</em>) pela <a
 href="https://en.wikipedia.org/wiki/Lifting-line_theory">Linha
-Sustentadora de Prandtl</a>.</p>
+Sustentadora de Prandtl</a> (Prandtl e Tietjens [<a
+href="#referências">2</a>]).</p>
 <p>O <a
 href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a> é resolvido pelo <strong>Princípio das Imagens de
-Kelvin</strong>: um sistema espelhado a uma distância vertical <span
-class="math inline">\(h\)</span> abaixo da superfície do solo gera
-<em>upwash</em> que reduz o <em>downwash</em> efetivo:</p>
+Solo</a> é resolvido pelo <a
+href="https://en.wikipedia.org/wiki/Method_of_images">método das
+imagens</a> de Kelvin (Anderson [<a href="#referências">5</a>]): um
+sistema espelhado a uma distância vertical <span
+class="math inline">\(h\)</span> abaixo da superfície do solo gera <a
+href="https://en.wikipedia.org/wiki/Upwash">upwash</a> que reduz o <a
+href="https://en.wikipedia.org/wiki/Downwash">downwash</a> efetivo:</p>
 <p><span class="math display">\[\Delta C_L = a_0\frac{C_L}{\pi AR}(1 -
 \sigma)\]</span></p>
 <p><strong>A característica limitante</strong>: a asa fixa nunca opera
 em <span class="math inline">\(V_\infty \approx 0\)</span>. Sua
 velocidade mínima garante que a pressão dinâmica seja sempre superior à
 velocidade induzida, então a esteira permanece sempre convectada a
-jusante. <strong>Não há estagnação frontal nem <a
+jusante. Não há estagnação frontal nem <a
 href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a></strong>.</p>
+Vortex</a>.</p>
 <p><strong>Colapso em alta velocidade</strong>: como <span
 class="math inline">\(q_\infty\)</span> cresce quadraticamente, o ângulo
 de ataque é forçado a zero. Pelo <a
@@ -1569,27 +1576,28 @@ impõe redução progressiva do passo coletivo (<span
 class="math inline">\(\theta_0\)</span>).</p>
 <h3 id="a-formação-do-ground-vortex">A Formação do Ground Vortex</h3>
 <p>Diferentemente da asa fixa, o rotor opera rotineiramente em
-velocidades nulas (pairado). No pairado (<span
-class="math inline">\(V_\infty = 0\)</span>), o <em>downwash</em> maciço
-atinge o solo ortogonalmente, criando um ponto de estagnação e forçando
-o fluxo a se espalhar radialmente em <em>wall jet</em>.</p>
-<p>Quando o helicóptero adquire pequena velocidade a frente, o
+velocidades nulas no <a
+href="https://en.wikipedia.org/wiki/Hover_(flight)">pairado</a>. No
+pairado (<span class="math inline">\(V_\infty = 0\)</span>), o downwash
+maciço atinge o solo ortogonalmente, criando um ponto de estagnação e
+forçando o fluxo a se espalhar radialmente em <a
+href="https://en.wikipedia.org/wiki/Wall_jet">jato de parede</a>
+(<em>wall jet</em>).</p>
+<p>Quando o helicóptero adquire pequena velocidade à frente, o
 escoamento frontal colide com o <em>wall jet</em> contrário, criando uma
-<strong>linha de separação abrupta</strong> que rola sobre si mesma — o
-<a
+linha de separação abrupta que rola sobre si mesma — o <a
 href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a>. À medida que a aeronave acelera, a pressão dinâmica
-eventualmente supera o momento do <em>wall jet</em>, e o <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a> é varrido para trás (<em>blow back</em>).</p>
+Vortex</a> (Leishman [<a href="#referências">3</a>], Johnson [<a
+href="#referências">4</a>]). À medida que a aeronave acelera, a pressão
+dinâmica eventualmente supera o momento do <em>wall jet</em>, e o Ground
+Vortex é varrido para trás (<em>blow back</em>).</p>
 <h3 id="o-modelo-de-cheeseman--bennett">O Modelo de Cheeseman &amp;
 Bennett</h3>
-<p>Na impossibilidade de modelar analiticamente o caos do <a
-href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)#Ground_vortex">Ground
-Vortex</a> nos anos 1950, Cheeseman e Bennett modelaram a esteira como
-uma fonte isolada com espelho, introduzindo o <em>wake skew</em> (<span
-class="math inline">\(\chi\)</span>) para capturar a transição da
-estagnação para a esteira convectada:</p>
+<p>Na impossibilidade de modelar analiticamente o regime do Ground
+Vortex nos anos 1950, Cheeseman e Bennett [<a href="#referências">1</a>]
+modelaram a esteira como uma fonte isolada com espelho, introduzindo o
+<em>wake skew</em> (<span class="math inline">\(\chi\)</span>) para
+capturar a transição da estagnação para a esteira convectada:</p>
 <p><span class="math display">\[\tan(\chi) =
 \frac{V_\infty}{v_i}\]</span></p>
 <p><span class="math display">\[\frac{T_{IGE}}{T_{OGE}} = \frac{1}{1 -
@@ -1642,8 +1650,9 @@ Solo</a> desaparece por inanição do campo induzido.</p>
 Estabilidade Longitudinal: Asa Fixa vs. Multi-rotor</h2>
 <h3 id="asa-fixa-momento-picador-via-empenagem">Asa Fixa: Momento
 Picador via Empenagem</h3>
-<p>Imersa na esteira da asa, a empenagem “enxerga” um ângulo de ataque
-reduzido:</p>
+<p>Imersa na esteira da asa, a <a
+href="https://pt.wikipedia.org/wiki/Empenagem">empenagem</a> “enxerga”
+um ângulo de ataque reduzido:</p>
 <p><span class="math display">\[\alpha_t = \alpha_w - i_w + i_t -
 \epsilon\]</span></p>
 <p>Onde <span class="math inline">\(i_w\)</span> e <span
@@ -1651,18 +1660,17 @@ class="math inline">\(i_t\)</span> são os ângulos de incidência da asa e
 da cauda.</p>
 <p>Em <a
 href="https://en.wikipedia.org/wiki/Ground_effect_(aerodynamics)">Efeito
-Solo</a>, o colapso do <em>downwash</em> (<span
-class="math inline">\(\epsilon \to 0\)</span>) faz a empenagem “ver”
-mais fluxo, aumentando sua sustentação e gerando momento picador
-estabilizante:</p>
+Solo</a>, o colapso do downwash (<span class="math inline">\(\epsilon
+\to 0\)</span>) faz a empenagem “ver” mais fluxo, aumentando sua
+sustentação e gerando momento picador estabilizante:</p>
 <p><span class="math display">\[\Delta C_{M_{IGE}} \propto -V_H (\Delta
 C_{L_t})\]</span></p>
 <p><span class="math display">\[\Delta C_{M\alpha_{IGE}} \propto -V_H
 \cdot a_1 \left(1 - \frac{d\epsilon}{d\alpha_{IGE}}\right)\]</span></p>
 <p>Onde <span class="math inline">\(V_H\)</span> é o volume de cauda. A
-empenagem providencia <a
-href="https://en.wikipedia.org/wiki/Flight_dynamics_(fixed-wing_aircraft)">estabilidade
-estática</a> em velocidade.</p>
+empenagem provê <a
+href="https://en.wikipedia.org/wiki/Longitudinal_static_stability">estabilidade
+estática longitudinal</a> em velocidade.</p>
 <h3 id="multi-rotor-a-instabilidade-da-esteira">Multi-rotor: A
 Instabilidade da Esteira</h3>
 <p>Em multi-rotores (<a
@@ -1704,27 +1712,21 @@ velocidade</strong></li>
 <h2 id="referências">Referências</h2>
 <p>[1] Cheeseman, I. C., e Bennett, W. E., <em>The Effect of the Ground
 on a Helicopter Rotor in Forward Flight</em>, Aeronautical Research
-Council Reports and Memoranda, No. 3021, HMSO, London, 1955. —
-Referência seminal: derivou a equação fechada do ganho IGE em função da
-altura normalizada e do ângulo de skew da esteira. <a
+Council Reports and Memoranda, nº 3021, HMSO, London, 1955. (acesso em
+15 mar. 2026). <a
 href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/3590">Link</a></p>
-<p>[2] Prandtl, L.; Tietjens, O. G., <em>Applied Hydro- and
-Aeromechanics</em>, Dover Publications, New York, 1957. — Fundamento da
-teoria da linha sustentadora e dos vórtices em ferradura aplicados à asa
-fixa. <a
+<p>[2] Prandtl, L., e Tietjens, O. G., <em>Applied Hydro- and
+Aeromechanics</em>, Dover Publications, New York, 1957. (acesso em 15
+mar. 2026). <a
 href="https://archive.org/details/in.ernet.dli.2015.205401">Link</a></p>
 <p>[3] Leishman, J. G., <em>Principles of Helicopter Aerodynamics</em>,
-2ª ed., Cambridge University Press, Cambridge, 2006. — Referência padrão
-em aerodinâmica de helicópteros, incluindo teoria do momento, dinâmica
-de batimento e teoria de esteira. <a
+2ª ed., Cambridge University Press, Cambridge, 2006. <a
 href="https://doi.org/10.1017/CBO9780511813658">Link</a></p>
 <p>[4] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
-University Press, Cambridge, 2013. — Tratamento moderno e abrangente de
-aeromecânica de rotores, incluindo teoria do disco atuador, modelos de
-esteira e dinâmica de indução. <a
+University Press, Cambridge, 2013. <a
 href="https://doi.org/10.1017/CBO9781139235655">Link</a></p>
 <p>[5] Anderson, J. D., <em>Fundamentals of Aerodynamics</em>, 6ª ed.,
-McGraw-Hill, New York, 2017. <a
+McGraw-Hill, New York, 2017. (acesso em 15 mar. 2026). <a
 href="https://archive.org/details/fundamentalsofae0000ande">Link</a></p>
 </main>
 

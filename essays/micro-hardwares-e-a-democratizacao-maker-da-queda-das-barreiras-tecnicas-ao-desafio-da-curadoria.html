@@ -1493,17 +1493,20 @@ credencial, e o indivíduo isolado simplesmente não entrava.</p>
 <p>A virada dos anos 2000 e 2010 desmontou cada camada dessa arquitetura
 de exclusão. O <a
 href="https://en.wikipedia.org/wiki/Arduino">Arduino</a> padronizou a
-experiência de programar microcontrolador. O <a
+experiência de programar microcontrolador [<a
+href="#referências">1</a>]. O <a
 href="https://en.wikipedia.org/wiki/ESP32">ESP32</a> colocou
 conectividade Wi-Fi e Bluetooth integrados, múltiplos <a
 href="https://en.wikipedia.org/wiki/General-purpose_input/output">GPIOs</a>
-e periféricos, além de potência de processamento respeitável, numa placa
-que custa menos que um livro técnico. O <a
+e periféricos, além de potência de processamento respeitável [<a
+href="#referências">2</a>], numa placa que custa menos que um livro
+técnico. O <a
 href="https://en.wikipedia.org/wiki/Raspberry_Pi">Raspberry Pi</a>
 ofereceu computação Linux completa a partir do Raspberry Pi Zero,
 lançado em 2015 por US$ 5. A mesma linha hoje se estende até os US$ 80
 do Raspberry Pi 5 de 8 GB, lançado em 2023. Barramentos de comunicação
-universais (<a href="https://en.wikipedia.org/wiki/I%C2%B2C">I2C</a>, <a
+universais (<a href="https://en.wikipedia.org/wiki/I%C2%B2C">I2C</a> [<a
+href="#referências">5</a>], <a
 href="https://en.wikipedia.org/wiki/Serial_Peripheral_Interface">SPI</a>,
 <a
 href="https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter">UART</a>)
@@ -1600,8 +1603,9 @@ seguintes.</p>
 aprender, letramento digital prévio e fluência em inglês técnico
 continuam funcionando como barreiras reais, mesmo com o preço da placa
 já perto de zero. Jan van Dijk descreve esse resíduo como exclusão
-digital em camadas: a barreira material cai primeiro, mas as barreiras
-de habilidade e de uso persistem depois dela.</p>
+digital em camadas [<a href="#referências">3</a>]: a barreira material
+cai primeiro, mas as barreiras de habilidade e de uso persistem depois
+dela.</p>
 <hr />
 <h2 id="o-multiplicador-open-source">O Multiplicador Open-Source</h2>
 <p>Sobre a base de hardware acessível opera o segundo multiplicador:
@@ -1628,10 +1632,11 @@ composto de capacidade disponível.</p>
 A transição do segredo industrial (esquemáticos, firmwares e know-how
 trancados) para o compartilhamento aberto representou inversão de
 valores em setores que historicamente tratavam informação técnica como
-vantagem competitiva máxima. O movimento de open-source hardware
-formalizou isso em licenças, e a norma social resultante, publicar o que
-construiu, documentar o que publicou, ajudar quem documenta mal, é o
-verdadeiro motor da abundância que o próximo capítulo problematiza.</p>
+vantagem competitiva máxima [<a href="#referências">4</a>]. O movimento
+de open-source hardware formalizou isso em licenças, e a norma social
+resultante, publicar o que construiu, documentar o que publicou, ajudar
+quem documenta mal, é o verdadeiro motor da abundância que o próximo
+capítulo problematiza.</p>
 <hr />
 <h2 id="o-novo-gargalo-da-programação-à-curadoria">O Novo Gargalo: Da
 Programação à Curadoria</h2>
@@ -1665,31 +1670,29 @@ fragilidade de cadeias profundas de dependência — a mesma classe de
 risco do maker que descobre, na véspera da demonstração, que sua pilha
 inteira depende de código abandonado.</p>
 <p>O botnet <a
-href="https://en.wikipedia.org/wiki/Mirai_%28malware%29">Mirai</a>,
-também de 2016, mostra a mesma fragilidade num registro mais grave. O
-malware varria a internet localizando dispositivos de Internet das
-Coisas, câmeras, roteadores e gravadores digitais de vídeo, protegidos
-apenas pelas credenciais padrão de fábrica que ninguém trocou. Uma vez
-identificado, cada dispositivo era infectado e recrutado para uma rede
-de bots. Em outubro de 2016 essa rede lançou o ataque que derrubou a
-Dyn, provedora central de resolução de DNS, e tirou do ar por horas
-serviços de grande porte em várias regiões. O número de 1,2 Tb/s,
-frequentemente associado retrospectivamente ao Mirai, não deve ser usado
-como pico da Dyn: relatórios técnicos de 2016 distinguem ataques
-diferentes. A Akamai documentou ataques Mirai de 623 e 555 Gb/s no
-terceiro trimestre daquele ano, enquanto sua cronologia posterior separa
-esses episódios do ataque à Dyn em 21 de outubro (<a
-href="https://www.akamai.com/site/en/documents/state-of-the-internet/q3-2016-state-of-the-internet-security-executive-summary.pdf">Akamai,
-Q3 2016</a>; <a
-href="https://www.akamai.com/site/en/documents/state-of-the-internet/spring-2018-state-of-the-internet-security-report.pdf">Akamai,
-2018</a>). A diferença em relação ao left-pad está no tipo de dano. Uma
-biblioteca removida derruba builds e atrasa entregas. Um enxame de
-placas baratas com senha padrão vira arma contra a infraestrutura da
-internet inteira. Os mesmos micro-hardwares que baixaram a barreira de
-entrada para o maker baixaram também a barreira de entrada para o
-invasor, e a curadoria que este capítulo cobra do desenvolvedor precisa
-incluir a pergunta de segurança que a facilidade de uso tende a empurrar
-para depois.</p>
+href="https://en.wikipedia.org/wiki/Mirai_%28malware%29">Mirai</a> [<a
+href="#referências">6</a>], também de 2016, mostra a mesma fragilidade
+num registro mais grave. O malware varria a internet localizando
+dispositivos de Internet das Coisas, câmeras, roteadores e gravadores
+digitais de vídeo, protegidos apenas pelas credenciais padrão de fábrica
+que ninguém trocou. Uma vez identificado, cada dispositivo era infectado
+e recrutado para uma rede de bots. Em outubro de 2016 essa rede lançou o
+ataque que derrubou a Dyn, provedora central de resolução de DNS, e
+tirou do ar por horas serviços de grande porte em várias regiões. O
+número de 1,2 Tbps, frequentemente associado retrospectivamente ao
+Mirai, não deve ser usado como pico da Dyn: relatórios técnicos de 2016
+distinguem ataques diferentes. A Akamai documentou ataques Mirai de 623
+e 555 Gbps no terceiro trimestre daquele ano, enquanto sua cronologia
+posterior separa esses episódios do ataque à Dyn em 21 de outubro
+(Akamai, Q3 2016 [<a href="#referências">12</a>]; Akamai, 2018 [<a
+href="#referências">13</a>]). A diferença em relação ao left-pad está no
+tipo de dano. Uma biblioteca removida derruba builds e atrasa entregas.
+Um enxame de placas baratas com senha padrão vira arma contra a
+infraestrutura da internet inteira. Os mesmos micro-hardwares que
+baixaram a barreira de entrada para o maker baixaram também a barreira
+de entrada para o invasor, e a curadoria que este capítulo cobra do
+desenvolvedor precisa incluir a pergunta de segurança que a facilidade
+de uso tende a empurrar para depois.</p>
 <p>O resultado é uma transformação sutil do ofício: o maker moderno
 trabalha cada vez mais como integrador de blocos alheios e cada vez
 menos como programador de registradores, e essa troca é globalmente
@@ -1713,11 +1716,11 @@ social, só que agora distribuído e menos visível.</p>
 Ilusão da Democratização: Funcionar Uma Vez Contra Robustez</h2>
 <p>O capítulo anterior tratou de escolher código. Este trata da ilusão
 mais cara do ecossistema: confundir funcionar uma vez com funcionar
-sempre. O vídeo do YouTube mostra o protótipo operando perfeitamente por
-dois minutos numa bancada limpa. O sistema que opera 24 horas por dia
-sob variação térmica, ruído elétrico e vibração é outro objeto de
-engenharia, separados por disciplinas inteiras que a facilidade inicial
-esconde completamente.</p>
+sempre [<a href="#referências">8</a>]. O vídeo do YouTube mostra o
+protótipo operando perfeitamente por dois minutos numa bancada limpa. O
+sistema que opera 24 horas por dia sob variação térmica, ruído elétrico
+e vibração é outro objeto de engenharia, separados por disciplinas
+inteiras que a facilidade inicial esconde completamente.</p>
 <p>A lista dos esconderijos técnicos é instrutiva porque todos são
 invisíveis no primeiro teste. Ruído eletromagnético acoplando-se em
 linhas de sinal. Capacitores de desacoplamento ausentes, causando resets
@@ -1760,15 +1763,16 @@ compilador reclama da ausência deles. O sistema passa a funcionar sempre
 não porque o código melhorou, mas porque alguém percorreu o caminho do
 sintoma até a física.</p>
 <p>A maturidade de engenharia, nesse quadro, tem definição precisa: é a
-capacidade de prever e gerenciar modos de falha antes que eles ocorram,
-e essa capacidade não acompanha automaticamente a capacidade de fazer
-funcionar. Ela exige metodologia (testes acelerados, análise de falhas,
-margens explícitas), cultura (assumir que o sistema vai falhar e
-projetar para degradar graciosamente) e humildade estatística (um
-dispositivo que nunca falhou ainda não provou confiabilidade, só falta
-de amostra). A democratização entregou a bancada para todos. A
-mentalidade de robustez continua sendo formada do jeito antigo, devagar,
-através de falhas próprias devidamente analisadas.</p>
+capacidade de prever e gerenciar modos de falha antes que eles ocorram
+[<a href="#referências">7</a>], e essa capacidade não acompanha
+automaticamente a capacidade de fazer funcionar. Ela exige metodologia
+(testes acelerados, análise de falhas, margens explícitas), cultura
+(assumir que o sistema vai falhar e projetar para degradar
+graciosamente) e humildade estatística (um dispositivo que nunca falhou
+ainda não provou confiabilidade, só falta de amostra). A democratização
+entregou a bancada para todos. A mentalidade de robustez continua sendo
+formada do jeito antigo, devagar, através de falhas próprias devidamente
+analisadas.</p>
 <p>Nem sequer existe número canônico para medir a distância entre os
 dois regimes. Taxas de falha publicadas de componentes comerciais voando
 em pequenos satélites variam demais com órbita, blindagem e amostra para
@@ -1783,9 +1787,10 @@ confiança?</p>
 <h2 id="o-transbordamento-para-a-indústria">O Transbordamento para a
 Indústria</h2>
 <p>Resta a pergunta prática final: essa cultura transbordou para a
-engenharia profissional séria ou permaneceu no hobby? A resposta
-empírica é “transbordou, mas por canais específicos”, e conhecê-los
-evita tanto o desprezo quanto o exagero.</p>
+engenharia profissional séria ou permaneceu no hobby? [<a
+href="#referências">10</a>] A resposta empírica é “transbordou, mas por
+canais específicos”, e conhecê-los evita tanto o desprezo quanto o
+exagero.</p>
 <p>O canal principal é humano: engenheiros que desenvolvem no hobby a
 intuição de prototipagem rápida, depuração experimental e iteração
 barata levam essa agilidade para dentro das grandes empresas, onde ela
@@ -1797,26 +1802,27 @@ volume e alta customização onde o ponto de equilíbrio econômico favorece
 o componente comercial de prateleira sobre o desenho certificado. Um
 caso emblemático é a <a
 href="https://en.wikipedia.org/wiki/Adafruit_Industries">Adafruit
-Industries</a>, fundada por Limor Fried em 2005 como projeto
-universitário. Hoje é uma fabricante de Nova York com receita anual na
-casa das dezenas de milhões de dólares, cerca de US$ 45 milhões em 2016,
-que projeta, fabrica e vende módulos de hardware aberto. Seus módulos
-atendem tanto educadores quanto engenheiros profissionais, presença bem
-documentada em fóruns e catálogos de distribuidores industriais, o que
-sugere que a ponte entre o maker e o profissional opera nos dois
-sentidos.</p>
+Industries</a> [<a href="#referências">11</a>], fundada por Limor Fried
+em 2005 como projeto universitário. Hoje é uma fabricante de Nova York
+com receita anual na casa das dezenas de milhões de dólares, cerca de
+US$ 45 milhões em 2016, que projeta, fabrica e vende módulos de hardware
+aberto. Seus módulos atendem tanto educadores quanto engenheiros
+profissionais, presença bem documentada em fóruns e catálogos de
+distribuidores industriais, o que sugere que a ponte entre o maker e o
+profissional opera nos dois sentidos.</p>
 <p>Mas as barreiras para produto final crítico permanecem
 intransponíveis por boa razão, e o setor aeronáutico exemplifica cada
 uma. Certificação exige rastreabilidade completa de componentes e
 processos. Requisitos ambientais militares e aeronáuticos (MIL-STD,
-DO-160) submetem o hardware a vibração, temperatura e umidade que a
-placa de bancada nunca enfrentará. E emissões eletromagnéticas têm
-limites regulatórios que designs hobbyistas ignoram por completo. Essas
-barreiras não são burocracia contra inovação: são memória institucional
-de acidentes, e cada linha delas existe porque algo falhou antes. A
-divisão correta, portanto, é temporal e funcional: maker na fase
-exploratória, engenharia formal no produto certificado, e o erro grave é
-usar a lógica errada no estágio errado.</p>
+DO-160 [<a href="#referências">9</a>]) submetem o hardware a vibração,
+temperatura e umidade que a placa de bancada nunca enfrentará. E
+emissões eletromagnéticas têm limites regulatórios que designs
+hobbyistas ignoram por completo. Essas barreiras não são burocracia
+contra inovação: são memória institucional de acidentes, e cada linha
+delas existe porque algo falhou antes. A divisão correta, portanto, é
+temporal e funcional: maker na fase exploratória, engenharia formal no
+produto certificado, e o erro grave é usar a lógica errada no estágio
+errado.</p>
 <hr />
 <h2
 id="conclusão-o-discernimento-na-era-da-abundância-técnica">Conclusão: O
@@ -1863,29 +1869,31 @@ comprar.</p>
 <h2 id="referências">Referências</h2>
 <p>[1] Banzi, M., e Shiloh, M., <em>Getting Started with Arduino</em>,
 3rd ed., Maker Media, San Francisco, 2014. — Documentação introdutória
-canônica da plataforma Arduino. <a
+canônica da plataforma Arduino. (acesso em 15 set. 2026). <a
 href="https://www.oreilly.com/library/view/getting-started-with/9781449363336/">Link</a></p>
 <p>[2] Espressif Systems, <em>ESP32 Series Datasheet</em>, Espressif
 Systems, Shanghai. — Especificações técnicas do SoC citado no capítulo
-2. (acesso em 21 Ago. 2026). <a
+2. (acesso em 21 ago. 2026). <a
 href="https://www.espressif.com/en/support/documents/technical-documents">Link</a></p>
 <p>[3] van Dijk, J., <em>The Digital Divide</em>, Polity Press,
 Cambridge, 2020. — Conceito de exclusão digital em camadas, usado para
-matizar a tese de acesso apenas material do capítulo 2. <a
+matizar a tese de acesso apenas material do capítulo 2. (acesso em 15
+set. 2026). <a
 href="https://www.wiley.com/en-us/The+Digital+Divide-p-9781509534456">Link</a></p>
 <p>[4] Raymond, E., <em>The Cathedral and the Bazaar</em>, O’Reilly
 Media, Sebastopol, 1999. — Análise seminal do modelo de desenvolvimento
-open-source do capítulo 3. <a
+open-source do capítulo 3. (acesso em 15 set. 2026). <a
 href="http://www.catb.org/~esr/writings/cathedral-bazaar/">Link</a></p>
 <p>[5] NXP Semiconductors, <em>UM10204: I2C-bus Specification and User
 Manual</em>, Rev. 7.0, NXP, Eindhoven, 2021. — Especificação do
-barramento que padronizou os sensores plugáveis. <a
+barramento que padronizou os sensores plugáveis. (acesso em 15 set.
+2026). <a
 href="https://www.nxp.com/docs/en/user-guide/UM10204.pdf">Link</a></p>
 <p>[6] Antonakakis, M., et al., <em>Understanding the Mirai Botnet</em>,
 Proceedings of the 26th USENIX Security Symposium, Vancouver, 2017,
 pp. 1093–1110. — Estudo do botnet que explorou credenciais padrão de
 dispositivos IoT baratos, contraponto de segurança ao incidente do
-left-pad no capítulo 4. <a
+left-pad no capítulo 4. (acesso em 15 set. 2026). <a
 href="https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-antonakakis.pdf">Link</a></p>
 <p>[7] Holzmann, G., <em>The Power of Ten: Rules for Developing
 Safety-Critical Code</em>, IEEE Computer, Vol. 39, No. 6, 2006,
@@ -1893,29 +1901,31 @@ pp. 95–99. — Regras de robustez para código crítico, contraponto do
 capítulo 5. <a href="https://doi.org/10.1109/MC.2006.212">Link</a></p>
 <p>[8] Leveson, N., <em>Engineering a Safer World: Systems Thinking
 Applied to Safety</em>, MIT Press, Cambridge, 2011. — Metodologia de
-segurança de sistemas que fundamenta a crítica à ilusão do protótipo. <a
+segurança de sistemas que fundamenta a crítica à ilusão do protótipo.
+(acesso em 15 set. 2026). <a
 href="https://mitpress.mit.edu/9780262016629/engineering-a-safer-world/">Link</a></p>
 <p>[9] RTCA, <em>DO-160G: Environmental Conditions and Test Procedures
 for Airborne Equipment</em>, RTCA, Washington, 2010. — Norma de
 qualificação ambiental citada nas barreiras industriais do capítulo 7.
-<a href="https://www.rtca.org/">Link</a></p>
+(acesso em 15 set. 2026). <a href="https://www.rtca.org/">Link</a></p>
 <p>[10] Anderson, C., <em>Makers: The New Industrial Revolution</em>,
 Crown Business, New York, 2012. — Análise da convergência entre cultura
 maker e manufatura industrial que fundamenta o capítulo sobre
-transbordamento. <a
+transbordamento. (acesso em 15 set. 2026). <a
 href="https://en.wikipedia.org/wiki/Makers:_The_New_Industrial_Revolution">Link</a></p>
 <p>[11] <em>Adafruit Industries</em>, Wikipedia, The Free Encyclopedia.
 — Verbete de apoio para a fundação da empresa por Limor Fried em 2005 e
-a cifra de receita anual citada no capítulo 7. (acesso em 29 Ago. 2026).
+a cifra de receita anual citada no capítulo 7. (acesso em 29 ago. 2026).
 <a href="https://en.wikipedia.org/wiki/Adafruit_Industries">Link</a></p>
 <p>[12] Akamai Technologies, <em>Q3 2016 State of the Internet /
-Security — Executive Summary</em>, 2016. — Dados contemporâneos dos
-ataques Mirai de 623 e 555 Gb/s citados no capítulo sobre curadoria e
-segurança. <a
+Security: Executive Summary</em>, 2016. — Dados contemporâneos dos
+ataques Mirai de 623 e 555 Gbps citados no capítulo sobre curadoria e
+segurança. (acesso em 15 set. 2026). <a
 href="https://www.akamai.com/site/en/documents/state-of-the-internet/q3-2016-state-of-the-internet-security-executive-summary.pdf">Link</a></p>
 <p>[13] Akamai Technologies, <em>Spring 2018 State of the Internet /
 Security Report</em>, 2018. — Cronologia que distingue os ataques Mirai
-observados pela Akamai do ataque à Dyn em 21 de outubro de 2016. <a
+observados pela Akamai do ataque à Dyn em 21 de outubro de 2016. (acesso
+em 15 set. 2026). <a
 href="https://www.akamai.com/site/en/documents/state-of-the-internet/spring-2018-state-of-the-internet-security-report.pdf">Link</a></p>
 </main>
 
