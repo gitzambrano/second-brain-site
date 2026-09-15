@@ -1611,6 +1611,32 @@ obrigar a rever temperatura, resfriamento e estratégia de fabricação. A
 máquina mostra que fronteiras entre disciplinas são convenientes para
 organizar conhecimento, mas não existem da mesma forma no produto
 físico.</p>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>O Acoplamento Multidisciplinar: O Efeito Dominó do Requisito de
+Aceleração</p>
+</div>
+<h4 class="callout-inner-heading"
+id="a-cascata-física-disparada-por-uma-decisão-de-desempenho">A Cascata
+Física Disparada por uma Decisão de Desempenho</h4>
+<ol type="1">
+<li><strong>Cinemática &amp; Inércia:</strong> Dobrar a aceleração
+(<span class="math inline">\(a \to 2a\)</span>) dobra a força inercial
+(<span class="math inline">\(F_i = m a\)</span>) exercida nos eixos
+CoreXY.</li>
+<li><strong>Estruturas &amp; Modos:</strong> A força extra deflete o
+pórtico (<span class="math inline">\(k = F/\delta\)</span>) e excita as
+frequências modais naturais (<span class="math inline">\(\omega_n =
+\sqrt{k/m}\)</span>).</li>
+<li><strong>Controle &amp; Filtragem:</strong> O firmware precisa
+aplicar <em>input shaping</em> (filtros no comando) para cancelar o
+<em>ringing</em> sem perder fidelidade de trajetória.</li>
+<li><strong>Termodinâmica &amp; Fluidos:</strong> Imprimir mais rápido
+exige maior vazão volumétrica no hotend (<span
+class="math inline">\(\dot{V} = A \cdot v\)</span>), aumentando a
+demanda de condução térmica e resfriamento por ar.</li>
+</ol>
+</div>
 <hr />
 <h2
 id="mecânica-e-mecanismos-transformar-movimento-em-geometria">Mecânica e
@@ -1877,6 +1903,27 @@ espectro e a fase do comando enviado à estrutura. Um atua na planta. O
 outro atua na entrada. Ambos precisam ser sintonizados em relação às
 frequências relevantes e ambos deixam claro que “eliminar vibração” não
 é uma instrução genérica. É um problema de dinâmica.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Input Shaping versus Controle em Malha Fechada</p>
+</div>
+<h4 class="callout-inner-heading"
+id="a-antecipação-dinâmica-que-evita-lutar-contra-a-física">A
+Antecipação Dinâmica que Evita Lutar Contra a Física</h4>
+<ul>
+<li><strong>Controle por Realimentação Clássico (PID):</strong> Mede o
+erro após a perturbação ocorrer e reage. Em estruturas leves e rápidas,
+o atraso de fase inviabiliza suprimir vibrações de alta frequência
+(<span class="math inline">\(&gt;40\text{ Hz}\)</span>).</li>
+<li><strong>Filtro de Input Shaping (Feedforward):</strong> Modela a
+planta antes do movimento. Convoluciona o perfil de aceleração com uma
+sequência de impulsos calculados com base na frequência natural (<span
+class="math inline">\(\omega_n\)</span>) e no amortecimento (<span
+class="math inline">\(\zeta\)</span>), garantindo que a vibração gerada
+pelo primeiro pulso seja cancelada em oposição de fase pelo pulso
+subsequente.</li>
+</ul>
+</div>
 <p>Aeronaves usam controle em uma variedade muito maior de funções:
 estabilização, seguimento de comandos, gerenciamento de atuadores,
 controle de motores e regulação de subsistemas. A complexidade e o rigor

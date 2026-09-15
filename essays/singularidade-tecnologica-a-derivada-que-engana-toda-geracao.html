@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="22">
+<html lang="pt-BR" data-status="finalizado" data-minutes="23">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1777,6 +1777,64 @@ problema de estabilidade em controle de malha fechada. Se o tempo de
 resposta do supervisor humano é de semanas e a planta sob controle
 altera seus parâmetros internos a cada milissegundo, a malha
 desestabiliza inevitavelmente.</p>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>A Cinemática do Fast Takeoff e a Desestabilização de Malha
+Fechada</p>
+</div>
+<h4 class="callout-inner-heading"
+id="assimetria-de-banda-e-falha-de-controle-adaptativo">Assimetria de
+Banda e Falha de Controle Adaptativo</h4>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Dimensão do Sistema</th>
+<th style="text-align: left;">Regime Humano / Institucional</th>
+<th style="text-align: left;">Regime da Superinteligência Autônoma</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Tempo de Resposta (<span
+class="math inline">\(\tau\)</span>)</strong></td>
+<td style="text-align: left;">Meses a semanas (auditorias, leis,
+comitês)</td>
+<td style="text-align: left;">Milissegundos a horas (recompilação e
+refatoração interna)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Largura de Banda
+Cognitiva</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\sim 50\text{
+bits/s}\)</span> (leitura/fala em linguagem natural)</td>
+<td style="text-align: left;">Terabits/s (comunicação direta entre nós
+neurais e memória)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Topologia de
+Controle</strong></td>
+<td style="text-align: left;">Malha aberta com supervisão
+intermitente</td>
+<td style="text-align: left;">Malha fechada recursiva com autorregulação
+contínua</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Estabilidade
+Dinâmica</strong></td>
+<td style="text-align: left;">Estável enquanto <span
+class="math inline">\(\tau_{\text{supervisor}} \ll
+\tau_{\text{processo}}\)</span></td>
+<td style="text-align: left;"><strong>Instabilidade garantida:</strong>
+o sistema diverge antes da primeira correção</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>A diferença metodológica entre os dois pensadores é cristalina.
 Kurzweil aposta em uma taxa e propõe um calendário empírico testável por
 gráficos de desempenho. Bostrom postula uma transição de fase e
@@ -1970,6 +2028,34 @@ inaceitável para operação civil.</p>
 representam apenas deficiências passageiras de engenharia ou limites
 matemáticos inerentes ao paradigma de modelos puramente autorregressivos
 treinados em texto.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>O Trilema Estrutural da Autorregressão</p>
+</div>
+<h4 class="callout-inner-heading"
+id="três-limites-de-primeiros-princípios-nos-modelos-de-linguagem">Três
+Limites de Primeiros Princípios nos Modelos de Linguagem</h4>
+<ol type="1">
+<li><strong>Continuidade de Estado (Ontologia):</strong> Pesos estáticos
+congelados exigem que todo o estado dinâmico seja reinjetado via janela
+de contexto a cada inferência. Sem plasticidade sináptica contínua, não
+há consolidação de experiência viva, apenas amostragem condicional
+efêmera.</li>
+<li><strong>Assimetria Causal (Intervenção):</strong> Modelos
+autorregressivos minimizam a divergência de Kullback-Leibler sobre
+observações <span class="math inline">\(P(Y|X)\)</span>. Pelo Teorema de
+Pearl, nenhuma correlação observacional passiva permite derivar o
+operador de intervenção <span
+class="math inline">\(P(Y|\text{do}(X))\)</span> sem um modelo causal
+estrutural explícito.</li>
+<li><strong>Confiabilidade Fora de Distribuição (Robustez):</strong> Em
+espaços de alta dimensão, a probabilidade de uma sequência de <span
+class="math inline">\(N\)</span> passos manter-se estritamente correta
+decai como <span class="math inline">\(p^N\)</span>. Em engenharia de
+missão crítica, a cauda longa não admite degradação estocástica
+silenciosa.</li>
+</ol>
+</div>
 <hr />
 <h2 id="a-indistinguibilidade-epistêmica-rampa-ou-joelho-de-sigmoide">A
 Indistinguibilidade Epistêmica: Rampa ou Joelho de Sigmoide?</h2>
@@ -2163,9 +2249,9 @@ metodológica da suíte de tarefas e limitações declaradas da métrica
 (acesso em 21 Ago. 2026). <a
 href="https://metr.org/blog/2026-1-29-time-horizon-1-1/">Link</a></p>
 <p>[17] Tetlock, P. E., e Gardner, D., <em>Superforecasting: The Art and
-Science of Prediction</em>, Crown, New York, 2015. — Base metodológica
-dos agregados de previsão e calibração estatística (acesso em 21 Ago.
-2026). <a
+Science of Prediction</em>, Crown Publishers, New York, 2015. — Base
+metodológica dos agregados de previsão e calibração estatística (acesso
+em 21 Ago. 2026). <a
 href="https://en.wikipedia.org/wiki/Superforecasting:_The_Art_and_Science_of_Prediction">Link</a></p>
 <p>[18] Kokotajlo, D., Alexander, S., et al., <em>AI 2027</em>, AI
 Futures Project, 2025. — Cenário detalhado de fast takeoff cujas

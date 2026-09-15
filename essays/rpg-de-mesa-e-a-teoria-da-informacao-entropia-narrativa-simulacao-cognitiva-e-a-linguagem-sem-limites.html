@@ -1606,6 +1606,64 @@ dobrar o menu de ações acrescenta um único bit. A mesa opera num espaço
 aberto de linguagem natural, cuja entropia de decisão começa mais alta e
 não tem custo marginal de produção. A assimetria explica por que nenhum
 orçamento de produção digital fecha a distância.</p>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>A Termodinâmica Informacional das Mídias Interativas</p>
+</div>
+<h4 class="callout-inner-heading"
+id="entropia-de-decisão-por-turno-h---sum-p_i-log_2-p_i">Entropia de
+Decisão por Turno (<span class="math inline">\(H = -\sum p_i \log_2
+p_i\)</span>)</h4>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Meio Interativo</th>
+<th style="text-align: left;">Espaço de Ações (<span
+class="math inline">\(N\)</span>)</th>
+<th style="text-align: left;">Entropia Nominal (<span
+class="math inline">\(H\)</span>)</th>
+<th style="text-align: left;">Custo Marginal do Imprevisto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Videogame Linear</strong></td>
+<td style="text-align: left;"><span class="math inline">\(N = 1\)</span>
+(árvore estática)</td>
+<td style="text-align: left;"><span class="math inline">\(H \approx
+0\text{ bits}\)</span></td>
+<td style="text-align: left;">Infinito (exige reescrita de
+código/assets)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Videogame Mundo
+Aberto</strong></td>
+<td style="text-align: left;"><span class="math inline">\(N \approx
+50\)</span> (ações mapeadas)</td>
+<td style="text-align: left;"><span class="math inline">\(H \approx
+5{,}6\text{ bits}\)</span></td>
+<td style="text-align: left;">Elevadíssimo (animações, física de
+colisão, dublagem)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>RPG de Mesa (Mesa
+Viva)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(N \approx
+10^3+\)</span> (linguagem natural aberta)</td>
+<td style="text-align: left;"><span class="math inline">\(H \ge 10\text{
+bits}\)</span></td>
+<td style="text-align: left;"><strong>Zero:</strong> absorvido
+instantaneamente pela escuta do mestre</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr />
 <h2 id="o-dado-como-gerador-de-ruído-e-inovação-causal">O Dado Como
 Gerador de Ruído e Inovação Causal</h2>
@@ -1816,6 +1874,26 @@ Não é apenas uma questão de escala (<em>scale</em>): é a diferença entre
 fluência e continuidade. A primeira é propriedade estatística da geração
 de texto token a token. A segunda exige um estado global persistente que
 nenhuma janela de contexto finita mantém sozinha.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Fluência Estatística versus Continuidade Ontológica</p>
+</div>
+<h4 class="callout-inner-heading"
+id="por-que-modelos-de-linguagem-sofrem-como-game-masters-autônomos">Por
+Que Modelos de Linguagem Sofrem Como Game Masters Autônomos</h4>
+<ul>
+<li><strong>Fluência (Geração de Superfície):</strong> Amostragem de
+tokens condicionada à janela de atenção <span
+class="math inline">\(P(w_t \mid w_{&lt;t})\)</span>. Os LLMs são
+mestres em prosa vívida, diálogos dramáticos e descrições
+atmosféricas.</li>
+<li><strong>Continuidade (Manutenção de Invariantes):</strong> Um mundo
+persistente exige rastreamento estrito de causalidade (inventário,
+status de vida/morte de NPCs, leis físicas imutáveis). Em janelas
+longas, a ausência de um grafo de estado simbólico leva a contradições e
+alucinações irreversíveis.</li>
+</ul>
+</div>
 <p>Há, é verdade, uma linha de trabalho que ataca diretamente o gargalo
 do estado. Agentes com memória persistente e <a
 href="https://arxiv.org/abs/2005.11401">geração aumentada por
@@ -1917,8 +1995,8 @@ punhado de dados poliedrais. A tecnologia pode orbitar esse feito, mas
 ainda não o replicou, e talvez replique nunca.</p>
 <hr />
 <h2 id="referências">Referências</h2>
-<p>[1] Shannon, C., <em>A Mathematical Theory of Communication</em>,
-Bell System Technical Journal, Vol. 27, 1948, pp. 379–423. —
+<p>[1] Shannon, C. E., <em>A Mathematical Theory of Communication</em>,
+Bell System Technical Journal, Vol. 27, No. 3, 1948, pp. 379–423. —
 Formalização de entropia e capacidade de canal que fundamenta o capítulo
 2. <a
 href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">Link</a></p>
