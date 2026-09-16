@@ -1,0 +1,246 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="960" viewBox="0 0 1280 960">
+  <defs>
+    <!-- Arrowhead markers -->
+    <marker id="arr-axis" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0F172A" />
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#2563EB" />
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#059669" />
+    </marker>
+    <marker id="arr-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#DC2626" />
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#D97706" />
+    </marker>
+    <marker id="arr-slate" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 2 L 7 5 L 0 8 z" fill="#64748B" />
+    </marker>
+
+    <!-- Drop Shadows -->
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#0F172A" flood-opacity="0.07"/>
+    </filter>
+    <filter id="blade-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="3" stdDeviation="4" flood-color="#0F172A" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1280" height="960" fill="#FFFFFF" rx="16" />
+  <rect x="1" y="1" width="1278" height="958" fill="none" stroke="#E2E8F0" stroke-width="1.5" rx="15" />
+
+  <!-- Title Header Block -->
+  <g transform="translate(50, 42)">
+    <text x="0" y="0" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="800" fill="#0F172A" letter-spacing="-0.5">Convenção de Azimute e Eixos de Referência do Rotor</text>
+    <text x="0" y="24" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" fill="#64748B">Vista de topo do disco · Rotação anti-horária (visto de cima) · Azimute ψ medido a partir da traseira</text>
+  </g>
+
+  <!-- ADVANCING / RETREATING REGION BADGES -->
+  <!-- Advancing Side (Right) -->
+  <g transform="translate(820, 140)" filter="url(#card-shadow)">
+    <rect x="0" y="0" width="230" height="74" rx="10" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5" />
+    <circle cx="20" cy="22" r="6" fill="#059669" />
+    <text x="34" y="26" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14.5" font-weight="700" fill="#065F46">Lado Avançante</text>
+    <text x="20" y="46" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#047857">0° &lt; ψ &lt; 180° (Direita)</text>
+    <text x="20" y="62" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-style="italic" fill="#065F46">u<tspan font-size="10" dy="2">T</tspan><tspan font-size="12" dy="-2"> = x + μ sin ψ</tspan>  (soma de velocidades)</text>
+  </g>
+
+  <!-- Retreating Side (Left) -->
+  <g transform="translate(310, 140)" filter="url(#card-shadow)">
+    <rect x="0" y="0" width="230" height="74" rx="10" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5" />
+    <circle cx="20" cy="22" r="6" fill="#EA580C" />
+    <text x="34" y="26" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14.5" font-weight="700" fill="#9A3412">Lado Recuante</text>
+    <text x="20" y="46" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#C2410C">180° &lt; ψ &lt; 360° (Esquerda)</text>
+    <text x="20" y="62" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-style="italic" fill="#9A3412">u<tspan font-size="10" dy="2">T</tspan><tspan font-size="12" dy="-2"> = x − μ |sin ψ|</tspan>  (subtração)</text>
+  </g>
+
+  <!-- ROTOR DISK CIRCLE -->
+  <path d="M 680 210 A 265 265 0 0 1 680 740 Z" fill="#059669" fill-opacity="0.03" />
+  <path d="M 680 210 A 265 265 0 0 0 680 740 Z" fill="#EA580C" fill-opacity="0.03" />
+  <circle cx="680" cy="475" r="265" fill="none" stroke="#64748B" stroke-width="2" stroke-dasharray="6,5" />
+
+  <!-- Root Cutout Disc and Pointer (Top-Left Quadrant, psi ~ 135 deg: screen dx < 0, dy < 0) -->
+  <circle cx="680" cy="475" r="58" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="3,3" />
+  <path d="M 638 433 L 585 380 L 515 380" fill="none" stroke="#64748B" stroke-width="1.2" marker-start="url(#arr-slate)" />
+  <g transform="translate(508, 380)" text-anchor="end">
+    <rect x="-115" y="-18" width="115" height="34" rx="6" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" />
+    <text x="-8" y="-2" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="700" fill="#334155">Corte na raiz</text>
+    <text x="-8" y="11" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748B">x₀ = r₀ / R</text>
+  </g>
+
+  <!-- Radius Dimension Line R (Bottom-Left Quadrant, psi = 315 deg: screen dx < 0, dy > 0) -->
+  <line x1="680" y1="475" x2="492.61670298556487" y2="662.383297014435" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4,4" />
+  <g transform="translate(566.5606855524937, 588.4393144475063)">
+    <rect x="-35" y="-12" width="70" height="24" rx="5" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="0" y="4" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="700" fill="#334155" text-anchor="middle">Raio R (x=1)</text>
+  </g>
+
+  <!-- COORDINATE AXES (+X / -X and +Y / -Y) -->
+  <!-- Longitudinal Axis X: Rear (-X, screen bottom) to Front (+X, screen top) -->
+  <line x1="680" y1="790" x2="680" y2="155" stroke="#0F172A" stroke-width="2.5" marker-end="url(#arr-axis)" />
+  <!-- Lateral Axis Y: Left (-Y, screen left) to Right (+Y, screen right) -->
+  <line x1="365" y1="475" x2="1000" y2="475" stroke="#0F172A" stroke-width="2.5" marker-end="url(#arr-axis)" />
+
+  <!-- AXIS LABELS -->
+  <!-- +X (Frente) -->
+  <g transform="translate(680, 140)" text-anchor="middle">
+    <rect x="-70" y="-15" width="140" height="28" rx="6" fill="#0F172A" />
+    <text x="0" y="4" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="700" fill="#FFFFFF">+X (Frente / Proa)</text>
+  </g>
+  <!-- -X (Traseira) -->
+  <g transform="translate(680, 805)" text-anchor="middle">
+    <rect x="-70" y="-12" width="140" height="25" rx="5" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1" />
+    <text x="0" y="5" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#334155">−X (Traseira / Cauda)</text>
+  </g>
+  <!-- +Y (Direita) -->
+  <g transform="translate(1013, 475)" text-anchor="start">
+    <rect x="0" y="-14" width="110" height="28" rx="6" fill="#0F172A" />
+    <text x="12" y="5" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="700" fill="#FFFFFF">+Y (Direita)</text>
+  </g>
+  <!-- -Y (Esquerda) -->
+  <g transform="translate(350, 475)" text-anchor="end">
+    <rect x="-110" y="-14" width="110" height="28" rx="6" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1" />
+    <text x="-12" y="5" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#334155">−Y (Esquerda)</text>
+  </g>
+
+  <!-- 4 CARDINAL AZIMUTH BADGES (ψ = 0°, 90°, 180°, 270°) -->
+  <!-- ψ = 0° (Rear, -X) -->
+  <g transform="translate(680, 740)">
+    <circle cx="0" cy="0" r="4.5" fill="#0F172A" />
+    <rect x="-38" y="10" width="76" height="23" rx="5" fill="#FFFFFF" stroke="#0F172A" stroke-width="1.5" />
+    <text x="0" y="26" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="800" fill="#0F172A" text-anchor="middle">ψ = 0°</text>
+  </g>
+  <!-- ψ = 90° (Right, +Y) -->
+  <g transform="translate(945, 475)">
+    <circle cx="0" cy="0" r="4.5" fill="#0F172A" />
+    <rect x="10" y="-34" width="82" height="23" rx="5" fill="#FFFFFF" stroke="#0F172A" stroke-width="1.5" />
+    <text x="51" y="-18" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="800" fill="#0F172A" text-anchor="middle">ψ = 90°</text>
+  </g>
+  <!-- ψ = 180° (Front, +X) -->
+  <g transform="translate(680, 210)">
+    <circle cx="0" cy="0" r="4.5" fill="#0F172A" />
+    <rect x="-44" y="-34" width="88" height="23" rx="5" fill="#FFFFFF" stroke="#0F172A" stroke-width="1.5" />
+    <text x="0" y="-18" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="800" fill="#0F172A" text-anchor="middle">ψ = 180°</text>
+  </g>
+  <!-- ψ = 270° (Left, -Y) -->
+  <g transform="translate(415, 475)">
+    <circle cx="0" cy="0" r="4.5" fill="#0F172A" />
+    <rect x="-92" y="-34" width="82" height="23" rx="5" fill="#FFFFFF" stroke="#0F172A" stroke-width="1.5" />
+    <text x="-51" y="-18" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="800" fill="#0F172A" text-anchor="middle">ψ = 270°</text>
+  </g>
+
+  <!-- ROTATION ARROW (Omega, Counter-Clockwise) -->
+  <path d="M 796.1280439589327 762.4269949157041 A 310 310 0 0 0 986.9831013098868 518.1436612976203" fill="none" stroke="#D97706" stroke-width="3" marker-end="url(#arr-amber)" />
+  <g transform="translate(939.2833336180838, 675.8550573509541)">
+    <rect x="-5" y="-16" width="115" height="42" rx="6" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1" />
+    <text x="6" y="2" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="800" fill="#B45309">Ω</text>
+    <text x="25" y="0" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#92400E">Rotação</text>
+    <text x="6" y="18" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#B45309">(anti-horária)</text>
+  </g>
+
+  <!-- AZIMUTH ANGLE psi ARC -->
+  <path d="M 680 570 A 95 95 0 0 0 750.5987584203524 538.5674076040915" fill="none" stroke="#2563EB" stroke-width="2.5" marker-end="url(#arr-blue)" />
+  <!-- Angle Badge psi -->
+  <g transform="translate(709.6917749445334, 541.6888184079098)" text-anchor="middle">
+    <rect x="-18" y="-12" width="36" height="24" rx="5" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.2" />
+    <text x="0" y="5" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="800" fill="#1D4ED8">ψ</text>
+  </g>
+
+  <!-- BLADE AT AZIMUTH psi = 48° -->
+  <!-- Centerline -->
+  <line x1="680" y1="475" x2="891.7962752610574" y2="665.7022228122746" stroke="#94A3B8" stroke-width="1.2" stroke-dasharray="4,3" />
+  <!-- Blade Body -->
+  <polygon points="713.7345713886649,524.2136027254974 867.5655502624855,662.723638241781 886.3012072405335,641.9155831284139 732.4702283667128,503.4055476121303" fill="#CBD5E1" stroke="#334155" stroke-width="2" filter="url(#blade-shadow)" />
+
+  <!-- Blade Element dr -->
+  <polygon points="801.0904949649595,606.2333114309821 820.4122604273717,623.6307071963123 842.4935704372141,599.1069279555583 823.1718049748018,581.7095321902281" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2" />
+  
+  <!-- Callout line and badge for Element dr -->
+  <!-- Starts at element inner side, goes down-left to a neat badge -->
+  <path d="M 809.7476817866274 616.0467265518632 L 791.6811554149382 636.1116368397529 L 758.2246250969953 636.1116368397529" fill="none" stroke="#2563EB" stroke-width="1.2" marker-start="url(#arr-blue)" />
+  <g transform="translate(754.878972065201, 636.1116368397529)" text-anchor="end">
+    <rect x="-155" y="-18" width="155" height="36" rx="6" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1" />
+    <text x="-8" y="-2" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="700" fill="#1D4ED8">Elemento de pá dr</text>
+    <text x="-8" y="11" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10.5" fill="#2563EB">raio r = x R · corda c</text>
+  </g>
+
+  <!-- UNIT VECTORS AT BLADE ELEMENT -->
+  <!-- Radial vector e_r -->
+  <line x1="831.4529154322929" y1="611.3688175759353" x2="879.7573290883236" y2="654.862306989261" stroke="#2563EB" stroke-width="3" marker-end="url(#arr-blue)" />
+  <g transform="translate(890.1613566450071, 664.230135478285)">
+    <rect x="-16" y="-12" width="32" height="22" rx="4" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1" />
+    <text x="0" y="4" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="800" fill="#1D4ED8" text-anchor="middle">ê<tspan font-size="10" dy="2">r</tspan></text>
+  </g>
+
+  <!-- Tangential vector e_t -->
+  <line x1="832.832687706008" y1="590.4082300728932" x2="876.3261771193337" y2="542.1038164168625" stroke="#2563EB" stroke-width="3" marker-end="url(#arr-blue)" />
+  <g transform="translate(885.6940056083577, 531.699788860179)">
+    <rect x="-16" y="-12" width="32" height="22" rx="4" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1" />
+    <text x="0" y="4" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="800" fill="#1D4ED8" text-anchor="middle">ê<tspan font-size="10" dy="2">t</tspan></text>
+  </g>
+
+  <!-- Hub Center Pin -->
+  <circle cx="680" cy="475" r="7" fill="#0F172A" />
+  <circle cx="680" cy="475" r="3" fill="#FFFFFF" />
+
+  <!-- FLIGHT VELOCITY CARD (Left Side, Positioned Cleanly) -->
+  <g transform="translate(55, 300)" filter="url(#card-shadow)">
+    <rect x="0" y="0" width="145" height="195" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" />
+    <line x1="72" y1="145" x2="72" y2="45" stroke="#059669" stroke-width="4.5" marker-end="url(#arr-green)" />
+    <text x="72" y="28" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="800" fill="#065F46" text-anchor="middle">V<tspan font-size="11" dy="2">h</tspan><tspan font-size="15" dy="-2"> (V</tspan><tspan font-size="11" dy="2">∞</tspan><tspan font-size="15" dy="-2">)</tspan></text>
+    <text x="72" y="165" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#059669" text-anchor="middle">Voo à Frente</text>
+    <text x="72" y="180" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748B" text-anchor="middle">Direção +X</text>
+  </g>
+
+  <!-- FORCES AND MOMENTS AT HUB (Dedicated Floating Card, Bottom-Left) -->
+  <g transform="translate(55, 525)" filter="url(#card-shadow)">
+    <rect x="0" y="0" width="225" height="195" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" />
+    <text x="18" y="26" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="700" fill="#0F172A">Cargas no Cubo (Eixos de Corpo)</text>
+    
+    <!-- Tração T: circle with dot (out of page / up in -Z) -->
+    <circle cx="30" cy="54" r="8" fill="#FEF2F2" stroke="#DC2626" stroke-width="2" />
+    <circle cx="30" cy="54" r="3" fill="#DC2626" />
+    <text x="48" y="58" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#DC2626">T &gt; 0</text>
+    <text x="95" y="58" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748B">para cima (−Z)</text>
+
+    <!-- Longitudinal H: arrow pointing down (towards -X / rear) -->
+    <line x1="30" y1="78" x2="30" y2="96" stroke="#DC2626" stroke-width="2.5" marker-end="url(#arr-red)" />
+    <text x="48" y="90" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#DC2626">H &gt; 0</text>
+    <text x="95" y="90" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748B">para trás (−X)</text>
+
+    <!-- Lateral Y: arrow pointing right (towards +Y / right) -->
+    <line x1="22" y1="120" x2="38" y2="120" stroke="#DC2626" stroke-width="2.5" marker-end="url(#arr-red)" />
+    <text x="48" y="124" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#DC2626">Y &gt; 0</text>
+    <text x="95" y="124" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748B">para a direita (+Y)</text>
+
+    <!-- Momentos Mx e My -->
+    <text x="18" y="156" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="700" fill="#334155">M<tspan font-size="9" dy="2">x</tspan><tspan font-size="11.5" dy="-2"> &gt; 0</tspan> <tspan font-weight="400" fill="#64748B">: baixa asa direita</tspan></text>
+    <text x="18" y="176" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="700" fill="#334155">M<tspan font-size="9" dy="2">y</tspan><tspan font-size="11.5" dy="-2"> &gt; 0</tspan> <tspan font-weight="400" fill="#64748B">: arfagem nariz para cima</tspan></text>
+  </g>
+
+  <!-- FOOTER SYNTHESIS BOX -->
+  <g transform="translate(50, 840)">
+    <rect x="0" y="0" width="1180" height="84" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5" />
+    
+    <!-- Left column: Unit vectors -->
+    <g transform="translate(24, 25)">
+      <text x="0" y="0" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#0F172A">VETORES UNITÁRIOS LOCAIS DA PÁ</text>
+      <text x="0" y="22" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12.5" fill="#334155">ê<tspan font-size="10" dy="2">r</tspan><tspan font-size="12.5" dy="-2"> = −cos ψ X̂ + sin ψ Ŷ</tspan>  <tspan fill="#64748B">(radial para fora ao longo do raio)</tspan></text>
+      <text x="0" y="42" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12.5" fill="#334155">ê<tspan font-size="10" dy="2">t</tspan><tspan font-size="12.5" dy="-2"> =  sin ψ X̂ + cos ψ Ŷ</tspan>  <tspan fill="#64748B">(tangencial no sentido de rotação)</tspan></text>
+    </g>
+
+    <!-- Center divider line -->
+    <line x1="580" y1="12" x2="580" y2="72" stroke="#E2E8F0" stroke-width="1.5" />
+
+    <!-- Right column: Inflow and speed relations -->
+    <g transform="translate(605, 25)">
+      <text x="0" y="0" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#0F172A">CINEMÁTICA E VELOCIDADE RELATIVA DO ELEMENTO</text>
+      <text x="0" y="22" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12.5" fill="#334155">Velocidade tangencial: <tspan font-weight="600">u<tspan font-size="10" dy="2">T</tspan><tspan font-size="12.5" dy="-2"> = x + μ sin ψ</tspan></tspan>   ·   Velocidade radial: <tspan font-weight="600">u<tspan font-size="10" dy="2">R</tspan><tspan font-size="12.5" dy="-2"> = μ cos ψ</tspan></tspan></text>
+      <text x="0" y="42" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12.5" fill="#334155">Inflow no disco: <tspan font-weight="600">λ<tspan font-size="10" dy="2">d</tspan><tspan font-size="12.5" dy="-2">(x, ψ) = λ + λ</tspan><tspan font-size="10" dy="2">1c</tspan><tspan font-size="12.5" dy="-2"> x cos ψ</tspan></tspan>   ·   Ângulo de inflow: <tspan font-weight="600">ϕ ≃ λ<tspan font-size="10" dy="2">d</tspan><tspan font-size="12.5" dy="-2"> / u</tspan><tspan font-size="10" dy="2">T</tspan><tspan font-size="12.5" dy="-2"></tspan></tspan></text>
+    </g>
+  </g>
+</svg>
