@@ -2689,17 +2689,34 @@ P_{\mathrm{shaft}}=Q\Omega,
 <p><span class="math display">\[
 \boxed{C_P=C_Q}.
 \]</span></p>
+<p>Na rota direta de torque, correspondente ao modo <code>analytical_bet</code> do zBET, nenhum balanço energético é necessário para obter <span class="math inline">\(C_Q\)</span>: <span class="math inline">\(C_{Qi}\)</span> e <span class="math inline">\(C_{Q0}\)</span> são calculados pelas integrais de torque das Seções 13 e 14. O zBET oferece também a rota <code>energy_balance</code>, na qual <span class="math inline">\(C_{Qi}\)</span> é reconstruído pelo balanço energético apresentado a seguir; <span class="math inline">\(C_{Q0}\)</span> continua vindo do modelo de profile drag selecionado.</p>
 <hr />
 <h2 id="17-coeficiente-de-potência-aerodinâmica-no-ar-c_pmathrmair">17. Coeficiente de Potência Aerodinâmica no Ar (<span class="math inline">\(C_{Pair}\)</span>)</h2>
-<p>A potência aerodinâmica é organizada por balanço energético. Para inflow uniforme,</p>
+<p>A relação entre torque de eixo, forças no plano e balanço energético é particularmente importante em voo à frente. Johnson [<a href="#referências">1</a>], Eq. 6.106, escreve a potência de eixo como a soma da potência induzida, da potência de perfil e do trabalho associado ao movimento do rotor através do ar. Sob as convenções deste texto, e omitindo a contribuição explícita de <span class="math inline">\(C_{T0}\)</span>, essa relação pode ser escrita como</p>
 <p><span class="math display">\[
-C_{Pi}=K_{\mathrm{ind}}\lambda_iC_T,
-\qquad
-C_{Pc}=\mu_zC_T,
-\qquad
-C_{P,\mathrm{trans}}=\mu C_{Hi}.
+\boxed{
+C_Q
+=
+C_{Pi}
++
+C_{P0,\mathrm{air}}
++
+\mu_z C_T
+-
+\mu C_H
+}.
 \]</span></p>
-<p>Mantendo inicialmente a potência de perfil agrupada,</p>
+<p>A potência induzida modelada é</p>
+<p><span class="math display">\[
+C_{Pi}=K_{\mathrm{ind}}\lambda_iC_T.
+\]</span></p>
+<p>Definimos a potência aerodinâmica no ar usada neste trabalho por</p>
+<p><span class="math display">\[
+\boxed{
+C_{Pair}=C_Q+\mu C_H
+}.
+\]</span></p>
+<p>Substituindo a relação de Johnson,</p>
 <p><span class="math display">\[
 \boxed{
 C_{Pair}
@@ -2708,12 +2725,11 @@ K_{\mathrm{ind}}\lambda_iC_T
 +
 \mu_zC_T
 +
-\mu C_{Hi}
-+
 C_{P0,\mathrm{air}}
 }.
 \]</span></p>
-<p>A potência de perfil relativa ao ar é</p>
+<p>Portanto, não existe uma parcela adicional <span class="math inline">\(+\mu C_{Hi}\)</span> em <span class="math inline">\(C_{Pair}\)</span>. O termo <span class="math inline">\(\mu C_{Hi}\)</span> aparece quando se converte a potência no ar de volta para torque de eixo, mas cancela na expressão de <span class="math inline">\(C_{Pair}\)</span>.</p>
+<p>Para o modelo adotado neste trabalho,</p>
 <p><span class="math display">\[
 \boxed{
 C_{P0,\mathrm{air}}
@@ -2721,7 +2737,8 @@ C_{P0,\mathrm{air}}
 C_{Q0}+\mu C_{H0}
 }.
 \]</span></p>
-<p>Substituindo,</p>
+<p>Essa forma é a redução da Eq. 6.117 de Johnson [<a href="#referências">1</a>] quando se omitem o termo explícito de <span class="math inline">\(C_{T0}\)</span> e o trabalho de flapping. Em edgewise flight (<span class="math inline">\(\mu_z=0\)</span>), ela coincide diretamente com a decomposição clássica de potência de perfil. Para <span class="math inline">\(\mu_z\neq0\)</span>, a formulação completa de Johnson contém ainda <span class="math inline">\(-\mu_zC_{T0}\)</span>; se <span class="math inline">\(C_{T0}\)</span> também for incluído no thrust total, esse termo cancela contra a parcela axial correspondente no balanço total. Por isso, a omissão de <span class="math inline">\(C_{T0}\)</span> não altera o <span class="math inline">\(C_{Pair}\)</span> final dentro da convenção adotada aqui, embora altere a decomposição isolada de <span class="math inline">\(C_{P0,\mathrm{air}}\)</span>.</p>
+<p>Substituindo a expressão de profile power,</p>
 <p><span class="math display">\[
 \boxed{
 C_{Pair}
@@ -2729,28 +2746,39 @@ C_{Pair}
 K_{\mathrm{ind}}\lambda_iC_T
 +
 \mu_zC_T
-+
-\mu C_{Hi}
 +
 C_{Q0}
 +
 \mu C_{H0}
 }.
 \]</span></p>
-<p>Como <span class="math inline">\(C_H=C_{Hi}+C_{H0}\)</span>,</p>
+<p>A mesma álgebra fornece diretamente a opção <code>energy_balance</code> do zBET. Como</p>
+<p><span class="math display">\[
+C_Q=C_{Qi}+C_{Q0},
+\qquad
+C_H=C_{Hi}+C_{H0},
+\]</span></p>
+<p>temos</p>
+<p><span class="math display">\[
+C_{Qi}+C_{Q0}
+=
+C_{Pair}
+-
+\mu(C_{Hi}+C_{H0}).
+\]</span></p>
+<p>Usando a expressão de <span class="math inline">\(C_{Pair}\)</span> acima, os termos de profile drag cancelam e resulta</p>
 <p><span class="math display">\[
 \boxed{
-C_{Pair}
+C_{Qi}^{\mathrm{EB}}
 =
 K_{\mathrm{ind}}\lambda_iC_T
 +
 \mu_zC_T
-+
-\mu C_H
-+
-C_{Q0}
+-
+\mu C_{Hi}
 }.
 \]</span></p>
+<p>Assim, as duas rotas do zBET são fisicamente distintas, mas consistentes. Em <code>analytical_bet</code>, <span class="math inline">\(C_{Qi}\)</span> vem diretamente da integral de torque da Seção 13. Em <code>energy_balance</code>, <span class="math inline">\(C_{Qi}\)</span> vem da equação acima, sem avaliar a integral de torque induzido. Em ambos os casos, <span class="math inline">\(C_{Q0}\)</span> e <span class="math inline">\(C_{H0}\)</span> são fornecidos pelo modelo de profile drag selecionado, e <span class="math inline">\(C_{Pair}\)</span> é calculado pelo balanço energético.</p>
 <h3 id="de-onde-vem-o-fator-4.5mu2">De onde vem o fator <span class="math inline">\(4.5\mu^2\)</span></h3>
 <p>Em edgewise, para pá retangular sem corte de raiz,</p>
 <p><span class="math display">\[
@@ -2832,6 +2860,11 @@ sob a hipótese de inflow constante e o conjunto analítico fechado sob
 inflow não constante com gradientes <span
 class="math inline">\(K_x\)</span> e <span
 class="math inline">\(K_y\)</span>.</p>
+<p>Nas linhas de <span class="math inline">\(C_{Qi}\)</span> e <span class="math inline">\(C_Q\)</span>, as expressões mostradas nas tabelas correspondem à rota direta de torque (<code>analytical_bet</code>). Se o modo <code>energy_balance</code> for usado, substitui-se a linha de <span class="math inline">\(C_{Qi}\)</span> por</p>
+<p><span class="math display">\[
+C_{Qi}^{\mathrm{EB}}=K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T-\mu C_{Hi},
+\]</span></p>
+<p>mantendo-se <span class="math inline">\(C_Q=C_{Qi}+C_{Q0}\)</span>. As linhas de <span class="math inline">\(C_{Pair}\)</span> já correspondem ao balanço energético e, portanto, são independentes da rota escolhida para <span class="math inline">\(C_{Qi}\)</span>.</p>
 <h3 id="formulação-integral-genérica-universal">Formulação Integral
 Genérica (Universal)</h3>
 <p><em>(Corda arbitrária <span
@@ -3674,11 +3707,7 @@ pá avançante (<span class="math inline">\(M_{\text{tip}} &gt;
 0.85\)</span>). Em razões de avanço elevadas (<span
 class="math inline">\(\mu &gt; 0.4\)</span>), o escoamento reverso na pá
 recuante exige correções adicionais [<a href="#referências">8</a>].</li>
-<li>Modelo de arrasto de perfil: a expansão vetorial de profile power
-adota <span class="math inline">\(C_{d0}\)</span> constante e despreza
-termos de ordem <span class="math inline">\(\mu^4\ln\mu\)</span>. Para
-<span class="math inline">\(\mu &gt; 0.35\)</span>, a aproximação de Bennett (<span class="math inline">\(1+4.65\mu^2\)</span>) para a potência de perfil relativa ao ar <span class="math inline">\(C_{P0,\mathrm{air}}\)</span> mitiga parcialmente esse erro [<a
-href="#referências">2</a>].</li>
+<li>Modelo de arrasto de perfil: a expansão vetorial adota <span class="math inline">\(C_{d0}\)</span> constante e retém apenas termos de baixa ordem. A correção de Bennett <span class="math inline">\((1+4.65\mu^2)\)</span> refere-se a <span class="math inline">\(C_{P0,\mathrm{air}}\)</span>, não a <span class="math inline">\(C_{Q0}\)</span>, e é uma aproximação de baixo a moderado advance ratio [<a href="#referências">1</a>]. A formulação mantém <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}\)</span> e não introduz <span class="math inline">\(C_{T0}\)</span> como output; na formulação geral de Johnson, <span class="math inline">\(C_{T0}\)</span> altera a decomposição isolada da potência de perfil em voo axial, mas cancela no balanço total quando a mesma contribuição é mantida consistentemente no thrust.</li>
 <li>Distribuição de inflow: o fechamento bidimensional de primeira ordem
 retém os harmônicos <span class="math inline">\(K_x\cos\psi\)</span> e
 <span class="math inline">\(K_y\sin\psi\)</span>. Fenômenos como
