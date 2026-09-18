@@ -1960,133 +1960,141 @@ dC_{P0,\mathrm{air}}=dC_{Q0}+\mu dC_{H0}-\mu_zdC_{T0}
 =\frac{Nc(\bar r)}{4\pi^2R}C_dW^3\,d\bar r\,d\psi.
 \]</span></p>
 <p>A integral em <span class="math inline">\(W^3\)</span> é, portanto, uma integral de <strong>potência de perfil</strong>, não de torque de eixo.</p>
-<h2 id="6-coeficiente-de-tração-c_t-e-fechamento-do-inflow-médio">6.
-Coeficiente de Tração (<span class="math inline">\(C_T\)</span>) e
-fechamento do inflow médio</h2>
-<h3 id="formulação-integral-genérica-de-c_t">Formulação integral
-genérica de <span class="math inline">\(C_T\)</span></h3>
-<p>A contribuição normal produzida pela sustentação, <span class="math inline">\(C_{T,L}\)</span>, é a média
-azimutal da força normal elementar integrada ao longo do raio:</p>
+<h2 id="6-coeficiente-de-tração-c_t-e-fechamento-do-inflow-médio">6. Coeficiente de Tração (<span class="math inline">\(C_T\)</span>) e fechamento do inflow médio</h2>
+<h3 id="formulação-integral-de-c_t">Formulação integral de <span class="math inline">\(C_T\)</span></h3>
+<p>Este trabalho usa <strong>um único coeficiente de tração</strong>, <span class="math inline">\(C_T\)</span>. A contribuição normal de profile drag é mantida como o componente <span class="math inline">\(C_{T0}\)</span>, sem introduzir um segundo coeficiente de tração.</p>
+<p>A parcela não viscosa da carga normal é</p>
 <p><span class="math display">\[
-C_{T,L} = \frac{1}{2\pi} \int_0^{2\pi} \int_{\bar{r}_0}^1 dC_N = \frac12
-\int_{\bar{r}_0}^1 \frac{N\,c(\bar{r})a(\bar{r})}{\pi R} \left\langle
-\theta(\bar{r}) u_T^2 - \lambda_d u_T \right\rangle_\psi d\bar{r}.
+C_T-C_{T0}
+=
+\frac12
+\int_{\bar r_0}^1
+\frac{N\,c(\bar r)a(\bar r)}{\pi R}
+\left\langle
+\theta(\bar r)u_T^2-\lambda_d u_T
+\right\rangle_\psi d\bar r.
 \]</span></p>
-<p>Avaliando as médias azimutais com <span
-class="math inline">\(\lambda_d = \lambda + \lambda_i \bar{r}
-(K_x\cos\psi + K_y\sin\psi)\)</span> e <span class="math inline">\(u_T =
-\bar{r} + \mu\sin\psi\)</span>:</p>
-<ol type="1">
-<li>Média de <span class="math inline">\(u_T^2\)</span>: <span
-class="math display">\[
-\langle u_T^2 \rangle_\psi = \left\langle \bar{r}^2 + 2\mu
-\bar{r}\sin\psi + \mu^2\sin^2\psi \right\rangle_\psi = \bar{r}^2 +
-\frac{\mu^2}{2}.
-\]</span></li>
-<li>Média de <span class="math inline">\(\lambda_d u_T\)</span>: <span
-class="math display">\[
-\langle \lambda_d u_T \rangle_\psi = \left\langle [\lambda + \lambda_i
-\bar{r}(K_x\cos\psi + K_y\sin\psi)](\bar{r} + \mu\sin\psi)
-\right\rangle_\psi = \lambda \bar{r} + \frac12 K_y \lambda_i \mu
-\bar{r}.
-\]</span></li>
-</ol>
-<p>O gradiente longitudinal <span class="math inline">\(K_x\)</span>
-anula-se na média azimutal. O gradiente lateral <span
-class="math inline">\(K_y\)</span> acopla-se com a velocidade de avanço
-<span class="math inline">\(\mu\sin\psi\)</span>. A equação integral
-geral de tração com <span class="math inline">\(K_x\)</span> e <span
-class="math inline">\(K_y\)</span> é:</p>
+<p>Logo, o coeficiente de tração reportado é diretamente</p>
 <p><span class="math display">\[
-C_{T,L} = \frac12 \int_{\bar{r}_0}^1 \frac{N\,c(\bar{r})}{\pi R} a(r) \left[
-\theta(\bar{r})\left(\bar{r}^2 + \frac{\mu^2}{2}\right) - \lambda
-\bar{r} - \frac12 K_y \lambda_i \mu \bar{r} \right] d\bar{r}.
+\boxed{
+C_T
+=
+\frac12
+\int_{\bar r_0}^1
+\frac{N\,c(\bar r)a(\bar r)}{\pi R}
+\left\langle
+\theta(\bar r)u_T^2-\lambda_d u_T
+\right\rangle_\psi d\bar r
++
+C_{T0}
+}.
 \]</span></p>
-<h3 id="equações-totalmente-expandidas-de-c_t">Equações totalmente
-expandidas de <span class="math inline">\(C_T\)</span></h3>
-<ol type="1">
-<li><p>Para pá retangular (<span class="math inline">\(c(\bar{r})=c,
-a(\bar{r})=a\)</span>) com torção linear <span
-class="math inline">\(\theta(\bar{r}) = \theta_0 + \theta_t
-\bar{r}\)</span> e corte na raiz <span
-class="math inline">\(\bar{r}_0\)</span> sob inflow não constante (<span
-class="math inline">\(K_x, K_y\)</span>): <span class="math display">\[
-C_{T,L} = \frac{\sigma a}{2}\left[ \theta_0\left(\frac{1-\bar{r}_0^3}{3} +
-\frac{\mu^2}{2}(1-\bar{r}_0)\right) +
-\theta_t\left(\frac{1-\bar{r}_0^4}{4} +
-\frac{\mu^2}{4}(1-\bar{r}_0^2)\right) - \left(\lambda + \frac12
-K_y\lambda_i\mu\right)\frac{1-\bar{r}_0^2}{2} \right].
-\]</span></p></li>
-<li><p>Para pá retangular com torção linear sem corte na raiz (<span
-class="math inline">\(\bar{r}_0 = 0\)</span>) sob inflow não constante
-(<span class="math inline">\(K_x, K_y\)</span>): <span
-class="math display">\[
-C_{T,L} = \frac{\sigma a}{2}\left[ \theta_0\left(\frac13 +
-\frac{\mu^2}{2}\right) + \theta_t\left(\frac14 + \frac{\mu^2}{4}\right)
-- \frac12\left(\lambda + \frac12 K_y\lambda_i\mu\right) \right].
-\]</span></p></li>
-<li><p>Para pá retangular com passo uniforme (<span
-class="math inline">\(\theta_t = 0, \bar{r}_0 = 0\)</span>) sob inflow
-não constante (<span class="math inline">\(K_x, K_y\)</span>): <span
-class="math display">\[
-C_{T,L} = \frac{\sigma a}{2}\left[ \theta_0\left(\frac13 +
-\frac{\mu^2}{2}\right) - \frac12\left(\lambda + \frac12
-K_y\lambda_i\mu\right) \right].
-\]</span></p></li>
-<li><p>Sob a hipótese de inflow constante (<span
-class="math inline">\(\lambda_d = \lambda\)</span>, implicando <span
-class="math inline">\(K_y = 0\)</span>):</p></li>
-</ol>
-<p>Com torção linear e corte na raiz: <span class="math display">\[
-C_{T,L} = \frac{\sigma a}{2}\left[ \theta_0\left(\frac{1-\bar{r}_0^3}{3} +
-\frac{\mu^2}{2}(1-\bar{r}_0)\right) +
-\theta_t\left(\frac{1-\bar{r}_0^4}{4} +
-\frac{\mu^2}{4}(1-\bar{r}_0^2)\right) - \lambda\frac{1-\bar{r}_0^2}{2}
-\right].
-\]</span></p>
-<p>Com torção linear e sem corte (<span class="math inline">\(\bar{r}_0
-= 0\)</span>): <span class="math display">\[
-C_{T,L} = \frac{\sigma a}{2}\left[ \theta_0\left(\frac13 +
-\frac{\mu^2}{2}\right) + \theta_t\left(\frac14 + \frac{\mu^2}{4}\right)
-- \frac{\lambda}{2} \right].
-\]</span></p>
-<p>Com passo uniforme e sem corte (<span class="math inline">\(\theta_t
-= 0, \bar{r}_0 = 0\)</span>): <span class="math display">\[
-C_{T,L} = \frac{\sigma a}{2}\left[ \theta_0\left(\frac13 +
-\frac{\mu^2}{2}\right) - \frac{\lambda}{2} \right].
-\]</span></p>
-<h3 id="contribuição-normal-de-profile-drag-c_t0-e-tração-total">Contribuição normal de profile drag <span class="math inline">\(C_{T0}\)</span> e tração total</h3>
-<p>Quando <span class="math inline">\(\mu_z\neq0\)</span>, o profile drag possui uma pequena componente normal:</p>
+<p>Com <span class="math inline">\(\lambda_d=\lambda+\lambda_i\bar r(K_x\cos\psi+K_y\sin\psi)\)</span> e <span class="math inline">\(u_T=\bar r+\mu\sin\psi\)</span>,</p>
 <p><span class="math display">\[
-C_{T0}=\frac12\int_{\bar r_0}^{1}\sigma(\bar r)\left\langle C_dW(-\mu_z)\right\rangle_\psi d\bar r.
+\langle u_T^2\rangle_\psi=\bar r^2+\frac{\mu^2}{2},
+\qquad
+\langle\lambda_d u_T\rangle_\psi
+=
+\lambda\bar r+\frac12K_y\lambda_i\mu\bar r.
+\]</span></p>
+<p>Assim,</p>
+<p><span class="math display">\[
+\boxed{
+C_T
+=
+\frac12
+\int_{\bar r_0}^1
+\frac{N\,c(\bar r)}{\pi R}a(\bar r)
+\left[
+\theta(\bar r)\left(\bar r^2+\frac{\mu^2}{2}\right)
+-\lambda\bar r
+-\frac12K_y\lambda_i\mu\bar r
+\right]d\bar r
++
+C_{T0}
+}.
+\]</span></p>
+<h3 id="equações-totalmente-expandidas-de-c_t">Equações totalmente expandidas de <span class="math inline">\(C_T\)</span></h3>
+<p>Para pá retangular com torção linear, corte na raiz e inflow não constante,</p>
+<p><span class="math display">\[
+C_T
+=
+\frac{\sigma a}{2}
+\left[
+\theta_0\left(\frac{1-\bar r_0^3}{3}+\frac{\mu^2}{2}(1-\bar r_0)\right)
++
+\theta_t\left(\frac{1-\bar r_0^4}{4}+\frac{\mu^2}{4}(1-\bar r_0^2)\right)
+-
+\left(\lambda+\frac12K_y\lambda_i\mu\right)\frac{1-\bar r_0^2}{2}
+\right]
++
+C_{T0}.
+\]</span></p>
+<p>Sem corte na raiz,</p>
+<p><span class="math display">\[
+C_T
+=
+\frac{\sigma a}{2}
+\left[
+\theta_0\left(\frac13+\frac{\mu^2}{2}\right)
++
+\theta_t\left(\frac14+\frac{\mu^2}{4}\right)
+-
+\frac12\left(\lambda+\frac12K_y\lambda_i\mu\right)
+\right]
++
+C_{T0}.
+\]</span></p>
+<p>Com passo uniforme, <span class="math inline">\(\theta_t=0\)</span>,</p>
+<p><span class="math display">\[
+C_T
+=
+\frac{\sigma a}{2}
+\left[
+\theta_0\left(\frac13+\frac{\mu^2}{2}\right)
+-
+\frac12\left(\lambda+\frac12K_y\lambda_i\mu\right)
+\right]
++
+C_{T0}.
+\]</span></p>
+<h3 id="componente-normal-de-profile-drag-c_t0">Componente normal de profile drag <span class="math inline">\(C_{T0}\)</span></h3>
+<p>Quando <span class="math inline">\(\mu_z\neq0\)</span>,</p>
+<p><span class="math display">\[
+C_{T0}
+=
+\frac12\int_{\bar r_0}^{1}
+\sigma(\bar r)
+\left\langle C_dW(-\mu_z)\right\rangle_\psi d\bar r.
 \]</span></p>
 <p>Para pá retangular e expansão vetorial de baixa ordem,</p>
 <p><span class="math display">\[
-C_{T0}\simeq-\frac{\sigma C_{d0}}4\mu_z(1-\bar r_0^2),
-\qquad
-\boxed{C_T=C_{T,L}+C_{T0}}.
+C_{T0}\simeq-\frac{\sigma C_{d0}}4\mu_z(1-\bar r_0^2).
 \]</span></p>
 <p>Em voo puramente edgewise, <span class="math inline">\(C_{T0}=0\)</span>.</p>
-<h3
-id="fechamento-por-quantidade-de-movimento-em-escoamento-oblíquo">Fechamento
-por quantidade de movimento em escoamento oblíquo</h3>
-<p>O inflow induzido médio <span
-class="math inline">\(\lambda_i\)</span> fecha-se pela relação de
-quantidade de movimento de Glauert:</p>
+<h3 id="fechamento-por-quantidade-de-movimento-em-escoamento-oblíquo">Fechamento por quantidade de movimento em escoamento oblíquo</h3>
+<p>O fechamento de Glauert usa a parcela não viscosa da carga normal:</p>
 <p><span class="math display">\[
-C_{T,L} = 2 \lambda_i \sqrt{\mu^2 + (\mu_z + \lambda_i)^2}.
+\boxed{
+C_T-C_{T0}
+=
+2\lambda_i\sqrt{\mu^2+(\mu_z+\lambda_i)^2}
+}.
 \]</span></p>
-<p>Em voo pairado puro (<span class="math inline">\(\mu=0,
-\mu_z=0\)</span>), a solução é <span class="math inline">\(\lambda_i =
-\lambda = \sqrt{C_{T,L}/2}\)</span>. Em voo horizontal nivelado (<span
-class="math inline">\(\mu_z=0, \mu&gt;0\)</span>):</p>
+<p>Em pairado, <span class="math inline">\(C_{T0}=0\)</span> e <span class="math inline">\(\lambda_i=\lambda=\sqrt{C_T/2}\)</span>. Em voo horizontal nivelado,</p>
 <p><span class="math display">\[
-\lambda_i = \sqrt{\frac{\sqrt{\mu^4 + C_{T,L}^2} - \mu^2}{2}}.
+\lambda_i
+=
+\sqrt{
+\frac{
+\sqrt{\mu^4+(C_T-C_{T0})^2}-\mu^2
+}{2}
+}.
 \]</span></p>
-<p>Para razões de avanço moderadas a altas (<span
-class="math inline">\(\mu \gg \lambda\)</span>), o inflow induzido
-simplifica-se para a assíntota de asa fixa: <span
-class="math inline">\(\lambda_i \simeq C_{T,L}/(2\mu)\)</span>.</p>
+<p>Para <span class="math inline">\(\mu\gg\lambda\)</span>,</p>
+<p><span class="math display">\[
+\lambda_i\simeq\frac{C_T-C_{T0}}{2\mu}.
+\]</span></p>
 <hr />
 <h2 id="7-coeficiente-de-força-longitudinal-induzida-c_hi">7.
 Coeficiente de Força Longitudinal Induzida (<span
@@ -2763,7 +2771,7 @@ C_Q = \frac{\sigma a}{2}\left(\frac{\lambda\theta_0}{3} -
 <p><span class="math display">\[
 C_Q
 =
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +
 C_{P0,\mathrm{air}}
 +
@@ -2776,15 +2784,15 @@ C_{P0,\mathrm{air}}
 C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}-\mu_zC_{T0}.
 \]</span></p>
 <p>É essencial distinguir os dois termos axiais: <span class="math inline">\(+\mu_zC_T\)</span> é o termo global de subida, enquanto <span class="math inline">\(-\mu_zC_{T0}\)</span> pertence somente à identidade vetorial da potência de perfil.</p>
-<p>Usando <span class="math inline">\(C_Q=C_{Qi}+C_{Q0}\)</span>, <span class="math inline">\(C_H=C_{Hi}+C_{H0}\)</span> e <span class="math inline">\(C_T=C_{T,L}+C_{T0}\)</span>,</p>
+<p>Usando <span class="math inline">\(C_Q=C_{Qi}+C_{Q0}\)</span>, <span class="math inline">\(C_H=C_{Hi}+C_{H0}\)</span> e <span class="math inline">\(C_T\)</span>,</p>
 <p><span class="math display">\[
 \begin{aligned}
 C_Q
 &=
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +
 \left(C_{Q0}+\mu C_{H0}-\mu_zC_{T0}\right)\\
-&\quad+\mu_z(C_{T,L}+C_{T0})
+&\quad+\mu_zC_T
 -\mu(C_{Hi}+C_{H0}).
 \end{aligned}
 \]</span></p>
@@ -2799,9 +2807,9 @@ K_{\mathrm{ind}}\lambda_iC_{T,L}
 \boxed{
 C_{Qi}
 =
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +
-\mu_zC_{T,L}
+\mu_z(C_T-C_{T0})
 -
 \mu C_{Hi}
 }.
@@ -2823,7 +2831,7 @@ C_{Pair}=C_Q+\mu C_H
 \boxed{
 C_{Pair}
 =
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +
 \mu_zC_T
 +
@@ -2853,7 +2861,7 @@ C_{Pair}=C_Q+\mu C_H
 \boxed{
 C_{Pair}
 =
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +
 \mu_zC_T
 +
@@ -2869,9 +2877,9 @@ C_{Pair}=C_Q+\mu C_H,
 <p><span class="math display">\[
 C_{Qi}
 =
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +
-\mu_zC_{T,L}
+\mu_z(C_T-C_{T0})
 -
 \mu C_{Hi},
 \]</span></p>
@@ -2880,33 +2888,33 @@ K_{\mathrm{ind}}\lambda_iC_{T,L}
 \begin{aligned}
 C_{Pair}
 &=
-K_{\mathrm{ind}}\lambda_iC_{T,L}
-+\mu_zC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
++\mu_z(C_T-C_{T0})
 -\mu C_{Hi}
 +C_{Q0}
 +\mu(C_{Hi}+C_{H0})\\
 &=
-K_{\mathrm{ind}}\lambda_iC_{T,L}
-+\mu_zC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
++\mu_z(C_T-C_{T0})
 +C_{Q0}
 +\mu C_{H0}.
 \end{aligned}
 \]</span></p>
-<p>Como <span class="math inline">\(C_T=C_{T,L}+C_{T0}\)</span>,</p>
+<p>Como <span class="math inline">\(C_T\)</span>,</p>
 <p><span class="math display">\[
-\mu_zC_{T,L}=\mu_zC_T-\mu_zC_{T0}.
+\mu_z(C_T-C_{T0})=\mu_zC_T-\mu_zC_{T0}.
 \]</span></p>
 <p>Então,</p>
 <p><span class="math display">\[
 \begin{aligned}
 C_{Pair}
 &=
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +\mu_zC_T
 +\left(C_{Q0}+\mu C_{H0}-\mu_zC_{T0}\right)\\
 &=
 \boxed{
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +\mu_zC_T
 +C_{P0,\mathrm{air}}
 }.
@@ -2970,7 +2978,7 @@ C_{P0,\mathrm{air}}
 \boxed{
 C_{Pair}=C_Q
 =
-K_{\mathrm{ind}}\lambda_iC_{T,L}
+K_{\mathrm{ind}}\lambda_i(C_T-C_{T0})
 +
 \mu_zC_T
 +
