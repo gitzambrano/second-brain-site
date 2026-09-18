@@ -1080,7 +1080,7 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
   color:var(--gold);
   text-decoration:none;
   border-bottom:none;
-  font-family:var(--font-display);
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   transition:color .15s ease, opacity .15s ease;
   user-select:none;
 }
@@ -1702,9 +1702,10 @@ href="https://en.wikipedia.org/wiki/Alan_Turing">Alan Turing</a>
 concebendo com David Champernowne o Turochamp por volta de 1948 e
 executando depois o algoritmo manualmente até o <a
 href="https://www.science.org/doi/10.1126/science.aar6404">AlphaZero</a>
-vencendo <a href="https://stockfishchess.org/">Stockfish</a> com larga
-vantagem [<a href="#referências">1</a>] em 2017 após cerca de nove horas
-de auto-aprendizado, o equivalente a aproximadamente 700 mil partidas de
+[<a href="#referências">9</a>] vencendo <a
+href="https://stockfishchess.org/">Stockfish</a> com larga vantagem [<a
+href="#referências">1</a>] em 2017 após cerca de nove horas de
+auto-aprendizado, o equivalente a aproximadamente 700 mil partidas de
 jogo próprio, a história dos engines de xadrez é uma destilação da
 história da própria <a
 href="https://en.wikipedia.org/wiki/Artificial_intelligence">inteligência
@@ -2127,13 +2128,14 @@ assunto do capítulo XI), e o crescimento natural da capacidade de
 processamento previsto pela <a
 href="https://en.wikipedia.org/wiki/Moore%27s_law">Lei de Moore</a>.
 Engines como Rybka, e mais tarde o projeto de código aberto <a
-href="https://stockfishchess.org/">Stockfish</a>, superaram os melhores
-humanos por margens tão grandes que confrontos diretos deixaram de ser
-interessantes como espetáculo: a partir de meados dos anos 2000, ninguém
-mais duvidava seriamente que o computador ganharia. A fronteira de
-interesse se deslocou para o xadrez “centaur” ou “freestyle”, equipes de
-humano e máquina jogando juntos, já que a competição pura entre um
-humano e um engine moderno deixou de ser disputa.</p>
+href="https://stockfishchess.org/">Stockfish</a> [<a
+href="#referências">1</a>], superaram os melhores humanos por margens
+tão grandes que confrontos diretos deixaram de ser interessantes como
+espetáculo: a partir de meados dos anos 2000, ninguém mais duvidava
+seriamente que o computador ganharia. A fronteira de interesse se
+deslocou para o xadrez “centaur” ou “freestyle”, equipes de humano e
+máquina jogando juntos, já que a competição pura entre um humano e um
+engine moderno deixou de ser disputa.</p>
 <h3 id="a-virada-neural-alphazero-e-nnue-2017-2018">A Virada Neural:
 AlphaZero e NNUE (2017-2018)</h3>
 <p>O capítulo final dessa história, por enquanto, é a fusão entre a
@@ -2348,7 +2350,7 @@ href="https://en.wikipedia.org/wiki/Zobrist_hashing">hash de
 Zobrist</a></strong> [<a href="#referências">13</a>] atualizado
 incrementalmente. O método, inventado por <a
 href="https://en.wikipedia.org/wiki/Zobrist_hashing">Albert Zobrist</a>
-em 1970, funciona assim:</p>
+[<a href="#referências">13</a>] em 1970, funciona assim:</p>
 <ol type="1">
 <li>Para cada combinação (peça, casa), (lado a mover), (direito de
 roque) e (coluna de en-passant), atribuir um número aleatório de 64
@@ -3227,10 +3229,11 @@ outro ângulo: gerar os movimentos em ondas, em vez de todos de uma
 vez.</p>
 <p>A eficiência da <a
 href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">poda
-alfa-beta</a> depende criticamente da <strong>ordenação de
-movimentos</strong>: quanto mais cedo o melhor movimento é tentado, mais
-cedo os ramos ruins são cortados. A ordenação perfeita é impossível
-(requer resolver a posição), mas boas heurísticas se aproximam.</p>
+alfa-beta</a> [<a href="#referências">14</a>] depende criticamente da
+<strong>ordenação de movimentos</strong>: quanto mais cedo o melhor
+movimento é tentado, mais cedo os ramos ruins são cortados. A ordenação
+perfeita é impossível (requer resolver a posição), mas boas heurísticas
+se aproximam.</p>
 <h3 id="staged-move-generation">Staged Move Generation</h3>
 <p>Antes mesmo de ordenar os movimentos por score, existe uma decisão
 mais barata a tomar: será que é preciso gerar <em>todos</em> eles? Gerar
@@ -4066,9 +4069,10 @@ que exploram a mesma vantagem, a de não gastar atenção igual em tudo,
 por rotas distintas.</p>
 <p>O <a
 href="https://www.science.org/doi/10.1126/science.aar6404">AlphaZero</a>
-(Silver et al., <a href="https://deepmind.google/">DeepMind</a>, 2018)
-[<a href="#referências">9</a>] abandonou completamente a função de
-avaliação artesanal e a busca alfa-beta. Em seu lugar:</p>
+[<a href="#referências">9</a>] (Silver et al., <a
+href="https://deepmind.google/">DeepMind</a>, 2018) [<a
+href="#referências">9</a>] abandonou completamente a função de avaliação
+artesanal e a busca alfa-beta. Em seu lugar:</p>
 <ul>
 <li><strong>Rede neural profunda</strong> (<a
 href="https://en.wikipedia.org/wiki/Residual_neural_network">ResNet</a>
@@ -4097,8 +4101,9 @@ Deep NN vs. Alpha-Beta + NNUE</h3>
 <p>A competição moderna revela uma verdade sutil: <strong>ambas as
 abordagens convergem em força</strong>. A Stockfish com NNUE (alfa-beta
 + rede neural rasa) e o <a href="https://lczero.org/">Leela Chess
-Zero</a> (MCTS + rede neural profunda) estão separadas por menos de 30
-Elo nos rankings atuais, uma diferença que flutua entre versões.</p>
+Zero</a> [<a href="#referências">23</a>] (MCTS + rede neural profunda)
+estão separadas por menos de 30 Elo nos rankings atuais, uma diferença
+que flutua entre versões.</p>
 <p>A diferença é arquitetural, não fundamental:</p>
 <table>
 <colgroup>
@@ -5293,6 +5298,6 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <nav id="sbTocList"></nav>
 </aside>
 <script src="../assets/theme.js?v=42453cd1"></script>
-<script src="../assets/essay.js?v=01fe90ba"></script>
+<script src="../assets/essay.js?v=99dddf89"></script>
 </body>
 </html>

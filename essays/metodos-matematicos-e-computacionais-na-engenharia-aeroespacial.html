@@ -1080,7 +1080,7 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
   color:var(--gold);
   text-decoration:none;
   border-bottom:none;
-  font-family:var(--font-display);
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   transition:color .15s ease, opacity .15s ease;
   user-select:none;
 }
@@ -1859,7 +1859,8 @@ norma, a matriz de atitude reconstruída deixa de ser ortogonal e passa a
 esticar vetores que deveria apenas girar.</p>
 <p>Um segundo uso, menos óbvio, é a interpolação. O <a
 href="https://en.wikipedia.org/wiki/Slerp">SLERP</a>, <a
-href="https://dl.acm.org/doi/10.1145/325165.325242">proposto</a> por <a
+href="https://dl.acm.org/doi/10.1145/325165.325242">proposto</a> [<a
+href="#referências">3</a>] por <a
 href="https://en.wikipedia.org/wiki/Ken_Shoemake">Ken Shoemake</a> [<a
 href="#referências">3</a>], interpola entre duas atitudes ao longo do
 arco de círculo máximo da esfera unitária, com velocidade angular
@@ -1895,9 +1896,9 @@ class="math inline">\(SE(3)\)</span>, e há situações, notadamente
 cinemática de manipuladores e formação de múltiplos veículos, em que
 tratar as duas separadamente perde o acoplamento. Nesses casos os
 quaternions duais, ou a <a href="https://geometricalgebra.org/">álgebra
-geométrica conforme</a>, são a extensão natural, e o capítulo seguinte,
-sobre derivadas de Lie, é a porta de entrada formal para esse
-território.</p>
+geométrica conforme</a> [<a href="#referências">2</a>], são a extensão
+natural, e o capítulo seguinte, sobre derivadas de Lie, é a porta de
+entrada formal para esse território.</p>
 <hr />
 <h3
 id="derivadas-de-lie-campos-vetoriais-e-geometria-de-controle">Derivadas
@@ -1916,14 +1917,15 @@ se dois comandos aplicados em ordem trocada levam ao mesmo lugar.</p>
 href="https://en.wikipedia.org/wiki/Sophus_Lie">Sophus Lie</a> e chegou
 ao controle pelos <a
 href="https://link.springer.com/book/10.1007/978-1-84628-615-5">trabalhos</a>
-de <a href="https://en.wikipedia.org/wiki/Alberto_Isidori">Alberto
-Isidori</a> [<a href="#referências">5</a>] e pela sistematização de
-Slotine e Li [<a href="#referências">6</a>]. Ele é a linguagem certa
-quando o modelo é genuinamente não linear e a linearização em torno de
-um ponto de operação deixa de bastar, o que em aeronáutica acontece
-cedo: transição de eVTOL, envelope de alto ângulo de ataque e
-acoplamento entre eixos são todos regimes onde o jacobiano num ponto
-conta uma parte pequena da história.</p>
+[<a href="#referências">5</a>] de <a
+href="https://en.wikipedia.org/wiki/Alberto_Isidori">Alberto Isidori</a>
+[<a href="#referências">5</a>] e pela sistematização de Slotine e Li [<a
+href="#referências">6</a>]. Ele é a linguagem certa quando o modelo é
+genuinamente não linear e a linearização em torno de um ponto de
+operação deixa de bastar, o que em aeronáutica acontece cedo: transição
+de eVTOL, envelope de alto ângulo de ataque e acoplamento entre eixos
+são todos regimes onde o jacobiano num ponto conta uma parte pequena da
+história.</p>
 <h4 id="formulação-matemática-1">Formulação Matemática</h4>
 <p>Para um campo vetorial <span class="math inline">\(f: \mathbb{R}^n
 \to \mathbb{R}^n\)</span> e uma função escalar <span
@@ -2999,10 +3001,10 @@ de Hardy-Krause finita, e a maioria das respostas de engenharia não usa
 de fato todas as <span class="math inline">\(d\)</span> dimensões da
 mesma forma. A <a
 href="https://www.semanticscholar.org/paper/Valuation-of-mortgage-backed-securities-using-to-Caflisch-Morokoff/6ac7497e941375197034be07842f1dd38c9f95e3">dimensão
-efetiva</a> no sentido de superposição, formalizada por Caflisch,
-Morokoff e Owen em 1997 [<a href="#referências">22</a>], mede quantas
-variáveis, na prática, bastam para explicar quase toda a variância da
-resposta,</p>
+efetiva</a> [<a href="#referências">22</a>] no sentido de superposição,
+formalizada por Caflisch, Morokoff e Owen em 1997 [<a
+href="#referências">22</a>], mede quantas variáveis, na prática, bastam
+para explicar quase toda a variância da resposta,</p>
 <p><span class="math display">\[d_S = \min\left\{ s \;:\; \sum_{|u| \le
 s} \sigma_u^2 \;\ge\; 0.99\, \text{Var}(f) \right\},\]</span></p>
 <p>onde <span class="math inline">\(\sigma_u^2\)</span> é a parcela de
@@ -5307,9 +5309,9 @@ estatística, análise de sinais, dinâmica de sistemas e otimização
 deixaram de ser disciplinas separadas dentro do ciclo de projeto
 aeroespacial e passaram a compartilhar a mesma base de dados e o mesmo
 critério de decisão, movimento que <a
-href="http://databookuw.com/">Brunton e Kutz</a> sistematizaram sob o
-nome de engenharia orientada a dados [<a
-href="#referências">58</a>].</p>
+href="http://databookuw.com/">Brunton e Kutz</a> [<a
+href="#referências">58</a>] sistematizaram sob o nome de engenharia
+orientada a dados [<a href="#referências">58</a>].</p>
 <h4 id="formulação-matemática-21">Formulação Matemática</h4>
 <p>O fluxo pode ser descrito como uma cadeia de transformações,</p>
 <p><span class="math display">\[\text{dado bruto} \xrightarrow{\ \phi\ }
@@ -6254,6 +6256,6 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <nav id="sbTocList"></nav>
 </aside>
 <script src="../assets/theme.js?v=42453cd1"></script>
-<script src="../assets/essay.js?v=01fe90ba"></script>
+<script src="../assets/essay.js?v=99dddf89"></script>
 </body>
 </html>
