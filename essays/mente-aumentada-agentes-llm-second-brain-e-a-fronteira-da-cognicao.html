@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="44">
+<html lang="pt-BR" data-status="finalizado" data-minutes="47">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1066,12 +1066,188 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 }
 
 /* ------------------------------------------------------------------ */
+/* Citações Inline e Popup de Referência (Padrão Substack)            */
+/* ------------------------------------------------------------------ */
+.ref-cite {
+  font-size:.78em;
+  line-height:0;
+  vertical-align:super;
+  font-weight:600;
+  padding:0 .18em;
+  cursor:pointer;
+  color:var(--gold);
+  text-decoration:none;
+  border-bottom:none;
+  font-family:var(--font-display);
+  transition:color .15s ease, opacity .15s ease;
+  user-select:none;
+}
+.ref-cite:hover,
+.ref-cite:focus-visible,
+.ref-cite[aria-expanded="true"] {
+  color:var(--rust-bright);
+  text-decoration:none;
+}
+
+.ref-popup {
+  position:fixed;
+  z-index:1200;
+  max-width:min(380px, calc(100vw - 32px));
+  width:max-content;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:.88rem;
+  line-height:1.55;
+  color:var(--text);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(4px) scale(.98);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  pointer-events:none;
+}
+[data-theme="light"] .ref-popup {
+  background:var(--surface);
+  box-shadow:0 10px 30px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.05);
+  border-color:var(--border);
+}
+.ref-popup.is-active {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.ref-popup-inner {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.ref-popup-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  padding-bottom:5px;
+  margin-bottom:3px;
+}
+.ref-popup-num {
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  color:var(--gold);
+}
+.ref-popup-close {
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:1.15rem;
+  line-height:1;
+  cursor:pointer;
+  padding:0 3px;
+  border-radius:4px;
+  transition:color .15s ease;
+}
+.ref-popup-close:hover {
+  color:var(--text-bright);
+}
+.ref-popup-body {
+  font-size:.86rem;
+  color:var(--text);
+  overflow-wrap:break-word;
+}
+.ref-popup-body em,
+.ref-popup-body i {
+  color:var(--text-bright);
+}
+.ref-popup-body a {
+  color:var(--gold);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.ref-popup-body a:hover {
+  color:var(--rust-bright);
+}
+.ref-popup-body a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+}
+
+/* ------------------------------------------------------------------ */
 /* Impressão — mínimo funcional (oculta chrome fixo)                  */
 /* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
 /* ------------------------------------------------------------------ */
 @media print{
   .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
 }
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 <link rel="icon" href="../assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-light-512.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-dark-512.png" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t="light";document.documentElement.dataset.theme=t})();</script><style>@font-face {
   font-family: 'Inter';
@@ -1491,21 +1667,36 @@ Engenheiro Aumentado — e a Questão do Que Somos</a></li>
 </ul>
 <hr />
 <h2 id="na-fronteira-do-que-somos">Na Fronteira do Que Somos</h2>
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Se, ao confrontarmos alguma tarefa, uma parte do mundo funciona como
+um processo que, se feito na cabeça, não hesitaríamos em reconhecer como
+parte do processo cognitivo, então essa parte do mundo <em>é</em> parte
+do processo cognitivo.</p>
+</div>
+<div class="quote-attribution">
+<p>— Andy Clark &amp; David Chalmers, <em>The Extended Mind</em>
+(1998)</p>
+</div>
+</div>
 <p>Em 1945, <a
-href="https://en.wikipedia.org/wiki/Vannevar_Bush">Vannevar Bush</a>
-publicou um ensaio seminal chamado <a
+href="https://en.wikipedia.org/wiki/Vannevar_Bush">Vannevar Bush</a> [<a
+href="#referências">3</a>] publicou um ensaio seminal chamado <a
 href="https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/"><em>“As
 We May Think”</em></a>, descrevendo um dispositivo hipotético chamado <a
 href="https://en.wikipedia.org/wiki/Memex"><strong>Memex</strong></a> —
-uma máquina que permitiria a uma pessoa armazenar todos os seus livros,
-registros e comunicações, consultando qualquer item com velocidade e
-flexibilidade. Bush reconhecia que o maior problema da ciência moderna
-não era a produção de conhecimento, mas sua <em>organização e
-recuperação</em>. Oitenta anos depois, as ferramentas para materializar
-essa visão finalmente existem. Mas o momento é muito mais radical do que
-Bush poderia ter imaginado — porque não se trata apenas de recuperar
-conhecimento mais rápido. Trata-se de uma perturbação profunda nos
-alicerces do que chamamos de <em>mente</em>.</p>
+linhagem conceitual continuada por Douglas Engelbart [<a
+href="#referências">5</a>] na defesa da amplificação da inteligência
+organizacional —, permitindo a uma pessoa armazenar todos os seus
+livros, registros e comunicações, consultando qualquer item com
+velocidade e flexibilidade. Bush reconhecia que o maior problema da
+ciência moderna não era a produção de conhecimento, mas sua
+<em>organização e recuperação</em>. Oitenta anos depois, as ferramentas
+para materializar essa visão finalmente existem. Mas o momento é muito
+mais radical do que Bush poderia ter imaginado — porque não se trata
+apenas de recuperar conhecimento mais rápido. Trata-se de uma
+perturbação profunda nos alicerces do que chamamos de
+<em>mente</em>.</p>
 <h3 id="por-que-tanta-gente-ainda-é-cética">Por Que Tanta Gente Ainda é
 Cética?</h3>
 <p>Há uma razão muito concreta para o ceticismo generalizado que ainda
@@ -1549,8 +1740,8 @@ portanto, o argumento vai, uma máquina não pode realmente “pensar”: ela
 apenas simula o pensamento, processa tokens, produz texto
 estatisticamente plausível.</p>
 <p>Dois filósofos são frequentemente citados nesse debate. <a
-href="https://en.wikipedia.org/wiki/Daniel_Dennett">Daniel Dennett</a>,
-em <a
+href="https://en.wikipedia.org/wiki/Daniel_Dennett">Daniel Dennett</a>
+[<a href="#referências">7</a>], em <a
 href="https://en.wikipedia.org/wiki/Consciousness_Explained"><em>Consciousness
 Explained</em></a> (1991), argumentou de forma provocadora que a própria
 consciência humana é, em larga medida, uma ilusão gerada por processos
@@ -1558,12 +1749,13 @@ computacionais paralelos — sem um “teatro central” onde o self reside.
 <a href="https://en.wikipedia.org/wiki/John_Searle">John Searle</a>, por
 outro lado, com seu famoso argumento do <a
 href="https://en.wikipedia.org/wiki/Chinese_room"><em>Quarto
-Chinês</em></a>, sustentou que manipular símbolos de acordo com regras —
-por mais sofisticado que seja o processo — nunca gera compreensão
-genuína. A sintaxe, por si só, não produz semântica.</p>
+Chinês</em></a> [<a href="#referências">8</a>], sustentou que manipular
+símbolos de acordo com regras — por mais sofisticado que seja o processo
+— nunca gera compreensão genuína. A sintaxe, por si só, não produz
+semântica.</p>
 <p>Mas há uma terceira perspectiva, talvez a mais fascinante. <a
 href="https://en.wikipedia.org/wiki/Douglas_Hofstadter">Douglas
-Hofstadter</a>, em <a
+Hofstadter</a> [<a href="#referências">9</a>], em <a
 href="https://en.wikipedia.org/wiki/G%C3%B6del,_Escher,_Bach"><em>Gödel,
 Escher, Bach: An Eternal Golden Braid</em></a> (1979), explorou a ideia
 de que o pensamento consciente e o significado emergem de sistemas de
@@ -1647,7 +1839,8 @@ mais literal.</p>
 <p>Essa experiência tem um nome técnico — e a <a
 href="https://en.wikipedia.org/wiki/Philosophy_of_mind">filosofia da
 mente</a> o formalizou décadas antes de existirem LLMs. <a
-href="https://en.wikipedia.org/wiki/Andy_Clark">Andy Clark</a> e <a
+href="https://en.wikipedia.org/wiki/Andy_Clark">Andy Clark</a> e David
+Chalmers [<a href="#referências">4</a>] e <a
 href="https://en.wikipedia.org/wiki/David_Chalmers">David Chalmers</a>,
 em seu influente artigo de 1998 <a
 href="https://academic.oup.com/analysis/article-abstract/58/1/7/153111"><em>“The
@@ -1704,6 +1897,16 @@ filosófica é o mapa; a implementação prática é o território.</p>
 <hr />
 <h2 id="o-que-é-um-agente-llm-e-por-que-isso-muda-tudo">O Que é um
 Agente LLM e Por Que Isso Muda Tudo</h2>
+<div class="box callout-note">
+<div class="box-title">
+<p>Alerta Metacognitivo sobre Automação Precoce</p>
+</div>
+<p>O profissional sênior sabe avaliar criticamente uma resposta do
+agente porque construiu seu modelo mental através de anos de prática
+direta. Quem automatiza o raciocínio antes de dominá-lo saberá operar
+comandos no terminal, mas ficará indefeso quando o sistema alucinar em
+uma decisão crítica de arquitetura.</p>
+</div>
 <p>No paradigma de chat tradicional, você digita uma mensagem, o modelo
 responde, e a interação termina. Cada conversa começa do zero, sem
 memória do que foi discutido antes. É um oráculo que consulta e
@@ -1727,13 +1930,14 @@ obstáculos.</p>
 <h4 id="persistência-configurável">Persistência Configurável</h4>
 <p>Através de arquivos de configuração como <code>CLAUDE.md</code>,
 <code>AGENTS.md</code> ou equivalentes, o agente pode ser instruído
-sobre o contexto do projeto, convenções a seguir, e como se comportar.
+sobre o contexto do projeto, convenções a adotar e como se comportar.
 Esse conhecimento persiste entre sessões.</p>
 <hr />
 <h2 id="os-principais-agentes-do-mercado">Os Principais Agentes do
 Mercado</h2>
-<h3 id="claude-code-anthropic">Claude Code Anthropic</h3>
-<p>Modelos: claude-opus-4-6 · claude-sonnet-4-6</p>
+<p>Claude Code Anthropic [<a href="#referências">14</a>]</p>
+<p>Modelos: claude-opus-5 (ou opus-4-6) · claude-sonnet-5 (ou
+sonnet-4-6)</p>
 <p><strong>Interface:</strong> terminal exclusivamente (Windows:
 PowerShell, CMD ou Windows Terminal). Sem GUI. A comunicação é
 inteiramente textual — você digita instruções em linguagem natural, o
@@ -1749,20 +1953,24 @@ manual. Suporta <strong>sub-agents paralelos</strong> (múltiplos Claude
 Code trabalhando simultaneamente em partes diferentes de uma tarefa),
 <strong>Hooks</strong> (comandos shell executados antes ou depois de
 cada ação do agente, para formatação automática, lint e CI), e
-<strong>Agent Skills</strong> (diretórios SKILL.md que ensinam
-capacidades novas — como manipulação de PDFs, PPTX ou workflows
-específicos de domínio). Conecta-se a servidores MCP para integrar
-Google Drive, Jira, Slack, GitHub e ferramentas proprietárias sem código
-customizado.</p>
-<p>O <strong>Claude Opus 4.6</strong> é superior em tarefas que exigem
-entendimento profundo de sistemas complexos, raciocínio causal e
-manutenção de contexto em projetos grandes — ideal para análise de
-requisitos de certificação, revisão de FMEAs, e interpretação de
-regulamentos FAR/CS. O <strong>Claude Sonnet 4.6</strong>, mais veloz e
-econômico, cobre a maioria dos casos cotidianos com excelente
-custo-benefício. Ambos suportam janela de contexto de 1M tokens.</p>
-<pre><code>npm install -g @anthropic-ai/claude-code
-claude  # inicia no diretório atual</code></pre>
+<strong>Agent Skills [<a href="#referências">21</a>]</strong>
+(diretórios SKILL.md que ensinam capacidades novas — como manipulação de
+PDFs, PPTX ou workflows específicos de domínio). Conecta-se a servidores
+MCP para integrar Google Drive, Jira, Slack, GitHub e ferramentas
+proprietárias sem código customizado.</p>
+<p>O <strong>Claude Opus 5 (e Opus 4.6)</strong> é superior em tarefas
+que exigem entendimento profundo de sistemas complexos, raciocínio
+causal e manutenção de contexto em projetos grandes — ideal para análise
+de requisitos de certificação, revisão de FMEAs, e interpretação de
+regulamentos FAR/CS. O <strong>Claude Sonnet 5 (e Sonnet 4.6)</strong>,
+mais veloz e econômico, cobre a maioria dos casos cotidianos com
+excelente custo-benefício. Ambos suportam janela de contexto de 1M
+tokens.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">irm</span> https<span class="op">://</span>claude<span class="op">.</span><span class="fu">ai</span><span class="op">/</span>install<span class="op">.</span><span class="fu">ps1</span> <span class="op">|</span> <span class="fu">iex</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>npm install <span class="op">-</span>g @anthropic-ai<span class="op">/</span>claude-code</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>claude  <span class="co"># inicia no diretório atual</span></span></code></pre></div>
 <p><strong>Pontos fortes</strong></p>
 <ul>
 <li>Compreensão superior de sistemas complexos</li>
@@ -1777,7 +1985,7 @@ claude  # inicia no diretório atual</code></pre>
 <li>Custo por token em projetos grandes</li>
 <li>Interface puramente de terminal</li>
 </ul>
-<h3 id="gemini-cli-google">Gemini CLI Google</h3>
+<p>Gemini CLI Google [<a href="#referências">15</a>]</p>
 <p>Modelos: Gemini 3.1 Pro Preview · Gemini 2.5 Flash</p>
 <p><strong>Interface:</strong> terminal (Windows: PowerShell / CMD /
 Windows Terminal). Instalado via Node.js
@@ -1808,7 +2016,7 @@ suporte a workflows paralelos e checkpointing de sessão.</p>
 <li>Menos controle granular de aprovação que Claude Code</li>
 <li>Ecossistema de extensões ainda em crescimento</li>
 </ul>
-<h3 id="openai-codex-cli-openai">OpenAI Codex CLI OpenAI</h3>
+<p>OpenAI Codex CLI OpenAI [<a href="#referências">16</a>]</p>
 <p>Modelos: GPT-5.4 · GPT-5.4 Pro (raciocínio avançado)</p>
 <p><strong>Interface:</strong> terminal (Windows: PowerShell / Windows
 Terminal). Instalado via <code>npm install -g @openai/codex</code>,
@@ -1837,7 +2045,7 @@ complexidade.</p>
 <li>Sem tier gratuito relevante</li>
 <li>Política de dados para projetos sensíveis</li>
 </ul>
-<h3 id="github-copilot-microsoft">GitHub Copilot Microsoft</h3>
+<p>GitHub Copilot Microsoft [<a href="#referências">17</a>]</p>
 <p>Integração: VS Code · JetBrains · IDE-first</p>
 <p><strong>Interface:</strong> integrado ao IDE — não é um agente de
 terminal. No Windows, funciona como extensão do VS Code ou JetBrains
@@ -1865,9 +2073,9 @@ para aerodinâmica legada.</p>
 <li>Sem equivalente ao CLAUDE.md</li>
 <li>Dependência do ecossistema Microsoft/GitHub</li>
 </ul>
-<h3 id="open-claw--opencode-open-source">Open Claw / OpenCode
-Open-Source</h3>
-<p>Backend: qualquer LLM · Ollama local · Claude · GPT</p>
+<p>Open Claw / OpenCode Open-Source</p>
+<p>Backend: qualquer LLM · Ollama [<a href="#referências">18</a>] local
+· Claude · GPT</p>
 <p><strong>Interface:</strong> terminal (Windows: PowerShell / Windows
 Terminal). Instalação via npm ou binário pré-compilado. O OpenCode tem
 também uma TUI (Text User Interface) — uma interface visual dentro do
@@ -1932,6 +2140,22 @@ fundamentalmente diferente na qualidade do que produz.</p>
 </div>
 <hr />
 <h2 id="rodando-agentes-offline">Rodando Agentes Offline</h2>
+<div class="box callout-info">
+<div class="box-title">
+<p>Diretriz de Segurança: A Abordagem Híbrida</p>
+</div>
+<p>Para ambientes industriais e regulados (defesa, propriedade
+intelectual ou certificação técnica):</p>
+<ul>
+<li><strong>Local (Ollama / Hardware On-Premises):</strong> Varredura de
+dados confidenciais, relatórios de falhas e logs internos sem saída de
+pacotes para a nuvem.</li>
+<li><strong>Frontier Models via API (Claude Opus 5, GPT-5.4 / o3-pro,
+Gemini 3.1 Pro):</strong> Síntese metodológica, arquitetura de sistemas
+e tarefas abstratas onde dados anonimizados operam com máxima capacidade
+de raciocínio.</li>
+</ul>
+</div>
 <p>Para equipes com projetos sensíveis — defesa, certificação
 aeronáutica, dados proprietários — a dependência de APIs de terceiros
 pode ser inaceitável. A solução é rodar modelos completamente locais via
@@ -1941,8 +2165,8 @@ pode ser inaceitável. A solução é rodar modelos completamente locais via
 ollama pull gemma4:e4b       # 4.5B efetivos — roda em qualquer GPU dedicada
 ollama pull gemma4:26b       # MoE 26B (~4B ativos) — qualidade/custo excepcional
 ollama pull gemma4:31b       # 31B denso — topo de linha local, requer ~20GB VRAM
-ollama pull llama3.3:70b     # Melhor qualidade open-weight, hardware robusto
-ollama pull qwen2.5-coder:32b # Especializado em código
+ollama pull llama3.3:70b     # Alta qualidade open-weight (ou llama4:scout)
+ollama pull qwen3-coder:30b  # Especializado em código (MoE de alta eficiência)
 ollama pull deepseek-r1:32b  # Forte em raciocínio matemático</code></pre>
 <table>
 <colgroup>
@@ -2013,7 +2237,11 @@ científico relevante, cada linha de código que resolveu um problema
 não-óbvio.</p>
 <h3 id="o-obsidian-como-interface-do-second-brain">O Obsidian como
 Interface do Second Brain</h3>
-<p><strong>Obsidian</strong> é o editor Markdown que serve como janela
+<p><strong>Obsidian</strong> [<a href="#referências">10</a>], apoiado
+por plugins da comunidade [<a href="#referências">12</a>], ferramentas
+de captura como o Web Clipper [<a href="#referências">11</a>] e
+configurações locais como o obsidian-llm-wiki-local [<a
+href="#referências">13</a>], é o editor Markdown que serve como janela
 de visualização e navegação da sua wiki. Ele não é o agente — é o IDE. O
 agente (Claude Code, Gemini CLI, ou outro) escreve e mantém os arquivos;
 você os lê e navega pelo Obsidian. A separação é fundamental: você nunca
@@ -2109,7 +2337,8 @@ Compilada</h3>
 há acumulação. Faça uma pergunta sutil que exige sintetizar cinco
 documentos, e o LLM tem que encontrar e juntar os fragmentos relevantes
 toda vez. Nada é construído.</p>
-<p>— Andrej Karpathy, <em>LLM Wiki</em> (2026)</p>
+<p>— Andrej Karpathy [<a href="#referências">1</a>], <em>LLM Wiki</em>
+(2026)</p>
 <p>O RAG — o modo padrão de “upload de documentos” do ChatGPT,
 NotebookLM, e a maioria dos sistemas — é como uma biblioteca onde todo
 livro existe em estado de pó. Cada vez que você busca algo, o sistema
@@ -2124,9 +2353,46 @@ e mantém o artefato vivo, enriquecendo-o com cada nova fonte.</p>
 <hr />
 <h2 id="o-padrão-llm-wiki-conhecimento-que-compila">O Padrão LLM Wiki:
 Conhecimento que Compila</h2>
-<p>O padrão, formalizado por Karpathy e implementado no <a
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>O Obsidian é a IDE; o LLM é o programador; a wiki é o
+código-fonte.</p>
+</div>
+<div class="quote-attribution">
+<p>— Andrej Karpathy</p>
+</div>
+</div>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>RAG Tradicional vs. LLM Wiki: O Dilema da Biblioteca de Pó</p>
+</div>
+<ul>
+<li><strong>RAG Convencional (Interpretador):</strong> Fragmenta PDFs em
+chunks isolados em banco vetorial. Responde por similaridade semântica
+rasa, mas não sintetiza conceitos cruzados nem mantém consistência
+temporal.</li>
+<li><strong>LLM Wiki (Compilador):</strong> O agente atua como
+bibliotecário ativo. Cada documento é lido, confrontado com a base
+existente, destilado em conceitos atômicos e conectado bidirecionalmente
+na malha de conhecimento.</li>
+</ul>
+</div>
+<p>O padrão, formalizado conceitualmente por Karpathy e implementado de
+forma pioneira no <a
 href="https://github.com/NicholasSpisak/second-brain">second-brain de
-Nicholas Spisak</a>, tem uma arquitetura elegante em três camadas:</p>
+Nicholas Spisak</a> [<a href="#referências">2</a>], expandiu-se
+rapidamente em variantes multi-agente como o llm-wiki [<a
+href="#referências">19</a>] e o ecossistema acadêmico OmegaWiki [<a
+href="#referências">20</a>]. No ecossistema de engenharia deste autor,
+essa arquitetura atinge maturidade industrial no <a
+href="https://github.com/gitzambrano/second-brain-engine">second-brain-engine</a>
+[<a href="#referências">22</a>]. O engine desacopla com rigor a
+infraestrutura de automação (scripts determinísticos de compilação,
+linters semânticos e sincronização de skills) do cofre de conhecimento
+privado (<code>data/</code>) e da superfície de publicação estática
+(<code>site/</code>), estabelecendo quality gates automatizados para que
+nenhum conceito, entidade ou ensaio degrade com o tempo.</p>
+<p>Essa arquitetura fundamenta-se em três camadas essenciais:</p>
 <h3 id="camada-1--fontes-brutas-raw">Camada 1 — Fontes Brutas
 (<code>raw/</code>)</h3>
 <p>Tudo que você coleta vai aqui, sem modificação. O agente <em>lê</em>
@@ -2214,8 +2480,8 @@ membro pode ver o que foi ingerido e quando.</p>
 Diário — Exemplo Aeronáutico</h3>
 <p><strong>Manhã</strong>: você encontra um novo paper no AIAA sobre
 predição de transição laminar-turbulenta usando modelos γ-Reθ. Com o
-Obsidian Web Clipper, salva o PDF diretamente em
-<code>raw/papers/</code>.</p>
+Obsidian Web Clipper [<a href="#referências">11</a>], salva o PDF
+diretamente em <code>raw/papers/</code>.</p>
 <pre><code>/second-brain-ingest
 </code></pre>
 <p><strong>Tarde</strong>: você está redigindo um relatório técnico e
@@ -2257,6 +2523,16 @@ agente faz esse trabalho — e você direciona o resultado.</p>
 <hr />
 <h2 id="a-mente-coletiva-uma-revolução-na-gestão-do-conhecimento">A
 Mente Coletiva: Uma Revolução na Gestão do Conhecimento</h2>
+<div class="box callout-note">
+<div class="box-title">
+<p>O Resgate da Memória Institucional</p>
+</div>
+<p>Projetos industriais complexos têm ciclos de décadas. Quando
+profissionais experientes se aposentam, perdem-se os motivos pelos quais
+certas decisões de engenharia foram tomadas. Uma wiki viva mantida por
+agentes converte esse conhecimento tácito em patrimônio explícito,
+consultável pelas próximas gerações.</p>
+</div>
 <p>O salto mais poderoso não é o Second Brain individual. É quando uma
 equipe inteira compartilha uma base de conhecimento viva, mantida
 coletivamente por agentes LLM. Para entender por que isso é
@@ -2498,6 +2774,15 @@ importante quanto qualidade técnica da implementação.</p>
 <hr />
 <h2 id="o-engenheiro-aumentado--e-a-questão-do-que-somos">O Engenheiro
 Aumentado — e a Questão do Que Somos</h2>
+<div class="box callout-note">
+<div class="box-title">
+<p>O Princípio da Responsabilidade Inegociável</p>
+</div>
+<p>Na engenharia de sistemas críticos, a cadeia de conformidade é
+intransferível. Um agente pode sugerir cálculos, refatorar algoritmos e
+apontar normas, mas a assinatura técnica e o ônus ético pertencem
+integralmente ao ser humano.</p>
+</div>
 <p>Chegamos ao ponto mais desconfortável e mais importante. A questão
 não é apenas “como usar IA para ser mais produtivo”. A questão, em seu
 nível mais fundo, é: <strong>o que significa saber, e o que significa
@@ -2508,10 +2793,11 @@ Dennett</a> argumentou que a consciência é menos um estado interior
 unificado e mais um conjunto de processos paralelos que criam a
 <em>ilusão</em> de um eu coeso. <a
 href="https://en.wikipedia.org/wiki/Thomas_Metzinger">Thomas
-Metzinger</a>, mais radicalmente, sustentou que não existe um “eu” —
-apenas o modelo de um self gerado pelo cérebro em tempo real. Se aceita
-essa visão, a fronteira entre “minha mente” e “meu sistema externo de
-cognição” já era, sempre, porosa.</p>
+Metzinger</a> [<a href="#referências">6</a>], mais radicalmente,
+sustentou que não existe um “eu” — apenas o modelo de um self gerado
+pelo cérebro em tempo real. Se aceita essa visão, a fronteira entre
+“minha mente” e “meu sistema externo de cognição” já era, sempre,
+porosa.</p>
 <p>O que os agentes LLM fazem é tornar essa porosidade <em>operacional,
 explícita e produtiva</em>. Quando você usa o Obsidian com um agente
 para manter sua wiki de conhecimento aeronáutico, você não está apenas
@@ -2725,26 +3011,28 @@ agora, são acessíveis agora. As ferramentas estão disponíveis. O momento
 de começar é este.</p>
 <hr />
 <h2 id="referências">Referências</h2>
-<p>[1] Karpathy, A., <em>LLM Wiki</em>, GitHub Gist, 2026. — O ensaio
-original que formalizou o padrão da wiki compilada vs. RAG. Ponto de
-partida obrigatório. <a
+<p>[1] Karpathy, A., <em>LLM Wiki</em>, GitHub Gist, 2026. (acesso em 18
+set. 2026). — O ensaio original que formalizou o padrão da wiki
+compilada vs. RAG. Ponto de partida obrigatório. <a
 href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f">Link</a></p>
-<p>[2] Spisak, N., <em>second-brain</em>, GitHub repository. —
-Implementação de referência do padrão Karpathy: quatro skills
-(<code>/second-brain</code>, <code>/second-brain-ingest</code>,
+<p>[2] Spisak, N., <em>second-brain</em>, GitHub repository. (acesso em
+18 set. 2026). — Implementação de referência do padrão Karpathy: quatro
+skills (<code>/second-brain</code>, <code>/second-brain-ingest</code>,
 <code>/second-brain-query</code>, <code>/second-brain-lint</code>)
 compatíveis com Claude Code, Gemini CLI, Codex e outros agentes. <a
 href="https://github.com/NicholasSpisak/second-brain">Link</a></p>
-<p>[3] Bush, V., <em>As We May Think</em>, The Atlantic, 1945. — A visão
-original do Memex, oitenta anos antes da sua realização. <a
+<p>[3] Bush, V., <em>As We May Think</em>, The Atlantic, 1945. (acesso
+em 18 set. 2026). — A visão original do Memex, oitenta anos antes da sua
+realização. <a
 href="https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/">Link</a></p>
 <p>[4] Clark, A., e Chalmers, D., <em>The Extended Mind</em>, Analysis,
 Vol. 58, No. 1, 1998, pp. 7–19. — A filosofia da cognição distribuída e
 da mente estendida pelo ambiente. <a
 href="https://doi.org/10.1093/analys/58.1.7">Link</a></p>
 <p>[5] Engelbart, D., <em>Toward High-Performance Organizations: A
-Strategic Role for Groupware</em>, 1992. — CODIAK e OHS: precursores
-históricos do conceito de inteligência coletiva aumentada. <a
+Strategic Role for Groupware</em>, 1992. (acesso em 18 set. 2026). —
+CODIAK e OHS: precursores históricos do conceito de inteligência
+coletiva aumentada. <a
 href="https://www.dougengelbart.org/content/view/116/">Link</a></p>
 <p>[6] Metzinger, T., <em>Being No One: The Self-Model Theory of
 Subjectivity</em>, MIT Press, Cambridge, MA, 2003. (acesso em 15 set.
@@ -2754,54 +3042,67 @@ href="https://en.wikipedia.org/wiki/Thomas_Metzinger">Link</a></p>
 <p>[7] Dennett, D. C., <em>Consciousness Explained</em>, Little, Brown
 and Company, Boston, 1991. (acesso em 15 set. 2026). <a
 href="https://en.wikipedia.org/wiki/Consciousness_Explained">Link</a></p>
-<p>[8] <em>Chinese room</em>, Wikipedia, The Free Encyclopedia. <a
+<p>[8] <em>Chinese room</em>, Wikipedia, The Free Encyclopedia. (acesso
+em 18 set. 2026). <a
 href="https://en.wikipedia.org/wiki/Chinese_room">Link</a></p>
 <p>[9] Hofstadter, D. R., <em>Gödel, Escher, Bach: An Eternal Golden
 Braid</em>, Basic Books, New York, 1979. (acesso em 15 set. 2026). <a
 href="https://en.wikipedia.org/wiki/G%C3%B6del,_Escher,_Bach">Link</a></p>
-<p>[10] <em>obsidian.md</em>. — Download do editor Markdown. Gratuito
-para uso pessoal. Abre a pasta do vault como repositório navegável. <a
-href="https://obsidian.md">Link</a></p>
-<p>[11] <em>Obsidian Web Clipper</em>. — Extensão do Chrome para
-capturar artigos como Markdown diretamente para a pasta
-<code>raw/</code> do vault. <a
+<p>[10] <em>obsidian.md</em>. (acesso em 18 set. 2026). — Download do
+editor Markdown. Gratuito para uso pessoal. Abre a pasta do vault como
+repositório navegável. <a href="https://obsidian.md">Link</a></p>
+<p>[11] <em>Obsidian Web Clipper</em>. (acesso em 18 set. 2026). —
+Extensão do Chrome para capturar artigos como Markdown diretamente para
+a pasta <code>raw/</code> do vault. <a
 href="https://chromewebstore.google.com/detail/obsidian-web-clipper/cnjifjpddelmedmihgijeibhnjfabmlf">Link</a></p>
-<p>[12] <em>Obsidian Plugin Directory</em>. — Diretório de plugins da
-comunidade. Destaques: Dataview (consultas sobre frontmatter), Marp
-(slides a partir de Markdown), Canvas. <a
+<p>[12] <em>Obsidian Plugin Directory</em>. (acesso em 18 set. 2026). —
+Diretório de plugins da comunidade. Destaques: Dataview (consultas sobre
+frontmatter), Marp (slides a partir de Markdown), Canvas. <a
 href="https://obsidian.md/plugins">Link</a></p>
-<p>[13] <em>obsidian-llm-wiki-local — kytmanov</em>. — Versão do padrão
-LLM Wiki para Ollama local — sem APIs externas, 100% on-device. <a
+<p>[13] <em>obsidian-llm-wiki-local — kytmanov</em>. (acesso em 18 set.
+2026). — Versão do padrão LLM Wiki para Ollama local — sem APIs
+externas, 100% on-device. <a
 href="https://github.com/kytmanov/obsidian-llm-wiki-local">Link</a></p>
-<p>[14] Anthropic, <em>Claude Code</em>, 2026. — Agente de terminal.
+<p>[14] Anthropic, <em>Claude Code</em>, 2026. (acesso em 18 set. 2026).
+— Agente de terminal.
 <code>npm install -g @anthropic-ai/claude-code</code>. Modelos: Opus 4.6
 / Sonnet 4.6. <a href="https://claude.ai/code">Link</a></p>
-<p>[15] Google, <em>Gemini CLI</em>, GitHub repository. — Agente de
-terminal open-source. <code>npm install -g @google/gemini-cli</code>.
-Modelo flagship: Gemini 3.1 Pro Preview. Contexto de 1M tokens, Google
-Search nativo, MCP e Agent Skills. <a
+<p>[15] Google, <em>Gemini CLI</em>, GitHub repository. (acesso em 18
+set. 2026). — Agente de terminal open-source.
+<code>npm install -g @google/gemini-cli</code>. Modelo flagship: Gemini
+3.1 Pro Preview. Contexto de 1M tokens, Google Search nativo, MCP e
+Agent Skills. <a
 href="https://github.com/google-gemini/gemini-cli">Link</a></p>
-<p>[16] OpenAI, <em>Codex CLI</em>, GitHub repository. — Agente de
-terminal. <code>npm install -g @openai/codex</code>. Modelos: GPT-5.4 /
-GPT-5.4 Pro (Thinking). Suporte experimental a contexto de 1M tokens. <a
+<p>[16] OpenAI, <em>Codex CLI</em>, GitHub repository. (acesso em 18
+set. 2026). — Agente de terminal.
+<code>npm install -g @openai/codex</code>. Modelos: GPT-5.4 / GPT-5.4
+Pro (Thinking). Suporte experimental a contexto de 1M tokens. <a
 href="https://github.com/openai/codex">Link</a></p>
-<p>[17] Microsoft, <em>GitHub Copilot</em>. — Agente integrado ao IDE
-(VS Code / JetBrains). Autocomplete inline, painel de chat e modo Agent.
-<a href="https://github.com/features/copilot">Link</a></p>
-<p>[18] <em>Ollama</em>. — Servidor local de LLMs para
-Windows/Mac/Linux. Suporta Gemma 4 (E4B, 26B MoE, 31B), Llama 3.3, Qwen
-2.5, DeepSeek R1. <a href="https://ollama.com">Link</a></p>
-<p>[19] <em>llm-wiki — nvk</em>. — Implementação multi-agente da LLM
-Wiki com pesquisa paralela, geração de teses, ingestão de fontes e
-compilação com rastreabilidade completa. Agnóstico de agente. <a
+<p>[17] Microsoft, <em>GitHub Copilot</em>. (acesso em 18 set. 2026). —
+Agente integrado ao IDE (VS Code / JetBrains). Autocomplete inline,
+painel de chat e modo Agent. <a
+href="https://github.com/features/copilot">Link</a></p>
+<p>[18] <em>Ollama</em>. (acesso em 18 set. 2026). — Servidor local de
+LLMs para Windows/Mac/Linux. Suporta Gemma 4 (E4B, 26B MoE, 31B), Llama
+3.3, Qwen 2.5, DeepSeek R1. <a href="https://ollama.com">Link</a></p>
+<p>[19] <em>llm-wiki — nvk</em>. (acesso em 18 set. 2026). —
+Implementação multi-agente da LLM Wiki com pesquisa paralela, geração de
+teses, ingestão de fontes e compilação com rastreabilidade completa.
+Agnóstico de agente. <a
 href="https://github.com/nvk/llm-wiki">Link</a></p>
-<p>[20] Peking University, <em>OmegaWiki</em>, GitHub repository. — LLM
-Wiki aplicado a pesquisa científica full-lifecycle: ingestão, geração de
-hipóteses, experimentos, escrita de papers. <a
-href="https://github.com/skyllwt/OmegaWiki">Link</a></p>
-<p>[21] <em>Agent Skills</em>. — Padrão aberto (open source) para
-compartilhar skills entre agentes (Claude Code, Gemini CLI, Codex,
-Cursor e outros). <a href="https://agentskills.io">Link</a></p>
+<p>[20] Peking University, <em>OmegaWiki</em>, GitHub repository.
+(acesso em 18 set. 2026). — LLM Wiki aplicado a pesquisa científica
+full-lifecycle: ingestão, geração de hipóteses, experimentos, escrita de
+papers. <a href="https://github.com/skyllwt/OmegaWiki">Link</a></p>
+<p>[21] <em>Agent Skills</em>. (acesso em 18 set. 2026). — Padrão aberto
+(open source) para compartilhar skills entre agentes (Claude Code,
+Gemini CLI, Codex, Cursor e outros). <a
+href="https://agentskills.io">Link</a></p>
+<p>[22] Zambrano, G., <em>second-brain-engine</em>, GitHub repository.
+(acesso em 18 set. 2026). — Motor de automação, convenções de engenharia
+e quality gates determinísticos para gerenciamento de LLM Wikis e Second
+Brains distribuídos. <a
+href="https://github.com/gitzambrano/second-brain-engine">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
@@ -3113,6 +3414,238 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     esc = Math.max(base * 0.5, Math.min(esc * (e.deltaY < 0 ? 1.12 : 0.89), base * 12));
     aplica();
   }, {passive:false});
+})();
+</script>
+<script>
+/* Citações Inline e Popup de Referência no Padrão Substack */
+(function(){
+  "use strict";
+  function initFootnotes(){
+    var refHeading = null;
+    var h2s = document.querySelectorAll("h2");
+    for (var i = 0; i < h2s.length; i++) {
+      var hText = (h2s[i].textContent || "").trim().toLowerCase();
+      if (hText === "referências" || hText === "referencias") {
+        refHeading = h2s[i];
+        break;
+      }
+    }
+    if (!refHeading) return;
+
+    // 1. Mapeia cada entrada da seção ## Referências
+    var refMap = Object.create(null);
+    var p = refHeading.nextElementSibling;
+    while (p && !p.tagName.startsWith("H")) {
+      if (p.tagName === "P") {
+        var text = (p.textContent || "").trim();
+        var m = text.match(/^\[(\d+)\]/);
+        if (m) {
+          var num = m[1];
+          if (!p.id) p.id = "ref-" + num;
+          var clone = p.cloneNode(true);
+          if (clone.firstChild && clone.firstChild.nodeType === Node.TEXT_NODE) {
+            clone.firstChild.textContent = clone.firstChild.textContent.replace(/^\[\d+\]\s*/, "");
+          }
+          refMap[num] = {
+            num: num,
+            html: clone.innerHTML.trim()
+          };
+        }
+      }
+      p = p.nextElementSibling;
+    }
+
+    if (Object.keys(refMap).length === 0) return;
+
+    // 2. Localiza e transforma chamadas inline no corpo
+    var content = document.querySelector("main.content") || document.body;
+    var links = content.querySelectorAll('a[href^="#refer"]');
+    var anchors = [];
+
+    links.forEach(function(link){
+      if (link.closest("h2#referências ~ p, h2#referencias ~ p, nav, #sumário, #sumario")) return;
+      var rawText = (link.textContent || "").trim();
+      var num = rawText.replace(/[^\d]/g, "");
+      if (!num) return;
+      if (!refMap[num]) return;
+
+      // Limpa colchetes literais residuais [ e ] gerados antes/depois do link
+      var prev = link.previousSibling;
+      if (prev && prev.nodeType === Node.TEXT_NODE && prev.textContent.trimEnd().endsWith("[")) {
+        prev.textContent = prev.textContent.trimEnd().slice(0, -1);
+      }
+      var next = link.nextSibling;
+      if (next && next.nodeType === Node.TEXT_NODE && next.textContent.trimStart().startsWith("]")) {
+        next.textContent = next.textContent.trimStart().slice(1);
+      }
+
+      link.textContent = num;
+      link.classList.add("ref-cite");
+      link.setAttribute("data-ref", num);
+      link.setAttribute("role", "button");
+      link.setAttribute("aria-haspopup", "dialog");
+      link.setAttribute("aria-expanded", "false");
+      link.setAttribute("tabindex", "0");
+      anchors.push(link);
+    });
+
+    if (anchors.length === 0) return;
+
+    // 3. Cria elemento único do popup
+    var popup = document.createElement("div");
+    popup.id = "ref-popup";
+    popup.className = "ref-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-hidden", "true");
+    popup.innerHTML =
+      '<div class="ref-popup-inner">' +
+        '<div class="ref-popup-header">' +
+          '<span class="ref-popup-num"></span>' +
+          '<button class="ref-popup-close" aria-label="Fechar">\u00d7</button>' +
+        '</div>' +
+        '<div class="ref-popup-body"></div>' +
+      '</div>';
+    document.body.appendChild(popup);
+
+    var popupNum = popup.querySelector(".ref-popup-num");
+    var popupBody = popup.querySelector(".ref-popup-body");
+    var popupClose = popup.querySelector(".ref-popup-close");
+
+    var currentAnchor = null;
+    var hoverTimer = null;
+    var closeTimer = null;
+
+    function openPopup(anchor){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      var num = anchor.getAttribute("data-ref");
+      var data = refMap[num];
+      if (!data) return;
+
+      if (currentAnchor && currentAnchor !== anchor) {
+        currentAnchor.setAttribute("aria-expanded", "false");
+      }
+      currentAnchor = anchor;
+      anchor.setAttribute("aria-expanded", "true");
+
+      popupNum.textContent = "Referência [" + num + "]";
+      popupBody.innerHTML = data.html;
+
+      popupBody.querySelectorAll("a").forEach(function(a){
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      });
+
+      popup.classList.add("is-active");
+      popup.setAttribute("aria-hidden", "false");
+      positionPopup(anchor);
+    }
+
+    function closePopup(){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      if (!currentAnchor) return;
+      currentAnchor.setAttribute("aria-expanded", "false");
+      currentAnchor = null;
+      popup.classList.remove("is-active");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function positionPopup(anchor){
+      var rect = anchor.getBoundingClientRect();
+      var popRect = popup.getBoundingClientRect();
+      var popW = popRect.width || 340;
+      var popH = popRect.height || 110;
+
+      var top;
+      if (rect.top >= popH + 12) {
+        top = rect.top - popH - 6;
+      } else {
+        top = rect.bottom + 6;
+      }
+
+      var left = rect.left + (rect.width / 2) - (popW / 2);
+      var maxLeft = window.innerWidth - popW - 12;
+      left = Math.max(12, Math.min(left, maxLeft));
+
+      popup.style.top = Math.round(top) + "px";
+      popup.style.left = Math.round(left) + "px";
+    }
+
+    anchors.forEach(function(anchor){
+      anchor.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (currentAnchor === anchor) {
+          closePopup();
+        } else {
+          openPopup(anchor);
+        }
+      });
+
+      anchor.addEventListener("mouseenter", function(){
+        clearTimeout(closeTimer);
+        hoverTimer = setTimeout(function(){
+          openPopup(anchor);
+        }, 120);
+      });
+
+      anchor.addEventListener("mouseleave", function(){
+        clearTimeout(hoverTimer);
+        closeTimer = setTimeout(function(){
+          closePopup();
+        }, 220);
+      });
+
+      anchor.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (currentAnchor === anchor) closePopup(); else openPopup(anchor);
+        } else if (e.key === "Escape") {
+          closePopup();
+        }
+      });
+    });
+
+    popup.addEventListener("mouseenter", function(){
+      clearTimeout(closeTimer);
+    });
+    popup.addEventListener("mouseleave", function(){
+      closeTimer = setTimeout(function(){
+        closePopup();
+      }, 220);
+    });
+
+    popupClose.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+    });
+
+    document.addEventListener("click", function(e){
+      if (!popup.contains(e.target) && (!currentAnchor || !currentAnchor.contains(e.target))) {
+        closePopup();
+      }
+    });
+
+    window.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closePopup();
+    });
+
+    window.addEventListener("resize", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+
+    window.addEventListener("scroll", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFootnotes);
+  } else {
+    initFootnotes();
+  }
 })();
 </script>
 

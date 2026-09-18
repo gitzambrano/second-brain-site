@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="24">
+<html lang="pt-BR" data-status="finalizado" data-minutes="25">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1068,6 +1068,118 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 }
 
 /* ------------------------------------------------------------------ */
+/* Citações Inline e Popup de Referência (Padrão Substack)            */
+/* ------------------------------------------------------------------ */
+.ref-cite {
+  font-size:.78em;
+  line-height:0;
+  vertical-align:super;
+  font-weight:600;
+  padding:0 .18em;
+  cursor:pointer;
+  color:var(--gold);
+  text-decoration:none;
+  border-bottom:none;
+  font-family:var(--font-display);
+  transition:color .15s ease, opacity .15s ease;
+  user-select:none;
+}
+.ref-cite:hover,
+.ref-cite:focus-visible,
+.ref-cite[aria-expanded="true"] {
+  color:var(--rust-bright);
+  text-decoration:none;
+}
+
+.ref-popup {
+  position:fixed;
+  z-index:1200;
+  max-width:min(380px, calc(100vw - 32px));
+  width:max-content;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:.88rem;
+  line-height:1.55;
+  color:var(--text);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(4px) scale(.98);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  pointer-events:none;
+}
+[data-theme="light"] .ref-popup {
+  background:var(--surface);
+  box-shadow:0 10px 30px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.05);
+  border-color:var(--border);
+}
+.ref-popup.is-active {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.ref-popup-inner {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.ref-popup-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  padding-bottom:5px;
+  margin-bottom:3px;
+}
+.ref-popup-num {
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  color:var(--gold);
+}
+.ref-popup-close {
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:1.15rem;
+  line-height:1;
+  cursor:pointer;
+  padding:0 3px;
+  border-radius:4px;
+  transition:color .15s ease;
+}
+.ref-popup-close:hover {
+  color:var(--text-bright);
+}
+.ref-popup-body {
+  font-size:.86rem;
+  color:var(--text);
+  overflow-wrap:break-word;
+}
+.ref-popup-body em,
+.ref-popup-body i {
+  color:var(--text-bright);
+}
+.ref-popup-body a {
+  color:var(--gold);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.ref-popup-body a:hover {
+  color:var(--rust-bright);
+}
+.ref-popup-body a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+}
+
+/* ------------------------------------------------------------------ */
 /* Impressão — mínimo funcional (oculta chrome fixo)                  */
 /* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
 /* ------------------------------------------------------------------ */
@@ -1466,9 +1578,11 @@ process of cognition.</p>
 </div>
 <div class="quote-attribution">
 <p><a href="https://en.wikipedia.org/wiki/Humberto_Maturana">Humberto
-Maturana</a> &amp; <a
+Maturana</a> [<a href="#referências">1</a>], [<a
+href="#referências">2</a>] &amp; <a
 href="https://en.wikipedia.org/wiki/Francisco_Varela">Francisco
-Varela</a>, <em>The Tree of Knowledge</em> (1987)</p>
+Varela</a> [<a href="#referências">3</a>], <em>The Tree of
+Knowledge</em> (1987)</p>
 </div>
 </div>
 <hr />
@@ -1502,7 +1616,8 @@ se torna um organismo? E, mais vertiginoso ainda, quando um sistema
 artificial suficientemente complexo cruza essa fronteira?</p>
 <p>Este ensaio investiga essa questão pela lente da <strong><a
 href="https://en.wikipedia.org/wiki/Autopoiesis">autopoiese</a></strong>
-(o conceito formulado pelos biólogos chilenos <a
+[<a href="#referências">18</a>] (o conceito formulado pelos biólogos
+chilenos <a
 href="https://en.wikipedia.org/wiki/Humberto_Maturana">Humberto
 Maturana</a> e <a
 href="https://en.wikipedia.org/wiki/Francisco_Varela">Francisco
@@ -1535,6 +1650,17 @@ capacidade de ação podem aumentar sem exigir uma fronteira única em que
 as luzes simplesmente se acendam.</p>
 <hr />
 <h2 id="1-a-revolução-autopoiética">1. A Revolução Autopoiética</h2>
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Sistemas vivos são sistemas cognitivos, e viver como processo é um
+processo de cognição. A vida não é uma substância, é uma dinâmica de
+contínua autoprodução.</p>
+</div>
+<div class="quote-attribution">
+<p>— Humberto Maturana &amp; Francisco Varela, <em>De Máquinas e Seres
+Vivos</em> (1973)</p>
+</div>
+</div>
 <h3 id="maturana-varela-e-a-definição-operacional">Maturana, Varela e a
 Definição Operacional</h3>
 <p>Em 1973, Maturana e Varela publicaram <a
@@ -1662,25 +1788,26 @@ filosoficamente interessante:</p>
 href="https://en.wikipedia.org/wiki/Adaptive_immune_system">sistema
 imunológico adaptativo</a>, com sua <a
 href="https://en.wikipedia.org/wiki/Clonal_selection">seleção somática
-de clones</a>, mantém uma rede dinâmica de linfócitos, receptores,
-sinais e produção de anticorpos: clones celulares são selecionados,
-proliferam e se renovam em resposta ao ambiente antigênico. É autopoiese
-parcial, no máximo: os linfócitos produzem linfócitos, mas a fronteira
-que os delimita (a pele, as membranas do organismo) não é produto deles,
-e a população inteira pode desaparecer sem que o portador morra. Já o
-debate em torno da <a
+de clones</a> [<a href="#referências">26</a>], mantém uma rede dinâmica
+de linfócitos, receptores, sinais e produção de anticorpos: clones
+celulares são selecionados, proliferam e se renovam em resposta ao
+ambiente antigênico. É autopoiese parcial, no máximo: os linfócitos
+produzem linfócitos, mas a fronteira que os delimita (a pele, as
+membranas do organismo) não é produto deles, e a população inteira pode
+desaparecer sem que o portador morra. Já o debate em torno da <a
 href="https://en.wikipedia.org/wiki/Gaia_hypothesis">hipótese de
 Gaia</a>, formulada por <a
-href="https://en.wikipedia.org/wiki/James_Lovelock">James Lovelock</a> e
-desenvolvida com <a
-href="https://en.wikipedia.org/wiki/Lynn_Margulis">Lynn Margulis</a>,
-pergunta se a biosfera seria autopoiese em escala planetária: os seres
-vivos produzem os gases, a química da atmosfera e dos oceanos e, com
-isso, as próprias condições de sua continuidade. Os críticos respondem
-que a Terra não tem fronteira nem metabolismo no sentido estrito, e que
-acoplamento recíproco entre organismos não basta para constituir uma
-unidade autopoiética. O debate segue aberto, e é instrutivo justamente
-porque mostra onde o critério morde e onde escorrega.</p>
+href="https://en.wikipedia.org/wiki/James_Lovelock">James Lovelock</a>
+[<a href="#referências">24</a>] e desenvolvida com <a
+href="https://en.wikipedia.org/wiki/Lynn_Margulis">Lynn Margulis</a> [<a
+href="#referências">25</a>], pergunta se a biosfera seria autopoiese em
+escala planetária: os seres vivos produzem os gases, a química da
+atmosfera e dos oceanos e, com isso, as próprias condições de sua
+continuidade. Os críticos respondem que a Terra não tem fronteira nem
+metabolismo no sentido estrito, e que acoplamento recíproco entre
+organismos não basta para constituir uma unidade autopoiética. O debate
+segue aberto, e é instrutivo justamente porque mostra onde o critério
+morde e onde escorrega.</p>
 <h3 id="a-originalidade-do-conceito">A Originalidade do Conceito</h3>
 <p>A autopoiese não é meramente “<a
 href="https://en.wikipedia.org/wiki/Homeostasis">homeostase</a>”
@@ -1709,6 +1836,15 @@ substrato diferente?</p>
 <hr />
 <h2 id="2-autopoiese-cognição-e-o-enativismo">2. Autopoiese, Cognição e
 o Enativismo</h2>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>Organização vs. Estrutura</p>
+</div>
+<p>A organização define a identidade invariante de um sistema (as
+relações que fazem uma célula ser uma célula). A estrutura é a
+corporificação física temporária dessas relações, que pode e deve mudar
+constantemente sem que o sistema perca sua identidade autopoiética.</p>
+</div>
 <h3 id="a-cognição-como-autopoiese-de-segunda-ordem">A Cognição como
 Autopoiese de Segunda Ordem</h3>
 <p>Para Maturana, a cognição não é representação do mundo externo. É o
@@ -1737,17 +1873,18 @@ enquanto pretende fazer o primeiro: uma forma de chauvinismo disfarçado
 de ciência.</p>
 <h3 id="o-enativismo">O Enativismo</h3>
 <p>Francisco Varela, junto com <a
-href="https://en.wikipedia.org/wiki/Evan_Thompson">Evan Thompson</a> e
-<a href="https://en.wikipedia.org/wiki/Eleanor_Rosch">Eleanor Rosch</a>,
+href="https://en.wikipedia.org/wiki/Evan_Thompson">Evan Thompson</a> [<a
+href="#referências">4</a>] e <a
+href="https://en.wikipedia.org/wiki/Eleanor_Rosch">Eleanor Rosch</a>,
 levou essa ideia adiante em <a
 href="https://en.wikipedia.org/wiki/The_Embodied_Mind"><em>The Embodied
 Mind: Cognitive Science and Human Experience</em></a> (1991), dando
 origem ao <strong><a
-href="https://en.wikipedia.org/wiki/Enactivism">enativismo</a></strong>,
-a tese de que a cognição não é processamento de informação, não é
-computação sobre representações internas, mas <strong>ação
-incorporada</strong>: emergência da interação entre um organismo
-autopoiético e seu ambiente.</p>
+href="https://en.wikipedia.org/wiki/Enactivism">enativismo</a></strong>
+[<a href="#referências">19</a>], a tese de que a cognição não é
+processamento de informação, não é computação sobre representações
+internas, mas <strong>ação incorporada</strong>: emergência da interação
+entre um organismo autopoiético e seu ambiente.</p>
 <p>O enativismo tem cinco teses centrais. A primeira é a
 <strong>autonomia</strong>: sistemas cognitivos são auto-organizados e
 auto-mantidos, autopoiéticos. Vem em seguida a
@@ -1766,8 +1903,9 @@ básico.</p>
 <p>O enativismo critica a <a
 href="https://en.wikipedia.org/wiki/Computational_theory_of_mind">Teoria
 Computacional da Mente</a> de <a
-href="https://en.wikipedia.org/wiki/Jerry_Fodor">Jerry Fodor</a>. Mesmo
-se a cognição envolver computação, a <a
+href="https://en.wikipedia.org/wiki/Jerry_Fodor">Jerry Fodor</a> [<a
+href="#referências">12</a>]. Mesmo se a cognição envolver computação, a
+<a
 href="https://en.wikipedia.org/wiki/Turing_completeness">Turing-completude</a>
 fornece no máximo uma condição de capacidade formal: diz que o sistema
 pode implementar qualquer computação efetiva, não que já possua
@@ -1787,13 +1925,6 @@ congruente. Isso não é transmissão de informação: é co-evolução
 estrutural. A linguagem, para Maturana, não é um código que transmite
 significados, mas um processo de coordenação de ações entre sistemas
 acoplados.</p>
-<p>A implicação para a comunicação é radical: quando dois humanos
-conversam, não transmitem “informação” de uma mente para outra. Cada
-mente é organizacionalmente fechada: nenhum input externo pode
-especificar o estado interno de um sistema autopoiético. O que a
-conversa faz é <strong>perturbar</strong> cada sistema, que então
-reorganiza-se internamente de acordo com sua própria dinâmica.
-Compreensão não é recepção — é recriação.</p>
 <p>Isso tem implicações para a interação humano-IA: quando um humano usa
 um LLM extensivamente, há acoplamento estrutural? O humano modifica seu
 comportamento linguístico. O LLM, via <em>fine-tuning</em>, modifica
@@ -1805,33 +1936,73 @@ externamente.</p>
 Merleau-Ponty</h3>
 <p>O enativismo tem raízes profundas na <a
 href="https://en.wikipedia.org/wiki/Phenomenology_(philosophy)">fenomenologia</a>
-de <a href="https://en.wikipedia.org/wiki/Maurice_Merleau-Ponty">Maurice
-Merleau-Ponty</a>, que em <a
+de Francisco Varela, junto com <a
+href="https://en.wikipedia.org/wiki/Evan_Thompson">Evan Thompson</a> [<a
+href="#referências">4</a>] e <a
+href="https://en.wikipedia.org/wiki/Eleanor_Rosch">Eleanor Rosch</a>,
+publicou <a
+href="https://en.wikipedia.org/wiki/The_Embodied_Mind"><em>The Embodied
+Mind</em></a> (1991), dando origem ao <strong><a
+href="https://en.wikipedia.org/wiki/Enactivism">enativismo</a></strong>
+[<a href="#referências">19</a>], linhagem fundamental da literatura
+sobre <a
+href="https://en.wikipedia.org/wiki/Embodied_cognition">cognição
+corporificada</a> [<a href="#referências">21</a>], com a tese de que a
+cognição não é representação de um mundo pré-dado, mas a
+<strong>atuação</strong> (<em>enactment</em>) de um mundo através do
+acoplamento estrutural do organismo com o ambiente.</p>
+<p>O enativismo tem cinco teses centrais. A primeira é a
+<strong>autonomia</strong>: sistemas cognitivos são auto-organizados e
+autopoiéticos. A segunda é o <strong>incorporamento</strong>
+(<em>embodiment</em>): a cognição depende do corpo físico, com sua
+morfologia, seus sensores e sua biologia. A terceira é a
+<strong>emergência</strong>: processos cognitivos emergem da interação
+dinâmica entre cérebro, corpo e ambiente. A quarta é a
+<strong>experiência</strong>: a fenomenologia da experiência em primeira
+pessoa é irredutível e deve ser levada a sério pela ciência. A quinta é
+o <strong>senso-motor</strong>: a percepção é ação guiada pelos
+sentidos, não processamento passivo de dados.</p>
+<p>O enativismo critica a <a
+href="https://en.wikipedia.org/wiki/Computational_theory_of_mind">Teoria
+Computacional da Mente</a>, associada a nomes como <a
+href="https://en.wikipedia.org/wiki/Jerry_Fodor">Jerry Fodor</a> [<a
+href="#referências">12</a>]. Mesmo se a cognição envolver computação em
+algum nível, essa computação não é a manipulação abstrata de símbolos
+desincorporados: ela é a dinâmica física de um organismo vivo mantendo
+sua viabilidade.</p>
+<p>Essa perspectiva tem raízes filosóficas profundas em <a
+href="https://en.wikipedia.org/wiki/Maurice_Merleau-Ponty">Maurice
+Merleau-Ponty</a> [<a href="#referências">7</a>], que em <a
 href="https://en.wikipedia.org/wiki/Phenomenology_of_Perception"><em>Fenomenologia
-da Percepção</em></a> (1945) argumentou que o corpo não é um objeto
-entre objetos: é o <strong>sujeito</strong> da percepção. Não percebemos
-<em>com</em> o corpo; percebemos <em>enquanto</em> corpo. A percepção é
-motora: ver uma maçã é, implicitamente, ver como agarrá-la. O mundo não
-é representado; é <em>habitado</em>.</p>
-<p>O conceito de <strong>corpo vivido</strong> (<em>Leib</em>) de
-Merleau-Ponty antecipa a tese enativista: a cognição não pode ser
-separada do corpo porque o corpo é a condição de possibilidade da
-cognição. Um cérebro em um frasco (<a
-href="https://en.wikipedia.org/wiki/Brain_in_a_vat"><em>brain in a
-vat</em></a>) não cogniza, não porque falta processamento computacional,
-mas porque falta incorporação. E um LLM, nessa visão, é o análogo
-digital de um cérebro em um frasco: processa símbolos mas não habita um
-mundo.</p>
+da Percepção</em></a> (1945) defendeu que o corpo não é um objeto que
+possuímos, mas o sujeito da experiência — nós <em>somos</em> nossos
+corpos. O conceito de <strong>corpo vivido</strong> (<em>Leib</em>) de
+Merleau-Ponty antecipa a tese enativista: a cognição não é um software
+rodando em hardware neutro; é o modo de ser de um organismo encarnado.
+Evan Thompson, em <a
+href="https://en.wikipedia.org/wiki/Mind_in_Life"><em>Mind in
+Life</em></a> (2007), argumenta que há uma continuidade profunda entre
+vida e mente: onde há vida, há cognição (em forma básica), e a mente
+humana é a elaboração de processos que começam na célula.</p>
 <hr />
 <h2
 id="3-contra-argumentos-a-autopoiese-é-necessária-para-a-cognição">3.
 Contra-Argumentos: A Autopoiese é Necessária para a Cognição?</h2>
+<div class="box callout-note">
+<div class="box-title">
+<p>Computação Tradicional não é Vida</p>
+</div>
+<p>Programas de computador tradicionais são alopoiéticos: produzem algo
+diferente de si mesmos (dados, relatórios, telas) e dependem
+inteiramente de hardware e de mantenedores externos para sua
+continuidade. Eles não fabricam a sua própria matéria física.</p>
+</div>
 <h3 id="o-argumento-funcionalista">O Argumento Funcionalista</h3>
 <p><a href="https://en.wikipedia.org/wiki/Daniel_Dennett">Daniel
-Dennett</a> e <a
+Dennett</a> [<a href="#referências">11</a>] e <a
 href="https://en.wikipedia.org/wiki/Douglas_Hofstadter">Douglas
-Hofstadter</a> argumentariam que a autopoiese é uma
-<em>contingência</em> da cognição biológica, não uma
+Hofstadter</a> [<a href="#referências">10</a>] argumentariam que a
+autopoiese é uma <em>contingência</em> da cognição biológica, não uma
 <em>necessidade</em> da cognição em geral. O carbono evoluiu autopoiese
 porque é o caminho que a química terrestre encontrou para manter
 organização. Mas organização pode ser mantida por outros meios:
@@ -1880,7 +2051,7 @@ porque não tem nada em jogo.</p>
 <p>Essa é uma tese forte e controversa. Ela implica que a mortalidade é
 uma condição para a cognição, ideia que ecoa <a
 href="https://en.wikipedia.org/wiki/Martin_Heidegger">Martin
-Heidegger</a> e o conceito de <a
+Heidegger</a> [<a href="#referências">8</a>] e o conceito de <a
 href="https://en.wikipedia.org/wiki/Being-toward-death">Ser-para-a-morte</a>
 (<em>Sein-zum-Tode</em>). Se sistemas imortais não cognizam
 genuinamente, então nenhuma IA que pode ser copiada, restaurada de
@@ -1924,16 +2095,17 @@ mente fora do biológico.</p>
 e os Limites da Definição</h2>
 <h3 id="as-sete-definições-de-vida">As Sete Definições de Vida</h3>
 <p>A literatura sobre a natureza do vivo reúne pelo menos sete
-definições formais de vida: termodinâmica, darwiniana, bioquímica,
-autopoiética, informacional, cibernética e filosófica. A definição
-termodinâmica vê a vida como um sistema que exporta entropia para manter
-sua ordem interna. A darwiniana a vê como linhagem sujeita a seleção
-natural, e a bioquímica como química do carbono em solução aquosa. As
-definições informacional e cibernética tratam o vivo como processamento
-e controle de sinais, enquanto a filosófica pergunta o que há de comum
-em todas as anteriores. Cada uma captura um aspecto do fenômeno e falha
-em outro. A definição autopoiética é operacionalmente precisa, mas
-exclui <a href="https://en.wikipedia.org/wiki/Virus">vírus</a>, cristais
+definições formais de vida [<a href="#referências">20</a>]:
+termodinâmica, metabólica, genética, evolutiva, informacional,
+autopoiética e sistêmica. A definição termodinâmica vê a vida como um
+sistema que exporta entropia para manter sua ordem interna. A darwiniana
+a vê como linhagem sujeita a seleção natural, e a bioquímica como
+química do carbono em solução aquosa. As definições informacional e
+cibernética tratam o vivo como processamento e controle de sinais,
+enquanto a filosófica pergunta o que há de comum em todas as anteriores.
+Cada uma captura um aspecto do fenômeno e falha em outro. A definição
+autopoiética é operacionalmente precisa, mas exclui <a
+href="https://en.wikipedia.org/wiki/Virus">vírus</a>, cristais
 auto-replicantes e, possivelmente, vida em substratos não-químicos.</p>
 <p>A <a
 href="https://en.wikipedia.org/wiki/Thermodynamics#Non-equilibrium_thermodynamics">Termodinâmica
@@ -1943,16 +2115,17 @@ aberto</a> que mantém ordem interna exportando <a
 href="https://en.wikipedia.org/wiki/Entropy">entropia</a>, é compatível
 com a autopoiese mas mais geral. <a
 href="https://en.wikipedia.org/wiki/Erwin_Schr%C3%B6dinger">Erwin
-Schrödinger</a>, em <a
+Schrödinger</a> [<a href="#referências">5</a>], em <a
 href="https://en.wikipedia.org/wiki/What_Is_Life%3F"><em>O Que É
 Vida?</em></a> (1944), propôs que a vida se alimenta de <a
 href="https://en.wikipedia.org/wiki/Negentropy">Negentropia</a>
 (entropia negativa). <a
-href="https://en.wikipedia.org/wiki/Ilya_Prigogine">Ilya Prigogine</a>,
-com as <a
+href="https://en.wikipedia.org/wiki/Ilya_Prigogine">Ilya Prigogine</a>
+[<a href="#referências">6</a>], com as <a
 href="https://en.wikipedia.org/wiki/Dissipative_system">estruturas
-dissipativas</a> (Nobel 1977), mostrou que sistemas longe do equilíbrio
-termodinâmico podem auto-organizar-se espontaneamente.</p>
+dissipativas</a> [<a href="#referências">22</a>] (Nobel 1977), mostrou
+que sistemas longe do equilíbrio termodinâmico podem auto-organizar-se
+espontaneamente.</p>
 <p>A relação entre autopoiese e termodinâmica é complementar. A
 termodinâmica fornece a condição <em>necessária</em> (dissipação de
 entropia), enquanto a autopoiese fornece a condição
@@ -1981,21 +2154,24 @@ Universe Hypothesis</a>), então uma simulação suficientemente detalhada
 em outro substrato.</p>
 <p><a
 href="https://en.wikipedia.org/wiki/Christopher_Langton">Christopher
-Langton</a>, o fundador do campo de <a
+Langton</a> [<a href="#referências">15</a>], o fundador do campo de <a
 href="https://en.wikipedia.org/wiki/Artificial_life">vida artificial</a>
-(ALife), distinguiu entre vida artificial <em>fraca</em> (simulações
-para estudo) e <em>forte</em> (instanciações genuínas de vida). A ALife
-forte é exatamente a posição que os enativistas rejeitam.</p>
+(ALife) — acompanhado por estudos de Mark Bedau [<a
+href="#referências">16</a>] sobre a evolução da complexidade em sistemas
+adaptativos —, distinguiu entre vida artificial <em>fraca</em>
+(simulações para estudo) e <em>forte</em> (instanciações genuínas de
+vida). A ALife forte é exatamente a posição que os enativistas
+rejeitam.</p>
 <h3 id="autômatos-celulares-e-autopoiese-mínima">Autômatos Celulares e
 Autopoiese Mínima</h3>
 <p>A busca por autopoiese mínima em silício levou a experimentos com <a
 href="https://en.wikipedia.org/wiki/Cellular_automaton">autômatos
 celulares</a>. Em 2004, <a
 href="https://en.wikipedia.org/wiki/Autopoiesis#Computational_autopoiesis">Barry
-McMullin</a> e colegas demonstraram autômatos celulares 2D que exibem as
-propriedades formais da autopoiese: produção de componentes, formação de
-fronteira, e regeneração. Esses sistemas satisfazem a definição formal
-de Maturana. Mas são “vivos”?</p>
+McMullin [[17](#referências)]</a> e colegas demonstraram autômatos
+celulares 2D que exibem as propriedades formais da autopoiese: produção
+de componentes, formação de fronteira, e regeneração. Esses sistemas
+satisfazem a definição formal de Maturana. Mas são “vivos”?</p>
 <p>Maturana diria que não: a autopoiese define vida no espaço
 <em>físico</em>, não no espaço de um autômato celular. Mas essa posição
 é inconsistente com a definição original, que é formulada em termos
@@ -2026,8 +2202,10 @@ Luhmann</h2>
 <h3 id="sistemas-sociais-como-sistemas-autopoiéticos">Sistemas Sociais
 como Sistemas Autopoiéticos</h3>
 <p><a href="https://en.wikipedia.org/wiki/Niklas_Luhmann">Niklas
-Luhmann</a>, o sociólogo alemão, levou a autopoiese para o domínio
-social em sua magnum opus <a
+Luhmann</a> [<a href="#referências">13</a>], [<a
+href="#referências">14</a>], [<a href="#referências">23</a>], o
+sociólogo alemão, levou a autopoiese para o domínio social em sua magnum
+opus <a
 href="https://en.wikipedia.org/wiki/Social_Systems_(Luhmann)"><em>Soziale
 Systeme</em></a> (1984). Para Luhmann, <strong>sistemas sociais são
 autopoiéticos de comunicação</strong>: eles produzem comunicações a
@@ -2143,7 +2321,7 @@ textuais, sem corpo, sem metabolismo e sem risco existencial nenhum.</p>
 e a Autopoiese Distribuída</h3>
 <p><a href="https://en.wikipedia.org/wiki/Andy_Clark">Andy Clark</a> e
 <a href="https://en.wikipedia.org/wiki/David_Chalmers">David
-Chalmers</a>, com a tese da <a
+Chalmers</a> [<a href="#referências">9</a>], com a tese da <a
 href="https://en.wikipedia.org/wiki/Extended_mind_thesis">Extended
 Mind</a> (<a
 href="https://en.wikipedia.org/wiki/The_Extended_Mind"><em>The Extended
@@ -2586,6 +2764,238 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     esc = Math.max(base * 0.5, Math.min(esc * (e.deltaY < 0 ? 1.12 : 0.89), base * 12));
     aplica();
   }, {passive:false});
+})();
+</script>
+<script>
+/* Citações Inline e Popup de Referência no Padrão Substack */
+(function(){
+  "use strict";
+  function initFootnotes(){
+    var refHeading = null;
+    var h2s = document.querySelectorAll("h2");
+    for (var i = 0; i < h2s.length; i++) {
+      var hText = (h2s[i].textContent || "").trim().toLowerCase();
+      if (hText === "referências" || hText === "referencias") {
+        refHeading = h2s[i];
+        break;
+      }
+    }
+    if (!refHeading) return;
+
+    // 1. Mapeia cada entrada da seção ## Referências
+    var refMap = Object.create(null);
+    var p = refHeading.nextElementSibling;
+    while (p && !p.tagName.startsWith("H")) {
+      if (p.tagName === "P") {
+        var text = (p.textContent || "").trim();
+        var m = text.match(/^\[(\d+)\]/);
+        if (m) {
+          var num = m[1];
+          if (!p.id) p.id = "ref-" + num;
+          var clone = p.cloneNode(true);
+          if (clone.firstChild && clone.firstChild.nodeType === Node.TEXT_NODE) {
+            clone.firstChild.textContent = clone.firstChild.textContent.replace(/^\[\d+\]\s*/, "");
+          }
+          refMap[num] = {
+            num: num,
+            html: clone.innerHTML.trim()
+          };
+        }
+      }
+      p = p.nextElementSibling;
+    }
+
+    if (Object.keys(refMap).length === 0) return;
+
+    // 2. Localiza e transforma chamadas inline no corpo
+    var content = document.querySelector("main.content") || document.body;
+    var links = content.querySelectorAll('a[href^="#refer"]');
+    var anchors = [];
+
+    links.forEach(function(link){
+      if (link.closest("h2#referências ~ p, h2#referencias ~ p, nav, #sumário, #sumario")) return;
+      var rawText = (link.textContent || "").trim();
+      var num = rawText.replace(/[^\d]/g, "");
+      if (!num) return;
+      if (!refMap[num]) return;
+
+      // Limpa colchetes literais residuais [ e ] gerados antes/depois do link
+      var prev = link.previousSibling;
+      if (prev && prev.nodeType === Node.TEXT_NODE && prev.textContent.trimEnd().endsWith("[")) {
+        prev.textContent = prev.textContent.trimEnd().slice(0, -1);
+      }
+      var next = link.nextSibling;
+      if (next && next.nodeType === Node.TEXT_NODE && next.textContent.trimStart().startsWith("]")) {
+        next.textContent = next.textContent.trimStart().slice(1);
+      }
+
+      link.textContent = num;
+      link.classList.add("ref-cite");
+      link.setAttribute("data-ref", num);
+      link.setAttribute("role", "button");
+      link.setAttribute("aria-haspopup", "dialog");
+      link.setAttribute("aria-expanded", "false");
+      link.setAttribute("tabindex", "0");
+      anchors.push(link);
+    });
+
+    if (anchors.length === 0) return;
+
+    // 3. Cria elemento único do popup
+    var popup = document.createElement("div");
+    popup.id = "ref-popup";
+    popup.className = "ref-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-hidden", "true");
+    popup.innerHTML =
+      '<div class="ref-popup-inner">' +
+        '<div class="ref-popup-header">' +
+          '<span class="ref-popup-num"></span>' +
+          '<button class="ref-popup-close" aria-label="Fechar">\u00d7</button>' +
+        '</div>' +
+        '<div class="ref-popup-body"></div>' +
+      '</div>';
+    document.body.appendChild(popup);
+
+    var popupNum = popup.querySelector(".ref-popup-num");
+    var popupBody = popup.querySelector(".ref-popup-body");
+    var popupClose = popup.querySelector(".ref-popup-close");
+
+    var currentAnchor = null;
+    var hoverTimer = null;
+    var closeTimer = null;
+
+    function openPopup(anchor){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      var num = anchor.getAttribute("data-ref");
+      var data = refMap[num];
+      if (!data) return;
+
+      if (currentAnchor && currentAnchor !== anchor) {
+        currentAnchor.setAttribute("aria-expanded", "false");
+      }
+      currentAnchor = anchor;
+      anchor.setAttribute("aria-expanded", "true");
+
+      popupNum.textContent = "Referência [" + num + "]";
+      popupBody.innerHTML = data.html;
+
+      popupBody.querySelectorAll("a").forEach(function(a){
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      });
+
+      popup.classList.add("is-active");
+      popup.setAttribute("aria-hidden", "false");
+      positionPopup(anchor);
+    }
+
+    function closePopup(){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      if (!currentAnchor) return;
+      currentAnchor.setAttribute("aria-expanded", "false");
+      currentAnchor = null;
+      popup.classList.remove("is-active");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function positionPopup(anchor){
+      var rect = anchor.getBoundingClientRect();
+      var popRect = popup.getBoundingClientRect();
+      var popW = popRect.width || 340;
+      var popH = popRect.height || 110;
+
+      var top;
+      if (rect.top >= popH + 12) {
+        top = rect.top - popH - 6;
+      } else {
+        top = rect.bottom + 6;
+      }
+
+      var left = rect.left + (rect.width / 2) - (popW / 2);
+      var maxLeft = window.innerWidth - popW - 12;
+      left = Math.max(12, Math.min(left, maxLeft));
+
+      popup.style.top = Math.round(top) + "px";
+      popup.style.left = Math.round(left) + "px";
+    }
+
+    anchors.forEach(function(anchor){
+      anchor.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (currentAnchor === anchor) {
+          closePopup();
+        } else {
+          openPopup(anchor);
+        }
+      });
+
+      anchor.addEventListener("mouseenter", function(){
+        clearTimeout(closeTimer);
+        hoverTimer = setTimeout(function(){
+          openPopup(anchor);
+        }, 120);
+      });
+
+      anchor.addEventListener("mouseleave", function(){
+        clearTimeout(hoverTimer);
+        closeTimer = setTimeout(function(){
+          closePopup();
+        }, 220);
+      });
+
+      anchor.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (currentAnchor === anchor) closePopup(); else openPopup(anchor);
+        } else if (e.key === "Escape") {
+          closePopup();
+        }
+      });
+    });
+
+    popup.addEventListener("mouseenter", function(){
+      clearTimeout(closeTimer);
+    });
+    popup.addEventListener("mouseleave", function(){
+      closeTimer = setTimeout(function(){
+        closePopup();
+      }, 220);
+    });
+
+    popupClose.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+    });
+
+    document.addEventListener("click", function(e){
+      if (!popup.contains(e.target) && (!currentAnchor || !currentAnchor.contains(e.target))) {
+        closePopup();
+      }
+    });
+
+    window.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closePopup();
+    });
+
+    window.addEventListener("resize", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+
+    window.addEventListener("scroll", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFootnotes);
+  } else {
+    initFootnotes();
+  }
 })();
 </script>
 

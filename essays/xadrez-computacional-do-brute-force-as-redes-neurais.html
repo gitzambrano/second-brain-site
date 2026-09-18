@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="101">
+<html lang="pt-BR" data-status="finalizado" data-minutes="102">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Xadrez Computacional — do Brute-Force às Redes Neurais</title>
 <meta property="og:title" content="Xadrez Computacional — do Brute-Force às Redes Neurais">
-<meta property="og:description" content="O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).">
+<meta property="og:description" content="O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo aproximadamente 2900).">
 <meta property="og:type" content="article">
 <script defer="" src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -1068,6 +1068,118 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 }
 
 /* ------------------------------------------------------------------ */
+/* Citações Inline e Popup de Referência (Padrão Substack)            */
+/* ------------------------------------------------------------------ */
+.ref-cite {
+  font-size:.78em;
+  line-height:0;
+  vertical-align:super;
+  font-weight:600;
+  padding:0 .18em;
+  cursor:pointer;
+  color:var(--gold);
+  text-decoration:none;
+  border-bottom:none;
+  font-family:var(--font-display);
+  transition:color .15s ease, opacity .15s ease;
+  user-select:none;
+}
+.ref-cite:hover,
+.ref-cite:focus-visible,
+.ref-cite[aria-expanded="true"] {
+  color:var(--rust-bright);
+  text-decoration:none;
+}
+
+.ref-popup {
+  position:fixed;
+  z-index:1200;
+  max-width:min(380px, calc(100vw - 32px));
+  width:max-content;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:.88rem;
+  line-height:1.55;
+  color:var(--text);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(4px) scale(.98);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  pointer-events:none;
+}
+[data-theme="light"] .ref-popup {
+  background:var(--surface);
+  box-shadow:0 10px 30px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.05);
+  border-color:var(--border);
+}
+.ref-popup.is-active {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.ref-popup-inner {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.ref-popup-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  padding-bottom:5px;
+  margin-bottom:3px;
+}
+.ref-popup-num {
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  color:var(--gold);
+}
+.ref-popup-close {
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:1.15rem;
+  line-height:1;
+  cursor:pointer;
+  padding:0 3px;
+  border-radius:4px;
+  transition:color .15s ease;
+}
+.ref-popup-close:hover {
+  color:var(--text-bright);
+}
+.ref-popup-body {
+  font-size:.86rem;
+  color:var(--text);
+  overflow-wrap:break-word;
+}
+.ref-popup-body em,
+.ref-popup-body i {
+  color:var(--text-bright);
+}
+.ref-popup-body a {
+  color:var(--gold);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.ref-popup-body a:hover {
+  color:var(--rust-bright);
+}
+.ref-popup-body a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+}
+
+/* ------------------------------------------------------------------ */
 /* Impressão — mínimo funcional (oculta chrome fixo)                  */
 /* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
 /* ------------------------------------------------------------------ */
@@ -1518,7 +1630,7 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
     <h1 class="hero-title">Xadrez Computacional — do Brute-Force às Redes Neurais</h1>
     <hr class="masthead-rule">
     <p class="byline">Gustavo Zambrano · Junho de 2026</p>
-    <p class="cover-summary">O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).</p>
+    <p class="cover-summary">O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo aproximadamente 2900).</p>
   </div>
 </header>
 
@@ -1767,8 +1879,8 @@ a mais</td>
 <tr>
 <td><strong><a
 href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo</a></strong></td>
-<td>Sistema de rating: humanos top ~2850, Stockfish ~3600, diferença de
-200 Elo ≈ 75% de vitórias</td>
+<td>Sistema de rating: humanos top cerca de 2850, Stockfish cerca de
+3600, diferença de 200 Elo ≈ 75% de vitórias</td>
 </tr>
 <tr>
 <td><strong>Peão passado</strong></td>
@@ -1880,6 +1992,16 @@ class="math inline">\(10^{10}\)</span> estados por segundo em hardware
 comum.</p>
 </div>
 <hr />
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>O número de partidas de xadrez possíveis (10¹²⁰) é ordens de grandeza
+maior que todos os átomos do universo visível (10⁸⁰). A maestria
+computacional não nasceu da força bruta, mas da arte da poda.</p>
+</div>
+<div class="quote-attribution">
+<p>— Claude Shannon (1950)</p>
+</div>
+</div>
 <h2 id="i-breve-história-dos-engines-de-xadrez">I. Breve História dos
 Engines de Xadrez</h2>
 <h3 id="a-intuição">A Intuição</h3>
@@ -2100,7 +2222,7 @@ href="#referências">11</a>], propôs duas estratégias fundamentais:</p>
 ramificações até uma profundidade fixa. Simples, mas exponencialmente
 cara. Para profundidade <span class="math inline">\(d = 10\)</span> com
 fator de ramificação <span class="math inline">\(b \approx 35\)</span>
-(em cada posição média, há ~35 movimentos legais): <span
+(em cada posição média, há cerca de 35 movimentos legais): <span
 class="math inline">\(35^{10} \approx 2.7 \times 10^{15}\)</span> nós.
 Impraticável.</li>
 <li><strong>Tipo B (seletivo)</strong>: explorar apenas linhas
@@ -2153,6 +2275,16 @@ mesmo depois de milhões de lances calculados.</p>
 <p>O texto a seguir detalha como o Zchezz implementa essa dupla
 representação, os números mágicos por trás dos ataques de peças
 deslizantes e o funcionamento exato do hash de Zobrist.</p>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>A Arquitetura de Bitboards</p>
+</div>
+<p>Representar as 64 casas do tabuleiro em inteiros de 64 bits
+(<code>uint64_t</code>). Ataques, bloqueios e raios de ação são
+calculados em frações de nanosegundo por instruções de hardware da CPU
+(<code>AND</code>, <code>OR</code>, <code>XOR</code>,
+<code>POPCNT</code>).</p>
+</div>
 <p>Antes de buscar, o engine precisa <em>representar</em> o tabuleiro de
 forma que operações fundamentais (gerar movimentos, verificar ataques,
 atualizar posições) sejam extremamente rápidas. A escolha da
@@ -2377,6 +2509,17 @@ minimiza pode garantir até agora</li>
 alternativa melhor), a busca é <strong>cortada</strong>: nenhum
 movimento restante precisa ser examinado</li>
 </ul>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>A Navalha da Poda Alfa-Beta</p>
+</div>
+<p>Com ordenação heurística precisa de movimentos, a poda alfa-beta
+reduz o fator de ramificação efetivo da raiz de <span
+class="math inline">\(b\)</span> para <span
+class="math inline">\(\sqrt{b}\)</span>. Na prática, isso permite que o
+engine pesquise o dobro da profundidade com exatamente o mesmo orçamento
+de tempo computacional.</p>
+</div>
 <p>Em <strong>ordem perfeita de movimentos</strong> (melhor primeiro), o
 custo cai de <span class="math inline">\(O(b^d)\)</span> para <span
 class="math inline">\(O(b^{d/2})\)</span>, efetivamente
@@ -2459,12 +2602,12 @@ em memória.</p>
 <tr>
 <td>Nativo</td>
 <td>4M entradas</td>
-<td>~112 MB</td>
+<td>cerca de 112 MB</td>
 </tr>
 <tr>
 <td>WASM (browser)</td>
 <td>512K entradas</td>
-<td>~14 MB</td>
+<td>cerca de 14 MB</td>
 </tr>
 </tbody>
 </table>
@@ -3201,7 +3344,8 @@ um movimento quiet:</p>
 de <span class="math inline">\(\text{depth}^2\)</span>; movimentos
 tentados antes do cutoff recebem penalty do mesmo valor.</p></li>
 <li><p><strong>Continuation History</strong> (CMH): duas tabelas
-<code>int16_t cont_hist[3][64][64×64]</code></p>
+<code>int16_t cont_hist[3][64][64×64]</code></p></li>
+</ol>
 <ul>
 <li>Slot 0: condicionada na casa de destino do movimento no ply <span
 class="math inline">\(-1\)</span> (1-ply CMH)</li>
@@ -3210,8 +3354,9 @@ class="math inline">\(-2\)</span> (2-ply CMH)</li>
 </ul>
 <p>A CMH captura <strong>padrões de resposta</strong>: “quando o
 adversário joga para d5, movimentos que saem de c3 são historicamente
-bons.”</p></li>
-<li><p><strong>Counter Move Table</strong>: descrita acima.</p></li>
+bons.”</p>
+<ol start="3" type="1">
+<li><strong>Counter Move Table</strong>: descrita acima.</li>
 </ol>
 <p>As três tabelas contribuem aditivamente ao score de movimentos quiet.
 No início de cada nova busca, as tabelas são
@@ -3453,6 +3598,15 @@ sem necessidade de rotação da rede.</p>
 <p>Fórmula de indexação:
 <code>color_offset × 64 + piece_type × 64 + square</code>, onde o square
 é invertido verticalmente para a perspectiva do oponente.</p>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>A Eficiência do Acumulador Dual NNUE</p>
+</div>
+<p>Ao manter dois acumuladores sincronizados (perspectiva Brancas e
+Pretas), o engine elimina qualquer cópia ou rotação de memória durante a
+busca. A avaliação da posição na folha torna-se uma operação aritmética
+direta e ultrarrápida no referencial do jogador ativo.</p>
+</div>
 <h3 id="dual-accumulator-dois-totais-correntes-ao-mesmo-tempo">Dual
 Accumulator: Dois Totais Correntes ao Mesmo Tempo</h3>
 <p>Se o Half-Mirror resolve <em>o que</em> cada lado enxerga, o Dual
@@ -3706,7 +3860,8 @@ e exato).</p>
 diretamente para centipawns sem nenhuma função transcendental no caminho
 quente de avaliação.</p>
 <h3 id="throughput">Throughput</h3>
-<p>A inferência inteira dá um ganho de ~2× sobre float32 em hardware <a
+<p>A inferência inteira dá um ganho de cerca de 2× sobre float32 em
+hardware <a
 href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX2</a>:
 16 elementos <code>int16_t</code> cabem num registrador de 256 bits
 versus 8 elementos <code>float32</code>.</p>
@@ -3723,8 +3878,8 @@ versus 8 elementos <code>float32</code>.</p>
                 L2B    int32[64]         bias × QA×QB
                 L3W    int8[64]          pesos × QB
                 L3B    float32[1]        bias (float)</code></pre>
-<p>Tamanho total: <strong>~426 KB</strong> (versus ~860 KB do formato
-float32 NNU2, redução de 50%).</p>
+<p>Tamanho total: <strong>cerca de 426 KB</strong> (versus cerca de 860
+KB do formato float32 NNU2, redução de 50%).</p>
 <hr />
 <h2 id="xiv-treinamento-auto-jogo-qat-e-gerações">XIV. Treinamento:
 Auto-Jogo, QAT e Gerações</h2>
@@ -3797,7 +3952,8 @@ engine)</li>
 <li>Posições de endgame geradas artificialmente para reforçar padrões
 finais</li>
 <li>Cada geração descobre padrões que a anterior não via</li>
-<li>Convergência quando o ganho cai abaixo de ~5 Elo por geração</li>
+<li>Convergência quando o ganho cai abaixo de aproximadamente 5 Elo por
+geração</li>
 </ul>
 <h3 id="quantization-aware-training-qat">Quantization-Aware Training
 (QAT)</h3>
@@ -3916,9 +4072,9 @@ avaliação artesanal e a busca alfa-beta. Em seu lugar:</p>
 <ul>
 <li><strong>Rede neural profunda</strong> (<a
 href="https://en.wikipedia.org/wiki/Residual_neural_network">ResNet</a>
-com ~80 blocos residuais, ~20 milhões de parâmetros) que avalia posições
-e sugere movimentos simultaneamente (uma <em>policy head</em>,
-probabilidade de cada movimento, e uma <em>value head</em>,
+com cerca de 80 blocos residuais, cerca de 20 milhões de parâmetros) que
+avalia posições e sugere movimentos simultaneamente (uma <em>policy
+head</em>, probabilidade de cada movimento, e uma <em>value head</em>,
 probabilidade de vitória)</li>
 <li><strong><a
 href="https://en.wikipedia.org/wiki/Monte_Carlo_tree_search">Monte Carlo
@@ -3965,13 +4121,13 @@ Elo nos rankings atuais, uma diferença que flutua entre versões.</p>
 </tr>
 <tr>
 <td>Avaliação</td>
-<td>NNUE (3 camadas, ~400KB)</td>
-<td>ResNet profunda (~100 camadas, ~100MB)</td>
+<td>NNUE (3 camadas, cerca de 400KB)</td>
+<td>ResNet profunda (cerca de 100 camadas, cerca de 100MB)</td>
 </tr>
 <tr>
 <td>Posições/segundo</td>
-<td>~100M (CPU)</td>
-<td>~40K (GPU)</td>
+<td>cerca de 100M (CPU)</td>
+<td>cerca de 40K (GPU)</td>
 </tr>
 <tr>
 <td>Nós por decisão</td>
@@ -4867,6 +5023,238 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     esc = Math.max(base * 0.5, Math.min(esc * (e.deltaY < 0 ? 1.12 : 0.89), base * 12));
     aplica();
   }, {passive:false});
+})();
+</script>
+<script>
+/* Citações Inline e Popup de Referência no Padrão Substack */
+(function(){
+  "use strict";
+  function initFootnotes(){
+    var refHeading = null;
+    var h2s = document.querySelectorAll("h2");
+    for (var i = 0; i < h2s.length; i++) {
+      var hText = (h2s[i].textContent || "").trim().toLowerCase();
+      if (hText === "referências" || hText === "referencias") {
+        refHeading = h2s[i];
+        break;
+      }
+    }
+    if (!refHeading) return;
+
+    // 1. Mapeia cada entrada da seção ## Referências
+    var refMap = Object.create(null);
+    var p = refHeading.nextElementSibling;
+    while (p && !p.tagName.startsWith("H")) {
+      if (p.tagName === "P") {
+        var text = (p.textContent || "").trim();
+        var m = text.match(/^\[(\d+)\]/);
+        if (m) {
+          var num = m[1];
+          if (!p.id) p.id = "ref-" + num;
+          var clone = p.cloneNode(true);
+          if (clone.firstChild && clone.firstChild.nodeType === Node.TEXT_NODE) {
+            clone.firstChild.textContent = clone.firstChild.textContent.replace(/^\[\d+\]\s*/, "");
+          }
+          refMap[num] = {
+            num: num,
+            html: clone.innerHTML.trim()
+          };
+        }
+      }
+      p = p.nextElementSibling;
+    }
+
+    if (Object.keys(refMap).length === 0) return;
+
+    // 2. Localiza e transforma chamadas inline no corpo
+    var content = document.querySelector("main.content") || document.body;
+    var links = content.querySelectorAll('a[href^="#refer"]');
+    var anchors = [];
+
+    links.forEach(function(link){
+      if (link.closest("h2#referências ~ p, h2#referencias ~ p, nav, #sumário, #sumario")) return;
+      var rawText = (link.textContent || "").trim();
+      var num = rawText.replace(/[^\d]/g, "");
+      if (!num) return;
+      if (!refMap[num]) return;
+
+      // Limpa colchetes literais residuais [ e ] gerados antes/depois do link
+      var prev = link.previousSibling;
+      if (prev && prev.nodeType === Node.TEXT_NODE && prev.textContent.trimEnd().endsWith("[")) {
+        prev.textContent = prev.textContent.trimEnd().slice(0, -1);
+      }
+      var next = link.nextSibling;
+      if (next && next.nodeType === Node.TEXT_NODE && next.textContent.trimStart().startsWith("]")) {
+        next.textContent = next.textContent.trimStart().slice(1);
+      }
+
+      link.textContent = num;
+      link.classList.add("ref-cite");
+      link.setAttribute("data-ref", num);
+      link.setAttribute("role", "button");
+      link.setAttribute("aria-haspopup", "dialog");
+      link.setAttribute("aria-expanded", "false");
+      link.setAttribute("tabindex", "0");
+      anchors.push(link);
+    });
+
+    if (anchors.length === 0) return;
+
+    // 3. Cria elemento único do popup
+    var popup = document.createElement("div");
+    popup.id = "ref-popup";
+    popup.className = "ref-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-hidden", "true");
+    popup.innerHTML =
+      '<div class="ref-popup-inner">' +
+        '<div class="ref-popup-header">' +
+          '<span class="ref-popup-num"></span>' +
+          '<button class="ref-popup-close" aria-label="Fechar">\u00d7</button>' +
+        '</div>' +
+        '<div class="ref-popup-body"></div>' +
+      '</div>';
+    document.body.appendChild(popup);
+
+    var popupNum = popup.querySelector(".ref-popup-num");
+    var popupBody = popup.querySelector(".ref-popup-body");
+    var popupClose = popup.querySelector(".ref-popup-close");
+
+    var currentAnchor = null;
+    var hoverTimer = null;
+    var closeTimer = null;
+
+    function openPopup(anchor){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      var num = anchor.getAttribute("data-ref");
+      var data = refMap[num];
+      if (!data) return;
+
+      if (currentAnchor && currentAnchor !== anchor) {
+        currentAnchor.setAttribute("aria-expanded", "false");
+      }
+      currentAnchor = anchor;
+      anchor.setAttribute("aria-expanded", "true");
+
+      popupNum.textContent = "Referência [" + num + "]";
+      popupBody.innerHTML = data.html;
+
+      popupBody.querySelectorAll("a").forEach(function(a){
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      });
+
+      popup.classList.add("is-active");
+      popup.setAttribute("aria-hidden", "false");
+      positionPopup(anchor);
+    }
+
+    function closePopup(){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      if (!currentAnchor) return;
+      currentAnchor.setAttribute("aria-expanded", "false");
+      currentAnchor = null;
+      popup.classList.remove("is-active");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function positionPopup(anchor){
+      var rect = anchor.getBoundingClientRect();
+      var popRect = popup.getBoundingClientRect();
+      var popW = popRect.width || 340;
+      var popH = popRect.height || 110;
+
+      var top;
+      if (rect.top >= popH + 12) {
+        top = rect.top - popH - 6;
+      } else {
+        top = rect.bottom + 6;
+      }
+
+      var left = rect.left + (rect.width / 2) - (popW / 2);
+      var maxLeft = window.innerWidth - popW - 12;
+      left = Math.max(12, Math.min(left, maxLeft));
+
+      popup.style.top = Math.round(top) + "px";
+      popup.style.left = Math.round(left) + "px";
+    }
+
+    anchors.forEach(function(anchor){
+      anchor.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (currentAnchor === anchor) {
+          closePopup();
+        } else {
+          openPopup(anchor);
+        }
+      });
+
+      anchor.addEventListener("mouseenter", function(){
+        clearTimeout(closeTimer);
+        hoverTimer = setTimeout(function(){
+          openPopup(anchor);
+        }, 120);
+      });
+
+      anchor.addEventListener("mouseleave", function(){
+        clearTimeout(hoverTimer);
+        closeTimer = setTimeout(function(){
+          closePopup();
+        }, 220);
+      });
+
+      anchor.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (currentAnchor === anchor) closePopup(); else openPopup(anchor);
+        } else if (e.key === "Escape") {
+          closePopup();
+        }
+      });
+    });
+
+    popup.addEventListener("mouseenter", function(){
+      clearTimeout(closeTimer);
+    });
+    popup.addEventListener("mouseleave", function(){
+      closeTimer = setTimeout(function(){
+        closePopup();
+      }, 220);
+    });
+
+    popupClose.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+    });
+
+    document.addEventListener("click", function(e){
+      if (!popup.contains(e.target) && (!currentAnchor || !currentAnchor.contains(e.target))) {
+        closePopup();
+      }
+    });
+
+    window.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closePopup();
+    });
+
+    window.addEventListener("resize", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+
+    window.addEventListener("scroll", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFootnotes);
+  } else {
+    initFootnotes();
+  }
 })();
 </script>
 

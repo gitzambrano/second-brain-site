@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="18">
+<html lang="pt-BR" data-status="finalizado" data-minutes="19">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1066,6 +1066,118 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 }
 
 /* ------------------------------------------------------------------ */
+/* Citações Inline e Popup de Referência (Padrão Substack)            */
+/* ------------------------------------------------------------------ */
+.ref-cite {
+  font-size:.78em;
+  line-height:0;
+  vertical-align:super;
+  font-weight:600;
+  padding:0 .18em;
+  cursor:pointer;
+  color:var(--gold);
+  text-decoration:none;
+  border-bottom:none;
+  font-family:var(--font-display);
+  transition:color .15s ease, opacity .15s ease;
+  user-select:none;
+}
+.ref-cite:hover,
+.ref-cite:focus-visible,
+.ref-cite[aria-expanded="true"] {
+  color:var(--rust-bright);
+  text-decoration:none;
+}
+
+.ref-popup {
+  position:fixed;
+  z-index:1200;
+  max-width:min(380px, calc(100vw - 32px));
+  width:max-content;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:.88rem;
+  line-height:1.55;
+  color:var(--text);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(4px) scale(.98);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  pointer-events:none;
+}
+[data-theme="light"] .ref-popup {
+  background:var(--surface);
+  box-shadow:0 10px 30px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.05);
+  border-color:var(--border);
+}
+.ref-popup.is-active {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.ref-popup-inner {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.ref-popup-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  padding-bottom:5px;
+  margin-bottom:3px;
+}
+.ref-popup-num {
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  color:var(--gold);
+}
+.ref-popup-close {
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:1.15rem;
+  line-height:1;
+  cursor:pointer;
+  padding:0 3px;
+  border-radius:4px;
+  transition:color .15s ease;
+}
+.ref-popup-close:hover {
+  color:var(--text-bright);
+}
+.ref-popup-body {
+  font-size:.86rem;
+  color:var(--text);
+  overflow-wrap:break-word;
+}
+.ref-popup-body em,
+.ref-popup-body i {
+  color:var(--text-bright);
+}
+.ref-popup-body a {
+  color:var(--gold);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.ref-popup-body a:hover {
+  color:var(--rust-bright);
+}
+.ref-popup-body a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+}
+
+/* ------------------------------------------------------------------ */
 /* Impressão — mínimo funcional (oculta chrome fixo)                  */
 /* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
 /* ------------------------------------------------------------------ */
@@ -1520,9 +1632,21 @@ força externa que o arrasta como um objeto inerte.</p>
 <hr />
 <h2 id="capítulo-1--as-principais-visões-sobre-livre-arbítrio">Capítulo
 1 — As principais visões sobre livre-arbítrio</h2>
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Os homens julgam-se livres porque têm consciência de suas volições e
+de seus apetites, mas ignoram as causas que os dispõem a querer e a
+desejar.</p>
+</div>
+<div class="quote-attribution">
+<p>— Baruch Spinoza, <em>Ética</em> (1677)</p>
+</div>
+</div>
 <p>A forma mais intuitiva de pensar o livre-arbítrio é imaginar que,
 diante de um mesmo conjunto de condições, uma pessoa poderia ter
-escolhido de maneira diferente. Essa visão costuma ser chamada de <a
+escolhido de maneira diferente — problema clássico das possibilidades
+alternativas examinado por Harry Frankfurt [<a
+href="#referências">12</a>]. Essa visão costuma ser chamada de <a
 href="https://en.wikipedia.org/wiki/Libertarianism_(metaphysics)">libertarianismo</a>,
 embora o nome possa confundir porque não tem relação direta com
 política. O libertarianismo sobre o livre-arbítrio sustenta que uma
@@ -1537,30 +1661,37 @@ explicar como a liberdade pode existir sem virar mero acaso.</p>
 href="https://en.wikipedia.org/wiki/Hard_determinism">determinismo
 duro</a>, segundo o qual o universo é inteiramente regido por causas e,
 portanto, o <a
-href="https://en.wikipedia.org/wiki/Free_will">livre-arbítrio</a> em
-sentido robusto não existe. As escolhas humanas seriam apenas o
-resultado necessário de estados anteriores do mundo. Quem defende essa
-posição costuma dizer que a sensação de decidir livremente é uma
-experiência subjetiva enganosa, útil talvez para a vida cotidiana, mas
-sem correspondência metafísica profunda. Em versões mais sofisticadas, o
-determinismo duro não precisa soar pessimista ou niilista; ele pode
-simplesmente concluir que <a
+href="https://en.wikipedia.org/wiki/Free_will">livre-arbítrio</a> [<a
+href="#referências">14</a>] em sentido robusto não existe. As escolhas
+humanas seriam apenas o resultado necessário de estados anteriores do
+mundo. Quem defende essa posição costuma dizer que a sensação de decidir
+livremente é uma experiência subjetiva enganosa, útil talvez para a vida
+cotidiana, mas sem correspondência metafísica profunda. Em versões mais
+sofisticadas, o determinismo duro não precisa soar pessimista ou
+niilista; ele pode simplesmente concluir que <a
 href="https://en.wikipedia.org/wiki/Moral_responsibility">responsabilidade
-moral</a> e autonomia, como normalmente as imaginamos, precisam ser
-revisadas.</p>
+moral</a> [<a href="#referências">18</a>] e autonomia, como normalmente
+as imaginamos, precisam ser revisadas.</p>
 <p>Entre esses extremos está o <a
-href="https://en.wikipedia.org/wiki/Compatibilism">compatibilismo</a>. O
-ponto central dessa visão é que liberdade e determinismo não são
-necessariamente incompatíveis. Um ato pode ser determinado e ainda assim
-ser livre, desde que provenha do próprio agente, de suas razões,
-desejos, valores, caráter e capacidade de <a
-href="https://en.wikipedia.org/wiki/Deliberation">deliberação</a>. O
-contraste decisivo não é entre causação e não causação, mas entre
+href="https://en.wikipedia.org/wiki/Compatibilism">compatibilismo</a>
+[<a href="#referências">13</a>]. O ponto central dessa visão é que
+liberdade e determinismo não são necessariamente incompatíveis. Um ato
+pode ser determinado e ainda assim ser livre, desde que provenha do
+próprio agente, de suas razões, desejos, valores, caráter e capacidade
+de <a href="https://en.wikipedia.org/wiki/Deliberation">deliberação</a>.
+O contraste decisivo não é entre causação e não causação, mas entre
 causação interna e causação externa. Se uma pessoa age após refletir,
 pesar motivos, imaginar consequências e formar uma intenção conforme sua
 própria constituição psicológica, então faz sentido dizer que ela agiu
 livremente, ainda que essa constituição psicológica também tenha
 causas.</p>
+<p><picture><source srcset="../assets/media/compatibilismo-o-livre-arbitrio-como-propriedade-de-um-sistema-natural_fig1.webp" type="image/webp"><img
+src="../assets/media/compatibilismo-o-livre-arbitrio-como-propriedade-de-um-sistema-natural_fig1.png"
+alt="Infográfico: O Quadrante do Livre-Arbítrio e da Causalidade Natural" /></picture></p>
+<p><em>Figura 1. O quadrante de posições metafísicas sobre o
+livre-arbítrio diante da causalidade natural: da incompatibilidade do
+determinismo duro à agência compatibilista em sistemas
+complexos.</em></p>
 <p>Essa ideia aparece com força já na tradição antiga, especialmente no
 <a href="https://en.wikipedia.org/wiki/Stoicism">estoicismo</a>. Para os
 estoicos, o mundo era uma ordem racional na qual tudo ocorre segundo o
@@ -1572,61 +1703,65 @@ reaparecerá muitas vezes na filosofia: a liberdade pode ser entendida
 como alinhamento consciente com a estrutura do real, não como fuga
 dela.</p>
 <p>Mais tarde, <a
-href="https://en.wikipedia.org/wiki/Thomas_Hobbes">Thomas Hobbes</a>
-ofereceu uma formulação notavelmente clara de liberdade em termos
-compatibilistas. Para ele, livre é o agente que não encontra
-impedimentos externos para agir segundo sua vontade. Se eu quero sair de
-casa e a porta está aberta, sou livre para sair; se estou trancado, não
-sou. O fato de meus desejos terem causas anteriores não destrói a
-liberdade nesse sentido. O que a destrói é a coerção, a prisão, o
-bloqueio externo. Hobbes ajuda a mostrar que o conceito cotidiano de
-liberdade já contém, em grande medida, um componente compatibilista.</p>
-<p><a href="https://en.wikipedia.org/wiki/David_Hume">David Hume</a> é
-talvez o grande nome clássico dessa tradição. Em sua filosofia, a
-necessidade causal não é inimiga da liberdade, porque o que nos importa
-na vida moral não é a ausência de causas, mas o fato de que ações
-procedem dos motivos e do caráter de uma pessoa. Hume percebeu que, se
-abandonássemos toda regularidade causal, perderíamos também a base para
-compreender a conduta humana. A responsabilidade moral depende de
-podermos relacionar ações a traços relativamente estáveis do agente.
-Quando alguém age por sua própria disposição interna, e não sob
-violência externa, a ação ainda é dele. Hume está na raiz da definição
-moderna de compatibilismo porque transforma a discussão: em vez de
-perguntar se houve causa, ele pergunta que tipo de causa houve. Para uma
-discussão detalhada, ver <a
+href="https://en.wikipedia.org/wiki/Thomas_Hobbes">Thomas Hobbes</a> [<a
+href="#referências">3</a>] ofereceu uma formulação notavelmente clara de
+liberdade em termos compatibilistas. Para ele, livre é o agente que não
+encontra impedimentos externos para agir segundo sua vontade. Se eu
+quero sair de casa e a porta está aberta, sou livre para sair; se estou
+trancado, não sou. O fato de meus desejos terem causas anteriores não
+destrói a liberdade nesse sentido. O que a destrói é a coerção, a
+prisão, o bloqueio externo. Hobbes ajuda a mostrar que o conceito
+cotidiano de liberdade já contém, em grande medida, um componente
+compatibilista.</p>
+<p><a href="https://en.wikipedia.org/wiki/David_Hume">David Hume</a> [<a
+href="#referências">1</a>], [<a href="#referências">2</a>] é talvez o
+grande nome clássico dessa tradição. Em sua filosofia, a necessidade
+causal não é inimiga da liberdade, porque o que nos importa na vida
+moral não é a ausência de causas, mas o fato de que ações procedem dos
+motivos e do caráter de uma pessoa. Hume percebeu que, se abandonássemos
+toda regularidade causal, perderíamos também a base para compreender a
+conduta humana. A responsabilidade moral depende de podermos relacionar
+ações a traços relativamente estáveis do agente. Quando alguém age por
+sua própria disposição interna, e não sob violência externa, a ação
+ainda é dele. Hume está na raiz da definição moderna de compatibilismo
+porque transforma a discussão: em vez de perguntar se houve causa, ele
+pergunta que tipo de causa houve. Para uma discussão detalhada, ver <a
 href="https://plato.stanford.edu/entries/hume-freewill/">Hume on Free
-Will</a>.</p>
+Will</a> [<a href="#referências">15</a>].</p>
 <p>A história do problema ganha outra dimensão com <a
-href="https://en.wikipedia.org/wiki/Immanuel_Kant">Immanuel Kant</a>.
-Kant não é compatibilista no sentido clássico de Hume, mas sua filosofia
-é fundamental para entender por que a questão é tão difícil. Ele
-percebeu que a descrição do ser humano como fenômeno natural parece
-submetê-lo a leis causais, enquanto a moral exige que nos pensemos como
-autores de nossas ações. Kant tentou resolver isso por meio da distinção
-entre perspectivas distintas: como fenômeno, o homem é parte da
-natureza; como coisa em si, ele é pensado sob uma perspectiva moral de
-autonomia. Mesmo quem discorda da solução kantiana precisa reconhecer a
-profundidade do problema que ele levantou. Kant mostrou que o debate não
-é apenas físico, mas também normativo e conceitual.</p>
+href="https://en.wikipedia.org/wiki/Immanuel_Kant">Immanuel Kant</a> [<a
+href="#referências">4</a>]. Kant não é compatibilista no sentido
+clássico de Hume, mas sua filosofia é fundamental para entender por que
+a questão é tão difícil. Ele percebeu que a descrição do ser humano como
+fenômeno natural parece submetê-lo a leis causais, enquanto a moral
+exige que nos pensemos como autores de nossas ações. Kant tentou
+resolver isso por meio da distinção entre perspectivas distintas: como
+fenômeno, o homem é parte da natureza; como coisa em si, ele é pensado
+sob uma perspectiva moral de autonomia. Mesmo quem discorda da solução
+kantiana precisa reconhecer a profundidade do problema que ele levantou.
+Kant mostrou que o debate não é apenas físico, mas também normativo e
+conceitual.</p>
 <p><a href="https://en.wikipedia.org/wiki/Arthur_Schopenhauer">Arthur
-Schopenhauer</a> foi muito mais pessimista. Para ele, o homem pode fazer
-o que quer, mas não pode querer o que quer. Essa frase é célebre porque
-captura uma intuição anticompatibilista poderosa: a vontade mesma parece
-escapar ao comando consciente. Se o querer está enraizado em impulsos
-mais profundos, então a liberdade usual seria uma aparência.
-Schopenhauer, porém, também é útil ao compatibilismo porque revela a
-fragilidade de nossa autoimagem. Ele nos obriga a admitir que muito do
-que chamamos de decisão vem de camadas não transparentes da psique.</p>
+Schopenhauer</a> [<a href="#referências">5</a>] foi muito mais
+pessimista. Para ele, o homem pode fazer o que quer, mas não pode querer
+o que quer. Essa frase é célebre porque captura uma intuição
+anticompatibilista poderosa: a vontade mesma parece escapar ao comando
+consciente. Se o querer está enraizado em impulsos mais profundos, então
+a liberdade usual seria uma aparência. Schopenhauer, porém, também é
+útil ao compatibilismo porque revela a fragilidade de nossa autoimagem.
+Ele nos obriga a admitir que muito do que chamamos de decisão vem de
+camadas não transparentes da psique.</p>
 <p><a href="https://en.wikipedia.org/wiki/Friedrich_Nietzsche">Friedrich
-Nietzsche</a> radicaliza essa desconfiança. Ele critica a ideia de
-sujeito soberano, de eu plenamente unitário e transparente a si mesmo.
-Nossa ação, para Nietzsche, nasce de um jogo de forças, impulsos,
-interpretações e tendências que nem sempre dominamos. Isso costuma ser
-lido como uma ameaça ao livre-arbítrio, mas também pode ser lido como um
-convite a redefini-lo: não como soberania metafísica absoluta, e sim
-como capacidade de formação de si em meio a impulsos que precisam ser
-organizados. O ponto nietzschiano mais importante para este ensaio é que
-o eu não é uma substância simples; ele é uma configuração dinâmica.</p>
+Nietzsche</a> [<a href="#referências">6</a>] radicaliza essa
+desconfiança. Ele critica a ideia de sujeito soberano, de eu plenamente
+unitário e transparente a si mesmo. Nossa ação, para Nietzsche, nasce de
+um jogo de forças, impulsos, interpretações e tendências que nem sempre
+dominamos. Isso costuma ser lido como uma ameaça ao livre-arbítrio, mas
+também pode ser lido como um convite a redefini-lo: não como soberania
+metafísica absoluta, e sim como capacidade de formação de si em meio a
+impulsos que precisam ser organizados. O ponto nietzschiano mais
+importante para este ensaio é que o eu não é uma substância simples; ele
+é uma configuração dinâmica.</p>
 <p>No século XX e no começo do século XXI, o compatibilismo ganhou
 versões naturalistas muito influentes. Entre elas, a de <a
 href="https://en.wikipedia.org/wiki/Daniel_Dennett">Daniel Dennett</a> é
@@ -1637,22 +1772,32 @@ físicas. O que importa é a capacidade de responder a razões, antecipar
 consequências, aprender com a experiência, inibir impulsos e se
 comportar de modo flexível. Em livros como <a
 href="https://mitpress.mit.edu/9780262540421/elbow-room/">Elbow Room</a>
-e <em>Freedom Evolves</em>, Dennett procura mostrar que a liberdade
+[<a href="#referências">7</a>] e <em>Freedom Evolves</em> [<a
+href="#referências">8</a>], Dennett procura mostrar que a liberdade
 valiosa é uma propriedade evolutiva e funcional, não uma exceção
 sobrenatural.</p>
 <hr />
 <h2 id="capítulo-2--o-problema-do-demônio-de-laplace">Capítulo 2 — O
 problema do Demônio de Laplace</h2>
+<div class="box callout-example">
+<div class="box-title">
+<p>O Demônio de Laplace e a Inviabilidade de Auto-Previsão</p>
+</div>
+<p>Mesmo em um universo estritamente determinístico, a auto-previsão
+perfeita por um agente interno é matematicamente impossível: nenhum
+sistema físico pode conter uma simulação completa e em tempo real de si
+mesmo sem entrar em recursão infinita.</p>
+</div>
 <p>O chamado <a
 href="https://en.wikipedia.org/wiki/Laplace%27s_demon">demônio de
-Laplace</a> é uma imagem filosófica famosa porque exprime com elegância
-a ameaça máxima ao livre-arbítrio. Se um intelecto conhecesse a posição
-e a velocidade de todas as partículas do universo em um dado instante, e
-se conhecesse também todas as leis da natureza, então poderia calcular
-com precisão o futuro inteiro do cosmos. O universo seria como um
-gigantesco mecanismo de relógio. O presente conteria já todo o futuro em
-forma codificada. Nesse quadro, a impressão de escolha livre pareceria
-ilusória.</p>
+Laplace</a> [<a href="#referências">16</a>] é uma imagem filosófica
+famosa porque exprime com elegância a ameaça máxima ao livre-arbítrio.
+Se um intelecto conhecesse a posição e a velocidade de todas as
+partículas do universo em um dado instante, e se conhecesse também todas
+as leis da natureza, então poderia calcular com precisão o futuro
+inteiro do cosmos. O universo seria como um gigantesco mecanismo de
+relógio. O presente conteria já todo o futuro em forma codificada. Nesse
+quadro, a impressão de escolha livre pareceria ilusória.</p>
 <p>Essa imagem ficou tão influente porque toca em algo muito profundo.
 Ela nos força a encarar a hipótese de que não somos iniciadores
 absolutos de nada. Tudo o que fazemos seria a continuação necessária de
@@ -1772,6 +1917,16 @@ eliminem a ação do agente.</p>
 <h2
 id="capítulo-5--o-cérebro-os-hormônios-e-o-universo-como-um-único-sistema">Capítulo
 5 — O cérebro, os hormônios e o universo como um único sistema</h2>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>A Falácia do Fantasma na Máquina</p>
+</div>
+<p>O medo do determinismo nasce da crença implícita de que existe um
+‘eu’ imaterial sendo coagido pelas leis da física. Mas o determinismo
+não é uma prisão externa: o cérebro, a história biográfica e as sinapses
+<em>são</em> o próprio agente. Quando o sistema físico delibera e
+decide, é você decidindo.</p>
+</div>
 <p>Agora chegamos à tese que defendemos. A ideia pode ser formulada de
 maneira simples: o ser humano não é um observador exterior ao universo,
 mas uma parte dele. Logo, quando falamos de ação humana, estamos falando
@@ -1810,19 +1965,28 @@ conectado à arquitetura interna do agente e menos submetido a coerções
 externas, manipulações, surtos ou automatismos cegos. Nesse sentido, a
 liberdade humana não é antinatural. Ela é um produto natural
 extremamente sofisticado.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Responsabilidade Moral sem Misticismo</p>
+</div>
+<p>Mesmo num cosmos determinista, censuras, leis e incentivos sociais
+funcionam como variáveis causais no ambiente do agente, modulando o
+cálculo deliberativo de ações futuras.</p>
+</div>
 <p>A formulação de <a
-href="https://en.wikipedia.org/wiki/Sean_Carroll">Sean Carroll</a> é
-útil aqui porque enfatiza exatamente o fato de que o que chamamos de
+href="https://en.wikipedia.org/wiki/Sean_Carroll">Sean Carroll</a> [<a
+href="#referências">9</a>], [<a href="#referências">10</a>] é útil aqui
+porque enfatiza exatamente o fato de que o que chamamos de
 livre-arbítrio pertence ao nível dos organismos completos, não ao nível
 microscópico das partículas. Em sua abordagem, o universo pode ser
 descrito de forma física sem que isso apague a realidade de agentes,
-decisões e responsabilidade. A pessoa é um padrão emergente, uma
-organização estável, e não apenas um agregado de átomos sem unidade.
-Essa intuição combina com o modo como falamos de mente, caráter e
-personalidade: são descrições de alto nível de uma estrutura causal
-complexa. Se eu ajo de acordo com meu caráter, com minha memória e com
-meu julgamento, então a ação é minha precisamente porque brota dessa
-organização.</p>
+decisões e responsabilidade. A pessoa é um padrão emergente [<a
+href="#referências">17</a>], uma organização estável, e não apenas um
+agregado de átomos sem unidade. Essa intuição combina com o modo como
+falamos de mente, caráter e personalidade: são descrições de alto nível
+de uma estrutura causal complexa. Se eu ajo de acordo com meu caráter,
+com minha memória e com meu julgamento, então a ação é minha
+precisamente porque brota dessa organização.</p>
 <p><a href="https://en.wikipedia.org/wiki/Daniel_Dennett">Daniel
 Dennett</a> leva essa tese ainda mais longe. Para ele, o que importa não
 é preservar um suposto poder metafísico impossível de checar, mas
@@ -1844,8 +2008,10 @@ href="https://en.wikipedia.org/wiki/Kurt_G%C3%B6del">Kurt Gödel</a>
 precisa ser feita com cuidado, porque é fácil exagerar a analogia entre
 incompletude lógica e livre-arbítrio. Não se deve dizer, de forma
 simplista, que os <a
-href="https://en.wikipedia.org/wiki/Gödel%27s_incompleteness_theorems">teoremas
-de incompletude de Gödel</a> provam o livre-arbítrio. Eles não provam.
+href="https://en.wikipedia.org/wiki/G%C3%B6del%27s_incompleteness_theorems">teoremas
+de incompletude de Gödel</a> — explorados no contexto da autorreferência
+e da identidade cognitiva por Douglas Hofstadter [<a
+href="#referências">11</a>] — provam o livre-arbítrio. Eles não provam.
 Mas eles ajudam a iluminar um aspecto filosófico importante: sistemas
 ricos que tentam representar a si mesmos encontram limites internos.</p>
 <p>Isso é relevante por duas razões. Primeiro, porque o ser humano é um
@@ -2272,6 +2438,238 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     esc = Math.max(base * 0.5, Math.min(esc * (e.deltaY < 0 ? 1.12 : 0.89), base * 12));
     aplica();
   }, {passive:false});
+})();
+</script>
+<script>
+/* Citações Inline e Popup de Referência no Padrão Substack */
+(function(){
+  "use strict";
+  function initFootnotes(){
+    var refHeading = null;
+    var h2s = document.querySelectorAll("h2");
+    for (var i = 0; i < h2s.length; i++) {
+      var hText = (h2s[i].textContent || "").trim().toLowerCase();
+      if (hText === "referências" || hText === "referencias") {
+        refHeading = h2s[i];
+        break;
+      }
+    }
+    if (!refHeading) return;
+
+    // 1. Mapeia cada entrada da seção ## Referências
+    var refMap = Object.create(null);
+    var p = refHeading.nextElementSibling;
+    while (p && !p.tagName.startsWith("H")) {
+      if (p.tagName === "P") {
+        var text = (p.textContent || "").trim();
+        var m = text.match(/^\[(\d+)\]/);
+        if (m) {
+          var num = m[1];
+          if (!p.id) p.id = "ref-" + num;
+          var clone = p.cloneNode(true);
+          if (clone.firstChild && clone.firstChild.nodeType === Node.TEXT_NODE) {
+            clone.firstChild.textContent = clone.firstChild.textContent.replace(/^\[\d+\]\s*/, "");
+          }
+          refMap[num] = {
+            num: num,
+            html: clone.innerHTML.trim()
+          };
+        }
+      }
+      p = p.nextElementSibling;
+    }
+
+    if (Object.keys(refMap).length === 0) return;
+
+    // 2. Localiza e transforma chamadas inline no corpo
+    var content = document.querySelector("main.content") || document.body;
+    var links = content.querySelectorAll('a[href^="#refer"]');
+    var anchors = [];
+
+    links.forEach(function(link){
+      if (link.closest("h2#referências ~ p, h2#referencias ~ p, nav, #sumário, #sumario")) return;
+      var rawText = (link.textContent || "").trim();
+      var num = rawText.replace(/[^\d]/g, "");
+      if (!num) return;
+      if (!refMap[num]) return;
+
+      // Limpa colchetes literais residuais [ e ] gerados antes/depois do link
+      var prev = link.previousSibling;
+      if (prev && prev.nodeType === Node.TEXT_NODE && prev.textContent.trimEnd().endsWith("[")) {
+        prev.textContent = prev.textContent.trimEnd().slice(0, -1);
+      }
+      var next = link.nextSibling;
+      if (next && next.nodeType === Node.TEXT_NODE && next.textContent.trimStart().startsWith("]")) {
+        next.textContent = next.textContent.trimStart().slice(1);
+      }
+
+      link.textContent = num;
+      link.classList.add("ref-cite");
+      link.setAttribute("data-ref", num);
+      link.setAttribute("role", "button");
+      link.setAttribute("aria-haspopup", "dialog");
+      link.setAttribute("aria-expanded", "false");
+      link.setAttribute("tabindex", "0");
+      anchors.push(link);
+    });
+
+    if (anchors.length === 0) return;
+
+    // 3. Cria elemento único do popup
+    var popup = document.createElement("div");
+    popup.id = "ref-popup";
+    popup.className = "ref-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-hidden", "true");
+    popup.innerHTML =
+      '<div class="ref-popup-inner">' +
+        '<div class="ref-popup-header">' +
+          '<span class="ref-popup-num"></span>' +
+          '<button class="ref-popup-close" aria-label="Fechar">\u00d7</button>' +
+        '</div>' +
+        '<div class="ref-popup-body"></div>' +
+      '</div>';
+    document.body.appendChild(popup);
+
+    var popupNum = popup.querySelector(".ref-popup-num");
+    var popupBody = popup.querySelector(".ref-popup-body");
+    var popupClose = popup.querySelector(".ref-popup-close");
+
+    var currentAnchor = null;
+    var hoverTimer = null;
+    var closeTimer = null;
+
+    function openPopup(anchor){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      var num = anchor.getAttribute("data-ref");
+      var data = refMap[num];
+      if (!data) return;
+
+      if (currentAnchor && currentAnchor !== anchor) {
+        currentAnchor.setAttribute("aria-expanded", "false");
+      }
+      currentAnchor = anchor;
+      anchor.setAttribute("aria-expanded", "true");
+
+      popupNum.textContent = "Referência [" + num + "]";
+      popupBody.innerHTML = data.html;
+
+      popupBody.querySelectorAll("a").forEach(function(a){
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      });
+
+      popup.classList.add("is-active");
+      popup.setAttribute("aria-hidden", "false");
+      positionPopup(anchor);
+    }
+
+    function closePopup(){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      if (!currentAnchor) return;
+      currentAnchor.setAttribute("aria-expanded", "false");
+      currentAnchor = null;
+      popup.classList.remove("is-active");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function positionPopup(anchor){
+      var rect = anchor.getBoundingClientRect();
+      var popRect = popup.getBoundingClientRect();
+      var popW = popRect.width || 340;
+      var popH = popRect.height || 110;
+
+      var top;
+      if (rect.top >= popH + 12) {
+        top = rect.top - popH - 6;
+      } else {
+        top = rect.bottom + 6;
+      }
+
+      var left = rect.left + (rect.width / 2) - (popW / 2);
+      var maxLeft = window.innerWidth - popW - 12;
+      left = Math.max(12, Math.min(left, maxLeft));
+
+      popup.style.top = Math.round(top) + "px";
+      popup.style.left = Math.round(left) + "px";
+    }
+
+    anchors.forEach(function(anchor){
+      anchor.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (currentAnchor === anchor) {
+          closePopup();
+        } else {
+          openPopup(anchor);
+        }
+      });
+
+      anchor.addEventListener("mouseenter", function(){
+        clearTimeout(closeTimer);
+        hoverTimer = setTimeout(function(){
+          openPopup(anchor);
+        }, 120);
+      });
+
+      anchor.addEventListener("mouseleave", function(){
+        clearTimeout(hoverTimer);
+        closeTimer = setTimeout(function(){
+          closePopup();
+        }, 220);
+      });
+
+      anchor.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (currentAnchor === anchor) closePopup(); else openPopup(anchor);
+        } else if (e.key === "Escape") {
+          closePopup();
+        }
+      });
+    });
+
+    popup.addEventListener("mouseenter", function(){
+      clearTimeout(closeTimer);
+    });
+    popup.addEventListener("mouseleave", function(){
+      closeTimer = setTimeout(function(){
+        closePopup();
+      }, 220);
+    });
+
+    popupClose.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+    });
+
+    document.addEventListener("click", function(e){
+      if (!popup.contains(e.target) && (!currentAnchor || !currentAnchor.contains(e.target))) {
+        closePopup();
+      }
+    });
+
+    window.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closePopup();
+    });
+
+    window.addEventListener("resize", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+
+    window.addEventListener("scroll", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFootnotes);
+  } else {
+    initFootnotes();
+  }
 })();
 </script>
 

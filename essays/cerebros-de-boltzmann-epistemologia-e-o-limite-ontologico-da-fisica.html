@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="19">
+<html lang="pt-BR" data-status="finalizado" data-minutes="20">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1068,6 +1068,118 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 }
 
 /* ------------------------------------------------------------------ */
+/* Citações Inline e Popup de Referência (Padrão Substack)            */
+/* ------------------------------------------------------------------ */
+.ref-cite {
+  font-size:.78em;
+  line-height:0;
+  vertical-align:super;
+  font-weight:600;
+  padding:0 .18em;
+  cursor:pointer;
+  color:var(--gold);
+  text-decoration:none;
+  border-bottom:none;
+  font-family:var(--font-display);
+  transition:color .15s ease, opacity .15s ease;
+  user-select:none;
+}
+.ref-cite:hover,
+.ref-cite:focus-visible,
+.ref-cite[aria-expanded="true"] {
+  color:var(--rust-bright);
+  text-decoration:none;
+}
+
+.ref-popup {
+  position:fixed;
+  z-index:1200;
+  max-width:min(380px, calc(100vw - 32px));
+  width:max-content;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:.88rem;
+  line-height:1.55;
+  color:var(--text);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(4px) scale(.98);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  pointer-events:none;
+}
+[data-theme="light"] .ref-popup {
+  background:var(--surface);
+  box-shadow:0 10px 30px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.05);
+  border-color:var(--border);
+}
+.ref-popup.is-active {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.ref-popup-inner {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.ref-popup-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  padding-bottom:5px;
+  margin-bottom:3px;
+}
+.ref-popup-num {
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  color:var(--gold);
+}
+.ref-popup-close {
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:1.15rem;
+  line-height:1;
+  cursor:pointer;
+  padding:0 3px;
+  border-radius:4px;
+  transition:color .15s ease;
+}
+.ref-popup-close:hover {
+  color:var(--text-bright);
+}
+.ref-popup-body {
+  font-size:.86rem;
+  color:var(--text);
+  overflow-wrap:break-word;
+}
+.ref-popup-body em,
+.ref-popup-body i {
+  color:var(--text-bright);
+}
+.ref-popup-body a {
+  color:var(--gold);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.ref-popup-body a:hover {
+  color:var(--rust-bright);
+}
+.ref-popup-body a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+}
+
+/* ------------------------------------------------------------------ */
 /* Impressão — mínimo funcional (oculta chrome fixo)                  */
 /* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
 /* ------------------------------------------------------------------ */
@@ -1532,15 +1644,38 @@ duro desse critério.</p>
 <hr />
 <h2 id="i-a-origem-termodinâmica-de-boltzmann-à-flutuação">I. A Origem
 Termodinâmica: de Boltzmann à Flutuação</h2>
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>Num universo infinito em equilíbrio térmico, a probabilidade
+estatística de que uma mente isolada flutue do vácuo térmico é
+astronomicamente maior do que a gênese de bilhões de galáxias
+ordenadas.</p>
+</div>
+<div class="quote-attribution">
+<p>— Ludwig Boltzmann (1896)</p>
+</div>
+</div>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>O Paradoxo Entrópico de Boltzmann</p>
+</div>
+<p>Se confiarmos cegamente no cálculo termodinâmico clássico em um
+universo eterno em equilíbrio, a explicação mais provável para a sua
+existência agora é que você é uma flutuação espontânea no vácuo — e
+todas as suas memórias de infância são um acidente entrópico
+efêmero.</p>
+</div>
 <h3 id="ludwig-boltzmann-e-a-mecânica-estatística">Ludwig Boltzmann e a
 Mecânica Estatística</h3>
 <p><a href="https://en.wikipedia.org/wiki/Ludwig_Boltzmann">Ludwig
-Boltzmann</a> (1844–1906) foi o primeiro a propor que a <a
+Boltzmann</a> [<a href="#referências">4</a>], [<a
+href="#referências">15</a>] (1844–1906) foi o primeiro a propor que a <a
 href="https://en.wikipedia.org/wiki/Second_law_of_thermodynamics">Segunda
-Lei da Termodinâmica</a> — a entropia de um sistema isolado tende a
-aumentar — é uma lei <em>estatística</em>, não absoluta. A entropia
-<span class="math inline">\(S\)</span> de um sistema é proporcional ao
-logaritmo do número de microestados compatíveis com seu macroestado:</p>
+Lei da Termodinâmica</a> [<a href="#referências">12</a>] — a entropia de
+um sistema isolado tende a aumentar — é uma lei <em>estatística</em>,
+não absoluta. A entropia <span class="math inline">\(S\)</span> de um
+sistema é proporcional ao logaritmo do número de microestados
+compatíveis com seu macroestado:</p>
 <p><span class="math display">\[S = k_B \ln \Omega\]</span></p>
 <p>onde <span class="math inline">\(k_B\)</span> é a <a
 href="https://en.wikipedia.org/wiki/Boltzmann_constant">constante de
@@ -1578,8 +1713,12 @@ com aproximadamente <span class="math inline">\(4 \times
 significativo. Flutuações grandes não são proibidas pela física. Elas
 são suprimidas por esse fator exponencial.</p>
 <h3 id="o-cérebro-de-boltzmann">O Cérebro de Boltzmann</h3>
-<p>A ideia nasce de uma extrapolação estatística. Em um universo eterno
-em equilíbrio térmico (a “<a
+<p>A ideia nasce de uma extrapolação estatística — formalizada no
+contexto cosmológico moderno por Andreas Albrecht e Lorenzo Sorbo [<a
+href="#referências">3</a>] sob a designação de <a
+href="https://en.wikipedia.org/wiki/Boltzmann_brain">Cérebro de
+Boltzmann</a> [<a href="#referências">11</a>]. Em um universo eterno em
+equilíbrio térmico (a “<a
 href="https://en.wikipedia.org/wiki/Heat_death_of_the_universe">morte
 térmica</a>”), flutuações de entropia são inevitáveis dado tempo
 suficiente, e flutuações pequenas são muito mais prováveis do que
@@ -1606,10 +1745,10 @@ mais provável que sejamos flutuações efêmeras, com memórias falsas e
 nenhuma conexão real com o passado que acreditamos ter vivido.</p>
 <p>Esse é o <strong><a
 href="https://en.wikipedia.org/wiki/Measure_problem_(cosmology)">problema
-da medida</a></strong> em cosmologia: em um universo infinito, como
-contar observadores? Se você conta todos os cérebros (flutuações +
-normais) e pergunta “que tipo sou eu provavelmente?”, a resposta
-esmagadora é: uma flutuação.</p>
+da medida</a> [<a href="#referências">13</a>]</strong> em cosmologia: em
+um universo infinito, como contar observadores? Se você conta todos os
+cérebros (flutuações + normais) e pergunta “que tipo sou eu
+provavelmente?”, a resposta esmagadora é: uma flutuação.</p>
 <h3 id="implicações-cosmológicas">Implicações Cosmológicas</h3>
 <p>O argumento dos cérebros de Boltzmann tornou-se uma
 <strong>ferramenta de seleção teórica</strong> na cosmologia moderna.
@@ -1618,8 +1757,9 @@ Modelos que produzem mais cérebros de Boltzmann do que observadores
 não porque sejam matematicamente inconsistentes, mas porque minam a
 confiabilidade do próprio raciocínio usado para derivá-los.</p>
 <p><a href="https://en.wikipedia.org/wiki/Sean_M._Carroll">Sean
-Carroll</a> argumenta em <a
-href="https://arxiv.org/abs/1702.00850"><em>Why Boltzmann Brains Are
+Carroll</a> [<a href="#referências">1</a>], [<a
+href="#referências">5</a>], [<a href="#referências">16</a>] argumenta em
+<a href="https://arxiv.org/abs/1702.00850"><em>Why Boltzmann Brains Are
 Bad</em></a> (2017) que modelos com excesso de cérebros de Boltzmann são
 <em>cognitivamente instáveis</em>: se você acredita no modelo, você
 deveria acreditar que suas crenças são provavelmente falsas — incluindo
@@ -1629,13 +1769,16 @@ Tempo</h3>
 <p>Se a dominância estatística das flutuações depende do tempo
 disponível, a pergunta seguinte é por que nosso universo escapa dela. A
 resposta passa pelo problema da <a
-href="https://en.wikipedia.org/wiki/Arrow_of_time">seta do tempo</a>: a
-segunda lei da termodinâmica diz que a entropia <em>aumenta</em> no
-futuro, mas as equações fundamentais da física são simétricas no tempo.
-A baixa entropia do Big Bang — a <a
+href="https://en.wikipedia.org/wiki/Arrow_of_time">seta do tempo</a> [<a
+href="#referências">14</a>]: a segunda lei da termodinâmica diz que a
+entropia <em>aumenta</em> no futuro, mas as equações fundamentais da
+física são simétricas no tempo. A baixa entropia do Big Bang — a <a
 href="https://en.wikipedia.org/wiki/Past_hypothesis">Past Hypothesis</a>
 de <a href="https://en.wikipedia.org/wiki/David_Albert">David Albert</a>
-— é <em>inserida à mão</em>, não derivada.</p>
+[<a href="#referências">6</a>], cuja improbabilidade astronômica inicial
+foi calculada por Roger Penrose [<a href="#referências">7</a>] em uma
+precisão de <span class="math inline">\(10^{10^{123}}\)</span> — é
+<em>inserida à mão</em>, não derivada.</p>
 <p>Cérebros de Boltzmann aparecem quando se tenta derivar a seta do
 tempo <em>sem</em> a Past Hypothesis: o universo não tem direção
 preferencial, e flutuações em ambas as direções são igualmente
@@ -1686,14 +1829,15 @@ pode somar observadores de todos os horizontes sem dupla-contagem</li>
 <li><strong>Medida causal</strong>: contar apenas observadores no
 passado causal de um dado ponto, o que suprime flutuações no futuro
 distante</li>
-<li><strong>Desflutuação quântica</strong>: formulada sem colapso da
-função de onda, a mecânica quântica no espaço de Sitter não gera
-flutuações dinâmicas; <a
+<li><strong>Desflutuação quântica (conforme Kimberly Boddy, Sean Carroll
+e Jason Pollack [<a href="#referências">17</a>])</strong>: formulada sem
+colapso da função de onda, a mecânica quântica no espaço de Sitter não
+gera flutuações dinâmicas; <a
 href="https://doi.org/10.1007/s10701-016-9996-8"><em>De Sitter Space
 Without Dynamical Quantum Fluctuations</em></a>, de Boddy, Carroll e
-Pollack, argumenta que estados estacionários não produzem histórias
-dependentes do tempo, e um vácuo que não flutua não fabrica
-cérebros</li>
+Pollack [<a href="#referências">17</a>], argumenta que estados
+estacionários não produzem histórias dependentes do tempo, e um vácuo
+que não flutua não fabrica cérebros</li>
 </ol>
 <p>Nenhuma dessas respostas é universalmente aceita. O problema dos
 cérebros de Boltzmann permanece como uma das questões mais importantes —
@@ -1701,6 +1845,14 @@ e mais embaraçosas — da cosmologia teórica.</p>
 <hr />
 <h2 id="iii-epistemologia-como-restrição-da-ontologia">III.
 Epistemologia como Restrição da Ontologia</h2>
+<div class="box callout-note">
+<div class="box-title">
+<p>A Instabilidade Cognitiva da Teoria</p>
+</div>
+<p>Se uma teoria física conclui que observadores típicos são cérebros de
+Boltzmann, ela destrói sua própria base empírica: não temos razão para
+confiar nos dados laboratoriais que nos levaram a formular a teoria.</p>
+</div>
 <h3 id="a-inversão-fundamental">A Inversão Fundamental</h3>
 <p>Tradicionalmente, supõe-se que a ontologia — o que existe — vem
 primeiro, e que a epistemologia apenas descreve como conhecemos esse
@@ -1742,8 +1894,8 @@ inviabilidade epistemológica.</p>
 <h2
 id="iv-de-hume-aos-cérebros-de-boltzmann-quando-o-ceticismo-vira-físico">IV.
 De Hume aos Cérebros de Boltzmann: Quando o Ceticismo Vira Físico</h2>
-<p><a href="https://en.wikipedia.org/wiki/David_Hume">David Hume</a>, em
-seu <a
+<p><a href="https://en.wikipedia.org/wiki/David_Hume">David Hume</a> [<a
+href="#referências">10</a>], em seu <a
 href="https://en.wikipedia.org/wiki/A_Treatise_of_Human_Nature"><em>Treatise
 of Human Nature</em></a> (1739), mostrou que não há justificação lógica
 para a <a
@@ -1895,8 +2047,8 @@ construção</strong>.</p>
 <h2 id="vii-kant-condições-de-possibilidade-da-experiência">VII. Kant:
 Condições de Possibilidade da Experiência</h2>
 <p>É aqui que <a
-href="https://en.wikipedia.org/wiki/Immanuel_Kant">Immanuel Kant</a>
-entra com precisão quase cirúrgica.</p>
+href="https://en.wikipedia.org/wiki/Immanuel_Kant">Immanuel Kant</a> [<a
+href="#referências">9</a>] entra com precisão quase cirúrgica.</p>
 <p>Kant argumentou, na <a
 href="https://en.wikipedia.org/wiki/Critique_of_Pure_Reason"><em>Crítica
 da Razão Pura</em></a> (1781), que o conhecimento não é apenas uma
@@ -1969,8 +2121,8 @@ que não minam a confiança no processo que as gerou. Para ele, isso não é
 subjetivismo — é um critério de seleção teórica análogo à <a
 href="https://en.wikipedia.org/wiki/Falsifiability">falsificabilidade</a>
 de <a href="https://en.wikipedia.org/wiki/Karl_Popper">Popper</a>.</p>
-<h3 id="don-page-contagem-de-observadores">Don Page: Contagem de
-Observadores</h3>
+<h3 id="don-page-2-contagem-de-observadores">Don Page [<a
+href="#referências">2</a>]: Contagem de Observadores</h3>
 <p>Don Page mostrou quão severamente a contagem de cérebros de Boltzmann
 pode restringir a vida do vácuo e a cosmologia de de Sitter. Medidas
 locais e causais foram desenvolvidas sobretudo na literatura de Raphael
@@ -1987,7 +2139,7 @@ de Boltzmann.</p>
 <h3 id="o-universo-matemático-de-tegmark">O Universo Matemático de
 Tegmark</h3>
 <p><a href="https://en.wikipedia.org/wiki/Max_Tegmark">Max Tegmark</a>
-propõe uma solução radical: na <a
+[<a href="#referências">8</a>] propõe uma solução radical: na <a
 href="https://en.wikipedia.org/wiki/Mathematical_universe_hypothesis">Hipótese
 do Universo Matemático</a>, <em>toda</em> estrutura matemática existe
 fisicamente. Nesse framework, a pergunta não é “nosso universo produz
@@ -2546,6 +2698,238 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     esc = Math.max(base * 0.5, Math.min(esc * (e.deltaY < 0 ? 1.12 : 0.89), base * 12));
     aplica();
   }, {passive:false});
+})();
+</script>
+<script>
+/* Citações Inline e Popup de Referência no Padrão Substack */
+(function(){
+  "use strict";
+  function initFootnotes(){
+    var refHeading = null;
+    var h2s = document.querySelectorAll("h2");
+    for (var i = 0; i < h2s.length; i++) {
+      var hText = (h2s[i].textContent || "").trim().toLowerCase();
+      if (hText === "referências" || hText === "referencias") {
+        refHeading = h2s[i];
+        break;
+      }
+    }
+    if (!refHeading) return;
+
+    // 1. Mapeia cada entrada da seção ## Referências
+    var refMap = Object.create(null);
+    var p = refHeading.nextElementSibling;
+    while (p && !p.tagName.startsWith("H")) {
+      if (p.tagName === "P") {
+        var text = (p.textContent || "").trim();
+        var m = text.match(/^\[(\d+)\]/);
+        if (m) {
+          var num = m[1];
+          if (!p.id) p.id = "ref-" + num;
+          var clone = p.cloneNode(true);
+          if (clone.firstChild && clone.firstChild.nodeType === Node.TEXT_NODE) {
+            clone.firstChild.textContent = clone.firstChild.textContent.replace(/^\[\d+\]\s*/, "");
+          }
+          refMap[num] = {
+            num: num,
+            html: clone.innerHTML.trim()
+          };
+        }
+      }
+      p = p.nextElementSibling;
+    }
+
+    if (Object.keys(refMap).length === 0) return;
+
+    // 2. Localiza e transforma chamadas inline no corpo
+    var content = document.querySelector("main.content") || document.body;
+    var links = content.querySelectorAll('a[href^="#refer"]');
+    var anchors = [];
+
+    links.forEach(function(link){
+      if (link.closest("h2#referências ~ p, h2#referencias ~ p, nav, #sumário, #sumario")) return;
+      var rawText = (link.textContent || "").trim();
+      var num = rawText.replace(/[^\d]/g, "");
+      if (!num) return;
+      if (!refMap[num]) return;
+
+      // Limpa colchetes literais residuais [ e ] gerados antes/depois do link
+      var prev = link.previousSibling;
+      if (prev && prev.nodeType === Node.TEXT_NODE && prev.textContent.trimEnd().endsWith("[")) {
+        prev.textContent = prev.textContent.trimEnd().slice(0, -1);
+      }
+      var next = link.nextSibling;
+      if (next && next.nodeType === Node.TEXT_NODE && next.textContent.trimStart().startsWith("]")) {
+        next.textContent = next.textContent.trimStart().slice(1);
+      }
+
+      link.textContent = num;
+      link.classList.add("ref-cite");
+      link.setAttribute("data-ref", num);
+      link.setAttribute("role", "button");
+      link.setAttribute("aria-haspopup", "dialog");
+      link.setAttribute("aria-expanded", "false");
+      link.setAttribute("tabindex", "0");
+      anchors.push(link);
+    });
+
+    if (anchors.length === 0) return;
+
+    // 3. Cria elemento único do popup
+    var popup = document.createElement("div");
+    popup.id = "ref-popup";
+    popup.className = "ref-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-hidden", "true");
+    popup.innerHTML =
+      '<div class="ref-popup-inner">' +
+        '<div class="ref-popup-header">' +
+          '<span class="ref-popup-num"></span>' +
+          '<button class="ref-popup-close" aria-label="Fechar">\u00d7</button>' +
+        '</div>' +
+        '<div class="ref-popup-body"></div>' +
+      '</div>';
+    document.body.appendChild(popup);
+
+    var popupNum = popup.querySelector(".ref-popup-num");
+    var popupBody = popup.querySelector(".ref-popup-body");
+    var popupClose = popup.querySelector(".ref-popup-close");
+
+    var currentAnchor = null;
+    var hoverTimer = null;
+    var closeTimer = null;
+
+    function openPopup(anchor){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      var num = anchor.getAttribute("data-ref");
+      var data = refMap[num];
+      if (!data) return;
+
+      if (currentAnchor && currentAnchor !== anchor) {
+        currentAnchor.setAttribute("aria-expanded", "false");
+      }
+      currentAnchor = anchor;
+      anchor.setAttribute("aria-expanded", "true");
+
+      popupNum.textContent = "Referência [" + num + "]";
+      popupBody.innerHTML = data.html;
+
+      popupBody.querySelectorAll("a").forEach(function(a){
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      });
+
+      popup.classList.add("is-active");
+      popup.setAttribute("aria-hidden", "false");
+      positionPopup(anchor);
+    }
+
+    function closePopup(){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      if (!currentAnchor) return;
+      currentAnchor.setAttribute("aria-expanded", "false");
+      currentAnchor = null;
+      popup.classList.remove("is-active");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function positionPopup(anchor){
+      var rect = anchor.getBoundingClientRect();
+      var popRect = popup.getBoundingClientRect();
+      var popW = popRect.width || 340;
+      var popH = popRect.height || 110;
+
+      var top;
+      if (rect.top >= popH + 12) {
+        top = rect.top - popH - 6;
+      } else {
+        top = rect.bottom + 6;
+      }
+
+      var left = rect.left + (rect.width / 2) - (popW / 2);
+      var maxLeft = window.innerWidth - popW - 12;
+      left = Math.max(12, Math.min(left, maxLeft));
+
+      popup.style.top = Math.round(top) + "px";
+      popup.style.left = Math.round(left) + "px";
+    }
+
+    anchors.forEach(function(anchor){
+      anchor.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (currentAnchor === anchor) {
+          closePopup();
+        } else {
+          openPopup(anchor);
+        }
+      });
+
+      anchor.addEventListener("mouseenter", function(){
+        clearTimeout(closeTimer);
+        hoverTimer = setTimeout(function(){
+          openPopup(anchor);
+        }, 120);
+      });
+
+      anchor.addEventListener("mouseleave", function(){
+        clearTimeout(hoverTimer);
+        closeTimer = setTimeout(function(){
+          closePopup();
+        }, 220);
+      });
+
+      anchor.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (currentAnchor === anchor) closePopup(); else openPopup(anchor);
+        } else if (e.key === "Escape") {
+          closePopup();
+        }
+      });
+    });
+
+    popup.addEventListener("mouseenter", function(){
+      clearTimeout(closeTimer);
+    });
+    popup.addEventListener("mouseleave", function(){
+      closeTimer = setTimeout(function(){
+        closePopup();
+      }, 220);
+    });
+
+    popupClose.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+    });
+
+    document.addEventListener("click", function(e){
+      if (!popup.contains(e.target) && (!currentAnchor || !currentAnchor.contains(e.target))) {
+        closePopup();
+      }
+    });
+
+    window.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closePopup();
+    });
+
+    window.addEventListener("resize", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+
+    window.addEventListener("scroll", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFootnotes);
+  } else {
+    initFootnotes();
+  }
 })();
 </script>
 

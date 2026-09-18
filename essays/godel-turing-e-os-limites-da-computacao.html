@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="16">
+<html lang="pt-BR" data-status="finalizado" data-minutes="17">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1068,6 +1068,118 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
 }
 
 /* ------------------------------------------------------------------ */
+/* Citações Inline e Popup de Referência (Padrão Substack)            */
+/* ------------------------------------------------------------------ */
+.ref-cite {
+  font-size:.78em;
+  line-height:0;
+  vertical-align:super;
+  font-weight:600;
+  padding:0 .18em;
+  cursor:pointer;
+  color:var(--gold);
+  text-decoration:none;
+  border-bottom:none;
+  font-family:var(--font-display);
+  transition:color .15s ease, opacity .15s ease;
+  user-select:none;
+}
+.ref-cite:hover,
+.ref-cite:focus-visible,
+.ref-cite[aria-expanded="true"] {
+  color:var(--rust-bright);
+  text-decoration:none;
+}
+
+.ref-popup {
+  position:fixed;
+  z-index:1200;
+  max-width:min(380px, calc(100vw - 32px));
+  width:max-content;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:.88rem;
+  line-height:1.55;
+  color:var(--text);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(4px) scale(.98);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  pointer-events:none;
+}
+[data-theme="light"] .ref-popup {
+  background:var(--surface);
+  box-shadow:0 10px 30px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.05);
+  border-color:var(--border);
+}
+.ref-popup.is-active {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.ref-popup-inner {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.ref-popup-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  padding-bottom:5px;
+  margin-bottom:3px;
+}
+.ref-popup-num {
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  color:var(--gold);
+}
+.ref-popup-close {
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:1.15rem;
+  line-height:1;
+  cursor:pointer;
+  padding:0 3px;
+  border-radius:4px;
+  transition:color .15s ease;
+}
+.ref-popup-close:hover {
+  color:var(--text-bright);
+}
+.ref-popup-body {
+  font-size:.86rem;
+  color:var(--text);
+  overflow-wrap:break-word;
+}
+.ref-popup-body em,
+.ref-popup-body i {
+  color:var(--text-bright);
+}
+.ref-popup-body a {
+  color:var(--gold);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.ref-popup-body a:hover {
+  color:var(--rust-bright);
+}
+.ref-popup-body a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+}
+
+/* ------------------------------------------------------------------ */
 /* Impressão — mínimo funcional (oculta chrome fixo)                  */
 /* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
 /* ------------------------------------------------------------------ */
@@ -1465,8 +1577,8 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 that needs to be done.</p>
 </div>
 <div class="quote-attribution">
-<p>— Alan Turing, <em>Computing Machinery and Intelligence</em>
-(1950)</p>
+<p>— Alan Turing, <em>Computing Machinery and Intelligence</em> (1950)
+[<a href="#referências">18</a>]</p>
 </div>
 </div>
 <hr />
@@ -1490,10 +1602,11 @@ Modéstia como Virtude Epistêmica</a></li>
 <hr />
 <h2 id="introdução-o-sonho-de-fechar-a-matemática">Introdução: O Sonho
 de Fechar a Matemática</h2>
-<p>No início do século XX, uma parte importante da matemática perseguia
-uma ambição que hoje parece quase excessiva: transformar toda a
-disciplina em um edifício formal no qual cada verdade pudesse, em
-princípio, ser alcançada por regras explícitas. <a
+<p>No início do século XX, formulada com rigor por David Hilbert e
+Wilhelm Ackermann [<a href="#referências">19</a>], uma parte importante
+da matemática perseguia uma ambição que hoje parece quase excessiva:
+transformar toda a disciplina em um edifício formal no qual cada verdade
+pudesse, em princípio, ser alcançada por regras explícitas. <a
 href="https://en.wikipedia.org/wiki/David_Hilbert">David Hilbert</a> foi
 a figura central desse projeto. A matemática deveria ser consistente, de
 modo que uma proposição e sua negação não pudessem ser ambas
@@ -1530,10 +1643,33 @@ em metáfora universal.</p>
 <hr />
 <h2 id="i-quando-a-matemática-aprende-a-falar-de-si-mesma">I. Quando a
 Matemática Aprende a Falar de Si Mesma</h2>
+<div class="pull-quote callout-quote">
+<div class="quote-text">
+<p>A matemática conseguiu demonstrar rigorosamente por que ela jamais
+poderá provar tudo dentro de si mesma.</p>
+</div>
+<div class="quote-attribution">
+<p>— Kurt Gödel (1931)</p>
+</div>
+</div>
+<div class="box callout-abstract">
+<div class="box-title">
+<p>A Incompletude de Gödel em Uma Frase</p>
+</div>
+<p>Em qualquer sistema formal consistente capaz de articular aritmética
+elementar, existem proposições verdadeiras que o sistema é incapaz de
+demonstrar usando apenas seus próprios axiomas.</p>
+</div>
+<p><picture><source srcset="../assets/media/godel-turing-e-os-limites-da-computacao_fig1.webp" type="image/webp"><img
+src="../assets/media/godel-turing-e-os-limites-da-computacao_fig1.png"
+alt="Infográfico: A Genealogia dos Limites Formais — de Hilbert à Computação Universal" /></picture></p>
+<p><em>Figura 1. A genealogia dos limites formais da razão
+computacional: do otimismo axiomático de Hilbert à incompletude de Gödel
+e à indecidibilidade da Máquina de Turing.</em></p>
 <p>Antes de Gödel, <a
-href="https://en.wikipedia.org/wiki/Georg_Cantor">Georg Cantor</a> já
-havia mostrado a força de uma técnica que se tornaria recorrente na
-lógica do século XX. Em seu <a
+href="https://en.wikipedia.org/wiki/Georg_Cantor">Georg Cantor</a> [<a
+href="#referências">4</a>] já havia mostrado a força de uma técnica que
+se tornaria recorrente na lógica do século XX. Em seu <a
 href="https://en.wikipedia.org/wiki/Cantor%27s_diagonal_argument">argumento
 diagonal</a>, Cantor supõe que todos os números reais de um intervalo
 foram colocados em uma lista. Em seguida, percorre a diagonal dessa
@@ -1564,9 +1700,13 @@ representar uma porção adequada da aritmética, provar essa sentença sob
 as hipóteses relevantes de consistência, cria-se a contradição que a
 construção foi desenhada para expor. Se não a prova, permanece uma
 sentença que o sistema não resolve internamente. O primeiro teorema de
-incompletude não diz que a matemática inteira é misteriosa; diz que
-sistemas dessa classe não podem reunir, ao mesmo tempo, toda a
-expressividade desejada e uma completude formal irrestrita.</p>
+incompletude [<a href="#referências">1</a>], [<a
+href="#referências">11</a>], [<a href="#referências">15</a>], cuja
+exposição analítica canônica foi formulada por Ernest Nagel e James
+Newman [<a href="#referências">8</a>], não diz que a matemática inteira
+é misteriosa; diz que sistemas dessa classe não podem reunir, ao mesmo
+tempo, toda a expressividade desejada e uma completude formal
+irrestrita.</p>
 <p>Isso é mais forte do que descobrir uma conjectura particularmente
 difícil. Uma conjectura aberta pode estar à espera de uma técnica que
 ainda não inventamos. A incompletude afirma que, para qualquer sistema
@@ -1603,11 +1743,21 @@ para falar, de maneira codificada, sobre si mesmo.</p>
 <hr />
 <h2 id="ii-turing-transforma-o-mesmo-limite-em-uma-máquina">II. Turing
 Transforma o Mesmo Limite em uma Máquina</h2>
+<div class="box callout-example">
+<div class="box-title">
+<p>O Problema da Parada de Turing</p>
+</div>
+<p>Turing demonstrou que não existe algoritmo geral capaz de inspecionar
+qualquer programa arbitrário com suas entradas e dizer com certeza se
+ele eventualmente terminará ou entrará em um loop infinito.</p>
+</div>
 <p>Quando <a href="https://en.wikipedia.org/wiki/Alan_Turing">Alan
 Turing</a> publicou, em 1936, o artigo <a
 href="https://en.wikipedia.org/wiki/On_Computable_Numbers,_with_an_Application_to_the_Entscheidungsproblem"><em>On
 Computable Numbers, with an Application to the
-Entscheidungsproblem</em></a>, a pergunta parecia diferente. Em vez de
+Entscheidungsproblem</em></a> [<a href="#referências">2</a>], ao lado
+dos trabalhos contemporâneos de Alonzo Church sobre o cálculo lambda [<a
+href="#referências">3</a>], a pergunta parecia diferente. Em vez de
 perguntar o que pode ser provado, Turing perguntou o que significa
 executar um procedimento mecânico. Sua máquina abstrata — fita,
 símbolos, cabeça de leitura e um conjunto finito de regras — era
@@ -1619,24 +1769,28 @@ Turing</a> não é importante porque computadores reais tenham uma fita
 infinita. É importante porque fornece um modelo extremamente simples da
 computação efetiva. A <a
 href="https://en.wikipedia.org/wiki/Church%E2%80%93Turing_thesis">Tese
-de Church–Turing</a> sustenta que qualquer procedimento efetivamente
-calculável pode ser representado por modelos equivalentes de computação.
-A tese não é um teorema matemático sobre o mundo físico; é uma afirmação
-sobre a extensão do conceito de procedimento efetivo, apoiada pela
-convergência de formalizações independentes.</p>
+de Church–Turing</a> [<a href="#referências">13</a>], [<a
+href="#referências">17</a>], formalizada em livros-texto contemporâneos
+por Michael Sipser [<a href="#referências">10</a>] e na literatura
+canônica sobre máquinas universais [<a href="#referências">16</a>],
+sustenta que qualquer procedimento efetivamente calculável pode ser
+representado por modelos equivalentes de computação. A tese não é um
+teorema matemático sobre o mundo físico; é uma afirmação sobre a
+extensão do conceito de procedimento efetivo, apoiada pela convergência
+de formalizações independentes.</p>
 <p>Com essa linguagem em mãos, Turing mostrou que o Entscheidungsproblem
 não podia ter a solução geral que Hilbert esperava. Uma forma moderna de
 enxergar o resultado é pelo <a
 href="https://en.wikipedia.org/wiki/Halting_problem">problema da
-parada</a>. Suponha que exista um programa universal <span
-class="math inline">\(H(P,I)\)</span> capaz de dizer, para qualquer
-programa <span class="math inline">\(P\)</span> e entrada <span
-class="math inline">\(I\)</span>, se a execução terminará. Poderíamos
-então construir outro programa, <span class="math inline">\(D\)</span>,
-que recebe um programa como entrada, pergunta a <span
-class="math inline">\(H\)</span> o que esse programa fará quando receber
-a si mesmo e faz deliberadamente o contrário: se <span
-class="math inline">\(H\)</span> prevê que ele para, <span
+parada</a> [<a href="#referências">12</a>]. Suponha que exista um
+programa universal <span class="math inline">\(H(P,I)\)</span> capaz de
+dizer, para qualquer programa <span class="math inline">\(P\)</span> e
+entrada <span class="math inline">\(I\)</span>, se a execução terminará.
+Poderíamos então construir outro programa, <span
+class="math inline">\(D\)</span>, que recebe um programa como entrada,
+pergunta a <span class="math inline">\(H\)</span> o que esse programa
+fará quando receber a si mesmo e faz deliberadamente o contrário: se
+<span class="math inline">\(H\)</span> prevê que ele para, <span
 class="math inline">\(D\)</span> entra em loop; se <span
 class="math inline">\(H\)</span> prevê que ele entra em loop, <span
 class="math inline">\(D\)</span> para.</p>
@@ -1686,22 +1840,23 @@ materiais para fabricar o contraexemplo.</p>
 <p>Essa família de argumentos ajuda a entender por que alguns limites
 posteriores parecem parentes próximos. A <a
 href="https://en.wikipedia.org/wiki/Kolmogorov_complexity">complexidade
-de Kolmogorov</a>, por exemplo, mede o tamanho do menor programa capaz
-de gerar uma sequência. Há sequências que não possuem descrição
-substancialmente menor do que elas mesmas: são incompressíveis nesse
-sentido algorítmico. Mais importante para este ensaio, <span
-class="math inline">\(K(x)\)</span> não pode ser computada por um
-algoritmo geral. Se pudéssemos identificar mecanicamente a menor
+de Kolmogorov</a> [<a href="#referências">14</a>], por exemplo, mede o
+tamanho do menor programa capaz de gerar uma sequência. Há sequências
+que não possuem descrição substancialmente menor do que elas mesmas: são
+incompressíveis nesse sentido algorítmico. Mais importante para este
+ensaio, <span class="math inline">\(K(x)\)</span> não pode ser computada
+por um algoritmo geral. Se pudéssemos identificar mecanicamente a menor
 descrição de toda sequência, resolveríamos problemas que reencontram a
 barreira da parada.</p>
 <p><a href="https://en.wikipedia.org/wiki/Gregory_Chaitin">Gregory
-Chaitin</a> empurrou essa ligação adiante com versões informacionais da
-incompletude e com o número <span class="math inline">\(\Omega\)</span>,
-que codifica a probabilidade de parada de programas num modelo universal
-prefix-free. O ponto filosófico não é que “o universo é aleatório”, e
-sim que até uma quantidade precisamente definida pode conter informação
-que não pode ser extraída por um procedimento algorítmico geral.
-Definibilidade e computabilidade não são a mesma coisa.</p>
+Chaitin</a> [<a href="#referências">9</a>] empurrou essa ligação adiante
+com versões informacionais da incompletude e com o número <span
+class="math inline">\(\Omega\)</span>, que codifica a probabilidade de
+parada de programas num modelo universal prefix-free. O ponto filosófico
+não é que “o universo é aleatório”, e sim que até uma quantidade
+precisamente definida pode conter informação que não pode ser extraída
+por um procedimento algorítmico geral. Definibilidade e computabilidade
+não são a mesma coisa.</p>
 <p>Há uma intuição poderosa aqui: <strong>mais poder expressivo não
 elimina necessariamente o limite; às vezes cria o espaço em que o limite
 pode ser formulado</strong>. Um sistema fraco demais para falar sobre
@@ -1760,14 +1915,15 @@ e a existência matemática de um modelo de hipercomputação não concede
 automaticamente ao universo um computador desse tipo.</p>
 <p>O cuidado mais importante, porém, está nas extrapolações para a
 mente. <a href="https://en.wikipedia.org/wiki/Roger_Penrose">Roger
-Penrose</a> e, antes dele, J. R. Lucas argumentaram que matemáticos
-humanos conseguem reconhecer a verdade de sentenças que um sistema
-formal correspondente não consegue provar e que, portanto, a mente não
-pode ser inteiramente algorítmica. O argumento é provocador, mas a
-passagem não é obrigatória. Para aplicá-lo, seria preciso identificar a
-mente com um sistema formal específico, estabelecer a consistência
-relevante desse sistema e justificar que o matemático realmente dispõe
-de um ponto de vista que a máquina não poderia reproduzir. <a
+Penrose</a> [<a href="#referências">7</a>] e, antes dele, J. R. Lucas
+argumentaram que matemáticos humanos conseguem reconhecer a verdade de
+sentenças que um sistema formal correspondente não consegue provar e
+que, portanto, a mente não pode ser inteiramente algorítmica. O
+argumento é provocador, mas a passagem não é obrigatória. Para
+aplicá-lo, seria preciso identificar a mente com um sistema formal
+específico, estabelecer a consistência relevante desse sistema e
+justificar que o matemático realmente dispõe de um ponto de vista que a
+máquina não poderia reproduzir. <a
 href="https://en.wikipedia.org/wiki/Hilary_Putnam">Hilary Putnam</a>, <a
 href="https://en.wikipedia.org/wiki/Daniel_Dennett">Daniel Dennett</a> e
 outros atacaram justamente essas pontes.</p>
@@ -1776,6 +1932,14 @@ contraste, uma licença para declarar a mente mágica.</p>
 <hr />
 <h2 id="v-inteligência-artificial-diante-de-um-limite-formal">V.
 Inteligência Artificial Diante de um Limite Formal</h2>
+<div class="box callout-note">
+<div class="box-title">
+<p>A Cartografia da Razão Diante da Inteligência Artificial</p>
+</div>
+<p>Gödel e Turing não destruíram a matemática nem a computação: deram à
+razão humana o seu mapa geográfico mais nobre, demarcando para sempre a
+fronteira entre o que é computável e o que é verdadeiro.</p>
+</div>
 <p>É natural perguntar o que tudo isso significa para a inteligência
 artificial. Uma IA implementada em computadores convencionais não ganha,
 por ser muito capaz, um algoritmo geral para o problema da parada. Um
@@ -1809,7 +1973,10 @@ trabalho entre geração heurística e verificação formal: a máquina
 propõe, um kernel restrito verifica; quando a prova não cabe no sistema
 atual, mudam-se axiomas, métodos ou objetivos de forma explícita.</p>
 <p><a href="https://en.wikipedia.org/wiki/Douglas_Hofstadter">Douglas
-Hofstadter</a> oferece uma leitura diferente e mais metafórica. Em <a
+Hofstadter</a> em <em>Gödel, Escher, Bach</em> [<a
+href="#referências">5</a>] e <em>I Am a Strange Loop</em> [<a
+href="#referências">6</a>] oferece uma leitura diferente e mais
+metafórica. Em <a
 href="https://en.wikipedia.org/wiki/G%C3%B6del,_Escher,_Bach"><em>Gödel,
 Escher, Bach</em></a> e <a
 href="https://en.wikipedia.org/wiki/I_Am_a_Strange_Loop"><em>I Am a
@@ -1857,9 +2024,12 @@ progresso indefinido com fechamento final.</p>
 um horizonte. Caminhar aumenta enormemente o território visível, e nada
 nos obriga a parar. O erro seria imaginar que distância percorrida e
 desaparecimento do horizonte são a mesma coisa.</p>
-<p>Essa é a modéstia que Gödel e Turing justificam: não a desistência
-diante da razão, mas a recusa em pedir a ela uma garantia que a própria
-razão demonstrou não poder fornecer em todos os casos.</p>
+<p>Essa é a modéstia epistêmica que Gödel e Turing ensinam. Ela não é
+niilismo nem desespero; é o reconhecimento sóbrio de que qualquer
+sistema que pretenda fundar-se a si mesmo esbarra no trilema de
+Münchhausen [<a href="#referências">20</a>]. A razão humana torna-se
+mais forte, e não mais fraca, quando compreende com precisão matemática
+onde terminam suas garantias formais.</p>
 <hr />
 <h2 id="referências">Referências</h2>
 <p>[1] Gödel, K., <em>Über formal unentscheidbare Sätze der Principia
@@ -2243,6 +2413,238 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   }, {passive:false});
 })();
 </script>
+<script>
+/* Citações Inline e Popup de Referência no Padrão Substack */
+(function(){
+  "use strict";
+  function initFootnotes(){
+    var refHeading = null;
+    var h2s = document.querySelectorAll("h2");
+    for (var i = 0; i < h2s.length; i++) {
+      var hText = (h2s[i].textContent || "").trim().toLowerCase();
+      if (hText === "referências" || hText === "referencias") {
+        refHeading = h2s[i];
+        break;
+      }
+    }
+    if (!refHeading) return;
+
+    // 1. Mapeia cada entrada da seção ## Referências
+    var refMap = Object.create(null);
+    var p = refHeading.nextElementSibling;
+    while (p && !p.tagName.startsWith("H")) {
+      if (p.tagName === "P") {
+        var text = (p.textContent || "").trim();
+        var m = text.match(/^\[(\d+)\]/);
+        if (m) {
+          var num = m[1];
+          if (!p.id) p.id = "ref-" + num;
+          var clone = p.cloneNode(true);
+          if (clone.firstChild && clone.firstChild.nodeType === Node.TEXT_NODE) {
+            clone.firstChild.textContent = clone.firstChild.textContent.replace(/^\[\d+\]\s*/, "");
+          }
+          refMap[num] = {
+            num: num,
+            html: clone.innerHTML.trim()
+          };
+        }
+      }
+      p = p.nextElementSibling;
+    }
+
+    if (Object.keys(refMap).length === 0) return;
+
+    // 2. Localiza e transforma chamadas inline no corpo
+    var content = document.querySelector("main.content") || document.body;
+    var links = content.querySelectorAll('a[href^="#refer"]');
+    var anchors = [];
+
+    links.forEach(function(link){
+      if (link.closest("h2#referências ~ p, h2#referencias ~ p, nav, #sumário, #sumario")) return;
+      var rawText = (link.textContent || "").trim();
+      var num = rawText.replace(/[^\d]/g, "");
+      if (!num) return;
+      if (!refMap[num]) return;
+
+      // Limpa colchetes literais residuais [ e ] gerados antes/depois do link
+      var prev = link.previousSibling;
+      if (prev && prev.nodeType === Node.TEXT_NODE && prev.textContent.trimEnd().endsWith("[")) {
+        prev.textContent = prev.textContent.trimEnd().slice(0, -1);
+      }
+      var next = link.nextSibling;
+      if (next && next.nodeType === Node.TEXT_NODE && next.textContent.trimStart().startsWith("]")) {
+        next.textContent = next.textContent.trimStart().slice(1);
+      }
+
+      link.textContent = num;
+      link.classList.add("ref-cite");
+      link.setAttribute("data-ref", num);
+      link.setAttribute("role", "button");
+      link.setAttribute("aria-haspopup", "dialog");
+      link.setAttribute("aria-expanded", "false");
+      link.setAttribute("tabindex", "0");
+      anchors.push(link);
+    });
+
+    if (anchors.length === 0) return;
+
+    // 3. Cria elemento único do popup
+    var popup = document.createElement("div");
+    popup.id = "ref-popup";
+    popup.className = "ref-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-hidden", "true");
+    popup.innerHTML =
+      '<div class="ref-popup-inner">' +
+        '<div class="ref-popup-header">' +
+          '<span class="ref-popup-num"></span>' +
+          '<button class="ref-popup-close" aria-label="Fechar">\u00d7</button>' +
+        '</div>' +
+        '<div class="ref-popup-body"></div>' +
+      '</div>';
+    document.body.appendChild(popup);
+
+    var popupNum = popup.querySelector(".ref-popup-num");
+    var popupBody = popup.querySelector(".ref-popup-body");
+    var popupClose = popup.querySelector(".ref-popup-close");
+
+    var currentAnchor = null;
+    var hoverTimer = null;
+    var closeTimer = null;
+
+    function openPopup(anchor){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      var num = anchor.getAttribute("data-ref");
+      var data = refMap[num];
+      if (!data) return;
+
+      if (currentAnchor && currentAnchor !== anchor) {
+        currentAnchor.setAttribute("aria-expanded", "false");
+      }
+      currentAnchor = anchor;
+      anchor.setAttribute("aria-expanded", "true");
+
+      popupNum.textContent = "Referência [" + num + "]";
+      popupBody.innerHTML = data.html;
+
+      popupBody.querySelectorAll("a").forEach(function(a){
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      });
+
+      popup.classList.add("is-active");
+      popup.setAttribute("aria-hidden", "false");
+      positionPopup(anchor);
+    }
+
+    function closePopup(){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      if (!currentAnchor) return;
+      currentAnchor.setAttribute("aria-expanded", "false");
+      currentAnchor = null;
+      popup.classList.remove("is-active");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function positionPopup(anchor){
+      var rect = anchor.getBoundingClientRect();
+      var popRect = popup.getBoundingClientRect();
+      var popW = popRect.width || 340;
+      var popH = popRect.height || 110;
+
+      var top;
+      if (rect.top >= popH + 12) {
+        top = rect.top - popH - 6;
+      } else {
+        top = rect.bottom + 6;
+      }
+
+      var left = rect.left + (rect.width / 2) - (popW / 2);
+      var maxLeft = window.innerWidth - popW - 12;
+      left = Math.max(12, Math.min(left, maxLeft));
+
+      popup.style.top = Math.round(top) + "px";
+      popup.style.left = Math.round(left) + "px";
+    }
+
+    anchors.forEach(function(anchor){
+      anchor.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (currentAnchor === anchor) {
+          closePopup();
+        } else {
+          openPopup(anchor);
+        }
+      });
+
+      anchor.addEventListener("mouseenter", function(){
+        clearTimeout(closeTimer);
+        hoverTimer = setTimeout(function(){
+          openPopup(anchor);
+        }, 120);
+      });
+
+      anchor.addEventListener("mouseleave", function(){
+        clearTimeout(hoverTimer);
+        closeTimer = setTimeout(function(){
+          closePopup();
+        }, 220);
+      });
+
+      anchor.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (currentAnchor === anchor) closePopup(); else openPopup(anchor);
+        } else if (e.key === "Escape") {
+          closePopup();
+        }
+      });
+    });
+
+    popup.addEventListener("mouseenter", function(){
+      clearTimeout(closeTimer);
+    });
+    popup.addEventListener("mouseleave", function(){
+      closeTimer = setTimeout(function(){
+        closePopup();
+      }, 220);
+    });
+
+    popupClose.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+    });
+
+    document.addEventListener("click", function(e){
+      if (!popup.contains(e.target) && (!currentAnchor || !currentAnchor.contains(e.target))) {
+        closePopup();
+      }
+    });
+
+    window.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closePopup();
+    });
+
+    window.addEventListener("resize", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+
+    window.addEventListener("scroll", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFootnotes);
+  } else {
+    initFootnotes();
+  }
+})();
+</script>
 
 <header class="sb-bar">
   <a class="sb-brand" href="../index.html"><span class="sb-mark" aria-hidden="true"></span>Second Brain</a>
@@ -2267,7 +2669,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
 </dialog>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
 <div class="sb-tags"><span class="sb-tag">Filosofia</span><span class="sb-tag">Lógica</span><span class="sb-tag">Computação</span><span class="sb-tag">Inteligência-Artificial</span><span class="sb-tag">Matemática</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="xadrez-computacional-do-brute-force-as-redes-neurais.html"><strong>Xadrez Computacional — do Brute-Force às Redes Neurais</strong><span>O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo ~2900).</span></a><a class="sb-related-card" href="chatgpts-e-zumbis-filosoficos-uma-reflexao-sobre-consciencia-e-inteligencia-artificial.html"><strong>ChatGPTs e Zumbis Filosóficos — Uma Reflexão Sobre Consciência e Inteligência Artificial</strong><span>O experimento mental do zumbi filosófico é aplicado aos modelos de linguagem para mostrar que o problema da consciência artificial é uma versão extrema do problema das outras mentes. Turing, Searle, Chalmers, Dennett e teorias formais entram como respostas concorrentes à mesma pergunta: que evidência nos autorizaria a dizer que existe alguém do outro lado?</span></a><a class="sb-related-card" href="neo-chauvinismo-da-cognicao-antropocentrica.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a><a class="sb-related-card" href="instanciar-e-simular-uma-investigacao-sobre-a-natureza-das-leis-naturais.html"><strong>Instanciar e Simular — uma investigação sobre a natureza das leis naturais</strong><span>O ensaio investiga a &quot;portabilidade estrutural&quot; das leis naturais (a propriedade que permite que a lei da gravidade funcione igualmente em simulações e na realidade), percorrendo dezesseis posições de Aristóteles a Bostrom. Apenas leis genuínas suportam contrafactuais e são portáveis para substratos alternativos, com implicações diretas para a hipótese da simulação e a filosofia da mente.</span></a><a class="sb-related-card" href="cerebros-de-boltzmann-epistemologia-e-o-limite-ontologico-da-fisica.html"><strong>Cérebros de Boltzmann, Epistemologia e o Limite Ontológico da Física</strong><span>A possibilidade termodinâmica de que uma mente surja espontaneamente de uma flutuação entrópica é usada como bisturi filosófico para examinar onde epistemologia e ontologia se fundem. Percorrendo Hume, Kant e a cosmologia contemporânea, o ensaio mostra que a hipótese não é uma curiosidade: é um critério eliminatório de modelos cosmológicos inteiros.</span></a><a class="sb-related-card" href="monte-carlo-simular-e-instanciar-multiversos-computacionais-e-os-limites-do-real.html"><strong>Monte Carlo, Simular e Instanciar — Multiversos Computacionais e os Limites do Real</strong><span>O método de Monte Carlo calcula milhares de futuros possíveis para descartar quase todos. O ensaio toma essa rotina como teste para uma pergunta antiga da metafísica: simular é instanciar? Confronta o universo matemático de Tegmark com a leitura física da existência, examina o paralelo imperfeito com os muitos-mundos de Everett e chega ao problema ético de apagar uma simulação.</span></a><a class="sb-related-card" href="epistemologia-e-os-limites-do-conhecimento-de-platao-a-mecanica-quantica.html"><strong>Epistemologia e os Limites do Conhecimento — de Platão à Mecânica Quântica</strong><span>O arco completo da epistemologia ocidental (de Platão a Hume, Popper, Quine, Gödel e às implicações da mecânica quântica) é percorrido para mostrar que os limites do conhecimento não são curiosidades acadêmicas: são restrições ativas sobre o tipo de ciência que podemos fazer e o tipo de universo que podemos conhecer.</span></a><a class="sb-related-card" href="ontologia-e-metafisica-da-existencia-de-deus-a-existencia-do-universo.html"><strong>Ontologia e Metafísica — Da Existência de Deus à Existência do Universo</strong><span>A pergunta de Leibniz — por que existe algo em vez de nada? — é tratada como um problema sobre onde cada visão de mundo permite que a cadeia de explicações termine. Deus, fatos brutos, multiversos e necessidade matemática oferecem pontos de parada diferentes, mas todos pagam um preço. O ensaio pergunta se a exigência de uma explicação última pertence ao universo ou à razão humana.</span></a><a class="sb-related-card" href="autopoiese-consciencia-e-os-limites-do-vivo.html"><strong>Autopoiese, Consciência e os Limites do Vivo</strong><span>A autopoiese (a auto-produção contínua dos próprios componentes como marca definitória da vida) é examinada em profundidade e projetada sobre o debate da consciência artificial. Se a vida é um processo e não uma substância, o que isso exige de um sistema artificial para ser considerado cognoscente?</span></a><a class="sb-related-card" href="metodos-matematicos-e-computacionais-na-engenharia-aeroespacial.html"><strong>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</strong><span>Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</span></a></div></section>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="xadrez-computacional-do-brute-force-as-redes-neurais.html"><strong>Xadrez Computacional — do Brute-Force às Redes Neurais</strong><span>O ensaio documenta a viagem do autor pelo mundo do xadrez computacional durante o desenvolvimento do Zchezz, seu próprio engine de xadrez. De Shannon e Turing ao AlphaZero, cada geração de técnicas (bitboards, poda alfa-beta, redes NNUE, reinforcement learning) é explorada em duas camadas: intuição e implementação real, revelando como o Zchezz subiu nos ombros de setenta anos de gigantes para atingir força de jogo estimada acima do nível de grande mestre humano (Elo aproximadamente 2900).</span></a><a class="sb-related-card" href="chatgpts-e-zumbis-filosoficos-uma-reflexao-sobre-consciencia-e-inteligencia-artificial.html"><strong>ChatGPTs e Zumbis Filosóficos — Uma Reflexão Sobre Consciência e Inteligência Artificial</strong><span>O experimento mental do zumbi filosófico é aplicado aos modelos de linguagem para mostrar que o problema da consciência artificial é uma versão extrema do problema das outras mentes. Turing, Searle, Chalmers, Dennett e teorias formais entram como respostas concorrentes à mesma pergunta: que evidência nos autorizaria a dizer que existe alguém do outro lado?</span></a><a class="sb-related-card" href="neo-chauvinismo-da-cognicao-antropocentrica.html"><strong>Neo-chauvinismo da Cognição Antropocêntrica</strong><span>O ensaio sustenta que a resistência filosófica à cognição de máquinas repete o gesto histórico de negar consciência ao outro sempre que esse reconhecimento ameaçava privilégios estabelecidos. Percorre Descartes, Searle, Penrose e Chalmers para mostrar que nenhum argumento contra a cognição artificial sobrevive ao seu próprio padrão epistêmico quando aplicado simetricamente à cognição humana.</span></a><a class="sb-related-card" href="instanciar-e-simular-uma-investigacao-sobre-a-natureza-das-leis-naturais.html"><strong>Instanciar e Simular — uma investigação sobre a natureza das leis naturais</strong><span>O ensaio investiga a &quot;portabilidade estrutural&quot; das leis naturais (a propriedade que permite que a lei da gravidade funcione igualmente em simulações e na realidade), percorrendo dezesseis posições de Aristóteles a Bostrom. Apenas leis genuínas suportam contrafactuais e são portáveis para substratos alternativos, com implicações diretas para a hipótese da simulação e a filosofia da mente.</span></a><a class="sb-related-card" href="cerebros-de-boltzmann-epistemologia-e-o-limite-ontologico-da-fisica.html"><strong>Cérebros de Boltzmann, Epistemologia e o Limite Ontológico da Física</strong><span>A possibilidade termodinâmica de que uma mente surja espontaneamente de uma flutuação entrópica é usada como bisturi filosófico para examinar onde epistemologia e ontologia se fundem. Percorrendo Hume, Kant e a cosmologia contemporânea, o ensaio mostra que a hipótese não é uma curiosidade: é um critério eliminatório de modelos cosmológicos inteiros.</span></a><a class="sb-related-card" href="monte-carlo-simular-e-instanciar-multiversos-computacionais-e-os-limites-do-real.html"><strong>Monte Carlo, Simular e Instanciar — Multiversos Computacionais e os Limites do Real</strong><span>O método de Monte Carlo calcula milhares de futuros possíveis para descartar quase todos. O ensaio toma essa rotina como teste para uma pergunta antiga da metafísica: simular é instanciar? Confronta o universo matemático de Tegmark com a leitura física da existência, examina o paralelo imperfeito com os muitos-mundos de Everett e chega ao problema ético de apagar uma simulação.</span></a><a class="sb-related-card" href="epistemologia-e-os-limites-do-conhecimento-de-platao-a-mecanica-quantica.html"><strong>Epistemologia e os Limites do Conhecimento — de Platão à Mecânica Quântica</strong><span>O arco completo da epistemologia ocidental (de Platão a Hume, Popper, Quine, Gödel e às implicações da mecânica quântica) é percorrido para mostrar que os limites do conhecimento não são curiosidades acadêmicas: são restrições ativas sobre o tipo de ciência que podemos fazer e o tipo de universo que podemos conhecer.</span></a><a class="sb-related-card" href="ontologia-e-metafisica-da-existencia-de-deus-a-existencia-do-universo.html"><strong>Ontologia e Metafísica — Da Existência de Deus à Existência do Universo</strong><span>A pergunta de Leibniz — por que existe algo em vez de nada? — é tratada como um problema sobre onde cada visão de mundo permite que a cadeia de explicações termine. Deus, fatos brutos, multiversos e necessidade matemática oferecem pontos de parada diferentes, mas todos pagam um preço. O ensaio pergunta se a exigência de uma explicação última pertence ao universo ou à razão humana.</span></a><a class="sb-related-card" href="autopoiese-consciencia-e-os-limites-do-vivo.html"><strong>Autopoiese, Consciência e os Limites do Vivo</strong><span>A autopoiese (a auto-produção contínua dos próprios componentes como marca definitória da vida) é examinada em profundidade e projetada sobre o debate da consciência artificial. Se a vida é um processo e não uma substância, o que isso exige de um sistema artificial para ser considerado cognoscente?</span></a><a class="sb-related-card" href="metodos-matematicos-e-computacionais-na-engenharia-aeroespacial.html"><strong>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</strong><span>Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</span></a></div></section>
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do ensaio">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>
