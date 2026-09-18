@@ -1506,7 +1506,7 @@ class="math inline">\(C_P\)</span>)</a></li>
 <li><a
 href="#17-coeficiente-de-potência-aerodinâmica-no-ar-c_pmathrmair">17.
 Coeficiente de Potência Aerodinâmica no Ar (<span
-class="math inline">\(C_{P\mathrm{air}}\)</span>)</a></li>
+class="math inline">\(C_{Pair}\)</span>)</a></li>
 <li><a href="#18-figura-de-mérito-fm-e-fator-de-potência-induzida">18.
 Figura de Mérito (<span class="math inline">\(FM\)</span>) e fator de
 potência induzida</a></li>
@@ -1536,7 +1536,7 @@ class="math inline">\(C_{Qi}\)</span>, <span
 class="math inline">\(C_{Q0}\)</span> e <span
 class="math inline">\(C_Q\)</span>, potência mecânica no eixo <span
 class="math inline">\(C_P\)</span> e potência aerodinâmica no ar <span
-class="math inline">\(C_{P\mathrm{air}}\)</span>, estabelecendo com
+class="math inline">\(C_{Pair}\)</span>, estabelecendo com
 rigor matemático a sua derivação a partir de primeiros princípios
 (<em>first principles</em>).</p>
 <p>A formulação combina a <a
@@ -1669,18 +1669,14 @@ velocidade axial externa opõe-se ao downwash:</p>
 class="math inline">\(\lambda\)</span> em <span
 class="math inline">\(\alpha &gt; 0\)</span> aumenta o ângulo de ataque
 efetivo das pás e eleva a tração gerada para um mesmo passo de pá.</p>
-<h3 id="distinção-entre-referenciais-cubo-vs.-massa-de-ar">Distinção entre referenciais: cubo vs. massa de ar</h3>
-<p>A análise energética do rotor exige distinguir o trabalho mecânico no eixo do trabalho associado à translação do rotor através do ar.</p>
-<ol type="1">
-<li><p>No referencial acoplado ao cubo, o torque de acionamento realiza trabalho à taxa <span class="math inline">\(P_{\mathrm{shaft}}=Q\Omega\)</span>.</p></li>
-<li><p>No referencial inercial da massa de ar, além da rotação existe trabalho de translação:</p>
+<h3 id="potência-no-eixo-e-potência-aerodinâmica">Potência no eixo e potência aerodinâmica</h3>
+<p>O trabalho mecânico fornecido pelo eixo é</p>
 <p><span class="math display">\[
-P_{\mathrm{air}}=P_{\mathrm{shaft}}+V_xH-V_zT.
-\]</span></p></li>
-</ol>
-<p>Em voo puramente horizontal, <span class="math inline">\(V_z=0\)</span>, recupera-se <span class="math inline">\(P_{\mathrm{air}}=P_{\mathrm{shaft}}+V_xH\)</span>.</p>
+P_{\mathrm{shaft}}=Q\Omega.
+\]</span></p>
+<p>A potência aerodinâmica no ar será denotada por <span class="math inline">\(P_{\mathrm{air}}\)</span> e calculada pelo balanço energético na Seção 17.</p>
 <h3 id="normalização-dos-coeficientes">Normalização dos coeficientes</h3>
-<p>Os coeficientes aerodinâmicos usam <span class="math inline">\(A=\pi R^2\)</span> e a velocidade de ponta <span class="math inline">\(\Omega R\)</span>:</p>
+<p>Os coeficientes aerodinâmicos usam a área do disco <span class="math inline">\(A=\pi R^2\)</span> e a velocidade de ponta <span class="math inline">\(\Omega R\)</span>:</p>
 <p><span class="math display">\[
 C_T=\frac{T}{\rho A(\Omega R)^2},\qquad
 C_H=\frac{H}{\rho A(\Omega R)^2},\qquad
@@ -1691,15 +1687,14 @@ C_{Mx}=\frac{M_x}{\rho A(\Omega R)^2R},\qquad
 C_{My}=\frac{M_y}{\rho A(\Omega R)^2R},\qquad
 C_Q=\frac{Q}{\rho A(\Omega R)^2R}.
 \]</span></p>
-<p>A potência mecânica no eixo é</p>
+<p>Para potência,</p>
 <p><span class="math display">\[
 C_P=\frac{P_{\mathrm{shaft}}}{\rho A(\Omega R)^3}=C_Q,
 \]</span></p>
-<p>enquanto a potência aerodinâmica no ar, na notação <code>CPair</code>, é</p>
+<p>e</p>
 <p><span class="math display">\[
-\boxed{C_{Pair}=C_Q+\mu C_H}.
+C_{Pair}=\frac{P_{\mathrm{air}}}{\rho A(\Omega R)^3}.
 \]</span></p>
-<p>O termo <span class="math inline">\(\mu C_H\)</span> não pertence à potência de eixo; ele representa o trabalho de translação longitudinal. O termo de subida <span class="math inline">\(+\mu_zC_T\)</span> já está embutido em <span class="math inline">\(C_Q\)</span> e aparece explicitamente quando a mesma potência é escrita pela rota do balanço energético.</p>
 <h2 id="3-geometria-da-pá-coordenadas-radiais-e-solidez">3. Geometria da
 pá, coordenadas radiais e solidez</h2>
 <h3
@@ -1936,47 +1931,47 @@ dC_{Fi} = \frac{N\,c(\bar{r})a(\bar{r})}{4\pi^2 R}
 \left[\theta(\bar{r})\lambda_d u_T - \lambda_d^2\right] d\bar{r}\,d\psi.
 \]</span></p>
 <h3 id="fechamento-vetorial-de-arrasto-de-perfil">Fechamento vetorial de arrasto de perfil</h3>
-<p>O arrasto de perfil deve ser tratado como uma força associada ao vetor de velocidade local. Definindo</p>
+<p>O arrasto de perfil é alinhado com a velocidade relativa local. Definindo</p>
 <p><span class="math display">\[
-u_T=\bar r+\mu\sin\psi,\qquad u_R=\mu\cos\psi,
+u_T=\bar r+\mu\sin\psi,
+\qquad
+u_R=\mu\cos\psi,
 \]</span></p>
-<p>e incluindo a componente axial imposta <span class="math inline">\(\mu_z\)</span>,</p>
+<p>e</p>
 <p><span class="math display">\[
-W=\sqrt{u_T^2+u_R^2+\mu_z^2}.
+W=\sqrt{u_T^2+u_R^2+\mu_z^2},
 \]</span></p>
-<p>As projeções de profile drag são</p>
+<p>as duas projeções usadas neste trabalho são</p>
 <p><span class="math display">\[
-dC_{T0}=\frac{Nc(\bar r)}{4\pi^2R}C_dW(-\mu_z)\,d\bar r\,d\psi,
+dC_{H0}
+=
+\frac{N c(\bar r)}{4\pi^2R}
+C_dW(\bar r\sin\psi+\mu)
+\,d\bar r\,d\psi,
 \]</span></p>
+<p>e</p>
 <p><span class="math display">\[
-dC_{H0}=\frac{Nc(\bar r)}{4\pi^2R}C_dW(\bar r\sin\psi+\mu)\,d\bar r\,d\psi,
+dC_{Q0}
+=
+\frac{N c(\bar r)}{4\pi^2R}
+C_dW u_T\bar r
+\,d\bar r\,d\psi.
 \]</span></p>
-<p><span class="math display">\[
-dC_{Q0}=\frac{Nc(\bar r)}{4\pi^2R}C_dWu_T\bar r\,d\bar r\,d\psi.
-\]</span></p>
-<p>Logo,</p>
-<p><span class="math display">\[
-dC_{P0,\mathrm{air}}=dC_{Q0}+\mu dC_{H0}-\mu_zdC_{T0}
-=\frac{Nc(\bar r)}{4\pi^2R}C_dW^3\,d\bar r\,d\psi.
-\]</span></p>
-<p>A integral em <span class="math inline">\(W^3\)</span> é, portanto, uma integral de <strong>potência de perfil</strong>, não de torque de eixo.</p>
+<p>A primeira produz a força longitudinal de perfil; a segunda produz o torque de perfil no eixo. Ambas serão integradas vetorialmente.</p>
 <h2 id="6-coeficiente-de-tração-c_t-e-fechamento-do-inflow-médio">6. Coeficiente de Tração (<span class="math inline">\(C_T\)</span>) e fechamento do inflow médio</h2>
 <h3 id="formulação-integral-de-c_t">Formulação integral de <span class="math inline">\(C_T\)</span></h3>
-<p>Neste trabalho, <span class="math inline">\(C_T\)</span> tem uma definição única: é o <strong>coeficiente de tração não viscoso</strong>. A contribuição normal de profile drag é <span class="math inline">\(C_{T0}\)</span> e não é somada a <span class="math inline">\(C_T\)</span>.</p>
+<p>A força normal elementar integrada no disco fornece</p>
 <p><span class="math display">\[
 \boxed{
 C_T
 =
 \frac{1}{2\pi}
-\int_0^{2\pi}
-\int_{\bar r_0}^{1}dC_N
+\int_0^{2\pi}\int_{\bar r_0}^{1}dC_N
 =
-\frac12
-\int_{\bar r_0}^{1}
+\frac12\int_{\bar r_0}^{1}
 \frac{N\,c(\bar r)a(\bar r)}{\pi R}
-\left\langle
-\theta(\bar r)u_T^2-\lambda_d u_T
-\right\rangle_\psi d\bar r
+\left\langle\theta(\bar r)u_T^2-\lambda_d u_T\right\rangle_\psi
+d\bar r
 }.
 \]</span></p>
 <p>Com <span class="math inline">\(\lambda_d=\lambda+\lambda_i\bar r(K_x\cos\psi+K_y\sin\psi)\)</span> e <span class="math inline">\(u_T=\bar r+\mu\sin\psi\)</span>,</p>
@@ -1987,13 +1982,12 @@ C_T
 =
 \lambda\bar r+\frac12K_y\lambda_i\mu\bar r.
 \]</span></p>
-<p>Portanto,</p>
+<p>Logo,</p>
 <p><span class="math display">\[
 \boxed{
 C_T
 =
-\frac12
-\int_{\bar r_0}^{1}
+\frac12\int_{\bar r_0}^{1}
 \frac{N\,c(\bar r)}{\pi R}a(\bar r)
 \left[
 \theta(\bar r)\left(\bar r^2+\frac{\mu^2}{2}\right)
@@ -2040,47 +2034,15 @@ C_T
 \frac12\left(\lambda+\frac12K_y\lambda_i\mu\right)
 \right].
 \]</span></p>
-<h3 id="componente-normal-viscosa-c_t0">Componente normal viscosa <span class="math inline">\(C_{T0}\)</span></h3>
-<p>Quando <span class="math inline">\(\mu_z\neq0\)</span>,</p>
-<p><span class="math display">\[
-C_{T0}
-=
-\frac12\int_{\bar r_0}^{1}
-\sigma(\bar r)
-\left\langle C_dW(-\mu_z)\right\rangle_\psi d\bar r.
-\]</span></p>
-<p>Para pá retangular e expansão vetorial de baixa ordem,</p>
-<p><span class="math display">\[
-C_{T0}
-\simeq
--\frac{\sigma C_{d0}}4\mu_z(1-\bar r_0^2).
-\]</span></p>
-<p><span class="math inline">\(C_{T0}\)</span> é separado: não altera <span class="math inline">\(C_T\)</span>, não entra no inflow e não entra em <span class="math inline">\(C_{Qi}\)</span>. Neste modelo ele é usado somente na contabilização de <span class="math inline">\(C_{Pair}\)</span>.</p>
 <h3 id="fechamento-por-quantidade-de-movimento-em-escoamento-oblíquo">Fechamento por quantidade de movimento em escoamento oblíquo</h3>
-<p>Como <span class="math inline">\(C_T\)</span> já é a parcela não viscosa,</p>
 <p><span class="math display">\[
-\boxed{
-C_T
-=
-2\lambda_i\sqrt{\mu^2+(\mu_z+\lambda_i)^2}
-}.
+\boxed{C_T=2\lambda_i\sqrt{\mu^2+(\mu_z+\lambda_i)^2}}.
 \]</span></p>
-<p>Em pairado,</p>
+<p>Em pairado, <span class="math inline">\(\lambda_i=\lambda=\sqrt{C_T/2}\)</span>. Em voo horizontal nivelado,</p>
 <p><span class="math display">\[
-\lambda_i=\lambda=\sqrt{\frac{C_T}{2}}.
+\lambda_i=\sqrt{\frac{\sqrt{\mu^4+C_T^2}-\mu^2}{2}}.
 \]</span></p>
-<p>Em voo horizontal nivelado,</p>
-<p><span class="math display">\[
-\lambda_i
-=
-\sqrt{
-\frac{\sqrt{\mu^4+C_T^2}-\mu^2}{2}
-}.
-\]</span></p>
-<p>Para <span class="math inline">\(\mu\gg\lambda\)</span>,</p>
-<p><span class="math display">\[
-\lambda_i\simeq\frac{C_T}{2\mu}.
-\]</span></p>
+<p>Para <span class="math inline">\(\mu\gg\lambda\)</span>, <span class="math inline">\(\lambda_i\simeq C_T/(2\mu)\)</span>.</p>
 <hr />
 <h2 id="7-coeficiente-de-força-longitudinal-induzida-c_hi">7.
 Coeficiente de Força Longitudinal Induzida (<span
@@ -2219,42 +2181,18 @@ class="math display">\[
 C_{H0} = \frac{3}{8}\sigma C_{d0}\mu.
 \]</span></p></li>
 </ol>
-<h3
-id="comparação-com-a-aproximação-puramente-tangencial-referência">Comparação
-com a aproximação puramente tangencial (referência)</h3>
-<p>A dedução apresentada em 8.1 emprega a integração vetorial completa
-no plano do disco, na qual a velocidade incidente resultante <span
-class="math inline">\(U_p = \sqrt{U_T^2 + U_R^2}\)</span> e a projeção
-geométrica no eixo longitudinal geram <span
-class="math inline">\(\langle U_p(\bar{r}\sin\psi + \mu) \rangle_\psi =
-\frac{3}{2}\mu\bar{r}\)</span>, fornecendo <span
-class="math inline">\(C_{H0} = \frac{3}{8}\sigma
-C_{d0}\mu(1-\bar{r}_0^2)\)</span>.</p>
-<p>Para fins comparativos de referência, na literatura clássica
-simplificada assume-se com frequência que a força de arrasto se alinha
-apenas com a direção tangencial à corda (<span class="math inline">\(U
-\approx U_T\)</span>) e despreza-se a velocidade radial (<span
-class="math inline">\(U_R = \mu\cos\psi\)</span>) na composição da
-pressão dinâmica. Projetando esse arrasto elementar puramente tangencial
-<span class="math inline">\(dD \approx \frac{1}{2}\rho c C_{d0}
-U_T^2\)</span> no eixo longitudinal via <span
-class="math inline">\(\sin\psi\)</span>, obtém-se:</p>
+<h3 id="aproximação-tangencial-apenas-referência">Aproximação tangencial: apenas referência</h3>
+<blockquote>
+<p><strong>Comparação, não usada nos resultados.</strong> Se <span class="math inline">\(u_R\)</span> for desprezado e o arrasto for tratado como puramente tangencial,</p>
 <p><span class="math display">\[
-\langle U_T^2 \sin\psi \rangle_\psi = \langle (\bar{r} + \mu\sin\psi)^2
-\sin\psi \rangle_\psi = 2\mu\bar{r}\langle\sin^2\psi\rangle =
-\mu\bar{r}.
+\boxed{
+C_{H0}^{\mathrm{tang}}
+=
+\frac14\sigma C_{d0}\mu(1-\bar r_0^2)
+}.
 \]</span></p>
-<p>A integração radial direta dessa formulação puramente tangencial
-resulta em:</p>
-<p><span class="math display">\[
-C_{H0}^{\mathrm{tang}} = \frac{1}{4}\sigma C_{d0}\mu(1-\bar{r}_0^2).
-\]</span></p>
-<p>A aproximação tangencial subestima a força longitudinal de perfil em
-exatamente 33% em relação à formulação vetorial completa (<span
-class="math inline">\(1/4\)</span> versus <span
-class="math inline">\(3/8\)</span>). A discrepância provém do aumento
-real de pressão dinâmica proporcionado pelo escoamento cruzado ao longo
-da envergadura das pás.</p>
+<p>Sem corte de raiz, <span class="math inline">\(C_{H0}^{\mathrm{tang}}=\sigma C_{d0}\mu/4\)</span>. A integração vetorial usada no restante do texto fornece <span class="math inline">\(3\sigma C_{d0}\mu/8\)</span>.</p>
+</blockquote>
 <hr />
 <h2 id="9-coeficiente-de-força-longitudinal-total-c_h">9. Coeficiente de
 Força Longitudinal Total (<span class="math inline">\(C_H\)</span>)</h2>
@@ -2619,53 +2557,53 @@ C_{Qi} = \frac{\sigma a}{2}\left(\frac{\lambda\theta_0}{3} -
 \]</span></p>
 <hr />
 <h2 id="14-coeficiente-de-torque-de-perfil-no-eixo-c_q0">14. Coeficiente de Torque de Perfil no Eixo (<span class="math inline">\(C_{Q0}\)</span>)</h2>
-<p>O torque de perfil <span class="math inline">\(C_{Q0}\)</span> é a parcela do arrasto de perfil que produz momento resistente em torno do eixo. Como torque e potência de eixo usam a mesma normalização,</p>
-<p><span class="math display">\[
-\boxed{C_{P0}=C_{Q0}}.
-\]</span></p>
-<p>Essa grandeza não deve ser confundida com a potência de perfil relativa ao ar, denotada por <span class="math inline">\(C_{P0,\mathrm{air}}\)</span>.</p>
-<h3 id="integral-vetorial-correta-de-c_q0">Integral vetorial correta de <span class="math inline">\(C_{Q0}\)</span></h3>
-<p><span class="math display">\[
-C_{Q0}=\frac12\int_{\bar r_0}^{1}\sigma(\bar r)\left\langle C_dWu_T\bar r\right\rangle_\psi d\bar r.
-\]</span></p>
-<p>Para baixa ordem,</p>
-<p><span class="math display">\[
-\left\langle Wu_T\bar r\right\rangle_\psi
-=\bar r^3+\left(\frac34\mu^2+\frac12\mu_z^2\right)\bar r+O(4).
-\]</span></p>
-<p>Assim, para pá retangular,</p>
+<h3 id="integral-vetorial-de-c_q0">Integral vetorial de <span class="math inline">\(C_{Q0}\)</span></h3>
+<p>O torque de profile drag vem diretamente do momento da componente tangencial da força de arrasto:</p>
 <p><span class="math display">\[
 \boxed{
-C_{Q0}^{\mathrm{vec}}\simeq
+C_{Q0}
+=
+\frac12\int_{\bar r_0}^{1}
+\sigma(\bar r)
+\left\langle C_d W u_T\bar r\right\rangle_\psi d\bar r
+}.
+\]</span></p>
+<p>Com <span class="math inline">\(W=\sqrt{u_T^2+u_R^2+\mu_z^2}\)</span>, <span class="math inline">\(u_T=\bar r+\mu\sin\psi\)</span> e <span class="math inline">\(u_R=\mu\cos\psi\)</span>, a expansão de baixa ordem fornece</p>
+<p><span class="math display">\[
+\left\langle W u_T\bar r\right\rangle_\psi
+=
+\bar r^3+
+\left(\frac34\mu^2+\frac12\mu_z^2\right)\bar r+O(4).
+\]</span></p>
+<p>Para pá retangular,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm{vec}}
+\simeq
 \frac{\sigma C_{d0}}8
 \left[(1-\bar r_0^4)+(1.5\mu^2+\mu_z^2)(1-\bar r_0^2)\right]
 }.
 \]</span></p>
-<p>Em voo edgewise e sem corte, <span class="math inline">\(C_{Q0}^{\mathrm{vec}}\simeq\frac{\sigma C_{d0}}8(1+1.5\mu^2)\)</span>.</p>
-<h3 id="aproximação-puramente-tangencial">Aproximação puramente tangencial</h3>
+<p>Em edgewise e sem corte de raiz,</p>
 <p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm{vec}}
+\simeq\frac{\sigma C_{d0}}8(1+1.5\mu^2)
+}.
+\]</span></p>
+<h3 id="aproximação-tangencial-apenas-referência-cq0">Aproximação tangencial: apenas referência</h3>
+<blockquote>
+<p><strong>Comparação, não usada nos resultados.</strong> Se o escoamento radial for desprezado e <span class="math inline">\(W\approx|u_T|\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
 C_{Q0}^{\mathrm{tang}}
-=\frac{\sigma C_{d0}}8
-\left[(1-\bar r_0^4)+\mu^2(1-\bar r_0^2)\right],
+=
+\frac{\sigma C_{d0}}8
+\left[(1-\bar r_0^4)+\mu^2(1-\bar r_0^2)\right]
+}.
 \]</span></p>
-<p>e, sem corte, <span class="math inline">\(C_{Q0}^{\mathrm{tang}}=\frac{\sigma C_{d0}}8(1+\mu^2)\)</span>.</p>
-<h3 id="por-que-4.5-e-4.65-não-pertencem-a-c_q0">Por que 4.5 e 4.65 não pertencem a <span class="math inline">\(C_{Q0}\)</span></h3>
-<p>A integral em <span class="math inline">\(W^3\)</span> mede potência de perfil relativa ao ar, <span class="math inline">\(C_{P0,\mathrm{air}}\)</span>, e não a contribuição de eixo <span class="math inline">\(C_{P0}=C_{Q0}\)</span>:</p>
-<p><span class="math display">\[
-C_{P0,\mathrm{air}}
-=C_{Q0}+\mu C_{H0}-\mu_zC_{T0}
-=\frac12\int_{\bar r_0}^{1}\sigma C_d\left\langle W^3\right\rangle_\psi d\bar r.
-\]</span></p>
-<p>Em voo edgewise,</p>
-<p><span class="math display">\[
-C_{P0,\mathrm{air}}
-\simeq\frac{\sigma C_{d0}}8
-\left[(1-\bar r_0^4)+4.5\mu^2(1-\bar r_0^2)\right].
-\]</span></p>
-<p>Sem corte, <span class="math inline">\(C_{P0,\mathrm{air}}\simeq\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span>. Bennett refina essa <strong>potência</strong>:</p>
-<p><span class="math display">\[
-C_{P0,\mathrm{air}}^{\mathrm{Ben}}\approx\frac{\sigma C_{d0}}8(1+4.65\mu^2).
-\]</span></p>
+<p>Sem corte, <span class="math inline">\(C_{Q0}^{\mathrm{tang}}=\sigma C_{d0}(1+\mu^2)/8\)</span>. O cálculo principal continua sendo a integral vetorial acima.</p>
+</blockquote>
 <hr />
 <h2 id="15-coeficiente-de-torque-mecânico-total-no-eixo-c_q">15.
 Coeficiente de Torque Mecânico Total no Eixo (<span
@@ -2743,193 +2681,101 @@ C_Q = \frac{\sigma a}{2}\left(\frac{\lambda\theta_0}{3} -
 \]</span></p>
 <hr />
 <h2 id="16-coeficiente-de-potência-mecânica-no-eixo-c_p">16. Coeficiente de Potência Mecânica no Eixo (<span class="math inline">\(C_P\)</span>)</h2>
-<h3 id="identidade-mecânica-de-eixo">Identidade mecânica de eixo</h3>
-<p>Pela definição da taxa de trabalho fornecida pelo mastro,</p>
-<p><span class="math display">\[
-\boxed{C_{P,\mathrm{shaft}}=C_Q=C_{Qi}+C_{Q0}}.
-\]</span></p>
-<p>Consequentemente, a contribuição de profile drag para a potência de eixo é</p>
-<p><span class="math display">\[
-\boxed{C_{P0}=C_{Q0}}.
-\]</span></p>
-<h3 id="fechamento-energético-do-torque-induzido">Fechamento energético do torque induzido</h3>
 <p>A potência mecânica no eixo é</p>
 <p><span class="math display">\[
-\boxed{C_{P,\mathrm{shaft}}=C_Q},
+P_{\mathrm{shaft}}=Q\Omega,
 \]</span></p>
-<p>e a parcela de profile drag no eixo é</p>
+<p>portanto</p>
 <p><span class="math display">\[
-\boxed{C_{P0}=C_{Q0}}.
+\boxed{C_P=C_Q}.
 \]</span></p>
-<p>Como <span class="math inline">\(C_T\)</span> é exclusivamente não viscoso,</p>
-<p><span class="math display">\[
-\boxed{
-C_{Qi}
-=
-K_{\mathrm{ind}}\lambda_iC_T
-+
-\mu_zC_T
--
-\mu C_{Hi}
-}.
-\]</span></p>
-<p>A potência total de eixo é</p>
-<p><span class="math display">\[
-\boxed{C_Q=C_{Qi}+C_{Q0}}.
-\]</span></p>
-<p><span class="math inline">\(C_{T0}\)</span> não aparece nessas equações: ele não modifica <span class="math inline">\(C_T\)</span> nem <span class="math inline">\(C_{Qi}\)</span>.</p>
 <hr />
-<h2 id="17-coeficiente-de-potência-aerodinâmica-no-ar-c_pair">17. Coeficiente de Potência Aerodinâmica no Ar (<span class="math inline">\(C_{Pair}\)</span>)</h2>
-<h3 id="rota-pelo-torque-no-eixo">Rota pelo torque no eixo</h3>
+<h2 id="17-coeficiente-de-potência-aerodinâmica-no-ar-c_pmathrmair">17. Coeficiente de Potência Aerodinâmica no Ar (<span class="math inline">\(C_{Pair}\)</span>)</h2>
+<p>A potência aerodinâmica é organizada por balanço energético. Para inflow uniforme,</p>
 <p><span class="math display">\[
-\boxed{
-C_{Pair}=C_Q+\mu C_H
-}.
+C_{Pi}=\lambda_iC_T,
+\qquad
+C_{Pc}=\mu_zC_T,
+\qquad
+C_{P,\mathrm{trans}}=\mu C_{Hi}.
 \]</span></p>
-<p>Com <span class="math inline">\(C_Q=C_{Qi}+C_{Q0}\)</span>, <span class="math inline">\(C_H=C_{Hi}+C_{H0}\)</span> e</p>
-<p><span class="math display">\[
-C_{Qi}
-=
-K_{\mathrm{ind}}\lambda_iC_T
-+
-\mu_zC_T
--
-\mu C_{Hi},
-\]</span></p>
-<p>segue que</p>
+<p>Mantendo inicialmente a potência de perfil agrupada,</p>
 <p><span class="math display">\[
 \boxed{
 C_{Pair}
 =
-K_{\mathrm{ind}}\lambda_iC_T
+\lambda_iC_T
 +
 \mu_zC_T
++
+\mu C_{Hi}
++
+C_{P0,\mathrm{air}}
+}.
+\]</span></p>
+<p>A potência de perfil relativa ao ar é</p>
+<p><span class="math display">\[
+\boxed{
+C_{P0,\mathrm{air}}
+=
+C_{Q0}+\mu C_{H0}
+}.
+\]</span></p>
+<p>Substituindo,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Pair}
+=
+\lambda_iC_T
++
+\mu_zC_T
++
+\mu C_{Hi}
 +
 C_{Q0}
 +
 \mu C_{H0}
 }.
 \]</span></p>
-<h3 id="rota-pelo-balanço-energético">Rota pelo balanço energético</h3>
-<p>A potência de profile drag relativa ao ar é</p>
-<p><span class="math display">\[
-\boxed{
-C_{P0,\mathrm{air}}
-=
-C_{Q0}
-+
-\mu C_{H0}
--
-\mu_zC_{T0}
-}.
-\]</span></p>
-<p>Como <span class="math inline">\(C_T\)</span> não inclui <span class="math inline">\(C_{T0}\)</span>, o balanço energético mantém separadas as contribuições <span class="math inline">\(\mu_zC_T\)</span> e <span class="math inline">\(\mu_zC_{T0}\)</span>. Logo,</p>
+<p>Como <span class="math inline">\(C_H=C_{Hi}+C_{H0}\)</span>,</p>
 <p><span class="math display">\[
 \boxed{
 C_{Pair}
 =
-K_{\mathrm{ind}}\lambda_iC_T
+\lambda_iC_T
 +
-\mu_zC_T+\mu_zC_{T0}
+\mu_zC_T
 +
-C_{P0,\mathrm{air}}
+\mu C_H
++
+C_{Q0}
 }.
 \]</span></p>
-<p>Substituindo <span class="math inline">\(C_{P0,\mathrm{air}}\)</span>,</p>
+<h3 id="de-onde-vem-o-fator-4.5mu2">De onde vem o fator <span class="math inline">\(4.5\mu^2\)</span></h3>
+<p>Em edgewise, para pá retangular sem corte de raiz,</p>
+<p><span class="math display">\[
+C_{Q0}\simeq\frac{\sigma C_{d0}}8(1+1.5\mu^2),
+\qquad
+C_{H0}\simeq\frac{3\sigma C_{d0}}8\mu.
+\]</span></p>
+<p>Logo,</p>
 <p><span class="math display">\[
 \begin{aligned}
-C_{Pair}
+C_{P0,\mathrm{air}}
+&=C_{Q0}+\mu C_{H0}\\
+&\simeq
+\frac{\sigma C_{d0}}8(1+1.5\mu^2)
++
+\frac{3\sigma C_{d0}}8\mu^2\\
 &=
-K_{\mathrm{ind}}\lambda_iC_T
-+
-\mu_zC_T+\mu_zC_{T0}
-+
-C_{Q0}
-+
-\mu C_{H0}
--
-\mu_zC_{T0}
-\\
-&=
-K_{\mathrm{ind}}\lambda_iC_T
-+
-\mu_zC_T
-+
-C_{Q0}
-+
-\mu C_{H0}.
+\boxed{\frac{\sigma C_{d0}}8(1+4.5\mu^2)}.
 \end{aligned}
 \]</span></p>
-<p>Portanto,</p>
+<p>A aproximação clássica de Bennett fornece</p>
 <p><span class="math display">\[
-\boxed{
-C_Q+\mu C_H
-=
-K_{\mathrm{ind}}\lambda_iC_T
-+
-\mu_zC_T+\mu_zC_{T0}
-+
-C_{P0,\mathrm{air}}
-}.
-\]</span></p>
-<p><span class="math inline">\(C_{T0}\)</span> é usado apenas nessa contabilização de <span class="math inline">\(C_{Pair}\)</span>. O termo <span class="math inline">\(+\mu_zC_{T0}\)</span> cancela o <span class="math inline">\(-\mu_zC_{T0}\)</span> contido em <span class="math inline">\(C_{P0,\mathrm{air}}\)</span>.</p>
-<h3 id="potência-de-perfil-no-eixo-e-no-ar">Potência de perfil no eixo e no ar</h3>
-<p>No eixo,</p>
-<p><span class="math display">\[
-\boxed{C_{P0}=C_{Q0}}.
-\]</span></p>
-<p>No ar,</p>
-<p><span class="math display">\[
-\boxed{
-C_{P0,\mathrm{air}}
-=
-C_{Q0}+\mu C_{H0}-\mu_zC_{T0}
-}.
-\]</span></p>
-<p>Equivalentemente,</p>
-<p><span class="math display">\[
-C_{P0,\mathrm{air}}
-=
-\frac12\int_{\bar r_0}^{1}\sigma(\bar r)
-\left\langle C_dW^3\right\rangle_\psi d\bar r.
-\]</span></p>
-<p>Para pá retangular e baixa ordem,</p>
-<p><span class="math display">\[
-C_{P0,\mathrm{air}}
-\simeq
-\frac{\sigma C_{d0}}8
-\left[(1-\bar r_0^4)+(4.5\mu^2+3\mu_z^2)(1-\bar r_0^2)\right].
-\]</span></p>
-<p>Em edgewise e sem corte,</p>
-<p><span class="math display">\[
-C_{P0,\mathrm{air}}\simeq\frac{\sigma C_{d0}}8(1+4.5\mu^2),
-\qquad
-C_{P0,\mathrm{air}}^{\mathrm{Ben}}\approx\frac{\sigma C_{d0}}8(1+4.65\mu^2).
-\]</span></p>
-<h3 id="casos-particulares">Casos particulares</h3>
-<p>Em edgewise, <span class="math inline">\(\mu_z=0\)</span>:</p>
-<p><span class="math display">\[
-\boxed{
-C_{Pair}
-=
-C_Q+\mu C_H
-=
-K_{\mathrm{ind}}\lambda_iC_T
-+
-C_{P0,\mathrm{air}}
-}.
-\]</span></p>
-<p>Em voo axial, <span class="math inline">\(\mu=0\)</span>:</p>
-<p><span class="math display">\[
-\boxed{
-C_{Pair}=C_Q
-=
-K_{\mathrm{ind}}\lambda_iC_T
-+
-\mu_zC_T+\mu_zC_{T0}
-+
-C_{P0,\mathrm{air}}
-}.
+C_{P0,\mathrm{air}}^{\mathrm{Ben}}
+\approx
+\frac{\sigma C_{d0}}8(1+4.65\mu^2).
 \]</span></p>
 <hr />
 <h2 id="18-figura-de-mérito-fm-e-fator-de-potência-induzida">18. Figura
@@ -3076,19 +2922,15 @@ class="math inline">\(C_Q\)</span></strong></td>
 <tr>
 <td style="text-align: left;"><strong><span
 class="math inline">\(C_P\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(C_P =
-C_Q\)</span> (identidade mecânica de eixo e balanço global de
-conservação de energia)</td>
+<td style="text-align: left;"><span class="math inline">\(C_P=C_Q\)</span></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong><span
-class="math inline">\(C_{P\mathrm{air}}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac12
-\int_{\bar{r}_0}^1 \frac{N\,c(\bar{r})}{\pi R} \left\{ a(\bar{r})\left[
-\lambda\theta(\bar{r})\left(\bar{r}^2 + \frac{\mu^2}{2}\right) -
-\lambda^2 \bar{r} - \frac{(K_x^2+K_y^2)\lambda_i^2}{2}\bar{r}^3 \right]
-+ \left\langle C_d W^3
-\right\rangle_\psi \right\} d\bar{r}\)</span></td>
+<td style="text-align: left;"><strong><span class="math inline">\(C_{P0,\mathrm{air}}\)</span></strong></td>
+<td style="text-align: left;"><span class="math inline">\(C_{Q0}+\mu C_{H0}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3209,16 +3051,8 @@ class="math inline">\(C_P\)</span></strong></td>
 C_Q\)</span></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong><span
-class="math inline">\(C_{P\mathrm{air}}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac{\sigma
-a}{2}\left[\lambda\theta_0\left(\frac{1-\bar{r}_0^3}{3} +
-\frac{\mu^2}{2}(1-\bar{r}_0)\right) +
-\lambda\theta_t\left(\frac{1-\bar{r}_0^4}{4} +
-\frac{\mu^2}{4}(1-\bar{r}_0^2)\right) -
-\lambda^2\frac{1-\bar{r}_0^2}{2}\right] + \frac{\sigma
-C_{d0}}{8}\left[(1-\bar{r}_0^4) +
-4.5\mu^2(1-\bar{r}_0^2)\right]\)</span></td>
+<td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8[(1-\bar r_0^4)+4.5\mu^2(1-\bar r_0^2)]\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3320,13 +3154,8 @@ class="math inline">\(C_P\)</span></strong></td>
 C_Q\)</span></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong><span
-class="math inline">\(C_{P\mathrm{air}}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac{\sigma
-a}{2}\left[\lambda\theta_0\left(\frac13 + \frac{\mu^2}{2}\right) +
-\lambda\theta_t\left(\frac14 + \frac{\mu^2}{4}\right) -
-\frac{\lambda^2}{2}\right] + \frac{\sigma C_{d0}}{8}(1 +
-4.5\mu^2)\)</span></td>
+<td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3425,12 +3254,8 @@ class="math inline">\(C_P\)</span></strong></td>
 C_Q\)</span></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong><span
-class="math inline">\(C_{P\mathrm{air}}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac{\sigma
-a}{2}\left[\lambda\theta_0\left(\frac13 + \frac{\mu^2}{2}\right) -
-\frac{\lambda^2}{2}\right] + \frac{\sigma C_{d0}}{8}(1 +
-4.5\mu^2)\)</span></td>
+<td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3564,17 +3389,8 @@ class="math inline">\(C_P\)</span></strong></td>
 C_Q\)</span></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong><span
-class="math inline">\(C_{P\mathrm{air}}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac{\sigma
-a}{2}\left\{ \lambda\left[ \theta_0\left(\frac{1-\bar{r}_0^3}{3} +
-\frac{\mu^2}{2}(1-\bar{r}_0)\right) +
-\theta_t\left(\frac{1-\bar{r}_0^4}{4} +
-\frac{\mu^2}{4}(1-\bar{r}_0^2)\right) - \left(\lambda + \frac12
-K_y\lambda_i\mu\right)\frac{1-\bar{r}_0^2}{2} \right] -
-\frac{(K_x^2+K_y^2)\lambda_i^2}{8}(1-\bar{r}_0^4) \right\} +
-\frac{\sigma C_{d0}}{8}\left[(1-\bar{r}_0^4) +
-4.5\mu^2(1-\bar{r}_0^2)\right]\)</span></td>
+<td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8[(1-\bar r_0^4)+4.5\mu^2(1-\bar r_0^2)]\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3686,14 +3502,8 @@ class="math inline">\(C_P\)</span></strong></td>
 C_Q\)</span></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong><span
-class="math inline">\(C_{P\mathrm{air}}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac{\sigma
-a}{2}\left\{ \lambda\left[ \theta_0\left(\frac13 +
-\frac{\mu^2}{2}\right) + \theta_t\left(\frac14 + \frac{\mu^2}{4}\right)
-- \frac12\left(\lambda + \frac12 K_y\lambda_i\mu\right) \right] -
-\frac{(K_x^2+K_y^2)\lambda_i^2}{8} \right\} + \frac{\sigma C_{d0}}{8}(1
-+ 4.5\mu^2)\)</span></td>
+<td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3800,13 +3610,8 @@ class="math inline">\(C_P\)</span></strong></td>
 C_Q\)</span></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong><span
-class="math inline">\(C_{P\mathrm{air}}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac{\sigma
-a}{2}\left\{ \lambda\left[ \theta_0\left(\frac13 +
-\frac{\mu^2}{2}\right) - \frac12\left(\lambda + \frac12
-K_y\lambda_i\mu\right) \right] - \frac{(K_x^2+K_y^2)\lambda_i^2}{8}
-\right\} + \frac{\sigma C_{d0}}{8}(1 + 4.5\mu^2)\)</span></td>
+<td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span></td>
 </tr>
 </tbody>
 </table>
