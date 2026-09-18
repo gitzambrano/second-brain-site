@@ -2693,7 +2693,7 @@ P_{\mathrm{shaft}}=Q\Omega,
 <h2 id="17-coeficiente-de-potência-aerodinâmica-no-ar-c_pmathrmair">17. Coeficiente de Potência Aerodinâmica no Ar (<span class="math inline">\(C_{Pair}\)</span>)</h2>
 <p>A potência aerodinâmica é organizada por balanço energético. Para inflow uniforme,</p>
 <p><span class="math display">\[
-C_{Pi}=\lambda_iC_T,
+C_{Pi}=K_{\mathrm{ind}}\lambda_iC_T,
 \qquad
 C_{Pc}=\mu_zC_T,
 \qquad
@@ -2704,7 +2704,7 @@ C_{P,\mathrm{trans}}=\mu C_{Hi}.
 \boxed{
 C_{Pair}
 =
-\lambda_iC_T
+K_{\mathrm{ind}}\lambda_iC_T
 +
 \mu_zC_T
 +
@@ -2726,7 +2726,7 @@ C_{Q0}+\mu C_{H0}
 \boxed{
 C_{Pair}
 =
-\lambda_iC_T
+K_{\mathrm{ind}}\lambda_iC_T
 +
 \mu_zC_T
 +
@@ -2742,7 +2742,7 @@ C_{Q0}
 \boxed{
 C_{Pair}
 =
-\lambda_iC_T
+K_{\mathrm{ind}}\lambda_iC_T
 +
 \mu_zC_T
 +
@@ -2778,28 +2778,50 @@ C_{P0,\mathrm{air}}^{\mathrm{Ben}}
 \frac{\sigma C_{d0}}8(1+4.65\mu^2).
 \]</span></p>
 <hr />
-<h2 id="18-figura-de-mérito-fm-e-fator-de-potência-induzida">18. Figura
-de Mérito (<span class="math inline">\(FM\)</span>) e fator de potência
-induzida</h2>
-<p>Em voo pairado nivelado (<span class="math inline">\(\mu=0,
-\mu_z=0\)</span>), a potência induzida ideal calculada por quantidade de
-movimento é:</p>
+<h2 id="18-figura-de-mérito-fm-e-fator-de-potência-induzida">18. Figura de Mérito (<span class="math inline">\(FM\)</span>) e fator de potência induzida</h2>
+<p>Em voo pairado nivelado (<span class="math inline">\(\mu=0,\mu_z=0\)</span>), a potência induzida ideal dada pela quantidade de movimento é</p>
 <p><span class="math display">\[
-C_{Pi}^{\mathrm{ideal}} = \lambda_i C_T = \frac{C_T^{3/2}}{\sqrt2}.
+C_{Pi}^{\mathrm{ideal}}
+=
+\lambda_iC_T
+=
+\frac{C_T^{3/2}}{\sqrt2}.
 \]</span></p>
-<p>Em rotores reais, perdas de ponta, contração da esteira e
-carregamento não uniforme aumentam a potência induzida por um fator
-empírico <span class="math inline">\(\kappa \ge 1.0\)</span>:</p>
+<p>As perdas induzidas reais são representadas pelo fator <span class="math inline">\(K_{\mathrm{ind}}\)</span>:</p>
 <p><span class="math display">\[
-C_{Pi} = \kappa \frac{C_T^{3/2}}{\sqrt2}.
+\boxed{
+C_{Pi}
+=
+K_{\mathrm{ind}}
+\frac{C_T^{3/2}}{\sqrt2}
+}.
 \]</span></p>
-<p>O torque de perfil em pairado para pás sem corte de raiz é <span
-class="math inline">\(C_{Q0} = \frac{\sigma C_{d0}}{8}\)</span>. A
-figura de mérito (<span class="math inline">\(FM\)</span>), que mede a
-eficiência aerodinâmica em voo pairado, é calculada por:</p>
+<p>Em pairado, <span class="math inline">\(\mu=0\)</span> e portanto <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}\)</span>. A potência aerodinâmica usada na figura de mérito é</p>
 <p><span class="math display">\[
-FM = \frac{C_{Pi}^{\mathrm{ideal}}}{C_P} = \frac{C_T^{3/2}/\sqrt2}{C_Q}
-= \frac{1}{\kappa + \dfrac{\sigma C_{d0}}{4\sqrt2\,C_T^{3/2}}}.
+C_{Pair}
+=
+K_{\mathrm{ind}}
+\frac{C_T^{3/2}}{\sqrt2}
++
+C_{Q0}.
+\]</span></p>
+<p>Assim,</p>
+<p><span class="math display">\[
+\boxed{
+FM
+=
+\frac{C_T^{3/2}/\sqrt2}
+{K_{\mathrm{ind}}C_T^{3/2}/\sqrt2+C_{Q0}}
+}.
+\]</span></p>
+<p>Para pá retangular sem corte de raiz, <span class="math inline">\(C_{Q0}=\sigma C_{d0}/8\)</span>, então</p>
+<p><span class="math display">\[
+FM
+=
+\frac{1}
+{K_{\mathrm{ind}}+
+\dfrac{\sigma C_{d0}}
+{4\sqrt2\,C_T^{3/2}}}.
 \]</span></p>
 <hr />
 <h2 id="19-tabelas-de-síntese-dos-coeficientes-aerodinâmicos">19.
@@ -2930,7 +2952,7 @@ class="math inline">\(C_P\)</span></strong></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span>, com <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3052,7 +3074,7 @@ C_Q\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8[(1-\bar r_0^4)+4.5\mu^2(1-\bar r_0^2)]\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span>, com <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3155,7 +3177,7 @@ C_Q\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span>, com <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3255,7 +3277,7 @@ C_Q\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span>, com <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3390,7 +3412,7 @@ C_Q\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8[(1-\bar r_0^4)+4.5\mu^2(1-\bar r_0^2)]\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span>, com <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3503,7 +3525,7 @@ C_Q\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span>, com <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3611,7 +3633,7 @@ C_Q\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><span class="math inline">\(C_{Pair}\)</span></strong></td>
-<td style="text-align: left;"><span class="math inline">\(\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+\frac{\sigma C_{d0}}8(1+4.5\mu^2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(K_{\mathrm{ind}}\lambda_iC_T+\mu_zC_T+\mu C_{Hi}+C_{P0,\mathrm{air}}\)</span>, com <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}\)</span></td>
 </tr>
 </tbody>
 </table>
