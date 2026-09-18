@@ -2801,12 +2801,116 @@ C_{P0,\mathrm{air}}\simeq\frac{\sigma C_{d0}}8(1+4.5\mu^2),
 \qquad
 C_{P0,\mathrm{air}}^{\mathrm{Ben}}\approx\frac{\sigma C_{d0}}8(1+4.65\mu^2).
 \]</span></p>
-<h3 id="balanço-total">Balanço total</h3>
+<h3 id="modelagem-energética-de-c_pair">Modelagem energética de <span class="math inline">\(C_{Pair}\)</span></h3>
+<p>No zBET, <code>CPair</code> representa a potência aerodinâmica do rotor relativa à massa de ar não perturbada:</p>
 <p><span class="math display">\[
-C_{P\mathrm{air}}
-=K_{\mathrm{ind}}\lambda_iC_{T,L}+C_{P0,\mathrm{air}},
+\boxed{
+C_{Pair}\equiv C_{P\mathrm{air}}
+=C_Q+\mu C_H-\mu_zC_T
+}.
 \]</span></p>
-<p>para o rotor isolado, omitindo potência parasita de fuselagem e outras fontes externas.</p>
+<p>Partindo de <span class="math inline">\(C_Q=C_{Qi}+C_{Q0}\)</span>, com</p>
+<p><span class="math display">\[
+C_{Qi}
+=
+K_{\mathrm{ind}}\lambda_iC_{T,L}
++\mu_zC_{T,L}
+-\mu C_{Hi},
+\]</span></p>
+<p>e usando <span class="math inline">\(C_H=C_{Hi}+C_{H0}\)</span> e <span class="math inline">\(C_T=C_{T,L}+C_{T0}\)</span>, resulta</p>
+<p><span class="math display">\[
+\begin{aligned}
+C_{Pair}
+&=C_Q+\mu C_H-\mu_zC_T\\
+&=
+\left(
+K_{\mathrm{ind}}\lambda_iC_{T,L}
++\mu_zC_{T,L}
+-\mu C_{Hi}
++C_{Q0}
+\right)
++\mu(C_{Hi}+C_{H0})
+-\mu_z(C_{T,L}+C_{T0}).
+\end{aligned}
+\]</span></p>
+<p>Os termos de translação associados às cargas induzidas cancelam-se:</p>
+<p><span class="math display">\[
+-\mu C_{Hi}+\mu C_{Hi}=0,
+\qquad
++\mu_zC_{T,L}-\mu_zC_{T,L}=0.
+\]</span></p>
+<p>Logo,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Pair}
+=
+K_{\mathrm{ind}}\lambda_iC_{T,L}
++
+C_{Q0}+\mu C_{H0}-\mu_zC_{T0}
+}.
+\]</span></p>
+<p>Como <span class="math inline">\(C_{P0,\mathrm{air}}=C_{Q0}+\mu C_{H0}-\mu_zC_{T0}\)</span>, a forma energética compacta é</p>
+<p><span class="math display">\[
+\boxed{
+C_{Pair}
+=
+K_{\mathrm{ind}}\lambda_iC_{T,L}
++
+C_{P0,\mathrm{air}}
+}.
+\]</span></p>
+<p>Esta é a mesma grandeza calculada pela identidade cinemática <span class="math inline">\(C_Q+\mu C_H-\mu_zC_T\)</span>; são duas rotas de contabilização da mesma potência.</p>
+<p>Em voo puramente edgewise,</p>
+<p><span class="math display">\[
+\boxed{
+C_{Pair}
+=
+C_Q+\mu C_H
+=
+K_{\mathrm{ind}}\lambda_iC_T
++
+C_{P0,\mathrm{air}}
+}.
+\]</span></p>
+<p>Para a aproximação tangencial de profile drag,</p>
+<p><span class="math display">\[
+C_{P0,\mathrm{air}}^{\mathrm{tang}}
+=
+\frac{\sigma C_{d0}}8
+\left[(1-\bar r_0^4)+3\mu^2(1-\bar r_0^2)\right],
+\]</span></p>
+<p>enquanto a expansão vetorial de baixa ordem fornece, em edgewise flight,</p>
+<p><span class="math display">\[
+C_{P0,\mathrm{air}}^{\mathrm{vec}}
+\simeq
+\frac{\sigma C_{d0}}8
+\left[(1-\bar r_0^4)+4.5\mu^2(1-\bar r_0^2)\right].
+\]</span></p>
+<p>Para o modelo vetorial numérico,</p>
+<p><span class="math display">\[
+C_{P0,\mathrm{air}}^{\mathrm{num}}
+=
+\frac12\int_{\bar r_0}^{1}\sigma(\bar r)
+\left\langle C_dW^3\right\rangle_\psi d\bar r.
+\]</span></p>
+<p>Assim, os três modelos de profile drag alteram a avaliação de <span class="math inline">\(C_{P0,\mathrm{air}}\)</span>, enquanto a estrutura energética global permanece</p>
+<p><span class="math display">\[
+\boxed{
+C_{Pair}
+=
+C_{Pi,\mathrm{air}}
++
+C_{P0,\mathrm{air}},
+\qquad
+C_{Pi,\mathrm{air}}
+=
+K_{\mathrm{ind}}\lambda_iC_{T,L}.
+}
+\]</span></p>
+<h3 id="interpretação-física">Interpretação física</h3>
+<p>A diferença entre <span class="math inline">\(C_Q\)</span> e <span class="math inline">\(C_{Pair}\)</span> é de referencial e de caminho de energia. <span class="math inline">\(C_Q\)</span> mede somente a potência mecânica fornecida pelo eixo, <span class="math inline">\(C_{P,\mathrm{shaft}}=C_Q\)</span>, enquanto <span class="math inline">\(C_{Pair}\)</span> inclui também o trabalho devido à translação do rotor através do ar.</p>
+<p>O termo <span class="math inline">\(\mu C_H\)</span> não é uma correção de torque: é potência fornecida pelo movimento horizontal do veículo. Analogamente, <span class="math inline">\(-\mu_zC_T\)</span> contabiliza o trabalho associado à translação axial.</p>
+<p>Por isso, usar Bennett diretamente em <span class="math inline">\(C_{Q0}\)</span> seria inconsistente: Bennett aproxima <span class="math inline">\(C_{P0,\mathrm{air}}\)</span>, a parcela de profile drag de <span class="math inline">\(C_{Pair}\)</span>, e não o torque viscoso de eixo isoladamente.</p>
 <hr />
 <h2 id="18-figura-de-mérito-fm-e-fator-de-potência-induzida">18. Figura
 de Mérito (<span class="math inline">\(FM\)</span>) e fator de potência

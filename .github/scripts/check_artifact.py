@@ -48,7 +48,7 @@ def main() -> int:
 
     actual = digest()
     if actual != expected:
-        raise SystemExit("privacy gate: artifact changed after it was sealed")
+        raise SystemExit(f"privacy gate: artifact changed after it was sealed (actual={actual})")
 
     print(f"privacy gate: OK ({actual[:16]}…)")
     return 0
