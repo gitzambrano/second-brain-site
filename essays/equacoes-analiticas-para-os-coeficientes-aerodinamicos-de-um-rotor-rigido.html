@@ -1753,6 +1753,34 @@ referência do rotor é:</p>
 <p><span class="math display">\[
 \sigma = \frac{N c}{\pi R}.
 \]</span></p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Solidez de referência e consistência das formulações
+simplificadas</p>
+</div>
+<p>A solidez geométrica de referência <span
+class="math inline">\(\sigma\)</span> adotada no ensaio pode ser
+interpretada calculando-se a área da pá estendida até o centro de
+rotação (<span class="math inline">\(r = 0\)</span>), <span
+class="math inline">\(A_{b,\mathrm{ref}} = N c R\)</span>, e dividindo-a
+pela área total do disco <span class="math inline">\(A = \pi
+R^2\)</span>:</p>
+<p><span class="math display">\[
+\sigma = \frac{A_{b,\mathrm{ref}}}{A} = \frac{N c R}{\pi R^2} = \frac{N
+c}{\pi R}.
+\]</span></p>
+<p>Sob essa convenção, os termos redutores <span
+class="math inline">\((1 - \bar{r}_0^n)\)</span> presentes nas
+formulações com corte de raiz atuam estritamente como correções
+geométricas da área e dos momentos de inércia da pá em relação à pá
+projetada. Consequentemente, as equações simplificadas sem corte (<span
+class="math inline">\(\bar{r}_0 = 0\)</span>) possuem consistência
+física direta: elas expressam o comportamento analítico exato para a
+solidez de referência <span class="math inline">\(\sigma\)</span>,
+permitindo cálculos rápidos de ordem de grandeza e estimativas
+preliminares robustas antes da modelagem do raio do cubo e do mecanismo
+de fixação.</p>
+</div>
 <p>O passo geométrico seccional <span
 class="math inline">\(\theta(\bar{r})\)</span> sob torção linear é
 expresso por:</p>
@@ -1775,36 +1803,9 @@ I_m = \int_{\bar{r}_0}^1 \sigma(\bar{r}) \bar{r}^m\,d\bar{r}, \qquad T_m
 class="math inline">\(\sigma\)</span>, essas expressões reduzem-se a
 <span class="math inline">\(I_m = \sigma J_m\)</span> e <span
 class="math inline">\(T_m = \sigma(\theta_0 J_m + \theta_t
-J_{m+1})\)</span>.</p>
-<div class="box callout-note">
-<div class="box-title">
-<p>Solidez de referência e consistência das formulações
-simplificadas</p>
-</div>
-<h4 class="callout-inner-heading"
-id="solidez-projetada-até-o-cubo">Solidez projetada até o cubo</h4>
-<p>A solidez geométrica de referência <span
-class="math inline">\(\sigma\)</span> adotada no ensaio pode ser
-interpretada calculando-se a área da pá estendida até o centro de
-rotação (<span class="math inline">\(r = 0\)</span>), <span
-class="math inline">\(A_{b,\mathrm{ref}} = N c R\)</span>, e dividindo-a
-pela área total do disco <span class="math inline">\(A = \pi
-R^2\)</span>:</p>
-<p>$$</p>
-<p>= = = .</p>
-<p>$$</p>
-<p>Sob essa convenção, os termos redutores <span
-class="math inline">\((1 - \bar{r}_0^n)\)</span> presentes nas
-formulações com corte de raiz atuam estritamente como correções
-geométricas da área e dos momentos de inércia da pá em relação à pá
-projetada. Consequentemente, as equações simplificadas sem corte (<span
-class="math inline">\(\bar{r}_0 = 0\)</span>) possuem consistência
-física direta: elas expressam o comportamento analítico exato para a
-solidez de referência <span class="math inline">\(\sigma\)</span>,
-permitindo cálculos rápidos de ordem de grandeza e estimativas
-preliminares robustas antes da modelagem do raio do cubo e do mecanismo
-de fixação.</p>
-</div>
+J_{m+1})\)</span>. A consistência das simplificações analíticas sem
+corte de raiz (<span class="math inline">\(\bar{r}_0 = 0\)</span>) com a
+solidez de referência foi apresentada no callbox acima.</p>
 <h2 id="4-cinemática-local-e-modelos-de-inflow">4. Cinemática local e
 modelos de inflow</h2>
 <h3 id="velocidades-adimensionais-no-plano-da-pá">Velocidades
@@ -2006,10 +2007,6 @@ torque de perfil no eixo. Ambas serão integradas vetorialmente.</p>
 <p>O parâmetro <span class="math inline">\(C_{d0}\)</span> como
 coeficiente de arrasto médio equivalente</p>
 </div>
-<h4 class="callout-inner-heading"
-id="arrasto-médio-de-operação-versus-c_dmin-de-sustentação-nula">Arrasto
-médio de operação versus <span class="math inline">\(C_{d,\min}\)</span>
-de sustentação nula</h4>
 <p>Nas formulações analíticas fechadas de forças e potências de perfil
 (<span class="math inline">\(C_{H0}\)</span>, <span
 class="math inline">\(C_{Q0}\)</span> e <span
@@ -2350,14 +2347,15 @@ C_{H0} = \frac{3}{8}\sigma C_{d0}\mu.
 <div class="box-title">
 <p>Aproximação tangencial (referência comparativa)</p>
 </div>
-<h4 class="callout-inner-heading"
-id="comparação-com-a-literatura-clássica">Comparação com a literatura
-clássica</h4>
 <p>Se o escoamento radial <span class="math inline">\(u_R\)</span> for
 desprezado e o arrasto for tratado como puramente tangencial:</p>
-<p>$$</p>
-<p>.</p>
-<p>$$</p>
+<p><span class="math display">\[
+\boxed{
+C_{H0}^{\mathrm{tang}}
+=
+\frac14\sigma C_{d0}\mu(1-\bar r_0^2)
+}.
+\]</span></p>
 <p>Sem corte de raiz (<span class="math inline">\(\bar r_0=0\)</span>),
 obtém-se o valor simplificado clássico <span
 class="math inline">\(C_{H0}^{\mathrm{tang}}=\frac14\sigma
@@ -2733,9 +2731,6 @@ C_{Qi} = \frac{\sigma a}{2}\left(\frac{\lambda\theta_0}{3} -
 <p>Rota alternativa: <span class="math inline">\(C_{Qi}\)</span> via
 balanço energético</p>
 </div>
-<h4 class="callout-inner-heading"
-id="fechamento-pelo-balanço-de-potência">Fechamento pelo balanço de
-potência</h4>
 <p>A derivação acima obtém <span class="math inline">\(C_{Qi}\)</span>
 integrando o momento da força induzida no plano da pá. Em formulações
 analíticas e computacionais baseadas no balanço global de potência do
@@ -2829,14 +2824,20 @@ C_{Q0}^{\mathrm{vec}}
 <div class="box-title">
 <p>Aproximação tangencial (referência comparativa)</p>
 </div>
-<h4 class="callout-inner-heading"
-id="comparação-com-a-literatura-clássica-1">Comparação com a literatura
-clássica</h4>
 <p>Se o escoamento radial for desprezado e <span
 class="math inline">\(W\approx|u_T|\)</span>:</p>
-<p>$$</p>
-<p>.</p>
-<p>$$</p>
+<p><span class="math display">\[
+\boxed{
+C_{Q0}^{\mathrm{tang}}
+=
+\frac{\sigma C_{d0}}8
+\left[
+(1-\bar r_0^4)
++
+\mu^2(1-\bar r_0^2)
+\right]
+}.
+\]</span></p>
 <p>Sem corte de raiz (<span class="math inline">\(\bar r_0=0\)</span>),
 obtém-se a expressão usual da literatura simplificada <span
 class="math inline">\(C_{Q0}^{\mathrm{tang}}=\frac{\sigma
@@ -3042,14 +3043,15 @@ C_{Q0}+\mu C_{H0}\\
 <p>Aproximação prática de Bennett e a origem do fator <span
 class="math inline">\(4.65\mu^2\)</span></p>
 </div>
-<h4 class="callout-inner-heading"
-id="ajuste-semi-empírico-de-dissipação-viscosa">Ajuste semi-empírico de
-dissipação viscosa</h4>
 <p>Bennett propôs a aproximação semi-empírica clássica para a potência
 de perfil no ar:</p>
-<p>$$</p>
-<p>.</p>
-<p>$$</p>
+<p><span class="math display">\[
+\boxed{
+C_{P0,\mathrm{air}}^{\mathrm{Ben}}
+\approx
+\frac{\sigma C_{d0}}8(1+4.65\mu^2)
+}.
+\]</span></p>
 <p>A integração vetorial direta de baixa ordem truncada em <span
 class="math inline">\(\mu^2\)</span> fornece rigorosamente <span
 class="math inline">\(1 + 4.5\mu^2\)</span> (<span
@@ -3076,42 +3078,42 @@ garante excelente fidelidade prática: erro inferior a cerca de 1% até
 <p>Rota alternativa: <span class="math inline">\(C_{Qi}\)</span> por
 balanço energético</p>
 </div>
-<h4 class="callout-inner-heading"
-id="fechamento-macroscópico-de-potência">Fechamento macroscópico de
-potência</h4>
 <p>Embora <span class="math inline">\(C_{Qi}\)</span> tenha sido
 derivado diretamente da integral de torque na Seção 13, ele também pode
 ser recuperado a partir do balanço energético. Como</p>
-<p>$$</p>
-<p>C_{Pair}=C_Q+C_H,</p>
-<p>$$</p>
+<p><span class="math display">\[
+C_{Pair}=C_Q+\mu C_H,
+\]</span></p>
 <p>com</p>
-<p>$$</p>
-<p>C_Q=C_{Qi}+C_{Q0},</p>
-<p>C_H=C_{Hi}+C_{H0},</p>
-<p>$$</p>
+<p><span class="math display">\[
+C_Q=C_{Qi}+C_{Q0},
+\qquad
+C_H=C_{Hi}+C_{H0},
+\]</span></p>
 <p>e</p>
-<p>$$</p>
-<p>C_{Pair}</p>
-<p>=</p>
-<p>K_{}_iC_T</p>
-<ul>
-<li></li>
-</ul>
-<p>_zC_T</p>
-<ul>
-<li></li>
-</ul>
-<p>C_{Q0}</p>
-<ul>
-<li></li>
-</ul>
-<p>C_{H0},</p>
-<p>$$</p>
+<p><span class="math display">\[
+C_{Pair}
+=
+K_{\mathrm{ind}}\lambda_iC_T
++
+\mu_zC_T
++
+C_{Q0}
++
+\mu C_{H0},
+\]</span></p>
 <p>segue que</p>
-<p>$$</p>
-<p>.</p>
-<p>$$</p>
+<p><span class="math display">\[
+\boxed{
+C_{Qi}^{\mathrm{EB}}
+=
+K_{\mathrm{ind}}\lambda_iC_T
++
+\mu_zC_T
+-
+\mu C_{Hi}
+}.
+\]</span></p>
 <p>O termo <span class="math inline">\(-\mu C_{Hi}\)</span> surge ao
 converter a potência aerodinâmica no ar em torque de eixo; ele não
 representa uma parcela adicional de perda em <span
