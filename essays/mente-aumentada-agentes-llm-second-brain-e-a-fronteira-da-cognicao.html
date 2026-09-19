@@ -1751,11 +1751,11 @@ para obter uma análise técnica e recebeu nonsense bem formatado tem toda
 a razão de ter ficado desconfiado.</p>
 <p>O problema é que <strong>essa experiência não corresponde mais à
 realidade dos modelos de ponta de 2025-2026</strong>. Os modelos que
-realmente transformam o trabalho técnico — Claude Opus, GPT-4o, Gemini
-Pro — são pagos, e não são baratos. O gap entre o que está disponível
-gratuitamente e o que está disponível via API ou assinatura premium se
-tornou enorme. A maioria das pessoas nunca teve acesso ao que esses
-modelos são capazes de fazer hoje.</p>
+realmente transformam o trabalho técnico — Claude Fable 5.1, GPT 6 Astra
+e Gemini 3.8 Flash — são pagos, e não são baratos. O gap entre o que
+está disponível gratuitamente e o que está disponível via API ou
+assinatura premium se tornou enorme. A maioria das pessoas nunca teve
+acesso ao que esses modelos são capazes de fazer hoje.</p>
 <p>Somado a isso, o uso de agentes — a forma mais poderosa de interação
 com LLMs — ainda exige configuração técnica significativa: instalar
 ferramentas via linha de comando, gerenciar chaves de API, configurar
@@ -1979,8 +1979,7 @@ Esse conhecimento persiste entre sessões.</p>
 <h2 id="os-principais-agentes-do-mercado">Os Principais Agentes do
 Mercado</h2>
 <p>Claude Code Anthropic [<a href="#referências">14</a>]</p>
-<p>Modelos: claude-opus-5 (ou opus-4-6) · claude-sonnet-5 (ou
-sonnet-4-6)</p>
+<p>Modelos: Claude Fable 5.1 (claude-fable-5-1)</p>
 <p><strong>Interface:</strong> terminal exclusivamente (Windows:
 PowerShell, CMD ou Windows Terminal). Sem GUI. A comunicação é
 inteiramente textual — você digita instruções em linguagem natural, o
@@ -2001,14 +2000,13 @@ cada ação do agente, para formatação automática, lint e CI), e
 PDFs, PPTX ou workflows específicos de domínio). Conecta-se a servidores
 MCP para integrar Google Drive, Jira, Slack, GitHub e ferramentas
 proprietárias sem código customizado.</p>
-<p>O <strong>Claude Opus 5 (e Opus 4.6)</strong> é superior em tarefas
-que exigem entendimento profundo de sistemas complexos, raciocínio
-causal e manutenção de contexto em projetos grandes — ideal para análise
-de requisitos de certificação, revisão de FMEAs, e interpretação de
-regulamentos FAR/CS. O <strong>Claude Sonnet 5 (e Sonnet 4.6)</strong>,
-mais veloz e econômico, cobre a maioria dos casos cotidianos com
-excelente custo-benefício. Ambos suportam janela de contexto de 1M
-tokens.</p>
+<p>O <strong>Claude Fable 5.1</strong> é o modelo de fronteira da
+Anthropic, superior em tarefas que exigem entendimento profundo de
+sistemas complexos, raciocínio causal, raciocínio estendido
+(<em>extended thinking</em>) e manutenção de contexto em projetos
+grandes — ideal para análise de requisitos de certificação, revisão de
+FMEAs e interpretação de regulamentos FAR/CS. Suporta janela de contexto
+de 1M tokens com altíssima precisão e velocidade.</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">irm</span> https<span class="op">://</span>claude<span class="op">.</span><span class="fu">ai</span><span class="op">/</span>install<span class="op">.</span><span class="fu">ps1</span> <span class="op">|</span> <span class="fu">iex</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -2029,7 +2027,7 @@ class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-
 <li>Interface puramente de terminal</li>
 </ul>
 <p>Gemini CLI Google [<a href="#referências">15</a>]</p>
-<p>Modelos: Gemini 3.1 Pro Preview · Gemini 2.5 Flash</p>
+<p>Modelos: Gemini 3.8 Flash</p>
 <p><strong>Interface:</strong> terminal (Windows: PowerShell / CMD /
 Windows Terminal). Instalado via Node.js
 (<code>npm install -g @google/gemini-cli</code>), iniciado com
@@ -2041,13 +2039,17 @@ com o mesmo princípio de briefing por projeto. Suporta também
 (razão + ação) — lê arquivos, executa comandos shell, cria e modifica
 arquivos autonomamente. Inclui ferramentas nativas de Google Search com
 grounding, acesso a web via fetch, e execução de código. O diferencial
-concreto é a janela de contexto de <strong>1 milhão de tokens</strong>
-no Gemini 3.1 Pro Preview, o que permite ingerir projetos inteiros de
-uma vez. Extensível via servidores MCP e Agent Skills (SKILL.md), com
-suporte a workflows paralelos e checkpointing de sessão.</p>
+concreto do <strong>Gemini 3.8 Flash</strong> é aliar raciocínio de
+ponta e altíssima cadência a uma janela de contexto massiva de <strong>1
+milhão de tokens</strong> (com expansões adicionais para tiers
+corporativos), o que permite ingerir projetos inteiros de uma vez com
+máxima eficiência para fluxos de código e pesquisa técnica. Extensível
+via servidores MCP e Agent Skills (SKILL.md), com suporte a workflows
+paralelos e checkpointing de sessão.</p>
 <p><strong>Pontos fortes</strong></p>
 <ul>
-<li>Janela de 1M tokens (Gemini 3.1 Pro)</li>
+<li>Janela de 1M tokens nativa (Gemini 3.8 Flash)</li>
+<li>Gemini 3.8 Flash com alta cadência, precisão e eficiência</li>
 <li>Google Search grounding nativo</li>
 <li>Tier gratuito generoso (1.000 req/dia)</li>
 <li>Agent Skills e MCP extensíveis</li>
@@ -2055,12 +2057,14 @@ suporte a workflows paralelos e checkpointing de sessão.</p>
 </ul>
 <p><strong>Limitações</strong></p>
 <ul>
-<li>Gemini 3.1 Pro ainda em preview (não GA)</li>
-<li>Menos controle granular de aprovação que Claude Code</li>
-<li>Ecossistema de extensões ainda em crescimento</li>
+<li>Menos controle granular de aprovação interativa do que Claude Code
+em fluxos complexos de terminal</li>
+<li>Quotas e latência em raciocínios longos com grounding extensivo de
+busca</li>
+<li>Ecossistema de extensões ainda em consolidação</li>
 </ul>
 <p>OpenAI Codex CLI OpenAI [<a href="#referências">16</a>]</p>
-<p>Modelos: GPT-5.4 · GPT-5.4 Pro (raciocínio avançado)</p>
+<p>Modelos: GPT 6 Astra</p>
 <p><strong>Interface:</strong> terminal (Windows: PowerShell / Windows
 Terminal). Instalado via <code>npm install -g @openai/codex</code>,
 iniciado com <code>codex</code>. Usa <code>AGENTS.md</code> para
@@ -2068,25 +2072,29 @@ configuração persistente de contexto por projeto — o mesmo arquivo
 reconhecido por outros agentes compatíveis com o padrão aberto.</p>
 <p><strong>Esquema de trabalho:</strong> similar ao Claude Code — você
 descreve a tarefa em linguagem natural, o agente planeja ações, lê e
-escreve arquivos, executa comandos. O diferencial está no modo
-“Thinking” do GPT-5.4, que realiza raciocínio explícito passo a passo
-antes de agir — vantajoso em problemas de otimização, verificação de
-equações aerodinâmicas e análise de requisitos complexos. Suporte
-experimental a janela de contexto de 1M tokens no Codex. O
-<strong>GPT-5.4 Pro</strong>, disponível em planos Enterprise,
-representa o topo de linha para tarefas profissionais de alta
-complexidade.</p>
+escreve arquivos, executa comandos em ambiente seguro. O diferencial
+está no modo “Thinking” com raciocínio deliberativo
+(<em>chain-of-thought</em>) do <strong>GPT 6 Astra</strong>, que realiza
+deduções explícitas passo a passo antes de agir — extremamente vantajoso
+em problemas de otimização, verificação de equações aerodinâmicas e
+análise de requisitos complexos. Suporte a janela de contexto expandida
+de 1 milhão de tokens no ecossistema Codex. O <strong>GPT 6
+Astra</strong>, disponível em planos profissionais e Enterprise,
+representa o topo de linha para tarefas que demandam máxima profundidade
+lógica e rigor formal.</p>
 <p><strong>Pontos fortes</strong></p>
 <ul>
-<li>Raciocínio matemático explícito (GPT-5.4 Thinking)</li>
-<li>Ecossistema OpenAI maturo</li>
-<li>AGENTS.md compatível com padrão aberto</li>
-<li>GPT-5.4 Pro para tarefas de alta complexidade</li>
+<li>Raciocínio matemático e lógico deliberativo de fronteira (GPT 6
+Astra)</li>
+<li>Ecossistema OpenAI maturo e integrado à suíte ChatGPT Work /
+Desktop</li>
+<li>AGENTS.md compatível com padrão aberto e sandboxing nativo</li>
+<li>GPT 6 Astra para tarefas de alta complexidade e certificação</li>
 </ul>
 <p><strong>Limitações</strong></p>
 <ul>
-<li>Sem tier gratuito relevante</li>
-<li>Política de dados para projetos sensíveis</li>
+<li>Sem tier gratuito relevante para modelos de raciocínio avançado</li>
+<li>Política de dados para projetos sensíveis corporativos</li>
 </ul>
 <p>GitHub Copilot Microsoft [<a href="#referências">17</a>]</p>
 <p>Integração: VS Code · JetBrains · IDE-first</p>
@@ -2193,10 +2201,10 @@ intelectual ou certificação técnica):</p>
 <li><strong>Local (Ollama / Hardware On-Premises):</strong> Varredura de
 dados confidenciais, relatórios de falhas e logs internos sem saída de
 pacotes para a nuvem.</li>
-<li><strong>Frontier Models via API (Claude Opus 5, GPT-5.4 / o3-pro,
-Gemini 3.1 Pro):</strong> Síntese metodológica, arquitetura de sistemas
-e tarefas abstratas onde dados anonimizados operam com máxima capacidade
-de raciocínio.</li>
+<li><strong>Frontier Models via API (Claude Fable 5.1, GPT 6 Astra,
+Gemini 3.8 Flash):</strong> Síntese metodológica, arquitetura de
+sistemas e tarefas abstratas onde dados anonimizados operam com máxima
+capacidade de raciocínio.</li>
 </ul>
 </div>
 <p>Para equipes com projetos sensíveis — defesa, certificação
@@ -2254,12 +2262,13 @@ ollama pull deepseek-r1:32b  # Forte em raciocínio matemático</code></pre>
 </tbody>
 </table>
 <p><strong>Importante:</strong> modelos locais de 26B-31B parâmetros são
-significativamente menos capazes que <strong>Claude Opus 4.6</strong> ou
-<strong>GPT-5.4</strong> em tarefas complexas de raciocínio. A exceção
-são os modelos MoE como Gemma 4 26B, que entregam qualidade
-surpreendente para o tamanho efetivo. A estratégia híbrida é sensata:
-modelos locais para processamento em massa e código rotineiro; API cloud
-para análises mais sofisticadas.</p>
+significativamente menos capazes que <strong>Claude Fable 5.1</strong>,
+<strong>GPT 6 Astra</strong> ou <strong>Gemini 3.8 Flash</strong> em
+tarefas complexas de raciocínio. A exceção são os modelos MoE como Gemma
+4 26B, que entregam qualidade surpreendente para o tamanho efetivo. A
+estratégia híbrida é sensata: modelos locais para processamento em massa
+e código rotineiro, reservando APIs em nuvem para análises mais
+sofisticadas.</p>
 <hr />
 <h2 id="o-conceito-de-second-brain">O Conceito de Second Brain</h2>
 <p>O termo “<a
@@ -3048,10 +3057,9 @@ href="https://en.wikipedia.org/wiki/Andy_Clark">Andy Clark</a> e <a
 href="https://en.wikipedia.org/wiki/David_Chalmers">David Chalmers</a>
 formalizaram a filosofia em 1998. Andrej Karpathy destilou o padrão
 prático em 2026. Os modelos que tornam tudo isso possível —
-<strong>Claude Opus 4.6</strong>, <strong>Claude Sonnet 4.6</strong>,
-<strong>GPT-5.4</strong>, <strong>Gemini 3.1 Pro</strong> — existem
-agora, são acessíveis agora. As ferramentas estão disponíveis. O momento
-de começar é este.</p>
+<strong>Claude Fable 5.1</strong>, <strong>GPT 6 Astra</strong>,
+<strong>Gemini 3.8 Flash</strong> — existem agora, são acessíveis agora.
+As ferramentas estão disponíveis. O momento de começar é este.</p>
 <hr />
 <h2 id="referências">Referências</h2>
 <p>[1] Karpathy, A., <em>LLM Wiki</em>, GitHub Gist, 2026. (acesso em 18
@@ -3108,18 +3116,17 @@ externas, 100% on-device. <a
 href="https://github.com/kytmanov/obsidian-llm-wiki-local">Link</a></p>
 <p>[14] Anthropic, <em>Claude Code</em>, 2026. (acesso em 18 set. 2026).
 — Agente de terminal.
-<code>npm install -g @anthropic-ai/claude-code</code>. Modelos: Opus 4.6
-/ Sonnet 4.6. <a href="https://claude.ai/code">Link</a></p>
+<code>npm install -g @anthropic-ai/claude-code</code>. Modelo: Claude
+Fable 5.1. <a href="https://claude.ai/code">Link</a></p>
 <p>[15] Google, <em>Gemini CLI</em>, GitHub repository. (acesso em 18
 set. 2026). — Agente de terminal open-source.
-<code>npm install -g @google/gemini-cli</code>. Modelo flagship: Gemini
-3.1 Pro Preview. Contexto de 1M tokens, Google Search nativo, MCP e
-Agent Skills. <a
-href="https://github.com/google-gemini/gemini-cli">Link</a></p>
+<code>npm install -g @google/gemini-cli</code>. Modelo: Gemini 3.8
+Flash. Contexto de 1M tokens, Google Search nativo, MCP e Agent Skills.
+<a href="https://github.com/google-gemini/gemini-cli">Link</a></p>
 <p>[16] OpenAI, <em>Codex CLI</em>, GitHub repository. (acesso em 18
 set. 2026). — Agente de terminal.
-<code>npm install -g @openai/codex</code>. Modelos: GPT-5.4 / GPT-5.4
-Pro (Thinking). Suporte experimental a contexto de 1M tokens. <a
+<code>npm install -g @openai/codex</code>. Modelo: GPT 6 Astra
+(Thinking). Suporte a contexto expandido de 1M tokens. <a
 href="https://github.com/openai/codex">Link</a></p>
 <p>[17] Microsoft, <em>GitHub Copilot</em>. (acesso em 18 set. 2026). —
 Agente integrado ao IDE (VS Code / JetBrains). Autocomplete inline,
