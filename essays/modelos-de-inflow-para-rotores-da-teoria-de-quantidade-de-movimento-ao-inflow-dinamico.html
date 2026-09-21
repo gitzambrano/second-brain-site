@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="22">
+<html lang="pt-BR" data-status="finalizado" data-minutes="32">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A Física do que um Modelo Decide Esquecer — Informação, Aproximação e os Limites da Simulação</title>
-<meta property="og:title" content="A Física do que um Modelo Decide Esquecer — Informação, Aproximação e os Limites da Simulação">
-<meta property="og:description" content="Modelar não é replicar o cosmos, mas realizar uma compressão informacional seletiva. Da hidrodinâmica às derivadas de estabilidade, dos Digital Twins e emuladores neurais à maldição borgesiana de Funes o Memorioso, a engenharia progride ao descartar variáveis irrelevantes, confrontando o limite epistemológico de confiar onde não mediu.">
+<title>Modelos de Inflow para Rotores: da Teoria de Quantidade de Movimento ao Inflow Dinâmico</title>
+<meta property="og:title" content="Modelos de Inflow para Rotores: da Teoria de Quantidade de Movimento ao Inflow Dinâmico">
+<meta property="og:description" content="Glauert, Coleman, Drees, Mangler–Squire, Pitt–Peters e Peters–He são construídos passo a passo, do balanço de quantidade de movimento à teoria de estados finitos. A tese é que esses modelos não formam uma escala de precisão, e sim de informação preservada: valor médio, gradiente espacial, estrutura radial e memória temporal da esteira. Um mesmo ponto de operação percorre todos eles em um exemplo numérico fechado.">
 <meta property="og:type" content="article">
 <script defer="" src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -1603,694 +1603,1967 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <header class="masthead">
   <div class="stripe"></div>
   <div class="masthead-inner">
-    <h1 class="hero-title">A Física do que um Modelo Decide Esquecer — Informação, Aproximação e os Limites da Simulação</h1>
+    <h1 class="hero-title">Modelos de Inflow para Rotores: da Teoria de Quantidade de Movimento ao Inflow Dinâmico</h1>
     <hr class="masthead-rule">
     <p class="byline">Gustavo Zambrano · Setembro de 2026</p>
-    <p class="cover-summary">Modelar não é replicar o cosmos, mas realizar uma compressão informacional seletiva. Da hidrodinâmica às derivadas de estabilidade, dos Digital Twins e emuladores neurais à maldição borgesiana de Funes o Memorioso, a engenharia progride ao descartar variáveis irrelevantes, confrontando o limite epistemológico de confiar onde não mediu.</p>
+    <p class="cover-summary">Glauert, Coleman, Drees, Mangler–Squire, Pitt–Peters e Peters–He são construídos passo a passo, do balanço de quantidade de movimento à teoria de estados finitos. A tese é que esses modelos não formam uma escala de precisão, e sim de informação preservada: valor médio, gradiente espacial, estrutura radial e memória temporal da esteira. Um mesmo ponto de operação percorre todos eles em um exemplo numérico fechado.</p>
   </div>
 </header>
 
 <main class="content">
-<div class="pull-quote callout-quote">
-<div class="quote-text">
-<p>Todos os modelos estão errados, mas alguns são úteis.</p>
-</div>
-<div class="quote-attribution">
-<p>— George E. P. Box, <em>Science and Statistics</em> (1976)</p>
-</div>
-</div>
-<hr />
 <h2 id="sumário">Sumário</h2>
 <ul>
-<li><a href="#introdução-nenhum-modelo-contém-o-mundo">Introdução:
-Nenhum Modelo Contém o Mundo</a></li>
-<li><a href="#o-ato-de-escolher-um-estado-já-é-um-ato-de-esquecimento">O
-Ato de Escolher um Estado já é um Ato de Esquecimento</a></li>
+<li><a href="#1-introdução">1. Introdução</a></li>
+<li><a href="#2-variáveis-e-campo-de-inflow">2. Variáveis e Campo de
+Inflow</a></li>
 <li><a
-href="#coarse-graining-transformar-muitos-detalhes-em-poucos-números">Coarse-Graining:
-Transformar Muitos Detalhes em Poucos Números</a></li>
-<li><a href="#linearização-esquecer-a-curvatura-local">Linearização:
-Esquecer a Curvatura Local</a></li>
+href="#3-glauert-o-inflow-médio-a-partir-da-teoria-de-quantidade-de-movimento">3.
+Glauert: o inflow médio a partir da teoria de quantidade de
+movimento</a></li>
 <li><a
-href="#de-navier-stokes-a-derivadas-de-estabilidade-uma-cadeia-de-compressões">De
-Navier-Stokes a Derivadas de Estabilidade: Uma Cadeia de
-Compressões</a></li>
+href="#4-coleman-gradiente-longitudinal-produzido-pela-esteira-inclinada">4.
+Coleman: gradiente longitudinal produzido pela esteira
+inclinada</a></li>
+<li><a href="#5-drees-gradientes-longitudinal-e-lateral">5. Drees:
+gradientes longitudinal e lateral</a></li>
 <li><a
-href="#quando-o-passado-foi-esquecido-inflow-esteiras-e-estados-ocultos">Quando
-o Passado Foi Esquecido: Inflow, Esteiras e Estados Ocultos</a></li>
-<li><a
-href="#redução-de-ordem-encontrar-as-coordenadas-que-carregam-a-dinâmica">Redução
-de Ordem: Encontrar as Coordenadas que Carregam a Dinâmica</a></li>
-<li><a
-href="#surrogates-e-digital-twins-quando-o-modelo-do-modelo-vira-ferramenta">Surrogates
-e Digital Twins: Quando o Modelo do Modelo Vira Ferramenta</a></li>
-<li><a href="#o-paradoxo-da-validação-como-confiar-onde-não-medimos">O
-Paradoxo da Validação: Como Confiar Onde Não Medimos?</a></li>
-<li><a href="#hume-entra-no-simulador">Hume Entra no Simulador</a></li>
-<li><a
-href="#erro-de-modelo-a-incerteza-que-não-cabe-na-distribuição">Erro de
-Modelo: A Incerteza que Não Cabe na Distribuição</a></li>
-<li><a href="#a-compressão-ótima-depende-da-pergunta">A Compressão Ótima
-Depende da Pergunta</a></li>
-<li><a
-href="#conclusão-compreender-é-esquecer-com-disciplina">Conclusão:
-Compreender é Esquecer com Disciplina</a></li>
+href="#6-manglersquire-distribuição-espacial-por-teoria-potencial">6.
+Mangler–Squire: distribuição espacial por teoria potencial</a></li>
+<li><a href="#7-inflow-dinâmico">7. Inflow Dinâmico</a></li>
+<li><a href="#8-pittpeters-três-estados-para-a-dinâmica-da-esteira">8.
+Pitt–Peters: três estados para a dinâmica da esteira</a></li>
+<li><a href="#9-petershe-uma-teoria-de-estados-finitos-generalizada">9.
+Peters–He: uma teoria de estados finitos generalizada</a></li>
+<li><a href="#10-síntese-dos-modelos-e-aplicações">10. Síntese dos
+Modelos e Aplicações</a></li>
+<li><a href="#11-exemplo-numérico">11. Exemplo Numérico</a></li>
+<li><a href="#12-conclusão">12. Conclusão</a></li>
 </ul>
 <hr />
-<h2 id="introdução-nenhum-modelo-contém-o-mundo">Introdução: Nenhum
-Modelo Contém o Mundo</h2>
-<p>Em um conto célebre de um único parágrafo intitulado <em>Del rigor en
-la ciencia</em>, o escritor argentino <a
-href="https://en.wikipedia.org/wiki/Jorge_Luis_Borges">Jorge Luis
-Borges</a> [<a href="#referências">1</a>] narra a ruína de um império
-cuja corporação de cartógrafos atingiu tal perfeição técnica que
-produziu um mapa do império cuja escala era de um para um, coincidindo
-ponto por ponto com o território real. As gerações seguintes perceberam
-a inutilidade daquela obra colossal: consultar o mapa exigia caminhar
-sobre uma superfície idêntica ao próprio solo. A relíquia foi abandonada
-às intempéries dos desertos ocidentais, desfazendo-se em frangalhos de
-pergaminho sob o sol e o inverno.</p>
-<p>A fábula borgesiana expressa a condição primeira de qualquer esforço
-científico e de engenharia. Um modelo que tentasse conter a totalidade
-da realidade não seria um modelo. Seria apenas uma duplicação inútil do
-universo, compartilhando todas as dificuldades operacionais do objeto
-original.</p>
-<p>Considere três representações distintas de uma mesma aeronave de
-transporte comercial estacionada em um hangar. Para a equipe de
-aeroelasticidade e integridade estrutural, a aeronave é uma malha
-tridimensional de <a
-href="https://en.wikipedia.org/wiki/Finite_element_method">elementos
-finitos</a> contendo dezenas de milhões de nós mecânicos que descrevem a
-flexibilidade das longarinas, a espessura dos painéis e as tensões
-locais sob turbulência. Para a equipe encarregada de projetar o piloto
-automático de atitude, a aeronave é um sistema dinâmico rígido de seis
-graus de liberdade, reduzido a um vetor compacto de doze estados
-acoplados por derivadas aerodinâmicas. Para o despachante de voo
-calculando o plano de abastecimento entre dois continentes, o avião
-colapsa em uma tabela tabular de consumo e uma curva polar de arrasto
-que relaciona peso, altitude e velocidade.</p>
-<p>Cada uma dessas representações é verdadeira em um sentido operacional
-rigoroso. Nenhuma delas é completa. Todas operam mediante um ato prévio
-de amputação deliberada.</p>
-<p>Modelar a natureza é uma atividade de compressão seletiva de
-informação [<a href="#referências">3</a>]. Um modelo físico não triunfa
-porque descreve tudo o que acontece, mas porque descarta com precisão
-matemática tudo aquilo que não altera a resposta para uma pergunta
-específica. O erro perigoso na ciência aplicada nunca reside no ato de
-esquecer, pois sem esquecimento o cálculo é impossível. O erro reside em
-esquecer um mecanismo físico que, sob condições não testadas, volta a
-governar o comportamento do sistema.</p>
-<div class="box callout-abstract">
-<div class="box-title">
-<p>Compressão de Estados em Três Escalas</p>
-</div>
-<p>Três descrições da mesma máquina revelam resoluções físicas distintas
-para finalidades complementares:</p>
-<ul>
-<li><strong>Malha estrutural completa:</strong> <span
-class="math inline">\(10^7\)</span> graus de liberdade. Calcula
-flambagem, fadiga e concentração de tensões locais. É intratável para
-simulações de trajetória temporal em tempo real.</li>
-<li><strong>Dinâmica de corpo rígido (6-DOF):</strong> 12 variáveis de
-estado. Resolve estabilidade de atitude, amortecimento de modos e leis
-de controle de voo. Descarta a deformação elástica dos membros.</li>
-<li><strong>Equações de energia e performance pontual:</strong> 3
-variáveis macroscópicas. Determina alcance de cruzeiro, teto de serviço
-e consumo de combustível.</li>
-</ul>
-</div>
-<h2 id="o-ato-de-escolher-um-estado-já-é-um-ato-de-esquecimento">O Ato
-de Escolher um Estado já é um Ato de Esquecimento</h2>
-<p><picture><source srcset="../assets/media/a-fisica-do-que-um-modelo-decide-esquecer-informacao-aproximacao-e-os-limites-da-simulacao_fig1.webp" type="image/webp"><img
-src="../assets/media/a-fisica-do-que-um-modelo-decide-esquecer-informacao-aproximacao-e-os-limites-da-simulacao_fig1.png"
-alt="Infográfico: Os Três Pilares da Termodinâmica da Informação" /></picture></p>
-<p><em>Figura 1. Limite de Landauer, Teorema de Liouville e a Computação
-Reversível de Bennett: os fundamentos termodinâmicos da perda de
-informação.</em></p>
-<p>A redução dimensional de um sistema físico não tem início quando
-escrevemos um algoritmo numérico em um computador. Ela começa no
-instante teórico em que decidimos quais grandezas merecem compor o vetor
-de estado.</p>
-<p>Na <a
-href="https://en.wikipedia.org/wiki/Flight_dynamics_(fixed-wing_aircraft)">mecânica
-de voo</a> tradicional, a evolução de uma aeronave é formalizada por um
-vetor de variáveis <span class="math inline">\(x = [u, v, w, p, q, r,
-\phi, \theta, \psi, x_E, y_E, z_E]^T\)</span>, registrando velocidades
-translacionais, velocidades angulares e orientações no espaço [<a
-href="#referências">11</a>]. No momento em que essa escolha é fixada no
-papel, bilhões de graus de liberdade da matéria real são ativamente
-descartados. O modelo ignora as oscilações de flexão da ponta da asa, as
-flutuações de vórtices microscópicos nas fendas dos flaps, a temperatura
-do fluido nos atuadores hidráulicos e a vibração acústica no interior da
-cabine.</p>
-<p>A adoção de um vetor de estado discreto traduz uma aposta
-informacional sobre a memória do sistema. Na linguagem da matemática de
-<a href="https://en.wikipedia.org/wiki/Dynamical_system">sistemas
-dinâmicos</a>, assume-se que o vetor escolhido é suficientemente
-informativo para que o estado futuro dependa unicamente do estado
-presente. Essa propriedade, conhecida como markovianidade efetiva,
-estabelece que todo o histórico passado do avião foi sintetizado nos
-números que compõem <span class="math inline">\(x\)</span> neste exato
-instante.</p>
-<p>Essa hipótese nem sempre resiste ao contato com regimes severos.
-Quando o sistema físico retém memória de estados anteriores que foram
-banidos do modelo simplificado, essa dinâmica esquecida não evapora no
-ar. Ela reaparece nas observações experimentais como anomalias não
-explicadas: atrasos de fase imprevistos entre comando e resposta,
-ciclos-limite, histerese aerodinâmica ou distúrbios que os engenheiros
-chamam genericamente de ruído de processo. A aparente aleatoriedade de
-uma medição física é, com frequência, a assinatura determinística de um
-estado que decidimos não enxergar.</p>
-<div class="box callout-info">
-<div class="box-title">
-<p>Evidência</p>
-</div>
-<h4 class="callout-inner-heading"
-id="a-memória-oculta-da-aerodinâmica-não-estacionária">A Memória Oculta
-da Aerodinâmica Não-Estacionária</h4>
-<p>Em manobras rápidas de elevação de ângulo de ataque próximo ao estol,
-o coeficiente de sustentação de um perfil aerodinâmico não segue a mesma
-curva durante a subida e a descida do comando. Ele descreve um laço
-aberto de histerese. Se o modelo considerar a sustentação como uma
-função puramente instantânea do ângulo de ataque estático, o erro de
-predição de forças pode superar 40% durante o ciclo. O fluxo de ar
-descolado retém memória da esteira que exige estados adicionais de
-dinâmica de vórtices para ser restaurada.</p>
-</div>
+<h2 id="1-introdução">1. Introdução</h2>
+<p>O inflow de um rotor é a velocidade induzida pelo próprio rotor no
+escoamento que atravessa o disco. A dificuldade está em definir
+<strong>qual</strong> velocidade representa o fenômeno de interesse.
+Para desempenho em voo pairado, um valor médio pode ser suficiente. Para
+calcular <a
+href="https://en.wikipedia.org/wiki/Helicopter_rotor#Flapping">batimento</a>,
+momentos de cubo e distribuição de carga em voo à frente, é preciso
+representar efeitos locais. Para dinâmica de voo e controle, também é
+necessário representar a resposta temporal: a velocidade induzida não
+muda instantaneamente quando a carga do rotor muda.</p>
+<p>Os modelos clássicos de inflow diferem pela informação física que
+representam. A <a
+href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/1434">teoria
+de Glauert</a> [<a href="#referências">1</a>] fornece o inflow médio
+compatível com tração e balanço de quantidade de movimento. <a
+href="https://ntrs.nasa.gov/citations/19930093086">Coleman, Feingold e
+Stempin</a> [<a href="#referências">2</a>] acrescentam o gradiente
+longitudinal associado à inclinação da esteira, enquanto <a
+href="https://doi.org/10.1017/S2753447200000871">Drees</a> [<a
+href="#referências">3</a>] inclui também um gradiente lateral. <a
+href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/3182">Mangler
+e Squire</a> [<a href="#referências">4</a>] representam dependência
+radial e azimutal por teoria potencial. <a
+href="https://profiles.wustl.edu/en/publications/theoretical-prediction-of-dynamic-inflow-derivatives/">Pitt
+e Peters</a> [<a href="#referências">5</a>] introduzem estados
+diferenciais para os modos de inflow, e Peters, Boyd e He [<a
+href="#referências">7</a>], seguidos por <a
+href="https://profiles.wustl.edu/en/publications/finite-state-induced-flow-models-ii-three-dimensional-rotor-disk/">Peters
+e He</a> [<a href="#referências">8</a>], [<a href="#referências">9</a>],
+generalizam a base modal. Esses modelos não constituem uma escala única
+de precisão: a escolha depende da informação espacial e temporal
+necessária ao problema.</p>
+<h2 id="2-variáveis-e-campo-de-inflow">2. Variáveis e Campo de
+Inflow</h2>
+<p>Para um rotor de raio <span class="math inline">\(R\)</span>, área de
+disco <span class="math inline">\(A=\pi R^2\)</span> e velocidade
+angular <span class="math inline">\(\Omega\)</span>, adota-se como
+velocidade de referência a velocidade de ponta,</p>
+<p><span class="math display">\[
+V_{\mathrm{ponta}}=\Omega R.
+\]</span></p>
+<p>Ela fornece a escala para adimensionalizar as velocidades do
+escoamento e permite escrever as mesmas relações para rotores com
+diferentes raios e rotações.</p>
+<p>A velocidade do ar não perturbado é decomposta em uma componente
+<span class="math inline">\(V_t\)</span> no plano do disco e uma
+componente <span class="math inline">\(V_n\)</span> normal ao disco.
+Adota-se <span class="math inline">\(V_n&gt;0\)</span> no mesmo sentido
+do fluxo induzido através do rotor, que em voo pairado sustentado aponta
+para baixo através do disco.</p>
+<p>A velocidade induzida média no disco será <span
+class="math inline">\(v_i\)</span>. As grandezas adimensionais
+correspondentes são</p>
+<p><span class="math display">\[
+\mu=\frac{V_t}{\Omega R},
+\]</span></p>
+<p><span class="math display">\[
+\mu_z=\frac{V_n}{\Omega R},
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+\lambda_i=\frac{v_i}{\Omega R}.
+\]</span></p>
+<p>O símbolo <span class="math inline">\(\mu\)</span> representa a
+velocidade no plano do disco normalizada pela velocidade de ponta, <span
+class="math inline">\(\mu_z\)</span> representa a velocidade axial
+externa normalizada e <span class="math inline">\(\lambda_i\)</span>
+representa apenas a contribuição induzida pelo rotor.</p>
+<p>Define-se também o <strong>inflow total normal</strong> no disco,</p>
+<p><span class="math display">\[
+\lambda=\mu_z+\lambda_i.
+\]</span></p>
+<p><span class="math inline">\(\lambda_i\)</span> representa a parcela
+criada pelo rotor, enquanto <span class="math inline">\(\lambda\)</span>
+representa a velocidade normal total vista pela pá após incluir o
+movimento da aeronave. As duas grandezas não são intercambiáveis em
+subida ou descida.</p>
+<p>A tração é adimensionalizada como</p>
+<p><span class="math display">\[
+C_T=\frac{T}{\rho A\left(\Omega R\right)^2},
+\]</span></p>
+<p>onde <span class="math inline">\(\rho\)</span> é a densidade do ar.
+Essa definição transforma a carga global do rotor em uma quantidade
+comparável entre configurações diferentes.</p>
+<h3 id="campo-de-inflow">Campo de Inflow</h3>
+<p>A <a href="https://en.wikipedia.org/wiki/Momentum_theory">teoria de
+quantidade de movimento</a> mais simples usa apenas <span
+class="math inline">\(v_i\)</span>, um valor médio. O rotor real, porém,
+vê uma distribuição</p>
+<p><span class="math display">\[
+v_i=v_i(r,\psi,t),
+\]</span></p>
+<p>onde <span class="math inline">\(r\)</span> é a posição radial, <span
+class="math inline">\(\psi\)</span> é o <a
+href="https://en.wikipedia.org/wiki/Azimuth">azimute</a> e <span
+class="math inline">\(t\)</span> é o tempo. Em forma adimensional,</p>
+<p><span class="math display">\[
+\lambda_i=\lambda_i(\bar r,\psi,t),
+\qquad
+\bar r=\frac{r}{R}.
+\]</span></p>
+<p>A expressão permite variação radial, azimutal e temporal do campo.
+Glauert reduz essa descrição a um valor médio. Coleman e Drees
+acrescentam os primeiros gradientes azimutais com dependência radial
+linear, enquanto Mangler–Squire inclui vários <a
+href="https://en.wikipedia.org/wiki/Harmonic">harmônicos</a> e funções
+radiais próprias. Pitt–Peters retém poucos modos espaciais com dinâmica
+temporal, e Peters–He amplia sistematicamente o conjunto de modos.</p>
+<h3 id="acoplamento-entre-inflow-e-carga-da-pá">Acoplamento entre inflow
+e carga da pá</h3>
+<p>Para uma seção de pá a uma distância radial <span
+class="math inline">\(r\)</span>, a velocidade do ar incidente
+decompõe-se em uma componente no plano de rotação <span
+class="math inline">\(U_T\)</span> e uma componente perpendicular ao
+plano do disco <span class="math inline">\(U_P\)</span>. Em primeira
+aproximação,</p>
+<p><span class="math display">\[
+U_T \approx \Omega r + V_t\sin\psi = \Omega R\left(\bar r +
+\mu\sin\psi\right)
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+U_P \approx V_n + v_i = \Omega R\left(\mu_z + \lambda_i\right).
+\]</span></p>
+<p>O ângulo de inflow local <span class="math inline">\(\phi\)</span> é
+definido por</p>
+<p><span class="math display">\[
+\phi\approx\tan^{-1}\left(\frac{U_P}{U_T}\right).
+\]</span></p>
+<p>Para pequenos ângulos,</p>
+<p><span class="math display">\[
+\phi\approx\frac{U_P}{U_T}.
+\]</span></p>
+<p>O ângulo de ataque aerodinâmico da seção resulta em</p>
+<p><span class="math display">\[
+\alpha\approx\theta-\phi,
+\]</span></p>
+<p>onde <span class="math inline">\(\theta\)</span> é o passo geométrico
+local. Um acréscimo de inflow induzido <span
+class="math inline">\(\lambda_i\)</span> eleva <span
+class="math inline">\(U_P\)</span>, amplia o ângulo de escoamento <span
+class="math inline">\(\phi\)</span> e, consequentemente, reduz o ângulo
+de ataque efetivo <span class="math inline">\(\alpha\)</span> para um
+passo <span class="math inline">\(\theta\)</span> constante.</p>
+<p>Essa cadeia mostra como o inflow afeta as principais grandezas
+aerodinâmicas do rotor:</p>
+<p><span class="math display">\[
+\lambda_i
+\longrightarrow
+\phi
+\longrightarrow
+\alpha
+\longrightarrow
+C_l
+\longrightarrow
+\text{carga da pá}
+\longrightarrow
+\text{batimento e momentos de cubo}.
+\]</span></p>
+<p>Além do cálculo da potência induzida, o modelo de inflow entra na
+distribuição de carregamento que determina a dinâmica e o controle do
+rotor.</p>
 <h2
-id="coarse-graining-transformar-muitos-detalhes-em-poucos-números">Coarse-Graining:
-Transformar Muitos Detalhes em Poucos Números</h2>
-<p>O processo pelo qual a física transforma multidões de variáveis
-microscópicas em um punhado de grandezas macroscópicas utilizáveis
-atende pelo nome de <a
-href="https://en.wikipedia.org/wiki/Coarse-graining">coarse-graining</a>
-(granulação grossa). Esse procedimento é o alicerce silencioso que
-separa a física teórica da computação insolúvel.</p>
-<p>Considere a atmosfera através da qual voa uma aeronave. Um único
-metro cúbico de ar ao nível do mar contém aproximadamente <span
-class="math inline">\(2{,}5 \times 10^{25}\)</span> moléculas de
-nitrogênio e oxigênio colidindo em velocidades de centenas de metros por
-segundo. Rastrear individualmente a posição e o momento de cada molécula
-segundo as leis de Newton exigiria um computador cuja memória excederia
-toda a matéria conhecida do planeta.</p>
-<p>No entanto, a <a
-href="https://en.wikipedia.org/wiki/Fluid_mechanics">mecânica dos
-fluidos</a> e a termodinâmica operam com apenas cinco campos contínuos
-expressos nas <a
-href="https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations">equações
-de Navier-Stokes</a>: densidade <span
-class="math inline">\(\rho\)</span>, temperatura <span
-class="math inline">\(T\)</span> e as três componentes do vetor de
-velocidade macroscópica <span class="math inline">\(\mathbf{v}\)</span>.
-A pressão não é uma propriedade de uma molécula individual, mas a média
-estatística da taxa de transferência de momento linear provocada por
-sextilhões de choques microscópicos contra uma superfície.</p>
-<p>O coarse-graining funciona porque muitas configurações moleculares
-distintas (microestados) produzem exatamente o mesmo comportamento
-térmico e de pressão (macroestado). As minúcias individuais de onde cada
-molécula se encontra colapsam em invariantes estatísticos.</p>
-<p>A lição epistemológica é profunda: as leis efetivas que governam o
-macrocosmos não são muletas precárias decorrentes de nossa limitação
-computacional. Elas são a única forma sob a qual a física se torna
-inteligível. Saber a posição de cada elétron na asa de um avião não
-apenas é impossível, como não acrescentaria nenhum conhecimento
-relevante para quem deseja calcular a sustentação que equilibra o peso
-da aeronave.</p>
-<h2 id="linearização-esquecer-a-curvatura-local">Linearização: Esquecer
-a Curvatura Local</h2>
-<p>Se o coarse-graining remove as partículas para produzir equações
-diferenciais contínuas, a linearização executa a etapa seguinte de
-compactação matemática: ela descarta as curvaturas das funções para
-transformar relações não lineares em matrizes algébricas tratáveis.</p>
-<p>Considere uma equação diferencial geral não linear que descreve as
-forças e momentos que atuam em um corpo:</p>
-<p><span class="math display">\[\dot{x} = f(x, u)\]</span></p>
-<p>onde <span class="math inline">\(x\)</span> é o estado e <span
-class="math inline">\(u\)</span> representa os comandos dos atuadores.
-Ao definir uma condição de equilíbrio ou voo nivelado trimado <span
-class="math inline">\((x_0, u_0)\)</span> tal que <span
-class="math inline">\(f(x_0, u_0) = 0\)</span>, podemos expandir a
-função em uma <a
-href="https://en.wikipedia.org/wiki/Taylor_series">série de Taylor</a>
-em torno desse ponto de operação:</p>
-<p><span class="math display">\[f(x_0 + \delta x, u_0 + \delta u) =
-f(x_0, u_0) + \left.\frac{\partial f}{\partial x}\right|_{0}\delta x +
-\left.\frac{\partial f}{\partial u}\right|_{0}\delta u +
-\mathcal{O}(\|\delta x\|^2, \|\delta u\|^2)\]</span></p>
-<p>A linearização consiste na decisão formal de descartar os termos de
-ordem superior representados por <span
-class="math inline">\(\mathcal{O}(\delta^2)\)</span>. O comportamento
-local passa a ser governado por matrizes constantes:</p>
-<p><span class="math display">\[\delta\dot{x} = A \delta x + B \delta
-u\]</span></p>
-<p>onde <span class="math inline">\(A\)</span> é a matriz Jacobiana de
-derivadas de estabilidade e <span class="math inline">\(B\)</span> é a
-matriz de controle.</p>
-<p>Essa aproximação é uma obra-prima de economia analítica. Ao descartar
-as curvaturas locais, o engenheiro ganha acesso imediato ao universo da
-álgebra linear: autovalores que revelam se os modos naturais de
-oscilação amortecem ou divergem, frequências naturais de resposta e
-matrizes de controlabilidade.</p>
-<p>O risco reside na fronteira da aproximação. A linearização preserva
-fielmente a reta tangente ao ponto de operação, mas torna-se cega
-conforme o vetor de perturbação se afasta do ponto de trimagem. Perto de
-limites físicos como separação de camada limite, estol aerodinâmico ou
-saturação de deflexão de leme, a curvatura descartada deixa de ser uma
-pequena correção numérica e passa a governar bifurcações dinâmicas
-severas [<a href="#referências">12</a>].</p>
-<div class="box callout-example">
-<div class="box-title">
-<p>Experimento Mental</p>
-</div>
-<h4 class="callout-inner-heading"
-id="o-vale-parabólico-e-a-rampa-de-escape">O Vale Parabólico e a Rampa
-de Escape</h4>
-<p>Imagine uma esfera rolando no fundo de uma bacia parabólica
-profunda.</p>
-<p>Perto do centro da bacia, o fundo parece plano ou perfeitamente
-linear, comportando-se como um oscilador harmônico ideal onde o período
-de oscilação é constante, independente da amplitude. O modelo
-linearizado prevê que a esfera oscilará para sempre dentro do vale
-seguro.</p>
-<p>Se a esfera for submetida a um empurrão que a leve até a borda da
-bacia, onde as paredes se curvam para baixo em uma rampa íngreme, o
-modelo linearizado continuará afirmando que a força restauradora puxa a
-esfera de volta. No mundo real, os termos quadráticos dominam, a esfera
-escapa pela borda e despenca no abismo.</p>
-</div>
-<h2
-id="de-navier-stokes-a-derivadas-de-estabilidade-uma-cadeia-de-compressões">De
-Navier-Stokes a Derivadas de Estabilidade: Uma Cadeia de
-Compressões</h2>
-<p>O caminho percorrido pelo projeto de uma aeronave moderna ilustra uma
-verdadeira pirâmide de compressão informacional, na qual terabytes de
-dados espaciais são sucessivamente refinados até se tornarem um punhado
-de coeficientes escalares.</p>
-<p>No topo da cadeia de fidelidade, a simulação computacional de <a
-href="https://en.wikipedia.org/wiki/Computational_fluid_dynamics">dinâmica
-dos fluidos computacional</a> (CFD) resolve as equações de Navier-Stokes
-médias de Reynolds (RANS) em malhas volumétricas que ultrapassam cem
-milhões de células poliédricas. Cada iteração do solucionador calcula
-campos distribuídos de velocidade tridimensional, tensões viscosas,
-pressão estática e energia cinética turbulenta ao redor de toda a
-fuselagem.</p>
-<p>Essa torrente de dados espaciais seria inútil se fosse injetada
-diretamente no simulador de voo ou na arquitetura de comando de
-superfícies. O cálculo de um único segundo de escoamento em malha fina
-pode consumir centenas de horas em supercomputadores paralelos.</p>
-<p>Para torná-la acionável, a engenharia aplica operações sucessivas de
-integração. Os campos contínuos de pressão e cisalhamento são integrados
-sobre a superfície da asa, gerando forças e momentos resultantes
-concentrados. Essas forças são divididas pela pressão dinâmica e pela
-área de referência, gerando coeficientes adimensionais escalares. Em
-seguida, perturbações numéricas em torno do ponto de operação produzem
-derivadas adimensionais como <span
-class="math inline">\(C_{m_\alpha}\)</span> e <span
-class="math inline">\(C_{m_q}\)</span>. Por fim, essas derivadas
-alimentam as matrizes do espaço de estados, onde cada coeficiente
-sintetiza o comportamento aerodinâmico médio de uma asa inteira.</p>
-<p>A cada degrau dessa escada, bilhões de números são descartados em
-troca de velocidade computacional, clareza causal e interpretabilidade
-matemática. O ganho é evidente: um piloto ou um sistema fly-by-wire pode
-operar em tempo real a centenas de hertz. A perda é simétrica:
-detalhamentos locais, descolamentos parciais de esteira e interações
-aerodinâmicas não lineares deixam de existir na representação
-simplificada.</p>
-<h2
-id="quando-o-passado-foi-esquecido-inflow-esteiras-e-estados-ocultos">Quando
-o Passado Foi Esquecido: Inflow, Esteiras e Estados Ocultos</h2>
-<p>A mecânica de rotores de helicópteros e aeronaves de asas rotativas
-oferece um estudo de caso esclarecedor sobre o perigo de esquecer a
-memória do fluido circundante.</p>
-<p>Nos primórdios da teoria de helicópteros, utilizava-se a teoria de
-quantidade de movimento elementar combinada com a teoria do elemento de
-pá, assumindo que a velocidade induzida que atravessa o disco do rotor
-(o chamado inflow) respondia de forma instantânea às mudanças de passo
-das pás. Esse modelo partia da premissa de que a massa de ar não possuía
-inércia dinâmica apreciável, operando em regime quase-estacionário.</p>
-<p>Quando esses modelos foram testados em manobras dinâmicas rápidas ou
-acoplados a sistemas automáticos de controle de voo, a aeronave real
-frequentemente apresentava instabilidades severas, tendências a
-oscilações induzidas pelo piloto e atrasos acentuados de resposta no
-eixo de arfagem e rolamento.</p>
-<p>A razão física do erro residia no esquecimento da esteira de
-vórtices. Um rotor em funcionamento carrega consigo uma coluna
-descendente de ar em movimento acelerado contendo grande energia
-cinética e momento linear. Quando o piloto puxa subitamente o comando de
-passo coletivo ou cíclico, as pás alteram a sustentação em
-milissegundos, mas a coluna de esteira sob o rotor leva tempo apreciável
-para ser acelerada ou defletida. Essa esteira empurrada retém a memória
-aerodinâmica das manobras passadas.</p>
-<p>A solução teórica formulada por David Peters e colaboradores [<a
-href="#referências">6</a>] consistiu na criação dos modelos de <a
-href="https://en.wikipedia.org/wiki/Helicopter_rotor">inflow
-dinâmico</a>. A única maneira de restaurar a fidelidade do modelo foi
-admitir que a velocidade induzida não é uma função estática de entrada,
-mas ela própria uma variável de estado dinâmica independente dotada de
-sua própria equação diferencial de primeira ordem:</p>
-<p><span class="math display">\[\tau \dot{\lambda} + \lambda =
-C_T\]</span></p>
-<p>onde <span class="math inline">\(\lambda\)</span> é o inflow
-induzido, <span class="math inline">\(\tau\)</span> é a constante de
-tempo da esteira e <span class="math inline">\(C_T\)</span> é o
-coeficiente de tração instantâneo. Ao reinjetar estados de inflow no
-vetor de estado da aeronave, a inércia esquecida do ar retornou ao
-modelo, e os atrasos de fase observados nos testes de voo foram
-reproduzidos com fidelidade.</p>
-<p>Um modelo estático sem memória só é admissível quando o tempo
-característico de relaxação das variáveis descartadas é ordens de
-grandeza menor do que a dinâmica do fenômeno que desejamos controlar.
-Quando o ambiente relaxa lentamente, ignorar seus estados internos
-equivale a pilotar às cegas.</p>
-<h2
-id="redução-de-ordem-encontrar-as-coordenadas-que-carregam-a-dinâmica">Redução
-de Ordem: Encontrar as Coordenadas que Carregam a Dinâmica</h2>
-<p>Nas últimas décadas, a engenharia computacional deixou de depender
-exclusivamente da intuição humana para simplificar modelos.
-Desenvolveram-se métodos matemáticos automatizados capazes de
-inspecionar simulações gigantescas de alta fidelidade e descobrir, por
-métodos analíticos, as coordenadas dominantes que concentram a maior
-parte da física do problema. Esse campo atende pelo nome de <a
-href="https://en.wikipedia.org/wiki/Model_order_reduction">redução de
-ordem de modelos</a> (ROM).</p>
-<p>Entre as técnicas mais consolidadas destaca-se a <a
-href="https://en.wikipedia.org/wiki/Proper_orthogonal_decomposition">Decomposição
-Ortogonal Própria</a> (POD), introduzida no estudo de turbulência por
-Lawrence Sirovich [<a href="#referências">7</a>]. O método analisa uma
-série temporal de fotografias instantâneas (snapshots) de um campo
-vetorial de alta dimensão gerado por CFD ou experimentos óticos. Por
-meio de uma decomposição em valores singulares, o algoritmo calcula
-funções de base espacial ortogonais que maximizam a captura da energia
-cinética média do escoamento.</p>
-<p>Com frequência, uma simulação de escoamento turbulento ao redor de um
-aerofólio envolvendo milhões de graus de liberdade revela que apenas
-quatro ou cinco modos espaciais concentram mais de 90% da energia
-flutuante do sistema. O modelo reduzido projeta as equações originais de
-Navier-Stokes sobre esse subespaço de baixa dimensão através de uma
-projeção de Galerkin, convertendo equações diferenciais parciais
-intratáveis em um conjunto de equações diferenciais ordinárias
-compactas.</p>
-<p>Mais recentemente, a teoria de operadores de <a
-href="https://en.wikipedia.org/wiki/Koopman_operator">Koopman</a> e
-métodos de decomposição dinâmica de modos (DMD) levaram essa filosofia
-além, buscando mapear dinâmicas não lineares complexas em representações
-lineares globais sobre espaços funcionais de dimensão infinita,
-aproximados por matrizes de modos coerentes [<a
+id="3-glauert-o-inflow-médio-a-partir-da-teoria-de-quantidade-de-movimento">3.
+Glauert: o inflow médio a partir da teoria de quantidade de
+movimento</h2>
+<p>A formulação de Glauert parte de uma idealização de baixa ordem: as
+pás são substituídas por um <strong><a
+href="https://en.wikipedia.org/wiki/Actuator_disc">disco
+atuador</a></strong>, uma superfície infinitamente fina que produz um <a
+href="https://en.wikipedia.org/wiki/Pressure_drop">salto de pressão</a>
+e representa a ação global do rotor sobre o ar, sem resolver a geometria
+das pás.</p>
+<p>A extensão dessa ideia para voo oblíquo aparece no trabalho pioneiro
+de Glauert sobre o <a
+href="https://en.wikipedia.org/wiki/Autogyro">autogiro</a> [<a
+href="#referências">1</a>] e estabeleceu a base dos modelos de inflow
+médio aplicados a helicópteros. Uma apresentação clássica da formulação
+moderna consta em Seddon e Newman [<a href="#referências">12</a>] e na
+revisão comparativa de <a
+href="https://ntrs.nasa.gov/citations/19900006622">Chen</a> [<a
 href="#referências">10</a>].</p>
-<p>Contudo, a redução matemática traz uma armadilha sutil. Uma
-compressão que maximiza energia cinética não maximiza necessariamente
-causalidade ou sensibilidade de controle. Em dinâmica de fluidos, um
-modo de vórtice que carrega menos de 0,5% da energia total do escoamento
-pode ser precisamente o gatilho instável que induz a separação da camada
-limite na borda de fuga. Cortar modos por critérios puramente
-energéticos pode eliminar a faísca que desencadeia o incêndio dinâmico
-do sistema.</p>
+<h3 id="velocidade-efetiva-na-formulação-de-glauert">Velocidade efetiva
+na formulação de Glauert</h3>
+<p>No plano do rotor, o escoamento possui a componente <span
+class="math inline">\(V_t\)</span> paralela ao disco e a componente
+normal <span class="math inline">\(V_n+v_i\)</span>. A formulação de
+Glauert combina ambas em uma velocidade efetiva,</p>
+<p><span class="math display">\[
+V_e
+=
+\sqrt{V_t^2+\left(V_n+v_i\right)^2}.
+\]</span></p>
+<p><span class="math inline">\(V_e\)</span> é a magnitude da velocidade
+resultante usada pela formulação de Glauert. Ela não é a componente
+normal ao plano do rotor.</p>
+<h3 id="transporte-de-massa-efetivo">Transporte de massa efetivo</h3>
+<p>Para conectar o limite de voo pairado ao de voo à frente rápido, a
+formulação associa <span class="math inline">\(V_e\)</span> a uma escala
+efetiva de transporte de massa em um volume de controle de área
+característica <span class="math inline">\(A\)</span>:</p>
+<p><span class="math display">\[
+\dot m_{\mathrm{ef}}=\rho A V_e.
+\]</span></p>
+<p>Esse passo deve ser entendido como uma hipótese adotada para
+representar o escoamento oblíquo. O fluxo local através do plano
+geométrico do rotor depende da componente normal <span
+class="math inline">\(V_n+v_i\)</span>, enquanto a velocidade <span
+class="math inline">\(V_t\)</span>, por ser paralela ao disco, não
+atravessa esse plano.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Velocidade resultante não é velocidade normal</p>
+</div>
+<p>Na aproximação de Glauert, <span class="math inline">\(V_e\)</span>
+representa a escala convectiva usada no balanço global de quantidade de
+movimento. Escrever <span class="math inline">\(\dot
+m_{\mathrm{ef}}=\rho A V_e\)</span> não significa que <span
+class="math inline">\(V_e\)</span> seja a velocidade normal através da
+área geométrica do disco.</p>
+</div>
+<p>À medida que <span class="math inline">\(V_t\)</span> cresce, aumenta
+a escala convectiva do escoamento que interage com o rotor. Para a mesma
+tração, a velocidade induzida média necessária diminui, reproduzindo a
+transição entre o limite de voo pairado e o comportamento de alta
+velocidade à frente.</p>
+<h3 id="balanço-de-quantidade-de-movimento">Balanço de quantidade de
+movimento</h3>
+<p>Na teoria axial de disco atuador, a velocidade adicional em campo
+distante a jusante é o dobro da velocidade induzida no plano do disco.
+Glauert preserva esse salto de quantidade de movimento na direção da
+tração,</p>
+<p><span class="math display">\[
+\Delta V_n=2v_i,
+\]</span></p>
+<p>e o combina com a aproximação de transporte efetivo:</p>
+<p><span class="math display">\[
+T=\dot m_{\mathrm{ef}}\,\Delta V_n
+=
+2\rho A v_i V_e.
+\]</span></p>
+<p>Substituindo a expressão de <span
+class="math inline">\(V_e\)</span>:</p>
+<p><span class="math display">\[
+T
+=
+2\rho A v_i
+\sqrt{V_t^2+\left(V_n+v_i\right)^2}.
+\]</span></p>
+<p>Essa é a relação dimensional de Glauert para o inflow médio. Ela deve
+ser lida como uma extensão de baixa ordem da teoria de quantidade de
+movimento ao escoamento oblíquo, não como uma identidade local para o
+fluxo através do plano do rotor.</p>
+<h3 id="adimensionalização">Adimensionalização</h3>
+<p>A divisão da equação por <span class="math inline">\(\rho A(\Omega
+R)^2\)</span> converte o lado esquerdo em <span
+class="math inline">\(C_T\)</span>. No lado direito, expressam-se as
+grandezas em forma adimensional:</p>
+<p><span class="math display">\[
+v_i=\lambda_i\Omega R,
+\]</span></p>
+<p><span class="math display">\[
+V_t=\mu\Omega R,
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+V_n+v_i=\left(\mu_z+\lambda_i\right)\Omega R.
+\]</span></p>
+<p>Após o cancelamento dos termos <span class="math inline">\(\Omega
+R\)</span>, resulta em</p>
+<p><span class="math display">\[
+C_T
+=
+2\lambda_i
+\sqrt{\mu^2+\left(\mu_z+\lambda_i\right)^2}.
+\]</span></p>
+<p>Como <span class="math inline">\(\lambda=\mu_z+\lambda_i\)</span>, a
+mesma equação pode ser escrita como</p>
+<p><span class="math display">\[
+C_T=2\lambda_i\sqrt{\mu^2+\lambda^2}.
+\]</span></p>
+<p>Isolando <span class="math inline">\(\lambda_i\)</span>, chegamos à
+forma conhecida como equação de inflow de Glauert:</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i
+=
+\frac{C_T}
+{2\sqrt{\mu^2+\left(\mu_z+\lambda_i\right)^2}}
+}
+\]</span></p>
+<p>A equação é implícita porque <span
+class="math inline">\(\lambda_i\)</span> aparece nos dois lados. O rotor
+cria inflow, mas o inflow altera a velocidade que atravessa o próprio
+rotor. O acoplamento físico aparece matematicamente como uma equação não
+linear.</p>
+<h3 id="limite-de-voo-pairado">Limite de voo pairado</h3>
+<p>Em voo pairado,</p>
+<p><span class="math display">\[
+\mu=0
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+\mu_z=0.
+\]</span></p>
+<p>A equação de Glauert se reduz a</p>
+<p><span class="math display">\[
+C_T=2\lambda_i^2.
+\]</span></p>
+<p>A solução positiva para o inflow é</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i=\sqrt{\frac{C_T}{2}}
+}
+\]</span></p>
+<p>que é o resultado clássico da teoria de quantidade de movimento para
+voo pairado.</p>
+<p>Em unidades dimensionais, como <span
+class="math inline">\(C_T=T/[\rho A(\Omega R)^2]\)</span>, a mesma
+relação produz</p>
+<p><span class="math display">\[
+v_i=\sqrt{\frac{T}{2\rho A}}.
+\]</span></p>
+<p>A velocidade induzida em voo pairado cresce com a raiz quadrada da
+carga de disco <span class="math inline">\(T/A\)</span>. Dobrar a tração
+no mesmo disco não dobra <span class="math inline">\(v_i\)</span>. Eleva
+<span class="math inline">\(v_i\)</span> por um fator <span
+class="math inline">\(\sqrt{2}\)</span>.</p>
+<h3 id="voo-à-frente-rápido">Voo à frente rápido</h3>
+<p>Quando a velocidade no plano do rotor domina a velocidade normal,</p>
+<p><span class="math display">\[
+\mu\gg\lambda,
+\]</span></p>
+<p>podemos aproximar</p>
+<p><span class="math display">\[
+\sqrt{\mu^2+\lambda^2}\approx\mu.
+\]</span></p>
+<p>A equação de Glauert torna-se</p>
+<p><span class="math display">\[
+\lambda_i\approx\frac{C_T}{2\mu}.
+\]</span></p>
+<p>Em voo à frente, a velocidade tangencial ao disco aumenta a escala
+convectiva associada ao balanço global de quantidade de movimento. Para
+a mesma tração, a variação necessária de velocidade normal diminui, e o
+inflow induzido médio passa a decrescer aproximadamente com <span
+class="math inline">\(1/\mu\)</span> quando as demais grandezas são
+mantidas.</p>
+<h3 id="potência-induzida-ideal">Potência induzida ideal</h3>
+<p>O disco atuador ideal entrega potência ao escoamento à taxa</p>
+<p><span class="math display">\[
+P_i=T v_i.
+\]</span></p>
+<p>Adimensionalizando por <span class="math inline">\(\rho A(\Omega
+R)^3\)</span>, obtemos</p>
+<p><span class="math display">\[
+C_{P_i}=C_T\lambda_i.
+\]</span></p>
+<p>A queda de <span class="math inline">\(\lambda_i\)</span> com o
+aumento inicial de <span class="math inline">\(\mu\)</span> explica por
+que a potência induzida diminui quando o helicóptero sai do voo pairado
+e entra em voo translacional, antes que outras parcelas de potência
+passem a dominar.</p>
+<h3 id="limites-do-modelo-médio-de-glauert">Limites do modelo médio de
+Glauert</h3>
+<p>A equação de quantidade de movimento fornece apenas o valor médio de
+<span class="math inline">\(\lambda_i\)</span> e não determina sua
+distribuição entre as regiões a montante e a jusante do disco. Em voo à
+frente, a inclinação da esteira introduz não uniformidade espacial.
+Assim,</p>
+<p><span class="math display">\[
+\lambda_i(\bar r,\psi)\neq\lambda_i.
+\]</span></p>
+<p>Glauert também introduziu uma representação de primeiro harmônico
+para o campo não uniforme, que pode ser escrita de forma geral como</p>
+<p><span class="math display">\[
+\lambda_i(\bar r,\psi)
+=
+\lambda_0
+\left[
+1+\kappa_x\bar r\cos\psi
++\kappa_y\bar r\sin\psi
+\right].
+\]</span></p>
+<p>Aqui <span class="math inline">\(\lambda_0 \equiv \lambda_i\)</span>
+representa o valor médio obtido da teoria de quantidade de movimento,
+enquanto <span class="math inline">\(\kappa_x\)</span> e <span
+class="math inline">\(\kappa_y\)</span> são gradientes adimensionais. A
+formulação estabelece a estrutura espacial de primeiro harmônico,
+restando determinar os coeficientes a partir da física da esteira.
+Coleman e Drees propõem relações distintas para determinar esses
+coeficientes.</p>
 <h2
-id="surrogates-e-digital-twins-quando-o-modelo-do-modelo-vira-ferramenta">Surrogates
-e Digital Twins: Quando o Modelo do Modelo Vira Ferramenta</h2>
-<p>À medida que os modelos computacionais se tornaram os motores
-primários de decisão industrial, surgiu uma nova camada de abstração: os
-chamados modelos substitutos (surrogate models) ou metamodelos.</p>
-<p>Executar uma simulação detalhada de elementos finitos estruturais ou
-de CFD aerotérmico pode exigir horas ou dias para uma única combinação
-de parâmetros de projeto. Quando os engenheiros precisam explorar
-envelopes com dezenas de milhares de cenários (para otimização de forma
-ou certificação de confiabilidade estatística), consultar a simulação
-física a cada passo torna-se impraticável.</p>
-<p>A solução adotada consiste em construir um modelo do modelo.
-Algoritmos de aprendizado de máquina, processos gaussianos (conhecidos
-como <a href="https://en.wikipedia.org/wiki/Kriging">Kriging</a>) e
-redes neurais profundas são treinados a partir de um conjunto esparso de
-dados gerados pela simulação pesada. Uma vez ajustado, o surrogate
-interpola a superfície de resposta quase instantaneamente.</p>
-<p>Essa mesma lógica sustenta a ideia contemporânea de <a
-href="https://en.wikipedia.org/wiki/Digital_twin">gêmeo digital</a>. Um
-gêmeo digital industrial não é uma cópia ontológica de cada átomo da
-aeronave que voa na companhia aérea. Ele é um conjunto hierárquico de
-modelos surrogate e equações dinâmicas alimentado em tempo quase real
-por sensores embarcados de deformação, temperatura e vibração,
-atualizando estimativas de dano cumulativo por fadiga.</p>
-<p>O problema epistemológico dessa proliferação de camadas reside na
-perda de rastreabilidade do erro composto. Acumulam-se o erro de
-modelagem da física subjacente em relação à natureza, o erro de
-discretização numérica do solver, o erro de ajuste estatístico do modelo
-surrogate e o erro de calibração dos parâmetros ajustados a partir de
-dados de telemetria.</p>
-<p>Quando um modelo é construído em cima de aproximações de outros
-modelos, a incerteza deixa de se propagar de forma limpa e previsível.
-Pequenos vieses sistemáticos em cada degrau da abstração podem somar-se
-construtivamente, gerando predições que parecem dotadas de alta certeza
-matemática, mas que habitam um mundo fictício descolado da física do
-componente real.</p>
-<h3 id="o-paradoxo-da-ia-aprender-a-física-ou-hiperotimizar-a-amnésia">O
-Paradoxo da IA: Aprender a Física ou Hiperotimizar a Amnésia?</h3>
-<p>Com a emergência recente de redes neurais informadas pela física (<a
-href="https://en.wikipedia.org/wiki/Physics-informed_neural_networks">PINNs</a>),
-operadores neurais de Fourier (FNOs) e modelos generativos aplicados à
-fluidodinâmica, a engenharia defronta-se com um paradoxo epistemológico
-inédito.</p>
-<p>Quando uma rede profunda é treinada sobre dezenas de terabytes de
-dados sintéticos extraídos de simulações de Navier-Stokes para atuar
-como um emulador instantâneo de escoamento, o que ela está
-verdadeiramente aprendendo?</p>
-<p>Se a simulação numérica de base utilizou um modelo de turbulência
-RANS com fechamento <span class="math inline">\(k-\varepsilon\)</span>
-(que por formulação teórica já descartou a anisotropia dos vórtices e
-assumiu viscosidade turbulenta isotrópica), a rede neural não corrigirá
-essa amputação física. Pelo contrário: ela aprenderá com precisão
-sobre-humana a replicar exatamente a cegueira do modelo original. A
-inteligência artificial não redescobre a física que foi esquecida: ela
-<strong>hiperotimiza a amnésia</strong>.</p>
-<p>O perigo da IA na simulação não reside em errar os números, mas em
-gerar saídas visualmente indistinguíveis de um fluido real com
-velocidades de cálculo mil vezes superiores, induzindo o projetista a
-acreditar que a máquina compreendeu a turbulência onde ela apenas
-memorizou as cicatrizes estatísticas de um código incompleto.</p>
-<h2 id="o-paradoxo-da-validação-como-confiar-onde-não-medimos">O
-Paradoxo da Validação: Como Confiar Onde Não Medimos?</h2>
-<p>A epistemologia da engenharia moderna está ancorada no binômio
-formal: <a
-href="https://en.wikipedia.org/wiki/Verification_and_validation">verificação
-e validação</a> (V&amp;V) [<a href="#referências">9</a>].</p>
-<p>A distinção conceitual é precisa. A verificação pergunta se as
-equações matemáticas estão sendo resolvidas corretamente pelo software,
-configurando um problema computacional sobre taxas de convergência de
-malha e controle de erros de arredondamento. A validação, por sua vez,
-pergunta se as equações escolhidas são as equações corretas para
-descrever o fenômeno físico, constituindo um problema empírico resolvido
-pelo confronto direto com medições experimentais independentes em túneis
-de vento, ensaios de bancada e voos instrumentados.</p>
-<p>Aqui se manifesta o dilema central da modelagem preditiva. Nenhum
-programa de desenvolvimento aeroespacial dispõe de orçamento, tempo ou
-segurança física para testar experimentalmente todos os pontos
-imagináveis do envelope operacional.</p>
-<p>Não é possível voar todas as combinações de velocidade, altitude,
-peso bruto, posição do centro de gravidade, rajadas de vento turbulento
-de intensidade máxima e falhas simultâneas de subsistemas. Os dados
-experimentais de validação são, por necessidade inescapável, uma coleção
-finita e esparsa de pontos em um hipervolume dimensional contínuo.</p>
-<p>O objetivo de criar um modelo computacional não é prever o que já foi
-medido na pista de ensaio na semana passada. O objetivo é usá-lo para
-prever o que acontecerá amanhã em pontos do envelope onde nenhum sensor
-jamais esteve.</p>
-<p>Essa travessia exige interpolação e, nos casos mais críticos,
-extrapolação. Toda validação comprova que o modelo funcionou nas
-condições específicas em que foi testado. O ato de usar o modelo fora
-desse conjunto é um salto indutivo que só pode ser sustentado se
-tivermos razões teóricas sólidas para acreditar que a estrutura física
-estruturante do modelo permanece válida no território inexplorado.</p>
-<h2 id="hume-entra-no-simulador">Hume Entra no Simulador</h2>
-<p>Esse dilema da extrapolação computacional nada mais é do que a
-reencarnação moderna do célebre <a
-href="https://en.wikipedia.org/wiki/Problem_of_induction">problema da
-indução</a>, formulado pelo filósofo escocês <a
-href="https://en.wikipedia.org/wiki/David_Hume">David Hume</a> no século
-XVIII em <em>An Enquiry Concerning Human Understanding</em> [<a
-href="#referências">4</a>].</p>
-<p>Hume observou que nenhuma quantidade de observações passadas de que o
-Sol nasceu todas as manhãs fornece uma justificativa puramente lógica
-para a afirmação de que o Sol nascerá amanhã. A crença na regularidade
-do futuro baseia-se na suposição não demonstrável de que a natureza
-manterá uniformemente suas leis e padrões.</p>
-<p>Transposto para o hangar de engenharia, o veredicto de Hume ganha
-contornos decisivos: o fato de um simulador de voo ter previsto com
-precisão o comportamento de uma aeronave em mil ensaios anteriores não
-prova matematicamente que ele continuará preciso no ensaio de número mil
-e um.</p>
-<p>A ciência aplicada contorna a paralisia cética combinando três
-salvaguardas epistemológicas. Primeiro, ancora as extrapolações em
-princípios de conservação de massa, momento e energia, garantindo que o
-modelo respeite invariantes físicas consolidadas. Segundo, aplica a
-lição de <a href="https://en.wikipedia.org/wiki/Karl_Popper">Karl
-Popper</a> [<a href="#referências">5</a>], buscando deliberadamente
-refutar o modelo nos cantos mais severos do envelope de voo em vez de
-acumular confirmações em cruzeiro benigno. Terceiro, estabelece margens
-de segurança estruturais e limites operacionais conservadores em relação
-aos limiares teóricos de falha.</p>
-<p>A confiança em um modelo não é a certeza estéril de uma demonstração
-geométrica. É uma crença racional graduada e atualizada continuamente à
-medida que novas evidências operacionais acumulam-se no tempo. Como
-resumiu o estatístico britânico George Box [<a
-href="#referências">2</a>], todos os modelos estão errados, mas alguns
-são úteis.</p>
-<h2 id="erro-de-modelo-a-incerteza-que-não-cabe-na-distribuição">Erro de
-Modelo: A Incerteza que Não Cabe na Distribuição</h2>
-<p>Na prática da análise de risco e da confiabilidade estrutural, os
-engenheiros tornaram-se proficientes em rodar simulações estocásticas de
-<a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Monte
-Carlo</a>. Sorteiam-se milhões de valores para tolerâncias de
-fabricação, rajadas atmosféricas aleatórias e dispersões no peso de
-combustível, gerando histogramas de probabilidade de falha.</p>
-<p>Esse esforço analítico oculta frequentemente uma confusão categórica
-entre dois tipos de incerteza: a incerteza de parâmetros e a incerteza
-de forma do modelo (model-form uncertainty).</p>
-<p>A incerteza paramétrica assume que a forma das equações matemáticas
-está correta, mas que não conhecemos com exatidão os valores numéricos
-das constantes. Variar o coeficiente de amortecimento de arfagem <span
-class="math inline">\(C_{m_q}\)</span> em uma distribuição normal entre
-<span class="math inline">\(-10\)</span> e <span
-class="math inline">\(-14\)</span> é um exemplo de propagação de
-incerteza paramétrica. O computador gera uma curva probabilística de
-resposta e o analista conclui que mapeou o risco.</p>
-<p>O risco verdadeiro reside na incerteza estrutural da própria física
-modelada [<a href="#referências">8</a>]. Se a aeronave entrar em um
-regime de estol assimétrico acoplado com efeito de esteira de asa sobre
-o profundor que as equações lineares simplesmente não contêm em sua
-formulação matemática original, nenhuma quantidade de sorteios de Monte
-Carlo sobre <span class="math inline">\(C_{m_q}\)</span> detectará o
-perigo.</p>
-<p>O modelo não pode prever a probabilidade de um mecanismo físico que
-ele próprio foi projetado para esquecer.</p>
-<p>A calibração bayesiana avançada de modelos de computador, proposta
-por Marc Kennedy e Anthony O’Hagan [<a href="#referências">8</a>],
-formaliza esse abismo adicionando um termo explícito de discrepância
-estrutural <span class="math inline">\(\delta(x)\)</span> entre o código
-numérico <span class="math inline">\(\eta(x, \theta)\)</span> e a
-realidade observada <span class="math inline">\(y(x)\)</span>:</p>
-<p><span class="math display">\[y(x) = \eta(x, \theta) + \delta(x) +
-\epsilon\]</span></p>
-<p>onde <span class="math inline">\(\theta\)</span> representa os
-parâmetros a calibrar e <span class="math inline">\(\epsilon\)</span> é
-o erro aleatório de medição. Admitir formalmente a existência de <span
-class="math inline">\(\delta(x)\)</span> é o passo epistemológico mais
-honesto que um cientista pode dar. É o reconhecimento explícito de que a
-natureza não é o modelo, e de que a distância entre os dois não se reduz
-a ruído aleatório de sensor.</p>
-<h2 id="a-compressão-ótima-depende-da-pergunta">A Compressão Ótima
-Depende da Pergunta</h2>
-<p>A conclusão inevitável de nossa jornada pela arquitetura da simulação
-científica é que não existe, nem jamais existirá, um modelo que seja
-universalmente superior a todos os outros em termos absolutos.</p>
-<p>A qualidade de um modelo físico é uma propriedade relacional. Um
-modelo só é bom ou ruim em relação direta à pergunta específica que ele
-foi construído para responder e às restrições de tempo e recursos da
-decisão que ele precisa apoiar.</p>
-<p>No projeto conceitual preliminar, um modelo simplificado de
-aerodinâmica analítica supera um solver massivo de CFD, pois o
-projetista precisa avaliar centenas de variações geométricas em poucas
-horas para identificar tendências de compromisso entre enflechamento e
-alongamento. Um solver que leva semanas para convergir uma única malha
-paralisa o processo decisório. No projeto estrutural de detalhamento, a
-simplificação analítica torna-se perigosa, exigindo malhas densas de
-elementos finitos para verificar tensões locais ao redor de portas e
-rebites. Já no controle de voo a bordo, a prioridade absoluta é a
-causalidade temporal estrita, onde um modelo compacto de espaço de
-estados rodando a cada dez milissegundos supera qualquer ferramenta de
-alta fidelidade incapaz de operar em tempo real.</p>
-<p>Na linguagem da <a
-href="https://en.wikipedia.org/wiki/Information_theory">teoria da
-informação</a>, a modelagem científica é uma busca pelo modelo
-suficiente: a menor quantidade de bits e variáveis que preserva
-integralmente a informação necessária para tomar a decisão correta,
-descartando todo o ruído redundante que sobrecarrega a computação sem
-alterar o desfecho.</p>
-<h2 id="conclusão-compreender-é-esquecer-com-disciplina">Conclusão:
-Compreender é Esquecer com Disciplina</h2>
-<p>A ambição ingênua de que o progresso da ciência culminará em
-computadores capazes de simular o cosmos inteiro átomo por átomo é a
-versão digitalizada do mapa megalomaníaco imaginado por Borges. Se
-pudéssemos simular cada grão de poeira e cada turbilhonamento de ar ao
-redor de um avião com fidelidade total e absoluta, teríamos criado
-apenas um segundo avião, igualmente complexo, opaco e difícil de
-decifrar.</p>
-<p>Em outro conto imortal, <em>Funes el memorioso</em> (1942), o mesmo
-Borges descreve um jovem uruguaio incapaz de esquecer: Ireneo Funes
-lembrava a forma exata de cada folha de cada árvore vista uma única vez,
-as estrias da espuma em um remo e as nuvens de uma tarde remota de 1882.
-No entanto, o narrador sentencia: <em>“Suspeito, contudo, de que ele não
-era muito capaz de pensar. Pensar é esquecer diferenças, é generalizar,
-abstrair. No mundo abarrotado de Funes, não havia senão detalhes, quase
-imediatos.”</em></p>
-<p>A advertência borgesiana resume o axioma da modelagem científica:
-<strong>um computador que lembrasse de cada molécula da atmosfera não
-seria uma mente: seria uma duplicação inútil do céu</strong>.</p>
-<p>Compreender a natureza não é acumular todos os dados existentes.
-Compreender é descobrir quais dados podem ser descartados sem prejuízo
-da inteligibilidade.</p>
-<p>A física progride toda vez que demonstra que um fenômeno
-aparentemente caótico e de dimensão gigantesca é governado, na verdade,
-por um subespaço compacto de leis invariantes. Galileu compreendeu a
-queda dos corpos esquecendo a resistência do ar. Kepler compreendeu as
-órbitas planetárias tratando o Sol e Marte como pontos adimensionais de
-massa. A aerodinâmica moderna compreendeu a estabilidade das aeronaves
-comprimindo campos contínuos de escoamento em matrizes elegantes de
-derivadas locais.</p>
-<p>A força de uma teoria científica reside tanto na clareza do que ela
-explica quanto na coragem com que ela declara o que escolheu deixar de
-fora.</p>
-<p>O risco da era dos simuladores gigantescos e da inteligência
-artificial aplicada à física surge no momento em que esquecemos o que
-foi esquecido: quando os operadores de software passam a acreditar que a
-realidade se restringe aos parâmetros codificados nas matrizes de seus
-algoritmos. Fora da tela de cristal líquido, os fluidos reais continuam
-se movendo com todas as suas não linearidades selvagens, esteiras
-turbulentas e acoplamentos imprevistos. A engenharia madura é aquela que
-caminha com humildade entre o poder prodigioso da abstração matemática e
-o respeito vigilante pelo mundo físico real que nenhum modelo jamais
-conseguirá aprisionar por inteiro.</p>
+id="4-coleman-gradiente-longitudinal-produzido-pela-esteira-inclinada">4.
+Coleman: gradiente longitudinal produzido pela esteira inclinada</h2>
+<p>O relatório de 1945 de Coleman, Feingold e Stempin [<a
+href="#referências">2</a>] investigou a distribuição de velocidade
+induzida ao longo do disco para problemas de vibração e dinâmica de pás.
+O modelo representa a esteira por uma folha vortical cilíndrica
+semi-infinita e inclinada em relação ao eixo normal do rotor, o que
+permite calcular a componente normal da velocidade induzida ao longo do
+diâmetro longitudinal.</p>
+<h3 id="origem-física-do-gradiente-longitudinal">Origem física do
+gradiente longitudinal</h3>
+<p>Em voo pairado ideal, a esteira permanece aproximadamente alinhada
+com o eixo do rotor. Para pontos simétricos a montante e a jusante do
+centro do disco, a distribuição de distância e orientação em relação aos
+elementos vorticais da esteira também é simétrica. A contribuição normal
+integrada da esteira não apresenta, portanto, um gradiente longitudinal
+de primeiro harmônico.</p>
+<p>Em voo à frente, a velocidade no plano do disco convecta a esteira
+para trás. O eixo da folha vortical deixa de ser normal ao rotor e passa
+a formar um ângulo <span class="math inline">\(\chi\)</span> com essa
+direção. A simetria entre as duas metades do disco é então quebrada. Na
+integração do campo induzido, os elementos da esteira apresentam
+distâncias e orientações diferentes quando observados de um ponto a
+montante ou a jusante. O resultado é uma componente normal de indução
+maior em uma região do disco e menor na região oposta.</p>
+<p>Na convenção adotada neste texto, <span
+class="math inline">\(x&gt;0\)</span> aponta para jusante. A solução de
+Coleman produz inflow maior no lado a jusante e menor no lado a
+montante. O gradiente não é introduzido como uma correção arbitrária:
+ele é a aproximação de primeira ordem do campo induzido pela geometria
+assimétrica de uma esteira inclinada.</p>
+<p>O ângulo de inclinação da esteira, ou <em>wake skew angle</em>, é
+definido cinematicamente por</p>
+<p><span class="math display">\[
+\tan\chi=\frac{V_t}{V_n+v_i}.
+\]</span></p>
+<p>Na forma adimensional,</p>
+<p><span class="math display">\[
+\boxed{
+\chi
+=
+\tan^{-1}\left(\frac{\mu}{\lambda}\right)
+}
+\]</span></p>
+<p>utilizando-se <span
+class="math inline">\(\operatorname{atan2}\)</span> em implementação
+numérica para preservar o quadrante correto.</p>
+<p>Para <span class="math inline">\(\mu=0\)</span>, obtém-se <span
+class="math inline">\(\chi=0\)</span>. À medida que a componente no
+plano do rotor cresce em relação à componente normal, <span
+class="math inline">\(\chi\)</span> aumenta e a assimetria longitudinal
+do campo induzido se torna mais pronunciada.</p>
+<h3 id="representação-de-primeiro-harmônico">Representação de primeiro
+harmônico</h3>
+<p>Define-se o eixo <span class="math inline">\(x\)</span> no plano do
+disco ao longo da projeção longitudinal da esteira, com <span
+class="math inline">\(x&gt;0\)</span> orientado para jusante. O azimute
+<span class="math inline">\(\psi\)</span> é medido a partir desse
+semieixo positivo, de modo que</p>
+<p><span class="math display">\[
+\frac{x}{R}=\bar r\cos\psi.
+\]</span></p>
+<p>A aproximação linear para a distribuição de inflow é</p>
+<p><span class="math display">\[
+\lambda_i
+=
+\lambda_0
+\left(1+\kappa_x\frac{x}{R}\right).
+\]</span></p>
+<p>Coleman [<a href="#referências">2</a>] obtém</p>
+<p><span class="math display">\[
+\boxed{
+\kappa_x=\tan\left(\frac{\chi}{2}\right)
+}
+\]</span></p>
+<p>e, nessa idealização puramente longitudinal,</p>
+<p><span class="math display">\[
+\kappa_y=0.
+\]</span></p>
+<p>A distribuição sobre o disco torna-se</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i(\bar r,\psi)
+=
+\lambda_0
+\left[
+1+\tan\left(\frac{\chi}{2}\right)\bar r\cos\psi
+\right].
+}
+\]</span></p>
+<h3
+id="relação-entre-inclinação-da-esteira-e-gradiente-longitudinal">Relação
+entre inclinação da esteira e gradiente longitudinal</h3>
+<p>A solução completa do cilindro vortical inclinado é expressa por
+Coleman em termos de integrais elípticas. Para uso prático, os autores
+também apresentam uma aproximação local baseada nos primeiros termos da
+expansão em série em torno do centro do disco. O valor no centro fornece
+o inflow médio local e a derivada longitudinal fornece a inclinação do
+campo. Nessa aproximação, a razão entre o gradiente longitudinal e o
+valor médio resulta em <span class="math inline">\(\tan(\chi/2)\)</span>
+[<a href="#referências">2</a>].</p>
+<p>A identidade</p>
+<p><span class="math display">\[
+\tan\left(\frac{\chi}{2}\right)
+=
+\frac{1-\cos\chi}{\sin\chi}
+=
+\frac{\sin\chi}{1+\cos\chi}
+\]</span></p>
+<p>mostra como o gradiente varia com a geometria da esteira. Para <span
+class="math inline">\(\chi\)</span> pequeno,</p>
+<p><span class="math display">\[
+\tan\left(\frac{\chi}{2}\right)
+\approx\frac{\chi}{2},
+\]</span></p>
+<p>de modo que o gradiente cresce inicialmente de forma aproximadamente
+linear com o ângulo de inclinação. Quando <span
+class="math inline">\(\chi\)</span> se aproxima de <span
+class="math inline">\(90^\circ\)</span>,</p>
+<p><span class="math display">\[
+\tan\left(\frac{\chi}{2}\right)\rightarrow1,
+\]</span></p>
+<p>e a variação longitudinal prevista na borda torna-se da ordem do
+próprio inflow médio.</p>
+<h3 id="conservação-do-valor-médio-no-primeiro-harmônico">Conservação do
+valor médio no primeiro harmônico</h3>
+<p>O termo linear não altera a média do disco porque</p>
+<p><span class="math display">\[
+\frac{1}{A}\int_A x\,dA=0.
+\]</span></p>
+<p>A média de inflow sobre o disco permanece, portanto,</p>
+<p><span class="math display">\[
+\frac{1}{A}\int_A
+\lambda_0
+\left(1+\kappa_x\frac{x}{R}\right)dA
+=
+\lambda_0.
+\]</span></p>
+<p>O valor médio <span class="math inline">\(\lambda_0\)</span> continua
+representando o balanço global, enquanto <span
+class="math inline">\(\kappa_x\)</span> redistribui esse inflow
+longitudinalmente. Essa separação permite usar Glauert para fechar a
+magnitude média e Coleman para representar a primeira assimetria
+espacial.</p>
+<h3 id="efeito-sobre-a-carga-da-pá">Efeito sobre a carga da pá</h3>
+<p>No lado em que o inflow normal aumenta, a componente <span
+class="math inline">\(U_P\)</span> também aumenta. O ângulo de
+escoamento <span class="math inline">\(\phi\)</span> cresce e reduz o
+ângulo de ataque efetivo <span
+class="math inline">\(\alpha=\theta-\phi\)</span> para o mesmo passo
+geométrico. O gradiente de inflow produz, portanto, um gradiente
+correspondente de carregamento aerodinâmico.</p>
+<p>Como a pá atravessa esse campo a cada revolução, a distribuição
+longitudinal aparece como conteúdo harmônico no carregamento e
+influencia batimento e momentos no cubo. O acoplamento entre esteira e
+dinâmica de pá surge da alteração local do ângulo de ataque, não de um
+termo estrutural introduzido separadamente.</p>
+<h3 id="limitações-do-modelo-de-coleman">Limitações do modelo de
+Coleman</h3>
+<p>A dependência radial é linear e a representação retém apenas o
+primeiro harmônico longitudinal. O modelo não resolve a estrutura
+detalhada próxima à raiz e à ponta, harmônicos espaciais superiores nem
+a evolução temporal da esteira. A versão básica também não introduz um
+gradiente lateral independente.</p>
+<p>Coleman deve, portanto, ser interpretado como uma representação
+espacial de primeira ordem da assimetria criada pela esteira
+inclinada.</p>
+<h2 id="5-drees-gradientes-longitudinal-e-lateral">5. Drees: gradientes
+longitudinal e lateral</h2>
+<p>O trabalho de J. Meijer Drees [<a href="#referências">3</a>],
+publicado em 1949, formulou uma descrição direta do fluxo induzido
+através do rotor aplicável a problemas de estabilidade, regiões de
+escoamento perturbado e operações com componentes de velocidade
+horizontal e vertical. A formulação original abrange regimes complexos,
+mas a prática de engenharia consolidou como “modelo de Drees” uma
+parametrização específica para os coeficientes <span
+class="math inline">\(\kappa_x\)</span> e <span
+class="math inline">\(\kappa_y\)</span> da distribuição de primeiro
+harmônico.</p>
+<h3 id="coeficientes-de-primeiro-harmônico">Coeficientes de primeiro
+harmônico</h3>
+<p>A representação preserva a base espacial de primeiro harmônico:</p>
+<p><span class="math display">\[
+\lambda_i(\bar r,\psi)
+=
+\lambda_0
+\left[
+1+\kappa_x\bar r\cos\psi
++\kappa_y\bar r\sin\psi
+\right].
+\]</span></p>
+<p>Na convenção adotada (<span class="math inline">\(x/R=\bar
+r\cos\psi\)</span> longitudinal com <span
+class="math inline">\(x&gt;0\)</span> a jusante e <span
+class="math inline">\(y/R=\bar r\sin\psi\)</span> lateral com <span
+class="math inline">\(y&gt;0\)</span> no semidisco da pá avançante), os
+coeficientes formulados por Drees [<a href="#referências">3</a>] são
+expressos como</p>
+<p><span class="math display">\[
+\boxed{
+\kappa_x
+=
+\frac{4}{3}
+\frac{1-\cos\chi-1.8\mu^2}{\sin\chi}
+}
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+\boxed{
+\kappa_y=-2\mu.
+}
+\]</span></p>
+<p>A expressão longitudinal também pode ser escrita como</p>
+<p><span class="math display">\[
+\kappa_x
+=
+\frac{4}{3}
+\left[
+\left(1-1.8\mu^2\right)\csc\chi
+-\cot\chi
+\right].
+\]</span></p>
+<p>As duas formas são algebricamente equivalentes porque</p>
+<p><span class="math display">\[
+\frac{1-\cos\chi-1.8\mu^2}{\sin\chi}
+=
+\frac{1-1.8\mu^2}{\sin\chi}
+-
+\frac{\cos\chi}{\sin\chi}.
+\]</span></p>
+<h3 id="gradiente-longitudinal-kappa_x">Gradiente longitudinal <span
+class="math inline">\(\kappa_x\)</span></h3>
+<p>Coleman liga o gradiente longitudinal apenas à geometria da esteira
+por meio de <span class="math inline">\(\chi\)</span>. Drees mantém a
+dependência com <span class="math inline">\(\chi\)</span>, mas
+acrescenta explicitamente <span class="math inline">\(\mu\)</span>. Isso
+permite que duas condições com inclinação da esteira parecida, mas <a
+href="https://en.wikipedia.org/wiki/Advance_ratio">razão de avanço</a>
+diferente, não sejam obrigadas a ter exatamente a mesma
+distribuição.</p>
+<p>O primeiro termo do numerador,</p>
+<p><span class="math display">\[
+1-\cos\chi,
+\]</span></p>
+<p>cresce à medida que a esteira se inclina. O termo</p>
+<p><span class="math display">\[
+-1.8\mu^2
+\]</span></p>
+<p>modifica essa tendência com a razão de avanço. O fator <span
+class="math inline">\(4/3\)</span> ajusta a amplitude da distribuição
+resultante.</p>
+<p>O coeficiente pertence à parametrização de Drees e não representa uma
+constante universal da física. A formulação reduz a distribuição
+tridimensional da esteira a dois gradientes de primeiro harmônico.</p>
+<h3 id="limite-de-voo-pairado-1">Limite de voo pairado</h3>
+<p>A expressão de <span class="math inline">\(\kappa_x\)</span> parece
+indeterminada em voo pairado porque <span
+class="math inline">\(\chi\rightarrow0\)</span> produz numerador e
+denominador tendendo a zero. O limite, porém, é regular.</p>
+<p>Para pequeno <span class="math inline">\(\chi\)</span>,</p>
+<p><span class="math display">\[
+1-\cos\chi\approx\frac{\chi^2}{2}
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+\sin\chi\approx\chi.
+\]</span></p>
+<p>Quando também <span
+class="math inline">\(\mu\rightarrow0\)</span>,</p>
+<p><span class="math display">\[
+\kappa_x
+\approx
+\frac{4}{3}\frac{\chi^2/2}{\chi}
+=
+\frac{2}{3}\chi
+\rightarrow0.
+\]</span></p>
+<p>Ao mesmo tempo,</p>
+<p><span class="math display">\[
+\kappa_y=-2\mu\rightarrow0.
+\]</span></p>
+<p>No limite de voo pairado simétrico, o modelo reduz-se ao inflow
+uniforme.</p>
+<h3 id="limite-de-esteira-quase-horizontal">Limite de esteira quase
+horizontal</h3>
+<p>Quando</p>
+<p><span class="math display">\[
+\chi\rightarrow90^\circ,
+\]</span></p>
+<p>temos <span class="math inline">\(\cos\chi\rightarrow0\)</span> e
+<span class="math inline">\(\sin\chi\rightarrow1\)</span>. Assim,</p>
+<p><span class="math display">\[
+\kappa_x
+\rightarrow
+\frac{4}{3}\left(1-1.8\mu^2\right).
+\]</span></p>
+<p>Para <span class="math inline">\(\mu=0.2\)</span>, por exemplo,</p>
+<p><span class="math display">\[
+1.8\mu^2=1.8(0.04)=0.072,
+\]</span></p>
+<p>então</p>
+<p><span class="math display">\[
+\kappa_x\approx\frac{4}{3}(0.928)\approx1.24
+\]</span></p>
+<p>se a esteira fosse exatamente horizontal. O valor real fica um pouco
+diferente porque <span class="math inline">\(\chi\)</span> não é
+exatamente <span class="math inline">\(90^\circ\)</span>.</p>
+<h3 id="gradiente-lateral-kappa_y">Gradiente lateral <span
+class="math inline">\(\kappa_y\)</span></h3>
+<p>A diferença operacional de Drees em relação à forma Coleman mais
+simples é</p>
+<p><span class="math display">\[
+\kappa_y=-2\mu.
+\]</span></p>
+<p>A distribuição passa a apresentar também um gradiente lateral. O
+sinal depende da definição de azimute, do sentido de rotação e da
+orientação dos eixos, de modo que a convenção deve ser declarada antes
+de associar o sinal de <span class="math inline">\(\kappa_y\)</span> ao
+aumento ou à redução de inflow em cada lado do disco.</p>
+<p>A magnitude cresce linearmente com <span
+class="math inline">\(\mu\)</span>. Para <span
+class="math inline">\(\mu=0.2\)</span>,</p>
+<p><span class="math display">\[
+\kappa_y=-0.4.
+\]</span></p>
+<p>Na borda lateral, o termo pode representar uma diferença de <span
+class="math inline">\(40\%\)</span> do inflow médio. Essa assimetria
+altera o carregamento de primeiro harmônico e, por consequência, o
+batimento lateral e os momentos do rotor.</p>
+<h3 id="comparação-espacial-com-glauert-e-coleman">Comparação espacial
+com Glauert e Coleman</h3>
+<p>A figura abaixo usa <span class="math inline">\(C_T=0.006\)</span>,
+<span class="math inline">\(\mu=0.20\)</span> e <span
+class="math inline">\(\mu_z=0\)</span>. O valor médio é obtido pela
+equação de Glauert. Coleman e Drees usam esse mesmo valor médio e apenas
+redistribuem o inflow longitudinalmente.</p>
+<p><picture><source srcset="../assets/media/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig1.webp" type="image/webp"><img
+src="../assets/media/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig1.png"
+alt="Comparação longitudinal entre Glauert, Coleman e Drees" /></picture></p>
+<p><em>Figura 1. Distribuição longitudinal de inflow em Glauert, Coleman
+e Drees para o mesmo valor médio.</em></p>
+<p>Na figura, Glauert aparece como uma reta horizontal porque não contém
+informação espacial. Em Coleman, o plano de inflow tem gradiente
+determinado por <span class="math inline">\(\tan(\chi/2)\)</span>. Drees
+usa outro gradiente longitudinal e acrescenta um termo lateral que não
+aparece neste corte.</p>
+<p>Para o mesmo <span class="math inline">\(C_T\)</span>, os três
+modelos podem concordar no inflow médio e ainda fornecer distribuições
+locais diferentes. Essa diferença pode alterar cargas de pá e momentos
+mesmo quando as grandezas globais permanecem próximas.</p>
+<h2 id="6-manglersquire-distribuição-espacial-por-teoria-potencial">6.
+Mangler–Squire: distribuição espacial por teoria potencial</h2>
+<p>Coleman e Drees descrevem o campo de inflow como um plano sobre o
+disco. Essa aproximação retém apenas termos proporcionais a <span
+class="math inline">\(r\cos\psi\)</span> e <span
+class="math inline">\(r\sin\psi\)</span>. O trabalho de Mangler e Squire
+[<a href="#referências">4</a>], desenvolvido no contexto da teoria de
+rotor levemente carregado, segue outro caminho. Em vez de escolher um
+plano e calibrar seus gradientes, parte-se das equações do escoamento e
+calcula-se uma distribuição espacial compatível com um carregamento
+prescrito no disco.</p>
+<p>O <a
+href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/3182">relatório
+ARC R&amp;M 2642</a> [<a href="#referências">4</a>] assume um rotor
+levemente carregado e um número infinito de pás. A hipótese de infinitas
+pás transforma o rotor em um disco contínuo. A hipótese de baixo
+carregamento permite linearizar as perturbações de velocidade em relação
+ao escoamento de referência.</p>
+<h3 id="formulação-potencial-linearizada">Formulação potencial
+linearizada</h3>
+<p>Para um escoamento incompressível e invíscido governado pelas <a
+href="https://en.wikipedia.org/wiki/Euler_equations_%28fluid_dynamics%29">equações
+de Euler</a>, a velocidade total pode ser escrita como uma velocidade
+uniforme de referência <span class="math inline">\(\mathbf
+V_\infty\)</span> mais uma perturbação <span
+class="math inline">\(\mathbf u&#39;\)</span>:</p>
+<p><span class="math display">\[
+\mathbf V=\mathbf V_\infty+\mathbf u&#39;.
+\]</span></p>
+<p>Se a perturbação for pequena,</p>
+<p><span class="math display">\[
+\lVert\mathbf u&#39;\rVert\ll\lVert\mathbf V_\infty\rVert,
+\]</span></p>
+<p>os termos quadráticos em <span class="math inline">\(\mathbf
+u&#39;\)</span> podem ser desprezados na equação de quantidade de
+movimento. Para um <a
+href="https://en.wikipedia.org/wiki/Potential_flow">escoamento
+potencial</a>,</p>
+<p><span class="math display">\[
+\mathbf u&#39;=\nabla\phi,
+\]</span></p>
+<p>onde <span class="math inline">\(\phi\)</span> é o potencial de
+velocidade perturbado.</p>
+<p>A incompressibilidade exige</p>
+<p><span class="math display">\[
+\nabla\cdot\mathbf u&#39;=0.
+\]</span></p>
+<p>Substituindo <span class="math inline">\(\mathbf
+u&#39;=\nabla\phi\)</span>, resulta</p>
+<p><span class="math display">\[
+\boxed{
+\nabla^2\phi=0.
+}
+\]</span></p>
+<p>A distribuição de inflow passa, portanto, a ser um problema de valor
+de contorno para a <a
+href="https://en.wikipedia.org/wiki/Laplace%27s_equation">equação de
+Laplace</a>.</p>
+<h3 id="salto-de-pressão-no-disco">Salto de pressão no disco</h3>
+<p>O disco atuador cria uma diferença de pressão entre suas duas faces.
+Chamaremos essa diferença de</p>
+<p><span class="math display">\[
+\Delta p(r,\psi).
+\]</span></p>
+<p>Na teoria linearizada, o salto de pressão está relacionado ao
+gradiente do potencial e à perturbação de velocidade induzida. Como a
+equação de Laplace é linear, a decomposição modal do carregamento produz
+uma decomposição correspondente da resposta de velocidade nos mesmos
+harmônicos azimutais.</p>
+<p>Escrevemos o carregamento genericamente como</p>
+<p><span class="math display">\[
+\Delta p(r,\psi)
+=
+\Delta p_0(r)
++
+\sum_{n=1}^{\infty}
+\Delta p_n(r)\cos(n\psi)
++
+\sum_{n=1}^{\infty}
+\widetilde{\Delta p}_n(r)\sin(n\psi).
+\]</span></p>
+<p>Por linearidade, o inflow pode ser representado de forma
+correspondente:</p>
+<p><span class="math display">\[
+\lambda_i(r,\psi)
+=
+\lambda_{i0}(r)
++
+\sum_{n=1}^{\infty}
+\lambda_{in}^{c}(r)\cos(n\psi)
++
+\sum_{n=1}^{\infty}
+\lambda_{in}^{s}(r)\sin(n\psi).
+\]</span></p>
+<p>Em relação a Drees, os coeficientes deixam de ser apenas
+multiplicadores lineares de <span class="math inline">\(r\)</span>: cada
+harmônico possui uma <strong>função radial própria</strong>.</p>
+<h3 id="forma-clássica-de-manglersquire">Forma clássica de
+Mangler–Squire</h3>
+<p>Uma forma usada para representar a solução original é</p>
+<p><span class="math display">\[
+\lambda_i
+=
+\frac{2C_T}{\mu}
+\left[
+\frac{c_0}{2}
+-
+\sum_{n=1}^{\infty}
+c_n(\bar r,\alpha_d)\cos(n\psi)
+\right],
+\]</span></p>
+<p>onde <span class="math inline">\(\alpha_d\)</span> é o ângulo de
+ataque do plano do disco em relação ao escoamento incidente (<span
+class="math inline">\(\tan\alpha_d = V_n/V_t = \mu_z/\mu\)</span>) e as
+funções <span class="math inline">\(c_n\)</span> dependem da família de
+carregamento prescrita.</p>
+<p>A presença de <span class="math inline">\(1/\mu\)</span> mostra uma
+limitação estrutural da formulação original. Ela é construída para uma
+condição em que a velocidade no plano do rotor fornece uma escala
+dominante. Quando <span class="math inline">\(\mu\rightarrow0\)</span>,
+a expressão perde validade. Extensões posteriores, como a forma
+associada a Bramwell, substituem a escala <span
+class="math inline">\(2C_T/\mu\)</span> por uma escala baseada no inflow
+médio, preservando as funções espaciais de Mangler–Squire e evitando a
+singularidade formal em voo pairado.</p>
+<h3 id="carregamentos-tipo-i-e-tipo-iii">Carregamentos Tipo I e Tipo
+III</h3>
+<p>Mangler e Squire construíram soluções para formas fundamentais de
+carregamento do disco. O chamado <strong>Tipo I</strong> se aproxima de
+um carregamento elíptico. O <strong>Tipo III</strong> representa uma
+distribuição mais parecida com carregamentos de propulsor, reduzindo-se
+no centro e na borda.</p>
+<p>A utilidade da decomposição é linear. Se</p>
+<p><span class="math display">\[
+\Delta p
+=a\,\Delta p_I+b\,\Delta p_{III},
+\]</span></p>
+<p>então a resposta de inflow é</p>
+<p><span class="math display">\[
+\lambda_i
+=a\,\lambda_{i,I}+b\,\lambda_{i,III}.
+\]</span></p>
+<p>O engenheiro pode combinar famílias de carregamento sem resolver
+novamente o problema potencial a partir do zero.</p>
+<h3 id="estrutura-radial-e-curvatura-espacial">Estrutura radial e
+curvatura espacial</h3>
+<p>Ao longo de um eixo, a forma linear de Drees é</p>
+<p><span class="math display">\[
+\lambda_i(x)=\lambda_0\left(1+\kappa_x\frac{x}{R}\right).
+\]</span></p>
+<p>A derivada espacial é constante:</p>
+<p><span class="math display">\[
+\frac{d\lambda_i}{dx}=\frac{\lambda_0\kappa_x}{R}.
+\]</span></p>
+<p>O campo é um plano. Mangler–Squire permite</p>
+<p><span class="math display">\[
+\frac{d^2\lambda_i}{dx^2}\neq0.
+\]</span></p>
+<p>Essa curvatura espacial, ausente no modelo linear, permite
+representar variações próximas à raiz e à ponta e distribuições de
+carregamento que não podem ser reduzidas a um único gradiente.</p>
+<h3 id="limites-da-formulação">Limites da formulação</h3>
+<p>Mangler–Squire exige especificar o carregamento do disco e resolver
+uma estrutura espacial mais elaborada, mas continua sendo uma teoria
+idealizada para rotor levemente carregado. Não resolve o enrolamento
+livre da esteira vortical, a interação pá-vórtice nem a geometria
+discreta de um número finito de pás.</p>
+<p>Mangler–Squire acrescenta resolução espacial sem introduzir dinâmica
+temporal. Para um carregamento instantâneo especificado, a formulação
+calcula a distribuição de inflow correspondente, mas não descreve a
+trajetória temporal até esse estado.</p>
+<h2 id="7-inflow-dinâmico">7. Inflow Dinâmico</h2>
+<p>Modelos quase-estáticos associam cada condição de carregamento a uma
+distribuição de inflow de equilíbrio. Essa aproximação elimina o
+intervalo necessário para que o campo induzido se reorganize após uma
+mudança de carga. Em um rotor real, a circulação das pás, a vorticidade
+emitida e o escoamento ao redor do disco evoluem no tempo. A velocidade
+induzida, portanto, possui dinâmica própria.</p>
+<h3 id="resposta-transitória-a-mudanças-de-carregamento">Resposta
+transitória a mudanças de carregamento</h3>
+<p>Em um rotor operando a rotação constante, um comando rápido de
+coletivo altera o passo das pás e modifica o carregamento aerodinâmico.
+Em um modelo completo, a sequência é</p>
+<p><span class="math display">\[
+\Delta\theta_0
+\longrightarrow
+\Delta C_T(t)
+\longrightarrow
+\Delta\lambda_i(t),
+\]</span></p>
+<p>mas <span class="math inline">\(C_T(t)\)</span> não é determinado
+pelo modelo de inflow isoladamente. Ele resulta da aerodinâmica das pás,
+que depende de passo, velocidade relativa, inflow e, quando
+representado, movimento da pá.</p>
+<p>Para estudar apenas a dinâmica da esteira, é comum prescrever uma
+mudança nas cargas generalizadas e observar a resposta dos estados de
+inflow. Nesse caso, o degrau aplicado ao modelo é um degrau em <span
+class="math inline">\(C_T\)</span> ou nos momentos aerodinâmicos, não um
+degrau no próprio inflow.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Entrada e saída do modelo de inflow dinâmico</p>
+</div>
+<p>Em Pitt–Peters, as entradas são cargas generalizadas do rotor,
+tipicamente <span class="math inline">\(C_T\)</span>, <span
+class="math inline">\(C_{M_x}\)</span> e <span
+class="math inline">\(C_{M_y}\)</span>. As saídas são os estados de
+inflow. Coletivo, RPM e batimento afetam o inflow apenas por meio do
+modelo aerodinâmico e dinâmico ao qual Pitt–Peters é acoplado.</p>
+</div>
+<p>Em uma comparação entre inflow quase-estático e dinâmico, o degrau é
+aplicado à carga que define um novo inflow de equilíbrio. O modelo
+quase-estático assume esse equilíbrio imediatamente, enquanto o modelo
+dinâmico evolui até ele em uma escala de tempo finita.</p>
+<h3 id="resposta-de-primeira-ordem-do-inflow-médio">Resposta de primeira
+ordem do inflow médio</h3>
+<p>Para representar apenas o mecanismo temporal, o modo uniforme pode
+ser escrito na forma dimensional</p>
+<p><span class="math display">\[
+\boxed{
+t_i
+\frac{d\Delta\lambda_i}{dt}
++
+\Delta\lambda_i
+=
+K_{CT}\Delta C_T.
+}
+\]</span></p>
+<p>A entrada é a variação de <span class="math inline">\(C_T\)</span> e
+a saída é a variação do inflow médio. A constante <span
+class="math inline">\(t_i\)</span> mede a rapidez com que o campo
+induzido acompanha uma mudança de carga.</p>
+<p>Para um degrau de <span class="math inline">\(C_T\)</span> aplicado
+em <span class="math inline">\(t=0\)</span>, a resposta é</p>
+<p><span class="math display">\[
+\Delta\lambda_i(t)
+=
+\Delta\lambda_{i,\mathrm{eq}}
+\left[ 1-e^{-t/t_i} \right].
+\]</span></p>
+<p>Após um intervalo <span class="math inline">\(t_i\)</span>, o inflow
+percorreu <span class="math inline">\(63.2\%\)</span> da mudança até o
+novo equilíbrio. Após <span class="math inline">\(2t_i\)</span>,
+percorreu <span class="math inline">\(86.5\%\)</span> e, após <span
+class="math inline">\(3t_i\)</span>, aproximadamente <span
+class="math inline">\(95\%\)</span>.</p>
+<p>Essa constante de tempo pertence à <strong>resposta de inflow a <span
+class="math inline">\(C_T\)</span></strong>. Ela não representa atraso
+do próprio comando e não é uma constante de tempo de coletivo, RPM ou
+batimento.</p>
+<h3 id="massa-aparente-e-evolução-da-esteira">Massa aparente e evolução
+da esteira</h3>
+<p>A dinâmica surge porque alterar o campo induzido exige acelerar uma
+região de fluido que não está limitada geometricamente ao volume do
+disco. Em teoria potencial, essa contribuição aparece como massa
+aparente. Ao mesmo tempo, a nova vorticidade emitida pelas pás é
+convectada e modifica progressivamente a geometria da esteira.</p>
+<p>Pitt e Peters [<a href="#referências">5</a>] representam esses
+efeitos por uma matriz de massa aparente e por um pequeno conjunto de
+estados, sem acompanhar individualmente os filamentos vorticais. A
+formulação descreve a resposta temporal dos modos de inflow retidos no
+modelo.</p>
+<h3 id="acoplamento-com-batimento-e-dinâmica-do-rotor">Acoplamento com
+batimento e dinâmica do rotor</h3>
+<p>O inflow dinâmico não depende da existência de um grau de liberdade
+de batimento para ser definido. As equações podem ser integradas para um
+disco com geometria prescrita se <span
+class="math inline">\(C_T\)</span>, <span
+class="math inline">\(C_{M_x}\)</span> e <span
+class="math inline">\(C_{M_y}\)</span> forem fornecidos
+externamente.</p>
+<p>Em um rotor dinâmico, entretanto, batimento e inflow ficam acoplados.
+O movimento de batimento altera velocidades locais e ângulos de ataque,
+modifica a distribuição de carga e, portanto, força os estados de
+inflow. O novo inflow altera novamente os ângulos de ataque e as cargas
+que governam o batimento. A interação é bidirecional:</p>
+<p><span class="math display">\[
+\text{batimento}
+\longrightarrow
+\text{carregamento}
+\longrightarrow
+\text{inflow}
+\longrightarrow
+\text{carregamento}
+\longrightarrow
+\text{batimento}.
+\]</span></p>
+<p>O acoplamento torna-se relevante quando modos de inflow e de
+batimento ocupam faixas de frequência comparáveis. Estudos de dinâmica
+de voo mostram que a inclusão do inflow dinâmico altera a resposta do
+modo de batimento e a resposta vertical a comandos rápidos de coletivo
+[<a href="#referências">10</a>] [<a href="#referências">11</a>].</p>
+<h2 id="8-pittpeters-três-estados-para-a-dinâmica-da-esteira">8.
+Pitt–Peters: três estados para a dinâmica da esteira</h2>
+<p>O artigo de Pitt e Peters de 1981 [<a href="#referências">5</a>]
+desenvolve uma teoria linear não estacionária que relaciona tração,
+momento de rolagem e momento de arfagem à resposta transitória do campo
+induzido. A teoria baseia-se em um disco atuador não estacionário e
+produz um modelo compacto para análise de estabilidade e simulação em
+tempo real.</p>
+<p>Uma formulação voltada a aplicações práticas de engenharia é
+apresentada por <a href="https://doi.org/10.4050/JAHS.33.64">Peters e
+Ninh</a> [<a href="#referências">6</a>]. Tratamentos abrangentes e
+sínteses computacionais modernas constam em Johnson [<a
+href="#referências">13</a>] e na <a
+href="https://bladead.readthedocs.io/en/latest/src/background/pitt_peters.html">documentação
+do BladeAD</a>.</p>
+<h3 id="três-modos-espaciais">Três modos espaciais</h3>
+<p>Pitt–Peters aproxima o inflow por</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i(\bar r,\psi,t)
+=
+\lambda_0(t)
++
+\bar r\lambda_c(t)\cos\psi
++
+\bar r\lambda_s(t)\sin\psi.
+}
+\]</span></p>
+<p>Os três coeficientes dependem do tempo. <span
+class="math inline">\(\lambda_0\)</span> representa o modo uniforme,
+enquanto <span class="math inline">\(\lambda_c\)</span> e <span
+class="math inline">\(\lambda_s\)</span> representam os primeiros
+harmônicos cosseno e seno, associados aos dois gradientes ortogonais do
+disco segundo a convenção de eixos adotada.</p>
+<p>A forma espacial lembra Drees, mas a diferença física está no
+tratamento dos coeficientes: eles deixam de ser funções algébricas
+instantâneas de <span class="math inline">\(\mu\)</span> e <span
+class="math inline">\(\chi\)</span> e passam a ser <strong>estados
+diferenciais</strong>.</p>
+<h3 id="cargas-generalizadas-associadas-aos-modos">Cargas generalizadas
+associadas aos modos</h3>
+<p>Definimos o vetor de estados</p>
+<p><span class="math display">\[
+\boldsymbol\lambda
+=
+\begin{bmatrix}
+\lambda_0\\
+\lambda_c\\
+\lambda_s
+\end{bmatrix}.
+\]</span></p>
+<p>O carregamento correspondente pode ser organizado como</p>
+<p><span class="math display">\[
+\mathbf C
+=
+\begin{bmatrix}
+C_T\\
+-C_{M_y}\\
+C_{M_x}
+\end{bmatrix},
+\]</span></p>
+<p>onde</p>
+<p><span class="math display">\[
+C_{M_x}
+=
+\frac{M_x}
+{\rho A(\Omega R)^2R}
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+C_{M_y}
+=
+\frac{M_y}
+{\rho A(\Omega R)^2R}.
+\]</span></p>
+<p>A associação é modal: a tração corresponde ao momento espacial de
+ordem zero da carga, enquanto os momentos de arfagem e rolagem
+correspondem, respectivamente, a assimetrias longitudinal e lateral.
+Cada carga generalizada força, assim, o modo de inflow com a mesma
+simetria espacial.</p>
+<p>Essa estrutura é uma redução modal do problema de esteira.</p>
+<h3 id="equações-dinâmicas">Equações dinâmicas</h3>
+<p>Uma forma comum das equações é</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf L\mathbf M\dot{\boldsymbol\lambda}
++
+\boldsymbol\lambda
+=
+\mathbf L\mathbf C.
+}
+\]</span></p>
+<p>A pré-multiplicação da equação por <span
+class="math inline">\(\mathbf L^{-1}\)</span> separa os termos de massa
+aparente e resposta quase-estática:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf M\dot{\boldsymbol\lambda}
++
+\mathbf L^{-1}\boldsymbol\lambda
+=
+\mathbf C.
+}
+\]</span></p>
+<p>Nessa forma, os dois blocos físicos ficam explícitos. A matriz <span
+class="math inline">\(\mathbf M\)</span> multiplica as derivadas dos
+estados e representa a massa aparente associada aos modos de inflow. A
+matriz <span class="math inline">\(\mathbf L^{-1}\)</span> estabelece a
+relação quase-estática entre os estados e as cargas, enquanto <span
+class="math inline">\(\mathbf L\)</span> mapeia cargas generalizadas em
+inflow de equilíbrio e incorpora os acoplamentos produzidos pela
+inclinação da esteira.</p>
+<p>Na normalização adotada nas expressões seguintes, o ponto representa
+derivada em relação ao tempo adimensional <span
+class="math inline">\(\tau\)</span>. Para RPM constante,</p>
+<p><span class="math display">\[
+\tau=\Omega t.
+\]</span></p>
+<p>Assim, uma unidade de <span class="math inline">\(\tau\)</span>
+corresponde a um radiano de rotação do rotor. A conversão para segundos
+deve ser feita somente depois que a escala temporal adimensional do modo
+tiver sido determinada.</p>
+<h3 id="matriz-de-massa-aparente-mathbf-m">Matriz de massa aparente
+<span class="math inline">\(\mathbf M\)</span></h3>
+<p>Na normalização clássica,</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf M
+=
+\begin{bmatrix}
+\dfrac{128}{75\pi} &amp; 0 &amp; 0\\[6pt]
+0 &amp; \dfrac{64}{45\pi} &amp; 0\\[6pt]
+0 &amp; 0 &amp; \dfrac{64}{45\pi}
+\end{bmatrix}.
+}
+\]</span></p>
+<p>A matriz é diagonal nessa base. Isso significa que a massa aparente
+associada a cada função de forma básica pode ser tratada separadamente
+antes de introduzir o acoplamento produzido por <span
+class="math inline">\(\mathbf L\)</span>.</p>
+<p>O valor do modo uniforme é diferente dos valores dos modos de
+primeiro harmônico porque as três funções de forma aceleram
+distribuições espaciais diferentes de fluido.</p>
+<h3 id="matriz-de-ganho-mathbf-l">Matriz de ganho <span
+class="math inline">\(\mathbf L\)</span></h3>
+<p>Uma forma clássica é</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf L
+=
+\frac{1}{V_{\mathrm{ef}}}
+\begin{bmatrix}
+\dfrac{1}{2}
+&amp;
+-\dfrac{15\pi}{64}
+\sqrt{\dfrac{1-\cos\chi}{1+\cos\chi}}
+&amp;0\\[10pt]
+\dfrac{15\pi}{64}
+\sqrt{\dfrac{1-\cos\chi}{1+\cos\chi}}
+&amp;
+\dfrac{4\cos\chi}{1+\cos\chi}
+&amp;0\\[10pt]
+0&amp;0&amp;\dfrac{4}{1+\cos\chi}
+\end{bmatrix}.
+}
+\]</span></p>
+<p>A raiz pode ser reconhecida pela identidade de meio ângulo:</p>
+<p><span class="math display">\[
+\sqrt{\frac{1-\cos\chi}{1+\cos\chi}}
+=
+\tan\left(\frac{\chi}{2}\right)
+\]</span></p>
+<p>para o intervalo usual <span
+class="math inline">\(0\leq\chi&lt;\pi\)</span>.</p>
+<p>A mesma função que aparece em Coleman surge nos termos fora da
+diagonal de Pitt–Peters porque ambos os modelos carregam a mesma
+informação geométrica: a inclinação da esteira acopla o modo uniforme ao
+modo longitudinal.</p>
+<h3 id="acoplamento-entre-os-modos-uniforme-e-longitudinal">Acoplamento
+entre os modos uniforme e longitudinal</h3>
+<p>Em voo pairado,</p>
+<p><span class="math display">\[
+\chi=0.
+\]</span></p>
+<p>Nesse limite,</p>
+<p><span class="math display">\[
+\tan\left(\frac{\chi}{2}\right)=0.
+\]</span></p>
+<p>Os elementos <span class="math inline">\(L_{01}\)</span> e <span
+class="math inline">\(L_{10}\)</span> desaparecem. O modo uniforme e o
+modo longitudinal ficam desacoplados pela simetria da esteira.</p>
+<p>Em voo à frente,</p>
+<p><span class="math display">\[
+\chi&gt;0,
+\]</span></p>
+<p>e esses elementos tornam-se diferentes de zero. Uma mudança de tração
+pode então excitar conteúdo longitudinal de inflow, enquanto um
+carregamento longitudinal pode alterar o componente médio. O acoplamento
+matemático expressa a perda da simetria que desacoplava esses modos em
+voo pairado.</p>
+<h3 id="velocidade-efetiva">Velocidade efetiva</h3>
+<p>O fator de escala de <span class="math inline">\(\mathbf L\)</span>
+usa uma velocidade efetiva</p>
+<p><span class="math display">\[
+\boxed{
+V_{\mathrm{ef}}
+=
+\frac{
+\mu^2+\lambda(\lambda+\lambda_i)
+}
+{\sqrt{\mu^2+\lambda^2}}.
+}
+\]</span></p>
+<p>Todas as grandezas dessa expressão são adimensionais. <span
+class="math inline">\(\lambda_i\)</span> continua sendo obtido da
+relação média de quantidade de movimento, enquanto <span
+class="math inline">\(\lambda=\mu_z+\lambda_i\)</span>.</p>
+<p>A função combina o transporte associado à velocidade no plano do
+rotor com o transporte axial. Ela estabelece a escala com que as cargas
+produzem inflow na teoria dinâmica.</p>
+<h3 id="regime-estacionário">Regime estacionário</h3>
+<p>Se as cargas permanecem constantes por tempo suficiente,</p>
+<p><span class="math display">\[
+\dot{\boldsymbol\lambda}=0.
+\]</span></p>
+<p>A equação de Pitt–Peters reduz-se a</p>
+<p><span class="math display">\[
+\boldsymbol\lambda
+=
+\mathbf L\mathbf C.
+\]</span></p>
+<p>Portanto, Pitt–Peters contém um modelo de inflow não uniforme
+quase-estático como estado de equilíbrio e acrescenta a trajetória
+temporal até esse estado. Drees fornece diretamente uma distribuição de
+equilíbrio, enquanto Pitt–Peters acrescenta uma lei de evolução para
+seus modos principais.</p>
+<h3 id="espaço-de-estados-e-escala-temporal">Espaço de estados e escala
+temporal</h3>
+<p>Para rotação constante, a normalização de Pitt–Peters usa o tempo
+adimensional</p>
+<p><span class="math display">\[
+\tau=\Omega t,
+\]</span></p>
+<p>de modo que <span class="math inline">\(\tau\)</span> mede o avanço
+angular do rotor em radianos. As equações dinâmicas são escritas
+como</p>
+<p><span class="math display">\[
+\mathbf M\frac{d\boldsymbol\lambda}{d\tau}
++
+\mathbf L^{-1}\boldsymbol\lambda
+=
+\mathbf C.
+\]</span></p>
+<p>A forma de espaço de estados é</p>
+<p><span class="math display">\[
+\frac{d\boldsymbol\lambda}{d\tau}
+=
+-\mathbf M^{-1}\mathbf L^{-1}\boldsymbol\lambda
++
+\mathbf M^{-1}\mathbf C.
+\]</span></p>
+<p>Os autovalores desse sistema determinam as escalas temporais dos
+modos de inflow. No modo uniforme, a entrada é <span
+class="math inline">\(C_T\)</span> e a saída é o estado médio de inflow
+<span class="math inline">\(\lambda_0\)</span>.</p>
+<h3 id="resposta-do-modo-uniforme-a-um-degrau-de-c_t">Resposta do modo
+uniforme a um degrau de <span class="math inline">\(C_T\)</span></h3>
+<p>Em voo pairado, ou em uma linearização em que o modo uniforme pode
+ser tratado isoladamente, a equação assume a forma</p>
+<p><span class="math display">\[
+\boxed{
+\tau_{0,\mathrm{nd}}
+\frac{d\Delta\lambda_0}{d\tau}
++
+\Delta\lambda_0
+=
+K_{CT}\Delta C_T.
+}
+\]</span></p>
+<p><span class="math inline">\(\Delta C_T\)</span> é a entrada do modelo
+e <span class="math inline">\(\Delta\lambda_0\)</span> é a resposta do
+inflow. A constante <span
+class="math inline">\(\tau_{0,\mathrm{nd}}\)</span> é a
+<strong>constante de tempo da resposta de inflow a uma mudança de <span
+class="math inline">\(C_T\)</span></strong>.</p>
+<p>Para um degrau de <span class="math inline">\(C_T\)</span>, o novo
+valor de equilíbrio de inflow é atingido segundo uma resposta de
+primeira ordem:</p>
+<p><span class="math display">\[
+\Delta\lambda_0(\tau)
+=
+\Delta\lambda_{0,\mathrm{eq}}
+\left[
+1-
+e^{-\tau/\tau_{0,\mathrm{nd}}}
+\right].
+\]</span></p>
+<p>Quando</p>
+<p><span class="math display">\[
+\tau=\tau_{0,\mathrm{nd}},
+\]</span></p>
+<p>o inflow percorreu <span class="math inline">\(63.2\%\)</span> da
+mudança entre o estado inicial e o novo equilíbrio. Em <span
+class="math inline">\(2\tau_{0,\mathrm{nd}}\)</span>, percorreu <span
+class="math inline">\(86.5\%\)</span> e, em <span
+class="math inline">\(3\tau_{0,\mathrm{nd}}\)</span>, aproximadamente
+<span class="math inline">\(95\%\)</span>.</p>
+<p>A constante pode ser expressa em radianos de rotação ou em revoluções
+do rotor:</p>
+<p><span class="math display">\[
+N_{\mathrm{rev},0}
+=
+\frac{\tau_{0,\mathrm{nd}}}{2\pi}.
+\]</span></p>
+<p>Se for necessário convertê-la para segundos, usa-se</p>
+<p><span class="math display">\[
+t_0
+=
+\frac{\tau_{0,\mathrm{nd}}}{\Omega}.
+\]</span></p>
+<p>Na figura, a entrada é um degrau em <span
+class="math inline">\(C_T\)</span>. O modelo quase-estático aplica
+imediatamente o inflow correspondente ao novo <span
+class="math inline">\(C_T\)</span>, enquanto Pitt–Peters faz <span
+class="math inline">\(\lambda_0\)</span> evoluir até o mesmo equilíbrio
+com resposta de primeira ordem.</p>
+<p><picture><source srcset="../assets/media/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig2.webp" type="image/webp"><img
+src="../assets/media/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig2.png"
+alt="Resposta normalizada de inflow dinâmico" /></picture></p>
+<p><em>Figura 2. Resposta do inflow médio a um degrau de <span
+class="math inline">\(C_T\)</span>: modelo quase-estático e resposta
+dinâmica de primeira ordem.</em></p>
+<h3 id="acoplamento-com-dinâmica-de-voo">Acoplamento com dinâmica de
+voo</h3>
+<p>Chen e Hindson [<a href="#referências">11</a>] investigaram a
+influência do inflow dinâmico na resposta vertical de helicópteros. A
+introdução de estados de inflow altera o acoplamento entre tração,
+batimento e movimento do corpo. Em um modelo linearizado completo, os
+estados de esteira se juntam aos estados de corpo rígido e aos estados
+do rotor.</p>
+<p>A estrutura genérica passa a ser</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\dot{\mathbf x}_{corpo}\\
+\dot{\mathbf x}_{rotor}\\
+\dot{\boldsymbol\lambda}
+\end{bmatrix}
+=
+\mathbf A
+\begin{bmatrix}
+\mathbf x_{corpo}\\
+\mathbf x_{rotor}\\
+\boldsymbol\lambda
+\end{bmatrix}
++
+\mathbf B\mathbf u.
+\]</span></p>
+<p>Eliminar <span class="math inline">\(\boldsymbol\lambda\)</span> por
+uma relação algébrica significa eliminar polos e fase associados à
+esteira. Dependendo da frequência do modo de interesse, essa
+simplificação pode alterar amortecimento previsto, resposta inicial e
+margens de controle.</p>
+<h2 id="9-petershe-uma-teoria-de-estados-finitos-generalizada">9.
+Peters–He: uma teoria de estados finitos generalizada</h2>
+<p>Pitt–Peters adota três funções de forma: uma uniforme, uma
+longitudinal e uma lateral. Essa base é suficiente quando os fenômenos
+de interesse podem ser representados nesses três modos, mas não resolve
+estrutura radial adicional, harmônicos azimutais superiores ou cargas
+aeroelásticas que exijam mais graus de liberdade.</p>
+<p>A teoria de estados finitos desenvolvida por Peters, Boyd e He em
+1989 [<a href="#referências">7</a>], validada experimentalmente por
+Peters e He [<a href="#referências">8</a>] e colocada em formulação
+tridimensional por Peters e He em 1995 [<a href="#referências">9</a>],
+resolve esse problema de forma sistemática. O inflow é expandido
+azimutalmente por uma <a
+href="https://en.wikipedia.org/wiki/Fourier_series">série de Fourier</a>
+e radialmente por funções associadas a uma base de Legendre. Cada
+coeficiente da expansão torna-se um estado dinâmico.</p>
+<h3 id="potencial-de-aceleração">Potencial de aceleração</h3>
+<p>Para escoamento incompressível e potencial, a perturbação de
+velocidade satisfaz continuidade e uma forma linearizada da equação de
+quantidade de movimento. Em vez de trabalhar apenas com o potencial de
+velocidade, a teoria usa um <strong>potencial de aceleração</strong>
+relacionado ao campo de pressão.</p>
+<p>O potencial de aceleração é compatível com a representação do rotor
+como um disco com descontinuidade de pressão. Como o gradiente de
+pressão governa a aceleração do fluido, a expansão modal do salto de
+pressão estabelece uma relação entre modos de carregamento e modos de
+velocidade induzida.</p>
+<p>As funções espaciais são escolhidas para satisfazer a estrutura da
+solução da equação de Laplace em coordenadas adequadas ao disco, e a
+separação de variáveis conduz a funções de Legendre.</p>
+<h3 id="expansão-modal-do-inflow">Expansão modal do inflow</h3>
+<p>Uma forma geral da expansão de Peters–He pode ser escrita como</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i(\bar r,\psi,t)
+=
+\sum_{m=0}^{M}
+\sum_{j=m+1,m+3,\ldots}^{N_m}
+\phi_j^m(\bar r)
+\left[
+\alpha_j^m(t)\cos(m\psi)
++
+\beta_j^m(t)\sin(m\psi)
+\right].
+}
+\]</span></p>
+<p>O índice <span class="math inline">\(m\)</span> é o harmônico
+azimutal. O índice <span class="math inline">\(j\)</span> identifica a
+função radial permitida para aquele harmônico. As funções <span
+class="math inline">\(\phi_j^m(\bar r)\)</span> são funções de forma
+radiais construídas a partir da base de Legendre. Os coeficientes <span
+class="math inline">\(\alpha_j^m\)</span> e <span
+class="math inline">\(\beta_j^m\)</span> são os estados de inflow.</p>
+<p>O índice <span class="math inline">\(m\)</span> organiza a resolução
+azimutal. Para <span class="math inline">\(m=0\)</span>, os estados são
+axissimétricos e diferem apenas por sua estrutura radial. Para <span
+class="math inline">\(m=1\)</span>, surgem <span
+class="math inline">\(\cos\psi\)</span> e <span
+class="math inline">\(\sin\psi\)</span>, que contêm os gradientes
+longitudinal e lateral representados por Pitt–Peters com funções radiais
+lineares. Para <span class="math inline">\(m=2\)</span>, os termos <span
+class="math inline">\(\cos2\psi\)</span> e <span
+class="math inline">\(\sin2\psi\)</span> representam padrões com duas
+máximas e duas mínimas por revolução. Harmônicos superiores refinam
+progressivamente essa estrutura azimutal.</p>
+<h3 id="estrutura-radial-da-expansão">Estrutura radial da expansão</h3>
+<p>Dois campos podem ter o mesmo primeiro harmônico azimutal e
+distribuições radiais diferentes, por exemplo com maior concentração de
+inflow perto da ponta ou no meio da pá. Um único termo <span
+class="math inline">\(\bar r\cos\psi\)</span> não distingue essas
+distribuições.</p>
+<p>A base radial permite escrever</p>
+<p><span class="math display">\[
+\lambda_{1c}(\bar r)
+=
+\sum_j
+\alpha_j^1\phi_j^1(\bar r).
+\]</span></p>
+<p>O primeiro harmônico longitudinal deixa de ter um único gradiente
+radial linear. Ele passa a ter uma forma radial construída por
+superposição.</p>
+<p>Os índices <span class="math inline">\(m\)</span> e <span
+class="math inline">\(j\)</span> controlam dimensões diferentes da
+expansão: <span class="math inline">\(m\)</span> define a resolução
+azimutal e <span class="math inline">\(j\)</span> define a resolução
+radial. A truncagem pode ser escolhida separadamente em cada
+direção.</p>
+<h3 id="projeção-modal-das-cargas">Projeção modal das cargas</h3>
+<p>Cada estado recebe a projeção da distribuição de sustentação sobre
+sua função de forma, em vez de ser forçado pelo mesmo <span
+class="math inline">\(C_T\)</span>. Uma força generalizada típica possui
+a forma</p>
+<p><span class="math display">\[
+\tau_j^{m,c}
+\propto
+\int_0^{2\pi}
+\int_0^1
+L(\bar r,\psi)
+\phi_j^m(\bar r)
+\cos(m\psi)
+\,d\bar r\,d\psi,
+\]</span></p>
+<p>com expressão análoga para o termo seno:</p>
+<p><span class="math display">\[
+\tau_j^{m,s}
+\propto
+\int_0^{2\pi}
+\int_0^1
+L(\bar r,\psi)
+\phi_j^m(\bar r)
+\sin(m\psi)
+\,d\bar r\,d\psi.
+\]</span></p>
+<p>Essas integrais são projeções modais. Quanto maior a correlação entre
+a distribuição de carga e uma função de forma, maior a força
+generalizada associada àquele estado.</p>
+<h3 id="dinâmica-de-estados-finitos">Dinâmica de estados finitos</h3>
+<p>Depois da expansão, a teoria produz um sistema de equações
+diferenciais de primeira ordem para o vetor de coeficientes. Em forma
+compacta,</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf M_f\dot{\mathbf q}
++
+\mathbf K_f\mathbf q
+=
+\mathbf F_f.
+}
+\]</span></p>
+<p>O vetor <span class="math inline">\(\mathbf q\)</span> reúne os
+coeficientes <span class="math inline">\(\alpha_j^m\)</span> e <span
+class="math inline">\(\beta_j^m\)</span> mantidos na truncagem. A matriz
+<span class="math inline">\(\mathbf M_f\)</span> representa massa
+aparente e acoplamento dinâmico, <span class="math inline">\(\mathbf
+K_f\)</span> representa o operador quase-estático de inflow e <span
+class="math inline">\(\mathbf F_f\)</span> contém as projeções do
+carregamento.</p>
+<p>A formulação generaliza a estrutura de Pitt–Peters para uma base com
+número de estados definido pela truncagem modal.</p>
+<h3 id="truncagem-modal">Truncagem modal</h3>
+<p>A expansão infinita não precisa ser resolvida inteira. Escolhem-se um
+harmônico máximo e um número de funções de forma radiais por harmônico.
+O custo computacional cresce com o número total de estados.</p>
+<p>Se apenas dinâmica de corpo rígido de baixa frequência importa,
+poucos modos podem ser suficientes. Se o objetivo inclui vibração,
+aeroelasticidade ou distribuição detalhada de carga, mais modos podem
+ser necessários.</p>
+<p>A ordem do modelo é ajustada pelo número de harmônicos azimutais e
+funções radiais retidos na truncagem, sem alterar a formulação
+básica.</p>
+<h3 id="relação-com-pittpeters">Relação com Pitt–Peters</h3>
+<p>Pitt–Peters corresponde a uma truncagem de três estados da formulação
+de estados finitos, com funções de forma equivalentes a</p>
+<p><span class="math display">\[
+1,
+\qquad
+\bar r\cos\psi,
+\qquad
+\bar r\sin\psi.
+\]</span></p>
+<p>Peters–He substitui esse conjunto fixo por</p>
+<p><span class="math display">\[
+\{\phi_j^m(\bar r)\cos(m\psi),
+\phi_j^m(\bar r)\sin(m\psi)\}.
+\]</span></p>
+<p>A relação entre as duas formulações pode ser expressa como</p>
+<p><span class="math display">\[
+3\ \text{estados escolhidos}
+\longrightarrow
+N\ \text{estados gerados sistematicamente}.
+\]</span></p>
+<p>O trabalho de 1989 [<a href="#referências">7</a>] mostra que a teoria
+de estados finitos recupera, em limites assintóticos apropriados,
+resultados associados a inflow dinâmico, Prandtl–Goldstein, Theodorsen,
+Loewy e à <a
+href="https://en.wikipedia.org/wiki/Blade_element_momentum_theory">teoria
+combinada de elemento de pá e quantidade de movimento</a>. Essas
+correspondências situam a formulação em relação a teorias clássicas de
+aeromecânica de asas rotativas.</p>
+<h2 id="10-síntese-dos-modelos-e-aplicações">10. Síntese dos Modelos e
+Aplicações</h2>
+<p>Os modelos podem ser comparados pelo tipo de informação física que
+representam e pelo problema de engenharia a que se destinam.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Valor médio</th>
+<th>Não uniformidade espacial</th>
+<th>Dinâmica temporal</th>
+<th>Estrutura radial</th>
+<th>Uso típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Glauert</td>
+<td>Sim</td>
+<td>Não, na forma de quantidade de movimento uniforme</td>
+<td>Não</td>
+<td>Não</td>
+<td>Desempenho e equilíbrio médio</td>
+</tr>
+<tr>
+<td>Coleman</td>
+<td>Sim, herdado de quantidade de movimento</td>
+<td>1º harmônico longitudinal</td>
+<td>Não</td>
+<td>Linear</td>
+<td>Cargas e equilíbrio com esteira inclinada</td>
+</tr>
+<tr>
+<td>Drees</td>
+<td>Sim, herdado de quantidade de movimento</td>
+<td>1º harmônico longitudinal e lateral</td>
+<td>Não</td>
+<td>Linear</td>
+<td>Cargas e equilíbrio em voo à frente</td>
+</tr>
+<tr>
+<td>Mangler–Squire</td>
+<td>Sim</td>
+<td>Vários harmônicos</td>
+<td>Não</td>
+<td>Não linear</td>
+<td>Distribuição espacial com vários harmônicos</td>
+</tr>
+<tr>
+<td>Pitt–Peters</td>
+<td>Sim</td>
+<td>Uniforme + dois 1º harmônicos</td>
+<td>Sim</td>
+<td>Linear nos modos básicos</td>
+<td>Dinâmica de voo, controle, aeroelasticidade de baixa ordem</td>
+</tr>
+<tr>
+<td>Peters–He</td>
+<td>Sim</td>
+<td>Harmônicos e funções de forma radiais ajustáveis</td>
+<td>Sim</td>
+<td>Sim</td>
+<td>Aeromecânica e aeroelasticidade com ordem modal ajustável</td>
+</tr>
+</tbody>
+</table>
+<h3 id="desempenho">Desempenho</h3>
+<p>Para estimativas de potência induzida média em voo pairado ou voo à
+frente fora de regimes em que a teoria de quantidade de movimento perde
+validade, Glauert fornece diretamente a variável global necessária.
+Estados adicionais de esteira não são necessários quando a métrica
+depende apenas desse valor médio.</p>
+<h3 id="equilíbrio-e-cargas-de-pá">Equilíbrio e cargas de pá</h3>
+<p>Quando o objetivo inclui comando de passo, batimento e momentos
+médios, a distribuição espacial passa a importar. Coleman ou Drees
+capturam a primeira assimetria que um modelo uniforme omite.
+Mangler–Squire torna-se adequado quando a curvatura radial da
+distribuição influencia a resposta aerodinâmica.</p>
+<h3 id="dinâmica-de-voo-e-controle">Dinâmica de voo e controle</h3>
+<p>Se a faixa de frequência do problema é comparável à dinâmica de
+estabelecimento da esteira, uma relação algébrica de inflow elimina fase
+e estados físicos. Pitt–Peters acrescenta três estados de inflow e pode
+ser incorporado diretamente a modelos de espaço de estados.</p>
+<p>A revisão de <a
+href="https://ntrs.nasa.gov/citations/19900006622">Chen para aplicações
+de dinâmica de voo e controle</a> [<a href="#referências">10</a>] relata
+correlação global favorável do modelo Pitt–Peters de primeiro harmônico
+nos casos avaliados.</p>
+<h3 id="aeroelasticidade-e-cargas-vibratórias">Aeroelasticidade e cargas
+vibratórias</h3>
+<p>Aeroelasticidade de rotor exige representar interações entre
+frequências estruturais, harmônicos de rotação e resposta aerodinâmica
+não estacionária. Como sistematizado por Johnson [<a
+href="#referências">13</a>], três estados tornam-se insuficientes para
+investigar cargas vibratórias de frequências múltiplas de rotação.
+Peters–He oferece uma formulação sistemática para expandir a resolução
+modal.</p>
+<h3 id="fenômenos-além-dos-modelos-de-baixa-ordem">Fenômenos além dos
+modelos de baixa ordem</h3>
+<p>Todos os modelos descritos são reduções de ordem. Fenômenos dominados
+pela geometria detalhada da esteira podem exigir esteira prescrita,
+esteira livre ou dinâmica dos fluidos computacional (CFD). A interação
+pá-vórtice é o exemplo clássico. O campo local depende da posição de
+filamentos vorticais discretos e da distância entre pá e vórtice. Um
+primeiro harmônico do disco não contém essa informação geométrica.</p>
+<p>Em termos de engenharia, a ordem necessária é aquela que ainda
+preserva o mecanismo físico dominante para a métrica de interesse.</p>
+<h2 id="11-exemplo-numérico">11. Exemplo Numérico</h2>
+<h3 id="degrau-de-c_t-em-voo-pairado">Degrau de <span
+class="math inline">\(C_T\)</span> em voo pairado</h3>
+<p>Um rotor inicialmente em voo pairado opera com</p>
+<p><span class="math display">\[
+C_T=0.006.
+\]</span></p>
+<p>Pela teoria de quantidade de movimento,</p>
+<p><span class="math display">\[
+\lambda_{i,0}
+=
+\sqrt{\frac{C_T}{2}}
+=
+\sqrt{\frac{0.006}{2}}
+\approx
+0.05477.
+\]</span></p>
+<p>Em <span class="math inline">\(t=0\)</span>, aplica-se um degrau de
+carga para</p>
+<p><span class="math display">\[
+C_T=0.007.
+\]</span></p>
+<p>O novo inflow de equilíbrio é</p>
+<p><span class="math display">\[
+\lambda_{i,\mathrm{eq}}
+=
+\sqrt{\frac{0.007}{2}}
+\approx
+0.05916.
+\]</span></p>
+<p>A mudança de equilíbrio é</p>
+<p><span class="math display">\[
+\Delta\lambda_{i,\mathrm{eq}}
+=
+0.05916-0.05477
+\approx
+0.00439.
+\]</span></p>
+<p>No modelo quase-estático, o inflow acompanha o novo <span
+class="math inline">\(C_T\)</span> instantaneamente:</p>
+<p><span class="math display">\[
+\lambda_{i,\mathrm{qs}}(0^+)
+=
+0.05916.
+\]</span></p>
+<p>No modelo dinâmico, <span class="math inline">\(C_T\)</span> é a
+entrada e <span class="math inline">\(\lambda_i\)</span> responde com
+uma dinâmica de primeira ordem. Em voo pairado, o modo uniforme de
+Pitt–Peters se desacopla dos modos de primeiro harmônico. Para o ponto
+inicial,</p>
+<p><span class="math display">\[
+M_{00}
+=
+\frac{128}{75\pi}
+\approx
+0.5432
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+L_{00}
+=
+\frac{1}{4\lambda_{i,0}}
+\approx
+4.564.
+\]</span></p>
+<p>A constante de tempo adimensional é</p>
+<p><span class="math display">\[
+\boxed{
+\tau_{0,\mathrm{nd}}
+=
+L_{00}M_{00}
+\approx
+2.48.
+}
+\]</span></p>
+<p>A resposta ao degrau de <span class="math inline">\(C_T\)</span> pode
+então ser escrita como</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_i(\tau)
+=
+0.05477
++
+0.00439
+\left[
+1-e^{-\tau/2.48}
+\right].
+}
+\]</span></p>
+<p>Os dois modelos fornecem:</p>
+<table>
+<thead>
+<tr>
+<th>Tempo</th>
+<th style="text-align: right;">Modelo quase-estático</th>
+<th style="text-align: right;">Modelo dinâmico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(0^+\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05916\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05477\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\tau_{0,\mathrm{nd}}\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05916\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05755\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(2\tau_{0,\mathrm{nd}}\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05916\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05857\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(3\tau_{0,\mathrm{nd}}\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05916\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05894\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\infty\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05916\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(0.05916\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Após uma constante de tempo, o inflow completou <span
+class="math inline">\(63.2\%\)</span> da mudança produzida pelo degrau
+de <span class="math inline">\(C_T\)</span>. Após três constantes de
+tempo, completou aproximadamente <span
+class="math inline">\(95\%\)</span>.</p>
+<p>Como</p>
+<p><span class="math display">\[
+\frac{\tau_{0,\mathrm{nd}}}{2\pi}
+=
+\frac{2.48}{2\pi}
+\approx
+0.395,
+\]</span></p>
+<p>uma constante de tempo corresponde, nesse ponto, a cerca de <span
+class="math inline">\(0.40\)</span> revolução do rotor.</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Resposta ao degrau de <span class="math inline">\(C_T\)</span></p>
+</div>
+<p>O degrau é aplicado em <span class="math inline">\(C_T\)</span>. O
+modelo quase-estático supõe que o inflow assuma imediatamente o valor
+compatível com o novo <span class="math inline">\(C_T\)</span>. O modelo
+dinâmico mantém o mesmo estado final, mas representa o tempo finito
+necessário para o campo induzido se reorganizar.</p>
+</div>
+<h2 id="12-conclusão">12. Conclusão</h2>
+<p>Glauert fornece o inflow médio compatível com o balanço global de
+quantidade de movimento e permanece adequado quando a métrica de
+interesse é essencialmente global, como desempenho e potência induzida
+média.</p>
+<p>Coleman acrescenta o primeiro gradiente longitudinal produzido pela
+inclinação da esteira. Drees mantém a mesma estrutura de primeiro
+harmônico e introduz dependência explícita da razão de avanço e um
+gradiente lateral. Mangler–Squire amplia a descrição espacial ao
+permitir harmônicos e distribuições radiais que não ficam restritos a um
+plano linear.</p>
+<p>Pitt–Peters acrescenta dinâmica temporal aos modos uniforme,
+longitudinal e lateral. As cargas generalizadas do rotor forçam estados
+de inflow que evoluem com uma escala temporal própria e podem ser
+acoplados à dinâmica de batimento, corpo rígido e controle. Peters–He
+generaliza essa formulação para uma base modal de ordem ajustável, com
+maior resolução radial e azimutal.</p>
+<p>A escolha entre esses modelos depende da informação necessária ao
+problema: valor médio, distribuição espacial de primeira ordem,
+estrutura espacial de maior resolução ou resposta temporal da
+esteira.</p>
 <h2 id="referências">Referências</h2>
-<p>[1] Borges, J. L., <em>Ficciones</em> (inclui <em>Del rigor en la
-ciencia</em> e <em>Funes el memorioso</em>), Sur, Buenos Aires, 1944.
-(acesso em 15 set. 2026). <a
-href="https://en.wikipedia.org/wiki/Ficciones">Link</a></p>
-<p>[2] Box, G. E. P., <em>Science and Statistics</em>, Journal of the
-American Statistical Association, Vol. 71, No. 356, 1976, pp. 791–799.
-<a href="https://doi.org/10.1080/01621459.1976.10480949">Link</a></p>
-<p>[3] Shannon, C. E., <em>A Mathematical Theory of Communication</em>,
-Bell System Technical Journal, Vol. 27, No. 3, 1948, pp. 379–423. <a
-href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">Link</a></p>
-<p>[4] Hume, D., <em>An Enquiry Concerning Human Understanding</em>, A.
-Millar, London, 1748. (acesso em 15 set. 2026). <a
-href="https://en.wikipedia.org/wiki/An_Enquiry_Concerning_Human_Understanding">Link</a></p>
-<p>[5] Popper, K., <em>The Logic of Scientific Discovery</em>,
-Hutchinson, London, 1959. (acesso em 15 set. 2026). <a
-href="https://en.wikipedia.org/wiki/The_Logic_of_Scientific_Discovery">Link</a></p>
+<p>[1] Glauert, H., <em>A General Theory of the Autogiro</em>,
+Aeronautical Research Committee Reports and Memoranda, No. 1111, 1926.
+<a
+href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/1434">Link</a></p>
+<p>[2] Coleman, R. P., Feingold, A. M., e Stempin, C. W., <em>Evaluation
+of the Induced-Velocity Field of an Idealized Helicopter Rotor</em>,
+NACA Advance Restricted Report L5E10, NACA Wartime Report L-126,
+National Advisory Committee for Aeronautics, June 1945. <a
+href="https://ntrs.nasa.gov/citations/19930093086">Link</a></p>
+<p>[3] Drees, J. M., <em>A Theory of Airflow Through Rotors and Its
+Application to Some Helicopter Problems</em>, The Journal of the
+Helicopter Association of Great Britain, Vol. 3, No. 2, pp. 79–104,
+1949. <a href="https://doi.org/10.1017/S2753447200000871">Link</a></p>
+<p>[4] Mangler, K. W., e Squire, H. B., <em>The Induced Velocity Field
+of a Rotor</em>, Aeronautical Research Council Reports and Memoranda,
+No. 2642, May 1950. <a
+href="https://reports.aerade.cranfield.ac.uk/handle/1826.2/3182">Link</a></p>
+<p>[5] Pitt, D. M., e Peters, D. A., <em>Theoretical Prediction of
+Dynamic-Inflow Derivatives</em>, Vertica, Vol. 5, No. 1, 1981,
+pp. 21–34. <a
+href="https://www.semanticscholar.org/paper/9b869928b4d99bc22d5f6ec5f6758238b854165c">Link</a></p>
 <p>[6] Peters, D. A., e Ninh, H. Q., <em>Dynamic Inflow for Practical
 Applications</em>, Journal of the American Helicopter Society, Vol. 33,
 No. 4, 1988, pp. 64–68. <a
 href="https://doi.org/10.4050/JAHS.33.64">Link</a></p>
-<p>[7] Sirovich, L., <em>Turbulence and the Dynamics of Coherent
-Structures. Part I: Coherent Structures</em>, Quarterly of Applied
-Mathematics, Vol. 45, No. 3, 1987, pp. 561–571. <a
-href="https://doi.org/10.1090/qam/910462">Link</a></p>
-<p>[8] Kennedy, M. C., e O’Hagan, A., <em>Bayesian Calibration of
-Computer Models</em>, Journal of the Royal Statistical Society: Series B
-(Statistical Methodology), Vol. 63, No. 3, 2001, pp. 425–464. <a
-href="https://doi.org/10.1111/1467-9868.00294">Link</a></p>
-<p>[9] Oberkampf, W. L., e Roy, C. J., <em>Verification and Validation
-in Scientific Computing</em>, Cambridge University Press, Cambridge,
-2010. <a href="https://doi.org/10.1017/CBO9780511760396">Link</a></p>
-<p>[10] Rowley, C. W., Mezić, I., Bagheri, S., Schlatter, P., e
-Henningson, D. S., <em>Spectral Analysis of Nonlinear Flows</em>,
-Journal of Fluid Mechanics, Vol. 641, 2009, pp. 115–127. <a
-href="https://doi.org/10.1017/S0022112009992059">Link</a></p>
-<p>[11] Nelson, R. C., <em>Flight Stability and Automatic Control</em>,
-2ª ed., McGraw-Hill, New York, 1998. <a
-href="https://archive.org/details/flightstabilitya0000nels">Link</a></p>
-<p>[12] Guckenheimer, J., e Holmes, P., <em>Nonlinear Oscillations,
-Dynamical Systems, and Bifurcations of Vector Fields</em>,
-Springer-Verlag, New York, 1983. <a
-href="https://doi.org/10.1007/978-1-4612-1140-2">Link</a></p>
+<p>[7] Peters, D. A., Boyd, D. D., e He, C. J., <em>Finite-State
+Induced-Flow Model for Rotors in Hover and Forward Flight</em>, Journal
+of the American Helicopter Society, Vol. 34, No. 4, pp. 5–17, 1989. <a
+href="https://doi.org/10.4050/JAHS.34.5">Link</a></p>
+<p>[8] Peters, D. A., e He, C. J., <em>Correlation of Measured Induced
+Velocities with a Finite-State Wake Model</em>, Journal of the American
+Helicopter Society, Vol. 36, No. 3, pp. 59–70, 1991. <a
+href="https://doi.org/10.4050/JAHS.36.59">Link</a></p>
+<p>[9] Peters, D. A., e He, C. J., <em>Finite State Induced Flow Models.
+Part II: Three-Dimensional Rotor Disk</em>, Journal of Aircraft, Vol.
+32, No. 2, pp. 323–333, 1995. <a
+href="https://doi.org/10.2514/3.46719">Link</a></p>
+<p>[10] Chen, R. T. N., <em>A Survey of Nonuniform Inflow Models for
+Rotorcraft Flight Dynamics and Control Applications</em>, NASA Technical
+Memorandum 102219, NASA Ames Research Center, Moffett Field, CA, 1989.
+<a href="https://ntrs.nasa.gov/citations/19900006622">Link</a></p>
+<p>[11] Chen, R. T. N., e Hindson, W. S., <em>Influence of Dynamic
+Inflow on the Helicopter Vertical Response</em>, Vertica, Vol. 11, 1987.
+<a href="https://ntrs.nasa.gov/citations/19870015049">Link</a></p>
+<p>[12] Seddon, J., e Newman, S., <em>Basic Helicopter
+Aerodynamics</em>, 3rd ed., John Wiley &amp; Sons, Chichester, 2011. <a
+href="https://doi.org/10.1002/9781119994114.ch5">Link</a></p>
+<p>[13] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
+University Press, Cambridge, 2013. <a
+href="https://www.cambridge.org/core/books/rotorcraft-aeromechanics/">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
@@ -2962,8 +4235,8 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <p class="sb-subscribe-note"><u>Confirme</u> o e-mail recebido. Verifique a <u>caixa de spam</u>. Marque o email como <u>confiável</u>. Você não receberá mensagens de spam.</p>
 </dialog>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
-<div class="sb-tags"><span class="sb-tag">Engenharia</span><span class="sb-tag">Filosofia</span><span class="sb-tag">Física</span><span class="sb-tag">Epistemologia</span><span class="sb-tag">Computação</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="metodos-matematicos-e-computacionais-na-engenharia-aeroespacial.html"><strong>Métodos Matemáticos e Computacionais na Engenharia Aeroespacial</strong><span>Vinte e um métodos avançados (de álgebra geométrica e quaternions a filtragem não-linear, decomposição de ordem reduzida e homologia computacional) são apresentados com rigor axiomático, interpretação física e código aplicável, em sete blocos temáticos. O objetivo é munir o projetista aeroespacial de um vocabulário matemático unificado para enfrentar sistemas não-lineares e incertezas estocásticas em plataformas modernas.</span></a><a class="sb-related-card" href="modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico.html"><strong>Modelos de Inflow para Rotores: da Teoria de Quantidade de Movimento ao Inflow Dinâmico</strong><span>Glauert, Coleman, Drees, Mangler–Squire, Pitt–Peters e Peters–He são construídos passo a passo, do balanço de quantidade de movimento à teoria de estados finitos. A tese é que esses modelos não formam uma escala de precisão, e sim de informação preservada: valor médio, gradiente espacial, estrutura radial e memória temporal da esteira. Um mesmo ponto de operação percorre todos eles em um exemplo numérico fechado.</span></a><a class="sb-related-card" href="monte-carlo-simular-e-instanciar-multiversos-computacionais-e-os-limites-do-real.html"><strong>Monte Carlo, Simular e Instanciar — Multiversos Computacionais e os Limites do Real</strong><span>O método de Monte Carlo calcula milhares de futuros possíveis para descartar quase todos. O ensaio toma essa rotina como teste para uma pergunta antiga da metafísica: simular é instanciar? Confronta o universo matemático de Tegmark com a leitura física da existência, examina o paralelo imperfeito com os muitos-mundos de Everett e chega ao problema ético de apagar uma simulação.</span></a><a class="sb-related-card" href="instanciar-e-simular-uma-investigacao-sobre-a-natureza-das-leis-naturais.html"><strong>Instanciar e Simular — uma investigação sobre a natureza das leis naturais</strong><span>O ensaio investiga a &quot;portabilidade estrutural&quot; das leis naturais (a propriedade que permite que a lei da gravidade funcione igualmente em simulações e na realidade), percorrendo dezesseis posições de Aristóteles a Bostrom. Apenas leis genuínas suportam contrafactuais e são portáveis para substratos alternativos, com implicações diretas para a hipótese da simulação e a filosofia da mente.</span></a><a class="sb-related-card" href="validacao-estocastica-de-dinamica-de-voo-de-hume-ao-p-value.html"><strong>Validação Estocástica de Dinâmica de Voo — De Hume ao p-value</strong><span>O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.</span></a></div></section>
+<div class="sb-tags"><span class="sb-tag">Engenharia</span><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Rotores</span><span class="sb-tag">Dinâmica-de-Voo</span></div>
+<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="forca-lateral-de-um-rotor-em-voo-a-frente-inflow-uniforme-e-coleman.html"><strong>Força Lateral de um Rotor em Voo à Frente: Inflow Uniforme e Coleman</strong><span>Com inflow uniforme, a teoria de elemento de pá prevê força lateral média nula, porque as contribuições da frente e da traseira do disco se cancelam exatamente. O estudo deriva esse cancelamento a partir da cinemática azimutal, mostra que o gradiente longitudinal de Coleman quebra a simetria frente-trás e obtém uma expressão fechada para o coeficiente de força lateral, com um exemplo numérico.</span></a><a class="sb-related-card" href="parametros-adimensionais-que-governam-a-geometria-e-a-esteira-de-rotores.html"><strong>Parâmetros Adimensionais que Governam a Geometria e a Esteira de Rotores</strong><span>Dois rotores fisicamente distintos produzem esteiras semelhantes sob quais condições? O white paper demonstra que o coeficiente de tração Tc e a razão cinemática entre avanço e inflow são grandezas biunivocamente equivalentes e governam sozinhos a geometria da esteira. A energia e velocidade da esteira, porém, exigem uma segunda condição: o mesmo carregamento de disco.</span></a><a class="sb-related-card" href="efeito-da-solidez-sobre-os-parametros-aerodinamicos-fundamentais-de-um-rotor-a-tracao-constante.html"><strong>Efeito da Solidez sobre os Parâmetros Aerodinâmicos Fundamentais de um Rotor a Tração Constante</strong><span>A partir de primeiros princípios físicos e com rigor matemático, o artigo descreve como a solidez afeta os parâmetros aerodinâmicos fundamentais de um rotor mantido a tração constante e com velocidade à frente.</span></a><a class="sb-related-card" href="dinamica-de-voo-de-um-rotor-teetering-controlado-por-rpm.html"><strong>Dinâmica de Voo de um Rotor Teetering Controlado por RPM</strong><span>A dinâmica de malha aberta de um rotor teetering controlado exclusivamente por RPM é analisada em detalhe, revelando o acoplamento inerente entre tração, arfagem e rolagem que emerge da assimetria aerodinâmica em voo avante. O ensaio cobre Mast Bumping, acoplamento passo-batimento e a não-linearidade das derivadas de estabilidade como base aeromecânica para o controle de eVTOLs.</span></a><a class="sb-related-card" href="modelagem-teorica-do-efeito-solo-em-multirrotores.html"><strong>Modelagem Teórica do Efeito Solo em Multirrotores</strong><span>A partir do modelo de Cheeseman &amp; Bennett e do princípio de superposição de potenciais, o white paper deriva uma formulação generalizada do efeito solo para N rotores em hover e transição. O resultado central é a quantificação da assimetria de tração dianteiro/traseiro que pode gerar momentos de arfagem instáveis durante o voo pairado próximo ao solo..</span></a><a class="sb-related-card" href="rotores-e-giroscopios-construcao-fisica-e-matematica-a-partir-das-leis-de-newton.html"><strong>Rotores e Giroscópios — Construção Física e Matemática a Partir das Leis de Newton</strong><span>O ensaio demonstra formalmente que precessão giroscópica e resposta de batimento de rotor não são explicações concorrentes: são duas leituras do mesmo sistema de equações em referenciais diferentes. A prova percorre o oscilador harmônico em ressonância no referencial da pá e sua transformação para o referencial fixo via Transformação de Coleman.</span></a><a class="sb-related-card" href="equacoes-analiticas-para-os-coeficientes-aerodinamicos-de-um-rotor-rigido.html"><strong>Equações Analíticas para os Coeficientes Aerodinâmicos de um Rotor Rígido</strong><span>Dedução analítica de primeiros princípios dos coeficientes aerodinâmicos de um rotor rígido em voo de avanço: tração, forças no plano, momentos no cubo, torque e potências. Apresenta a formulação integral genérica e soluções analíticas fechadas com torção e corte de raiz, contrastando o modelo de inflow uniforme com a distribuição de esteira não uniforme dotada de harmônicos longitudinal e lateral. Organiza os resultados em tabelas de síntese para projeto e dinâmica de voo.</span></a></div></section>
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do ensaio">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>
