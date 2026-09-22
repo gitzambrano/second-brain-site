@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="32">
+<html lang="pt-BR" data-status="finalizado" data-minutes="37">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Modelos de Inflow para Rotores: da Teoria de Quantidade de Movimento ao Inflow Dinâmico</title>
 <meta property="og:title" content="Modelos de Inflow para Rotores: da Teoria de Quantidade de Movimento ao Inflow Dinâmico">
-<meta property="og:description" content="Glauert, Coleman, Drees, Mangler–Squire, Pitt–Peters e Peters–He são construídos passo a passo, do balanço de quantidade de movimento à teoria de estados finitos. A tese é que esses modelos não formam uma escala de precisão, e sim de informação preservada: valor médio, gradiente espacial, estrutura radial e memória temporal da esteira. Um mesmo ponto de operação percorre todos eles em um exemplo numérico fechado.">
+<meta property="og:description" content="Glauert, Coleman, Drees, Mangler–Squire, Pitt–Peters e Peters–He são comparados pela informação física que preservam: valor médio, gradientes espaciais, estrutura radial e memória temporal da esteira. O texto deriva as formulações principais e mostra, com inputs de coletivo e RPM, como o inflow dinâmico altera a resposta transitória do rotor.">
 <meta property="og:type" content="article">
 <script defer="" src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -1606,7 +1606,7 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
     <h1 class="hero-title">Modelos de Inflow para Rotores: da Teoria de Quantidade de Movimento ao Inflow Dinâmico</h1>
     <hr class="masthead-rule">
     <p class="byline">Gustavo Zambrano · Setembro de 2026</p>
-    <p class="cover-summary">Glauert, Coleman, Drees, Mangler–Squire, Pitt–Peters e Peters–He são construídos passo a passo, do balanço de quantidade de movimento à teoria de estados finitos. A tese é que esses modelos não formam uma escala de precisão, e sim de informação preservada: valor médio, gradiente espacial, estrutura radial e memória temporal da esteira. Um mesmo ponto de operação percorre todos eles em um exemplo numérico fechado.</p>
+    <p class="cover-summary">Glauert, Coleman, Drees, Mangler–Squire, Pitt–Peters e Peters–He são comparados pela informação física que preservam: valor médio, gradientes espaciais, estrutura radial e memória temporal da esteira. O texto deriva as formulações principais e mostra, com inputs de coletivo e RPM, como o inflow dinâmico altera a resposta transitória do rotor.</p>
   </div>
 </header>
 
@@ -1636,7 +1636,8 @@ Pitt–Peters: três estados para a dinâmica da esteira</a></li>
 Peters–He: uma teoria de estados finitos generalizada</a></li>
 <li><a href="#10-síntese-dos-modelos-e-aplicações">10. Síntese dos
 Modelos e Aplicações</a></li>
-<li><a href="#11-exemplo-numérico-de-inflow-dinâmico">11. Exemplo Numérico de Inflow Dinâmico</a></li>
+<li><a href="#11-exemplo-numérico-de-inflow-dinâmico">11. Exemplo
+Numérico de Inflow Dinâmico</a></li>
 <li><a href="#12-conclusão">12. Conclusão</a></li>
 </ul>
 <hr />
@@ -3439,7 +3440,7 @@ instante o inflow de equilíbrio correspondente à carga instantânea,
 enquanto Pitt–Peters conserva a memória temporal da esteira. A diferença
 entre as duas soluções não está no ponto de equilíbrio final, mas no
 atraso de fase entre carregamento e inflow durante o transiente.</p>
-<h3 id="111-input-de-coletivo-em-rampa">11.1 Input de Coletivo em Rampa</h3>
+<h3 id="input-de-coletivo-em-rampa">Input de Coletivo em Rampa</h3>
 <p>No primeiro caso, aplica-se um comando de coletivo com taxa</p>
 <p><span class="math display">\[
 \dot\theta_0 = 60^\circ/\mathrm{s},
@@ -3466,13 +3467,9 @@ temporariamente abaixo do valor quase-estático. Isso reduz o ângulo de
 inflow, aumenta o ângulo de ataque efetivo das pás e faz o carregamento
 crescer mais do que cresceria se a esteira pudesse se reorganizar
 instantaneamente.</p>
-<figure>
-<img
-src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig3.svg"
-alt="Input de coletivo: resposta de carga" />
-<figcaption aria-hidden="true">Input de coletivo: resposta de
-carga</figcaption>
-</figure>
+<p><img
+src="../assets/media/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig3.svg"
+alt="Input de coletivo: resposta de carga" /></p>
 <p><em>Figura 3. Resposta de <span
 class="math inline">\(C_T/C_{T0}\)</span> a uma rampa de coletivo de
 <span class="math inline">\(60^\circ/\mathrm{s}\)</span> até <span
@@ -3507,14 +3504,10 @@ atraso do campo induzido em relação ao coletivo. O mesmo mecanismo
 aparece em estudos clássicos de resposta vertical de helicópteros com
 inflow dinâmico, nos quais comandos rápidos de coletivo produzem uma
 resposta inicial mais pronunciada quando a esteira é tratada como estado
-dinâmico <a href="#referências">[11]</a>.</p>
-<figure>
-<img
-src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig4.svg"
-alt="Input de coletivo: resposta de inflow" />
-<figcaption aria-hidden="true">Input de coletivo: resposta de
-inflow</figcaption>
-</figure>
+dinâmico [<a href="#referências">11</a>].</p>
+<p><img
+src="../assets/media/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig4.svg"
+alt="Input de coletivo: resposta de inflow" /></p>
 <p><em>Figura 4. Resposta de <span
 class="math inline">\(\lambda_i\)</span> ao mesmo input de coletivo. O
 modelo quase-estático assume o valor de equilíbrio compatível com o
@@ -3545,7 +3538,7 @@ t_{\mathrm{PP},1}
 portanto o comando e a reorganização da esteira ocorrem em escalas
 temporais próximas. Essa proximidade explica por que a separação entre
 as respostas quase-estática e dinâmica é claramente visível.</p>
-<h3 id="112-input-de-rpm-em-rampa">11.2 Input de RPM em Rampa</h3>
+<h3 id="input-de-rpm-em-rampa">Input de RPM em Rampa</h3>
 <p>No segundo caso, o coletivo permanece fixo e a rotação cresce a</p>
 <p><span class="math display">\[
 \dot n = 1000\ \mathrm{rpm/s}
@@ -3583,13 +3576,9 @@ class="math inline">\(v_i\)</span> reduz temporariamente</p>
 class="math inline">\(C_T\)</span> em relação à solução quase-estática.
 A diferença aparece como uma pequena elevação adicional de <span
 class="math inline">\(T/T_0\)</span> durante a rampa.</p>
-<figure>
-<img
-src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig5.svg"
-alt="Input de RPM: resposta de tração" />
-<figcaption aria-hidden="true">Input de RPM: resposta de
-tração</figcaption>
-</figure>
+<p><img
+src="../assets/media/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig5.svg"
+alt="Input de RPM: resposta de tração" /></p>
 <p><em>Figura 5. Resposta de <span class="math inline">\(T/T_0\)</span>
 a uma rampa de rotação de <span class="math inline">\(1000\
 \mathrm{rpm/s}\)</span> entre 800 e 900 rpm. A mesma trajetória de <span
@@ -3631,13 +3620,9 @@ inflow como</p>
 \frac{v_i}{\Omega_0R},
 \]</span></p>
 <p>usando a velocidade de ponta inicial como referência fixa.</p>
-<figure>
-<img
-src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig6.svg"
-alt="Input de RPM: resposta do inflow físico" />
-<figcaption aria-hidden="true">Input de RPM: resposta do inflow
-físico</figcaption>
-</figure>
+<p><img
+src="../assets/media/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig6.svg"
+alt="Input de RPM: resposta do inflow físico" /></p>
 <p><em>Figura 6. Resposta do inflow físico ao input de RPM. A
 normalização fixa evidencia o atraso do campo induzido durante a
 aceleração e preserva continuidade na variável representada.</em></p>
@@ -3664,7 +3649,7 @@ t_{\mathrm{PP},900}
 várias constantes de tempo do inflow. Por isso a diferença entre as
 soluções quase-estática e dinâmica é menor do que no input de coletivo,
 cuja rampa ocorre praticamente na mesma escala temporal da esteira.</p>
-<h3 id="113-acoplamento-com-batimento-em-helicópteros">11.3 Acoplamento com
+<h3 id="acoplamento-com-batimento-em-helicópteros">Acoplamento com
 Batimento em Helicópteros</h3>
 <p>As duas simulações anteriores tratam o rotor como rígido e isolam o
 acoplamento entre carregamento e inflow. Em um helicóptero, o batimento
@@ -3676,24 +3661,25 @@ as cargas que excitam novamente o batimento.</p>
 <p>Esse acoplamento não implica que toda resposta de batimento apresente
 overshoot. O efeito depende do modo considerado, do Lock number, do
 carregamento e da relação entre as escalas temporais da pá, da esteira e
-do corpo rígido. Chen e Hindson <a href="#referências">[11]</a> mostraram, para a
-resposta vertical em hover, que o inflow dinâmico pode reduzir a
-estabilidade do modo de batimento no modelo estudado e, combinado com o
-modo adicional de inflow, produzir grande overshoot inicial de
-aceleração vertical após uma entrada abrupta de coletivo. O resultado
-relevante não é a existência universal de um pico de batimento, mas a
-alteração dos autovalores, do amortecimento e da fase do sistema
-rotor-corpo.</p>
-<p>Schrage et al. <a href="#referências">[14]</a> chegaram à mesma conclusão por
-uma análise modal mais ampla: a inclusão de inflow dinâmico altera
-sistematicamente as raízes dos modos acoplados, aumentando o
-amortecimento de alguns modos de batimento de alta frequência e
-reduzindo o amortecimento de movimentos corpo-batimento. O acoplamento
-entre estados de inflow e batimento também pode produzir pares de raízes
-complexas, tornando determinadas respostas mais oscilatórias. A revisão
-de Gaonkar e Peters <a href="#referências">[15]</a> mostra que dados experimentais
-de batimento são melhor correlacionados quando a memória da esteira é
-incluída na modelagem.</p>
+do corpo rígido. Chen e Hindson [<a href="#referências">11</a>]
+mostraram, para a resposta vertical em hover, que o inflow dinâmico pode
+reduzir a estabilidade do modo de batimento no modelo estudado e,
+combinado com o modo adicional de inflow, produzir grande overshoot
+inicial de aceleração vertical após uma entrada abrupta de coletivo. O
+resultado relevante não é a existência universal de um pico de
+batimento, mas a alteração dos autovalores, do amortecimento e da fase
+do sistema rotor-corpo.</p>
+<p>Schrage et al. [<a href="#referências">14</a>] chegaram à mesma
+conclusão por uma análise modal mais ampla: a inclusão de inflow
+dinâmico altera sistematicamente as raízes dos modos acoplados,
+aumentando o amortecimento de alguns modos de batimento de alta
+frequência e reduzindo o amortecimento de movimentos corpo-batimento. O
+acoplamento entre estados de inflow e batimento também pode produzir
+pares de raízes complexas, tornando determinadas respostas mais
+oscilatórias. A revisão de Gaonkar e Peters [<a
+href="#referências">15</a>] mostra que dados experimentais de batimento
+são melhor correlacionados quando a memória da esteira é incluída na
+modelagem.</p>
 <p>Assim, as Figuras 3 a 6 devem ser interpretadas como um isolamento da
 dinâmica aerodinâmica de um rotor rígido. Em um helicóptero, a constante
 de tempo de Pitt–Peters continua caracterizando a memória da esteira,
@@ -3772,8 +3758,15 @@ href="https://doi.org/10.1002/9781119994114.ch5">Link</a></p>
 <p>[13] Johnson, W., <em>Rotorcraft Aeromechanics</em>, Cambridge
 University Press, Cambridge, 2013. <a
 href="https://www.cambridge.org/core/books/rotorcraft-aeromechanics/">Link</a></p>
-<p>[14] Schrage, D. P., Peters, D. A., Prasad, J. V. R., Stumpf, W. F., e He, C., <em>Helicopter Stability and Control Modeling Improvements and Verification on Two Helicopters</em>, AIAA Atmospheric Flight Mechanics Conference, 1988. <a href="https://ntrs.nasa.gov/citations/19900055419">Link</a></p>
-<p>[15] Gaonkar, G. H., e Peters, D. A., <em>A Review of Dynamic Inflow and Its Effect on Experimental Correlations</em>, Rotorcraft Dynamics 1984, NASA Ames Research Center, 1985. <a href="https://ntrs.nasa.gov/citations/19860005823">Link</a></p>
+<p>[14] Schrage, D. P., Peters, D. A., Prasad, J. V. R., Stumpf, W. F.,
+e He, C., <em>Helicopter Stability and Control Modeling Improvements and
+Verification on Two Helicopters</em>, AIAA Atmospheric Flight Mechanics
+Conference, 1988. <a
+href="https://ntrs.nasa.gov/citations/19900055419">Link</a></p>
+<p>[15] Gaonkar, G. H., e Peters, D. A., <em>A Review of Dynamic Inflow
+and Its Effect on Experimental Correlations</em>, Rotorcraft Dynamics
+1984, NASA Ames Research Center, 1985. <a
+href="https://ntrs.nasa.gov/citations/19860005823">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
