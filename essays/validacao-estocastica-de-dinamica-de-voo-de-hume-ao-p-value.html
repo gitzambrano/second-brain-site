@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="40">
+<html lang="pt-BR" data-status="finalizado" data-minutes="41">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,8 @@
 <meta property="og:title" content="Validação Estocástica de Dinâmica de Voo — De Hume ao p-value">
 <meta property="og:description" content="O ensaio pretende entender as entranhas filosóficas e epistemológicas do teste de hipótese: sem esse fundamento mais profundo, aplicar um teste estatístico é um gesto mecânico sem significado. Traça a linha de Hume ao falsificacionismo de Popper e daí ao framework H₀/H₁ como análogo operacional do método científico, aplicando toda essa arquitetura ao problema concreto de comparar simuladores de dinâmica de voo com dados reais de ensaio em voo.">
 <meta property="og:type" content="article">
+<script defer="" src="../assets/mathjax/tex-svg.js"
+type="text/javascript"></script>
 <style>
 /* ------------------------------------------------------------------ */
 /* Tokens: mobile = escuro editorial (padrao)                          */
@@ -265,7 +267,7 @@ body{
 /* ------------------------------------------------------------------ */
 .content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
 
-h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;text-wrap:balance;}
 .content h1{display:none;} /* titulo vive no masthead */
 
 .content h2{
@@ -323,7 +325,6 @@ h5{
 
 p{
   margin:0 0 1.25rem;word-break:break-word;
-  text-wrap:pretty;
 }
 @media (min-width:901px){
   .content > p{
@@ -2018,13 +2019,14 @@ científica.</li>
 tão extrema quanto a obtida, ou mais extrema, <em>assumindo que a
 hipótese nula é absolutamente verdadeira</em>.</p>
 </div>
-<p><strong>Definição Formal:</strong></p>
-<pre><code>p = P(|T| ≥ |t_obs| | H₀ verdadeira)
-
-Onde:
-T = estatística de teste (variável aleatória)
-t_obs = valor observado da estatística nos seus dados
-H₀ = hipótese nula (assume-se 100% verdadeira para o cálculo)</code></pre>
+<p><strong>Definição Formal:</strong> <span class="math display">\[
+p = P(|T| \ge |t_{\mathrm{obs}}| \mid H_0 \text{ verdadeira})
+\]</span></p>
+<p>onde <span class="math inline">\(T\)</span> é a estatística de teste
+(variável aleatória), <span
+class="math inline">\(t_{\mathrm{obs}}\)</span> é o valor observado da
+estatística nos dados e <span class="math inline">\(H_0\)</span> é a
+hipótese nula (assumida como verdadeira para o cálculo).</p>
 <p>Dissecando cada componente com o exemplo do simulador (média Monte
 Carlo = 5,0 ft/s; média voo = 6,1 ft/s):</p>
 <ol type="1">
@@ -2089,12 +2091,16 @@ href="https://en.wikipedia.org/wiki/Frequentist_probability">frequentismo</a>
 diretamente a hipóteses.</p>
 <p>O <a href="https://pt.wikipedia.org/wiki/Teorema_de_Bayes">teorema de
 Bayes</a>, aplicado à validação do simulador:</p>
-<pre><code>P(H₀ | dados) = P(dados | H₀) × P(H₀) / P(dados)
-
-Onde:
-P(H₀) = probabilidade a priori de que o modelo seja correto
-P(dados | H₀) = likelihood (verossimilhança) — relacionado ao p-value
-P(H₀ | dados) = probabilidade a posteriori — o que queremos saber</code></pre>
+<p><span class="math display">\[
+P(H_0 \mid \text{dados}) = \frac{P(\text{dados} \mid H_0) \,
+P(H_0)}{P(\text{dados})}
+\]</span></p>
+<p>onde <span class="math inline">\(P(H_0)\)</span> é a probabilidade a
+priori de que o modelo seja correto, <span
+class="math inline">\(P(\text{dados} \mid H_0)\)</span> é a
+verossimilhança (<em>likelihood</em>) e <span
+class="math inline">\(P(H_0 \mid \text{dados})\)</span> é a
+probabilidade a posteriori.</p>
 <p>A diferença fundamental: no framework bayesiano, podemos dizer “dada
 a evidência dos 100 voos, a probabilidade de que o modelo seja correto é
 de 15%”. No framework frequentista, essa afirmação é semanticamente
@@ -2242,13 +2248,16 @@ calibrado para rejeitar 5% das peças boas.</p>
 verdadeira em uma realização específica do experimento. É o erro em si —
 não a sua taxa. α é a taxa de ocorrência desse erro no longo prazo. A
 relação é:</p>
-<pre><code>P(Erro Tipo I) = α
-
-Ou seja:
-P(Rejeitar H₀ | H₀ verdadeira) = α
-
-Esta probabilidade é avaliada sobre a distribuição amostral de T,
-não sobre este experimento específico.</code></pre>
+<p><span class="math display">\[
+P(\text{Erro Tipo I}) = \alpha
+\]</span></p>
+<p>ou seja:</p>
+<p><span class="math display">\[
+P(\text{Rejeitar } H_0 \mid H_0 \text{ verdadeira}) = \alpha.
+\]</span></p>
+<p>Esta probabilidade é avaliada sobre a distribuição amostral de <span
+class="math inline">\(T\)</span>, não sobre este experimento
+específico.</p>
 <h4 id="o-que-é-o-p-value-e-como-se-relaciona-com-alpha">O que é o
 p-value e como se relaciona com alpha?</h4>
 <p>O p-value é calculado <em>após</em> ver os dados. Ele é a
@@ -2310,13 +2319,21 @@ a amostra precisa ser grande o suficiente para comprovar (com confiança
 de ensaio em voo.</p>
 <p><strong>Estrutura de Hipóteses do TOST (Schuirmann, 1987) [<a
 href="#referências">24</a>]:</strong></p>
-<pre><code>H₀₁: O erro do modelo é ≤ −Δ  (Subestimação inaceitável)
-H₀₂: O erro do modelo é ≥ +Δ  (Superestimação inaceitável)
-H₁ (Equivalência): O erro está contido no intervalo aberto (−Δ, +Δ)
-
-Nota: os sinais de ≤ e ≥ são essenciais — H₀ deve abrigar o sinal de
-igualdade (ver §2.2) para que a distribuição de referência seja ancorada
-num valor exato.</code></pre>
+<p><span class="math display">\[
+\begin{aligned}
+H_{01} &amp;: \text{O erro do modelo é } \le -\Delta \quad
+\text{(Subestimação inaceitável)} \\
+H_{02} &amp;: \text{O erro do modelo é } \ge +\Delta \quad
+\text{(Superestimação inaceitável)} \\
+H_1 &amp;: \text{O erro está contido no intervalo aberto } (-\Delta,
++\Delta) \quad \text{(Equivalência)}
+\end{aligned}
+\]</span></p>
+<p>Nota: os sinais de <span class="math inline">\(\le\)</span> e <span
+class="math inline">\(\ge\)</span> são essenciais — <span
+class="math inline">\(H_0\)</span> deve abrigar o sinal de igualdade
+(ver §2.2) para que a distribuição de referência seja ancorada em um
+valor exato.</p>
 <p>Antes do mecanismo, a calibração. O valor de Δ é decisão de
 engenharia, nunca estatística, e o exemplo de 0,5 ft/s no <em>sink
 rate</em> de toque ajuda a fixar a intuição. Um trem de pouso
@@ -2340,28 +2357,52 @@ contrário com alta confiança empírica (1-α).</p>
 composta H₀: |θ| ≥ Δ não é testada diretamente. Ela se decompõe em dois
 testes unilaterais executados sobre o mesmo dado: um afasta o erro do
 limite inferior, o outro o afasta do superior, e a equivalência só é
-declarada quando ambos rejeitam suas nulas simultaneamente. Com θ
-denotando a diferença média simulador menos voo e SE o erro padrão dessa
-estimativa:</p>
-<pre><code>H₀: |θ| ≥ Δ        (erro fora da zona aceitável)
-H₁: |θ| &lt; Δ        (equivalência)
-
-Decomposição (dois testes unilaterais, nível α):
-  H₀₁: θ ≤ −Δ   vs. H₁₁: θ &gt; −Δ     t₁ = (θ_obs + Δ) / SE
-  H₀₂: θ ≥ +Δ   vs. H₁₂: θ &lt; +Δ     t₂ = (Δ − θ_obs) / SE
-
-Equivalência declarada somente se t₁ e t₂ superarem
-simultaneamente o valor crítico t de Student.</code></pre>
+declarada quando ambos rejeitam suas nulas simultaneamente. Com <span
+class="math inline">\(\theta\)</span> denotando a diferença média
+simulador menos voo e <span class="math inline">\(\mathrm{SE}\)</span> o
+erro padrão dessa estimativa:</p>
+<p><span class="math display">\[
+\begin{aligned}
+H_0 &amp;: |\theta| \ge \Delta \quad \text{(erro fora da zona
+aceitável)} \\
+H_1 &amp;: |\theta| &lt; \Delta \quad \text{(equivalência)}
+\end{aligned}
+\]</span></p>
+<p>Decomposição em dois testes unilaterais em nível <span
+class="math inline">\(\alpha\)</span>:</p>
+<ul>
+<li><span class="math inline">\(H_{01}: \theta \le -\Delta\)</span>
+versus <span class="math inline">\(H_{11}: \theta &gt; -\Delta\)</span>,
+com <span class="math inline">\(t_1 = (\theta_{\mathrm{obs}} + \Delta) /
+\mathrm{SE}\)</span>;</li>
+<li><span class="math inline">\(H_{02}: \theta \ge +\Delta\)</span>
+versus <span class="math inline">\(H_{12}: \theta &lt; +\Delta\)</span>,
+com <span class="math inline">\(t_2 = (\Delta - \theta_{\mathrm{obs}}) /
+\mathrm{SE}\)</span>.</li>
+</ul>
+<p>A equivalência é declarada somente se <span
+class="math inline">\(t_1\)</span> e <span
+class="math inline">\(t_2\)</span> superarem simultaneamente o valor
+crítico <span class="math inline">\(t\)</span> de Student.</p>
 <p>Um exemplo numérico completo mostra a máquina funcionando. Sejam Δ =
-0,5 ft/s no <em>sink rate</em>, diferença observada θ_obs = 0,12 ft/s,
-desvio-padrão amostral s = 1,5 ft/s e n = 100 voos. O erro padrão vale
-SE ≈ s/√n = 1,5/10 = 0,15 ft/s, e as estatísticas saem:</p>
-<pre><code>t₁ = (0,12 + 0,50) / 0,15 ≈ 4,1
-t₂ = (0,50 − 0,12) / 0,15 ≈ 2,5
-
-Os dois p-values unilaterais ficam abaixo de 0,025, portanto
-rejeitamos H₀₁ e H₀₂: o viés do simulador está confinado em
-(−0,5, +0,5) ft/s com confiança de 95%.</code></pre>
+0,5 ft/s no <em>sink rate</em>, diferença observada <span
+class="math inline">\(\theta_{\mathrm{obs}} = 0{,}12\text{
+ft/s}\)</span>, desvio-padrão amostral <span class="math inline">\(s =
+1{,}5\text{ ft/s}\)</span> e <span class="math inline">\(n =
+100\)</span> voos. O erro padrão vale <span
+class="math inline">\(\mathrm{SE} \approx s/\sqrt{n} = 1{,}5/10 =
+0{,}15\text{ ft/s}\)</span>, e as estatísticas saem:</p>
+<p><span class="math display">\[
+t_1 = \frac{0{,}12 + 0{,}50}{0{,}15} \approx 4{,}1, \qquad t_2 =
+\frac{0{,}50 - 0{,}12}{0{,}15} \approx 2{,}5.
+\]</span></p>
+<p>Os dois p-values unilaterais ficam abaixo de <span
+class="math inline">\(0{,}025\)</span>, portanto rejeitamos <span
+class="math inline">\(H_{01}\)</span> e <span
+class="math inline">\(H_{02}\)</span>: o viés do simulador está
+confinado em <span class="math inline">\((-0{,}5, +0{,}5)\text{
+ft/s}\)</span> com confiança de <span
+class="math inline">\(95\%\)</span>.</p>
 <p>Existe uma identidade que comprime o procedimento em uma única
 checagem: o TOST com nível α equivale a exigir que o intervalo de
 confiança de (1 − 2α) da diferença esteja inteiramente contido em (−Δ,
@@ -2892,25 +2933,52 @@ voos detectassem um viés de, digamos, 0,5 ft/s (engenheiramente
 significativo)? Se o poder for baixo (&lt; 80%), os testes negativos
 devem ser interpretados com cautela — não como confirmação do modelo,
 mas como insuficiência de evidência.</p>
-<pre><code>Poder = P(rejeitar H₀ | H₁ verdadeira com δ = efeito mínimo relevante)
-
-Parâmetros necessários:
-α = nível de significância (ex: 0,05)
-δ = diferença mínima engenheiramente relevante (ex: 0,5 ft/s)
-σ = desvio-padrão estimado (do Monte Carlo)
-n = tamanho da amostra de voo (100)
-
-n necessário para Poder = 0,80, α = 0,05:
-n ≈ 2 × (z_α/2 + z_β)² × σ² / δ²</code></pre>
-<p>Executando a fórmula com os parâmetros deste roteiro (δ = 0,5 ft/s, σ
-= 1,5 ft/s, n = 100 voos, α = 0,05):</p>
-<pre><code>Isolando o termo de potência em n:
-(z_α/2 + z_β)² = n·δ² / (2σ²) = 100 × 0,25 / (2 × 2,25) ≈ 5,56
-z_α/2 + z_β ≈ 2,36   →   z_β ≈ 2,36 − 1,96 = 0,40
-Poder = Φ(z_β) ≈ Φ(0,40) ≈ 0,65
-
-Efeito mínimo relevante reduzido à metade (δ = 0,25 ft/s):
-n ≈ 2 × (1,96 + 0,84)² × 1,5² / 0,25² ≈ 564 voos</code></pre>
+<p><span class="math display">\[
+\text{Poder} = P(\text{rejeitar } H_0 \mid H_1 \text{ verdadeira com }
+\delta = \text{efeito mínimo relevante})
+\]</span></p>
+<p>Parâmetros necessários:</p>
+<ul>
+<li><span class="math inline">\(\alpha\)</span>: nível de significância
+(ex: <span class="math inline">\(0{,}05\)</span>)</li>
+<li><span class="math inline">\(\delta\)</span>: diferença mínima
+engenheiramente relevante (ex: <span class="math inline">\(0{,}5\text{
+ft/s}\)</span>)</li>
+<li><span class="math inline">\(\sigma\)</span>: desvio-padrão estimado
+(do Monte Carlo)</li>
+<li><span class="math inline">\(n\)</span>: tamanho da amostra de voo
+(<span class="math inline">\(100\)</span>)</li>
+</ul>
+<p>O tamanho amostral <span class="math inline">\(n\)</span> necessário
+para <span class="math inline">\(\text{Poder} = 0{,}80\)</span> e <span
+class="math inline">\(\alpha = 0{,}05\)</span> é dado por:</p>
+<p><span class="math display">\[
+n \approx \frac{2 \, (z_{\alpha/2} + z_\beta)^2 \, \sigma^2}{\delta^2}.
+\]</span></p>
+<p>Executando a fórmula com os parâmetros deste roteiro (<span
+class="math inline">\(\delta = 0{,}5\text{ ft/s}\)</span>, <span
+class="math inline">\(\sigma = 1{,}5\text{ ft/s}\)</span>, <span
+class="math inline">\(n = 100\)</span> voos, <span
+class="math inline">\(\alpha = 0{,}05\)</span>):</p>
+<p>Isolando o termo de potência em <span
+class="math inline">\(n\)</span>:</p>
+<p><span class="math display">\[
+(z_{\alpha/2} + z_\beta)^2 = \frac{n \, \delta^2}{2 \, \sigma^2} =
+\frac{100 \times 0{,}25}{2 \times 2{,}25} \approx 5{,}56.
+\]</span></p>
+<p><span class="math display">\[
+z_{\alpha/2} + z_\beta \approx 2{,}36 \implies z_\beta \approx 2{,}36 -
+1{,}96 = 0{,}40.
+\]</span></p>
+<p><span class="math display">\[
+\text{Poder} = \Phi(z_\beta) \approx \Phi(0{,}40) \approx 0{,}65.
+\]</span></p>
+<p>Com o efeito mínimo relevante reduzido à metade (<span
+class="math inline">\(\delta = 0{,}25\text{ ft/s}\)</span>):</p>
+<p><span class="math display">\[
+n \approx \frac{2 \times (1{,}96 + 0{,}84)^2 \times 1{,}5^2}{0{,}25^2}
+\approx 564\text{ voos}.
+\]</span></p>
 <p>Com 100 voos, a probabilidade de detectar um viés de 0,5 ft/s gira em
 torno de 65%, abaixo da referência usual de 80%. Vale notar que a
 fórmula pressupõe os dois grupos com o mesmo tamanho; neste roteiro, os

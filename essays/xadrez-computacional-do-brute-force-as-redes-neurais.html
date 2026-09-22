@@ -267,7 +267,7 @@ body{
 /* ------------------------------------------------------------------ */
 .content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
 
-h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;text-wrap:balance;}
 .content h1{display:none;} /* titulo vive no masthead */
 
 .content h2{
@@ -325,7 +325,6 @@ h5{
 
 p{
   margin:0 0 1.25rem;word-break:break-word;
-  text-wrap:pretty;
 }
 @media (min-width:901px){
   .content > p{
@@ -4010,7 +4009,9 @@ restrições inteiras.</p>
 <h4 id="clippedrelu">ClippedReLU</h4>
 <p>O <code>ReLU</code> padrão é substituído por
 <code>ClippedReLU(clip=1.0)</code>:</p>
-<pre><code>ClippedReLU(x) = clamp(x, 0.0, 1.0)</code></pre>
+<p><span class="math display">\[
+\operatorname{ClippedReLU}(x) = \operatorname{clamp}(x, 0.0, 1.0)
+\]</span></p>
 <p>Durante o treinamento, a saída fica em <span
 class="math inline">\([0, 1.0]\)</span> (float). No engine, 1.0 mapeia
 exatamente para <span class="math inline">\(QA = 255\)</span>, dando uma
@@ -4024,10 +4025,10 @@ com Straight-Through Estimator (STE)</h4>
 <strong>snapped</strong> para o valor inteiro representável mais próximo
 e depois divididos de volta para float, simulando o arredondamento que
 ocorrerá no deployment:</p>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>limit <span class="op">=</span> <span class="dv">32767</span> <span class="op">/</span> QA                         <span class="co"># ≈ 128.5</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x_clamped <span class="op">=</span> clamp(w, −limit, <span class="op">+</span>limit)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x_quantized <span class="op">=</span> <span class="bu">round</span>(x_clamped × QA) <span class="op">/</span> QA   <span class="co"># snapped para grid inteiro</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>limit <span class="op">=</span> <span class="dv">32767</span> <span class="op">/</span> QA                         <span class="co"># ≈ 128.5</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>x_clamped <span class="op">=</span> clamp(w, −limit, <span class="op">+</span>limit)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>x_quantized <span class="op">=</span> <span class="bu">round</span>(x_clamped × QA) <span class="op">/</span> QA   <span class="co"># snapped para grid inteiro</span></span></code></pre></div>
 <p>Para o backward pass, gradientes fluem pelo arredondamento como se
 fosse uma identidade: o <strong><a
 href="https://arxiv.org/abs/1308.3432">Straight-Through
@@ -4037,9 +4038,9 @@ melhores valores no grid inteiro sem perder o sinal de gradiente.</p>
 <h4 id="hard-weight-clamping">Hard Weight Clamping</h4>
 <p>Após cada passo do otimizador, todos os pesos são hard-clamped para
 sua faixa float representável:</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lim1 <span class="op">=</span> <span class="dv">32767</span> <span class="op">/</span> QA  <span class="co"># ≈ 128.5  — L1 weight max</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lim2 <span class="op">=</span> <span class="dv">127</span>   <span class="op">/</span> QB  <span class="co"># ≈ 1.984  — L2/L3 weight max</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lim1 <span class="op">=</span> <span class="dv">32767</span> <span class="op">/</span> QA  <span class="co"># ≈ 128.5  — L1 weight max</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>lim2 <span class="op">=</span> <span class="dv">127</span>   <span class="op">/</span> QB  <span class="co"># ≈ 1.984  — L2/L3 weight max</span></span></code></pre></div>
 <p>Sem isso, o momentum do <a
 href="https://arxiv.org/abs/1412.6980">Adam</a> [<a
 href="#referências">21</a>] (otimizador baseado em <a
