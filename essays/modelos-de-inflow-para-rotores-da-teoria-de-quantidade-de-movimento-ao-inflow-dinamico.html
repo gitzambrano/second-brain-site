@@ -1636,7 +1636,7 @@ Pitt–Peters: três estados para a dinâmica da esteira</a></li>
 Peters–He: uma teoria de estados finitos generalizada</a></li>
 <li><a href="#10-síntese-dos-modelos-e-aplicações">10. Síntese dos
 Modelos e Aplicações</a></li>
-<li><a href="#11-exemplo-numérico">11. Exemplo Numérico</a></li>
+<li><a href="#11-exemplo-numérico-de-inflow-dinâmico">11. Exemplo Numérico de Inflow Dinâmico</a></li>
 <li><a href="#12-conclusão">12. Conclusão</a></li>
 </ul>
 <hr />
@@ -3331,14 +3331,15 @@ filamentos vorticais discretos e da distância entre pá e vórtice. Um
 primeiro harmônico do disco não contém essa informação geométrica.</p>
 <p>Em termos de engenharia, a ordem necessária é aquela que ainda
 preserva o mecanismo físico dominante para a métrica de interesse.</p>
-<h2 id="11-exemplo-numérico">11. Exemplo Numérico</h2>
+<h2 id="11-exemplo-numérico-de-inflow-dinâmico">11. Exemplo Numérico de
+Inflow Dinâmico</h2>
 <p>Considere um rotor em voo pairado com</p>
 <p><span class="math display">\[
 C_{T,0}=0.015,
 \qquad
 \Omega_0=800\ \mathrm{rpm}.
 \]</span></p>
-<p>O inflow de equilíbrio inicial é</p>
+<p>O inflow inicial de equilíbrio é</p>
 <p><span class="math display">\[
 \lambda_{i,0}
 =
@@ -3346,231 +3347,359 @@ C_{T,0}=0.015,
 \approx
 0.08660.
 \]</span></p>
-<p>Para o modo uniforme de Pitt–Peters,</p>
+<p>No modo uniforme de Pitt–Peters,</p>
 <p><span class="math display">\[
 M_{00}
 =
 \frac{128}{75\pi}
 \approx
-0.5432.
+0.5432,
 \]</span></p>
-<p>A constante de tempo local pode ser expressa em tempo adimensional, revoluções do rotor ou segundos:</p>
+<p>e a constante de tempo adimensional local pode ser escrita como</p>
 <p><span class="math display">\[
 \tau_{\mathrm{PP}}
 =
-\frac{M_{00}}{4\lambda_i},
-\qquad
-N_{\mathrm{rev,PP}}
-=
-\frac{\tau_{\mathrm{PP}}}{2\pi},
-\qquad
-t_{\mathrm{PP}}
-=
-\frac{\tau_{\mathrm{PP}}}{\Omega}.
+\frac{M_{00}}{4\lambda_i}.
 \]</span></p>
-<p>No ponto inicial,</p>
+<p>No ponto inicial, isso fornece</p>
 <p><span class="math display">\[
-\boxed{
 \tau_{\mathrm{PP},0}
 \approx
 1.568,
 \qquad
-N_{\mathrm{rev,PP},0}
+N_{\mathrm{rev},0}
+=
+\frac{\tau_{\mathrm{PP},0}}{2\pi}
 \approx
-0.250\ \mathrm{rev},
-\qquad
+0.250\ \mathrm{rev}.
+\]</span></p>
+<p>A 800 rpm, a constante de tempo correspondente é</p>
+<p><span class="math display">\[
 t_{\mathrm{PP},0}
+=
+\frac{\tau_{\mathrm{PP},0}}{\Omega_0}
 \approx
 18.7\ \mathrm{ms}.
-}
 \]</span></p>
-<p>Os dois exemplos seguintes comparam uma representação quase-estática com o modo uniforme de Pitt–Peters. Na representação quase-estática, o inflow assume em cada instante o valor de equilíbrio correspondente ao carregamento. Na representação dinâmica, o inflow evolui com a constante de tempo acima. A aerodinâmica da pá é representada localmente por uma relação linear entre coletivo, inflow e <span class="math inline">\(C_T\)</span>. Assume-se diretamente que <span class="math inline">\(1.5^\circ\)</span> de coletivo corresponde, em equilíbrio, a <span class="math inline">\(\Delta C_T=0.003\)</span> para o rotor deste exemplo.</p>
-
-<h3 id="input-de-coletivo-em-rampa">11.1 Input de Coletivo em Rampa</h3>
-<p>O coletivo aumenta a uma taxa constante</p>
-<p><span class="math display">\[
-\dot\theta_0
-=
-60^\circ/\mathrm{s}
-\]</span></p>
-<p>até completar</p>
-<p><span class="math display">\[
-\Delta\theta_0
-=
-1.5^\circ.
-\]</span></p>
-<p>A rampa dura</p>
-<p><span class="math display">\[
-\boxed{
-t_{\mathrm{rampa},\theta}
-=
-\frac{1.5^\circ}{60^\circ/\mathrm{s}}
-=
-25\ \mathrm{ms}.
-}
-\]</span></p>
-<p>Por hipótese, o novo ponto de equilíbrio é</p>
-<p><span class="math display">\[
-C_T:
-0.015
-\longrightarrow
-0.018.
-\]</span></p>
-<p>O inflow de equilíbrio correspondente passa de <span class="math inline">\(\lambda_{i,0}\approx0.08660\)</span> para</p>
+<p>Se o rotor evolui para <span
+class="math inline">\(C_T=0.018\)</span>, o inflow final de equilíbrio
+é</p>
 <p><span class="math display">\[
 \lambda_{i,1}
 =
 \sqrt{\frac{0.018}{2}}
 \approx
-0.09487.
+0.09487,
 \]</span></p>
-<p>No modelo quase-estático, <span class="math inline">\(C_T\)</span> e <span class="math inline">\(\lambda_i\)</span> percorrem continuamente a sequência de estados de equilíbrio durante a rampa. Com Pitt–Peters, o coletivo cresce mais rápido que o campo induzido. O inflow permanece temporariamente abaixo do valor quase-estático, o ângulo de inflow é menor e o ângulo de ataque efetivo das pás fica maior. Como consequência, <span class="math inline">\(C_T\)</span> fica temporariamente acima do valor quase-estático.</p>
-<p><img src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig3.svg" alt="Input de coletivo: resposta de carga" /></p>
-<p><em>Figura 3. Resposta de \(C_T/C_{T0}\) a uma rampa de coletivo de \(60^\circ/\mathrm{s}\) até \(\Delta\theta_0=1.5^\circ\). A linha quase-estática acompanha a sequência de equilíbrios. O modelo de Pitt–Peters apresenta carregamento maior durante o transiente porque o inflow responde com atraso.</em></p>
-<p>O máximo ocorre aproximadamente no final da rampa, quando o coletivo deixa de crescer mas o inflow ainda não atingiu o novo equilíbrio. No modelo usado neste exemplo,</p>
+<p>e a constante de tempo passa a</p>
 <p><span class="math display">\[
-\boxed{
+\tau_{\mathrm{PP},1}
+\approx
+1.432,
+\qquad
+N_{\mathrm{rev},1}
+\approx
+0.228\ \mathrm{rev},
+\]</span></p>
+<p>ou, ainda a 800 rpm,</p>
+<p><span class="math display">\[
+t_{\mathrm{PP},1}
+=
+\frac{\tau_{\mathrm{PP},1}}{\Omega_0}
+\approx
+17.1\ \mathrm{ms}.
+\]</span></p>
+<p>Para fechar o exemplo, adota-se uma forma linear de elemento de
+pá,</p>
+<p><span class="math display">\[
+C_T
+=
+A\theta_0 + B\lambda_i,
+\]</span></p>
+<p>com</p>
+<p><span class="math display">\[
+\frac{B}{A}=-\frac{3}{2}.
+\]</span></p>
+<p>Assume-se diretamente que um aumento de</p>
+<p><span class="math display">\[
+\Delta\theta_0 = 1.5^\circ
+\]</span></p>
+<p>corresponde, em equilíbrio, a</p>
+<p><span class="math display">\[
+\Delta C_T = 0.003,
+\]</span></p>
+<p>de modo que o rotor passa de</p>
+<p><span class="math display">\[
+C_T=0.015
+\quad \text{para} \quad
+C_T=0.018.
+\]</span></p>
+<p>Nos gráficos seguintes, o modelo quase-estático impõe em cada
+instante o inflow de equilíbrio correspondente à carga instantânea,
+enquanto Pitt–Peters conserva a memória temporal da esteira. A diferença
+entre as duas soluções não está no ponto de equilíbrio final, mas no
+atraso de fase entre carregamento e inflow durante o transiente.</p>
+<h3 id="111-input-de-coletivo-em-rampa">11.1 Input de Coletivo em Rampa</h3>
+<p>No primeiro caso, aplica-se um comando de coletivo com taxa</p>
+<p><span class="math display">\[
+\dot\theta_0 = 60^\circ/\mathrm{s},
+\]</span></p>
+<p>até completar</p>
+<p><span class="math display">\[
+\Delta\theta_0 = 1.5^\circ.
+\]</span></p>
+<p>A duração da rampa é</p>
+<p><span class="math display">\[
+t_{\mathrm{rampa},\theta}
+=
+\frac{1.5^\circ}{60^\circ/\mathrm{s}}
+=
+25\ \mathrm{ms}.
+\]</span></p>
+<p>Como a rotação permanece constante, a comparação pode ser feita
+diretamente em <span class="math inline">\(C_T/C_{T0}\)</span> e em
+<span class="math inline">\(\lambda_i(t)\)</span>. No modelo
+quase-estático, carga e inflow percorrem a sequência de estados de
+equilíbrio determinada pelo pitch. Com Pitt–Peters, o pitch cresce em
+uma escala temporal comparável à da esteira e o inflow permanece
+temporariamente abaixo do valor quase-estático. Isso reduz o ângulo de
+inflow, aumenta o ângulo de ataque efetivo das pás e faz o carregamento
+crescer mais do que cresceria se a esteira pudesse se reorganizar
+instantaneamente.</p>
+<figure>
+<img
+src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig3.svg"
+alt="Input de coletivo: resposta de carga" />
+<figcaption aria-hidden="true">Input de coletivo: resposta de
+carga</figcaption>
+</figure>
+<p><em>Figura 3. Resposta de <span
+class="math inline">\(C_T/C_{T0}\)</span> a uma rampa de coletivo de
+<span class="math inline">\(60^\circ/\mathrm{s}\)</span> até <span
+class="math inline">\(\Delta\theta_0=1.5^\circ\)</span>. A legenda é
+mantida dentro da área do gráfico; os símbolos dos eixos seguem a mesma
+notação usada no texto.</em></p>
+<p>O máximo ocorre aproximadamente quando a rampa termina. Nesse
+instante, o coletivo já atingiu o valor final, mas o inflow ainda não
+atingiu o novo equilíbrio. No modelo deste exemplo,</p>
+<p><span class="math display">\[
 \frac{C_{T,\max}}{C_{T,0}}
 \approx
 1.264,
-}
 \]</span></p>
-<p>correspondente a <span class="math inline">\(C_{T,\max}\approx0.01895\)</span>. Depois de 25 ms, o coletivo permanece constante e o inflow continua aumentando. Esse crescimento reduz o ângulo de ataque efetivo e faz <span class="math inline">\(C_T\)</span> diminuir do pico transitório até <span class="math inline">\(C_{T,\infty}=0.018\)</span>.</p>
-<p>O overshoot resulta do atraso do campo induzido em relação ao comando de coletivo. Esse mecanismo é consistente com estudos de resposta vertical de helicópteros, nos quais a inclusão de inflow dinâmico produz resposta inicial mais pronunciada após comandos rápidos de coletivo <a href="#referências">[11]</a>.</p>
-<p><img src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig4.svg" alt="Input de coletivo: resposta de inflow" /></p>
-<p><em>Figura 4. Resposta do inflow médio ao mesmo input de coletivo. O modelo quase-estático assume o valor de equilíbrio correspondente ao coletivo instantâneo, enquanto Pitt–Peters introduz a memória temporal da esteira.</em></p>
-<p>A constante de tempo também muda durante o transiente porque depende de <span class="math inline">\(\lambda_i\)</span>. No início,</p>
+<p>ou</p>
 <p><span class="math display">\[
-\boxed{
-N_{\mathrm{rev,PP}}
+C_{T,\max}
+\approx
+0.01895.
+\]</span></p>
+<p>A partir daí o pitch permanece constante, enquanto o inflow continua
+aumentando. O crescimento de <span
+class="math inline">\(\lambda_i\)</span> reduz o ângulo de ataque
+efetivo e conduz <span class="math inline">\(C_T\)</span> do pico
+transitório até</p>
+<p><span class="math display">\[
+C_{T,\infty}=0.018.
+\]</span></p>
+<p>Esse overshoot não foi introduzido por uma dinâmica artificial de
+<span class="math inline">\(C_T\)</span>; ele resulta diretamente do
+atraso do campo induzido em relação ao coletivo. O mesmo mecanismo
+aparece em estudos clássicos de resposta vertical de helicópteros com
+inflow dinâmico, nos quais comandos rápidos de coletivo produzem uma
+resposta inicial mais pronunciada quando a esteira é tratada como estado
+dinâmico <a href="#referências">[11]</a>.</p>
+<figure>
+<img
+src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig4.svg"
+alt="Input de coletivo: resposta de inflow" />
+<figcaption aria-hidden="true">Input de coletivo: resposta de
+inflow</figcaption>
+</figure>
+<p><em>Figura 4. Resposta de <span
+class="math inline">\(\lambda_i\)</span> ao mesmo input de coletivo. O
+modelo quase-estático assume o valor de equilíbrio compatível com o
+carregamento instantâneo; Pitt–Peters mantém o tempo finito necessário
+para a reorganização do campo induzido.</em></p>
+<p>A constante de tempo varia durante o transiente porque depende do
+próprio inflow. No ponto inicial,</p>
+<p><span class="math display">\[
+N_{\mathrm{rev},0}
 \approx
 0.250\ \mathrm{rev},
 \qquad
-t_{\mathrm{PP}}
+t_{\mathrm{PP},0}
 \approx
-18.7\ \mathrm{ms}
-}
+18.7\ \mathrm{ms},
 \]</span></p>
-<p>a 800 rpm. No novo equilíbrio, com <span class="math inline">\(C_T=0.018\)</span>,</p>
+<p>e, no novo equilíbrio,</p>
 <p><span class="math display">\[
-\boxed{
-N_{\mathrm{rev,PP}}
+N_{\mathrm{rev},1}
 \approx
 0.228\ \mathrm{rev},
 \qquad
-t_{\mathrm{PP}}
+t_{\mathrm{PP},1}
 \approx
 17.1\ \mathrm{ms}.
-}
 \]</span></p>
-<p>A rampa de coletivo dura 25 ms, portanto sua duração é da mesma ordem da constante de tempo do inflow. Essa proximidade de escalas explica a diferença visível entre as respostas quase-estática e dinâmica.</p>
-
-<h3 id="input-de-rpm-em-rampa">11.2 Input de RPM em Rampa</h3>
-<p>O segundo caso mantém o coletivo fixo e aumenta a rotação de</p>
+<p>A rampa de coletivo dura <span class="math inline">\(25\)</span> ms,
+portanto o comando e a reorganização da esteira ocorrem em escalas
+temporais próximas. Essa proximidade explica por que a separação entre
+as respostas quase-estática e dinâmica é claramente visível.</p>
+<h3 id="112-input-de-rpm-em-rampa">11.2 Input de RPM em Rampa</h3>
+<p>No segundo caso, o coletivo permanece fixo e a rotação cresce a</p>
 <p><span class="math display">\[
-800
-\longrightarrow
-900\ \mathrm{rpm}
+\dot n = 1000\ \mathrm{rpm/s}
 \]</span></p>
-<p>com taxa constante</p>
+<p>entre 800 e 900 rpm. A rampa dura</p>
 <p><span class="math display">\[
-\dot n
-=
-1000\ \mathrm{rpm/s}.
-\]</span></p>
-<p>A rampa dura</p>
-<p><span class="math display">\[
-\boxed{
 t_{\mathrm{rampa},n}
 =
 \frac{100\ \mathrm{rpm}}{1000\ \mathrm{rpm/s}}
 =
 100\ \mathrm{ms}.
-}
 \]</span></p>
-<p>Em voo pairado ideal, para geometria e coletivo fixos, o ponto adimensional de equilíbrio permanece aproximadamente no mesmo <span class="math inline">\(C_T\)</span>. A tração dimensional varia como</p>
+<p>Para geometria e coletivo fixos, o ponto adimensional de equilíbrio
+permanece aproximadamente no mesmo <span
+class="math inline">\(C_T\)</span>. A quantidade mais informativa deixa
+de ser apenas <span class="math inline">\(C_T\)</span> e passa a ser a
+tração dimensional,</p>
 <p><span class="math display">\[
 T
 =
 C_T\rho A(\Omega R)^2.
 \]</span></p>
-<p>No novo equilíbrio,</p>
+<p>No limite quase-estático, <span class="math inline">\(C_T\)</span>
+permanece aproximadamente constante e a tração acompanha diretamente
+<span class="math inline">\(\Omega^2\)</span>. Com Pitt–Peters, a
+velocidade induzida física não cresce instantaneamente com a rotação.
+Durante a aceleração, o atraso de <span
+class="math inline">\(v_i\)</span> reduz temporariamente</p>
 <p><span class="math display">\[
-\boxed{
-\frac{T_\infty}{T_0}
+\lambda_i
 =
-\left(
-\frac{900}{800}
-\right)^2
-\approx
-1.266.
-}
+\frac{v_i}{\Omega R},
 \]</span></p>
-<p>No cálculo quase-estático, o inflow físico acompanha imediatamente a rotação e <span class="math inline">\(C_T\)</span> permanece no valor de equilíbrio. Com Pitt–Peters, a velocidade induzida demora a crescer. Durante a aceleração, isso reduz temporariamente <span class="math inline">\(\lambda_i=v_i/(\Omega R)\)</span>, aumentando o ângulo de ataque efetivo das pás e elevando ligeiramente <span class="math inline">\(C_T\)</span>. O resultado aparece diretamente na tração.</p>
-<p><img src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig5.svg" alt="Input de RPM: resposta de tração" /></p>
-<p><em>Figura 5. Resposta de \(T/T_0\) a uma rampa de rotação de \(1000\ \mathrm{rpm/s}\) entre 800 e 900 rpm. A diferença entre as curvas decorre apenas da dinâmica do inflow, pois a mesma trajetória de \(\Omega(t)\) é usada nos dois casos.</em></p>
-<p>O máximo também ocorre aproximadamente no final da rampa. Para o modelo de Pitt–Peters,</p>
+<p>aumentando o ângulo de ataque efetivo e elevando ligeiramente <span
+class="math inline">\(C_T\)</span> em relação à solução quase-estática.
+A diferença aparece como uma pequena elevação adicional de <span
+class="math inline">\(T/T_0\)</span> durante a rampa.</p>
+<figure>
+<img
+src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig5.svg"
+alt="Input de RPM: resposta de tração" />
+<figcaption aria-hidden="true">Input de RPM: resposta de
+tração</figcaption>
+</figure>
+<p><em>Figura 5. Resposta de <span class="math inline">\(T/T_0\)</span>
+a uma rampa de rotação de <span class="math inline">\(1000\
+\mathrm{rpm/s}\)</span> entre 800 e 900 rpm. A mesma trajetória de <span
+class="math inline">\(\Omega(t)\)</span> é usada nas duas soluções; a
+separação entre as curvas é produzida apenas pela dinâmica do
+inflow.</em></p>
+<p>No modelo dinâmico, o máximo ocorre aproximadamente no final da
+rampa:</p>
 <p><span class="math display">\[
-\boxed{
 \left(\frac{T}{T_0}\right)_{\max}
 \approx
 1.289,
-}
 \]</span></p>
-<p>enquanto o valor estacionário é <span class="math inline">\(T_\infty/T_0\approx1.266\)</span>. O pequeno overshoot de tração tem a mesma origem aerodinâmica do caso de coletivo: ao final da rampa, a variável de comando já deixou de crescer, mas o inflow ainda está abaixo do valor correspondente ao novo equilíbrio. O crescimento posterior de <span class="math inline">\(v_i\)</span> aumenta o inflow normalizado, reduz <span class="math inline">\(C_T\)</span> e leva a tração ao valor estacionário.</p>
-<p>Diferentemente do caso de coletivo, a existência e a magnitude desse overshoot em um rotor real dependem também da dinâmica do sistema de rotação, da aerodinâmica não estacionária e dos graus de liberdade estruturais. O cálculo acima isola apenas o efeito do inflow dinâmico.</p>
-<p>Para visualizar o escoamento sem introduzir um salto puramente cinemático pela normalização variável, o inflow físico é apresentado como <span class="math inline">\(\hat{\lambda}_i=v_i/(\Omega_0R)\)</span>, usando a velocidade de ponta inicial como referência fixa.</p>
-<p><img src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig6.svg" alt="Input de RPM: resposta do inflow físico" /></p>
-<p><em>Figura 6. Resposta do inflow físico ao mesmo input de RPM. A normalização fixa evidencia o atraso do campo induzido em relação à aceleração do rotor.</em></p>
-<p>Como <span class="math inline">\(C_T\)</span> retorna aproximadamente ao mesmo valor de equilíbrio, a constante de tempo em revoluções permanece</p>
+<p>enquanto o valor estacionário é</p>
 <p><span class="math display">\[
-\boxed{
-N_{\mathrm{rev,PP}}
+\frac{T_\infty}{T_0}
+=
+\left(\frac{900}{800}\right)^2
+\approx
+1.266.
+\]</span></p>
+<p>O mecanismo é análogo ao caso de coletivo, mas a interpretação
+precisa ser feita em termos da tração dimensional. Quando a rampa de RPM
+termina, a velocidade de ponta já atingiu o valor final, enquanto o
+campo induzido ainda está atrasado. O crescimento posterior de <span
+class="math inline">\(v_i\)</span> aumenta novamente <span
+class="math inline">\(\lambda_i\)</span>, reduz o carregamento
+adimensional e leva a tração ao equilíbrio. A existência e a magnitude
+desse overshoot em um rotor real também dependem da dinâmica do sistema
+de rotação, da aerodinâmica não estacionária e dos graus de liberdade
+estruturais; o cálculo aqui isola apenas o efeito do inflow
+dinâmico.</p>
+<p>Para mostrar a evolução física da esteira sem introduzir um salto
+puramente cinemático causado pela normalização variável, representa-se o
+inflow como</p>
+<p><span class="math display">\[
+\hat{\lambda}_i
+=
+\frac{v_i}{\Omega_0R},
+\]</span></p>
+<p>usando a velocidade de ponta inicial como referência fixa.</p>
+<figure>
+<img
+src="../assets/modelos-de-inflow-para-rotores-da-teoria-de-quantidade-de-movimento-ao-inflow-dinamico_fig6.svg"
+alt="Input de RPM: resposta do inflow físico" />
+<figcaption aria-hidden="true">Input de RPM: resposta do inflow
+físico</figcaption>
+</figure>
+<p><em>Figura 6. Resposta do inflow físico ao input de RPM. A
+normalização fixa evidencia o atraso do campo induzido durante a
+aceleração e preserva continuidade na variável representada.</em></p>
+<p>Como o estado adimensional final retorna aproximadamente ao mesmo
+<span class="math inline">\(C_T\)</span>, a constante de tempo em
+revoluções permanece</p>
+<p><span class="math display">\[
+N_{\mathrm{rev}}
 \approx
 0.250\ \mathrm{rev}.
-}
 \]</span></p>
-<p>Em segundos, porém, a mesma fração de revolução depende de <span class="math inline">\(\Omega\)</span>. No início da rampa,</p>
+<p>Em segundos, porém, a mesma fração de revolução encurta com o aumento
+de rotação:</p>
 <p><span class="math display">\[
-\boxed{
 t_{\mathrm{PP},800}
 \approx
 18.7\ \mathrm{ms},
-}
-\]</span></p>
-<p>e no ponto final,</p>
-<p><span class="math display">\[
-\boxed{
+\qquad
 t_{\mathrm{PP},900}
 \approx
 16.6\ \mathrm{ms}.
-}
 \]</span></p>
-<p>A rampa de RPM dura 100 ms, várias constantes de tempo do inflow. Por isso a diferença entre a resposta quase-estática e Pitt–Peters é menor que no caso de coletivo, embora ainda apareça durante a aceleração.</p>
-
-<h3 id="acoplamento-com-batimento-em-helicópteros">11.3 Acoplamento com Batimento em Helicópteros</h3>
-<p>Os dois exemplos anteriores tratam o rotor como rígido: o carregamento aerodinâmico e o inflow estão acoplados, mas não há um grau de liberdade de batimento da pá. Em helicópteros, essa simplificação pode remover parte importante da dinâmica porque batimento e inflow realimentam um ao outro:</p>
-<p><span class="math display">\[
-\text{batimento}
-\longrightarrow
-\text{velocidades e ângulos de ataque locais}
-\longrightarrow
-\text{cargas do rotor}
-\longrightarrow
-\text{inflow}
-\longrightarrow
-\text{cargas}
-\longrightarrow
-\text{batimento}.
-\]</span></p>
-<p>Esse acoplamento não implica que toda resposta de batimento apresente overshoot. O efeito depende do modo considerado, do Lock number, do carregamento e da proximidade entre as escalas temporais do rotor e da esteira.</p>
-<p><a href="https://ntrs.nasa.gov/citations/19870015049">Chen e Hindson</a> <a href="#referências">[11]</a> estudaram a resposta vertical em hover incluindo batimento e inflow dinâmico. A análise mostrou que o inflow dinâmico reduz a estabilidade do modo de batimento no modelo estudado e, em conjunto com o novo modo de inflow, produz um grande overshoot inicial na aceleração vertical após uma entrada abrupta de coletivo. O efeito torna-se mais pronunciado quando <span class="math inline">\(C_T\)</span> ou o Lock number diminuem. O resultado relevante não é um overshoot universal do ângulo de batimento, mas uma alteração dos autovalores, do amortecimento e da fase do sistema rotor-corpo.</p>
-<p>Essa dependência modal também aparece em <a href="https://ntrs.nasa.gov/citations/19900055419">Schrage et al.</a> <a href="#referências">[14]</a>. No modelo estudado pelos autores, o inflow dinâmico aumenta o amortecimento de alguns modos de batimento de alta frequência, mas reduz o amortecimento de movimentos acoplados corpo-batimento. O acoplamento entre inflow e batimento também pode produzir pares de raízes complexas, tornando determinadas respostas mais oscilatórias.</p>
-<p>Dados experimentais de batimento revisados por <a href="https://ntrs.nasa.gov/citations/19860005823">Gaonkar e Peters</a> <a href="#referências">[15]</a> apresentam boa correlação com análises que incluem inflow dinâmico, reforçando que o estado da esteira não deve ser tratado como uma correção exclusivamente de desempenho quando a dinâmica das pás está no problema.</p>
-<div class="box callout-note">
-<div class="box-title"><p>Escopo do exemplo numérico</p></div>
-<p>As Figuras 3 a 6 isolam a dinâmica aerodinâmica de um rotor rígido. Em um helicóptero, os estados de batimento, inflow e corpo rígido formam um sistema acoplado. A constante de tempo de Pitt–Peters continua caracterizando a memória da esteira, mas a resposta observada de tração, aceleração e batimento passa a depender dos modos do sistema completo.</p>
-</div>
+<p>A rampa de RPM dura <span class="math inline">\(100\)</span> ms,
+várias constantes de tempo do inflow. Por isso a diferença entre as
+soluções quase-estática e dinâmica é menor do que no input de coletivo,
+cuja rampa ocorre praticamente na mesma escala temporal da esteira.</p>
+<h3 id="113-acoplamento-com-batimento-em-helicópteros">11.3 Acoplamento com
+Batimento em Helicópteros</h3>
+<p>As duas simulações anteriores tratam o rotor como rígido e isolam o
+acoplamento entre carregamento e inflow. Em um helicóptero, o batimento
+adiciona graus de liberdade aeromecânicos que modificam o próprio
+caminho pelo qual o inflow atua sobre as cargas. O movimento da pá
+altera velocidades e ângulos de ataque locais, modifica a distribuição
+de força no disco e, portanto, o inflow; a esteira alterada realimenta
+as cargas que excitam novamente o batimento.</p>
+<p>Esse acoplamento não implica que toda resposta de batimento apresente
+overshoot. O efeito depende do modo considerado, do Lock number, do
+carregamento e da relação entre as escalas temporais da pá, da esteira e
+do corpo rígido. Chen e Hindson <a href="#referências">[11]</a> mostraram, para a
+resposta vertical em hover, que o inflow dinâmico pode reduzir a
+estabilidade do modo de batimento no modelo estudado e, combinado com o
+modo adicional de inflow, produzir grande overshoot inicial de
+aceleração vertical após uma entrada abrupta de coletivo. O resultado
+relevante não é a existência universal de um pico de batimento, mas a
+alteração dos autovalores, do amortecimento e da fase do sistema
+rotor-corpo.</p>
+<p>Schrage et al. <a href="#referências">[14]</a> chegaram à mesma conclusão por
+uma análise modal mais ampla: a inclusão de inflow dinâmico altera
+sistematicamente as raízes dos modos acoplados, aumentando o
+amortecimento de alguns modos de batimento de alta frequência e
+reduzindo o amortecimento de movimentos corpo-batimento. O acoplamento
+entre estados de inflow e batimento também pode produzir pares de raízes
+complexas, tornando determinadas respostas mais oscilatórias. A revisão
+de Gaonkar e Peters <a href="#referências">[15]</a> mostra que dados experimentais
+de batimento são melhor correlacionados quando a memória da esteira é
+incluída na modelagem.</p>
+<p>Assim, as Figuras 3 a 6 devem ser interpretadas como um isolamento da
+dinâmica aerodinâmica de um rotor rígido. Em um helicóptero, a constante
+de tempo de Pitt–Peters continua caracterizando a memória da esteira,
+mas as respostas observadas de tração, aceleração e batimento pertencem
+aos modos do sistema acoplado, não ao inflow considerado
+isoladamente.</p>
 <h2 id="12-conclusão">12. Conclusão</h2>
 <p>Glauert fornece o inflow médio compatível com o balanço global de
 quantidade de movimento e permanece adequado quando a métrica de
