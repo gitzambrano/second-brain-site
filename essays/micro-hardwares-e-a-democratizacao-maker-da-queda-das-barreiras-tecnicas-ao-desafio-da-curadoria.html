@@ -95,6 +95,40 @@
   --box-verdict-bg:var(--surface2);
   --th-bg:var(--surface2);
 }
+[data-theme="sepia"]{
+  --bg:#FBF8F1;
+  --surface:#FFFAF3;
+  --surface2:#F3EDE3;
+  --border:#DED5C8;
+  --text:#39342F;
+  --text-dim:#746B62;
+  --text-bright:#26211C;
+  --gold:#785B38;
+  --gold-dim:#604626;
+  --rust:#8E4636;
+  --rust-bright:#9C4838;
+  --accent:#596B78;
+  --amber:#865A27;
+  --callout-note:#746B62;
+  --note-bg:#F3EDE3;
+  --callout-abstract:#77572F;
+  --callout-info:#596B78;
+  --callout-todo:#865A27;
+  --callout-success:#486F50;
+  --callout-question:#77572F;
+  --callout-warning:#8C5F2A;
+  --callout-failure:#8E4636;
+  --callout-danger:#98493E;
+  --callout-bug:#8F4337;
+  --callout-example:#6E536F;
+  --callout-quote:#746B62;
+  --quote-bg:#F3EDE3;
+  --box-bg:#FFFAF3;
+  --tab-mix:4%;
+  --verdict-mix:6%;
+  --box-verdict-bg:#F3EDE3;
+  --th-bg:#EEE5D8;
+}
 @media (min-width:901px){
   /* Desktop: coluna de leitura ampla com teto para monitores ultrawide. */
   :root{
@@ -103,7 +137,7 @@
   }
   /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
      escuro para quem preferir. Playfair permanece em todos os temas */
-  :root:not([data-theme="dark"]){
+  :root:not([data-theme="dark"]):not([data-theme="sepia"]){
     --bg:#FFFFFF;
     --surface:#F7F9FC;
     --surface2:#EDF2F8;
@@ -165,6 +199,16 @@ body{
   color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
 }
 #sbThemeToggle:hover{border-color:var(--gold);}
+#sbThemeToggle .theme-disc{
+  width:16px;height:16px;display:block;position:relative;box-sizing:border-box;overflow:hidden;
+  margin:auto;border:2px solid #111;border-radius:50%;
+  background:conic-gradient(from -90deg,#fff 0 33.333%,#d6bc8b 33.333% 66.666%,#111 66.666% 100%);
+}
+#sbThemeToggle .theme-disc::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  background:repeating-conic-gradient(from -90deg,#111 0 7deg,transparent 7deg 120deg);
+  pointer-events:none;
+}
 #sbToTop{
   position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
   border-radius:50%;border:1px solid var(--border);background:var(--surface);
@@ -187,17 +231,24 @@ body{
 }
 /* Tema claro: capa branca nobre com brilho suave dourado */
 [data-theme="light"] .masthead,
-:root:not([data-theme="dark"]) .masthead{
+:root:not([data-theme="dark"]):not([data-theme="sepia"]) .masthead{
   background:#F3F5F7;
   color:#171310;
 }
 [data-theme="light"] .masthead .hero-title,
-:root:not([data-theme="dark"]) .masthead .hero-title{
+:root:not([data-theme="dark"]):not([data-theme="sepia"]) .masthead .hero-title{
   color:#15120E;
 }
 /* Tema escuro: capa preta editorial */
 [data-theme="dark"] .masthead,
-:root[data-theme="dark"] .masthead{
+:root[data-theme="sepia"] .masthead{
+  background:#FBF8F1;
+  color:#39342F;
+}
+[data-theme="sepia"] .masthead .hero-title{
+  color:#26211C;
+}
+[data-theme="dark"] .masthead{
   background:#0A0A0A;
   color:#EDE8DF;
 }
@@ -1319,6 +1370,7 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
    - scripts/essay_template.html owns the essay body and components.
    - This file only maps theme tokens and styles Atlas-only chrome.
    - Light = white + Atlas blue.
+   - Sepia = warm paper + softened contrast.
    - Dark = near-black + restrained gold.
    ========================================================================== */
 
@@ -1344,13 +1396,61 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
   --sb-bg:#ffffff;
   --sb-surface:#ffffff;
   --sb-surface-soft:#f7f9fc;
-  --sb-text:#172235;--sb-text-strong:#0a1525;
+  --sb-text:#172235;
+  --sb-text-strong:#0a1525;
   --sb-muted:#5d6c81;
   --sb-line:rgba(23,34,53,.12);
   --sb-line-strong:rgba(23,34,53,.24);
   --sb-primary:#2f5fb0;
   --sb-primary-soft:rgba(47,95,176,.09);
   --sb-shadow:0 18px 54px rgba(24,45,78,.12);
+}
+
+:root[data-theme="sepia"] {
+  --bg:#fbf8f1;
+  --surface:#fffaf3;
+  --surface2:#f3ede3;
+  --border:#ded5c8;
+  --text:#39342f;
+  --text-dim:#746b62;
+  --text-bright:#26211c;
+  --gold:#785b38;
+  --gold-dim:#604626;
+  --rust:#8e4636;
+  --rust-bright:#9c4838;
+  --accent:#596b78;
+  --amber:#865a27;
+  --callout-note:#746b62;
+  --note-bg:#f3ede3;
+  --callout-abstract:#77572f;
+  --callout-info:#596b78;
+  --callout-todo:#865a27;
+  --callout-success:#486f50;
+  --callout-question:#77572f;
+  --callout-warning:#8c5f2a;
+  --callout-failure:#8e4636;
+  --callout-danger:#98493e;
+  --callout-bug:#8f4337;
+  --callout-example:#6e536f;
+  --callout-quote:#746b62;
+  --quote-bg:#f3ede3;
+  --box-bg:#fffaf3;
+  --tab-mix:4%;
+  --verdict-mix:6%;
+  --box-verdict-bg:#f3ede3;
+  --th-bg:#eee5d8;
+
+  --sb-bg:#fbf8f1;
+  --sb-surface:#fffdf8;
+  --sb-surface-soft:#fdfaf4;
+  --sb-text:#39342f;
+  --sb-text-strong:#26211c;
+  --sb-muted:#746b62;
+  --sb-line:rgba(74,62,48,.15);
+  --sb-line-strong:rgba(74,62,48,.28);
+  --sb-primary:#785b38;
+  --sb-primary-soft:rgba(117,87,47,.10);
+  --sb-shadow:0 20px 56px rgba(73,54,32,.12);
 }
 
 :root[data-theme="dark"] {
@@ -1375,7 +1475,8 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
   --sb-bg:#090909;
   --sb-surface:#121212;
   --sb-surface-soft:#181818;
-  --sb-text:#e8e8e8;--sb-text-strong:#ffffff;
+  --sb-text:#e8e8e8;
+  --sb-text-strong:#ffffff;
   --sb-muted:#a6a6a6;
   --sb-line:rgba(255,255,255,.11);
   --sb-line-strong:rgba(255,255,255,.22);
@@ -1399,6 +1500,12 @@ body{padding-top:68px;}
   color:var(--text) !important;
   border-bottom:1px solid var(--border);
 }
+:root[data-theme="sepia"] .masthead{
+  background:#fbf8f1 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="sepia"] .masthead .hero-title{color:var(--text-bright) !important;}
 :root[data-theme="dark"] .masthead{
   background:#090909 !important;
   color:var(--text) !important;
@@ -1451,13 +1558,12 @@ body{padding-top:68px;}
 .sb-nav{display:flex;align-items:center;gap:20px;}
 .sb-nav a{color:var(--sb-text) !important;font-size:14px;font-weight:500;line-height:1.6;text-decoration:none !important;}
 .sb-nav a:hover{color:var(--sb-text-strong) !important;}
-.sb-nav a.active{color:var(--sb-text) !important;font-weight:600;}
 .sb-nav button{
   box-sizing:border-box;width:36px;height:36px;padding:0;display:grid;place-items:center;
   border:1px solid var(--sb-line);border-radius:10px;
   background:var(--sb-primary-soft);color:var(--sb-text);cursor:pointer;
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1;
-  transition:border-color .16s cubic-bezier(.22,.61,.36,1),background .16s cubic-bezier(.22,.61,.36,1);
+  transition:border-color .16s cubic-bezier(.22,.61,.36,1);
 }
 .sb-nav button:hover{border-color:var(--sb-line-strong);background:color-mix(in srgb,var(--sb-primary) 17%,var(--sb-surface));}
 .sb-nav button:focus-visible{
@@ -1471,8 +1577,13 @@ body{padding-top:68px;}
   background:var(--sb-primary-soft);color:var(--sb-text);
   font:650 12.5px/1 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;white-space:nowrap;
 }
+.sb-nav a.active{color:var(--sb-text) !important;font-weight:600;}
+.sb-nav .sb-subscribe:hover{
+  border-color:var(--sb-line-strong);
+  background:color-mix(in srgb,var(--sb-primary) 17%,var(--sb-surface));
+  color:var(--sb-text);
+}
 #sbTheme{border-color:var(--sb-line);background:var(--sb-primary-soft);}
-.sb-nav .sb-subscribe:hover{border-color:var(--sb-line-strong);background:color-mix(in srgb,var(--sb-primary) 17%,var(--sb-surface));color:var(--sb-text);}
 .sb-subscribe-dialog{
   width:min(430px,calc(100% - 28px));margin:auto;padding:0;border:1px solid var(--sb-line-strong);
   border-radius:16px;background:var(--sb-surface);color:var(--sb-text);overflow:auto;
@@ -1573,7 +1684,7 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
   body{padding-top:60px;}
   body > .sb-progress:not(:has(.sb-progress-fill)){top:60px;}
   .sb-nav{gap:14px;}
-  .sb-nav a{color:var(--sb-text) !important;font-size:14px;font-weight:500;line-height:1.6;text-decoration:none !important;}
+  .sb-nav a{font-size:13px;}
   .sb-brand{gap:0;font-size:0;}
   .sb-nav a:first-child{display:none;}
   .sb-nav button{width:36px;height:36px;}
@@ -1591,37 +1702,61 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 @media(max-width:520px){
   .sb-brand{gap:0;font-size:0;}
   .sb-nav{gap:14px;}
-  .sb-nav a{color:var(--sb-text) !important;font-size:14px;font-weight:500;line-height:1.6;text-decoration:none !important;}
+  .sb-nav a{font-size:13px;}
 }
-</style>
-<style id="sb-sepia-head">
-:root[data-theme="sepia"]{--bg:#fbf8f1;--surface:#fffaf3;--surface2:#f3ede3;--border:#ded5c8;--text:#39342f;--text-dim:#746b62;--text-bright:#26211c;--gold:#785b38;--gold-dim:#604626;--rust:#8e4636;--rust-bright:#9c4838;--accent:#596b78;--amber:#865a27;--callout-note:#746b62;--note-bg:#f3ede3;--callout-abstract:#77572f;--callout-info:#596b78;--callout-todo:#865a27;--callout-success:#486f50;--callout-question:#77572f;--callout-warning:#8c5f2a;--callout-failure:#8e4636;--callout-danger:#98493e;--callout-bug:#8f4337;--callout-example:#6e536f;--callout-quote:#746b62;--quote-bg:#f3ede3;--box-bg:#fffaf3;--tab-mix:4%;--verdict-mix:6%;--box-verdict-bg:#f3ede3;--th-bg:#eee5d8;--sb-bg:#fbf8f1;--sb-surface:#fffdf8;--sb-surface-soft:#fdfaf4;--sb-text:#39342f;--sb-text-strong:#26211c;--sb-muted:#746b62;--sb-line:rgba(74,62,48,.13);--sb-line-strong:rgba(74,62,48,.25);--sb-primary:#785b38;--sb-primary-soft:rgba(120,91,56,.085);--sb-shadow:0 20px 56px rgba(73,54,32,.10)}
-:root[data-theme="sepia"] .masthead{background:#fbf8f1!important;color:var(--text)!important;border-bottom-color:var(--border)!important}:root[data-theme="sepia"] .masthead .hero-title{color:var(--text-bright)!important}.theme-disc{width:14px;height:14px;display:block;flex:none;box-sizing:border-box;border:0;border-radius:50%;background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2013%2013%22%3E%3Cpath%20d%3D%22M6.5%206.5L6.5%201A5.5%205.5%200%200%201%2011.263%209.25Z%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L11.263%209.25A5.5%205.5%200%200%201%201.737%209.25Z%22%20fill%3D%22%23ede3d2%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L1.737%209.25A5.5%205.5%200%200%201%206.5%201Z%22%20fill%3D%22%234a4844%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L6.5%201M6.5%206.5L11.263%209.25M6.5%206.5L1.737%209.25%22%20fill%3D%22none%22%20stroke%3D%22%236b655e%22%20stroke-width%3D%22.6%22%20stroke-linecap%3D%22butt%22%2F%3E%3Ccircle%20cx%3D%226.5%22%20cy%3D%226.5%22%20r%3D%225.5%22%20fill%3D%22none%22%20stroke%3D%22%233c3936%22%20stroke-width%3D%221%22%2F%3E%3C%2Fsvg%3E");box-shadow:none}.theme-disc::after{content:none!important}
-</style><style id="sb-header-contract">
-.sb-bar{height:68px!important;padding:0 max(24px,calc((100% - 1120px)/2))!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;-webkit-font-smoothing:antialiased!important;text-rendering:optimizeLegibility!important}
-.sb-brand{gap:11px!important;font-size:14px!important;font-weight:700!important;line-height:1.6!important;letter-spacing:-.02em!important;color:var(--sb-text-strong)!important}
+
+
+/* Shared three-theme selector: compact 13 px SVG with restrained contrast. */
+.theme-disc{
+  width:13px!important;height:13px!important;display:block!important;flex:none!important;
+  box-sizing:border-box!important;border:0!important;border-radius:50%!important;
+  background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2013%2013%22%3E%3Cpath%20d%3D%22M6.5%206.5L6.5%201A5.5%205.5%200%200%201%2011.263%209.25Z%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L11.263%209.25A5.5%205.5%200%200%201%201.737%209.25Z%22%20fill%3D%22%23ede3d2%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L1.737%209.25A5.5%205.5%200%200%201%206.5%201Z%22%20fill%3D%22%234a4844%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L6.5%201M6.5%206.5L11.263%209.25M6.5%206.5L1.737%209.25%22%20fill%3D%22none%22%20stroke%3D%22%236b655e%22%20stroke-width%3D%22.6%22%20stroke-linecap%3D%22butt%22%2F%3E%3Ccircle%20cx%3D%226.5%22%20cy%3D%226.5%22%20r%3D%225.5%22%20fill%3D%22none%22%20stroke%3D%22%233c3936%22%20stroke-width%3D%221%22%2F%3E%3C%2Fsvg%3E")!important;
+  box-shadow:none!important;font-size:0!important;line-height:1!important;
+}
+.theme-disc::after{content:none!important}
+
+/* SB_HEADER_CONTRACT:START */
+/* Header contract: identical metrics to Atlas home. Keep this last. */
+.sb-bar{height:68px;padding:0 max(24px,calc((100% - 1120px) / 2));-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.sb-brand{
+  gap:11px!important;font-size:14px!important;font-weight:700!important;line-height:1.6!important;
+  color:var(--sb-text-strong)!important
+}
 .sb-nav{gap:20px!important}
-.sb-nav a{font-size:14px!important;font-weight:500!important;line-height:1.6!important;color:var(--sb-text)!important}
-.sb-nav a.active{font-weight:600!important;color:var(--sb-text)!important}
-.sb-nav .sb-subscribe{height:36px!important;min-height:36px!important;padding:0 12px!important;border:1px solid var(--sb-line)!important;border-radius:10px!important;background:var(--sb-primary-soft)!important;color:var(--sb-text)!important;font:650 12.5px/1 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
-#sbTheme{width:36px!important;height:36px!important;border:1px solid var(--sb-line)!important;border-radius:10px!important;background:var(--sb-primary-soft)!important}
-@media(max-width:760px){
-.sb-bar{height:60px!important;padding:0 14px!important}
-body{padding-top:60px!important}
-body>.sb-progress:not(:has(.sb-progress-fill)){top:60px!important}
-.sb-brand{gap:0!important;font-size:0!important}
-.sb-nav{gap:14px!important}
-.sb-nav a:first-child{display:none!important}
-.sb-nav a{font-size:13px!important;font-weight:500!important;line-height:1.6!important}
-.sb-nav .sb-subscribe{height:36px!important;min-height:36px!important;padding:0 10px!important;font-size:12px!important;line-height:1!important}
-#sbTheme{width:36px!important;height:36px!important}
-#sbTheme>.theme-disc{width:13px!important;height:13px!important}
+.sb-nav a{
+  font-size:14px!important;font-weight:500!important;line-height:1.6!important;
+  color:var(--sb-text)!important
 }
+.sb-nav a.active{font-weight:600!important;color:var(--sb-text)!important}
+.sb-nav .sb-subscribe{
+  height:36px!important;min-height:36px!important;padding:0 12px!important;
+  border:1px solid var(--sb-line)!important;border-radius:10px!important;
+  background:var(--sb-primary-soft)!important;color:var(--sb-text)!important;
+  font:650 12.5px/1 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important
+}
+#sbTheme{
+  width:36px!important;height:36px!important;
+  border:1px solid var(--sb-line)!important;border-radius:10px!important;
+  background:var(--sb-primary-soft)!important
+}
+@media(max-width:760px){
+  .sb-bar{height:60px!important;padding:0 14px!important}
+  body{padding-top:60px}
+  body>.sb-progress:not(:has(.sb-progress-fill)){top:60px}
+  .sb-brand{gap:0!important;font-size:0!important}
+  .sb-nav{gap:14px!important}
+  .sb-nav a:first-child{display:none!important}
+  .sb-nav a{font-size:13px!important;font-weight:500!important;line-height:1.6!important}
+  .sb-nav .sb-subscribe{height:36px!important;min-height:36px!important;padding:0 10px!important;font-size:12px!important;line-height:1!important}
+  #sbTheme{width:36px!important;height:36px!important}
+  #sbTheme>.theme-disc{width:13px!important;height:13px!important}
+}
+/* SB_HEADER_CONTRACT:END */
 </style>
 </head>
 <body>
 <div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
-<button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
+<button id="sbThemeToggle" title="Tema" aria-label="Mudar para tema sépia"><span class="theme-disc" aria-hidden="true"></span></button>
 
 <header class="masthead">
   <div class="stripe"></div>
@@ -2137,19 +2272,33 @@ href="https://www.akamai.com/site/en/documents/state-of-the-internet/spring-2018
     fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
     toTop.classList.toggle("visible",h.scrollTop>600);
   }
-  /* Tema: inverte o tema EFETIVO (considerando o padrao do dispositivo:
-     claro no desktop, escuro no mobile) e persiste a escolha. */
+  /* Tema: claro → sépia → escuro. Sem escolha guardada, preserva o
+     padrão histórico do standalone: claro no desktop, escuro no mobile. */
   var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
-  try{var saved=localStorage.getItem("sb-theme");if(saved){root.setAttribute("data-theme",saved);}}catch(e){}
+  var themes=["light","sepia","dark"];
+  var themeNames={light:"claro",sepia:"sépia",dark:"escuro"};
+  try{var saved=localStorage.getItem("sb-theme");if(themes.indexOf(saved)>=0){root.setAttribute("data-theme",saved);}}catch(e){}
   function effectiveTheme(){
     var a=root.getAttribute("data-theme");
-    if(a)return a;
+    if(themes.indexOf(a)>=0)return a;
     return window.matchMedia("(min-width:901px)").matches?"light":"dark";
   }
+  function nextTheme(theme){
+    var at=themes.indexOf(theme);
+    return themes[(at<0?0:at+1)%themes.length];
+  }
+  function syncThemeButton(){
+    if(!tgl)return;
+    var current=effectiveTheme(),next=nextTheme(current);
+    tgl.setAttribute("aria-label","Mudar para tema "+themeNames[next]);
+    tgl.setAttribute("title","Tema "+themeNames[current]+" · próximo: "+themeNames[next]);
+  }
+  syncThemeButton();
   tgl.addEventListener("click",function(){
-    var next=effectiveTheme()==="dark"?"light":"dark";
+    var next=nextTheme(effectiveTheme());
     root.setAttribute("data-theme",next);
     try{localStorage.setItem("sb-theme",next);}catch(e){}
+    syncThemeButton();
   });
   /* Voltar ao topo */
   var toTop=document.getElementById("sbToTop");
@@ -2798,7 +2947,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=4a926ebc"></script>
-<script src="../assets/essay.js?v=4f68f7c8"></script>
+<script src="../assets/theme.js?v=4bbd3e0f"></script>
+<script src="../assets/essay.js?v=5a474ea5"></script>
 </body>
 </html>
