@@ -1226,7 +1226,7 @@ h2#referencias ~ p a[href^="http"]:last-of-type::after {
   .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
 }
 </style>
-<link rel="icon" href="../assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-light-512.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-dark-512.png" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(!t)t="light";document.documentElement.dataset.theme=t})();</script><style>@font-face {
+<link rel="icon" href="../assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-light-512.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-dark-512.png" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(["light","sepia","dark"].indexOf(t)<0)t="light";document.documentElement.dataset.theme=t})();</script><style>@font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
@@ -1594,7 +1594,10 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
   .sb-nav a{font-size:13px;}
 }
 </style>
-</head>
+<style id="sb-sepia-head">
+:root[data-theme="sepia"]{--bg:#fbf8f1;--surface:#fffaf3;--surface2:#f3ede3;--border:#ded5c8;--text:#39342f;--text-dim:#746b62;--text-bright:#26211c;--gold:#785b38;--gold-dim:#604626;--rust:#8e4636;--rust-bright:#9c4838;--accent:#596b78;--amber:#865a27;--callout-note:#746b62;--note-bg:#f3ede3;--callout-abstract:#77572f;--callout-info:#596b78;--callout-todo:#865a27;--callout-success:#486f50;--callout-question:#77572f;--callout-warning:#8c5f2a;--callout-failure:#8e4636;--callout-danger:#98493e;--callout-bug:#8f4337;--callout-example:#6e536f;--callout-quote:#746b62;--quote-bg:#f3ede3;--box-bg:#fffaf3;--tab-mix:4%;--verdict-mix:6%;--box-verdict-bg:#f3ede3;--th-bg:#eee5d8;--sb-bg:#fbf8f1;--sb-surface:#fffdf8;--sb-surface-soft:#fdfaf4;--sb-text:#26211c;--sb-muted:#746b62;--sb-line:rgba(74,62,48,.13);--sb-line-strong:rgba(74,62,48,.25);--sb-primary:#785b38;--sb-primary-soft:rgba(120,91,56,.085);--sb-shadow:0 20px 56px rgba(73,54,32,.10)}
+:root[data-theme="sepia"] .masthead{background:#fbf8f1!important;color:var(--text)!important;border-bottom-color:var(--border)!important}:root[data-theme="sepia"] .masthead .hero-title{color:var(--text-bright)!important}.theme-disc{width:19px;height:19px;display:block;flex:none;border-radius:50%;background:conic-gradient(from -90deg,#fff 0 33.333%,#d6bc8b 33.333% 66.666%,#111 66.666% 100%);border:1px solid color-mix(in srgb,var(--text) 30%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--bg) 45%,transparent)}
+</style></head>
 <body>
 <div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
 <button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
@@ -2946,7 +2949,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <a href="../graph.html">Grafo</a>
     <button class="sb-subscribe" type="button" id="sbSubscribe" aria-haspopup="dialog"
             aria-controls="sbSubscribeDialog">Assinar</button>
-    <button type="button" id="sbTheme" aria-label="Alternar tema" aria-pressed="false"><span aria-hidden="true">◐</span></button>
+    <button type="button" id="sbTheme" aria-label="Mudar para tema sépia"><span class="theme-disc" aria-hidden="true"></span></button>
   </nav>
 </header>
 <dialog class="sb-subscribe-dialog" id="sbSubscribeDialog" aria-labelledby="sbSubscribeTitle">
@@ -2973,7 +2976,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=42453cd1"></script>
-<script src="../assets/essay.js?v=eb7d9922"></script>
+<script src="../assets/theme.js?v=7ef45a5e"></script>
+<script src="../assets/essay.js?v=23ffb216"></script>
 </body>
 </html>
