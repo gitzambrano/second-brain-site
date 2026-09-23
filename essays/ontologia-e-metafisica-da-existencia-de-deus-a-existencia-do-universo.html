@@ -1599,7 +1599,28 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <style id="sb-sepia-head">
 :root[data-theme="sepia"]{--bg:#fbf8f1;--surface:#fffaf3;--surface2:#f3ede3;--border:#ded5c8;--text:#39342f;--text-dim:#746b62;--text-bright:#26211c;--gold:#785b38;--gold-dim:#604626;--rust:#8e4636;--rust-bright:#9c4838;--accent:#596b78;--amber:#865a27;--callout-note:#746b62;--note-bg:#f3ede3;--callout-abstract:#77572f;--callout-info:#596b78;--callout-todo:#865a27;--callout-success:#486f50;--callout-question:#77572f;--callout-warning:#8c5f2a;--callout-failure:#8e4636;--callout-danger:#98493e;--callout-bug:#8f4337;--callout-example:#6e536f;--callout-quote:#746b62;--quote-bg:#f3ede3;--box-bg:#fffaf3;--tab-mix:4%;--verdict-mix:6%;--box-verdict-bg:#f3ede3;--th-bg:#eee5d8;--sb-bg:#fbf8f1;--sb-surface:#fffdf8;--sb-surface-soft:#fdfaf4;--sb-text:#39342f;--sb-text-strong:#26211c;--sb-muted:#746b62;--sb-line:rgba(74,62,48,.13);--sb-line-strong:rgba(74,62,48,.25);--sb-primary:#785b38;--sb-primary-soft:rgba(120,91,56,.085);--sb-shadow:0 20px 56px rgba(73,54,32,.10)}
 :root[data-theme="sepia"] .masthead{background:#fbf8f1!important;color:var(--text)!important;border-bottom-color:var(--border)!important}:root[data-theme="sepia"] .masthead .hero-title{color:var(--text-bright)!important}.theme-disc{width:14px;height:14px;display:block;flex:none;box-sizing:border-box;border:0;border-radius:50%;background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2014%2014%22%3E%3Cpath%20d%3D%22M7%207L7%201A6%206%200%200%201%2012.196%2010Z%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M7%207L12.196%2010A6%206%200%200%201%201.804%2010Z%22%20fill%3D%22%23d6bc8b%22%2F%3E%3Cpath%20d%3D%22M7%207L1.804%2010A6%206%200%200%201%207%201Z%22%20fill%3D%22%23111%22%2F%3E%3Cpath%20d%3D%22M7%207L7%201M7%207L12.196%2010M7%207L1.804%2010%22%20fill%3D%22none%22%20stroke%3D%22%23111%22%20stroke-width%3D%221.25%22%2F%3E%3Ccircle%20cx%3D%227%22%20cy%3D%227%22%20r%3D%226%22%20fill%3D%22none%22%20stroke%3D%22%23111%22%20stroke-width%3D%221.5%22%2F%3E%3C%2Fsvg%3E");box-shadow:none}.theme-disc::after{content:none!important}
-</style></head>
+</style><style id="sb-header-contract">
+.sb-bar{height:68px!important;padding:0 max(24px,calc((100% - 1120px)/2))!important}
+.sb-brand{gap:11px!important;font-size:14px!important;font-weight:700!important;line-height:1.6!important;color:var(--sb-text-strong)!important}
+.sb-nav{gap:20px!important}
+.sb-nav a{font-size:14px!important;font-weight:500!important;line-height:1.6!important;color:var(--sb-text)!important}
+.sb-nav a.active{font-weight:600!important;color:var(--sb-text)!important}
+.sb-nav .sb-subscribe{height:36px!important;min-height:36px!important;padding:0 12px!important;border:1px solid var(--sb-line)!important;border-radius:10px!important;background:var(--sb-primary-soft)!important;color:var(--sb-text)!important;font:650 12.5px/1 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important}
+#sbTheme{width:36px!important;height:36px!important;border:1px solid var(--sb-line)!important;border-radius:10px!important;background:var(--sb-primary-soft)!important}
+@media(max-width:760px){
+.sb-bar{height:60px!important;padding:0 14px!important}
+body{padding-top:60px!important}
+body>.sb-progress:not(:has(.sb-progress-fill)){top:60px!important}
+.sb-brand{gap:0!important;font-size:0!important}
+.sb-nav{gap:14px!important}
+.sb-nav a:first-child{display:none!important}
+.sb-nav a{font-size:13px!important;font-weight:500!important;line-height:1.6!important}
+.sb-nav .sb-subscribe{height:36px!important;min-height:36px!important;padding:0 10px!important;font-size:12px!important;line-height:1!important}
+#sbTheme{width:36px!important;height:36px!important}
+#sbTheme>.theme-disc{width:13px!important;height:13px!important}
+}
+</style>
+</head>
 <body>
 <div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
 <button id="sbThemeToggle" title="Alternar tema" aria-label="Alternar tema">◐</button>
@@ -2965,7 +2986,7 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
     <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
   <nav id="sbTocList"></nav>
 </aside>
-<script src="../assets/theme.js?v=be359a54"></script>
+<script src="../assets/theme.js?v=4a926ebc"></script>
 <script src="../assets/essay.js?v=4f68f7c8"></script>
 </body>
 </html>
