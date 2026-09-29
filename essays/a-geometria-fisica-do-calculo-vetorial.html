@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="finalizado" data-minutes="16">
+<html lang="pt-BR" data-status="draft" data-minutes="9">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quando a Distância Colapsou — Por Que a Aviação Importa</title>
-<meta property="og:title" content="Quando a Distância Colapsou — Por Que a Aviação Importa">
-<meta property="og:description" content="A importância histórica da aviação transcende a velocidade mecânica: ela rasgou a métrica euclidiana do planeta, convertendo quilômetros em horas e transformando aeroportos em buracos de minhoca urbanos. Este ensaio investiga a nova topologia isocrônica e não euclidiana do mundo, confronta os custos desse acoplamento global e explica por que os bits da internet jamais tornarão o transporte aéreo obsoleto.">
+<title>A Geometria Física do Cálculo Vetorial</title>
+<meta property="og:title" content="A Geometria Física do Cálculo Vetorial">
+<meta property="og:description" content="Gradiente, divergência, rotacional e Laplaciano respondem, cada um, a uma pergunta física sobre um pedacinho de fluido: para onde é empurrado, se está inchando, se está girando, se destoa da vizinhança. Gauss e Stokes somam essas respostas locais na fronteira, e a relação de Crocco mostra por que um choque curvo gera vorticidade. O ensaio privilegia a intuição física e usa a matemática só no mínimo necessário.">
 <meta property="og:type" content="article">
 <script defer="" src="../assets/mathjax/tex-svg.js"
 type="text/javascript"></script>
@@ -1763,563 +1763,352 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
 <header class="masthead">
   <div class="stripe"></div>
   <div class="masthead-inner">
-    <h1 class="hero-title">Quando a Distância Colapsou — Por Que a Aviação Importa</h1>
+    <h1 class="hero-title">A Geometria Física do Cálculo Vetorial</h1>
     <hr class="masthead-rule">
     <p class="byline">Gustavo Zambrano · Setembro de 2026</p>
-    <p class="cover-summary">A importância histórica da aviação transcende a velocidade mecânica: ela rasgou a métrica euclidiana do planeta, convertendo quilômetros em horas e transformando aeroportos em buracos de minhoca urbanos. Este ensaio investiga a nova topologia isocrônica e não euclidiana do mundo, confronta os custos desse acoplamento global e explica por que os bits da internet jamais tornarão o transporte aéreo obsoleto.</p>
+    <p class="cover-summary">Gradiente, divergência, rotacional e Laplaciano respondem, cada um, a uma pergunta física sobre um pedacinho de fluido: para onde é empurrado, se está inchando, se está girando, se destoa da vizinhança. Gauss e Stokes somam essas respostas locais na fronteira, e a relação de Crocco mostra por que um choque curvo gera vorticidade. O ensaio privilegia a intuição física e usa a matemática só no mínimo necessário.</p>
   </div>
 </header>
 
 <main class="content">
-<div class="pull-quote callout-quote">
-<div class="quote-text">
-<p>A verdadeira distância entre dois pontos nunca foi medida em
-quilômetros ou milhas náuticas, mas em horas de vida, atrito energético
-e risco de travessia.</p>
-</div>
-</div>
-<hr />
 <h2 id="sumário">Sumário</h2>
 <ul>
-<li><a href="#1-introdução-o-mapa-mente">1. Introdução: O Mapa
-Mente</a></li>
 <li><a
-href="#2-antes-do-avião-a-civilização-limitada-pela-velocidade-da-matéria">2.
-Antes do Avião: A Civilização Limitada pela Velocidade da
-Matéria</a></li>
-<li><a href="#3-a-nova-geometria-distância-passa-a-ser-tempo">3. A Nova
-Geometria: Distância Passa a Ser Tempo</a></li>
+href="#introdução-o-cálculo-vetorial-como-linguagem-dos-contínuos">Introdução:
+o cálculo vetorial como linguagem dos contínuos</a></li>
+<li><a href="#o-gradiente-quando-uma-diferença-espacial-ganha-direção">O
+gradiente: quando uma diferença espacial ganha direção</a></li>
 <li><a
-href="#4-comércio-quando-perecibilidade-e-distância-deixam-de-ser-sinônimos">4.
-Comércio: Quando Perecibilidade e Distância Deixam de Ser
-Sinônimos</a></li>
-<li><a href="#5-pessoas-a-invenção-da-presença-distante">5. Pessoas: A
-Invenção da Presença Distante</a></li>
-<li><a href="#6-poder-a-geografia-estratégica-também-encolheu">6. Poder:
-A Geografia Estratégica Também Encolheu</a></li>
+href="#divergência-o-balanço-que-um-pequeno-volume-sente">Divergência: o
+balanço que um pequeno volume sente</a></li>
 <li><a
-href="#7-o-lado-sombrio-da-proximidade-pandemias-emissões-e-acoplamento-de-risco">7.
-O Lado Sombrio da Proximidade: Pandemias, Emissões e Acoplamento de
-Risco</a></li>
-<li><a href="#8-por-que-a-internet-não-tornou-o-avião-obsoleto">8. Por
-Que a Internet Não Tornou o Avião Obsoleto</a></li>
+href="#rotacional-e-vorticidade-a-rotação-que-existe-no-ponto">Rotacional
+e vorticidade: a rotação que existe no ponto</a></li>
 <li><a
-href="#9-um-planeta-de-poucas-horas-o-diâmetro-temporal-da-civilização">9.
-Um Planeta de Poucas Horas: O Diâmetro Temporal da Civilização</a></li>
+href="#laplaciano-o-desacordo-entre-um-ponto-e-sua-vizinhança">Laplaciano:
+o desacordo entre um ponto e sua vizinhança</a></li>
 <li><a
-href="#10-conclusão-a-tecnologia-que-redimensionou-a-terra-sem-mudar-seu-tamanho">10.
-Conclusão: A Tecnologia que Redimensionou a Terra sem Mudar Seu
-Tamanho</a></li>
+href="#gauss-o-que-nasce-no-interior-precisa-atravessar-a-fronteira">Gauss:
+o que nasce no interior precisa atravessar a fronteira</a></li>
+<li><a
+href="#stokes-o-giro-distribuído-reaparece-como-circulação-na-borda">Stokes:
+o giro distribuído reaparece como circulação na borda</a></li>
+<li><a
+href="#crocco-quando-a-geometria-da-vorticidade-encontra-energia-e-entropia">Crocco:
+quando a geometria da vorticidade encontra energia e entropia</a></li>
+<li><a href="#uma-única-geometria-por-trás-dos-operadores">Uma única
+geometria por trás dos operadores</a></li>
 </ul>
 <hr />
-<h2 id="1-introdução-o-mapa-mente">1. Introdução: O Mapa Mente</h2>
-<p>Abra um planisfério convencional e observe a distância entre Londres
-e Singapura: aproximadamente 10.800 quilômetros em linha reta. No papel
-ou na tela do computador, essa extensão parece uma constante geométrica
-imutável, gravada pela curvatura e pelo raio físico da Terra.</p>
-<p>No entanto, para a história humana e para a organização prática da
-sociedade, o mapa geométrico mente. A verdadeira distância entre dois
-pontos nunca foi medida em metros ou milhas náuticas, mas em horas de
-viagem, custo de energia, esforço fisiológico e risco de travessia. Dois
-pontos no globo podem manter rigorosamente as mesmas coordenadas
-geodésicas ao longo de séculos e, ainda assim, tornarem-se ordens de
-grandeza mais próximos ou mais distantes conforme as redes de transporte
-se expandem ou se degradam.</p>
-<p>A aviação produziu a mais radical deformação do espaço-tempo prático
-já testemunhada pela humanidade. Não se tratou apenas de um ganho
-quantitativo de velocidade, como a passagem da carruagem para o trem a
-vapor. Trata-se de uma ruptura de escala: o voo comercial converteu o
-planeta Terra em um território cujo diâmetro funcional mede menos de 36
-horas.</p>
-<div class="pull-quote callout-quote">
-<div class="quote-text">
-<p>A compressão do espaço pelo tempo não apenas aproxima lugares: ela
-altera a própria substância das relações sociais, tornando contingente
-aquilo que antes era determinado pela tirania da geografia.</p>
-</div>
-<div class="quote-attribution">
-<p>— David Harvey</p>
-</div>
-</div>
-<p>Este ensaio examina as consequências civilizacionais dessa contração
-métrica. Investigaremos como a capacidade de deslocar corpos pesados a
-900 quilômetros por hora reorganizou a geopolítica, as cadeias de
-suprimento e as relações humanas, confrontaremos as fragilidades
-sistêmicas dessa hiperconectividade e entenderemos por que o império
-digital dos bits não consegue substituir o império físico do querosene
-de aviação.</p>
-<hr />
 <h2
-id="2-antes-do-avião-a-civilização-limitada-pela-velocidade-da-matéria">2.
-Antes do Avião: A Civilização Limitada pela Velocidade da Matéria</h2>
-<p>Durante quase toda a existência da civilização humana, a velocidade
-da matéria determinava o horizonte de qualquer comunidade política e
-econômica.</p>
-<p>Como documentado pelo historiador <a
-href="https://pt.wikipedia.org/wiki/Fernand_Braudel">Fernand Braudel</a>
-[<a href="#referências">1</a>], no Mediterrâneo do século XVI, notícias,
-diplomatas, exércitos e mercadorias viajavam na mesma velocidade
-biológica: o passo de um cavalo em terra firme (cerca de 50 quilômetros
-por dia em estradas precárias) ou o ritmo caprichoso dos ventos que
-impulsionavam caravelas e galés. Para uma carta sair de Madri e chegar à
-Cidade do México durante o Império Espanhol, eram necessários entre três
-e seis meses. A resposta a uma ordem real chegava com frequência quando
-a crise que a motivara já havia se dissolvido ou culminado em
-guerra.</p>
-<div class="box callout-info">
-<div class="box-title">
-<p>O Império da Lentidão Biológica</p>
-</div>
-<p>Durante milênios, a humanidade viveu prisioneira do atrito do solo e
-das correntes marítimas. Os impérios antigos não desmoronavam apenas por
-incompetência política ou derrotas militares: desmoronavam porque a
-velocidade da informação material era incapaz de manter a coesão de
-territórios com mais de algumas centenas de quilômetros de raio.</p>
-</div>
-<p>A introdução das ferrovias no século XIX começou a rasgar esse tecido
-estático continental. Pela primeira vez na história, locomotivas a vapor
-permitiram que exércitos e cargas cruzassem terras em dias, unificando
-os Estados Unidos de costa a costa e forjando os grandes impérios
-terrestres da Europa Central e da Rússia.</p>
-<p>Contudo, a ferrovia parava na beira da água. Os oceanos continuavam
-sendo barreiras intransponíveis que exigiam semanas de navegação a vapor
-para a travessia transatlântica ou transpacífica. O romance de ficção de
-<a href="https://pt.wikipedia.org/wiki/J%C3%BAlio_Verne">Júlio
-Verne</a>, <em>A Volta ao Mundo em Oitenta Dias</em>, publicado em 1872
-[<a href="#referências">2</a>], era lido como um delírio audacioso de
-velocidade para a sua época. A Terra de Phileas Fogg ainda era um
-colosso vasto, perigoso e fragmentado.</p>
-<p>A invenção do telégrafo elétrico em meados do século XIX introduziu
-uma assimetria inédita: a informação descolou-se da matéria e passou a
-viajar na velocidade da luz. Notícias de bolsas de valores e despachos
-diplomáticos cruzavam continentes em minutos, mas as pessoas e as cargas
-materiais permaneciam ancoradas na lentidão dos cascos de ferro e das
-caldeiras a carvão. A civilização vivia em uma tensão permanente: a
-mente coletiva do planeta tornara-se instantânea, mas seu corpo
-continuava paralisado.</p>
-<div class="pull-quote callout-quote">
-<div class="quote-text">
-<p>O avião é uma máquina, certamente, mas que admirável instrumento de
-análise! Esse instrumento nos fez descobrir a verdadeira face da
-Terra.</p>
-</div>
-<div class="quote-attribution">
-<p>— Antoine de Saint-Exupéry, <em>Terra dos Homens</em></p>
-</div>
-</div>
-<hr />
-<h2 id="3-a-nova-geometria-distância-passa-a-ser-tempo">3. A Nova
-Geometria: Distância Passa a Ser Tempo</h2>
-<p>A aviação comercial fechou esse abismo entre o pensamento e a
-matéria. Ao transferir o transporte de massa para a troposfera, o avião
-destruiu a dependência das rotas terrestres impostas pelo relevo,
-montanhas, pântanos e litorais.</p>
-<p>Para compreender essa transformação, os geógrafos e economistas
-abandonaram as projeções cartográficas tradicionais de Mercator em favor
-dos <strong>mapas isocrônicos</strong> [<a href="#referências">3</a>].
-Em um mapa isocrônico, as linhas não unem pontos de mesma altitude ou
-latitude, mas pontos que exigem o mesmo tempo de viagem a partir de um
-centro de partida.</p>
-<p><picture><source srcset="../assets/media/quando-a-distancia-colapsou-por-que-a-aviacao-importa_fig1.webp" type="image/webp"><img
-src="../assets/media/quando-a-distancia-colapsou-por-que-a-aviacao-importa_fig1.png"
-alt="Colapso do Diâmetro Temporal" /></picture></p>
-<p><em>Figura 1. Evolução histórica do tempo de trânsito aos antípodas e
-contração do diâmetro temporal da Terra entre 1800 e 2026.</em></p>
-<p>Quando projetamos o planeta sob a métrica isocrônica da aviação a
-jato, a topologia resultante desafia o senso comum. Duas cidades
-geograficamente remotas, como São Paulo e Frankfurt (separadas por 9.800
-quilômetros), tornam-se vizinhas funcionais de 11 horas de viagem sem
-escalas. Ao mesmo tempo, uma cidade do interior situada a apenas 300
-quilômetros de uma capital, mas desprovida de aeroporto e ligada por
-rodovias precárias, pode demandar 8 horas de deslocamento terrestre.</p>
-<p>A conectividade aérea cria uma nova geografia de redes, formalizada
-pela teoria dos grafos. O mundo moderno não é uma superfície euclidiana
-contínua e isotrópica. Ele é um grafo esparso de pequenos mundos
-(<em>small-world network</em>), onde grandes aeroportos mundiais atuam
-como supernós altamente interligados. A proximidade física tornou-se
-secundária quando comparada à proximidade operacional no grafo de
-voos.</p>
-<h3
-id="a-geometria-não-euclidiana-da-civilização-e-os-buracos-de-minhoca-urbanos">A
-Geometria Não Euclidiana da Civilização e os Buracos de Minhoca
-Urbanos</h3>
-<p>A consequência mais fascinante dessa transição é que a aviação não
-apenas encolheu a Terra de forma uniforme: ela <strong>rasgou a própria
-métrica euclidiana</strong> do espaço social.</p>
-<p>Na geometria clássica de Euclides, a distância métrica entre dois
-pontos obedece invariavelmente à desigualdade triangular: a distância
-direta entre <span class="math inline">\(A\)</span> e <span
-class="math inline">\(B\)</span> é sempre menor ou igual à soma das
-distâncias passando por um ponto intermediário <span
-class="math inline">\(C\)</span>:</p>
-<p><span class="math display">\[d(A, B) \le d(A, C) + d(C,
-B)\]</span></p>
-<p>Além disso, a distância é uma função contínua e monótona da separação
-física: se o ponto <span class="math inline">\(B\)</span> está a 800
-quilômetros de <span class="math inline">\(A\)</span> e o ponto <span
-class="math inline">\(D\)</span> está a 5.500 quilômetros, <span
-class="math inline">\(B\)</span> está necessariamente muito mais perto
-de <span class="math inline">\(A\)</span> do que <span
-class="math inline">\(D\)</span>.</p>
-<p>No mundo forjado pelo jato comercial, essa intuição geométrica
-elementar entra em colapso total. Considere um habitante no centro de
-Londres em uma manhã de segunda-feira. Se ele desejar visitar um
-vilarejo rural remoto nas Terras Altas do noroeste da Escócia ou nas
-ilhas Hébridas Exteriores (situados a menos de 800 quilômetros em linha
-reta na mesma ilha da Grã-Bretanha), a jornada envolverá trens
-regionais, estradas sinuosas de pista única, esperas por balsas e
-baldeações que consumirão facilmente entre <strong>12 e 14 horas de
-esforço contínuo</strong>.</p>
-<p>Se, no mesmo instante, esse mesmo londrino decidir embarcar em um voo
-no Aeroporto de Heathrow rumo a Nova York (localizada a mais de 5.500
-quilômetros de distância, separada por um oceano colossal), ele pousará
-no Aeroporto JFK exatamente <strong>7 horas depois</strong>.</p>
-<p>Sob a métrica da ação humana e do tempo de vida, Nova York está
-geometricamente situada a metade da distância da Escócia.</p>
-<p><picture><source srcset="../assets/media/quando-a-distancia-colapsou-por-que-a-aviacao-importa_fig2.webp" type="image/webp"><img
-src="../assets/media/quando-a-distancia-colapsou-por-que-a-aviacao-importa_fig2.png"
-alt="A Geometria Não-Euclidiana dos Buracos de Minhoca Urbanos" /></picture></p>
-<p><em>Figura 2. A métrica não euclidiana da mobilidade: enquanto a rota
-terrestre Londres–Escócia consome até 14 horas de atrito geográfico, o
-voo transatlântico Londres–Nova York conecta os supernós em apenas 7
-horas.</em></p>
-<div class="box callout-note">
-<div class="box-title">
-<p>Buracos de Minhoca Urbanos</p>
-</div>
-<p>Os aeroportos internacionais operam na prática como pontes de
-Einstein-Rosen da mobilidade material. Ao cruzar o portão de embarque e
-adentrar o tubo pressurizado de alumínio e compósito, o passageiro não
-experimenta a continuidade física dos oceanos, florestas, fronteiras e
-tempestades que deslizam 11 mil metros abaixo. Ele é ejetado do espaço
-euclidiano contínuo e reinserido, poucas horas depois, em um nó
-completamente diferente da rede planetária.</p>
-</div>
-<p>A aviação converteu a geografia do planeta de um contínuo
-bidimensional em um hipergrafo discreto, onde dois pontos distantes no
-mapa tornam-se vizinhos imediatos desde que estejam conectados pela
-curvatura do querosene em rota de grande círculo.</p>
-<hr />
-<h2
-id="4-comércio-quando-perecibilidade-e-distância-deixam-de-ser-sinônimos">4.
-Comércio: Quando Perecibilidade e Distância Deixam de Ser Sinônimos</h2>
-<p>Em termos de tonelagem bruta, o transporte marítimo continua sendo a
-espinha dorsal incontestável do comércio internacional. Os gigantescos
-navios porta-contêineres de classe Triple-E transportam cerca de 80% do
-volume físico de mercadorias que circula pelos oceanos, movendo carvão,
-minério de ferro, grãos e automóveis a custos por tonelada-quilômetro
-que nenhuma aeronave jamais igualará [<a href="#referências">4</a>].</p>
-<p>Contudo, se medirmos o comércio global não pela massa, mas pelo
-<strong>valor econômico agregado</strong>, o cenário se inverte
-drasticamente. A carga aérea responde por menos de 1% do peso físico do
-comércio internacional, mas movimenta mais de 35% do seu valor monetário
-total.</p>
-<div class="box callout-warning">
-<div class="box-title">
-<p>35%</p>
-</div>
-<h4 class="callout-inner-heading" id="valor-global-do-comércio">Valor
-Global do Comércio</h4>
-<p>Mais de um terço do valor de todas as exportações e importações do
-planeta viaja nos porões de aeronaves de carga e de passageiros. Esse
-fluxo concentra microprocessadores de semicondutores de última geração,
-produtos biofarmacêuticos sensíveis a temperatura, vacinas de RNA
-mensageiro, flores frescas equatoriais, peças de reposição industrial de
-emergência e documentos financeiros críticos.</p>
-<div class="stat-divider">
-
-</div>
-<div class="stat-source">
-<p><a href="https://www.iata.org">IATA, <em>Air Cargo Market Analysis
-Report</em>, 2023</a></p>
-</div>
-</div>
-<p>A velocidade do transporte aéreo desfez uma equação histórica
-imutável: a equivalência entre perecibilidade e localismo. Antes do
-avião cargueiro, qualquer produto que se degradasse em menos de uma
-semana precisava ser consumido no próprio raio agrícola de sua
-produção.</p>
-<p>A cadeia de suprimentos farmacêutica e médica moderna é inteiramente
-dependente do voo. Um lote de radiofármacos para tratamento oncológico,
-cuja meia-vida radioativa mede poucas dezenas de horas, precisa ser
-sintetizado em um reator especializado em um continente e administrado a
-um paciente no hemisfério oposto no dia seguinte. O avião transforma o
-tempo de prateleira em uma variável de projeto logístico global.</p>
-<hr />
-<h2 id="5-pessoas-a-invenção-da-presença-distante">5. Pessoas: A
-Invenção da Presença Distante</h2>
-<p>A transformação mais profunda operada pela aviação ocorreu na
-intimidade da experiência humana e na antropologia das migrações.</p>
-<p>Durante os séculos XVIII e XIX, emigrar da Europa para as Américas
-significava uma ruptura existencial quase definitiva. O imigrante que
-embarcava em um navio a vela ou a vapor sabia que as chances de rever
-seus pais, amigos de infância e paisagens natais eram mínimas.
-Despedir-se no porto equivalia frequentemente a um velório antecipado em
-vida. A distância geográfica era uma sentença de esquecimento.</p>
-<p>A aviação comercial de massa barateou o custo temporal e psicológico
-da despedida. A partir da década de 1960, com a popularização de
-aeronaves como o Boeing 707 e o Douglas DC-8, a migração internacional
-transformou-se em uma condição diaspórica transnacional. Cientistas
-brasileiros podem manter laboratórios conjuntos na Alemanha retornando a
-cada semestre. Famílias dispersas entre Seul e Los Angeles reúnem-se no
-feriado de Ano Novo.</p>
-<div class="box callout-example">
-<div class="box-title">
-<p>A Invenção do Congresso Científico Internacional</p>
-</div>
-<h4 class="callout-inner-heading"
-id="a-circulação-presencial-da-evidência">A Circulação Presencial da
-Evidência</h4>
-<p>Antes de 1950, um físico teórico dependia da troca lenta de cartas
-impressas ou de conferências esporádicas de poucas dezenas de
-intelectuais abastados para debater novas teorias.</p>
-<div class="box-verdict callout-success">
-<p><span class="verdict-tag">Veredicto</span></p>
-<p>O surgimento da malha comercial aérea permitiu a consolidação do
-congresso científico internacional moderno. Milhares de pesquisadores
-convergem anualmente para centros de convenções em Genebra, Tóquio ou
-Chicago para debater dados preliminares, firmar colaborações e
-confrontar hipóteses frente a frente. A aceleração da ciência
-contemporânea é filha direta da mobilidade aérea dos cientistas.</p>
-</div>
-</div>
-<p>A presença humana deixou de ser prisioneira do berço natal. Como
-teorizado pelo sociólogo John Urry [<a href="#referências">7</a>] em
-seus estudos fundamentais sobre mobilidades, o avião reconfigurou os
-próprios padrões de sociabilidade, criando a figura do cidadão
-cosmopolita para quem o mundo deixou de ser um horizonte inatingível e
-tornou-se um território acessível.</p>
-<hr />
-<h2 id="6-poder-a-geografia-estratégica-também-encolheu">6. Poder: A
-Geografia Estratégica Também Encolheu</h2>
-<p>Se a aviação transformou o comércio e a cultura, ela revolucionou de
-forma ainda mais contundente a gramática do poder militar e da
-diplomacia entre nações [<a href="#referências">5</a>].</p>
-<p>Durante séculos, a geopolítica foi regida pelos conceitos de
-profundidade estratégica e barreiras naturais. A Grã-Bretanha prosperou
-protegida pelo Canal da Mancha. A Rússia derrotou invasores recuando
-através de milhares de quilômetros de estepes congeladas. A distância
-física era uma muralha inexpugnável que comprava tempo para a
-reorganização dos Estados.</p>
-<p>O poder aéreo estilhaçou essa imunidade geográfica por meio de três
-rupturas sucessivas. Em primeiro lugar, esquadrilhas de bombardeiros
-estratégicos provaram na Segunda Guerra Mundial que centros industriais
-podiam ser atingidos sem que tropas terrestres cruzassem a fronteira. Em
-segundo lugar, na era nuclear da Guerra Fria, vetores aéreos de longo
-alcance reduziram o tempo de resposta militar entre continentes para
-poucas horas. Em terceiro lugar, o transporte aéreo tático capacitou
-exércitos a mobilizar divisões e hospitais de campanha para qualquer
-ponto do globo em questão de dias, redefinindo o conceito de projeção de
-força.</p>
-<div class="pull-quote callout-quote">
-<div class="quote-text">
-<p>A velocidade é a própria essência da geopolítica contemporânea. A
-perda do espaço geográfico tradicional como escudo foi substituída pela
-corrida pelo controle absoluto do tempo de resposta militar.</p>
-</div>
-<div class="quote-attribution">
-<p>— Paul Virilio</p>
-</div>
-</div>
-<p>No plano diplomático, o avião inaugurou a diplomacia pessoal de
-cúpula (<em>shuttle diplomacy</em>), celebrada na atuação de secretários
-de Estado como Henry Kissinger nas crises do Oriente Médio na década de
-1970. Chefes de Estado não mais trocam emissários protocolares: eles
-voam diretamente para negociar tratados presencialmente em momentos de
-crise, comprimindo o tempo de deliberação das decisões políticas
-internacionais.</p>
-<hr />
-<h2
-id="7-o-lado-sombrio-da-proximidade-pandemias-emissões-e-acoplamento-de-risco">7.
-O Lado Sombrio da Proximidade: Pandemias, Emissões e Acoplamento de
-Risco</h2>
-<p>Nenhuma tecnologia de expansão opera sem gerar custos e fragilidades
-sistêmicas correspondentes. Ao aproximar todos os cantos do planeta, a
-aviação transformou a Terra em um sistema fortemente acoplado, no qual
-choques locais propagam-se quase sem amortecimento.</p>
-<p>O vetor epidemiológico é a manifestação mais dramática dessa
-vulnerabilidade. No século XIV, a Peste Negra levou quase uma década
-para se espalhar ao longo das rotas de caravana da Ásia Central até os
-portos da Europa. Em 2020, o coronavírus causador da COVID-19 cruzou
-todos os continentes e atingiu mais de 100 países em menos de seis
-semanas, transportado nos organismos assintomáticos de passageiros
-sentados em cabines pressurizadas a 35.000 pés [<a
-href="#referências">6</a>]. A velocidade do voo ultrapassou o período
-médio de incubação dos vírus mais perigosos da biosfera.</p>
-<div class="box callout-info">
-<div class="box-title">
-<p>O Vetor de Contágio</p>
-</div>
-<h4 class="callout-inner-heading"
-id="dinâmica-temporal-da-dispersão-patogênica">Dinâmica Temporal da
-Dispersão Patogênica</h4>
+id="introdução-o-cálculo-vetorial-como-linguagem-dos-contínuos">Introdução:
+o cálculo vetorial como linguagem dos contínuos</h2>
+<p>Uma partícula pontual cabe em poucos números: posição, velocidade,
+massa, força. Um meio contínuo, como o ar em torno de uma asa, tem
+pressão, temperatura e velocidade em cada ponto do espaço, e a pergunta
+muda. Deixa de ser apenas “qual é a força?” e passa a ser: para onde
+este pedacinho de ar é empurrado? Está sendo comprimido ou esticado?
+Está girando? Está mais quente, ou mais rápido, do que a vizinhança?</p>
+<p>O cálculo vetorial é o vocabulário dessas perguntas locais [<a
+href="#referências">1</a>]. Quatro operadores, todos escritos com o
+mesmo símbolo <span class="math inline">\(\nabla\)</span> (o “nabla”,
+uma instrução para ver como algo varia nas três direções), cobrem quase
+tudo:</p>
 <ul>
-<li><strong>Século XIV (Peste Negra):</strong> caravanas e galés
-resultavam em propagação em anos, permitindo que barreiras regionais e
-quarentenas atuassem como amortecedores naturais.</li>
-<li><strong>Século XXI (SARS e COVID-19):</strong> a malha aérea global
-produz propagação em horas, com tempo de voo inferior ao período médio
-de incubação viral.</li>
+<li><strong>Gradiente:</strong> para onde uma grandeza sobe mais
+depressa.</li>
+<li><strong>Divergência:</strong> se o fluido está saindo de um ponto ou
+se acumulando nele.</li>
+<li><strong>Rotacional:</strong> se há giro local.</li>
+<li><strong>Laplaciano:</strong> se o ponto destoa da média de seus
+vizinhos.</li>
 </ul>
-</div>
-<p>A segunda fatura crítica dessa contração geográfica é a pegada
-climática. A aviação comercial consome anualmente centenas de bilhões de
-litros de querosene fóssil Jet A-1, sendo responsável por
-aproximadamente 2,5% das emissões globais de dióxido de carbono e por um
-impacto radiativo ainda maior devido à emissão de óxidos de nitrogênio e
-à formação de trilhas de condensação (<em>contrails</em>) em grandes
-altitudes.</p>
-<div class="box callout-warning">
-<div class="box-title">
-<p>40 para 1</p>
-</div>
-<h4 class="callout-inner-heading"
-id="a-tirania-da-densidade-energética">A Tirania da Densidade
-Energética</h4>
-<p>Descarbonizar o voo de longo alcance representa um dos desafios mais
-hercúleos de toda a história da engenharia. As baterias elétricas mais
-avançadas atingem densidades energéticas da ordem de <span
-class="math inline">\(0{,}3\text{ kWh/kg}\)</span>, enquanto o querosene
-entrega quase <span class="math inline">\(12\text{ kWh/kg}\)</span> (uma
-vantagem física de 40 para 1). Voar a jato é, por definição física,
-pagar um tributo monumental de energia química e entropia para sustentar
-centenas de toneladas de metal no ar a 900 quilômetros por hora.</p>
-</div>
-<hr />
-<h2 id="8-por-que-a-internet-não-tornou-o-avião-obsoleto">8. Por Que a
-Internet Não Tornou o Avião Obsoleto</h2>
-<p>Durante a revolução das telecomunicações na década de 1990,
-proliferaram previsões confiantes de sociólogos e tecnólogos afirmando
-que a ascensão da internet, do correio eletrônico e da videoconferência
-tornaria a aviação comercial uma relíquia arcaica. Se a informação viaja
-instantaneamente através de fibras ópticas na velocidade da luz, por que
-seres humanos continuariam submetendo seus corpos à fadiga de fusos
-horários, filas de imigração e horas de confinamento em tubos de
-alumínio?</p>
-<p>Essas profecias falharam rotundamente. Nas décadas seguintes à
-expansão da internet, o número de passageiros transportados anualmente
-pela aviação civil não apenas não despencou, mas saltou de 1,5 bilhão no
-ano 2000 para mais de 4,5 bilhões em 2019.</p>
-<p>A explicação para esse paradoxo aparente reside na diferença
-irredutível entre a informação codificada e a experiência encarnada. Em
-primeiro lugar, manifesta-se uma complementaridade evidente entre redes
-digitais e mobilidade física. A facilidade de comunicação remota não
-elimina as interações humanas, mas multiplica os contatos
-internacionais. Uma parceria comercial iniciada por videoconferência
-chega inevitavelmente ao momento crítico em que um aperto de mãos
-presencial, a leitura da linguagem corporal e a convivência direta
-tornam-se indispensáveis para consolidar a confiança mútua.</p>
-<p>Em segundo lugar, a intransferibilidade do turismo e da cultura
-reforça essa atração. Nenhum ambiente de realidade imersiva substitui a
-sensação corpórea de caminhar pelas ruas de Roma, respirar a atmosfera
-dos Andes ou contemplar as pirâmides de Gizé. O turismo de massa
-persevera porque o espaço físico possui uma riqueza sensorial
-insubstituível por qualquer representação digital. Por fim, impõe-se a
-primazia da matéria produtiva: fábricas avançadas, plantas petroquímicas
-e turbinas aeroespaciais exigem a presença in loco de engenheiros e
-técnicos para inspecionar componentes, reparar falhas e validar linhas
-de montagem.</p>
-<div class="pull-quote callout-quote">
-<div class="quote-text">
-<p>A internet acelerou e barateou a circulação dos bits, mas são os
-aviões que continuam movendo os corpos que tomam as decisões sobre o
-destino desses bits.</p>
-</div>
-</div>
-<hr />
+<p>Dois teoremas, o de Gauss e o de Stokes, somam essas respostas locais
+e as transformam em balanços na fronteira. A ideia deste estudo é
+guardar a imagem física de cada peça, com a matemática no mínimo
+necessário.</p>
+<h2 id="o-gradiente-quando-uma-diferença-espacial-ganha-direção">O
+gradiente: quando uma diferença espacial ganha direção</h2>
+<p>Pense na pressão como o relevo de uma colina: onde a pressão é maior,
+a colina é mais alta. O gradiente <span class="math inline">\(\nabla
+p\)</span> é o vetor que aponta ladeira acima, e seu tamanho diz o
+quanto a ladeira é íngreme. A inclinação numa direção qualquer é apenas
+a projeção desse vetor naquela direção [<a
+href="#referências">10</a>].</p>
+<p><img
+src="../assets/media/a-geometria-fisica-do-calculo-vetorial_fig1.svg"
+alt="Gradiente de pressão, isóbaras e força líquida" /></p>
+<p><em>Figura 1. A colina de pressão: as isóbaras organizam o campo
+escalar, o vetor gradiente aponta para a subida mais íngreme e o
+desequilíbrio de pressão gera a aceleração líquida no sentido oposto,
+descida abaixo.</em></p>
+<p>Um cubinho de ar sente a diferença entre as pressões em faces
+opostas: a face de maior pressão empurra mais forte. O resultado é uma
+força líquida contra o gradiente, por unidade de volume,</p>
+<p><span class="math display">\[
+\mathbf f_p=-\nabla p,
+\]</span></p>
+<p>e o ar acelera colina abaixo. O que move o ar não é o valor da
+pressão, e sim a diferença: pressão uniforme, mesmo altíssima, não
+produz força nenhuma. A mesma lógica vale para uma bola na colina,
+empurrada contra o gradiente da energia potencial, <span
+class="math inline">\(\mathbf F=-\nabla U\)</span> [<a
+href="#referências">4</a>].</p>
+<p>Uma consequência bonita aparece quando o ar faz uma curva. Ele
+precisa de uma aceleração para dentro da curva, e só o gradiente de
+pressão pode fornecê-la; logo, a pressão cresce para fora da curva,
+<span class="math inline">\(\partial p/\partial n=\rho V^2/R\)</span>
+[<a href="#referências">7</a>]. Com ar a 50 m/s numa curva de 0,5 m de
+raio, isso dá cerca de 6 kPa por metro, quase 6% da pressão atmosférica
+a cada metro. O ar não “decide” acompanhar a asa: a parede impõe o
+contorno, e o campo de pressão se ajusta para transmitir essa imposição
+ao resto do escoamento.</p>
+<p><picture><source srcset="../assets/media/a-geometria-fisica-do-calculo-vetorial_fig2.webp" type="image/webp"><img
+src="../assets/media/a-geometria-fisica-do-calculo-vetorial_fig2.jpg"
+alt="Campo escalar e seu gradiente" /></picture></p>
+<p><em>Figura 2. Um campo escalar em duas dimensões e o campo vetorial
+gradiente correspondente. Fonte: <a
+href="https://commons.wikimedia.org/wiki/File:Gradient.jpg">Wikimedia
+Commons: Gradient.jpg</a>, MartinoK, CC BY-SA 3.0.</em></p>
+<p>Quando um campo de velocidades é o gradiente de uma função, <span
+class="math inline">\(\mathbf u=\nabla\phi\)</span>, dizemos que ele é
+potencial. Campos com essa estrutura não possuem rotação local,
+propriedade demonstrada na seção de rotacional.</p>
+<h2 id="divergência-o-balanço-que-um-pequeno-volume-sente">Divergência:
+o balanço que um pequeno volume sente</h2>
+<p>Imagine uma caixinha imaginária fixa no espaço. A divergência
+pergunta: sai mais fluido do que entra? Se sai mais, o ponto é uma fonte
+e o fluido ali se expande; se entra mais, é um sumidouro e o fluido se
+comprime; se entra e sai o mesmo, a divergência é nula [<a
+href="#referências">2</a>]. Em componentes, é a soma de três taxas de
+esticamento:</p>
+<p><span class="math display">\[
+\nabla\cdot\mathbf u=\frac{\partial u}{\partial x}+\frac{\partial
+v}{\partial y}+\frac{\partial w}{\partial z}.
+\]</span></p>
+<p><img
+src="../assets/media/a-geometria-fisica-do-calculo-vetorial_fig3.svg"
+alt="Divergência, rotação e cisalhamento em campos de velocidade" /></p>
+<p><em>Figura 3. Decomposição local do movimento: expansão volumétrica
+medida pela divergência, rotação de corpo rígido quantificada pelo
+rotacional, e deformação pura de cisalhamento.</em></p>
+<p>Acompanhando um pedacinho de fluido, a divergência é a taxa
+fracionária com que seu volume varia. Ele pode ser esticado numa direção
+e esmagado noutra, deformando-se muito, e ainda assim ter divergência
+nula, desde que o volume total não mude.</p>
+<p><img
+src="../assets/media/a-geometria-fisica-do-calculo-vetorial_fig4.svg"
+alt="Exemplos de divergência positiva, negativa e nula" /></p>
+<p><em>Figura 4. Campos com divergência positiva, negativa e nula tornam
+visível o balanço local entre fluxo que entra e fluxo que sai. Fonte: <a
+href="https://commons.wikimedia.org/wiki/File:Divergence_%28captions%29.svg">Wikimedia
+Commons: Divergence (captions).svg</a>, Bfoshizzle1, CC BY-SA
+4.0.</em></p>
+<p>Aqui entra a conservação de massa: a matéria não surge nem some,
+então o ar só fica mais denso num ponto se entrou mais do que saiu. Se a
+densidade de cada partícula não muda, o resultado é <span
+class="math inline">\(\nabla\cdot\mathbf u=0\)</span>, e o campo se
+chama <a
+href="https://en.wikipedia.org/wiki/Solenoidal_vector_field">solenoidal</a>.
+É o caso do ar em baixa velocidade (Mach abaixo de cerca de 0,3), em que
+a aerodinâmica trata o escoamento como incompressível. Acima disso a
+compressibilidade importa, e numa onda de choque a divergência fica
+fortemente negativa: o ar é comprimido numa camada finíssima.</p>
 <h2
-id="9-um-planeta-de-poucas-horas-o-diâmetro-temporal-da-civilização">9.
-Um Planeta de Poucas Horas: O Diâmetro Temporal da Civilização</h2>
-<p>Como podemos medir com precisão o verdadeiro tamanho funcional do
-mundo em que vivemos?</p>
-<p>Propomos aqui o conceito de <strong>Diâmetro Temporal da
-Terra</strong> (<span class="math inline">\(D_T\)</span>): o tempo médio
-necessário para que um indivíduo comum viaje entre dois pontos
-diametralmente opostos do globo (antípodas geográficos) utilizando a
-malha de transporte comercial pública disponível.</p>
-<div class="box callout-abstract">
-<div class="box-title">
-<p>Diâmetro Temporal da Terra (<span
-class="math inline">\(D_T\)</span>)</p>
-</div>
-<p>Tempo médio de trânsito entre antípodas geográficos na malha
-comercial pública disponível ao longo da história:</p>
+id="rotacional-e-vorticidade-a-rotação-que-existe-no-ponto">Rotacional e
+vorticidade: a rotação que existe no ponto</h2>
+<p>Mergulhe um micro-cata-vento no fluido. Se ele gira, há rotacional. O
+rotacional, <span
+class="math inline">\(\boldsymbol\omega=\nabla\times\mathbf u\)</span>,
+chamado de vorticidade, mede esse giro local: aponta ao longo do eixo de
+rotação, e seu tamanho é o dobro da velocidade angular média do fluido
+ao redor [<a href="#referências">5</a>]. Num disco girando como corpo
+rígido com velocidade angular <span
+class="math inline">\(\Omega\)</span>, por exemplo, <span
+class="math inline">\(\omega=2\Omega\)</span>.</p>
+<p>Dois casos desfazem a confusão mais comum, a de misturar trajetória
+curva com rotação local:</p>
 <ul>
-<li><strong>Ano 1800 (Navegação a vela e tração animal):</strong> <span
-class="math inline">\(D_T \approx 360\text{ dias}\)</span> (<span
-class="math inline">\(\approx 8.640\text{ horas}\)</span>)</li>
-<li><strong>Ano 1900 (Vapor e ferrovias transcontinentais):</strong>
-<span class="math inline">\(D_T \approx 40\text{ dias}\)</span> (<span
-class="math inline">\(\approx 960\text{ horas}\)</span>)</li>
-<li><strong>Ano 1935 (Correio aéreo e primeiros aviões
-comerciais):</strong> <span class="math inline">\(D_T \approx 5\text{
-dias}\)</span> (<span class="math inline">\(\approx 120\text{
-horas}\)</span>)</li>
-<li><strong>Ano 2026 (Rede global de jatos widebody):</strong> <span
-class="math inline">\(D_T \approx 24\text{ a } 36\text{
-horas}\)</span></li>
+<li><strong>Camadas retas e paralelas, uma mais rápida que a
+outra</strong> (escoamento de Couette): nenhuma linha curva à vista, mas
+o cata-vento gira, porque a pá do lado rápido é empurrada mais que a do
+lado lento. Há vorticidade sem círculo nenhum.</li>
+<li><strong>O redemoinho de um dreno</strong> (vórtice potencial,
+velocidade proporcional a <span class="math inline">\(1/r\)</span>):
+tudo circula, mas o cata-vento apenas percorre a órbita, sem girar sobre
+si mesmo. O rotacional é nulo, exceto no centro.</li>
 </ul>
-</div>
-<p>Em pouco mais de dois séculos de engenharia mecânica e aeronáutica, o
-diâmetro temporal da nossa civilização encolheu em 99,7%.</p>
-<div class="box callout-note">
-<div class="box-title">
-<p>A Desigualdade da Contração Espacial</p>
-</div>
-<p>Esse encolhimento não se distribui de maneira homogênea. Para um
-executivo ou acadêmico portador de passaporte forte e renda global, o
-planeta tem de fato 24 horas de diâmetro. Para um camponês vivendo em
-uma região rural isolada da África Subsaariana ou do interior da América
-Latina, o hospital ou a universidade mais próxima continuam situados a
-dias de caminhada árdua. A aviação comprime o planeta apenas para
-aqueles que estão conectados aos nós do seu grafo.</p>
-</div>
-<hr />
+<p><picture><source srcset="../assets/media/a-geometria-fisica-do-calculo-vetorial_fig5.webp" type="image/webp"><img
+src="../assets/media/a-geometria-fisica-do-calculo-vetorial_fig5.png"
+alt="Campos vetoriais com diferentes comportamentos de rotacional" /></picture></p>
+<p><em>Figura 5. A aparência global de rotação de um campo pode
+discordar do rotacional local, que é uma propriedade definida ponto a
+ponto. Fonte: <a
+href="https://commons.wikimedia.org/wiki/File:Vektorfelder_%28Rotation%29.png">Wikimedia
+Commons: Vektorfelder (Rotation).png</a>, Rhetos, CC0 1.0.</em></p>
+<p>Em resumo, o movimento local de um pedacinho de fluido combina quatro
+coisas independentes: translação, expansão ou compressão (divergência),
+giro (rotacional) e distorção por cisalhamento.</p>
 <h2
-id="10-conclusão-a-tecnologia-que-redimensionou-a-terra-sem-mudar-seu-tamanho">10.
-Conclusão: A Tecnologia que Redimensionou a Terra sem Mudar Seu
-Tamanho</h2>
-<p>Quando os astronautas da missão Apollo 8 contemplaram pela primeira
-vez a Terra erguendo-se sobre o horizonte cinzento da Lua em 1968, eles
-imortalizaram a imagem da <em>Canica Azul</em>: uma esfera frágil,
-deslumbrante e sem fronteiras flutuando na escuridão do vácuo
-cósmico.</p>
-<p>A aviação realizou na superfície terrestre aquilo que a astronomia
-revelou a partir do espaço exterior. Ao voar alto e rápido o suficiente
-para que a curvatura do planeta se torne visível pela janela da cabine,
-os aviões transformaram o mundo de um mistério infinito em uma casa
-comum habitável.</p>
-<p>A importância histórica da aviação não reside nas estatísticas frias
-de toneladas transportadas ou de assentos-quilômetro voados. Reside na
-audácia de ter transformado a distância geográfica de um destino natural
-inegociável em uma variável de engenharia, planejamento de rotas e
-cooperação humana. A Terra continua tendo os mesmos 40.075 quilômetros
-de circunferência em sua linha equatorial, mas, graças ao voo, a
-humanidade aprendeu a vivê-la como um único e vibrante território de
-poucas horas.</p>
-<hr />
+id="laplaciano-o-desacordo-entre-um-ponto-e-sua-vizinhança">Laplaciano:
+o desacordo entre um ponto e sua vizinhança</h2>
+<p>O gradiente, a divergência e o rotacional olham a primeira variação
+de um campo. O Laplaciano olha a curvatura:</p>
+<p><span class="math display">\[
+\nabla^2\phi=\nabla\cdot(\nabla\phi)=\frac{\partial^2\phi}{\partial
+x^2}+\frac{\partial^2\phi}{\partial y^2}+\frac{\partial^2\phi}{\partial
+z^2}.
+\]</span></p>
+<p>Sua leitura física é simples: ele compara o valor no ponto com a
+média dos vizinhos. Se o ponto está acima da média (um pico), o
+Laplaciano é negativo; se está abaixo (um vale), é positivo.</p>
+<p><img
+src="../assets/media/a-geometria-fisica-do-calculo-vetorial_fig6.svg"
+alt="Laplaciano, curvatura local e difusão viscosa" /></p>
+<p><em>Figura 6. O Laplaciano compara o ponto com a média de seus
+vizinhos: se o ponto é um pico, o Laplaciano é negativo e a física impõe
+amortecimento ou difusão para alisar a discrepância.</em></p>
+<p>Isso explica por que ele governa a difusão: um ponto mais quente que
+os vizinhos esfria, e um mais frio esquenta, <span
+class="math inline">\(\partial T/\partial t=\alpha\nabla^2T\)</span>. O
+Laplaciano é o operador do nivelamento. O atrito viscoso é a mesma
+ideia: num fluido incompressível de viscosidade constante, uma camada
+que corre mais rápido que a média das vizinhas é freada, e uma que corre
+mais devagar é puxada, com aceleração <span
+class="math inline">\(\nu\nabla^2\mathbf u\)</span> [<a
+href="#referências">6</a>].</p>
+<p>Quando o campo atinge o equilíbrio, <span
+class="math inline">\(\nabla^2\phi=0\)</span> (equação de <a
+href="https://en.wikipedia.org/wiki/Laplace%27s_equation">Laplace</a>),
+cada ponto é a média exata dos vizinhos. Não há picos nem vales no
+interior: os extremos só podem estar nas fronteiras. A imagem é a de uma
+membrana elástica esticada sobre uma moldura.</p>
+<h2
+id="gauss-o-que-nasce-no-interior-precisa-atravessar-a-fronteira">Gauss:
+o que nasce no interior precisa atravessar a fronteira</h2>
+<p>Até aqui cada operador foi local. O teorema da divergência os soma:
+tudo que nasce dentro de um volume precisa atravessar a fronteira [<a
+href="#referências">3</a>],</p>
+<p><span class="math display">\[
+\iiint_V \nabla\cdot\mathbf u\,dV=\iint_{\partial V}\mathbf
+u\cdot\mathbf n\,dS.
+\]</span></p>
+<p>A razão é geométrica. Fatie o volume em cubinhos: o que sai de um
+entra no vizinho, e o cancelamento em pares deixa só as faces externas.
+É essa contabilidade que sustenta os métodos de volumes finitos da
+aerodinâmica computacional: o domínio é dividido em milhares de células,
+e o balanço de fluxos em cada uma garante a conservação por
+construção.</p>
+<h2
+id="stokes-o-giro-distribuído-reaparece-como-circulação-na-borda">Stokes:
+o giro distribuído reaparece como circulação na borda</h2>
+<p>O teorema de Stokes faz o mesmo cancelamento para o giro. Os pequenos
+cata-ventos de uma superfície se anulam nas fronteiras internas, e sobra
+a circulação ao longo da borda:</p>
+<p><span class="math display">\[
+\Gamma=\oint_C \mathbf u\cdot d\mathbf l=\iint_S
+\boldsymbol\omega\cdot\mathbf n\,dS.
+\]</span></p>
+<p>São duas maneiras de medir a mesma coisa: somar os giros locais
+dentro, ou dar a volta na borda e somar o quanto o fluido acompanha o
+caminho.</p>
+<p>A aplicação clássica é a sustentação. Para um perfil em escoamento
+plano e incompressível, o teorema de Kutta–Joukowski diz que a
+sustentação por metro de envergadura vale <span
+class="math inline">\(L&#39;=\rho V\Gamma\)</span> [<a
+href="#referências">7</a>]: ela é proporcional à circulação em torno do
+perfil, isto é, à vorticidade ligada à asa. Não é preciso conhecer cada
+detalhe do campo de vorticidade, basta a circulação num contorno em
+volta do perfil.</p>
+<p>Há uma sutileza que retoma o redemoinho de dreno. Fora do centro o
+rotacional é nulo, mas a circulação em qualquer círculo em torno do
+centro não é. Não há contradição: Stokes exige que o campo seja regular
+em toda a superfície, e o centro é singular. Toda a vorticidade mora
+naquele ponto.</p>
+<h2
+id="crocco-quando-a-geometria-da-vorticidade-encontra-energia-e-entropia">Crocco:
+quando a geometria da vorticidade encontra energia e entropia</h2>
+<p>Até aqui foi cinemática. A relação de Crocco traz a dinâmica: em
+escoamento permanente e sem viscosidade [<a
+href="#referências">9</a>],</p>
+<p><span class="math display">\[
+\mathbf u\times\boldsymbol\omega=\nabla h_0-T\nabla s.
+\]</span></p>
+<p>Em palavras: a vorticidade transversal ao escoamento só pode existir
+onde a energia total (a entalpia de estagnação, <span
+class="math inline">\(h_0\)</span>) ou a entropia <span
+class="math inline">\(s\)</span> variam de uma linha de corrente para
+outra. Se ambas são uniformes e o escoamento é plano, ele é
+irrotacional.</p>
+<p>O exemplo mais instrutivo é o choque curvo à frente de um corpo
+supersônico. A energia total é a mesma dos dois lados do choque, mas a
+entropia não: o ar que atravessa a parte central, quase normal e mais
+forte, ganha mais entropia do que o que passa pelas laterais, oblíquas e
+mais fracas. Num choque normal a Mach 2 no ar, o aumento é de cerca de
+94 J/(kg·K). Essa diferença transversal de entropia exige, pela relação
+de Crocco, vorticidade atrás do choque: um escoamento que chegou
+irrotacional sai rotacional. A relação é um vínculo, não o mecanismo;
+quanto de vorticidade surge depende da intensidade e da curvatura do
+choque [<a href="#referências">11</a>].</p>
+<h2 id="uma-única-geometria-por-trás-dos-operadores">Uma única geometria
+por trás dos operadores</h2>
+<p>Os quatro operadores contam uma única história, que a equação de
+Navier–Stokes reúne para um escoamento incompressível de viscosidade
+cinemática <span class="math inline">\(\nu\)</span> constante [<a
+href="#referências">6</a>]:</p>
+<p><span class="math display">\[
+\frac{D\mathbf u}{Dt}=-\frac{1}{\rho}\nabla p+\nu\nabla^2\mathbf
+u+\mathbf b.
+\]</span></p>
+<p>A aceleração de uma partícula em trânsito vem de três fontes: a
+descida da colina de pressão (gradiente), o alisamento das diferenças
+entre camadas (Laplaciano) e as forças de campo, como a gravidade. A
+incompressibilidade entra como a condição de divergência nula, e a
+vorticidade, medida pelo rotacional, é o que a viscosidade espalha.</p>
+<p>Uma consequência curiosa: a força viscosa líquida é o rotacional da
+vorticidade, com sinal trocado [<a href="#referências">8</a>]. Ela
+depende só de como a vorticidade varia no espaço. Num escoamento
+incompressível e irrotacional, a força viscosa líquida é nula, mesmo com
+viscosidade diferente de zero.</p>
+<p>Quando cada símbolo vira uma ação mecânica que um engenheiro consegue
+imaginar (empurrar, inchar, girar, alisar), o cálculo vetorial deixa de
+ser um bloco de notação e passa a descrever o que o fluido faz.</p>
 <h2 id="referências">Referências</h2>
-<p>[1] Braudel, F., <em>The Mediterranean and the Mediterranean World in
-the Age of Philip II</em>, Harper &amp; Row, New York, 1972. <a
-href="https://archive.org/details/mediterraneanmed01brau">Link</a></p>
-<p>[2] Verne, J., <em>Le Tour du Monde en Quatre-Vingts Jours</em>,
-Pierre-Jules Hetzel, Paris, 1872. <a
-href="https://gallica.bnf.fr/ark:/12148/bpt6k1049646x">Link</a></p>
-<p>[3] Harvey, D., <em>The Condition of Postmodernity: An Enquiry into
-the Origins of Cultural Change</em>, Blackwell, Oxford, 1989. <a
-href="https://www.wiley.com/en-us/The+Condition+of+Postmodernity-p-9780631162940">Link</a></p>
-<p>[4] Stopford, M., <em>Maritime Economics</em>, 3ª ed., Routledge,
-London, 2009. <a
-href="https://doi.org/10.4324/9780203891742">Link</a></p>
-<p>[5] Douhet, G., <em>The Command of the Air</em>, Office of Air Force
-History, Washington, D.C., 1983. <a
-href="https://www.airuniversity.af.edu/AUPress/">Link</a></p>
-<p>[6] Chinazzi, M., et al., <em>The Effect of Travel Restrictions on
-the Spread of the 2019 Novel Coronavirus (COVID-19) Outbreak</em>,
-Science, Vol. 368, No. 6489, 2020, pp. 395–400. <a
-href="https://doi.org/10.1126/science.aba9757">Link</a></p>
-<p>[7] Urry, J., <em>Mobilities</em>, Polity Press, Cambridge, 2007. <a
-href="https://www.politybooks.com/bookdetail?book_slug=mobilities--9780745634180">Link</a></p>
+<p>[1] Schey, H. M., <em>Div, Grad, Curl, and All That: An Informal Text
+on Vector Calculus</em>, 4th ed., W. W. Norton &amp; Company, New York,
+2005. <a href="https://wwnorton.com/books/9780393925166">Link</a></p>
+<p>[2] Feynman, R. P., Leighton, R. B., e Sands, M., <em>The Feynman
+Lectures on Physics, Vol. II: Mainly Electromagnetism and Matter</em>,
+Basic Books, New York, 2011. <a
+href="https://www.feynmanlectures.caltech.edu/II_toc.html">Link</a></p>
+<p>[3] Marsden, J. E., e Tromba, A., <em>Vector Calculus</em>, 6th ed.,
+W. H. Freeman, New York, 2011. <a
+href="https://www.macmillanlearning.com/college/us/product/Vector-Calculus/p/1429215089">Link</a></p>
+<p>[4] Griffiths, D. J., <em>Introduction to Electrodynamics</em>, 4th
+ed., Cambridge University Press, Cambridge, UK, 2017. <a
+href="https://doi.org/10.1017/9781108420419">Link</a></p>
+<p>[5] Batchelor, G. K., <em>An Introduction to Fluid Dynamics</em>,
+Cambridge University Press, Cambridge, UK, 1967. <a
+href="https://doi.org/10.1017/CBO9780511800955">Link</a></p>
+<p>[6] Kundu, P. K., Cohen, I. M., e Dowling, D. R., <em>Fluid
+Mechanics</em>, 6ª ed., Academic Press, London, 2015. <a
+href="https://doi.org/10.1016/C2012-0-02558-7">Link</a></p>
+<p>[7] Anderson, J. D., <em>Fundamentals of Aerodynamics</em>, 6ª ed.,
+McGraw-Hill, New York, 2016. <a
+href="https://archive.org/details/fundamentalsofae0000ande">Link</a></p>
+<p>[8] Panton, R. L., <em>Incompressible Flow</em>, 4th ed., John Wiley
+&amp; Sons, Hoboken, NJ, 2013. <a
+href="https://doi.org/10.1002/9781118713075">Link</a></p>
+<p>[9] Cantwell, B. J., <em>Fundamentals of Compressible Flow</em>,
+AA210A Course Material, Stanford University, Stanford, CA, 2022. <a
+href="https://web.stanford.edu/~cantwell/AA210A_Course_Material/AA210A_Course_BOOK/AA210_Fundamentals_of_Compressible_Flow_BOOK_Brian_J_Cantwell_Jan_2022.pdf">Link</a></p>
+<p>[10] Stewart, J., <em>Calculus: Early Transcendentals</em>, 8th ed.,
+Cengage Learning, Boston, MA, 2015. <a
+href="https://www.cengage.com/c/calculus-early-transcendentals-8e-stewart/">Link</a></p>
+<p>[11] Hayes, W. D., The vorticity jump across a gasdynamic
+discontinuity, <em>Journal of Fluid Mechanics</em>, 2(6), 595–600, 1957.
+<a
+href="https://resolve.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/vorticity-jump-across-a-gasdynamic-discontinuity/24CFEEFB70602E93A5C98EA574068FAB">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
@@ -3005,8 +2794,8 @@ document.querySelectorAll('.content p').forEach(function(paragraph){
   <p class="sb-subscribe-note"><u>Confirme</u> o e-mail recebido. Verifique a <u>caixa de spam</u>. Marque o email como <u>confiável</u>. Você não receberá mensagens de spam.</p>
 </dialog>
 <div class="sb-progress"><span id="sbProgressFill"></span></div>
-<div class="sb-tags"><span class="sb-tag">Engenharia</span><span class="sb-tag">Sociedade</span><span class="sb-tag">Gestão</span><span class="sb-tag">Filosofia</span></div>
-<section class="sb-related"><h2>Continue explorando</h2><div class="sb-related-grid"><a class="sb-related-card" href="a-historia-da-aviacao-como-um-jogo-estrategico.html"><strong>A História da Aviação como um Jogo Estratégico</strong><span>A história da aviação também é uma história de decisões interdependentes: patentes, ameaça militar, lançamentos comerciais, regulação e infraestrutura alteram o valor de cada escolha técnica. O ensaio usa teoria dos jogos como lente para três mecanismos — competição, coordenação e dependência de trajetória —, formaliza um único caso (o impasse de patentes) e mostra onde a lente não alcança acidentes e programas industriais.</span></a><a class="sb-related-card" href="engenharia-em-menos-de-um-metro-cubico-a-impressora-3d-como-microcosmo-de-um-projeto-de-aeronave.html"><strong>Engenharia em menos de um metro cúbico — A impressora 3D como microcosmo de um projeto de aeronave</strong><span>Uma impressora 3D de mesa comprime, em menos de um metro cúbico, uma parcela surpreendente das disciplinas de um projeto de aeronave. A escala, a criticidade e o rigor são radicalmente diferentes, mas as classes de problemas são reconhecíveis: mecanismos, estruturas, vibrações, controle, calor, escoamento, eletrônica, software, materiais, manufatura, ensaios e integração. A interação entre essas disciplinas, e não cada uma isoladamente, transforma a máquina em um pequeno laboratório de engenharia de sistemas.</span></a></div></section>
+<div class="sb-tags"><span class="sb-tag">Matemática</span><span class="sb-tag">Cálculo-Vetorial</span><span class="sb-tag">Mecânica-dos-Fluidos</span><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Engenharia</span></div>
+
 <button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
         aria-controls="sbToc" title="Sumário do ensaio">
   <span class="sb-toc-icon" aria-hidden="true">☰</span>
