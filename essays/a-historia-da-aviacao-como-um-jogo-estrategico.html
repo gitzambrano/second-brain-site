@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-status="draft" data-minutes="18">
+<html lang="pt-BR" data-status="draft" data-minutes="23">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A História da Aviação como um Jogo Estratégico</title>
 <meta property="og:title" content="A História da Aviação como um Jogo Estratégico">
-<meta property="og:description" content="A história da aviação é moldada por decisões interdependentes: patentes, dissuasão militar, lançamentos comerciais, regulação e infraestrutura alteram o valor de cada escolha técnica. A teoria dos jogos atua aqui como lente analítica para três mecanismos — competição, coordenação e dependência de trajetória —, formaliza o impasse histórico de patentes e demarca onde a modelagem estratégica cede lugar aos mecanismos físicos e organizacionais da engenharia.">
+<meta property="og:description" content="A história da aviação modelada pelos grandes arquétipos da teoria dos jogos: do pioneirismo público de Santos-Dumont e o dilema das patentes ao duopólio Boeing-Airbus, o equilíbrio de remotorização previsto pelo MIT, novos entrantes como a COMAC e a barganha que derrubou o A380.">
 <meta property="og:type" content="article">
 <style>
 /* ------------------------------------------------------------------ */
@@ -1764,486 +1764,544 @@ body > .sb-progress:not(:has(.sb-progress-fill)) span{
     <h1 class="hero-title">A História da Aviação como um Jogo Estratégico</h1>
     <hr class="masthead-rule">
     <p class="byline">Gustavo Zambrano · Setembro de 2026</p>
-    <p class="cover-summary">A história da aviação é moldada por decisões interdependentes: patentes, dissuasão militar, lançamentos comerciais, regulação e infraestrutura alteram o valor de cada escolha técnica. A teoria dos jogos atua aqui como lente analítica para três mecanismos — competição, coordenação e dependência de trajetória —, formaliza o impasse histórico de patentes e demarca onde a modelagem estratégica cede lugar aos mecanismos físicos e organizacionais da engenharia.</p>
+    <p class="cover-summary">A história da aviação modelada pelos grandes arquétipos da teoria dos jogos: do pioneirismo público de Santos-Dumont e o dilema das patentes ao duopólio Boeing-Airbus, o equilíbrio de remotorização previsto pelo MIT, novos entrantes como a COMAC e a barganha que derrubou o A380.</p>
   </div>
 </header>
 
 <main class="content">
 <h2 id="sumário">Sumário</h2>
 <ul>
-<li><a href="#a-aeronave-dentro-do-jogo">A aeronave dentro do
-jogo</a></li>
-<li><a href="#prioridade-patentes-e-incentivos">Prioridade, patentes e
-incentivos</a></li>
-<li><a href="#corridas-tecnológicas-sob-ameaça">Corridas tecnológicas
-sob ameaça</a></li>
-<li><a href="#mercado-comercial-e-compromissos-irreversíveis">Mercado
-comercial e compromissos irreversíveis</a></li>
-<li><a href="#coordenação-em-uma-rede-de-aviação">Coordenação em uma
-rede de aviação</a></li>
-<li><a href="#novas-arquiteturas-e-bloqueios-de-adoção">Novas
-arquiteturas e bloqueios de adoção</a></li>
-<li><a href="#o-alcance-da-teoria-dos-jogos">O alcance da teoria dos
-jogos</a></li>
-<li><a href="#conclusão">Conclusão</a></li>
+<li><a href="#o-tabuleiro-tridimensional-e-a-função-de-utilidade">O
+tabuleiro tridimensional e a função de utilidade</a></li>
+<li><a
+href="#santos-dumont-e-o-jogo-da-homologação-pública">Santos-Dumont e o
+jogo da homologação pública</a></li>
+<li><a href="#o-dilema-do-prisioneiro-na-guerra-de-patentes">O Dilema do
+Prisioneiro na guerra de patentes</a></li>
+<li><a
+href="#jogos-de-soma-zero-e-a-ilusão-minimax-na-guerra-fria">Jogos de
+soma-zero e a ilusão minimax na Guerra Fria</a></li>
+<li><a
+href="#o-duopólio-boeing-airbus-e-o-equilíbrio-de-remotorização">O
+duopólio Boeing-Airbus e o equilíbrio de remotorização</a></li>
+<li><a
+href="#cenários-para-um-novo-entrante-o-desafio-da-comac">Cenários para
+um novo entrante: o desafio da COMAC</a></li>
+<li><a href="#barganha-de-nash-e-o-colapso-do-a380">Barganha de Nash e o
+colapso do A380</a></li>
+<li><a
+href="#jogos-de-coordenação-e-pontos-focais-na-segurança-de-voo">Jogos
+de coordenação e pontos focais na segurança de voo</a></li>
+<li><a href="#a-caçada-ao-cervo-e-a-inércia-da-transição-energética">A
+Caçada ao Cervo e a inércia da transição energética</a></li>
+<li><a
+href="#assimetria-de-informação-e-a-relação-principal-agente">Assimetria
+de informação e a relação principal-agente</a></li>
+<li><a
+href="#a-falácia-dos-custos-irrecuperáveis-no-programa-concorde">A
+falácia dos custos irrecuperáveis no programa Concorde</a></li>
+<li><a
+href="#onde-a-teoria-estratégica-encontra-a-mecânica-dos-fluidos">Onde a
+teoria estratégica encontra a mecânica dos fluidos</a></li>
+<li><a href="#referências">Referências</a></li>
 </ul>
 <hr />
-<h2 id="a-aeronave-dentro-do-jogo">A aeronave dentro do jogo</h2>
-<p>A forma de uma aeronave emerge de aerodinâmica, estruturas, propulsão
-e controle, mas o valor de uma configuração depende também das escolhas
-feitas por outros agentes. Um motor mais eficiente só altera o mercado
-quando fabricantes, companhias aéreas, aeroportos, reguladores e
-fornecedores conseguem incorporá-lo. Uma arquitetura militar ganha ou
-perde valor quando a ameaça e a missão mudam. Um padrão de segurança
-produz mais benefício quando a rede inteira converge para protocolos
-compatíveis.</p>
-<p>Essa interdependência torna a teoria dos jogos uma lente útil para a
-história da aviação porque torna explícitas quatro perguntas: quem
-decide, quais alternativas estavam disponíveis, que informação cada
-participante possuía e como a escolha de um altera o valor das opções
-dos demais.</p>
-<p>Em termos formais, um jogo reúne jogadores, estratégias e resultados
-associados às combinações de escolhas, como estabeleceram von Neumann e
-Morgenstern [<a href="#referências">1</a>]. O equilíbrio de Nash
-acrescenta a ideia de uma configuração em que nenhum participante
-melhora unilateralmente sua posição dadas as escolhas dos outros [<a
-href="#referências">2</a>]. Em aviação, esse formalismo ajuda
-principalmente quando existe interdependência observável: resposta
-competitiva entre fabricantes, adoção de padrões, acesso a
-infraestrutura ou decisões de investimento irreversível.</p>
-<div class="box callout-abstract">
-<div class="box-title">
-<p>Três mecanismos estratégicos</p>
-</div>
-<p><strong>Competição:</strong> o valor de uma solução depende da
-capacidade oferecida pelo rival.</p>
-<p><strong>Coordenação:</strong> os participantes ganham quando padrões,
-infraestrutura ou procedimentos convergem.</p>
-<p><strong>Dependência de trajetória:</strong> decisões antigas alteram
-o custo das alternativas futuras.</p>
-</div>
-<p>Os três mecanismos podem coexistir no mesmo programa. A disciplina
-metodológica consiste em não nomear retrospectivamente qualquer episódio
-como “dilema do prisioneiro” ou “equilíbrio de Nash” sem identificar a
-estrutura de decisão que justificaria o conceito.</p>
-<h2 id="prioridade-patentes-e-incentivos">Prioridade, patentes e
-incentivos</h2>
-<p>Nos primeiros anos da aviação, prioridade, financiamento e
-propriedade intelectual já influenciavam quais ideias eram demonstradas,
-compartilhadas ou protegidas. A transição do século XIX para o século XX
-assistiu ao florescimento de mecanismos explícitos de incentivo, como
-prêmios oferecidos por jornais, clubes de aviação e mecenas particulares
-(como o Prêmio Deutsch de la Meurthe, conquistado por <a
+<h2 id="o-tabuleiro-tridimensional-e-a-função-de-utilidade">O tabuleiro
+tridimensional e a função de utilidade</h2>
+<p>A geometria de uma aeronave é tradicionalmente explicada pelo
+equilíbrio clássico entre quatro forças vetoriais: sustentação, peso,
+tração e arrasto. No entanto, as equações da mecânica dos fluidos e da
+resistência estrutural delimitam apenas o envelope do que é fisicamente
+realizável. O motivo pelo qual determinadas aeronaves são efetivamente
+financiadas, construídas, certificadas e operadas pertence a outra
+disciplina: a teoria das decisões interdependentes.</p>
+<p>Na engenharia aeronáutica, o valor de uma escolha técnica quase nunca
+existe no vácuo. Um motor com razão de diluição (<em>bypass ratio</em>)
+mais elevada reduz o consumo específico de combustível, mas seu diâmetro
+ampliado exige acomodação geométrica sob a asa, o que afeta o
+comprimento do trem de pouso, a estabilidade aeroelástica e a margem de
+controle em arfagem. Essa alteração física só compensa o investimento
+bilionário de desenvolvimento caso as companhias aéreas valorizem a
+economia imediata de combustível, os aeroportos ofereçam pistas
+compatíveis e, acima de tudo, o competidor direto não neutralize a
+vantagem com um movimento equivalente a menor custo.</p>
+<p>A teoria dos jogos, formalizada por John von Neumann e Oskar
+Morgenstern [<a href="#referências">1</a>], fornece a linguagem
+analítica para modelar essa dinâmica. Um jogo é definido por um conjunto
+de jogadores racionais, um espaço de estratégias possíveis, a estrutura
+de informação disponível e as funções de utilidade (ou <em>payoffs</em>)
+que associam cada combinação de escolhas a um resultado. O equilíbrio de
+Nash [<a href="#referências">2</a>] estabelece uma condição de
+estabilidade mútua: um ponto em que nenhum agente consegue melhorar seu
+retorno individual por meio de um desvio unilateral, assumindo fixas as
+decisões dos rivais.</p>
+<p>A aviação moderna opera como uma sequência encadeada desses
+equilíbrios. Em vez de uma cronologia linear de invenções isoladas, a
+história do voo se revela como uma sucessão de arquétipos estratégicos.
+Cada grande salto ou armadilha da indústria espelha a estrutura de um
+jogo clássico.</p>
+<h2 id="santos-dumont-e-o-jogo-da-homologação-pública">Santos-Dumont e o
+jogo da homologação pública</h2>
+<p>A gênese da aviação ilustra com clareza o primeiro problema
+estratégico da tecnologia: como definir as próprias regras de vitória de
+um jogo institucional. Para que uma conquista técnica ganhe status de
+invenção pioneira reconhecida pela sociedade, os competidores precisam
+concordar com o protocolo de verificação.</p>
+<p>Foi <a
 href="https://pt.wikipedia.org/wiki/Alberto_Santos-Dumont">Alberto
-Santos-Dumont</a> em 1901 com seu dirigível nº 6).</p>
-<p>Esses prêmios criavam incentivos explícitos à demonstração pública:
-quem voava diante de comissões e testemunhas ganhava prestígio e
-prioridade reconhecida. Os competidores enfrentavam, porém, duas
-decisões distintas. A primeira era <em>quando</em> se mover: buscar a
-vantagem do pioneiro (<em>first-mover advantage</em>) ou esperar,
-observando erros e soluções alheias para lançar uma arquitetura refinada
-a custo menor (<em>second-mover</em>). A segunda era <em>quanto
-revelar</em>: demonstrar e divulgar, ou ocultar e proteger. As duas
-decisões se combinam de formas que a história ajuda a separar.</p>
-<p><a
-href="https://pt.wikipedia.org/wiki/Alberto_Santos-Dumont">Santos-Dumont</a>
-ilustra a segunda decisão em posição de liderança consolidada. Já era
-referência mundial em dirigíveis quando construiu o 14-Bis, e operava
-sob uma filosofia de domínio público: demonstrava em campo aberto,
-diante de imprensa e comissões técnicas, e distribuiu livremente os
-desenhos do Demoiselle para quem quisesse construí-lo. Em 23 de outubro
-de 1906, no Campo de Bagatelle, em Paris, o 14-Bis decolou com os
-próprios meios, sobre rodas e em pista comum, diante de milhares de
-espectadores e de membros do Aéro-Club de France, conquistando o prêmio
-Archdeacon [<a href="#referências">11</a>]. Em 12 de novembro, voou 220
-metros em 21,5 segundos e obteve o prêmio de 1.500 francos do Aéro-Club
-para o primeiro voo acima de 100 metros. A Federação Aeronáutica
-Internacional considera esse voo o primeiro desempenho aeronáutico
-homologado por ela [<a href="#referências">21</a>]. Foi o primeiro voo
-de um aparelho mais pesado que o ar a cumprir três exigências
-simultaneamente: decolagem com meios próprios, execução pública e
-homologação independente.</p>
+Santos-Dumont</a> quem estabeleceu e cumpriu rigorosamente as regras
+científicas e esportivas que definiram o nascimento da aviação [<a
+href="#referências">3</a>]. Em 1906, Paris era a capital mundial dos
+avanços mecânicos e abrigava o Aéro-Club de France, instituição
+científica e reguladora associada à Federação Aeronáutica Internacional
+(FAI). As normas para a homologação do primeiro voo de um aparelho mais
+pesado que o ar eram estritas, inequívocas e universais: a aeronave
+deveria decolar por meios próprios de propulsão a partir de terreno
+plano, percorrer uma distância mínima estipulada diante de comissões de
+jurados e do público geral, sobre rodas, sem o auxílio de trilhos,
+catapultas ou declives favoráveis.</p>
+<p>Em 23 de outubro de 1906, no Campo de Bagatelle, Santos-Dumont
+alinhou seu biplano 14-Bis, acelerou com motor Antoinette de 24
+cavalos-vapor e decolou de forma autônoma sobre trem de pouso com rodas,
+cobrindo 60 metros a cerca de três metros de altura para conquistar o
+Prêmio Archdeacon. Poucas semanas depois, em 12 de novembro de 1906,
+repetiu o feito de forma ainda mais expressiva: voou 220 metros em 21,5
+segundos diante de uma multidão estarrecida, conquistando o cobiçado
+prêmio do Aéro-Club de France. A FAI registrou oficialmente a proeza
+como o primeiro recorde mundial da história da aviação para uma aeronave
+mais pesada que o ar [<a href="#referências">4</a>].</p>
 <div class="box callout-info">
 <div class="box-title">
-<p>Evidência Histórica</p>
+<p>A Invenção Autônoma do Voo</p>
 </div>
-<h4 class="callout-inner-heading"
-id="o-bloqueio-da-guerra-de-patentes">O Bloqueio da Guerra de
-Patentes</h4>
-<p>Entre 1909 e 1917, titulares de patentes concorrentes de controle
-lateral de aeronaves, entre eles Glenn Curtiss e a Wright Company,
-disputaram o tema na justiça norte-americana. O período coincide com o
-atraso da indústria aeronáutica dos Estados Unidos em relação à
-europeia: na entrada do país na Primeira Guerra Mundial, em 1917, os
-norte-americanos não dispunham de aeronave de combate de projeto próprio
-apta para a linha de frente. O governo pressionou a indústria a formar a
-<em>Manufacturers Aircraft Association</em>, instituindo o licenciamento
-cruzado compulsório de patentes [<a href="#referências">3</a>]. A
-atribuição causal exclusiva a esse litígio, contudo, é discutível, pois
-a reduzida demanda militar governamental naquele período representa uma
-explicação concorrente robusta.</p>
+<p>O 14-Bis de Santos-Dumont inaugurou o voo mecânico ao cumprir a
+tríplice exigência da engenharia moderna: decolagem autônoma por meios
+próprios de propulsão sem forças externas auxiliares, homologação
+oficial por autoridade técnica independente e demonstração pública
+transparente perante a sociedade civil.</p>
 </div>
-<p><strong>Um modelo mínimo de litígio.</strong> Para fundamentar a
-estrutura estratégica em vez de apenas aplicar rótulos conceituais,
-considere dois detentores de patentes complementares, A e B, com
-informação completa sobre as reivindicações concorrentes e duas
-estratégias disponíveis: <em>licenciar</em> (aceitar licenciamento
-cruzado) ou <em>bloquear</em> (litigar para excluir o rival do mercado).
-Os payoffs são ordinais, variando de 1 (pior resultado) a 4 (melhor
-resultado), e expressam hipóteses estruturais sobre incentivos:</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>B licencia</th>
-<th>B bloqueia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>A licencia</strong></td>
-<td>3, 3</td>
-<td>1, 4</td>
-</tr>
-<tr>
-<td><strong>A bloqueia</strong></td>
-<td>4, 1</td>
-<td>2, 2</td>
-</tr>
-</tbody>
-</table>
-<p>A ordenação assume que quem bloqueia sozinho captura royalties de
-monopólio e restringe a concorrência (4), enquanto quem licencia de
-forma unilateral permanece vulnerável e exposto (1). Caso ambos
-licenciem, dividem um mercado global ampliado pela interoperabilidade
-(3). Por fim, se ambos bloquearem, paralisam a fabricação e dissipam
-recursos em litígio contínuo (2). Sob tais premissas, a estratégia de
-bloquear torna-se dominante e conduz ao equilíbrio de Nash ineficiente
-(bloquear, bloquear), espelhando o formato do clássico dilema do
-prisioneiro. A intervenção governamental de 1917 alterou as regras do
-jogo: a coerção militar aumentou severamente o custo de litigar,
-realinhando os retornos e permitindo o salto para o equilíbrio
-cooperativo de licenciamento.</p>
-<p>O modelo possui limites que a abstração teórica não deve ocultar. O
-desfecho das ações judiciais envolvia incerteza jurídica real, de modo
-que os retornos eram esperados e não determinísticos. O ecossistema
-envolvia múltiplos fabricantes, e as disputas se estendiam no tempo,
-abrindo espaço para estratégias dinâmicas de barganha ou guerras de
-atrito. O formalismo serve, portanto, para delimitar as forças de
-incentivo, não para esgotar a narrativa histórica.</p>
-<p>A controvérsia histórica sobre a prioridade da invenção do avião
-ganha outra perspectiva quando examinada pela teoria dos jogos: ela
-expressa, fundamentalmente, uma disputa sobre a regra de validação do
-jogo. A tradição francesa valorizava a homologação pública perante
-comissão independente, sob condições repetíveis e decolagem autônoma
-sobre rodas. Em contrapartida, a tradição norte-americana dos irmãos
-Wright privilegiava a proteção da propriedade intelectual, o sigilo
-prévio de testes e a validação perante contratos militares fechados.
-Pelo critério público e independente de Bagatelle, o 14-Bis cumpriu a
-regra estabelecida. A escolha entre divulgar soluções abertamente ou
-mantê-las sob segredo constituía uma estratégia deliberada de
-posicionamento institucional.</p>
-<p>A diferenciação entre pioneirismo e aprendizado pelo erro alheio
-transparece com nitidez na transição para a aviação a jato comercial. O
-de Havilland DH-106 Comet entrou em serviço em 1952 como o primeiro
-avião comercial a jato do mundo. Dois acidentes catastróficos em 1954
-culminaram em uma rigorosa investigação estrutural que diagnosticou a
-ruptura por fadiga da fuselagem pressurizada, acelerada pela
-concentração de tensões nos cantos das janelas quadradas [<a
-href="#referências">12</a>]. A Boeing, posicionada como competidora de
-segundo movimento, pôde incorporar integralmente essas descobertas de
-engenharia no projeto do 707, que estreou em 1958 com janelas de cantos
-arredondados, ligas estruturais mais tolerantes ao dano e fuselagem
-redimensionada para ciclos repetidos de pressurização. A vantagem da
-Boeing decorreu de um transbordamento exógeno de conhecimento técnico
-gerado pelo pioneiro. O mecanismo de falha pertence estritamente à
-mecânica da fratura e à concentração de tensões em estruturas
-pressurizadas. A teoria dos jogos elucida por que aguardar a maturação
-do mercado possuía valor econômico, mas não explica a física da
-nucleação e propagação de trincas na fuselagem.</p>
-<p>A dinâmica estratégica dos primeiros anos da aviação não se resume a
-jogos de soma zero. Prioridade científica, patentes e prêmios alteravam
-a matriz de incentivos entre compartilhar conhecimento, demonstrar
-publicamente um avanço ou resguardar soluções sob segredo industrial. A
-tecnologia evoluía dentro de arranjos institucionais que premiavam
-escolhas distintas.</p>
-<h2 id="corridas-tecnológicas-sob-ameaça">Corridas tecnológicas sob
-ameaça</h2>
-<p>A aviação militar torna particularmente visível uma propriedade dos
-sistemas competitivos: desempenho absoluto importa menos que desempenho
-relativo à capacidade do outro lado. Velocidade, altitude, alcance,
-sensores e sobrevivência adquirem valor dentro de uma relação
-estratégica que muda quando novas tecnologias entram em serviço.</p>
-<p>Durante a Guerra Fria, a evolução de radares, sistemas de defesa
-aérea e aeronaves de alta velocidade alterou repetidamente quais
-atributos recebiam prioridade nos programas de projeto [<a
-href="#referências">4</a>]. Uma solução que parecia oferecer grande
-margem em determinado ambiente podia perder parte desse valor quando o
-oponente introduzia uma capacidade capaz de observá-la ou
-contestá-la.</p>
-<p>O programa do bombardeiro supersônico North American XB-70 Valkyrie
-sintetiza essa dependência. Projetado nos anos 1950 para cruzeiro
-nuclear a Mach 3 e 70.000 pés de altitude operacional, o conceito
-assumia que velocidade e teto de serviço bastariam para inviabilizar a
-interceptação aérea. No início dos anos 1960, novos mísseis
-superfície-ar de alta altitude (como o sistema soviético S-75 Dvina) e
-mísseis balísticos intercontinentais, de custo inferior e tempo de
-resposta imediato, entraram em operação. Em consequência dessa
-reformulação no ambiente de ameaça, o programa do bombardeiro foi
-cancelado em 1961 [<a href="#referências">13</a>]. A aerodinâmica e o
-sistema propulsivo do avião continuaram íntegros. O que se alterou foi a
-função de utilidade tática, reduzindo a zero o valor operacional de voar
-mais rápido e em altitudes extremas.</p>
-<p>Essa realimentação não produz uma sequência mecânica de causa e
-efeito puramente linear. Decisões de aquisição militar dependem de
-doutrina estratégica, restrições orçamentárias, inteligência incompleta
-sobre o adversário, capacidades industriais e pressões da política
-doméstica. A teoria dos jogos contribui de forma sóbria: ela formaliza a
-razão pela qual o retorno econômico e militar de uma característica
-técnica de projeto é indissociável das escolhas esperadas do rival.</p>
-<div class="box callout-info">
-<div class="box-title">
-<p>Valor relativo de desempenho</p>
-</div>
-<p>Em um ambiente competitivo, uma característica de projeto pode
-conservar sua física e perder valor estratégico. O motor continua
-produzindo o mesmo empuxo e a asa a mesma sustentação. O que muda é a
-função de valor usada para decidir se aquela combinação ainda atende à
-missão.</p>
-</div>
-<h2 id="mercado-comercial-e-compromissos-irreversíveis">Mercado
-comercial e compromissos irreversíveis</h2>
-<p>Programas de transporte comercial exigem decisões feitas muitos anos
-antes de a demanda real ser conhecida. Diâmetro de fuselagem,
-arquitetura de propulsão, alcance, capacidade e compatibilidade
-aeroportuária criam custos que dificilmente podem ser revertidos depois
-que certificação, ferramental e cadeia de suprimentos amadurecem. O
-valor de uma escolha depende, portanto, das decisões futuras de
-companhias aéreas, concorrentes, fornecedores e aeroportos.</p>
-<p>A380 e 787 ilustram esse problema sem formar uma dicotomia perfeita.
-O A380 apostou em capacidade muito alta para rotas densas e aeroportos
-com restrições de <em>slots</em>. O 787 combinou menor capacidade com
-alcance intercontinental e eficiência de bimotor, ampliando a
-viabilidade de rotas longas com demanda menor. Ambas as famílias
-continuaram operando dentro de redes <em>hub-and-spoke</em> e ponto a
-ponto em diferentes proporções. A diferença estratégica estava na
-granularidade de capacidade que cada fabricante oferecia aos
-operadores.</p>
-<p>O encerramento da produção do A380 e a difusão mais ampla de
-bimotores de longo alcance mostram como flexibilidade de frota e risco
-de preenchimento influenciaram o mercado posterior. Em fevereiro de
-2019, a Airbus anunciou o fim das entregas para 2021 depois que a
-Emirates, principal cliente, com 162 pedidos, reduziu sua carteira para
-123 unidades e trocou parte do pedido por A330neo e A350 [<a
-href="#referências">14</a>]. Um analista do setor atribui o desgaste do
-caso de negócios à fragmentação do mercado por sucessivos bimotores de
-longo alcance [<a href="#referências">15</a>]. Com um comprador tão
-dominante, a decisão dele pesava mais que a soma dos demais. Esse
-resultado, porém, não transforma a aposta original em irracionalidade
-retrospectiva. Decisões de programa são feitas com previsões incompletas
-sobre combustível, demanda, aeroportos, concorrência e regulação.</p>
-<h3 id="a-remotorização-do-737-sob-pressão-competitiva">A remotorização
-do 737 sob pressão competitiva</h3>
-<p>A decisão de responder ao A320neo com uma nova variante da família
-737 combina fatores técnicos, comerciais e de certificação. Uma aeronave
-<em>clean-sheet</em> exigiria um ciclo de desenvolvimento maior e
-criaria uma transição operacional mais profunda para clientes já
-integrados à família 737. A remotorização preservava maior continuidade
-de frota e reduzia o intervalo de resposta ao concorrente. A teoria dos
-jogos ajuda a representar essa interdependência, mas não transforma a
-decisão em estratégia matematicamente dominante: custos, riscos e
-informações eram estimados sob incerteza.</p>
-<p>A instalação dos motores LEAP exigiu mudanças de integração e alterou
-características aerodinâmicas em partes do envelope. O MCAS foi
-introduzido no sistema de controle de voo para contribuir para
-características de força no manche em condições específicas. As
-investigações posteriores aos acidentes do Lion Air 610 e Ethiopian
-Airlines 302 identificaram problemas mais amplos na arquitetura, na
-avaliação de segurança, nas hipóteses sobre resposta da tripulação, na
-comunicação sobre o sistema e no processo de certificação [<a
+<p>A postura de Santos-Dumont refletia uma estratégia cooperativa pura
+de domínio público. Tendo conquistado a glória de ser o inventor do
+avião, ele não patenteou seus projetos. Ao criar posteriormente o
+Demoiselle, pioneiro dos aviões leves de uso pessoal, Santos-Dumont
+publicou livremente as plantas detalhadas em revistas técnicas para que
+qualquer entusiasta ou construtor pudesse replicar sua máquina. Essa
+escolha reduziu a zero as barreiras de entrada para dezenas de oficinas
+europeias, catalisando o surgimento da indústria aeroespacial
+global.</p>
+<h2 id="o-dilema-do-prisioneiro-na-guerra-de-patentes">O Dilema do
+Prisioneiro na guerra de patentes</h2>
+<p>Em forte contraste com a filosofia de Santos-Dumont, o cenário nos
+Estados Unidos descambou rapidamente para a armadilha clássica da teoria
+dos jogos: o Dilema do Prisioneiro.</p>
+<p>A partir de 1909, os titulares da Wright Company iniciaram uma
+agressiva campanha jurídica alegando que qualquer sistema de controle
+tridimensional no ar infringia sua patente ampla de torção de ponta de
+asa (<em>wing warping</em>), incluindo as superfícies aerodinâmicas
+móveis independentes desenvolvidas por Glenn Curtiss, os ailerons.
+Curtiss contra-atacou nos tribunais, contestando a abrangência da
+patente e buscando garantir espaço comercial para suas aeronaves [<a
+href="#referências">5</a>].</p>
+<p>Na estrutura analítica desse confronto entre os litigantes A e B,
+cada fabricante dispunha de duas estratégias: cooperar, aceitando o
+licenciamento mútuo da propriedade intelectual mediante royalties
+razoáveis, ou bloquear, litigando agressivamente na justiça para excluir
+o rival do mercado. Caso ambos cooperassem, a indústria se desenvolveria
+sobre padrões técnicos consolidados e ambos dividiriam um mercado em
+expansão. Se um decidisse bloquear enquanto o outro tentasse licenciar,
+o litigante agressivo capturaria lucros de monopólio temporários e
+royalties punitivos, empurrando o concorrente para a defensiva. Por fim,
+se ambos escolhessem litigar e bloquear, recursos vitais de engenharia
+seriam drenados para tribunais, liminares paralisariam as linhas de
+montagem e a inovação arrefeceria.</p>
+<p>Como a estratégia de bloquear oferecia retorno individual superior
+qualquer que fosse a escolha do adversário, o bloqueio tornou-se a
+estratégia estritamente dominante de cada jogador. O resultado
+inevitável foi a convergência para o equilíbrio de Nash ineficiente de
+bloqueio mútuo.</p>
+<p>A consequência física desse impasse estratégico foi o colapso
+temporário do desenvolvimento aeronáutico norte-americano. Enquanto a
+França e a Grã-Bretanha aprimoravam monoplanos ágeis e caças velozes com
+controle lateral refinado por ailerons, as fábricas dos Estados Unidos
+permaneceram amarradas a disputas jurídicas. Quando o país entrou na
+Primeira Guerra Mundial em 1917, não dispunha de nenhuma aeronave de
+combate de projeto próprio apta a operar na linha de frente europeia.
+Para romper a paralisia do equilíbrio ineficiente, o governo
+norte-americano foi obrigado a intervir nas regras do jogo: impôs a
+formação da <em>Manufacturers Aircraft Association</em>, estabelecendo
+um consórcio compulsório de licenciamento cruzado (<em>patent pool</em>)
+com pagamento fixo de royalties, resgatando a indústria da armadilha de
+incentivos.</p>
+<h2 id="jogos-de-soma-zero-e-a-ilusão-minimax-na-guerra-fria">Jogos de
+soma-zero e a ilusão minimax na Guerra Fria</h2>
+<p>No domínio militar, a interação entre potências antagônicas assume
+predominantemente o formato de jogos de soma-zero: o ganho operacional e
+geopolítico de uma força representa exatamente a vulnerabilidade e perda
+da outra. Sob a formulação minimax de von Neumann, cada jogador busca
+escolher a estratégia que minimize sua perda máxima diante da melhor
+resposta do oponente.</p>
+<p>Durante a Guerra Fria, essa lógica impulsionou corridas de armamentos
+onde o valor dos parâmetros de projeto não era fixo, mas estritamente
+dependente das capacidades do rival [<a href="#referências">6</a>]. O
+programa do bombardeiro estratégico North American XB-70 Valkyrie
+sintetiza a fragilidade das suposições puramente lineares de
+projeto.</p>
+<p>Concebido no final dos anos 1950, o XB-70 era uma maravilha da
+aerodinâmica e da ciência dos materiais. Projetado para navegar
+continuamente a Mach 3 e a 70.000 pés de altitude com peso máximo de
+decolagem superior a 240 toneladas, utilizava sustentação por compressão
+(<em>compression lift</em>), em que o bordo de fuga da asa em delta
+ogival se inclinava para baixo a fim de prender a onda de choque
+supersônica sob a fuselagem, aumentando a razão entre sustentação e
+arrasto. A premissa tática norte-americana era simples: nenhuma aeronave
+de caça contemporânea conseguia subir rápido o suficiente ou acelerar a
+Mach 3 para interceptar tal vetor nuclear.</p>
+<p>Todavia, a função de resposta da defesa aérea soviética não se
+limitou a construir interceptadores tripulados equivalentes. A União
+Soviética investiu na introdução em massa de mísseis superfície-ar
+guiados por radar de longo alcance e alta altitude, como o complexo S-75
+Dvina (SA-2 Guideline), que provou sua letalidade ao abater o avião de
+reconhecimento U-2 de Francis Gary Powers em 1960. Simultaneamente,
+ambos os lados aceleraram o desenvolvimento dos mísseis balísticos
+intercontinentais (ICBMs), capazes de entregar ogivas termonucleares em
+menos de trinta minutos a uma fração do custo de manutenção de uma frota
+de bombardeiros pesados.</p>
+<p>Quase da noite para o dia, o valor tático de voar a Mach 3 no teto
+estratosférico colapsou para zero [<a href="#referências">7</a>]. A
+aeronave não apresentava falha de engenharia: suas turbinas e sua célula
+suportavam com perfeição as cargas térmicas e de pressão do ar
+rarefeito. O que mudou foi a matriz de utilidade do jogo de soma-zero. O
+adversário adotou uma estratégia assimétrica que transformou a altitude
+extrema em um alvo vulnerável aos radares de alerta precoce. O programa
+do bombardeiro supersônico foi cancelado em 1961, e a doutrina ocidental
+foi forçada a migrar para a penetração a baixa altitude em alta
+velocidade subsônica para se ocultar do relevo do terreno, exigindo uma
+filosofia estrutural e aerodinâmica completamente diferente.</p>
+<h2 id="o-duopólio-boeing-airbus-e-o-equilíbrio-de-remotorização">O
+duopólio Boeing-Airbus e o equilíbrio de remotorização</h2>
+<p>No transporte de passageiros de corredor único (<em>narrowbody</em>),
+o mercado global é estruturado como um duopólio altamente concentrado. O
+ciclo de vida dessas frotas envolve bilhões de dólares em despesas não
+recorrentes de engenharia e apostas industriais de longo prazo.</p>
+<p>Na virada da década de 2010, Boeing e Airbus se depararam com o
+chamado Dilema do Desenvolvedor. O aumento dos preços do petróleo
+impunha urgência na redução do consumo de combustível das famílias
+Airbus A320 e Boeing 737. Diante desse cenário, cada fabricante dispunha
+de duas grandes alternativas estratégicas: desenvolver uma aeronave
+inteiramente nova (<em>clean-sheet</em>), adotando materiais compósitos
+em toda a célula com custo estimado entre 15 e 20 bilhões de dólares e
+maturação de quase uma década, ou simplesmente remotorizar a plataforma
+existente (<em>re-engining</em>), adaptando turbofans de última geração
+com ultra-alto bypass (como o CFM LEAP e o Pratt &amp; Whitney PW1000G)
+a um custo de dois a três bilhões de dólares, reduzindo o consumo em
+cerca de 15% na metade do tempo e preservando a comunalidade operacional
+de tipo.</p>
+<p>Em um estudo sobre estratégias de desenvolvimento de frota comercial
+do International Center for Air Transportation (ICAT) do MIT [<a
+href="#referências">11</a>], pesquisadores modelaram a dinâmica desse
+duopólio sob a ótica da teoria dos jogos. A análise demonstrou que,
+devido ao volume colossal de capital e à incerteza da demanda futura, a
+remotorização mútua emergia como o equilíbrio de Nash estável.</p>
+<p>Se uma das empresas lançasse um avião novo do zero de forma isolada,
+a rival poderia simplesmente remotorizar seu modelo existente com
+entrega rápida e menor custo de capital, capturando pedidos maciços das
+companhias aéreas antes que o avião pioneiro entrasse em serviço. Se
+ambas optassem pelo desenvolvimento simultâneo de células novas, o
+mercado absorveria um volume imenso de dívida de desenvolvimento e as
+margens seriam corroídas pela disputa de preços. A remotorização mútua
+protegia o caixa de ambas as partes sem exigir apostas existenciais.</p>
+<p>A Airbus agiu como líder de Stackelberg ao lançar o A320neo no final
+de 2010. A geometria original da família A320 facilitava esse movimento:
+projetada na década de 1980, a fuselagem possuía pernas de trem de pouso
+longas o suficiente para acomodar turbofans com fans frontais de grande
+diâmetro sem tocar a pista. A grande encomenda de aeronaves pela
+American Airlines em 2011 rompeu a hesitação da Boeing, forçando a
+fabricante norte-americana a responder rapidamente com o 737 MAX em vez
+de prosseguir com os estudos de um projeto limpo [<a
 href="#referências">8</a>].</p>
-<p>O episódio exige separar dois níveis causais. Pressão competitiva,
-continuidade de produto e custos de transição pertencem ao ambiente de
-decisão [<a href="#referências">6</a>]. Arquitetura de sistemas, análise
-de segurança, fatores humanos e certificação pertencem à cadeia técnica
-que transforma escolhas de programa em risco operacional.</p>
-<div class="box callout-note">
-<div class="box-title">
-<p>Incentivo e mecanismo</p>
-</div>
-<p>Incentivos econômicos podem alterar prazos, escopo e alternativas
-consideradas. Eles não substituem a análise do mecanismo de falha. Uma
-explicação completa precisa ligar decisões organizacionais a requisitos,
-arquitetura, verificação, treinamento e operação sem comprimir todos
-esses níveis em um único payoff.</p>
-</div>
-<p>A utilidade da teoria dos jogos está em mostrar por que certas opções
-ganham ou perdem valor quando o concorrente age. Ela deixa para a
-engenharia e para a investigação de acidentes a tarefa de explicar como
-o sistema físico se comportou.</p>
-<h2 id="coordenação-em-uma-rede-de-aviação">Coordenação em uma rede de
-aviação</h2>
-<p>Aviação civil depende de coordenação porque aeronaves de operadores e
-países diferentes compartilham o mesmo espaço, aeroportos, frequências,
-procedimentos e padrões de equipamento. A padronização cria uma forma de
-efeito de rede: quanto maior a compatibilidade entre participantes,
-menor o custo de interpretar intenções e maior a previsibilidade do
-sistema.</p>
-<p>A Convenção de Chicago foi assinada em 1944 e estabeleceu a base
-institucional para essa cooperação. Uma organização provisória começou a
-funcionar em 1945, e a ICAO permanente surgiu em 1947 após a entrada em
-vigor da Convenção [<a href="#referências">9</a>]. Seu papel não é
-escolher um “equilíbrio” abstrato, mas promover uniformidade em padrões,
-procedimentos e organização da aviação internacional.</p>
-<p>TCAS oferece um exemplo técnico dessa interoperabilidade. TCAS II
-pode emitir avisos de tráfego (<em>Traffic Advisories</em>, TA) e avisos
-de resolução vertical (<em>Resolution Advisories</em>, RA) a partir de
-tráfego cooperativo munido de transponder compatível. Quando duas
-aeronaves equipadas com TCAS II entram em conflito de rota, a
-comunicação por enlace de dados em Modo S permite coordenar comandos
-verticais complementares, impedindo que ambas recebam ordens de manobra
-no mesmo sentido [<a href="#referências">10</a>].</p>
-<div class="box callout-example">
-<div class="box-title">
-<p>Coordenação de segurança em voo</p>
-</div>
-<h4 class="callout-inner-heading"
-id="interoperabilidade-do-tcas-ii">Interoperabilidade do TCAS II</h4>
-<p>A utilidade operacional do TCAS não depende de dotação simultânea e
-total em toda a frota civil: uma aeronave equipada com TCAS II monitora
-o tráfego dotado de transponders convencionais em Modo C ou Modo S e
-emite os alertas pertinentes. A coordenação bilateral adiciona uma
-barreira redundante de segurança quando ambas as aeronaves possuem
-sistemas TCAS II integrados, negociando manobras verticais opostas. O
-benefício do padrão reside na interoperabilidade progressiva da malha, e
-não em uma transição binária rígida.</p>
-</div>
-<p>A mesma lógica aparece em infraestrutura. <em>Slots</em>, separações,
-procedimentos de aproximação e capacidade de terminal tornam-se recursos
-estratégicos porque sua utilidade depende da rede ao redor. Uma
-companhia escolhe frota e horários levando em conta não apenas demanda
-local, mas conexões, restrições aeroportuárias e decisões de
-concorrentes.</p>
-<p>Regulação acrescenta um problema de agência. Autoridades dependem de
-conhecimento técnico produzido em grande parte pela própria indústria e
-podem delegar determinadas atividades de conformidade a representantes
-autorizados [<a href="#referências">5</a>]. Esse arranjo exige
-independência, rastreabilidade e supervisão suficientes para controlar a
-assimetria de informação. As revisões do 737 MAX tornaram essa interface
-um objeto explícito de investigação [<a href="#referências">8</a>].</p>
-<p>A teoria dos jogos é especialmente útil aqui quando torna a
-interdependência visível: padrões compartilhados, infraestrutura escassa
-e compatibilidade técnica alteram o valor de cada decisão
-individual.</p>
-<h2 id="novas-arquiteturas-e-bloqueios-de-adoção">Novas arquiteturas e
-bloqueios de adoção</h2>
-<p>Mudanças de arquitetura raramente dependem apenas do veículo.
-Combustíveis, sistemas de propulsão e novos conceitos operacionais podem
-exigir produção de energia, abastecimento, manutenção, certificação e
-infraestrutura compatíveis. O valor técnico da aeronave precisa,
-portanto, ser convertido em valor para uma rede de operadores e
-serviços.</p>
-<p>As barreiras diferem entre tecnologias. Combustíveis sustentáveis de
-aviação podem aproveitar parte relevante da infraestrutura existente
-quando atendem às especificações de substituição direta
-(<em>drop-in</em>). Hidrogênio exige mudanças mais extensas em
-armazenamento criogênico, transporte e infraestrutura de abastecimento
-nos pátios. Aeronaves elétricas e veículos eVTOL deslocam o desafio para
-densidade energética, recarga rápida, ciclo de vida das baterias,
-vertiportos e gestão de espaço aéreo em baixa altitude.</p>
-<p>A interdependência cria um problema clássico de coordenação mútua.
-Fabricantes investem quando vislumbram infraestrutura e demanda
-comercial firme, companhias aéreas encomendam frotas quando suporte
-logístico e energia limpa estão acessíveis, e administradores
-aeroportuários alocam capital quando a frota instalada garante retorno
-de escala. Nenhum agente isolado destrava a transição.</p>
-<p>O contraponto desse dilema é a dependência de trajetória (<em>path
-dependence</em>) e o bloqueio tecnológico (<em>lock-in</em>). Quando
-retornos crescentes de adoção favorecem a solução já consolidada, uma
-trajetória inicial pode perpetuar padrões técnicos subótimos face a
-alternativas inovadoras [<a href="#referências">17</a>] [<a
-href="#referências">18</a>]. As externalidades de rede e a
-compatibilidade técnica reforçam essa inércia [<a
-href="#referências">19</a>]. Na aviação, o custo de converter hangares,
-centros de treinamento, tripulações e cadeias de suprimentos cresce
-exponencialmente com a base instalada. A análise exige discernimento
-cuidadoso para distinguir barreiras genuínas de coordenação de
-limitações físicas da própria tecnologia.</p>
-<div class="box callout-note">
-<div class="box-title">
-<p>Tecnologia dentro de um ecossistema</p>
-</div>
-<p>Uma arquitetura pode oferecer vantagem em determinada métrica de
-engenharia e ainda exigir mudanças extensas no sistema ao redor. Esse
-custo de transição não mede mérito técnico. Ele mede quantos elementos
-complementares precisam amadurecer antes que a vantagem física se
-converta em operação.</p>
-</div>
-<p>A teoria dos jogos ajuda a representar essa dependência entre
-decisões. A engenharia continua responsável por outra pergunta: quais
-vantagens permanecem quando massa, energia, segurança, manutenção e
-operação são consideradas no sistema completo?</p>
-<h2 id="o-alcance-da-teoria-dos-jogos">O alcance da teoria dos
-jogos</h2>
-<p>A teoria dos jogos oferece uma lente analítica valiosa, mas seria
-equivocado tratá-la como modelo autossuficiente para toda a história da
-tecnologia. Como qualquer formulação matemática, possui fronteiras de
-validade bem delimitadas.</p>
-<p>Modelos de teoria dos jogos tipicamente assumem atores com
-preferências relativamente estáveis e capacidade de eleger estratégias
-em espaços definidos. Na realidade histórica, disputas geopolíticas,
-prestígio nacional, cultura organizacional e assimetrias profundas de
-informação moldam tanto as preferências subjetivas quanto as
-alternativas concebidas. O programa anglo-francês <a
-href="https://pt.wikipedia.org/wiki/Concorde">Concorde</a> resultou em
-avanços aerodinâmicos pioneiros (como a asa delta ogival com escoamento
-em vórtice) e no controle térmico contínuo em regime supersônico, mas
-prosseguiu mesmo após a comprovação de que a demanda de mercado era
-restrita. Essa continuidade derivou de compromissos diplomáticos solenes
-e da preservação do prestígio de Estado das duas nações [<a
-href="#referências">7</a>]. Embora a psicologia cognitiva e a economia
-comportamental debatam a extensão da chamada “falácia dos custos
-irrecuperáveis” [<a href="#referências">16</a>], a lição metodológica
-permanece: quando prestígio geopolítico e objetivos institucionais
-compõem a função de utilidade, modelos restritos a payoffs puramente
-financeiros falham em antecipar o comportamento dos agentes.</p>
-<p>Outra barreira epistêmica decorre da incerteza genuína no sentido
-proposto por Frank Knight [<a href="#referências">20</a>], irredutível
-ao risco probabilístico quantificável. Na emergência de paradigmas
-tecnológicos disruptivos, os próprios participantes ignoram a topologia
-dos desdobramentos futuros. A introdução da propulsão a jato no
-pós-guerra, o advento dos materiais compósitos avançados ou choques
-energéticos repentinos não alteram meramente as probabilidades sobre
-ramos preexistentes: eles reconfiguram a própria árvore de decisões do
-jogo.</p>
-<p>Essa prudência epistemológica é indispensável. A teoria dos jogos
-esclarece vínculos entre escolhas estratégicas sob interdependência
-mútua, sem esgotar as causas históricas. Ela se mostra fecunda quando
-regras, incentivos e alternativas podem ser estruturados analiticamente.
-Revela-se insuficiente quando empregada para classificar qualquer evento
-histórico sob a chancela genérica de “equilíbrio”. Historiografia
-industrial, cultura de segurança, engenharia de sistemas e regulação
-preservam mecanismos causais próprios que precisam permanecer
-visíveis.</p>
-<h2 id="conclusão">Conclusão</h2>
-<p>A história da aviação ganha outra textura quando cada aeronave é
-vista como resposta a um ambiente estratégico. Patentes alteraram
-incentivos nos primeiros anos. Ameaças militares redefiniram o valor
-relativo de desempenho. Fabricantes de transporte comercial fizeram
-apostas irreversíveis sobre demanda e infraestrutura. Reguladores
-transformaram coordenação em padrões comuns de segurança.</p>
-<p>Nenhum desses processos reduz a aeronave a uma matriz de payoff. As
-forças aerodinâmicas continuam impondo limites que negociação alguma
-remove, e a segurança depende de mecanismos técnicos que precisam ser
-analisados em seu próprio nível. A contribuição da teoria dos jogos
-aparece um passo antes: ela mostra por que certos problemas chegaram à
-mesa do engenheiro, por que algumas alternativas ficaram economicamente
-próximas e outras permaneceram distantes.</p>
-<p>Uma aeronave, nesse sentido, cristaliza duas histórias ao mesmo
-tempo. Uma pertence à física do voo. A outra pertence ao conjunto de
-decisões interdependentes que tornou aquela configuração viável,
-financiável, certificável e operável naquele momento. Entender a máquina
-inteira exige ler as duas.</p>
+<p>Entretanto, as restrições físicas de um projeto não desaparecem por
+conveniência estratégica. O Boeing 737 nasceu em 1967 com trem de pouso
+propositalmente curto para operar em pistas regionais sem escadas
+mecânicas. Para acomodar o motor CFM LEAP-1B de 69 polegadas sob uma asa
+baixa sem sacrificar a distância de segurança em relação ao solo, os
+projetistas precisaram deslocar a nacele para a frente e ligeiramente
+acima do bordo de ataque. Essa alteração de posicionamento gerou uma
+força aerodinâmica ascendente na nacele que induzia momentos de cabrada
+em ângulos de ataque elevados.</p>
+<p>Para cumprir os requisitos de estabilidade estática longitudinal dos
+regulamentos federais de aeronavegabilidade (FAR Part 25) sem alterar o
+certificado de tipo básico da aeronave, a Boeing introduziu o software
+MCAS (<em>Maneuvering Characteristics Augmentation System</em>) [<a
+href="#referências">9</a>]. O desfecho trágico é amplamente conhecido na
+engenharia de sistemas: deficiências de redundância na leitura dos
+sensores de ângulo de ataque, premissas inadequadas sobre a resposta dos
+pilotos e dependência de um canal único de informação culminaram nos
+acidentes dos voos Lion Air 610 e Ethiopian Airlines 302 [<a
+href="#referências">10</a>]. A decisão estratégica de remotorização foi
+perfeitamente coerente sob a ótica do duopólio, mas o atalho de projeto
+impôs um custo humano intolerável e alterou profundamente a reputação
+corporativa da empresa.</p>
+<h2 id="cenários-para-um-novo-entrante-o-desafio-da-comac">Cenários para
+um novo entrante: o desafio da COMAC</h2>
+<p>O duopólio Boeing-Airbus não opera em um ambiente imutável. A teoria
+econômica dos oligopólios, a partir dos modelos clássicos de barreiras à
+entrada de Joe S. Bain [<a href="#referências">13</a>], prevê que lucros
+econômicos consistentes e carteiras de pedidos com prazos de entrega que
+ultrapassam sete anos estimulam a chegada de novos competidores.</p>
+<p>Hoje, essa tentativa é corporificada pela estatal chinesa COMAC com o
+jato comercial C919 [<a href="#referências">12</a>]. A dinâmica da
+entrada de um terceiro agente na categoria de 150 a 190 assentos desafia
+o equilíbrio histórico a partir de três mecanismos essenciais.</p>
+<p>Em primeiro lugar, opera o monopsônio de demanda estatal. A COMAC não
+atua sob restrições imediatas de maximização de lucro trimestral. Sua
+cadência inicial de produção apoia-se em encomendas firmes das
+companhias aéreas estatais chinesas (como China Eastern, Air China e
+China Southern), o que elimina o risco de liquidez que frequentemente
+inviabiliza novos entrantes nos primeiros anos de operação.</p>
+<p>Em segundo lugar, manifesta-se o gargalo do oligopólio de propulsão.
+Embora a fuselagem e as asas do C919 sejam de projeto e manufatura
+chinesa, a aeronave depende de fornecedores ocidentais para componentes
+críticos: os motores são o modelo LEAP-1C da CFM International
+(consórcio entre General Electric e Safran) e os sistemas de controle
+fly-by-wire e aviônica contam com parceiros como Honeywell e Collins
+Aerospace. Em um jogo geopolítico dinâmico, governos ocidentais retêm
+capacidade de influenciar a produção do entrante por meio de restrições
+de licenciamento de exportação de componentes aeronáuticos
+avançados.</p>
+<p>Em terceiro lugar, surge a barreira da certificação recíproca. Para
+disputar rotas internacionais e mercados ocidentais fora do território
+chinês, o C919 requer a homologação da Federal Aviation Administration
+(FAA) e da European Union Aviation Safety Agency (EASA). O custo técnico
+e o rigor documental desse escrutínio compõem uma barreira de entrada
+que os dois grandes fabricantes consolidados aprenderam a navegar ao
+longo de meio século.</p>
+<p>Em resposta ao entrante, o duopólio incumbente recorre a estratégias
+clássicas de precificação limite (<em>limit pricing</em>), ajustando
+descontos comerciais em lotes de aeronaves maduras e expandindo a
+capacidade de entrega para desestimular a migração de frotas globais
+para o novo operador antes que este consolide sua curva de aprendizado
+fabril.</p>
+<h2 id="barganha-de-nash-e-o-colapso-do-a380">Barganha de Nash e o
+colapso do A380</h2>
+<p>Quando as transações de mercado não envolvem milhões de consumidores
+pulverizados, os acordos comerciais assumem o formato de jogos de
+barganha cooperativa. A divisão dos ganhos depende do poder relativo de
+negociação de cada lado e de seu ponto de desacordo, formalizado na
+teoria da barganha de John Nash [<a href="#referências">14</a>] e nos
+modelos dinâmicos de Ariel Rubinstein [<a
+href="#referências">15</a>].</p>
+<p>O ponto de desacordo é determinado pela melhor alternativa a um
+acordo negociado (o chamado BATNA, <em>Best Alternative to a Negotiated
+Agreement</em>). A parte que conta com uma alternativa externa atraente
+adquire poder para extrair a maior parcela do excedente econômico.</p>
+<p>A trajetória do superjumbo Airbus A380 fornece um caso notável de
+vulnerabilidade a um monopsônio parcial na aviação civil. Projetado para
+uma visão de malha aérea baseada em conexões concentradas entre grandes
+aeroportos (<em>hub-and-spoke</em>), o A380 exigia uma taxa de produção
+regular para amortizar seus pesados custos de desenvolvimento e manter
+ativa a linha de montagem em Toulouse.</p>
+<p>Todavia, a preferência das companhias aéreas migrou velozmente para
+voos diretos de longo alcance entre cidades secundárias
+(<em>point-to-point</em>), impulsionada por bimotores eficientes em
+consumo como o Boeing 787 e o Airbus A350. Quase todas as operadoras
+tradicionais limitaram suas frotas a lotes modestos e cessaram novas
+encomendas. Restou à Airbus um único comprador expressivo: a companhia
+aérea Emirates, com base em Dubai, que encomendou 162 unidades,
+absorvendo quase metade de toda a produção histórica do modelo.</p>
+<p>Essa dependência alterou profundamente o equilíbrio de barganha. A
+Airbus não possuía nenhum outro cliente capaz de absorver lotes
+volumosos de quadrimotores, o que tornava seu BATNA próximo de zero: sem
+a Emirates, a cadência fabril era insustentável. Em contrapartida, a
+Emirates possuía excelente alternativa externa, pois podia remanejar sua
+estratégia e encomendar frotas mistas de bimotores modernos como o A350
+e o Boeing 777X.</p>
+<p>Quando a operadora condicionou novas encomendas a uma versão
+remotorizada (o conceito A380neo) e a Airbus concluiu que as despesas
+não recorrentes de engenharia para redesenhar asas e motores jamais se
+pagariam, a mesa de negociação desmoronou. Em fevereiro de 2019, a
+Emirates reduziu sua encomenda final de 162 para 123 jatos, substituindo
+as unidades restantes por encomendas de bimotores menores [<a
+href="#referências">16</a>]. Sem o cliente âncora, a Airbus oficializou
+o cancelamento do programa e encerrou a produção em 2021 [<a
+href="#referências">17</a>]. A excelência aerodinâmica da asa de 80
+metros de envergadura não foi suficiente para compensar o colapso do
+poder de barganha do fabricante diante de um comprador concentrado.</p>
+<h2 id="jogos-de-coordenação-e-pontos-focais-na-segurança-de-voo">Jogos
+de coordenação e pontos focais na segurança de voo</h2>
+<p>Nem todos os cenários estratégicos envolvem rivalidade ou conflito de
+interesses. O cotidiano da aviação civil depende de jogos de coordenação
+pura, em que todos os participantes ganham ao adotar uma convenção
+idêntica, evitando desfechos catastróficos.</p>
+<p>Em jogos com múltiplos equilíbrios de Nash, a solução exige a
+presença de pontos focais, conceito introduzido por Thomas Schelling [<a
+href="#referências">18</a>]. Um exemplo elementar é o tráfego aéreo:
+duas aeronaves que se aproximam de frente em um mesmo nível de voo se
+beneficiam caso ambas façam curva para a direita ou ambas façam curva
+para a esquerda. O único resultado inadmissível é a ação descoordenada,
+onde uma vira para a direita e a outra para a esquerda, mantendo o vetor
+de impacto.</p>
+<p>A Convenção de Chicago de 1944 e a criação da Organização da Aviação
+Civil Internacional (ICAO) tiveram como missão estabelecer esses pontos
+focais em escala global [<a href="#referências">19</a>]. A ICAO
+padronizou a fraseologia de rádio em inglês aeronáutico, as convenções
+altimétricas, a sinalização de pistas e as regras de separação vertical
+reduzida (RVSM), transformando a coordenação internacional em rotina
+segura.</p>
+<p>O exemplo técnico mais sofisticado dessa coordenação descentralizada
+é o TCAS II (<em>Traffic Alert and Collision Avoidance System</em>) [<a
+href="#referências">20</a>]. O sistema opera de forma independente do
+controle de tráfego aéreo de solo, interrogando diretamente os
+transponders em Modo S das aeronaves ao redor. Ao detectar que dois
+aviões estão em rota de colisão iminente, o TCAS emite Avisos de
+Resolução (<em>Resolution Advisories</em>).</p>
+<p>A sincronização entre as duas máquinas precisa ser infalível. O
+computador da primeira aeronave calcula uma manobra vertical de escape,
+instruindo o piloto a subir, enquanto transmite em milissegundos via
+enlace de dados direto para o avião oposto a ordem complementar de
+descida. Caso ambos decidissem subir ou descer por conta própria, o
+risco persistiria. O protocolo atua como um coordenador algorítmico
+distribuído que resolve o jogo de coordenação sem hesitação humana,
+garantindo a seleção coordenada do equilíbrio seguro.</p>
+<h2 id="a-caçada-ao-cervo-e-a-inércia-da-transição-energética">A Caçada
+ao Cervo e a inércia da transição energética</h2>
+<p>O desafio contemporâneo da descarbonização aérea reflete com precisão
+a estrutura matemática da Caçada ao Cervo (<em>Stag Hunt</em>), metáfora
+formulada por Jean-Jacques Rousseau e integrada à teoria dos jogos [<a
+href="#referências">21</a>].</p>
+<p>Nesse cenário, agentes podem cooperar para caçar um cervo, alcançando
+o melhor resultado coletivo possível, mas isso exige esforço conjunto e
+confiança mútua. Se um dos caçadores abandonar o posto para perseguir
+uma lebre solitária, ele garante sua alimentação imediata sem depender
+de ninguém, mas inviabiliza a caçada comum.</p>
+<p>O jogo apresenta dois equilíbrios de Nash puros. O equilíbrio
+superior em eficiência de Pareto consiste na cooperação mútua: a
+transição sistemática para combustíveis sustentáveis de aviação
+(<em>Sustainable Aviation Fuel</em> - SAF) em larga escala ou para
+aeronaves movidas a hidrogênio criogênico. O equilíbrio inferior, mas
+seguro contra riscos imediatos, consiste em continuar operando frotas
+tradicionais abastecidas com querosene fóssil Jet A-1, cujas cadeias de
+distribuição e refino estão amortizadas há quase um século.</p>
+<p>Nenhum fabricante pode investir dezenas de bilhões de dólares em uma
+família comercial a hidrogênio se os aeroportos globais não construírem
+usinas de liquefação, armazenamento criogênico e redes seguras de
+abastecimento em pista. Por sua vez, operadores aeroportuários recusam
+investir em infraestrutura criogênica enquanto não houver centenas de
+jatos comerciais operando regularmente. Da mesma forma, companhias
+aéreas enfrentam custos até três vezes superiores ao utilizar SAF,
+temendo perder competitividade para concorrentes que permaneçam no
+combustível fóssil tradicional.</p>
+<p>Esse impasse ilustra a dependência de trajetória (<em>path
+dependence</em>) e o bloqueio tecnológico (<em>lock-in</em>) estudados
+por Brian Arthur [<a href="#referências">22</a>]. As externalidades de
+rede da infraestrutura de petróleo ancoram o sistema no equilíbrio
+inferior da lebre, demonstrando que apenas instrumentos regulatórios
+obrigatórios e incentivos fiscais articulados conseguem induzir o salto
+coordenado para o equilíbrio sustentável do cervo.</p>
+<h2
+id="assimetria-de-informação-e-a-relação-principal-agente">Assimetria de
+informação e a relação principal-agente</h2>
+<p>O processo de certificação aeronáutica é um dos mais rigorosos da
+indústria global, mas convive com as tensões da teoria da agência e dos
+jogos de sinalização formulados por Michael Spence [<a
+href="#referências">23</a>].</p>
+<p>Na governança de segurança, a autoridade de aviação civil (como FAA,
+EASA ou ANAC) atua como o Principal, cuja função utilidade é resguardar
+a vida dos passageiros e a integridade do espaço aéreo. O fabricante de
+aeronaves atua como o Agente, contratado pela dinâmica do setor para
+projetar e demonstrar a conformidade técnica com milhares de normas de
+segurança [<a href="#referências">24</a>].</p>
+<p>A tensão emerge da disparidade de informação técnica. Uma aeronave
+contemporânea de transporte incorpora milhões de linhas de código de
+aviônica, leis complexas de controle digital fly-by-wire e estruturas
+avançadas em materiais compósitos. Os órgãos reguladores estatais
+enfrentam restrições orçamentárias crônicas e não dispõem de engenheiros
+suficientes para examinar cada detalhe de software ou cada ensaio em
+túnel de vento.</p>
+<p>Essa restrição motivou a criação de sistemas de delegação técnica,
+como o programa norte-americano ODA (<em>Organization Designation
+Authorization</em>), por meio do qual engenheiros e especialistas da
+própria fabricante são investidos de autoridade para atestar
+conformidade em nome do órgão governamental.</p>
+<p>Em momentos de concorrência acirrada de mercado, esse arranjo acentua
+o risco moral (<em>moral hazard</em>). O engenheiro credenciado vivencia
+pressões conflitantes entre a responsabilidade ética de fiscalização
+pública e a exigência corporativa de evitar adiamentos em cronogramas de
+entrega. No caso do 737 MAX, essa assimetria permitiu que modificações
+na autoridade de deflexão do estabilizador horizontal pelo sistema MCAS
+não fossem plenamente compreendidas pela equipe de supervisão
+governamental, deixando lacunas críticas nos manuais operacionais das
+tripulações.</p>
+<h2 id="a-falácia-dos-custos-irrecuperáveis-no-programa-concorde">A
+falácia dos custos irrecuperáveis no programa Concorde</h2>
+<p>A teoria da decisão assume que agentes plenamente racionais
+desconsideram desembolsos passados que não podem ser recuperados
+(<em>sunk costs</em>), pautando suas escolhas estritamente nos retornos
+e despesas marginais futuras. Contudo, quando governos e alianças
+internacionais lideram projetos tecnológicos de grande porte, as funções
+de utilidade passam a incorporar variáveis de prestígio nacional e
+orgulho de Estado, alimentando o fenômeno conhecido como o Efeito
+Concorde [<a href="#referências">25</a>].</p>
+<p>O programa supersônico anglo-francês Concorde foi um marco histórico
+de excelência técnica [<a href="#referências">26</a>]. Seus engenheiros
+superaram desafios aerodinâmicos complexos em regime Mach 2,
+desenvolveram tomadas de ar de geometria variável automatizadas para os
+motores Olympus 593 e controlaram a expansão térmica da estrutura sob
+voo prolongado.</p>
+<p>Apesar dessa proeza de engenharia, a aeronave revelou-se
+comercialmente inviável. O consumo elevado de combustível, a limitação a
+cerca de cem passageiros por voo, o ruído severo do estrondo sônico que
+impedia voos supersônicos sobre terra firme e o choque do petróleo na
+década de 1970 eliminaram as encomendas de operadoras internacionais,
+restringindo as frotas às companhias estatais Air France e British
+Airways.</p>
+<p>A continuidade dos voos por quase três décadas decorreu de uma
+dinâmica similar a um jogo de atrito político internacional (<em>war of
+attrition</em>). O tratado bilateral entre os governos britânico e
+francês continha cláusulas de penalidade rígidas contra a desistência
+unilateral. Além disso, abandonar publicamente o projeto equivaleria a
+conceder a supremacia tecnológica aos Estados Unidos e à União
+Soviética. Ambas as nações mantiveram subsídios contínuos para amortecer
+prejuízos operacionais, justificando desembolsos novos pelo volume
+colossal de capital que já havia sido afundado no projeto. O Concorde
+permaneceu em serviço como um monumento de prestígio, no qual as regras
+de valor político sobrepuseram-se ao cálculo financeiro tradicional.</p>
+<h2 id="onde-a-teoria-estratégica-encontra-a-mecânica-dos-fluidos">Onde
+a teoria estratégica encontra a mecânica dos fluidos</h2>
+<p>Analisar a história da aviação pelas lentes da teoria dos jogos
+dissipa a visão ingênua de que a forma dos aviões reflete somente uma
+evolução física neutra e desinteressada. Cada ângulo de enflechamento de
+asa, cada diâmetro de nacele e cada lógica de sistema de controle
+fly-by-wire traduzem o resultado de incentivos e estratégias de agentes
+interdependentes.</p>
+<p>O pioneirismo de <strong>Santos-Dumont</strong> em 1906 consolidou as
+normas da invenção autônoma sob o crivo da demonstração pública e
+independente. O <strong>Dilema do Prisioneiro</strong> na guerra de
+patentes norte-americana revelou o custo da litigância predatória até
+que a intervenção institucional resgatasse a cooperação. A lógica de
+<strong>soma-zero</strong> na Guerra Fria evidenciou a obsolescência
+tática do bombardeiro supersônico XB-70 diante de mísseis antiaéreos e
+balísticos. O <strong>equilíbrio de remotorização</strong> no duopólio
+Boeing-Airbus, antecipado por modelos analíticos do MIT, esclareceu as
+forças que direcionaram as escolhas de projeto do 737 MAX. A emergência
+da <strong>COMAC</strong> ilustra o embate contemporâneo entre o poder
+de compra de economias emergentes e o oligopólio ocidental de turbinas
+aeronáuticas. A dinâmica de <strong>barganha</strong> explicou o
+cancelamento precoce do gigante A380 diante da concentração de poder em
+um comprador âncora. As normas da <strong>ICAO</strong> e os comandos
+autônomos do <strong>TCAS II</strong> demonstraram a eficiência dos
+jogos de coordenação pura na preservação da vida humana. E o
+<strong>Efeito Concorde</strong> registrou os limites da racionalidade
+econômica quando o prestígio geopolítico domina as decisões de
+investimento.</p>
+<p>A teoria dos jogos não substitui, todavia, as leis universais da
+física. Ela opera no estágio inicial: elucida por que determinados
+conceitos de engenharia conquistaram recursos para sair da prancheta e
+ganhar forma física. Assim que uma aeronave alinha na pista e acelera
+para a decolagem, as discussões estratégicas silenciam e as equações da
+aerodinâmica assumem a autoridade definitiva. É na confluência
+equilibrada entre a inteligência estratégica dos homens e o respeito
+intransigente às forças da natureza que a aviação constrói sua
+trajetória pelos céus.</p>
 <h2 id="referências">Referências</h2>
 <p>[1] von Neumann, J., e Morgenstern, O., <em>Theory of Games and
 Economic Behavior</em>, Princeton University Press, Princeton, NJ, 1944.
@@ -2251,69 +2309,86 @@ Economic Behavior</em>, Princeton University Press, Princeton, NJ, 1944.
 <p>[2] Nash, J. F., <em>Equilibrium Points in N-Person Games</em>,
 Proceedings of the National Academy of Sciences, Vol. 36, No. 1, 1950,
 pp. 48–49. <a href="https://doi.org/10.1073/pnas.36.1.48">Link</a></p>
-<p>[3] Bilstein, R. E., <em>Flight in America: From the Wrights to the
+<p>[3] Barros, H. L., <em>Santos Dumont e a Invenção do Voo</em>, Jorge
+Zahar Editor, Rio de Janeiro, 2003. <a
+href="https://www.zahar.com.br">Link</a></p>
+<p>[4] Fédération Aéronautique Internationale, <em>FAI News</em>, 15
+nov. 2006 (centenário do voo de 12 de novembro de 1906). <a
+href="https://old.fai.org/news/31942-FAI-News-17-06">Link</a></p>
+<p>[5] Bilstein, R. E., <em>Flight in America: From the Wrights to the
 Astronauts</em>, Johns Hopkins University Press, Baltimore, 2001. <a
 href="https://jhupbooks.press.jhu.edu/title/flight-america">Link</a></p>
-<p>[4] Rich, B. R., e Janos, L., <em>Skunk Works: A Personal Memoir of
+<p>[6] Rich, B. R., e Janos, L., <em>Skunk Works: A Personal Memoir of
 My Years of Lockheed</em>, Little, Brown and Company, Boston, 1994. <a
 href="https://www.hachettebookgroup.com/titles/ben-r-rich/skunk-works/9780316743006/">Link</a></p>
-<p>[5] Wells, A. T., e Rodrigues, C. C., <em>Commercial Aviation
-Safety</em>, McGraw-Hill, New York, 2004. <a
-href="https://www.accessengineeringlibrary.com/content/book/9781259837067">Link</a></p>
-<p>[6] Langewiesche, W., <em>What Really Brought Down the Boeing 737
-Max?</em>, The New York Times Magazine, 2019. <a
-href="https://www.nytimes.com/2019/09/18/magazine/boeing-737-max-crashes.html">Link</a></p>
-<p>[7] Hayward, K., <em>Government and British Civil Aerospace: A Case
-Study in Post-War Technology Policy</em>, Manchester University Press,
-Manchester, 1983. <a
-href="https://manchesteruniversitypress.co.uk">Link</a></p>
-<p>[8] Joint Authorities Technical Review, <em>Boeing 737 MAX Flight
+<p>[7] National Museum of the U.S. Air Force, <em>North American XB-70
+Valkyrie</em> (fact sheet). <a
+href="https://www.nationalmuseum.af.mil/Visit/Museum-Exhibits/Fact-Sheets/Display/Article/195767/">Link</a></p>
+<p>[8] Sterman, J., e Quinn, J., <em>Boeing’s 737 MAX 8 Disasters:
+Management, Culture, and Engineering</em>, MIT Sloan School of
+Management, Cambridge, MA, 2020. <a
+href="https://mitsloan.mit.edu">Link</a></p>
+<p>[9] Congressional Research Service, <em>The Boeing 737 MAX: Overview
+and Issues for Congress</em>, R45794, 2019. <a
+href="https://crsreports.congress.gov/product/pdf/R/R45794">Link</a></p>
+<p>[10] Joint Authorities Technical Review, <em>Boeing 737 MAX Flight
 Control System: Observations, Findings, and Recommendations</em>,
 Federal Aviation Administration, 2019. <a
 href="https://www.faa.gov/sites/faa.gov/files/2021-08/Final_JATR_Submittal_to_FAA_Oct_2019.pdf">Link</a></p>
-<p>[9] International Civil Aviation Organization, <em>The History of
-ICAO and the Chicago Convention</em>, ICAO, acesso em 23 set. 2026. <a
-href="https://www.icao.int/history-icao-and-chicago-convention">Link</a></p>
-<p>[10] Federal Aviation Administration, <em>Airworthiness Approval of
-Traffic Alert and Collision Avoidance Systems (TCAS II), Versions 7.0
-&amp; 7.1 and Associated Mode S Transponders</em>, AC 20-151C, 2017. <a
-href="https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentid/1031826">Link</a></p>
-<p>[11] Universidade de São Paulo, Laboratório de Design e Simulação de
-Voo (LDSV), <em>Santos Dumont: O Pai da Aviação</em>. <a
-href="https://sites.usp.br/ldsv/?p=285">Link</a></p>
-<p>[12] Federal Aviation Administration, <em>De Havilland DH-106 Comet
-1</em>, Transport Airplane Lessons Learned Library. <a
-href="https://www.faa.gov/lessons_learned/transport_airplane/accidents/G-ALYV">Link</a></p>
-<p>[13] National Museum of the U.S. Air Force, <em>North American XB-70
-Valkyrie</em> (fact sheet). <a
-href="https://www.nationalmuseum.af.mil/Visit/Museum-Exhibits/Fact-Sheets/Display/Article/195767/">Link</a></p>
-<p>[14] Airbus, <em>Airbus Decides to Cease A380 Deliveries in
-2021</em>, comunicado reproduzido por ADS Group, 14 fev. 2019. <a
+<p>[11] Milborrow, D., e Belobaba, P., <em>Analysis of Commercial
+Aircraft Fleet Development Strategies: Clean-Sheet vs. Re-Engining</em>,
+International Center for Air Transportation (ICAT), MIT, Cambridge, MA,
+2012. <a href="http://hdl.handle.net/1721.1/78546">Link</a></p>
+<p>[12] Perrett, B., <em>COMAC C919: Strategic Implications for the
+Global Civil Aerospace Duopoly</em>, Aviation Week &amp; Space
+Technology, 2022. <a href="https://aviationweek.com">Link</a></p>
+<p>[13] Bain, J. S., <em>Barriers to New Competition</em>, Harvard
+University Press, Cambridge, MA, 1956. <a
+href="https://doi.org/10.4159/harvard.9780674188037">Link</a></p>
+<p>[14] Nash, J. F., <em>The Bargaining Problem</em>, Econometrica, Vol.
+18, No. 2, 1950, pp. 155–162. <a
+href="https://doi.org/10.2307/1907266">Link</a></p>
+<p>[15] Rubinstein, A., <em>Perfect Equilibrium in a Bargaining
+Model</em>, Econometrica, Vol. 50, No. 1, 1982, pp. 97–109. <a
+href="https://doi.org/10.2307/1912531">Link</a></p>
+<p>[16] Airbus, <em>Airbus Decides to Cease A380 Deliveries in
+2021</em>, ADS Group, 14 fev. 2019. <a
 href="https://www.adsgroup.org.uk/knowledge/industry-member-news/airbus-decides-it-will-end-a380-production/">Link</a></p>
-<p>[15] Leeham News, <em>Airbus ends the A380 program</em>, 13 fev.
+<p>[17] Leeham News, <em>Airbus ends the A380 program</em>, 13 fev.
 2019. <a
 href="https://leehamnews.com/2019/02/13/airbus-ends-the-a380-program/">Link</a></p>
-<p>[16] Arkes, H. R., e Ayton, P., <em>The Sunk Cost and Concorde
-Effects: Are Humans Less Rational Than Lower Animals?</em>,
-Psychological Bulletin, Vol. 125, No. 5, 1999, pp. 591–600. <a
-href="https://doi.org/10.1037/0033-2909.125.5.591">Link</a></p>
-<p>[17] David, P. A., <em>Clio and the Economics of QWERTY</em>,
-American Economic Review, Vol. 75, No. 3, 1985, pp. 332–337. <a
-href="https://www.jstor.org/stable/1805621">Link</a></p>
-<p>[18] Arthur, W. B., <em>Competing Technologies, Increasing Returns,
+<p>[18] Schelling, T. C., <em>The Strategy of Conflict</em>, Harvard
+University Press, Cambridge, MA, 1960. <a
+href="https://www.hup.harvard.edu/books/9780674840317">Link</a></p>
+<p>[19] International Civil Aviation Organization, <em>The History of
+ICAO and the Chicago Convention</em>, ICAO, acesso em 23 set. 2026. <a
+href="https://www.icao.int/history-icao-and-chicago-convention">Link</a></p>
+<p>[20] Federal Aviation Administration, <em>Airworthiness Approval of
+Traffic Alert and Collision Avoidance Systems (TCAS II)</em>, AC
+20-151C, 2017. <a
+href="https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentid/1031826">Link</a></p>
+<p>[21] Skyrme, R., <em>Coordination and the Stag Hunt in Technological
+Transition</em>, Journal of Evolutionary Economics, Vol. 28, 2018,
+pp. 411–435. <a
+href="https://doi.org/10.1007/s00191-017-0545-2">Link</a></p>
+<p>[22] Arthur, W. B., <em>Competing Technologies, Increasing Returns,
 and Lock-In by Historical Events</em>, The Economic Journal, Vol. 99,
 No. 394, 1989, pp. 116–131. <a
 href="https://doi.org/10.2307/2234208">Link</a></p>
-<p>[19] Katz, M. L., e Shapiro, C., <em>Network Externalities,
-Competition, and Compatibility</em>, American Economic Review, Vol. 75,
-No. 3, 1985, pp. 424–440. <a
-href="https://www.jstor.org/stable/1814809">Link</a></p>
-<p>[20] Knight, F. H., <em>Risk, Uncertainty and Profit</em>, Houghton
-Mifflin, Boston, 1921. <a
-href="https://www.econlib.org/library/Knight/knRUP.html">Link</a></p>
-<p>[21] Fédération Aéronautique Internationale, <em>FAI News</em>, 15
-nov. 2006 (centenário do voo de 12 de novembro de 1906). <a
-href="https://old.fai.org/news/31942-FAI-News-17-06">Link</a></p>
+<p>[23] Spence, M., <em>Job Market Signaling</em>, Quarterly Journal of
+Economics, Vol. 87, No. 3, 1973, pp. 355–374. <a
+href="https://doi.org/10.2307/1882010">Link</a></p>
+<p>[24] Wells, A. T., e Rodrigues, C. C., <em>Commercial Aviation
+Safety</em>, McGraw-Hill, New York, 2004. <a
+href="https://www.accessengineeringlibrary.com/content/book/9781259837067">Link</a></p>
+<p>[25] Arkes, H. R., e Ayton, P., <em>The Sunk Cost and Concorde
+Effects: Are Humans Less Rational Than Lower Animals?</em>,
+Psychological Bulletin, Vol. 125, No. 5, 1999, pp. 591–600. <a
+href="https://doi.org/10.1037/0033-2909.125.5.591">Link</a></p>
+<p>[26] Hayward, K., <em>Government and British Civil Aerospace: A Case
+Study in Post-War Technology Policy</em>, Manchester University Press,
+Manchester, 1983. <a
+href="https://manchesteruniversitypress.co.uk">Link</a></p>
 </main>
 
 <footer style="text-align:center;padding:0 1rem 4rem;">
