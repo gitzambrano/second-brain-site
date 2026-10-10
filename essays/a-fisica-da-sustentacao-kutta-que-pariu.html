@@ -1,0 +1,3026 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-status="finalizado" data-minutes="14">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Física da Sustentação – Kutta que pariu?</title>
+<meta property="og:title" content="A Física da Sustentação – Kutta que pariu?">
+<meta property="og:description" content="Uma explicação fisicamente intuitiva da sustentação, construída com a analogia de uma multidão em uma sala atravessada por um carro. O ensaio critica explicações causais incompletas baseadas em Bernoulli, momentum ou circulação e mostra como pressão e velocidade se estabelecem reciprocamente ao redor do perfil.">
+<meta property="og:type" content="article">
+<script defer="" src="../assets/mathjax/tex-svg.js"
+type="text/javascript"></script>
+<style>
+/* ------------------------------------------------------------------ */
+/* Tokens: mobile = escuro editorial (padrao)                          */
+/*         desktop = claro/branco (menos rebuscado), toggle sobrepoe   */
+/* ------------------------------------------------------------------ */
+:root{
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --bg:#0A0A0A;
+  --surface:#15181C;
+  --surface2:#20252B;
+  --border:#31383F;
+  --text:#D4CFC8;
+  --text-dim:#8A857E;
+  --text-bright:#EDE8DF;
+  --gold:#B08B4F;
+  --gold-dim:#7A6135;
+  --rust:#8E4636;
+  --rust-bright:#A84F3C;
+  --accent:#4A8FA8;
+  --amber:#967030;
+  /* Native Obsidian callout palette — dark theme. Each semantic type owns
+     an explicit accent instead of borrowing a generic global color. */
+  --callout-note:#A2988A;
+  --note-bg:color-mix(in srgb,var(--callout-note) 7%,var(--surface2));
+  --callout-abstract:#B08B4F;
+  --callout-info:#98938A;
+  --callout-todo:#B18A4A;
+  --callout-success:#63A37B;
+  --callout-question:#B08B4F;
+  --callout-warning:#B08B4F;
+  --callout-failure:#A95C4C;
+  --callout-danger:#D06A58;
+  --callout-bug:#C65F52;
+  --callout-example:#B08B4F;
+  --callout-quote:#85878C;
+  --quote-bg:#1B1C1F;
+  /* No escuro a caixa de destaque deixa de ser cinza neutro e ganha um ouro
+     de baixíssima opacidade: separa a caixa da prosa sem virar bloco colorido.
+     No claro os dois tokens voltam a ser as superfícies neutras de sempre. */
+  --box-bg:rgba(176,139,79,.055);
+  /* No claro o acento e escuro sobre papel branco e 2,5% ja marcam.
+     No escuro o acento e mais claro que o fundo e a mesma proporcao
+     some: a mistura sobe ate dar o mesmo degrau de contraste. */
+  --tab-mix:9%;
+  --verdict-mix:10%;
+  --box-verdict-bg:rgba(176,139,79,.10);
+  /* Cabecalho de tabela: no escuro o cinza de superficie quase some
+     contra o corpo. Um tint de rust separa a primeira linha sem
+     precisar de regra mais pesada. No claro ele nao e necessario. */
+  --th-bg:color-mix(in srgb,var(--rust) 16%,var(--surface2));
+  --max-width:700px;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:#F7F9FC;
+  --surface2:#EDF2F8;
+  --border:#D6DEE9;
+  --text:#2B3645;
+  --text-dim:#66758A;
+  --text-bright:#0E1928;
+  --gold:#2F5FB0;
+  --gold-dim:#234A86;
+  --rust:#8E4636;
+  --rust-bright:#A04030;
+  --accent:#35708A;
+  --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --note-bg:var(--surface2);
+  --callout-abstract:#2F5FB0;
+  --callout-info:#6E7684;
+  --callout-todo:#7B5C22;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#6E7684;
+  --quote-bg:#F1F3F7;
+  --box-bg:var(--surface);
+  --tab-mix:3%;
+  --verdict-mix:4%;
+  --box-verdict-bg:var(--surface2);
+  --th-bg:var(--surface2);
+}
+[data-theme="sepia"]{
+  --bg:#FBF8F1;
+  --surface:#FFFAF3;
+  --surface2:#F3EDE3;
+  --border:#DED5C8;
+  --text:#39342F;
+  --text-dim:#746B62;
+  --text-bright:#26211C;
+  --gold:#785B38;
+  --gold-dim:#604626;
+  --rust:#8E4636;
+  --rust-bright:#9C4838;
+  --accent:#596B78;
+  --amber:#865A27;
+  --callout-note:#746B62;
+  --note-bg:#F3EDE3;
+  --callout-abstract:#77572F;
+  --callout-info:#596B78;
+  --callout-todo:#865A27;
+  --callout-success:#486F50;
+  --callout-question:#77572F;
+  --callout-warning:#8C5F2A;
+  --callout-failure:#8E4636;
+  --callout-danger:#98493E;
+  --callout-bug:#8F4337;
+  --callout-example:#6E536F;
+  --callout-quote:#746B62;
+  --quote-bg:#F3EDE3;
+  --box-bg:#FFFAF3;
+  --tab-mix:4%;
+  --verdict-mix:6%;
+  --box-verdict-bg:#F3EDE3;
+  --th-bg:#EEE5D8;
+}
+@media (min-width:901px){
+  /* Desktop: coluna de leitura ampla com teto para monitores ultrawide. */
+  :root{
+    --wide-width:74vw;
+    --max-width:min(74vw,1185px);
+  }
+  /* Claro por padrão no desktop; data-theme="dark" devolve o editorial
+     escuro para quem preferir. Playfair permanece em todos os temas */
+  :root:not([data-theme="dark"]):not([data-theme="sepia"]){
+    --bg:#FFFFFF;
+    --surface:#F7F9FC;
+    --surface2:#EDF2F8;
+    --border:#D6DEE9;
+    --text:#2B3645;
+    --text-dim:#66758A;
+    --text-bright:#0E1928;
+    --gold:#2F5FB0;
+    --gold-dim:#234A86;
+    --rust:#8E4636;
+    --rust-bright:#A04030;
+    --accent:#35708A;
+    --amber:#7A5A18;
+  /* Native Obsidian callout palette — light theme. Hues keep the same
+     semantic identity, but luminance/saturation are tuned independently. */
+  --callout-note:#4A5C77;
+  --note-bg:var(--surface2);
+  --callout-abstract:#2F5FB0;
+  --callout-info:#6E7684;
+  --callout-todo:#7B5C22;
+  --callout-success:#2F7951;
+  --callout-question:#2F5FB0;
+  --callout-warning:#2F5FB0;
+  --callout-failure:#874238;
+  --callout-danger:#A13F34;
+  --callout-bug:#963A32;
+  --callout-example:#2F5FB0;
+  --callout-quote:#6E7684;
+  --quote-bg:#F1F3F7;
+    --box-bg:var(--surface);
+  --tab-mix:3%;
+  --verdict-mix:4%;
+    --box-verdict-bg:var(--surface2);
+    --th-bg:var(--surface2);
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:17.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome fixo: progresso / tema / topo                                */
+/* ------------------------------------------------------------------ */
+.sb-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent;}
+.sb-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));}
+#sbThemeToggle{
+  position:fixed;top:14px;right:14px;z-index:61;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--gold);font-size:1rem;cursor:pointer;transition:border-color .15s,color .15s;
+}
+#sbThemeToggle:hover{border-color:var(--gold);}
+#sbThemeToggle .theme-disc{
+  width:16px;height:16px;display:block;position:relative;box-sizing:border-box;overflow:hidden;
+  margin:auto;border:2px solid #111;border-radius:50%;
+  background:conic-gradient(from -90deg,#fff 0 33.333%,#d6bc8b 33.333% 66.666%,#111 66.666% 100%);
+}
+#sbThemeToggle .theme-disc::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  background:repeating-conic-gradient(from -90deg,#111 0 7deg,transparent 7deg 120deg);
+  pointer-events:none;
+}
+#sbToTop{
+  position:fixed;bottom:22px;right:18px;z-index:61;width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-dim);font-size:1rem;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .25s,border-color .15s;
+}
+#sbToTop.visible{opacity:1;pointer-events:auto;}
+#sbToTop:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ------------------------------------------------------------------ */
+/* Masthead = capa de livro (sempre escura, qualquer tema da pagina)   */
+/* ------------------------------------------------------------------ */
+.masthead{
+  position:relative;
+  min-height:88svh;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  padding:calc(2.5rem + env(safe-area-inset-top)) 1.2rem calc(2rem + env(safe-area-inset-bottom));
+  transition:background .25s ease,color .25s ease;
+}
+/* Tema claro: capa branca nobre com brilho suave dourado */
+[data-theme="light"] .masthead,
+:root:not([data-theme="dark"]):not([data-theme="sepia"]) .masthead{
+  background:#F3F5F7;
+  color:#171310;
+}
+[data-theme="light"] .masthead .hero-title,
+:root:not([data-theme="dark"]):not([data-theme="sepia"]) .masthead .hero-title{
+  color:#15120E;
+}
+/* Tema escuro: capa preta editorial */
+[data-theme="dark"] .masthead,
+:root[data-theme="sepia"] .masthead{
+  background:#FBF8F1;
+  color:#39342F;
+}
+[data-theme="sepia"] .masthead .hero-title{
+  color:#26211C;
+}
+[data-theme="dark"] .masthead{
+  background:#0A0A0A;
+  color:#EDE8DF;
+}
+[data-theme="dark"] .masthead .hero-title,
+:root[data-theme="dark"] .masthead .hero-title{
+  color:#EDE8DF;
+}
+@media (max-width:900px){
+  .masthead{min-height:92svh;}
+}
+/* O filete é a borda superior da capa, não um ornamento do título. Como a
+   capa centraliza os filhos verticalmente, deixá-lo no fluxo o empurrava para
+   encostar no título; ancorado no topo ele volta a ser moldura. */
+.stripe{
+  position:absolute;top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold-dim) 0%,var(--gold) 50%,var(--gold-dim) 100%);
+}
+.masthead-inner{max-width:var(--max-width);margin:0 auto;padding:0 1.2rem;width:100%;}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,9vw,4.6rem);
+  font-weight:900;line-height:1.08;color:var(--text-bright);
+  letter-spacing:-.02em;text-wrap:balance;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+@media (min-width:901px){
+  .hero-title{font-size:clamp(2.2rem,4.8vw,3.6rem);}
+}
+.masthead-rule{border:none;border-top:1px solid var(--gold-dim);width:90px;margin:1.7rem auto 1.3rem;}
+.byline{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);
+}
+.cover-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.85;margin-top:.95rem;
+}
+/* Rascunho ocupa o LUGAR do tempo de leitura (ver o JS no fim do arquivo):
+   num draft a duração ainda não significa nada, e o estado significa. Fica
+   no mesmo versalete, só com um filete ao redor para não passar batido. */
+.cover-meta.cover-draft{
+  color:var(--gold);opacity:1;
+  border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:2px;padding:.3rem .7rem;
+  display:inline-block;
+}
+
+.cover-summary{
+  max-width:min(760px,92%);
+  margin:1.45rem auto 0;
+  color:color-mix(in srgb,var(--text) 88%,var(--text-dim));
+  font-size:clamp(.96rem,2vw,1.08rem);
+  line-height:1.58;
+  text-wrap:balance;
+}
+[data-theme="light"] .cover-summary,
+:root:not([data-theme="dark"]) .cover-summary{color:#435166;}
+[data-theme="dark"] .cover-summary,
+:root[data-theme="dark"] .cover-summary{color:#C8C2B8;}
+
+/* ------------------------------------------------------------------ */
+/* Conteudo                                                            */
+/* ------------------------------------------------------------------ */
+.content{max-width:var(--max-width);margin:0 auto;padding:2.8rem 1.2rem 5rem;}
+
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-bright);line-height:1.25;text-wrap:balance;}
+.content h1{display:none;} /* titulo vive no masthead */
+
+.content h2{
+  font-size:clamp(1.45rem,4.6vw,2rem);font-weight:700;
+  margin:2.4rem 0 1.4rem;letter-spacing:-.01em;text-wrap:balance;
+}
+/* Kicker dourado com régua elástica — inserido por JS como primeiro filho
+   do h2 (.sb-kicker). Sem ele o h2 fica sem rótulo, e está tudo bem. */
+.sb-kicker{
+  display:flex;align-items:center;gap:.85rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;font-weight:400;letter-spacing:.14em;
+  color:var(--gold);margin-bottom:.6rem;text-transform:uppercase;
+}
+.sb-kicker::after{
+  content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--border) 82%,transparent);
+}
+:root[data-theme="dark"] .sb-kicker::after{
+  background:color-mix(in srgb,var(--gold) 34%,var(--border));
+}
+.content h2#sumário{display:none;}
+/* h3: distingue-se de h2 por PESO, CORPO e cor — não por família.
+   O monoespaçado que estava aqui punha um subtítulo com cara de rótulo de
+   código no meio de prosa serifada; num ensaio, `### Como mede` lia como
+   comentário de programa. A serifa de display em corpo menor e cor mais
+   fraca separa o nível sem trocar de universo tipográfico. O mono continua
+   sendo a voz dos rótulos (.sb-kicker, .box-badge, .label-solo, th), que é
+   justamente o que h3 NÃO é. */
+h3{
+  font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:-.005em;
+  line-height:1.3;
+  margin:2.3rem 0 .7rem;
+  color:color-mix(in srgb,var(--text-bright) 72%,var(--text-dim));
+}
+h4{
+  font-family:var(--font-display);
+  font-size:1.05rem;font-weight:700;
+  margin:1.8rem 0 .55rem;
+  color:color-mix(in srgb,var(--text-bright) 62%,var(--text-dim));
+}
+:root[data-theme="dark"] h3{
+  font-size:1.3rem;
+  color:color-mix(in srgb,var(--text-bright) 82%,var(--text-dim));
+  border-bottom:1px solid color-mix(in srgb,var(--gold) 24%,transparent);
+  padding-bottom:.38rem;
+}
+h5{
+  font-family:var(--font-display);
+  font-size:1rem;font-weight:700;
+  margin:1.55rem 0 .5rem;
+  color:color-mix(in srgb,var(--text-bright) 58%,var(--text-dim));
+}
+
+p{
+  margin:0 0 1.25rem;word-break:break-word;
+}
+@media (min-width:901px){
+  .content > p{
+    text-align:justify;
+    hyphens:none;
+    -webkit-hyphens:none;
+  }
+}
+/* Links: fonte na cor ouro (destaque suave e elegante), com sublinhado sutil
+   e transição para tom ferrugem no hover */
+a{
+  color:var(--gold);border-bottom:none;
+  text-decoration:underline;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);
+  text-underline-offset:3px;
+  transition:text-decoration-color .15s,color .15s;
+}
+a:hover{color:var(--rust-bright);text-decoration-color:var(--rust-bright);}
+strong{color:var(--text-bright);font-weight:600;}
+
+/* Ensaios com capitulos auto-numerados no proprio titulo ("## I. ..." /
+   "## 3. ...", com ou sem rotulo "Secao/Capitulo/Parte" na frente): o JS
+   esconde o prefixo de numeracao (span.sb-selfnum) e mostra o kicker
+   dourado no lugar — CAPITULO N ou a palavra semantica; a numeracao nao
+   aparece duas vezes. h2 sem numero e sem palavra semantica fica sem
+   kicker. */
+.content.self-numbered h2:not([data-label])::before{content:none;}
+.content .sb-selfnum{display:none;}
+
+/* Listas: o reset global zera o padding da UA — sem isto, os marcadores
+   (position:outside) penduram alem da borda e saem da tela no mobile. */
+ul,ol{margin:0 0 1.05em;padding-left:1.7em;}
+li{margin-bottom:.35em;}
+/* Marcador: fio de dourado, não gradiente ferrugem→dourado a 100% */
+li::marker{color:color-mix(in srgb,var(--gold-dim) 70%,var(--text-dim));}
+/* Listas dentro de componentes: alinhadas com o recuo do texto */
+.box :is(ul,ol),.card :is(ul,ol),.quote :is(ul,ol){
+  margin:.4rem 1.3rem 1rem;padding-left:1.5em;
+}
+/* Headings dentro de caixas: mesmo recuo dos paragrafos (sem isso ficam
+   colados na borda enquanto o texto tem 1.3rem — recuo esquisito) */
+.box > :is(h3,h4,h5){margin:1.1rem 1.3rem .45rem;}
+.card > :is(h3,h4,h5){margin:.6rem 0 .45rem;}
+/* Bloco de codigo dentro de caixa: mesmo recuo dos paragrafos e respiro em
+   cima e embaixo. Sem isto o <pre> ia de borda a borda da caixa e encostava
+   nos paragrafos vizinhos — a regra de recuo existia para heading e lista,
+   nunca para codigo. */
+.box > pre,.card > pre,.quote > pre{margin:1.1rem 1.3rem;}
+
+/* Ancora discreta nos titulos */
+.hlink{border-bottom:none;margin-left:.45rem;font-size:.6em;vertical-align:.35em;color:var(--border);transition:color .15s;}
+.hlink:hover{color:var(--gold);}
+
+.content hr{
+  border:none;border-top:1px solid var(--border);
+  text-align:center;margin:2.8rem auto;line-height:1;opacity:0.35;
+}
+/* Losango (✦) apenas estritamente entre capitulos (## que nao seja sumario nem referencias) */
+.content hr.sb-hr-chapter,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias)){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-chapter::before,
+.content hr:has(+ h2:not(#sumário):not(#sumario):not(#referências):not(#referencias))::before{
+  content:"\2726";color:var(--gold);font-size:1.1rem;
+  letter-spacing:.4em;padding-left:.4rem;opacity:.9;
+}
+/* Fecho: o divisor imediatamente antes de Referencias usa infinito */
+.content hr.sb-hr-references,
+.content hr:has(+ h2#referências),
+.content hr:has(+ h2#referencias){
+  border-top:none;opacity:1;
+}
+.content hr.sb-hr-references::before,
+.content hr:has(+ h2#referências)::before,
+.content hr:has(+ h2#referencias)::before{
+  content:"\221E";
+  font-size:1.25rem;
+  color:var(--gold);
+}
+/* Oculta divisores adjacentes ao sumario (o sumario ja possui bordas proprias) */
+.content hr:has(+ h2#sumário),
+.content hr:has(+ h2#sumario),
+.content #sumário + ul + hr,
+.content #sumário + ol + hr,
+.content #sumario + ul + hr,
+.content #sumario + ol + hr{
+  display:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sumario                                                             */
+/* ------------------------------------------------------------------ */
+/* Sumário sem caixa preenchida: apenas filetes hairline em cima e embaixo.
+   Rótulo ÍNDICE alinhado à esquerda em versalete (solução editorial). */
+#sumário + ul,#sumário + ol{
+  list-style:none;counter-reset:sb-toc;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.1rem 0;margin:2.2rem 0;
+}
+#sumário + ul::before,#sumário + ol::before{
+  content:"ÍNDICE";display:block;text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.85rem;
+}
+#sumário + ul li,#sumário + ol li{
+  counter-increment:sb-toc;display:flex;gap:.7rem;align-items:baseline;
+  font-size:.95rem;line-height:1.55;margin-bottom:.55rem;
+}
+#sumário + ul li::before,#sumário + ol li::before{
+  content:counter(sb-toc,upper-roman);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.56rem;color:var(--gold);min-width:1.7rem;flex-shrink:0;
+}
+/* Titulos ja numerados no proprio texto ("## I. ..."): o contador do
+   indice duplicaria/mascalaria a numeracao — some. */
+#sumário + ul.sb-toc-plain li,#sumário + ol.sb-toc-plain li{gap:0;}
+#sumário + ul.sb-toc-plain li::before,#sumário + ol.sb-toc-plain li::before{content:none;}
+#sumário + ul a,#sumário + ol a{
+  text-decoration-color:color-mix(in srgb,var(--gold) 34%,transparent);
+  color:var(--text);
+}
+#sumário + ul a:hover,#sumário + ol a:hover{
+  color:var(--gold);text-decoration-color:var(--gold);
+}
+
+/* ------------------------------------------------------------------ */
+/* Citacoes                                                            */
+/* ------------------------------------------------------------------ */
+.quote{
+  margin:2rem 0;padding:1.05rem 1.3rem;
+  background:var(--quote-bg);border-left:2px solid var(--callout-quote);
+}
+.quote p{font-size:1rem;color:var(--text);margin-bottom:1rem;}
+.quote p:last-child{margin-bottom:0;}
+
+.pull-quote{
+  position:relative;
+  margin:2.8rem 0 2.4rem;padding:1.55rem 1.4rem 1.2rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+/* As aspas gigantes (::before com " a 5rem) foram removidas:
+   a pull-quote já se distingue por itálico, filete lateral e respiro. */
+/* Epígrafes: pull-quotes de abertura (antes do 1º capítulo) viram
+   citação de livro — centrada, estreita, atribuição em mono. */
+.pull-quote.epigraph{
+  max-width:40ch;margin-left:auto;margin-right:auto;
+  border-left:none;background:transparent;padding:0 0 .4rem;
+}
+.pull-quote.epigraph::before{display:none;}
+.pull-quote.epigraph p{font-style:italic;color:var(--text-dim);}
+/* A epigrafe usa a MESMA atribuicao das demais citacoes: fonte propria por
+   posicao fazia o mesmo componente parecer dois componentes diferentes. */
+/* Mesma fonte e corpo da .quote — a distincao fica na borda e no fundo,
+   nao no tamanho (citacoes do mesmo essay nao podem parecer componentes
+   diferentes). */
+.pull-quote p{
+  font-style:italic;
+  font-size:.97rem;line-height:1.72;color:var(--text);
+  margin-bottom:.35rem;
+}
+.pq-cite{
+  font-size:.85rem;color:var(--text-dim);font-style:normal;
+  margin-top:.3rem;
+}
+.pq-cite p{margin:0;}
+
+/* Premium quote contract: the source quotation marks delimit content;
+   the renderer supplies oversized typographic marks. Attribution is separate. */
+.quote,.pull-quote{
+  position:relative;
+  overflow:hidden;
+}
+.quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.pull-quote{
+  margin:2.8rem 0 2.4rem;padding:1.4rem 1.5rem 1.25rem;
+  background:var(--quote-bg);border-left:3px solid var(--callout-quote);
+}
+.quote-text{
+  position:relative;
+  padding:.2rem 1.45rem .1rem 1.5rem;
+}
+.quote-text::before,.quote-text::after{
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:2.35rem;line-height:.85;
+  color:color-mix(in srgb,var(--gold) 78%,transparent);
+  pointer-events:none;
+}
+.quote-text::before{content:"“";left:.02rem;top:.08rem;}
+.quote-text::after{content:"”";right:.05rem;bottom:-.08rem;}
+.quote-text p{
+  margin:0 0 .85rem;
+  font-style:italic;font-size:1.01rem;line-height:1.76;color:var(--text);
+}
+.quote-text p:last-child{margin-bottom:0;}
+@media (min-width:901px){
+  .quote-text p{text-align:justify;hyphens:none;-webkit-hyphens:none;}
+}
+.quote-attribution{
+  margin:.8rem 1.45rem 0 1.5rem;
+  padding-top:.65rem;
+  border-top:1px solid color-mix(in srgb,var(--border) 82%,transparent);
+  font-family:'Source Serif 4',Georgia,'Times New Roman',serif;
+  font-size:.96rem;line-height:1.5;letter-spacing:.005em;
+  color:var(--text-dim);font-style:normal;
+}
+.quote-attribution p,.pull-quote .quote-attribution p{margin:0;font:inherit;color:inherit;}
+.quote-label{
+  width:fit-content;margin:0 1.45rem .45rem 1.5rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.76rem;line-height:1.35;letter-spacing:.06em;
+  color:var(--callout-quote);font-weight:600;
+}
+.quote-label p{margin:0;}
+.pull-quote.epigraph .quote-text p{color:var(--text-dim);}
+.pull-quote.epigraph .quote-attribution{
+  text-align:center;border-top:none;margin-top:.55rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Caixas tipadas                                                      */
+/* Badge como versalete sem retângulo preenchido; filete lateral       */
+/* colorido em --boxc sobre superfície neutra.                         */
+/* ------------------------------------------------------------------ */
+.box{
+  --boxc:var(--gold);
+  margin:2.6rem 0;
+  border-left:2px solid var(--boxc);
+  border-top:1px solid var(--border);
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--box-bg);
+  overflow:hidden;
+}
+/* No authored title means there is no title block to create top rhythm. */
+.box.box-untitled{padding-top:.95rem;}
+/* Native Obsidian callout identities. The type class is emitted directly
+   from [!type]; title/body text never participates in style selection. */
+.box.callout-note{--boxc:var(--callout-note);}
+.box.callout-abstract{--boxc:var(--callout-abstract);}
+.box.callout-info{--boxc:var(--callout-info);}
+.box.callout-todo{--boxc:var(--callout-todo);border-left-style:dashed;}
+.box.callout-success{--boxc:var(--callout-success);border-left-width:5px;}
+.box.callout-question{--boxc:var(--callout-question);}
+.box.callout-warning{--boxc:var(--callout-warning);}
+.box.callout-failure{--boxc:var(--callout-failure);}
+.box.callout-danger{--boxc:var(--callout-danger);}
+.box.callout-bug{--boxc:var(--callout-bug);}
+.box.callout-example{--boxc:var(--callout-example);}
+.box > h3,.box > h4,.box > h5,.box > h6{
+  padding:0 1.3rem;color:var(--text-bright);line-height:1.3;
+}
+.box > h3{font-size:1.16rem;margin:1.2rem 0 1.05rem;}
+.box > h4{font-size:1.08rem;margin:1rem 0 1rem;}
+.box > h5,.box > h6{font-size:1rem;margin:.9rem 0 .4rem;}
+.box > ul,.box > ol{padding-left:2.9rem;padding-right:1.3rem;font-size:1rem;}
+
+/* Badge: versalete espacejado sem retângulo preenchido */
+.box-badge{
+  display:block;width:fit-content;
+  color:var(--box-badge-c,var(--boxc));
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:.55rem 1.3rem .1rem;
+  font-variant:small-caps;
+}
+.box-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1.08rem;line-height:1.35;color:var(--text-bright);
+  padding:1rem 1.3rem .3rem;
+}
+.box > p{font-size:1rem;line-height:1.72;margin:0 0 1rem;padding:0 1.3rem;color:var(--text);}
+.box > p:last-of-type{margin-bottom:1.2rem;}
+.box-title p,.box-badge p{margin:0;padding:0;}
+
+/* Authored box header: compact color chip. The callout type itself is never
+   rendered as a word; --boxc only carries its visual identity. */
+.box-title{
+  padding:.85rem 1.3rem .25rem;
+  font:inherit;color:inherit;
+}
+.box-title p{
+  display:inline-block;
+  margin:0;padding:.28rem .58rem;
+  border:1px solid color-mix(in srgb,var(--boxc) 58%,transparent);
+  border-radius:3px;
+  background:color-mix(in srgb,var(--boxc) 8%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;font-weight:600;letter-spacing:.05em;line-height:1.35;
+}
+
+.box-verdict{
+  margin-top:1.45rem;padding:1.05rem 1.3rem 1.1rem;
+  background:color-mix(in srgb,var(--boxc) var(--verdict-mix),var(--bg));
+  border-top:1px solid color-mix(in srgb,var(--boxc) 48%,var(--border));
+}
+.box-verdict p{margin:0 0 .7rem;font-size:.98rem;color:var(--text-bright);}
+.verdict-tag{
+  display:block;font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--boxc);margin-bottom:.5rem;
+}
+
+/* Cards: filosofos e obras */
+.card{
+  margin:2.1rem 0;padding:1.15rem 1.3rem;
+  background:var(--surface);border-left:3px solid var(--gold-dim);
+}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-bright);}
+.card.livro .card-name{font-style:italic;}
+.card-meta{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;letter-spacing:.05em;
+  color:var(--text-dim);margin:.25rem 0 .75rem;
+}
+.card p{font-size:1rem;line-height:1.7;margin-bottom:.7rem;}
+.card p:last-child{margin-bottom:0;}
+
+/* Rotulo solto / ornamento */
+.label-solo{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);margin:2.3rem 0 .9rem;
+}
+.ornament{
+  text-align:center;margin:2.7rem 0;color:var(--text-dim);opacity:.6;
+  letter-spacing:.9em;padding-left:.9em;font-size:1.02rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas / codigo / figuras                                          */
+/* ------------------------------------------------------------------ */
+/* Tabela larga rola DENTRO de si mesma, em qualquer largura de tela. Sem
+   isto, uma tabela de muitas colunas empurrava a pagina inteira e o
+   documento inteiro ganhava barra de rolagem horizontal — o texto corrido
+   saia da tela junto com ela. `width:max-content` deixa a tabela pedir o
+   espaco de que precisa; `min-width:100%` garante que a tabela estreita
+   ainda ocupe a coluna toda. */
+table{
+  display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  width:max-content;min-width:0;max-width:100%;
+  border-collapse:collapse;margin:2rem auto;font-size:.95rem;
+}
+th{
+  background:var(--th-bg);color:var(--gold);text-align:left;
+  font-family:'JetBrains Mono',Consolas,monospace;font-weight:500;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+@media (min-width:901px){th{font-size:.76rem;}}
+td{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+/* Divisor vertical entre colunas (padrao adotado do white paper de
+   referencia): so ENTRE colunas, nunca nas bordas externas da tabela. */
+th + th,td + td{border-left:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+
+code{
+  font-family:'JetBrains Mono',Consolas,monospace;
+  background:var(--surface2);padding:.15em .4em;border-radius:4px;font-size:.82em;
+  /* Um identificador longo em codigo nao tem espaco onde quebrar e vazava
+     para fora da coluna de texto. Dentro de `pre` a regra nao vale: la a
+     rolagem horizontal do proprio bloco e o comportamento desejado. */
+  overflow-wrap:anywhere;
+}
+pre code{overflow-wrap:normal;}
+pre{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1em 1.2em;border-radius:6px;overflow-x:auto;
+  /* Ao remover a multiplicação do `<code>` interno, o valor foi congelado em
+     `.656em` só para preservar o corpo antigo — 11,5px contra 17,5px da prosa.
+     O celular já tinha subido para `.88em`; a tela grande ficou para trás e o
+     bloco de código saía menor justamente onde há mais espaço. */
+  font-size:.8em;line-height:1.55;
+}
+/* O Pandoc envolve todo bloco em `<pre><code>`, e o `.82em` do `code` se
+   multiplicava pelo do `pre`: no celular o texto do bloco saía a 9,7px, bem
+   abaixo do que o `pre` anuncia. O tamanho do bloco passa a ser só o do `pre`. */
+pre code{background:none;padding:0;font-size:inherit;}
+/* Pandoc may emit a more specific overflow rule for highlighted blocks.
+   Long code must scroll inside its own box instead of widening the document. */
+pre.sourceCode{overflow-x:auto !important;-webkit-overflow-scrolling:touch;}
+
+/* MathJax (saida SVG): equacoes nunca podem empurrar a largura da pagina.
+   Display mantem o tamanho e rola internamente; inline escala para caber
+   (scrollbar no meio de uma frase e pior que fonte menor). */
+mjx-container{max-width:100%;}
+mjx-container[display="true"]{
+  display:block;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:.3rem;
+  /* Numa equacao numerada o MathJax escreve `min-width` inline no proprio
+     container (o SVG interno usa width:100% e depende disso). `min-width`
+     ganha de `max-width`, entao o container ficava mais largo que a tela e
+     empurrava a pagina inteira no celular em vez de rolar por dentro. Zerar
+     so o do container, nunca o do SVG: o SVG guarda a largura real da formula,
+     que e justamente o que deve rolar aqui dentro. */
+  min-width:0 !important;
+}
+/* Formula no meio de uma frase: cabe na coluna ou rola dentro de si mesma.
+   Sem isto, uma equacao inline longa nao quebra e empurra o paragrafo — e com
+   ele a pagina inteira — alguns pixels para fora da tela no celular. */
+mjx-container:not([display="true"]){
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  vertical-align:-.5em;
+  font-size:90%;
+}
+mjx-container:not([display="true"]) svg{max-width:100%;height:auto;}
+/* Dentro de celula, `max-width:100%` era catastrofico: a tabela ja esta
+   limitada a 100% da coluna, o layout automatico espremia a celula, e a
+   formula encolhia junto — uma equacao de 35ex saia com 4px de altura no
+   celular. A tabela tem rolagem horizontal propria (regra de `table`), entao
+   aqui a formula fica no tamanho natural e quem rola e a tabela. */
+:is(td,th) mjx-container:not([display="true"]) svg{max-width:none;}
+:is(td,th) mjx-container:not([display="true"]){overflow:visible;}
+/* MathML assistivo: existe so para leitor de tela e ja vem `clip`ado pelo
+   MathJax — mas `clip` esconde sem encolher. A caixa continuava com a largura
+   real da formula (376px numa coluna de 356) e, absoluta dentro do container,
+   somava essa largura ao overflow rolavel de <p>, de .content e do documento:
+   era ela, e nao a equacao visivel, que empurrava a pagina no celular.
+   Reduzir a caixa a 1px e o padrao "visually hidden"; o conteudo continua na
+   arvore de acessibilidade e continua sendo lido. */
+/* Seletor com especificidade maior que `mjx-assistive-mml` sozinho: a folha do
+   MathJax entra no <head> DEPOIS desta e, com a mesma especificidade e o mesmo
+   `!important`, ganhava por ordem. */
+mjx-container > mjx-assistive-mml{
+  position:absolute !important;
+  width:1px !important;height:1px !important;
+  overflow:hidden !important;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+
+figure{max-width:100%;margin:2.2rem auto;text-align:center;}
+figure img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--border);}
+figcaption{margin-top:.7rem;font-size:.84em;color:var(--text-dim);font-style:italic;}
+/* O Markdown do corpus preserva a legenda como o parágrafo em itálico logo
+   depois da imagem; `implicit_figures` fica desligado para não duplicar o alt
+   text. Trate esse par como uma figura visual sem exigir reescrever essays: a
+   imagem e sua legenda ficam centradas, mas somente nesse padrão estrito. */
+.content > p:has(> picture:only-child){text-align:center;margin-bottom:.55rem;}
+.content > p:has(> picture:only-child) img{display:block;margin-inline:auto;}
+/* Uma imagem solta num paragrafo e um bloco, nao uma palavra: como inline-block
+   ela ainda somava o espaco em branco vizinho e estourava a coluna por alguns
+   pixels. */
+.content p > img{display:block;margin-inline:auto;}
+img{max-width:100%;height:auto;}
+/* Visor de figura: o painel cientifico e legivel na coluna como panorama,
+   mas os eixos so se leem em tamanho natural. O toque abre o visor; o
+   conteudo da pagina nao muda. */
+.content img{cursor:zoom-in;}
+#lupa{
+  position:fixed;inset:0;z-index:200;display:none;
+  background:color-mix(in srgb,var(--bg) 94%,black);
+  overscroll-behavior:contain;touch-action:none;
+}
+#lupa[open]{display:block;}
+#lupa img{
+  position:absolute;top:50%;left:50%;
+  max-width:none;max-height:none;
+  transform-origin:center;border-radius:0;border:0;
+  will-change:transform;
+}
+#lupa-fechar{
+  position:fixed;top:.9rem;right:.9rem;z-index:201;
+  width:2.6rem;height:2.6rem;border-radius:50%;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--text-bright);font-size:1.35rem;line-height:1;
+  display:grid;place-items:center;cursor:pointer;
+}
+#lupa-dica{
+  position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%);
+  z-index:201;padding:.4rem .85rem;border-radius:999px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-dim);font-size:.76rem;
+  font-family:'JetBrains Mono',Consolas,monospace;letter-spacing:.06em;
+}
+
+
+/* Figuras: o parágrafo que só contém imagens é a figura. Centraliza, espaça e
+   deixa as imagens do mesmo grupo fluírem lado a lado com respiro entre elas.
+   Prefixo `.content` (em vez de só `p:has(> img)`) porque a especificidade de
+   `:has()` é a do seu argumento (aqui, `img`, um seletor de tipo) — sem o
+   `.content`, a regra `.content > p{text-align:justify}` (que tem uma classe)
+   sempre vencia e deixava a imagem encostada à esquerda dentro do próprio
+   parágrafo centralizado. */
+.content p:has(> img){text-align:center;margin:2.2rem 0 .6rem;line-height:0;}
+.content p:has(> img) > img{display:inline-block;vertical-align:middle;margin:.35rem .5%;
+  border-radius:6px;border:1px solid var(--border);}
+/* Legenda identificada semanticamente pelo JS do template. Um <em> no meio
+   da prosa pós-imagem nunca muda de display: isso evita quebrar frases como
+   "o modelo subestima o <em>sink rate</em> principalmente na cauda". */
+.content p.sb-image-caption{
+  text-align:center;font-size:.84em;color:var(--text-dim);
+  line-height:1.5;margin-bottom:2rem;
+}
+.content p.sb-image-caption > em{
+  display:inline;font-size:inherit;color:inherit;line-height:inherit;margin:0;
+}
+
+/* Notas de rodape */
+.footnotes hr{display:none;}
+.footnotes{border-top:1px solid var(--border);margin-top:3.5rem;padding-top:1.6rem;}
+.footnotes ol{padding-left:1.4rem;font-size:.83rem;color:var(--text-dim);line-height:1.65;}
+.footnotes li{margin-bottom:.6rem;}
+
+::selection{background:color-mix(in srgb,var(--gold) 30%,transparent);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);}
+html{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                          */
+/* ------------------------------------------------------------------ */
+@media (max-width:640px){
+  body{font-size:16.5px;}
+  .masthead-inner{padding:1.9rem 1rem 1.6rem;}
+  .content{padding:2rem 1.05rem 4rem;}
+  .content h2{margin-top:2.7rem;}
+  /* Equações em bloco ficam 10% menores só no celular. Fórmulas inline
+     preservam o corpo normal para não mudar a métrica da linha de texto. */
+  mjx-container[display="true"]{font-size:90%;}
+  /* Monoespaçada encolhe mais que a serifada no mesmo corpo: a `.72em` de
+     antes dava 11,9px no celular. Bloco e trecho inline sobem juntos. */
+  pre{font-size:.88em;}
+  code{font-size:.88em;}
+  .quote,.card{padding:.95rem 1.05rem;}
+  /* Um gutter horizontal so por componente. A margem do celular somava ao
+     padding da tela grande e o corpo recuava mais que o proprio titulo. */
+  .box > p{padding-left:1.05rem;padding-right:1.05rem;font-size:1rem;}
+  .box > :is(h3,h4,h5,h6){padding-left:1.05rem;padding-right:1.05rem;}
+  .box > ul,.box > ol{padding-left:2.4rem;padding-right:1.05rem;}
+  .box > pre,.card > pre,.quote > pre{margin:1.05rem;}
+  .box-title{padding:1rem 1.05rem .3rem;}
+  .box-verdict{padding:.95rem 1.05rem 1rem;}
+  /* Pisos de legibilidade no celular. Na tela grande estas vozes menores
+     funcionam como hierarquia; a 375px viravam 10-12px, abaixo do que se le
+     confortavelmente. Só o piso sobe — a hierarquia continua. */
+  th{font-size:.82rem;letter-spacing:.06em;}
+  .quote p{font-size:.93rem;}
+  .quote-text p{font-size:.95rem;}
+  .box-verdict p{font-size:.96rem;}
+  /* Vozes de rótulo — versalete espacejado em monoespaçada. A 375px elas
+     caíam para 9,9-11,5px, e o espacejamento de .2em piora ainda mais a
+     leitura nesse corpo. */
+  .box-badge{font-size:.78rem;}
+  .verdict-tag{font-size:.78rem;}
+  .label-solo{font-size:.74rem;}
+  .card-meta{font-size:.78rem;}
+  .pq-cite{font-size:.9rem;}
+  .quote-attribution{font-size:.85rem;}
+  .pull-quote.epigraph p:last-child{font-size:.78rem;}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Explicit callout visual families v2                                */
+/* Type classes are the ONLY family selectors. Text is never inspected. */
+/* ------------------------------------------------------------------ */
+
+/* TAB EDITORIAL — experiment, idea, evidence, conceptual map. */
+.box:is(.callout-example,.callout-info,.callout-abstract){
+  border:1px solid var(--boxc);
+  border-radius:0;
+  background:color-mix(in srgb,var(--boxc) var(--tab-mix),var(--bg));
+  overflow:hidden;
+}
+.box:is(.callout-example,.callout-info,.callout-abstract) > .box-title{
+  /* `line-height:0` no contentor: o rotulo e `inline-block` e sentava sobre a
+     linha de texto do pai, o que abria um fio sem tinta entre ele e a moldura. */
+  margin:0;padding:0 0 1.15rem;line-height:0;
+}
+.box:is(.callout-example,.callout-info,.callout-abstract) > .box-title p{
+  display:inline-block;margin:0;
+  padding:.5rem 1.05rem .44rem;
+  /* Sem borda em cima nem a esquerda: quem faz esses dois lados e a propria
+     moldura da caixa. Com borda propria e recuo negativo, o `overflow:hidden`
+     da caixa cortava o recuo e sobravam duas linhas quase coincidentes. */
+  border:1px solid var(--boxc);border-top:0;border-left:0;border-radius:0;
+  background:color-mix(in srgb,var(--boxc) 15%,transparent);
+  color:var(--boxc);
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:13.6px;font-weight:600;line-height:1.35;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-variant:normal;
+}
+/* `info`/`abstract` afirmam um fato e a faixa vem cheia; `example`
+   propõe um cenário e vem só contornada. Mesma cor, mesma tipografia,
+   mesma medida — o que muda é o preenchimento. */
+.box.callout-example > .box-title p{
+  background:color-mix(in srgb,var(--boxc) 9%,transparent);
+}
+.box:is(.callout-example,.callout-info,.callout-abstract) > :is(h3,h4,h5,h6):first-of-type{
+  color:var(--boxc);
+}
+.box:is(.callout-example,.callout-info,.callout-abstract) > .box-title + :is(h3,h4,h5,h6){
+  margin-top:0;
+}
+
+/* NOTE — tonal block + strong rail, no tab. */
+/* `note` e a caixa PADRAO: a que se usa quando o bloco merece um quadro, mas
+   nao merece ser gritado. Sem faixa lateral larga, sem cor propria, sem troca
+   de familia tipografica — moldura constante, o mesmo tint dos cabecalhos de
+   tabela e a mesma prosa de fora da caixa. As outras familias existem para
+   quando se QUER destacar. */
+.box.callout-note{
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--note-bg,var(--surface2));
+}
+.box.callout-note > .box-title{padding:1.05rem 1.3rem .85rem;}
+.box.callout-note > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--gold);
+  font-family:inherit;
+  font-size:1rem;font-weight:700;letter-spacing:0;line-height:1.4;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-note > p{font-family:inherit;line-height:1.72;}
+
+/* ENTITY — explicit [!todo]; title=name, ####=metadata. */
+.box.callout-todo{
+  border:0;border-left:5px solid var(--boxc);border-radius:0;
+  background:var(--surface);overflow:hidden;
+}
+.box.callout-todo > .box-title{padding:1.25rem 1.3rem .22rem;}
+.box.callout-todo > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--text-bright);font-family:var(--font-display);
+  font-size:1.24rem;font-weight:700;letter-spacing:0;line-height:1.28;
+  text-transform:none;font-variant:normal;
+}
+.box.callout-todo > h4.entity-meta{
+  margin:.42rem 0 .9rem;padding:0 1.3rem;
+  color:var(--boxc);font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.84rem;font-weight:550;letter-spacing:.12em;line-height:1.48;
+  text-transform:uppercase;
+}
+
+/* STAT — explicit [!warning]; any authored title receives value treatment. */
+.box.callout-warning{
+  border:1px solid var(--border);border-left:6px solid var(--boxc);
+  border-radius:9px;background:var(--surface);overflow:hidden;
+}
+.box.callout-warning > .box-title{padding:1.3rem 1.3rem .75rem;}
+.box.callout-warning > .box-title p{
+  display:block;margin:0;padding:0;border:0;border-radius:0;background:none;
+  color:var(--boxc);font-family:var(--font-display);
+  font-size:clamp(1.75rem,4.5vw,2.3rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.015em;text-transform:none;font-variant:normal;
+}
+.box.callout-warning > p{font-size:1.02rem;line-height:1.68;}
+.box.callout-warning > .stat-divider{
+  height:1px;margin:1.35rem 1.3rem .95rem;padding:0;
+  background:var(--border);opacity:.85;
+}
+.box.callout-warning > .stat-source{
+  margin:0;padding:0 1.3rem 1.25rem;
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.78rem;line-height:1.62;letter-spacing:.025em;color:var(--text-dim);
+}
+.box.callout-warning > .stat-source p{margin:0;padding:0;font:inherit;color:inherit;}
+.box.callout-warning > .stat-source a{color:var(--accent);}
+
+/* Small native-family refinements. Color remains semantic, while geometry
+   keeps related callouts distinguishable even without relying on hue alone. */
+/* Estas quatro vinham com proporcao fixa e venciam a regra da familia, o
+   que prendia o preenchimento no valor calibrado para o tema claro. Passam
+   ao mesmo token: a diferenca entre os tipos vem do acento, nao daqui. */
+.box:is(.callout-abstract,.callout-info,.callout-example){
+  background:color-mix(in srgb,var(--boxc) var(--tab-mix),var(--bg));
+}
+.box.callout-success{background:color-mix(in srgb,var(--boxc) 5%,var(--surface));}
+.box.callout-question{background:color-mix(in srgb,var(--boxc) 4%,var(--surface));}
+.box:is(.callout-failure,.callout-danger,.callout-bug){
+  background:color-mix(in srgb,var(--boxc) 5%,var(--surface));
+  border-left-width:2px;border-left-style:solid;
+}
+
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{
+  padding:1.05rem 1.3rem .38rem;
+}
+.box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title p{
+  font-size:.80rem;line-height:1.4;letter-spacing:.075em;
+}
+
+/* State families keep their semantic rails and remain visibly distinct. */
+.box.callout-success{border-left-style:solid;}
+.box.callout-question{border-left-style:solid;}
+
+@media (max-width:640px){
+  .box:is(.callout-example,.callout-info,.callout-abstract) > .box-title{padding:0 0 1.15rem;}
+  .box:is(.callout-example,.callout-info,.callout-abstract) > .box-title p{
+    padding:.56rem .95rem .53rem;font-size:.80rem;letter-spacing:.12em;
+  }
+  .box.callout-note > .box-title,
+  .box.callout-todo > .box-title,
+  .box.callout-warning > .box-title,
+  .box:is(.callout-success,.callout-question,.callout-failure,.callout-danger,.callout-bug) > .box-title{padding-left:1.05rem;padding-right:1.05rem;}
+  .box.callout-todo > .box-title p{font-size:1.15rem;}
+  .box.callout-todo > h4.entity-meta{padding-left:1.05rem;padding-right:1.05rem;font-size:.83rem;}
+  .box.callout-warning > .stat-divider{margin-left:1.05rem;margin-right:1.05rem;}
+  .box.callout-warning > .stat-source{padding-left:1.05rem;padding-right:1.05rem;font-size:.80rem;}
+}
+
+/* ------------------------------------------------------------------ */
+/* Referências — recuo pendente + seta ↗ no link externo              */
+/* O pré-processador emite as referências como parágrafos [N] ...     */
+/* CSS aplica o recuo pendente sem tocar o markdown.                   */
+/* ------------------------------------------------------------------ */
+h2#referências ~ p,
+h2#referencias ~ p {
+  padding-left:2.4em;
+  text-indent:-2.4em;
+  font-size:.92rem;
+  line-height:1.62;
+  margin-bottom:.75rem;
+}
+/* ↗ só no ÚLTIMO link da referência — o "Link" final, que é o ponteiro
+   para a fonte. Antes a seta caía em todo link externo da citação (o
+   título da obra, um termo do comentário) e a entrada terminava com duas
+   ou três setas: "... 1689.↗ Wikipedia. Link ↗". A palavra "Link"
+   permanece; a seta apenas a acompanha. */
+h2#referências ~ p a[href^="http"]:last-of-type::after,
+h2#referencias ~ p a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Citações Inline e Popup de Referência (Padrão Substack)            */
+/* ------------------------------------------------------------------ */
+.ref-cite-group {
+  display:inline;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size:.78em;
+  line-height:0;
+  vertical-align:super;
+  user-select:none;
+  white-space:nowrap;
+}
+.ref-cite-group .ref-cite {
+  display:inline;
+  font-family:inherit;
+  font-size:inherit;
+  line-height:inherit;
+  vertical-align:baseline;
+  font-weight:600;
+  padding:0 .04em;
+  cursor:pointer;
+  color:var(--gold);
+  text-decoration:none;
+  border-bottom:none;
+  transition:color .15s ease, opacity .15s ease;
+}
+.ref-cite-group .ref-cite:hover,
+.ref-cite-group .ref-cite:focus-visible,
+.ref-cite-group .ref-cite[aria-expanded="true"] {
+  color:var(--rust-bright);
+  text-decoration:none;
+}
+.ref-cite-sep {
+  display:inline;
+  font-family:inherit;
+  font-size:inherit;
+  line-height:inherit;
+  vertical-align:baseline;
+  color:var(--gold);
+  font-weight:600;
+  margin-right:.12em;
+}
+
+.ref-cite {
+  font-size:.78em;
+  line-height:0;
+  vertical-align:super;
+  font-weight:600;
+  padding:0 .1em;
+  cursor:pointer;
+  color:var(--gold);
+  text-decoration:none;
+  border-bottom:none;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  transition:color .15s ease, opacity .15s ease;
+  user-select:none;
+}
+.ref-cite:hover,
+.ref-cite:focus-visible,
+.ref-cite[aria-expanded="true"] {
+  color:var(--rust-bright);
+  text-decoration:none;
+}
+
+.ref-popup {
+  position:fixed;
+  z-index:1200;
+  max-width:min(380px, calc(100vw - 32px));
+  width:max-content;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:.88rem;
+  line-height:1.55;
+  color:var(--text);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(4px) scale(.98);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  pointer-events:none;
+}
+[data-theme="light"] .ref-popup {
+  background:var(--surface);
+  box-shadow:0 10px 30px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.05);
+  border-color:var(--border);
+}
+.ref-popup.is-active {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.ref-popup-inner {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.ref-popup-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  padding-bottom:5px;
+  margin-bottom:3px;
+}
+.ref-popup-num {
+  font-family:'JetBrains Mono',Consolas,monospace;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  color:var(--gold);
+}
+.ref-popup-close {
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:1.15rem;
+  line-height:1;
+  cursor:pointer;
+  padding:0 3px;
+  border-radius:4px;
+  transition:color .15s ease;
+}
+.ref-popup-close:hover {
+  color:var(--text-bright);
+}
+.ref-popup-body {
+  font-size:.86rem;
+  color:var(--text);
+  overflow-wrap:break-word;
+}
+.ref-popup-body em,
+.ref-popup-body i {
+  color:var(--text-bright);
+}
+.ref-popup-body a {
+  color:var(--gold);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.ref-popup-body a:hover {
+  color:var(--rust-bright);
+}
+.ref-popup-body a[href^="http"]:last-of-type::after {
+  content:"\00A0↗";
+  font-size:.75em;
+  vertical-align:.1em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Impressão — mínimo funcional (oculta chrome fixo)                  */
+/* O PDF vem do LaTeX; este bloco serve apenas ao Ctrl+P do browser.  */
+/* ------------------------------------------------------------------ */
+@media print{
+  .sb-progress,#sbThemeToggle,#sbToTop,.hlink{display:none !important;}
+}
+</style>
+<link rel="icon" href="../assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-light-512.png"><link rel="icon" type="image/png" sizes="512x512" href="../assets/icon-dark-512.png" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><script>(function(){var t=null;try{t=localStorage.getItem("sb-theme")}catch(e){}if(["light","sepia","dark"].indexOf(t)<0)t="light";document.documentElement.dataset.theme=t})();</script><style>@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../assets/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../assets/fonts/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../assets/fonts/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../assets/fonts/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../assets/fonts/nuFkD-vYSZviVYUb_rj3ij__anPXDTnogkk7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../assets/fonts/nuFkD-vYSZviVYUb_rj3ij__anPXDTnogkk7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../assets/fonts/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(../assets/fonts/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../assets/fonts/vEFH2_tTDB4M7-auWDN0ahZJW1ge6NmXq2ZbF8zBfb98SUr6aX0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../assets/fonts/vEFI2_tTDB4M7-auWDN0ahZJW1gb8tc.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../assets/fonts/vEFI2_tTDB4M7-auWDN0ahZJW1gb8tc.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* ==========================================================================
+   Second Brain Atlas — public essay overlay
+
+   Contract:
+   - scripts/essay_template.html owns the essay body and components.
+   - This file only maps theme tokens and styles Atlas-only chrome.
+   - Light = white + Atlas blue.
+   - Sepia = warm paper + softened contrast.
+   - Dark = near-black + restrained gold.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]),
+:root[data-theme="light"] {
+  --bg:#ffffff;
+  --surface:#f7f9fc;
+  --surface2:#edf2f8;
+  --border:#d6dee9;
+  --text:#2b3645;
+  --text-dim:#66758a;
+  --text-bright:#0e1928;
+  --gold:#2f5fb0;
+  --gold-dim:#234a86;
+  --rust:#8e4636;
+  --rust-bright:#a04030;
+  --accent:#35708a;
+  --amber:#7a5a18;
+  /* Claro: a caixa de destaque continua neutra. */
+  --box-bg:var(--surface);
+  --box-verdict-bg:var(--surface2);
+
+  --sb-bg:#ffffff;
+  --sb-surface:#ffffff;
+  --sb-surface-soft:#f7f9fc;
+  --sb-text:#172235;
+  --sb-text-strong:#0a1525;
+  --sb-muted:#5d6c81;
+  --sb-line:rgba(23,34,53,.12);
+  --sb-line-strong:rgba(23,34,53,.24);
+  --sb-primary:#2f5fb0;
+  --sb-primary-soft:rgba(47,95,176,.09);
+  --sb-shadow:0 18px 54px rgba(24,45,78,.12);
+}
+
+:root[data-theme="sepia"] {
+  --bg:#fbf8f1;
+  --surface:#fffaf3;
+  --surface2:#f3ede3;
+  --border:#ded5c8;
+  --text:#39342f;
+  --text-dim:#746b62;
+  --text-bright:#26211c;
+  --gold:#785b38;
+  --gold-dim:#604626;
+  --rust:#8e4636;
+  --rust-bright:#9c4838;
+  --accent:#596b78;
+  --amber:#865a27;
+  --callout-note:#746b62;
+  --note-bg:#f3ede3;
+  --callout-abstract:#77572f;
+  --callout-info:#596b78;
+  --callout-todo:#865a27;
+  --callout-success:#486f50;
+  --callout-question:#77572f;
+  --callout-warning:#8c5f2a;
+  --callout-failure:#8e4636;
+  --callout-danger:#98493e;
+  --callout-bug:#8f4337;
+  --callout-example:#6e536f;
+  --callout-quote:#746b62;
+  --quote-bg:#f3ede3;
+  --box-bg:#fffaf3;
+  --tab-mix:4%;
+  --verdict-mix:6%;
+  --box-verdict-bg:#f3ede3;
+  --th-bg:#eee5d8;
+
+  --sb-bg:#fbf8f1;
+  --sb-surface:#fffdf8;
+  --sb-surface-soft:#fdfaf4;
+  --sb-text:#39342f;
+  --sb-text-strong:#26211c;
+  --sb-muted:#746b62;
+  --sb-line:rgba(74,62,48,.15);
+  --sb-line-strong:rgba(74,62,48,.28);
+  --sb-primary:#785b38;
+  --sb-primary-soft:rgba(117,87,47,.10);
+  --sb-shadow:0 20px 56px rgba(73,54,32,.12);
+}
+
+:root[data-theme="dark"] {
+  --bg:#090909;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#303030;
+  --text:#d8d4cd;
+  --text-dim:#979187;
+  --text-bright:#f2eee7;
+  --gold:#c9a45c;
+  --gold-dim:#8a6b33;
+  --rust:#9a4938;
+  --rust-bright:#bd5a42;
+  --accent:#5b95ac;
+  --amber:#a77a2e;
+  /* Escuro: ouro do Atlas em opacidade mínima, o mesmo gesto do export
+     standalone, só com o gold do site (#c9a45c) em vez do #b08b4f. */
+  --box-bg:rgba(201,164,92,.055);
+  --box-verdict-bg:rgba(201,164,92,.10);
+
+  --sb-bg:#090909;
+  --sb-surface:#121212;
+  --sb-surface-soft:#181818;
+  --sb-text:#e8e8e8;
+  --sb-text-strong:#ffffff;
+  --sb-muted:#a6a6a6;
+  --sb-line:rgba(255,255,255,.11);
+  --sb-line-strong:rgba(255,255,255,.22);
+  --sb-primary:#c9a45c;
+  --sb-primary-soft:rgba(201,164,92,.11);
+  --sb-shadow:0 24px 70px rgba(0,0,0,.46);
+}
+
+html,body{background:var(--bg);}
+body{padding-top:68px;}
+
+/* A equação continua na mesma medida editorial; em uma viewport estreita,
+   qualquer excedente fica contido nela, nunca fora da página. */
+.content mjx-container{max-width:100%;overflow-x:auto;}
+.content mjx-container:not([display]){display:inline-block;max-width:100%;overflow-x:auto;}
+
+/* Public cover: the only intentional visual departure from standalone export. */
+:root:not([data-theme="dark"]) .masthead,
+:root[data-theme="light"] .masthead{
+  background:#ffffff !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="sepia"] .masthead{
+  background:#fbf8f1 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="sepia"] .masthead .hero-title{color:var(--text-bright) !important;}
+:root[data-theme="dark"] .masthead{
+  background:#090909 !important;
+  color:var(--text) !important;
+  border-bottom:1px solid var(--border);
+}
+.masthead .hero-title{color:var(--text-bright) !important;}
+.masthead-rule{border-top-color:var(--gold) !important;}
+.stripe{
+  height:3px !important;
+  background:linear-gradient(90deg,
+    color-mix(in srgb,var(--gold) 20%,transparent),
+    var(--gold),
+    color-mix(in srgb,var(--gold) 20%,transparent)) !important;
+}
+
+/* Atlas owns these controls on public pages. */
+#sbThemeToggle,#sbToTop,body > .sb-progress > .sb-progress-fill{display:none !important;}
+
+.sb-bar{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  width:100%;height:68px;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 max(24px,calc((100% - 1120px) / 2));
+  border-bottom:1px solid var(--sb-line);
+  background:color-mix(in srgb,var(--sb-bg) 86%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.sb-brand{
+  display:flex;align-items:center;gap:11px;
+  color:var(--sb-text-strong) !important;font-weight:700;font-size:14px;line-height:1.6;letter-spacing:-.02em;
+  text-decoration:none !important;
+}
+.sb-mark{
+  display:grid;place-items:center;width:36px;height:36px;
+  border:1px solid var(--sb-line);
+  border-radius:10px;color:var(--sb-primary);background:var(--sb-primary-soft);
+  font-size:10px;font-weight:800;
+}
+/* A marca dentro do chip, no mesmo gesto do cabeçalho do catálogo. Aqui a
+   folha é EMBUTIDA na página do essay, cuja base é `essays/`, então o caminho
+   sobe um nível — ao contrário do site.css, que é servido de dentro de
+   `assets/`. */
+.sb-mark{
+  background:url("../assets/icon-32.png") center / 20px 20px no-repeat, var(--sb-primary-soft);
+}
+:root[data-theme="dark"] .sb-mark{
+  background-image:url("../assets/icon-32-dark.png");
+}
+.sb-nav{display:flex;align-items:center;gap:20px;}
+.sb-nav a{color:var(--sb-text) !important;font-size:14px;font-weight:500;line-height:1.6;text-decoration:none !important;}
+.sb-nav a:hover{color:var(--sb-text-strong) !important;}
+.sb-nav button{
+  box-sizing:border-box;width:36px;height:36px;padding:0;display:grid;place-items:center;
+  border:1px solid var(--sb-line);border-radius:10px;
+  background:var(--sb-primary-soft);color:var(--sb-text);cursor:pointer;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1;
+  transition:border-color .16s cubic-bezier(.22,.61,.36,1);
+}
+.sb-nav button:hover{border-color:var(--sb-line-strong);background:color-mix(in srgb,var(--sb-primary) 17%,var(--sb-surface));}
+.sb-nav button:focus-visible{
+  outline:2px solid color-mix(in srgb,var(--sb-primary) 58%,transparent);
+  outline-offset:2px;
+}
+.sb-nav .sb-subscribe{
+  box-sizing:border-box;width:auto;height:36px;min-height:36px;padding:0 12px;
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--sb-line);border-radius:10px;
+  background:var(--sb-primary-soft);color:var(--sb-text);
+  font:650 12.5px/1 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;white-space:nowrap;
+}
+.sb-nav a.active{color:var(--sb-text) !important;font-weight:600;}
+.sb-nav .sb-subscribe:hover{
+  border-color:var(--sb-line-strong);
+  background:color-mix(in srgb,var(--sb-primary) 17%,var(--sb-surface));
+  color:var(--sb-text);
+}
+#sbTheme{border-color:var(--sb-line);background:var(--sb-primary-soft);}
+.sb-subscribe-dialog{
+  width:min(430px,calc(100% - 28px));margin:auto;padding:0;border:1px solid var(--sb-line-strong);
+  border-radius:16px;background:var(--sb-surface);color:var(--sb-text);overflow:auto;
+}
+.sb-subscribe-dialog::backdrop{background:rgba(0,0,0,.54);}
+.sb-subscribe-dialog-head{position:relative;padding:24px 52px 0 24px;}
+.sb-subscribe-eyebrow{margin:0 0 5px;color:var(--sb-primary);font:700 9.5px/1 JetBrains Mono,monospace;letter-spacing:.17em;text-transform:uppercase;}
+.sb-subscribe-dialog h2{margin:0 0 7px;color:var(--sb-text);font:600 1.55rem/1.22 Source Serif 4,serif;letter-spacing:-.025em;}
+.sb-subscribe-dialog-head > p:last-of-type{margin:0;color:var(--sb-muted);font:13.5px/1.5 Inter,ui-sans-serif,system-ui,sans-serif;}
+.sb-subscribe-note{margin:-4px 24px 24px!important;padding:0;color:var(--sb-muted)!important;font:13.5px/1.55 Inter,ui-sans-serif,system-ui,sans-serif!important;}
+.sb-subscribe-note strong{color:var(--sb-text);font-weight:650;}
+.sb-subscribe-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border:1px solid var(--sb-line);border-radius:9px;background:transparent;color:var(--sb-muted);font-size:19px;line-height:1;cursor:pointer;}
+.sb-subscribe-embed{min-width:0;padding:18px 24px 24px;}
+.sb-subscribe-embed .formkit-form{max-width:none!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
+.sb-subscribe-embed .formkit-header,.sb-subscribe-embed .formkit-subheader,.sb-subscribe-embed [data-element="header"],.sb-subscribe-embed [data-element="subheader"]{display:none!important;}
+.sb-subscribe-embed .formkit-fields{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;margin:0!important;width:100%!important;}
+.sb-subscribe-embed .formkit-field,.sb-subscribe-embed [data-element="submit"]{box-sizing:border-box!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;align-self:stretch!important;flex:0 0 auto!important;}
+.sb-subscribe-embed .formkit-submit{display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;}
+.sb-subscribe-embed .formkit-field{margin:0!important;}
+.sb-subscribe-embed .formkit-input{box-sizing:border-box!important;width:100%!important;min-height:44px!important;margin:0!important;padding:0 13px!important;border:1px solid var(--sb-line-strong)!important;border-radius:10px!important;outline:0!important;background:var(--sb-surface-soft)!important;color:var(--sb-text)!important;font:13.5px Inter,ui-sans-serif,system-ui,sans-serif!important;}
+.sb-subscribe-embed .formkit-submit{box-sizing:border-box!important;width:100%!important;min-width:100%!important;max-width:none!important;align-self:stretch!important;min-height:44px!important;margin:0!important;padding:0 16px!important;border:1px solid transparent!important;border-radius:10px!important;background:var(--sb-primary)!important;color:var(--sb-bg)!important;font:700 13px Inter,ui-sans-serif,system-ui,sans-serif!important;cursor:pointer!important;}
+
+/* Public progress bar injected by render_public_essay.py. */
+body > .sb-progress:not(:has(.sb-progress-fill)){
+  position:fixed;top:68px;left:0;right:0;z-index:61;height:2px;background:transparent;
+}
+body > .sb-progress:not(:has(.sb-progress-fill)) span{
+  display:block;width:0;height:100%;background:var(--sb-primary);
+}
+
+.sb-toc-fab{
+  position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:61;
+  display:inline-flex;align-items:center;gap:8px;padding:10px 17px;
+  border:1px solid var(--sb-line);border-radius:999px;
+  background:color-mix(in srgb,var(--sb-surface) 96%,transparent);
+  color:var(--sb-text);box-shadow:var(--sb-shadow);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font:650 13px/1 Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer;
+}
+.sb-toc-fab:hover{border-color:var(--sb-primary);}
+.sb-toc-icon{color:var(--sb-primary);}
+
+.sb-toc{
+  position:fixed;right:clamp(16px,3vw,32px);
+  bottom:calc(clamp(16px,3vw,32px) + 54px);z-index:62;
+  width:min(380px,calc(100vw - 32px));max-height:min(65vh,600px);
+  display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--sb-line-strong);border-radius:16px;
+  background:color-mix(in srgb,var(--sb-surface) 98%,transparent);
+  box-shadow:var(--sb-shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-toc[hidden]{display:none !important;}
+.sb-toc header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 17px;border-bottom:1px solid var(--sb-line);color:var(--sb-text);font-size:13px;
+}
+.sb-toc header strong{color:inherit;}
+.sb-toc header button{border:0;background:transparent;color:var(--sb-muted);font-size:20px;cursor:pointer;}
+.sb-toc nav{display:flex;flex-direction:column;padding:9px 8px;overflow-y:auto;}
+.sb-toc a{
+  padding:8px 11px;border-left:2px solid transparent;border-radius:0 8px 8px 0;
+  color:var(--sb-muted) !important;font-size:12.5px;line-height:1.4;text-decoration:none !important;
+}
+.sb-toc a:hover{color:var(--sb-text) !important;background:var(--sb-primary-soft);}
+.sb-toc a.h3{padding-left:23px;font-size:11.5px;}
+.sb-toc a.active{
+  color:color-mix(in srgb,var(--sb-text) 92%,var(--sb-primary)) !important;
+  border-left-color:color-mix(in srgb,var(--sb-primary) 42%,transparent);background:transparent;
+}
+
+.sb-tags,.sb-related{
+  width:min(var(--max-width,760px),calc(100% - 48px));margin-inline:auto;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px;}
+.sb-tag{padding:4px 10px;border:1px solid var(--sb-line);border-radius:999px;color:var(--sb-muted);font-size:11px;}
+.sb-related{margin-top:42px;margin-bottom:76px;padding-top:28px;border-top:1px solid var(--sb-line);}
+.sb-related h2{
+  margin:0 0 16px;color:var(--sb-text);
+  font:700 18px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.sb-related-card{
+  display:flex;flex-direction:column;gap:7px;padding:15px 16px;
+  border:1px solid var(--sb-line);border-radius:13px;background:var(--sb-surface-soft);
+  color:var(--sb-text) !important;text-decoration:none !important;
+}
+.sb-related-card:hover{
+  border-color:color-mix(in srgb,var(--sb-primary) 55%,var(--sb-line));
+  background:var(--sb-primary-soft);
+}
+.sb-related-card strong{color:var(--sb-text);font-size:13px;}
+.sb-related-card span{color:var(--sb-muted);font-size:12px;line-height:1.45;}
+
+@media(max-width:720px){
+  .sb-bar{height:60px;padding:0 14px;} /* 14px lateral matches calc(100% - 28px) rhythm */
+  body{padding-top:60px;}
+  body > .sb-progress:not(:has(.sb-progress-fill)){top:60px;}
+  .sb-nav{gap:14px;}
+  .sb-nav a{font-size:13px;}
+  .sb-brand{gap:0;font-size:0;}
+  .sb-nav a:first-child{display:none;}
+  .sb-nav button{width:36px;height:36px;}
+  .sb-nav #sbTheme > span.theme-disc{width:13px;height:13px;display:block;font-size:0;line-height:1;}
+  .sb-nav .sb-subscribe{height:36px;min-height:36px;padding-inline:10px;font-size:12px;line-height:1;}
+  .sb-subscribe{display:inline-flex;}
+  .sb-toc-fab{width:44px;height:44px;padding:0;justify-content:center;}
+  .sb-toc-text{display:none;}
+  .sb-toc a{font-size:13px;padding:8px 11px;}
+  .sb-toc a.h3{font-size:12.5px;padding-left:23px;}
+  .sb-related-grid{grid-template-columns:1fr;}
+}
+/* Duas palavras curtas cabem em qualquer telefone. Esconder a segunda tirava
+   o unico caminho para o mapa na tela onde ele mais importa. */
+@media(max-width:520px){
+  .sb-brand{gap:0;font-size:0;}
+  .sb-nav{gap:14px;}
+  .sb-nav a{font-size:13px;}
+}
+
+
+/* Shared three-theme selector: compact 13 px SVG with restrained contrast. */
+.theme-disc{
+  width:13px!important;height:13px!important;display:block!important;flex:none!important;
+  box-sizing:border-box!important;border:0!important;border-radius:50%!important;
+  background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2013%2013%22%3E%3Cpath%20d%3D%22M6.5%206.5L6.5%201A5.5%205.5%200%200%201%2011.263%209.25Z%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L11.263%209.25A5.5%205.5%200%200%201%201.737%209.25Z%22%20fill%3D%22%23ede3d2%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L1.737%209.25A5.5%205.5%200%200%201%206.5%201Z%22%20fill%3D%22%234a4844%22%2F%3E%3Cpath%20d%3D%22M6.5%206.5L6.5%201M6.5%206.5L11.263%209.25M6.5%206.5L1.737%209.25%22%20fill%3D%22none%22%20stroke%3D%22%236b655e%22%20stroke-width%3D%22.6%22%20stroke-linecap%3D%22butt%22%2F%3E%3Ccircle%20cx%3D%226.5%22%20cy%3D%226.5%22%20r%3D%225.5%22%20fill%3D%22none%22%20stroke%3D%22%233c3936%22%20stroke-width%3D%221%22%2F%3E%3C%2Fsvg%3E")!important;
+  box-shadow:none!important;font-size:0!important;line-height:1!important;
+}
+.theme-disc::after{content:none!important}
+
+/* SB_HEADER_CONTRACT:START */
+/* Header contract: identical metrics to Atlas home. Keep this last. */
+.sb-bar{height:68px;padding:0 max(24px,calc((100% - 1120px) / 2));-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.sb-brand{
+  gap:11px!important;font-size:14px!important;font-weight:700!important;line-height:1.6!important;
+  color:var(--sb-text-strong)!important
+}
+.sb-nav{gap:20px!important}
+.sb-nav a{
+  font-size:14px!important;font-weight:500!important;line-height:1.6!important;
+  color:var(--sb-text)!important
+}
+.sb-nav a.active{font-weight:600!important;color:var(--sb-text)!important}
+.sb-nav .sb-subscribe{
+  height:36px!important;min-height:36px!important;padding:0 12px!important;
+  border:1px solid var(--sb-line)!important;border-radius:10px!important;
+  background:var(--sb-primary-soft)!important;color:var(--sb-text)!important;
+  font:650 12.5px/1 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important
+}
+#sbTheme{
+  width:36px!important;height:36px!important;
+  border:1px solid var(--sb-line)!important;border-radius:10px!important;
+  background:var(--sb-primary-soft)!important
+}
+@media(max-width:760px){
+  .sb-bar{height:60px!important;padding:0 14px!important}
+  body{padding-top:60px}
+  body>.sb-progress:not(:has(.sb-progress-fill)){top:60px}
+  .sb-brand{gap:0!important;font-size:0!important}
+  .sb-nav{gap:14px!important}
+  .sb-nav a:first-child{display:none!important}
+  .sb-nav a{font-size:13px!important;font-weight:500!important;line-height:1.6!important}
+  .sb-nav .sb-subscribe{height:36px!important;min-height:36px!important;padding:0 10px!important;font-size:12px!important;line-height:1!important}
+  #sbTheme{width:36px!important;height:36px!important}
+  #sbTheme>.theme-disc{width:13px!important;height:13px!important}
+}
+/* SB_HEADER_CONTRACT:END */
+
+/* --- Podcast do ensaio -------------------------------------------------------
+   Uma faixa compacta logo depois do resumo da capa. Só existe na página quando
+   há áudio publicado. Mesmos tokens do Atlas; sem sombra, sem cor nova.
+   Layout intrínseco: o flex-wrap leva os controles para uma segunda linha
+   quando a coluna não comporta tudo, sem breakpoints nem larguras fixas.
+   Largura: a capa tem 1,2rem de padding no <header> e outro 1,2rem no
+   .masthead-inner, enquanto .content tem só um (e abaixo de 640px os três
+   paddings mudam); --pc-delta devolve a diferença e o `min` com --max-width
+   mantém a mesma coluna do corpo. Os valores espelham essay_template.html. */
+.sb-podcast{
+  display:flex;flex-wrap:wrap;align-items:center;column-gap:10px;row-gap:2px;box-sizing:border-box;
+  --pc-delta:2.4rem;--pc-gut:1.2rem;
+  --pc-w:min(calc(100% + var(--pc-delta)),calc(var(--max-width,700px) - 2 * var(--pc-gut)));
+  width:var(--pc-w);max-width:none;min-width:0;
+  margin:1.4rem calc((100% - var(--pc-w)) / 2) 0;padding:6px 10px 6px 6px;
+  border:1px solid var(--sb-line);border-radius:12px;background:var(--sb-surface-soft);
+  color:var(--sb-text);text-align:left;text-transform:none;letter-spacing:0;
+  font:12.5px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.sb-podcast audio{display:none;}
+.sb-pc-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:2px;flex:none;
+  box-sizing:border-box;min-width:36px;height:36px;margin:0;padding:0 6px;
+  border:0;border-radius:9px;background:transparent;color:var(--sb-muted);
+  font:600 12px/1 Inter,ui-sans-serif,system-ui,sans-serif;font-variant-numeric:tabular-nums;
+  text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:background-color .15s,color .15s;
+}
+.sb-pc-btn:hover{background:var(--sb-primary-soft);color:var(--sb-text);}
+.sb-pc-btn:focus-visible,.sb-pc-seek:focus-visible{outline:2px solid var(--sb-primary);outline-offset:2px;}
+.sb-pc-ico{width:18px;height:18px;flex:none;fill:currentColor;}
+.sb-pc-back .sb-pc-ico,.sb-pc-fwd .sb-pc-ico,.sb-pc-dl .sb-pc-ico{fill:none;}
+.sb-pc-n{font-size:9.5px;font-weight:700;margin-left:-1px;}
+.sb-pc-play{
+  width:36px;padding:0;border-radius:50%;background:var(--sb-primary);color:var(--sb-bg);
+}
+.sb-pc-play:hover{background:var(--sb-primary);color:var(--sb-bg);filter:brightness(1.1);}
+.sb-pc-play .sb-pc-ico{width:15px;height:15px;}
+.sb-pc-play .sb-pc-ico-play{margin-left:2px;}
+.sb-pc-play .sb-pc-ico-pause{display:none;}
+.sb-podcast.is-playing .sb-pc-ico-play{display:none;}
+.sb-podcast.is-playing .sb-pc-ico-pause{display:block;}
+/* Rótulo: forma completa quando cabe; forma curta (sem "sobre este ensaio")
+   quando não. Nunca reticências. A escolha é feita por essay.js medindo o
+   texto real; sem JS a forma completa simplesmente quebra de linha. A
+   duração fica sempre visível. */
+.sb-pc-label{
+  flex:1 1 150px;min-width:0;margin:0;color:var(--sb-muted);
+  font:12.5px/1.3 Inter,ui-sans-serif,system-ui,sans-serif;text-align:left;
+}
+.sb-pc-label-short{display:none;}
+.sb-pc-label-dur{white-space:nowrap;font-variant-numeric:tabular-nums;}
+.sb-podcast[data-short] .sb-pc-label-full{display:none;}
+.sb-podcast[data-short] .sb-pc-label-short{display:inline;}
+.sb-pc-label.is-measuring{white-space:nowrap;}
+.sb-pc-label.is-measuring .sb-pc-label-full{display:inline;}
+.sb-pc-label.is-measuring .sb-pc-label-short{display:none;}
+.sb-pc-controls{display:flex;align-items:center;gap:0;flex:1 1 100%;min-width:0;}
+/* Numa linha só apenas onde sobra espaço para o rótulo completo. */
+@media(min-width:1100px){.sb-pc-controls{flex:1 1 330px;}}
+.sb-pc-time{
+  flex:none;min-width:2.6em;text-align:right;color:var(--sb-muted);
+  font-variant-numeric:tabular-nums;font-size:11.5px;
+}
+.sb-pc-speed{min-width:40px;}
+/* Slider: a mesma aparência no Chrome, Safari e Firefox. Encolhe antes de
+   qualquer botão sair da caixa. */
+.sb-pc-seek{
+  --pc-fill:0%;-webkit-appearance:none;appearance:none;flex:1 1 auto;width:auto;min-width:0;
+  height:32px;margin:0 6px;padding:0;background:transparent;cursor:pointer;
+}
+.sb-pc-seek:disabled{cursor:default;opacity:.55;}
+.sb-pc-seek::-webkit-slider-runnable-track{
+  height:4px;border-radius:999px;
+  background:linear-gradient(to right,var(--sb-primary) var(--pc-fill),var(--sb-line-strong) var(--pc-fill));
+}
+.sb-pc-seek::-moz-range-track{height:4px;border-radius:999px;background:var(--sb-line-strong);}
+.sb-pc-seek::-moz-range-progress{height:4px;border-radius:999px;background:var(--sb-primary);}
+.sb-pc-seek::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:12px;height:12px;margin-top:-4px;
+  border:0;border-radius:50%;background:var(--sb-primary);
+}
+.sb-pc-seek::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:var(--sb-primary);}
+@media(max-width:640px){.sb-podcast{--pc-delta:2.3rem;--pc-gut:1.05rem;}}
+@media(max-width:339px){
+  .sb-podcast{column-gap:8px;padding:5px 6px 5px 5px;}
+  .sb-pc-time{display:none;}
+  .sb-pc-seek{margin:0 4px;}
+  .sb-pc-btn{min-width:34px;padding:0 4px;}
+}
+@media print{.sb-podcast{display:none!important;}}
+</style>
+</head>
+<body>
+<div class="sb-progress"><div class="sb-progress-fill" id="sb-progress-fill"></div></div>
+<button id="sbThemeToggle" title="Tema" aria-label="Mudar para tema sépia"><span class="theme-disc" aria-hidden="true"></span></button>
+
+<header class="masthead">
+  <div class="stripe"></div>
+  <div class="masthead-inner">
+    <h1 class="hero-title">A Física da Sustentação – Kutta que pariu?</h1>
+    <hr class="masthead-rule">
+    <p class="byline">Gustavo Zambrano · Setembro de 2026</p>
+    <p class="cover-summary">Uma explicação fisicamente intuitiva da sustentação, construída com a analogia de uma multidão em uma sala atravessada por um carro. O ensaio critica explicações causais incompletas baseadas em Bernoulli, momentum ou circulação e mostra como pressão e velocidade se estabelecem reciprocamente ao redor do perfil.</p><section class="sb-podcast" data-sb-podcast data-title="A Física da Sustentação – Kutta que pariu?" aria-label="Podcast sobre este ensaio"><button type="button" class="sb-pc-btn sb-pc-play" aria-label="Reproduzir podcast" data-label-play="Reproduzir podcast" data-label-pause="Pausar podcast"><svg class="sb-pc-ico sb-pc-ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 8 5.2z"/></svg><svg class="sb-pc-ico sb-pc-ico-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.2" height="14" rx="1.2"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.2"/></svg></button><p class="sb-pc-label"><span class="sb-pc-label-full">Ouça um podcast gerado por IA sobre este ensaio</span><span class="sb-pc-label-short">Ouça um podcast gerado por IA</span><span class="sb-pc-label-dur"> · 21 min</span></p><div class="sb-pc-controls"><button type="button" class="sb-pc-btn sb-pc-back" aria-label="Voltar 15 segundos" title="Voltar 15 s"><svg class="sb-pc-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4.5v4.2h4.2"/></svg><span class="sb-pc-n">15</span></button><span class="sb-pc-time" aria-hidden="true">0:00</span><input type="range" class="sb-pc-seek" min="0" max="1000" step="1" value="0" aria-label="Posição no podcast" aria-valuetext="0:00" disabled><button type="button" class="sb-pc-btn sb-pc-fwd" aria-label="Avançar 15 segundos" title="Avançar 15 s"><svg class="sb-pc-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.2h-4.2"/></svg><span class="sb-pc-n">15</span></button><button type="button" class="sb-pc-btn sb-pc-speed" aria-label="Velocidade de reprodução: 1×" title="Velocidade">1×</button><a class="sb-pc-btn sb-pc-dl" href="../assets/podcasts/a-fisica-da-sustentacao-kutta-que-pariu.m4a" download="a-fisica-da-sustentacao-kutta-que-pariu.m4a" aria-label="Baixar o podcast (m4a)" title="Baixar"><svg class="sb-pc-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M5 19.5h14"/></svg></a></div><audio preload="none" src="../assets/podcasts/a-fisica-da-sustentacao-kutta-que-pariu.m4a"></audio></section>
+  </div>
+</header>
+
+<main class="content">
+<h2 id="sumário">Sumário</h2>
+<ul>
+<li><a href="#introdução">Introdução</a></li>
+<li><a href="#1-antes-da-asa-uma-pessoa-na-multidão">1. Antes da Asa,
+uma Pessoa na Multidão</a></li>
+<li><a href="#2-o-carro-entra-na-sala">2. O Carro Entra na Sala</a></li>
+<li><a href="#3-por-que-o-escoamento-curva-e-acelera">3. Por Que o
+Escoamento Curva e Acelera</a></li>
+<li><a href="#4-quando-os-empurrões-viram-sustentação">4. Quando os
+Empurrões Viram Sustentação</a></li>
+<li><a
+href="#5-o-que-circulação-vorticidade-e-viscosidade-acrescentam">5. O
+Que Circulação, Vorticidade e Viscosidade Acrescentam</a></li>
+<li><a href="#6-conclusão">6. Conclusão</a></li>
+</ul>
+<hr />
+<h2 id="introdução">Introdução</h2>
+<p>Este ensaio pretende explicar de forma fisicamente intuitiva e
+correta o mecanismo da <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-3/">sustentação
+aerodinâmica</a>, seguindo a abordagem de McLean [<a
+href="#referências">1</a>][<a href="#referências">2</a>][<a
+href="#referências">3</a>]. O objetivo não é apenas reproduzir relações
+capazes de calcular a força, mas explicar como o campo de escoamento se
+estabelece e quais relações físicas de causa e efeito sustentam esse
+processo.</p>
+<p>Várias explicações clássicas são matematicamente corretas sem
+constituírem, por si só, uma explicação causal. <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/">Bernoulli</a>
+relaciona pressão e velocidade, mas dizer que o ar passa mais rápido
+sobre o extradorso e por isso a pressão cai não explica por que ele
+ganhou velocidade. O <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/momentum-effects/">balanço
+de quantidade de movimento</a> mostra corretamente que o escoamento
+recebe momento para baixo, mas não explica sozinho como a asa produz
+essa deflexão nem como a força é transmitida através de uma região de
+fluido muito maior que a superfície que ela toca. A hipótese dos
+“caminhos iguais”, por sua vez, é simplesmente incorreta: parcelas
+separadas no bordo de ataque não precisam se reencontrar no bordo de
+fuga [<a href="#referências">4</a>].</p>
+<p><img
+src="../assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig1.gif"
+alt="Escoamento potencial ao redor de um perfil Kármán–Trefftz com partículas marcadas acompanhando o fluxo" /></p>
+<p><em>Figura 1. Escoamento potencial incompressível ao redor de um
+perfil Kármán–Trefftz. As partículas sobre o extradorso ganham mais
+velocidade e não se reencontram no bordo de fuga com as partículas
+correspondentes do intradorso. Fonte: Kraaiennest, Wikimedia Commons, CC
+BY-SA 3.0 [<a href="#referências">8</a>].</em></p>
+<p>O mesmo cuidado vale para <a
+href="https://pt.wikipedia.org/wiki/Teorema_de_Kutta_Joukowski">Kutta–Joukowski</a>.
+O teorema relaciona de forma precisa circulação e sustentação, mas dizer
+que a asa sustenta porque existe circulação apenas desloca a pergunta
+para a origem dessa <a
+href="https://en.wikipedia.org/wiki/Circulation_%28physics%29">circulação</a>.
+A <a
+href="https://pt.wikipedia.org/wiki/Condi%C3%A7%C3%A3o_de_Kutta">condição
+de Kutta</a> também não deve ser confundida com o mecanismo físico da
+sustentação. Na teoria de <a
+href="https://en.wikipedia.org/wiki/Potential_flow">escoamento
+potencial</a>, ela seleciona uma entre múltiplas soluções invíscidas
+matematicamente admissíveis e representa, de forma eficaz, parte da
+física viscosa omitida pelo modelo, sobretudo na região do bordo de
+fuga. Ela fecha o problema matemático, mas não substitui a explicação
+física de como pressão, velocidade e trajetória se estabelecem no
+escoamento [<a href="#referências">1</a>].</p>
+<div class="box callout-note">
+<div class="box-title">
+<p>Tese Central: O Acoplamento Simultâneo</p>
+</div>
+<p>Pressão e velocidade não formam uma cadeia causal unidirecional.
+Gradientes espaciais de pressão produzem forças que aceleram o fluido e
+alteram seu campo de velocidades. Por sua vez, o novo padrão cinemático
+reorganiza instantaneamente o campo de pressões. Ambos são solucionados
+de forma mútua e inseparável pelas equações de Navier-Stokes.</p>
+</div>
+<p>O ponto central de McLean é que pressão e velocidade não formam uma
+cadeia causal unidirecional. Gradientes de pressão produzem forças,
+essas forças aceleram o fluido e modificam seu campo de velocidades. O
+movimento resultante modifica, por sua vez, o campo de pressão, que
+produz novas acelerações. Esse acoplamento é uma característica das
+próprias <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/navier-strokes-equation/">equações
+de Navier–Stokes</a>: pressão e velocidade pertencem a uma mesma solução
+do escoamento, não a duas etapas independentes.</p>
+<p>Para tornar esse mecanismo visível, imagine uma sala bidimensional
+densamente ocupada por uma multidão. Inicialmente, todos permanecem em
+equilíbrio e cada pessoa exerce sobre os vizinhos uma pressão de fundo
+aproximadamente igual em todas as direções. Em seguida, um carro com a
+forma de um perfil aerodinâmico atravessa a sala. Cada pessoa
+representará uma parcela material de fluido, os empurrões entre vizinhos
+representarão as forças associadas ao campo de pressão e o carro
+representará o corpo impermeável que o escoamento precisa contornar. A
+mesma analogia será usada ao longo de todo o ensaio.</p>
+<h2 id="1-antes-da-asa-uma-pessoa-na-multidão">1. Antes da Asa, uma
+Pessoa na Multidão</h2>
+<p>Antes da chegada do carro, cada pessoa exerce sobre os vizinhos uma
+pressão de fundo. Na ausência de aceleração, esses empurrões são
+aproximadamente isotrópicos: cada indivíduo empurra em todas as direções
+com a mesma intensidade média. As forças se equilibram e a resultante é
+nula. Há pressão, mas não há aceleração.</p>
+<p>Se esse equilíbrio é perturbado, o efeito é imediato: se os vizinhos
+à direita exercem uma força maior do que os vizinhos à esquerda, resta
+uma força resultante para a esquerda, e a pessoa acelera nessa direção.
+Não existe atração exercida pelo lado de menor pressão; existe apenas um
+desequilíbrio entre forças de contato.</p>
+<p>No fluido ocorre o mesmo. Uma pressão elevada e uniforme não acelera
+uma parcela. A aceleração aparece quando a pressão varia no espaço,
+produzindo uma força resultante sobre o elemento material.</p>
+<p>A figura abaixo representa o caso unidimensional mais simples. Uma
+parcela recebe pressão <span class="math inline">\(P\)</span> em uma
+face e <span class="math inline">\(P+\Delta P\)</span> na face oposta. A
+representação foi redesenhada para este ensaio a partir de <em>Pressure
+on a particle in a fluid</em>, do Wikimedia Commons [<a
+href="#referências">7</a>].</p>
+<p><img
+src="../assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig2.svg"
+alt="Parcela de fluido com pressão P em uma face e P mais delta P na face oposta, produzindo aceleração para o lado de menor pressão" /></p>
+<p><em>Figura 2. Uma diferença de pressão entre faces opostas deixa uma
+força resultante e acelera a parcela para o lado de menor pressão.
+Redesenho didático baseado em Jean Biz Hertzberg, Wikimedia Commons, CC
+BY 4.0 [<a href="#referências">7</a>].</em></p>
+<p>Se a área das faces for <span class="math inline">\(A\)</span>, as
+forças de pressão têm módulos</p>
+<p><span class="math display">\[
+F_1=PA,
+\]</span></p>
+<p>e</p>
+<p><span class="math display">\[
+F_2=(P+\Delta P)A.
+\]</span></p>
+<p>A resultante tem módulo</p>
+<p><span class="math display">\[
+\Delta F=\Delta P\,A.
+\]</span></p>
+<p>Se a parcela tiver espessura <span class="math inline">\(\Delta
+x\)</span>, sua massa será</p>
+<p><span class="math display">\[
+m=\rho A\Delta x,
+\]</span></p>
+<p>e a segunda lei de Newton fornece</p>
+<p><span class="math display">\[
+a=\frac{\Delta P}{\rho\,\Delta x}.
+\]</span></p>
+<p>No limite diferencial, essa relação corresponde ao termo de pressão
+da equação de quantidade de movimento. O mecanismo local está completo:
+uma diferença espacial de pressão produz força; a força atua sobre uma
+massa; a massa acelera.</p>
+<h2 id="2-o-carro-entra-na-sala">2. O Carro Entra na Sala</h2>
+<p>Agora o carro atravessa a multidão. As pessoas diretamente à sua
+frente não podem continuar em linha reta porque a lataria ocupa a região
+para a qual se moviam. Elas desaceleram, desviam-se para os lados e
+passam a exercer forças maiores sobre os vizinhos. Forma-se, diante do
+carro, uma região de maior pressão de contato.</p>
+<p>Esse aumento de pressão não é um postulado adicional da analogia: ele
+decorre do próprio mecanismo. O carro interrompe parte do movimento
+existente enquanto novas pessoas continuam chegando por inércia,
+elevando as forças de contato na região frontal. O desequilíbrio que se
+forma desvia a multidão antes mesmo de cada pessoa tocar a lataria, pois
+a perturbação é transmitida através dos contatos entre vizinhos.</p>
+<p>No ar ocorre o mesmo mecanismo. Próximo ao ponto de estagnação, o
+escoamento é desacelerado e desviado, e a pressão aumenta. Perturbações
+de pressão propagam-se pelo gás a velocidade finita, próxima à
+velocidade do som [<a href="#referências">5</a>], de modo que o campo de
+escoamento começa a responder à presença do perfil também a
+montante.</p>
+<p>A superfície do carro impõe apenas uma condição de impermeabilidade:
+ninguém pode atravessá-la. Ela não prescreve as trajetórias da multidão.
+Essas trajetórias serão determinadas pelas forças que surgem à medida
+que o movimento é reorganizado ao redor do corpo.</p>
+<h2 id="3-por-que-o-escoamento-curva-e-acelera">3. Por Que o Escoamento
+Curva e Acelera</h2>
+<p>Observe as pessoas desviadas para cima na região dianteira do carro.
+Depois do desvio inicial, sua inércia tende a fazê-las prosseguir em
+trajetórias mais retas. O teto do carro, entretanto, curva-se para
+baixo. Se as pessoas continuassem retas, a região imediatamente junto à
+lataria passaria a receber menos força de contato do que a região mais
+afastada. Surge então um desequilíbrio: o empurrão vindo da região
+externa supera o empurrão junto ao carro e produz uma força resultante
+dirigida para o contorno. A trajetória se curva.</p>
+<p>Esse mecanismo opera continuamente. Se a multidão tentasse abandonar
+o carro em uma trajetória reta demais, reduziria ainda mais as forças de
+contato junto à superfície, o que aumentaria o desequilíbrio e a traria
+de volta ao contorno. Ninguém está preso ao carro e não existe sucção: a
+trajetória resulta das forças de contato que a própria tendência
+inercial de seguir reto ajuda a estabelecer.</p>
+<p>No fluido, o mesmo mecanismo se aplica diretamente. A tendência
+inercial de uma parcela é conservar sua velocidade; quando essa
+tendência faria o escoamento afastar-se do extradorso, a pressão junto
+ao perfil torna-se menor que a pressão mais afastada. O gradiente
+transversal resultante exerce uma força em direção ao centro de
+curvatura e desvia continuamente a parcela. É por isso que, enquanto o
+escoamento permanece aderido, ele não simplesmente segue reto sobre o
+extradorso.</p>
+<p><img
+src="../assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig3.svg"
+alt="Linhas de corrente ao redor de um perfil identificando os tubos de corrente sobre extradorso e intradorso" /></p>
+<p><em>Figura 3. Linhas de corrente de um escoamento potencial ao redor
+de um perfil, com os tubos de corrente superior e inferior
+identificados. A figura evidencia que a trajetória sobre o extradorso
+precisa ser continuamente desviada em relação à tendência inercial de
+seguir reta. Fonte: Michael Belisle, Wikimedia Commons, domínio público
+[<a href="#referências">9</a>].</em></p>
+<p>A relação pode ser escrita a partir da mesma diferença de pressão
+usada na Seção 1. Para uma parcela de espessura normal <span
+class="math inline">\(\Delta n\)</span> e área <span
+class="math inline">\(A\)</span>,</p>
+<p><span class="math display">\[
+\Delta F_n=\Delta P\,A.
+\]</span></p>
+<p>Se sua massa é</p>
+<p><span class="math display">\[
+m=\rho A\Delta n,
+\]</span></p>
+<p>a força necessária para uma trajetória de velocidade <span
+class="math inline">\(V\)</span> e raio local <span
+class="math inline">\(R\)</span> é a força centrípeta</p>
+<p><span class="math display">\[
+F_n=m\frac{V^2}{R}.
+\]</span></p>
+<p>Igualando as duas expressões,</p>
+<p><span class="math display">\[
+\Delta P\,A=\rho A\Delta n\,\frac{V^2}{R},
+\]</span></p>
+<p>e, portanto,</p>
+<p><span class="math display">\[
+\frac{\Delta P}{\Delta n}\approx \rho\frac{V^2}{R}.
+\]</span></p>
+<p>No limite diferencial,</p>
+<p><span class="math display">\[
+\left|\frac{\partial p}{\partial n}\right|\approx \rho\frac{V^2}{R}.
+\]</span></p>
+<div class="box callout-info">
+<div class="box-title">
+<p>Mecanismo: Curvatura e Gradiente Normal</p>
+</div>
+<p>Para curvar uma linha de corrente com raio local <span
+class="math inline">\(R\)</span> e velocidade <span
+class="math inline">\(V\)</span>, a mecânica de Newton exige uma
+aceleração centrípeta <span class="math inline">\(V^2 / R\)</span>. Em
+um fluido, essa aceleração só pode ser fornecida por um gradiente de
+pressão normal à trajetória: <span class="math inline">\(|\partial p /
+\partial n| \approx \rho V^2 / R\)</span>. A pressão precisa diminuir na
+direção do centro de curvatura.</p>
+</div>
+<p>A equação não cria o mecanismo; apenas quantifica a analogia. A
+diferença de pressão deixa uma força resultante, e essa força fornece a
+aceleração normal que curva a trajetória.</p>
+<p>A multidão também explica o ganho de velocidade ao contornar a região
+dianteira. As pessoas saem de uma região frontal de maior pressão de
+contato e entram na região superior, onde a tendência de se afastarem do
+contorno reduziu a pressão local. Ao longo da trajetória, passam então a
+receber maior força por trás do que pela frente. Essa componente
+tangencial da força produz aceleração no sentido do movimento e ganho de
+velocidade.</p>
+<p>No fluido, a parcela que deixa a região de alta pressão próxima ao
+ponto de estagnação e segue sobre o extradorso encontra, inicialmente,
+pressão decrescente ao longo da linha de corrente. O gradiente
+longitudinal de pressão produz aceleração tangencial e ganho de
+velocidade. O gradiente transversal modifica a direção da velocidade; o
+gradiente longitudinal modifica seu módulo.</p>
+<p>Essas duas componentes não devem ser transformadas em uma explicação
+causal unidirecional. A pressão modifica a velocidade porque seus
+gradientes produzem aceleração; mas a nova distribuição de velocidades
+modifica o movimento relativo das parcelas e, portanto, o próprio campo
+de pressão. Esse novo campo volta a acelerar o fluido. Pressão e
+velocidade estabelecem-se reciprocamente como partes de uma única
+solução do escoamento [<a href="#referências">1</a>][<a
+href="#referências">3</a>]. Bernoulli é uma relação integrada compatível
+com esse processo sob hipóteses apropriadas, não uma causa independente
+da baixa pressão.</p>
+<h2 id="4-quando-os-empurrões-viram-sustentação">4. Quando os Empurrões
+Viram Sustentação</h2>
+<p>A assimetria entre extradorso e intradorso já está contida no
+mecanismo da Seção 3. Sobre o carro, a tendência inercial de seguir reto
+afasta a multidão do teto e reduz as forças de contato junto à
+superfície. Sob o carro, a geometria desvia as pessoas de outra maneira
+e a lataria recebe forças de contato comparativamente maiores. O
+resultado é uma distribuição assimétrica de pressão sobre o veículo.</p>
+<p>No fluido ocorre o mesmo. Em uma condição sustentadora típica, grande
+parte do extradorso apresenta pressão abaixo da referência do escoamento
+não perturbado, enquanto partes importantes do intradorso apresentam
+pressão maior. A contribuição do extradorso para a sustentação pode ser
+dominante não porque exista ali uma força de atração, mas porque uma
+redução de pressão atua sobre uma área extensa da superfície superior. A
+região de baixa pressão não puxa a asa para cima: ela exerce um empurrão
+para baixo menor, enquanto a pressão mais elevada no intradorso exerce
+um empurrão para cima maior.</p>
+<p>A pressão exerce sobre cada elemento da superfície uma força
+normal,</p>
+<p><span class="math display">\[
+d\mathbf{F}_p=-p\,\mathbf{n}\,dA.
+\]</span></p>
+<p>A integração sobre todo o perfil fornece a contribuição de pressão
+para a força aerodinâmica. Em um fluido real existe também tensão
+viscosa tangencial, mas, em condições usuais de escoamento aderido, a
+sustentação é dominada pela distribuição de pressão.</p>
+<p>A mesma distribuição que acelera o fluido exerce forças sobre o
+corpo. Não há, portanto, um mecanismo para produzir o campo de
+escoamento e outro, separado, para produzir sustentação. O campo de
+pressão que curva e acelera as parcelas é o mesmo campo cuja integração
+sobre a superfície deixa uma força resultante sobre o perfil.</p>
+<p>McLean enfatiza que a região de baixa pressão sobre o extradorso não
+está confinada a uma película junto à parede. Ela se estende pelo campo
+externo, pois as linhas de corrente acima do perfil também são desviadas
+e participam da mesma estrutura de acelerações e gradientes de pressão
+[<a href="#referências">1</a>][<a href="#referências">3</a>].</p>
+<p><img
+src="../assets/media/a-fisica-da-sustentacao-kutta-que-pariu_fig4.png"
+alt="Campo de pressão e linhas de corrente ao redor de um perfil, mostrando que a perturbação se estende ao campo externo" /></p>
+<p><em>Figura 4. Campo de pressão e velocidade ao redor de um perfil. A
+perturbação associada ao extradorso ocupa uma região finita do campo
+externo, não apenas a superfície do perfil. Fonte: Ertunc, Wikimedia
+Commons, CC BY-SA 4.0 [<a href="#referências">10</a>].</em></p>
+<p>O balanço global de quantidade de movimento descreve a mesma
+interação em outra escala. Se o perfil recebe uma força líquida para
+cima, o fluido recebe, no balanço global, uma força líquida para baixo.
+Dizer que a asa deflete ar para baixo é, portanto, correto como balanço
+global, mas incompleto como explicação local: é o campo de pressão que
+transmite as forças responsáveis tanto pela deflexão do fluido quanto
+pela sustentação [<a href="#referências">2</a>][<a
+href="#referências">3</a>].</p>
+<p>Na analogia, mudar a orientação do carro em relação ao movimento
+médio da multidão modifica a assimetria dos desvios e das forças de
+contato entre suas faces. No perfil, essa variável é o <a
+href="https://www.grc.nasa.gov/www/k-12/VirtualAero/BottleRocket/airplane/incline.html">ângulo
+de ataque</a>. Alterá-lo modifica o campo de pressão e, portanto, a
+sustentação; aumentar a velocidade do escoamento, mantidos o regime e um
+padrão de escoamento semelhante, também aumenta a escala das diferenças
+de pressão necessárias para curvar as trajetórias, como indica a
+dependência com <span class="math inline">\(V^2\)</span> obtida na Seção
+3. Assim, ângulo de ataque e velocidade controlam a magnitude da
+sustentação sem introduzir um mecanismo físico diferente.</p>
+<h2 id="5-o-que-circulação-vorticidade-e-viscosidade-acrescentam">5. O
+Que Circulação, Vorticidade e Viscosidade Acrescentam</h2>
+<p>A explicação elementar da força pode ser construída sem começar por
+circulação ou vorticidade. Esses conceitos são importantes porque
+descrevem de maneira compacta propriedades do campo de escoamento, não
+porque substituam a dinâmica local de força e aceleração.</p>
+<p>Na multidão, a inércia de cada pessoa é indispensável: para alterar
+sua velocidade é necessária força. No fluido ocorre o mesmo. A escala de
+diferença de pressão necessária para produzir uma aceleração <span
+class="math inline">\(a\)</span> ao longo de uma distância <span
+class="math inline">\(\Delta x\)</span> é</p>
+<p><span class="math display">\[
+\Delta P\approx \rho a\Delta x.
+\]</span></p>
+<p>Sem massa específica, não haveria inércia a ser acelerada nem força
+aerodinâmica finita associada ao mecanismo.</p>
+<p>A viscosidade desempenha um papel mais específico. Ela não é a força
+que “cola” o escoamento ao extradorso nem a causa primária da curvatura
+das linhas de corrente; esse desvio é produzido pelo campo de pressão
+também no escoamento externo quase invíscido. No fluido real, porém, a
+viscosidade estabelece a <a
+href="https://en.wikipedia.org/wiki/Boundary_layer">camada limite</a>,
+governa aderência e separação e é decisiva na região do bordo de fuga,
+onde o escoamento real seleciona o estado compatível com uma saída suave
+[<a href="#referências">1</a>][<a href="#referências">6</a>].</p>
+<p>Circulação é uma medida global do campo de velocidades ao redor do
+perfil. Ela permite representar de forma compacta a assimetria do
+escoamento sustentador e relacioná-la quantitativamente à força por meio
+de resultados como Kutta–Joukowski. Essa descrição não substitui a
+história mecânica de cada parcela: localmente, sua velocidade muda
+porque forças atuam sobre uma massa. Interpretar a circulação como causa
+primária da sustentação apenas deslocaria a pergunta para a origem da
+própria circulação.</p>
+<p><a href="https://en.wikipedia.org/wiki/Vorticity">Vorticidade</a>,
+por sua vez, é uma grandeza local definida pelo rotacional do campo de
+velocidades. No escoamento externo aproximadamente potencial, grande
+parte da região fora da camada limite pode permanecer quase
+irrotacional, embora o escoamento possua circulação global. A
+vorticidade relevante concentra-se principalmente na camada limite e na
+esteira.</p>
+<div class="pull-quote callout-quote">
+<div class="quote-label">
+<p>Definição: O Papel da Condição de Kutta</p>
+</div>
+<div class="quote-text">
+<p>A condição de Kutta não é a causa física da sustentação: ela é o
+critério que seleciona, dentre infinitas soluções matemáticas invíscidas
+possíveis, aquela que reproduz o comportamento real imposto pela
+viscosidade na vizinhança do bordo de fuga, garantindo um escoamento
+suave sem singularidades.</p>
+</div>
+</div>
+<p>A condição de Kutta entra em um nível formal posterior. Na teoria
+potencial de um perfil com bordo de fuga agudo, ela seleciona, entre
+múltiplas soluções invíscidas matematicamente admissíveis, aquela
+compatível com a forma como o escoamento real deixa o bordo de fuga. Com
+isso, fixa a circulação da solução idealizada. É uma ferramenta
+fundamental para o cálculo, mas não substitui o mecanismo físico
+descrito neste ensaio.</p>
+<h2 id="6-conclusão">6. Conclusão</h2>
+<p>A analogia da multidão permite acompanhar o mecanismo da sustentação
+sem introduzir uma causa ad hoc. Antes da chegada do carro, a pressão de
+fundo se equilibra. O carro perturba esse equilíbrio; diferenças de
+pressão deixam forças resultantes; as forças aceleram as pessoas e
+modificam suas trajetórias e velocidades.</p>
+<p>Sobre o carro, a inércia tenderia a fazer a multidão seguir mais reto
+do que o contorno. Essa tendência reduz as forças de contato junto à
+superfície, permitindo que o empurrão maior vindo da região externa
+curve novamente as trajetórias. Ao mesmo tempo, a passagem da região
+frontal de maior pressão para a região superior de menor pressão produz
+uma componente tangencial da força e ganho de velocidade.</p>
+<p>No fluido, o mesmo mecanismo aparece como um campo de pressão não
+uniforme. O gradiente transversal fornece a aceleração normal associada
+à curvatura; o gradiente longitudinal produz ganho ou perda de
+velocidade. Pressão e velocidade, porém, não se determinam em uma única
+direção causal: a pressão modifica o movimento, o movimento modifica a
+pressão, e ambos se estabelecem reciprocamente como partes do mesmo
+escoamento.</p>
+<div class="box callout-info">
+<div class="box-title">
+<p>Veredicto: Como as Asas Realmente Voam</p>
+</div>
+<p>Sustentação não é mágica de Bernoulli nem um simples empurrão
+newtoniano isolado: é a integral da distribuição de pressões gerada pela
+deformação do campo de escoamento ao redor do corpo impermeável. A asa
+não puxa o ar: ela empurra menos no extradorso e empurra mais no
+intradorso.</p>
+</div>
+<p>A sustentação é a força resultante exercida por esse campo sobre o
+perfil. Bernoulli, o balanço de quantidade de movimento e a circulação
+descrevem aspectos ou balanços desse mesmo fenômeno; nenhum deles,
+isoladamente, constitui toda a explicação causal. Circulação,
+vorticidade, viscosidade e condição de Kutta completam e formalizam a
+descrição, mas não substituem sua estrutura mecânica elementar: pressão
+produz força, força acelera massa, e o movimento resultante reorganiza
+novamente o campo de pressão.</p>
+<h2 id="referências">Referências</h2>
+<p>[1] McLean, D., <em>Understanding Aerodynamics: Arguing from the Real
+Physics</em>, 1st ed., John Wiley &amp; Sons, 2013. <a
+href="https://onlinelibrary.wiley.com/doi/book/10.1002/9781118454190">Link</a></p>
+<p>[2] McLean, D., <em>Aerodynamic Lift, Part 1: The Science</em>, The
+Physics Teacher, Vol. 56, No. 8, pp. 516–520, 2018. <a
+href="https://doi.org/10.1119/1.5064558">Link</a></p>
+<p>[3] McLean, D., <em>Aerodynamic Lift, Part 2: A Comprehensive
+Physical Explanation</em>, The Physics Teacher, Vol. 56, No. 8,
+pp. 521–524, 2018. <a
+href="https://doi.org/10.1119/1.5064559">Link</a></p>
+<p>[4] Babinsky, H., <em>How Do Wings Work?</em>, Physics Education,
+Vol. 38, No. 6, pp. 497–503, 2003. <a
+href="https://doi.org/10.1088/0031-9120/38/6/001">Link</a></p>
+<p>[5] NASA Glenn Research Center, <em>Speed of Sound Derivation</em>,
+acesso em 12 set. 2026. <a
+href="https://www.grc.nasa.gov/www/BGH/snddrv.html">Link</a></p>
+<p>[6] NASA Glenn Research Center, <em>Boundary Layer</em>, acesso em 12
+set. 2026. <a
+href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/boundary-layer/">Link</a></p>
+<p>[7] Hertzberg, J. B., <em>Pressure on a particle in a fluid</em>,
+Wikimedia Commons, 2024, CC BY 4.0. <a
+href="https://commons.wikimedia.org/wiki/File:Pressure_on_a_particle_in_a_fluid.svg">Link</a></p>
+<p>[8] Kraaiennest, <em>Karman trefftz.gif</em>, Wikimedia Commons,
+2009, CC BY-SA 3.0. <a
+href="https://commons.wikimedia.org/wiki/File:Karman_trefftz.gif">Link</a></p>
+<p>[9] Belisle, M., <em>Streamlines around a NACA 0012.svg</em>,
+Wikimedia Commons, 2008, domínio público. <a
+href="https://commons.wikimedia.org/wiki/File:Streamlines_around_a_NACA_0012.svg">Link</a></p>
+<p>[10] Ertunc, <em>Velocity and pressure field around an
+airfoil.png</em>, Wikimedia Commons, 2023, CC BY-SA 4.0. <a
+href="https://commons.wikimedia.org/wiki/File:Velocity_and_pressure_field_around_an_airfoil.png">Link</a></p>
+</main>
+
+<footer style="text-align:center;padding:0 1rem 4rem;">
+  <div class="ornament">· · ·</div>
+  <p style="font-family:'JetBrains Mono',Consolas,monospace;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);">
+    Second Brain · Gustavo Zambrano · Setembro de 2026
+  </p>
+</footer>
+
+<button id="sbToTop" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  /* Progresso de leitura */
+  var fill=document.getElementById("sb-progress-fill");
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    fill.style.width=(max>0?(h.scrollTop/max)*100:0)+"%";
+    toTop.classList.toggle("visible",h.scrollTop>600);
+  }
+  /* Tema: claro → sépia → escuro. Sem escolha guardada, preserva o
+     padrão histórico do standalone: claro no desktop, escuro no mobile. */
+  var root=document.documentElement,tgl=document.getElementById("sbThemeToggle");
+  var themes=["light","sepia","dark"];
+  var themeNames={light:"claro",sepia:"sépia",dark:"escuro"};
+  try{var saved=localStorage.getItem("sb-theme");if(themes.indexOf(saved)>=0){root.setAttribute("data-theme",saved);}}catch(e){}
+  function effectiveTheme(){
+    var a=root.getAttribute("data-theme");
+    if(themes.indexOf(a)>=0)return a;
+    return window.matchMedia("(min-width:901px)").matches?"light":"dark";
+  }
+  function nextTheme(theme){
+    var at=themes.indexOf(theme);
+    return themes[(at<0?0:at+1)%themes.length];
+  }
+  function syncThemeButton(){
+    if(!tgl)return;
+    var current=effectiveTheme(),next=nextTheme(current);
+    tgl.setAttribute("aria-label","Mudar para tema "+themeNames[next]);
+    tgl.setAttribute("title","Tema "+themeNames[current]+" · próximo: "+themeNames[next]);
+  }
+  syncThemeButton();
+  tgl.addEventListener("click",function(){
+    var next=nextTheme(effectiveTheme());
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("sb-theme",next);}catch(e){}
+    syncThemeButton();
+  });
+  /* Voltar ao topo */
+  var toTop=document.getElementById("sbToTop");
+  if(toTop){toTop.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+  /* Legendas de figura: só o parágrafo inteiramente em itálico ou um prefixo
+   explícito Fig./Figura/Tira é legenda. Itálico incidental em prosa continua
+   inline, inclusive quando o parágrafo vem imediatamente depois da imagem. */
+function isImageCaption(paragraph){
+  var nodes=[].slice.call(paragraph.childNodes).filter(function(node){
+    return !(node.nodeType===3&&!node.textContent.trim());
+  });
+  var pureEmphasis=nodes.length===1&&nodes[0].nodeType===1&&nodes[0].tagName==='EM';
+  var explicitCaption=/^(fig(?:ura)?\.?\s*\d+\b|tira\b)/i.test(paragraph.textContent.trim());
+  return pureEmphasis||explicitCaption;
+}
+document.querySelectorAll('.content p').forEach(function(paragraph){
+  var previous=paragraph.previousElementSibling;
+  if(!previous||previous.tagName!=='P')return;
+  if(!previous.querySelector(':scope > img, :scope > picture'))return;
+  if(isImageCaption(paragraph))paragraph.classList.add('sb-image-caption');
+});
+  /* Identifica e classifica divisores de capitulo: o losango so aparece onde ha capitulo real */
+  document.querySelectorAll(".content hr").forEach(function(hr){
+    var next=hr.nextElementSibling;
+    while(next&&next.nodeType===1&&next.tagName==="P"&&!next.textContent.trim()){
+      next=next.nextElementSibling;
+    }
+    if(next&&next.tagName==="H2"){
+      var id=(next.id||"").toLowerCase();
+      if(id.indexOf("sum")===0){
+        hr.style.display="none";
+      }else if(id.indexOf("ref")===0){
+        hr.classList.add("sb-hr-references");
+      }else{
+        hr.classList.add("sb-hr-chapter");
+      }
+    }
+  });
+  /* Ancoras discretas nos capitulos */
+  document.querySelectorAll(".content h2[id]").forEach(function(h){
+    var a=document.createElement("a");
+    a.className="hlink";a.href="#"+h.id;a.textContent="§";
+    a.setAttribute("aria-label","Link para esta seção");
+    h.appendChild(a);
+  });
+  /* Rotulos dourados dos capitulos: <span class="sb-kicker"> inserido no
+     inicio de cada h2 — o CSS desenha a regua elastica ate a margem.
+     Numeros vem do proprio titulo ("## 3. ...", com ou sem rotulo
+     "Secao/Capitulo/Parte") e sao ocultados pelo stripSelfNumber;
+     secoes semanticas recebem a palavra; essays sem numeros usam contador
+     local CAPITULO 01, 02... Subtitulos (h3) nunca recebem rotulo. */
+  var content=document.querySelector(".content");
+  var h2s=content?content.querySelectorAll("h2:not(#sumário):not(#referências)"):[];
+  var selfNum=Array.prototype.some.call(h2s,function(h){
+    return /^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?(?:\d+|[IVXLC]+)[.\s—–:-]/i.test(h.textContent);
+  });
+  if(selfNum&&content){
+    content.classList.add("self-numbered");
+    var toc=document.querySelector("#sum\u00e1rio + ul,#sum\u00e1rio + ol");
+    if(toc){toc.classList.add("sb-toc-plain");}
+  }
+  /* Palavras semanticas: Introducao/Conclusao/Resumo Executivo etc. recebem
+     a propria palavra, com ou sem numero/rotulo na frente ("7. Conclusao",
+     "Secao 9 — Conclusao: ..."). O prefixo evita falso positivo tipo
+     "Previsao de Conclusao com Modelos...", em que a palavra existe mas
+     nao nomeia a secao. */
+  var SECTION_RE=/^\s*(?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s*)?(?:\d+|[IVXLC]+)?\s*[.:\-—–]?\s*(introdu[çc][aã]o|conclus[aã]o|resumo(?:\s+executivo)?|pref[áa]cio|pr[óo]logo|ep[íi]logo|posf[áa]cio|p[óo]s-?escrito|agradecimentos|ap[êe]ndice|anexos?)\b/i;
+
+  function stripAnexoPrefix(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((anexo|ap[êe]ndice)\s+([A-Za-z0-9]+))(?:[.\s—–:-]+)([\s\S]*)/i.exec(n.data);
+    if(!m){
+      var trimmed=n.data.trim();
+      var m2=/^(anexo|ap[êe]ndice)\s+([A-Za-z0-9]+)/i.exec(trimmed);
+      if(m2&&m2[0]===trimmed){
+        return m2[1].toUpperCase()+" "+m2[2].toUpperCase();
+      }
+      return null;
+    }
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[4];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase()+" "+m[3].toUpperCase();
+  }
+
+  /* Esconde o prefixo de numeracao a esquerda do titulo e devolve o numero
+     para o kicker: o CAPITULO NN dourado substitui o "3."/"Secao 3 —" no
+     texto em vez de repetir a numeracao. O prefixo pode ter rotulo
+     ("Secao 9 —", "Capitulo II:") — ele some inteiro, nao so o numero.
+     O lookahead (?!\d) evita partir numero de subsecao ("2.3 Titulo"). */
+  function stripSelfNumber(h){
+    var n=h.firstChild;
+    while(n&&n.nodeType!==3){n=n.nextSibling;}
+    if(!n){return null;}
+    var m=/^\s*((?:(?:se[çc][aã]o|cap[íi]tulo|parte)\s+)?((?:\d+|[IVXLC]+))(?:[.\s—–:-]+))(?!\d)([\s\S]*)/i.exec(n.data);
+    if(!m){return null;}
+    var span=document.createElement("span");
+    span.className="sb-selfnum";
+    span.setAttribute("aria-hidden","true");
+    span.textContent=m[1];
+    n.data=m[3];
+    h.insertBefore(span,n);
+    return m[2].toUpperCase();
+  }
+  function makeKicker(text){
+    var k=document.createElement("span");
+    k.className="sb-kicker";
+    k.textContent=text;
+    return k;
+  }
+  var chapterNo=0;
+  Array.prototype.forEach.call(h2s,function(h){
+    var anexo=stripAnexoPrefix(h);
+    var sem=SECTION_RE.exec(h.textContent);
+    var num=selfNum?stripSelfNumber(h):null;
+    var label=null;
+    if(anexo){
+      label=anexo;
+    }else if(sem){
+      label=sem[1].toUpperCase();
+    }else if(num){
+      /* Zero à esquerda para casar com o estilo decimal-leading-zero do
+         contador dos essays nao-numerados ("CAPITULO 03"). Regex sem o
+         cifrao: o compilador de templates do pandoc o trata como abertura
+         de expressao. */
+      var pad=/^[0-9]/.test(num)&&num.length<2?"0"+num:num;
+      label="CAPÍTULO "+pad;
+    }else if(!selfNum){
+      chapterNo+=1;
+      label="CAPÍTULO "+(chapterNo<10?"0"+chapterNo:""+chapterNo);
+    }
+    if(label){h.insertBefore(makeKicker(label),h.firstChild);}
+  });
+  /* Referencias: mantem apenas o titulo em dourado (kicker), sem texto duplicado */
+  var refs=content?content.querySelector("h2#refer\u00eancias, h2#referencias"):null;
+  if(refs){
+    var k=makeKicker("REFER\u00caNCIAS");
+    refs.textContent="";
+    refs.appendChild(k);
+  }
+  /* Meta-row da capa: tempo de leitura (~200 palavras/min) e capitulos \u2014
+     ou a marca de rascunho, que ocupa o LUGAR dela. `status` chega como
+     variavel do pandoc (-V status=... em export_essay_html.py); so `draft`
+     e marcado, `finalizado` nao recebe nada. */
+  if(content&&h2s.length){
+    var by=document.querySelector(".byline");
+    if(by){
+      var meta=document.createElement("p");
+      meta.className="cover-meta";
+      var isDraft=document.documentElement.getAttribute("data-status")==="draft";
+      if(isDraft){
+        meta.className+=" cover-draft";
+        meta.textContent="Rascunho";
+      }else{
+        // A conta tem que bater com a do catalogo (build_site.reading_minutes):
+        // mesma velocidade, 220 ppm, e matematica fora da contagem. Antes eram
+        // 200 ppm E o texto renderizado das formulas entrava como palavra, de
+        // modo que o MESMO essay anunciava 81 min aqui e 73 no catalogo — e o
+        // erro crescia justamente no essay tecnico, que e onde a formula pesa.
+        // `cloneNode` para nao mexer no DOM que o leitor esta vendo.
+        //
+        // O numero PRONTO chega do servidor em `data-minutes`, calculado por
+        // site_common.reading_minutes \u2014 a mesma funcao do catalogo, entao as
+        // duas superficies nunca divergem. Contar aqui era adivinhar duas
+        // vezes: media antes de o MathJax tipografar, com o LaTeX cru ainda no
+        // DOM como texto, e cada formula entrava como um punhado de palavras.
+        //
+        // A contagem local fica como plano B para um HTML antigo, gerado antes
+        // de o template passar a receber a variavel.
+        var servidor=parseInt(document.documentElement.getAttribute("data-minutes"),10);
+        var mins;
+        if(servidor>0){
+          mins=servidor;
+        }else{
+          var copia=content.cloneNode(true);
+          copia.querySelectorAll("mjx-container,.MathJax,math,script[type^='math/tex']")
+               .forEach(function(n){n.remove();});
+          var words=(copia.innerText||copia.textContent||"").trim().split(/\s+/).filter(Boolean).length;
+          mins=Math.max(1,Math.round(words/220));
+        }
+        meta.textContent="~"+mins+" min de leitura \u00b7 "+h2s.length+" cap\u00edtulos";
+      }
+      by.parentNode.insertBefore(meta,by.nextSibling);
+    }
+  }
+})();
+</script>
+<script>
+/* Visor de figura. Arrasta com um dedo ou com o mouse; a pinca de dois
+   dedos e a roda dao zoom. Fecha no botao, no Esc ou no toque fora. */
+(function(){
+  var alvo = document.querySelectorAll('.content img');
+  if (!alvo.length) return;
+  var visor = document.createElement('div');
+  visor.id = 'lupa';
+  visor.innerHTML =
+    '<button id="lupa-fechar" aria-label="Fechar">\u00d7</button>' +
+    '<span id="lupa-dica">arraste para mover \u00b7 pin\u00e7a ou roda para ampliar</span>';
+  document.body.appendChild(visor);
+  // O <img> existe fora do documento ate a primeira abertura: com src
+  // vazio mas presente no DOM ele conta como imagem quebrada na checagem
+  // de render, mesmo escondido por CSS.
+  var img = document.createElement('img');
+  img.alt = '';
+  var esc = 1, x = 0, y = 0, base = 1;
+
+  function aplica(){
+    img.style.transform =
+      'translate(-50%,-50%) translate(' + x + 'px,' + y + 'px) scale(' + esc + ')';
+  }
+  function abre(src, alt){
+    img.src = src; img.alt = alt || '';
+    if (!img.isConnected) visor.insertBefore(img, visor.firstChild);
+    img.onload = function(){
+      // Comeca enquadrando a figura inteira; dai o leitor amplia onde quiser.
+      var cx = innerWidth / img.naturalWidth, cy = innerHeight / img.naturalHeight;
+      base = Math.min(cx, cy) * 0.94;
+      esc = base; x = 0; y = 0; aplica();
+    };
+    visor.setAttribute('open', '');
+    document.body.style.overflow = 'hidden';
+  }
+  function fecha(){
+    visor.removeAttribute('open');
+    document.body.style.overflow = '';
+  }
+  alvo.forEach(function(n){
+    n.addEventListener('click', function(){ abre(n.currentSrc || n.src, n.alt); });
+  });
+  visor.querySelector('#lupa-fechar').addEventListener('click', fecha);
+  visor.addEventListener('click', function(e){ if (e.target === visor) fecha(); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') fecha(); });
+
+  var arrastando = false, px = 0, py = 0, dedos = {}, dist0 = 0, esc0 = 1;
+  visor.addEventListener('pointerdown', function(e){
+    if (e.target === img) {
+      dedos[e.pointerId] = [e.clientX, e.clientY];
+      var ids = Object.keys(dedos);
+      if (ids.length === 1) { arrastando = true; px = e.clientX; py = e.clientY; }
+      else if (ids.length === 2) {
+        arrastando = false;
+        var a = dedos[ids[0]], b = dedos[ids[1]];
+        dist0 = Math.hypot(a[0]-b[0], a[1]-b[1]); esc0 = esc;
+      }
+      img.setPointerCapture(e.pointerId);
+    }
+  });
+  visor.addEventListener('pointermove', function(e){
+    if (!(e.pointerId in dedos)) return;
+    dedos[e.pointerId] = [e.clientX, e.clientY];
+    var ids = Object.keys(dedos);
+    if (ids.length >= 2) {
+      var a = dedos[ids[0]], b = dedos[ids[1]];
+      var d = Math.hypot(a[0]-b[0], a[1]-b[1]);
+      if (dist0) { esc = Math.max(base * 0.5, Math.min(esc0 * d / dist0, base * 12)); aplica(); }
+    } else if (arrastando) {
+      x += e.clientX - px; y += e.clientY - py;
+      px = e.clientX; py = e.clientY; aplica();
+    }
+  });
+  function solta(e){ delete dedos[e.pointerId]; arrastando = false; dist0 = 0; }
+  visor.addEventListener('pointerup', solta);
+  visor.addEventListener('pointercancel', solta);
+  visor.addEventListener('wheel', function(e){
+    if (!visor.hasAttribute('open')) return;
+    e.preventDefault();
+    esc = Math.max(base * 0.5, Math.min(esc * (e.deltaY < 0 ? 1.12 : 0.89), base * 12));
+    aplica();
+  }, {passive:false});
+})();
+</script>
+<script>
+/* Citações Inline e Popup de Referência no Padrão Substack */
+(function(){
+  "use strict";
+  function initFootnotes(){
+    var refHeading = null;
+    var h2s = document.querySelectorAll("h2");
+    for (var i = 0; i < h2s.length; i++) {
+      var hText = (h2s[i].textContent || "").trim().toLowerCase();
+      if (hText === "referências" || hText === "referencias") {
+        refHeading = h2s[i];
+        break;
+      }
+    }
+    if (!refHeading) return;
+
+    // 1. Mapeia cada entrada da seção ## Referências
+    var refMap = Object.create(null);
+    var p = refHeading.nextElementSibling;
+    while (p && !p.tagName.startsWith("H")) {
+      if (p.tagName === "P") {
+        var text = (p.textContent || "").trim();
+        var m = text.match(/^\[(\d+)\]/);
+        if (m) {
+          var num = m[1];
+          if (!p.id) p.id = "ref-" + num;
+          var clone = p.cloneNode(true);
+          if (clone.firstChild && clone.firstChild.nodeType === Node.TEXT_NODE) {
+            clone.firstChild.textContent = clone.firstChild.textContent.replace(/^\[\d+\]\s*/, "");
+          }
+          refMap[num] = {
+            num: num,
+            html: clone.innerHTML.trim()
+          };
+        }
+      }
+      p = p.nextElementSibling;
+    }
+
+    if (Object.keys(refMap).length === 0) return;
+
+    // 2. Localiza e transforma chamadas inline no corpo
+    var content = document.querySelector("main.content") || document.body;
+    var rawLinks = [].slice.call(content.querySelectorAll('a[href^="#refer"]'));
+    var validItems = [];
+
+    rawLinks.forEach(function(link){
+      if (link.closest("h2#referências ~ p, h2#referencias ~ p, nav, #sumário, #sumario")) return;
+      var rawText = (link.textContent || "").trim();
+      var num = rawText.replace(/[^\d]/g, "");
+      if (!num || !refMap[num]) return;
+      validItems.push({ link: link, num: num });
+    });
+
+    if (validItems.length === 0) return;
+
+    // Agrupa citações consecutivas (ex: [1], [2], [3] -> 1, 2, 3 no mesmo grupo superscript)
+    var clusters = [];
+    var currentCluster = [validItems[0]];
+
+    for (var i = 1; i < validItems.length; i++) {
+      var prevItem = validItems[i - 1];
+      var currItem = validItems[i];
+
+      var areAdjacent = false;
+      if (prevItem.link.parentNode && prevItem.link.parentNode === currItem.link.parentNode) {
+        var node = prevItem.link.nextSibling;
+        var onlySeps = true;
+        while (node && node !== currItem.link) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            if (/[^\s,;\[\]]/.test(node.textContent)) {
+              onlySeps = false;
+              break;
+            }
+          } else if (node.nodeType !== Node.COMMENT_NODE) {
+            onlySeps = false;
+            break;
+          }
+          node = node.nextSibling;
+        }
+        if (node === currItem.link && onlySeps) {
+          areAdjacent = true;
+        }
+      }
+
+      if (areAdjacent) {
+        currentCluster.push(currItem);
+      } else {
+        clusters.push(currentCluster);
+        currentCluster = [currItem];
+      }
+    }
+    clusters.push(currentCluster);
+
+    var anchors = [];
+
+    clusters.forEach(function(cluster){
+      var firstLink = cluster[0].link;
+      var lastLink = cluster[cluster.length - 1].link;
+      var parent = firstLink.parentNode;
+      if (!parent) return;
+
+      // Limpa colchetes e espaços antes da primeira citação do grupo
+      var prev = firstLink.previousSibling;
+      if (prev && prev.nodeType === Node.TEXT_NODE) {
+        var sPrev = prev.textContent;
+        while (sPrev.length > 0) {
+          var lastCh = sPrev.charAt(sPrev.length - 1);
+          if (lastCh === "[" || /\s/.test(lastCh)) {
+            sPrev = sPrev.slice(0, -1);
+          } else {
+            break;
+          }
+        }
+        prev.textContent = sPrev;
+        if (!prev.textContent) {
+          parent.removeChild(prev);
+        }
+      }
+
+      // Limpa colchetes e espaços após a última citação do grupo
+      var next = lastLink.nextSibling;
+      if (next && next.nodeType === Node.TEXT_NODE) {
+        var sNext = next.textContent;
+        while (sNext.charAt(0) === "]") {
+          sNext = sNext.slice(1);
+        }
+        if (/^\s+[.,;:!?]/.test(sNext)) {
+          sNext = sNext.replace(/^\s+/, "");
+        }
+        next.textContent = sNext;
+        if (!next.textContent) {
+          parent.removeChild(next);
+        }
+      }
+
+      // Remove nós de separação intermediários do parent (ex: "], [")
+      for (var c = 0; c < cluster.length - 1; c++) {
+        var a = cluster[c].link;
+        var b = cluster[c + 1].link;
+        var middle = a.nextSibling;
+        while (middle && middle !== b) {
+          var toRemove = middle;
+          middle = middle.nextSibling;
+          if (toRemove.parentNode) {
+            toRemove.parentNode.removeChild(toRemove);
+          }
+        }
+      }
+
+      // Cria contêiner do grupo em superscript
+      var group = document.createElement("span");
+      group.className = "ref-cite-group";
+      parent.insertBefore(group, firstLink);
+
+      cluster.forEach(function(item, idx){
+        if (idx > 0) {
+          var sep = document.createElement("span");
+          sep.className = "ref-cite-sep";
+          sep.textContent = ", ";
+          group.appendChild(sep);
+        }
+
+        var link = item.link;
+        link.textContent = item.num;
+        link.classList.add("ref-cite");
+        link.setAttribute("data-ref", item.num);
+        link.setAttribute("role", "button");
+        link.setAttribute("aria-haspopup", "dialog");
+        link.setAttribute("aria-expanded", "false");
+        link.setAttribute("tabindex", "0");
+        group.appendChild(link);
+        anchors.push(link);
+      });
+    });
+
+    if (anchors.length === 0) return;
+
+    // 3. Cria elemento único do popup
+    var popup = document.createElement("div");
+    popup.id = "ref-popup";
+    popup.className = "ref-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-hidden", "true");
+    popup.innerHTML =
+      '<div class="ref-popup-inner">' +
+        '<div class="ref-popup-header">' +
+          '<span class="ref-popup-num"></span>' +
+          '<button class="ref-popup-close" aria-label="Fechar">\u00d7</button>' +
+        '</div>' +
+        '<div class="ref-popup-body"></div>' +
+      '</div>';
+    document.body.appendChild(popup);
+
+    var popupNum = popup.querySelector(".ref-popup-num");
+    var popupBody = popup.querySelector(".ref-popup-body");
+    var popupClose = popup.querySelector(".ref-popup-close");
+
+    var currentAnchor = null;
+    var hoverTimer = null;
+    var closeTimer = null;
+
+    function openPopup(anchor){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      var num = anchor.getAttribute("data-ref");
+      var data = refMap[num];
+      if (!data) return;
+
+      if (currentAnchor && currentAnchor !== anchor) {
+        currentAnchor.setAttribute("aria-expanded", "false");
+      }
+      currentAnchor = anchor;
+      anchor.setAttribute("aria-expanded", "true");
+
+      popupNum.textContent = "Referência [" + num + "]";
+      popupBody.innerHTML = data.html;
+
+      popupBody.querySelectorAll("a").forEach(function(a){
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      });
+
+      popup.classList.add("is-active");
+      popup.setAttribute("aria-hidden", "false");
+      positionPopup(anchor);
+    }
+
+    function closePopup(){
+      clearTimeout(closeTimer);
+      clearTimeout(hoverTimer);
+      if (!currentAnchor) return;
+      currentAnchor.setAttribute("aria-expanded", "false");
+      currentAnchor = null;
+      popup.classList.remove("is-active");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function positionPopup(anchor){
+      var rect = anchor.getBoundingClientRect();
+      var popRect = popup.getBoundingClientRect();
+      var popW = popRect.width || 340;
+      var popH = popRect.height || 110;
+
+      var top;
+      if (rect.top >= popH + 12) {
+        top = rect.top - popH - 6;
+      } else {
+        top = rect.bottom + 6;
+      }
+
+      var left = rect.left + (rect.width / 2) - (popW / 2);
+      var maxLeft = window.innerWidth - popW - 12;
+      left = Math.max(12, Math.min(left, maxLeft));
+
+      popup.style.top = Math.round(top) + "px";
+      popup.style.left = Math.round(left) + "px";
+    }
+
+    anchors.forEach(function(anchor){
+      anchor.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (currentAnchor === anchor) {
+          closePopup();
+        } else {
+          openPopup(anchor);
+        }
+      });
+
+      anchor.addEventListener("mouseenter", function(){
+        clearTimeout(closeTimer);
+        hoverTimer = setTimeout(function(){
+          openPopup(anchor);
+        }, 120);
+      });
+
+      anchor.addEventListener("mouseleave", function(){
+        clearTimeout(hoverTimer);
+        closeTimer = setTimeout(function(){
+          closePopup();
+        }, 220);
+      });
+
+      anchor.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (currentAnchor === anchor) closePopup(); else openPopup(anchor);
+        } else if (e.key === "Escape") {
+          closePopup();
+        }
+      });
+    });
+
+    popup.addEventListener("mouseenter", function(){
+      clearTimeout(closeTimer);
+    });
+    popup.addEventListener("mouseleave", function(){
+      closeTimer = setTimeout(function(){
+        closePopup();
+      }, 220);
+    });
+
+    popupClose.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+    });
+
+    document.addEventListener("click", function(e){
+      if (!popup.contains(e.target) && (!currentAnchor || !currentAnchor.contains(e.target))) {
+        closePopup();
+      }
+    });
+
+    window.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closePopup();
+    });
+
+    window.addEventListener("resize", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+
+    window.addEventListener("scroll", function(){
+      if (currentAnchor) positionPopup(currentAnchor);
+    }, {passive:true});
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFootnotes);
+  } else {
+    initFootnotes();
+  }
+})();
+</script>
+
+<header class="sb-bar">
+  <a class="sb-brand" href="../index.html"><span class="sb-mark" aria-hidden="true"></span>Second Brain</a>
+  <nav class="sb-nav">
+    <a class="active" href="../index.html">Ensaios</a>
+    <a href="../graph.html">Grafo</a>
+    <button class="sb-subscribe" type="button" id="sbSubscribe" aria-haspopup="dialog"
+            aria-controls="sbSubscribeDialog">Assinar</button>
+    <button type="button" id="sbTheme" aria-label="Mudar para tema sépia"><span class="theme-disc" aria-hidden="true"></span></button>
+  </nav>
+</header>
+<dialog class="sb-subscribe-dialog" id="sbSubscribeDialog" aria-labelledby="sbSubscribeTitle">
+  <div class="sb-subscribe-dialog-head">
+    <h2 id="sbSubscribeTitle">Receba novos ensaios por email.</h2>
+    <form method="dialog"><button class="sb-subscribe-close" type="submit" aria-label="Fechar">×</button></form>
+  </div>
+  <div class="sb-subscribe-embed" aria-label="Assinar o boletim do Second Brain">
+    <div id="sbKitEmbedMount" data-uid="4fd36350af"
+         data-src="https://gustavo-jose-zambrano.kit.com/4fd36350af/index.js"></div>
+  </div>
+  <p class="sb-subscribe-note"><u>Confirme</u> o e-mail recebido. Verifique a <u>caixa de spam</u>. Marque o email como <u>confiável</u>. Você não receberá mensagens de spam.</p>
+</dialog>
+<div class="sb-progress"><span id="sbProgressFill"></span></div>
+<div class="sb-tags"><span class="sb-tag">Engenharia</span><span class="sb-tag">Aerodinâmica</span><span class="sb-tag">Física</span></div>
+
+<button class="sb-toc-fab" type="button" id="sbTocFab" aria-expanded="false"
+        aria-controls="sbToc" title="Sumário do ensaio">
+  <span class="sb-toc-icon" aria-hidden="true">☰</span>
+  <span class="sb-toc-text">Sumário</span>
+</button>
+<aside class="sb-toc" id="sbToc" hidden aria-label="Sumário do ensaio">
+  <header><strong>Sumário</strong>
+    <button type="button" id="sbTocClose" aria-label="Fechar">×</button></header>
+  <nav id="sbTocList"></nav>
+</aside>
+<script src="../assets/theme.js?v=4bbd3e0f"></script>
+<script src="../assets/essay.js?v=58ade166"></script>
+</body>
+</html>
