@@ -2033,15 +2033,17 @@ atualização do rating após cada partida segue a regra:</p>
 \]</span></p>
 <p>onde <span class="math inline">\(S_i \in \{0, 0.5, 1\}\)</span> é o
 resultado real (derrota, empate, vitória), <span
-class="math inline">\(\hat{p}_i\)</span> é a probabilidade de vitória
-prevista antes da partida, <span class="math inline">\(K_w &gt;
-0\)</span> é o fator de importância do torneio e <span
+class="math inline">\(g_{home}\)</span> e <span
+class="math inline">\(g_{away}\)</span> são os gols marcados por cada
+equipe, <span class="math inline">\(\hat{p}_i\)</span> é a probabilidade
+de vitória prevista antes da partida, <span class="math inline">\(K_w
+&gt; 0\)</span> é o fator de importância do torneio e <span
 class="math inline">\(G\)</span> é um fator de margem de gols que
 amplifica o sinal de partidas com grandes diferenciais de placar:</p>
 <p><span class="math display">\[
-G = \begin{cases} 1{,}0 &amp; \text{se } |S_{home} - S_{away}| \leq 1 \\
-1{,}5 &amp; \text{se } |S_{home} - S_{away}| = 2 \\ \frac{11 + |S_{home}
-- S_{away}|}{8} &amp; \text{caso contrário} \end{cases}
+G = \begin{cases} 1{,}0 &amp; \text{se } |g_{home} - g_{away}| \leq 1 \\
+1{,}5 &amp; \text{se } |g_{home} - g_{away}| = 2 \\ \frac{11 + |g_{home}
+- g_{away}|}{8} &amp; \text{caso contrário} \end{cases}
 \]</span></p>
 <p>A probabilidade de vitória prevista é dada pela <a
 href="https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_log%C3%ADstica">função
