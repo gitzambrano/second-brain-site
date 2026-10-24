@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .card { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1.5; rx: 12px; }
+      .title { font-family: system-ui, -apple-system, sans-serif; font-size: 17px; font-weight: 700; fill: #0f172a; }
+      .formula { font-family: "DejaVu Sans", Consolas, monospace; font-size: 15px; font-weight: 600; fill: #0369a1; }
+      .tag-rot { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; fill: #dc2626; letter-spacing: 0.5px; }
+      .tag-irrot { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 700; fill: #059669; letter-spacing: 0.5px; }
+      .badge-rot { fill: #fee2e2; stroke: #fca5a5; stroke-width: 1; rx: 6px; }
+      .badge-irrot { fill: #dcfce7; stroke: #86efac; stroke-width: 1; rx: 6px; }
+      .streamline { stroke: #94a3b8; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+      .stream-solid { stroke: #0284c7; stroke-width: 2.5; fill: none; }
+      .label-sub { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; fill: #64748b; }
+      .ref-line { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 4 3; }
+    </style>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#0284c7"/>
+    </marker>
+    <marker id="arr-red" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M 0 0 L 7 3.5 L 0 7 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="700" class="bg"/>
+
+  <!-- ==================== QUADRANTE 1: ROTAÇÃO RÍGIDA ==================== -->
+  <rect x="25" y="25" width="560" height="310" class="card"/>
+  <text x="50" y="58" class="title">1. Rotação de Corpo Rígido</text>
+  <text x="50" y="80" class="formula">u = −Ωy,  v = Ωx  ⇒  ω_z = 2Ω</text>
+  
+  <rect x="445" y="42" width="115" height="26" class="badge-rot"/>
+  <text x="502" y="59" class="tag-rot" text-anchor="middle">ROTACIONAL</text>
+
+  <!-- Órbita circular concêntrica -->
+  <circle cx="290" cy="195" r="45" class="streamline"/>
+  <circle cx="290" cy="195" r="90" class="streamline"/>
+  <circle cx="290" cy="195" r="4" fill="#0f172a"/>
+
+  <!-- Setas de velocidade ao longo da órbita externa -->
+  <path d="M 290 105 A 90 90 0 0 0 200 195" class="stream-solid" marker-end="url(#arr-blue)"/>
+  <path d="M 200 195 A 90 90 0 0 0 290 285" class="stream-solid" marker-end="url(#arr-blue)"/>
+  <path d="M 290 285 A 90 90 0 0 0 380 195" class="stream-solid" marker-end="url(#arr-blue)"/>
+  <path d="M 380 195 A 90 90 0 0 0 290 105" class="stream-solid" marker-end="url(#arr-blue)"/>
+
+  <!-- Paddle wheel na posição leste da órbita, girando -->
+  <g transform="translate(380, 195) rotate(45)">
+    <circle cx="0" cy="0" r="18" fill="#ffffff" stroke="#dc2626" stroke-width="2"/>
+    <line x1="-15" y1="0" x2="15" y2="0" stroke="#dc2626" stroke-width="2.5"/>
+    <line x1="0" y1="-15" x2="0" y2="15" stroke="#dc2626" stroke-width="2.5"/>
+    <circle cx="0" cy="-15" r="4" fill="#dc2626"/> <!-- Pá colorida de referência -->
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+  </g>
+  <!-- Seta indicando giro local do cata-vento -->
+  <path d="M 412 180 A 26 26 0 0 1 412 215" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#arr-red)"/>
+  <text x="424" y="202" font-family="DejaVu Sans" font-size="13" fill="#dc2626" font-weight="700">Ω</text>
+
+  <!-- ==================== QUADRANTE 2: CISALHAMENTO SIMPLES ==================== -->
+  <rect x="615" y="25" width="560" height="310" class="card"/>
+  <text x="640" y="58" class="title">2. Cisalhamento Simples (Couette)</text>
+  <text x="640" y="80" class="formula">u = Sy,  v = 0  ⇒  ω_z = −S</text>
+
+  <rect x="1035" y="42" width="115" height="26" class="badge-rot"/>
+  <text x="1092" y="59" class="tag-rot" text-anchor="middle">ROTACIONAL</text>
+
+  <!-- Perfil de velocidade com setas azuis proporcionais -->
+  <line x1="680" y1="120" x2="980" y2="120" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <line x1="680" y1="155" x2="920" y2="155" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <line x1="680" y1="190" x2="860" y2="190" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <line x1="680" y1="225" x2="800" y2="225" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <line x1="680" y1="260" x2="740" y2="260" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <!-- Linha inclinada do perfil -->
+  <line x1="740" y1="260" x2="980" y2="120" stroke="#94a3b8" stroke-dasharray="4 4" stroke-width="1.5"/>
+
+  <!-- Paddle wheel IMERSO NO CISALHAMENTO -->
+  <g transform="translate(860, 190) rotate(25)">
+    <circle cx="0" cy="0" r="22" fill="#ffffff" stroke="#dc2626" stroke-width="2"/>
+    <line x1="-18" y1="0" x2="18" y2="0" stroke="#dc2626" stroke-width="2.5"/>
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#dc2626" stroke-width="2.5"/>
+    <circle cx="0" cy="-18" r="4" fill="#dc2626"/> <!-- Pá empurrada mais rápido -->
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+  </g>
+  <path d="M 894 175 A 30 30 0 0 1 894 210" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#arr-red)"/>
+
+  <!-- ==================== QUADRANTE 3: EXTENSÃO PURA ==================== -->
+  <rect x="25" y="360" width="560" height="310" class="card"/>
+  <text x="50" y="393" class="title">3. Extensão Pura (Deformação)</text>
+  <text x="50" y="415" class="formula">u = ax,  v = −ay  ⇒  ω_z = 0</text>
+
+  <rect x="430" y="377" width="130" height="26" class="badge-irrot"/>
+  <text x="495" y="394" class="tag-irrot" text-anchor="middle">IRROTACIONAL</text>
+
+  <!-- Linhas hiperbólicas de fluxo -->
+  <path d="M 180 440 Q 250 470 250 530" class="streamline"/>
+  <path d="M 400 440 Q 330 470 330 530" class="streamline"/>
+  <path d="M 180 620 Q 250 590 250 530" class="streamline"/>
+  <path d="M 400 620 Q 330 590 330 530" class="streamline"/>
+
+  <!-- Setas axiais de compressão vertical e estiramento horizontal -->
+  <line x1="290" y1="445" x2="290" y2="485" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <line x1="290" y1="615" x2="290" y2="575" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <line x1="240" y1="530" x2="190" y2="530" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <line x1="340" y1="530" x2="390" y2="530" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+
+  <!-- Elemento deformado simetricamente (sem giro) -->
+  <g transform="translate(290, 530)">
+    <circle cx="0" cy="0" r="18" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+    <line x1="-15" y1="0" x2="15" y2="0" stroke="#059669" stroke-width="2.5"/>
+    <line x1="0" y1="-15" x2="0" y2="15" stroke="#059669" stroke-width="2.5"/>
+    <circle cx="0" cy="-15" r="3.5" fill="#dc2626"/> <!-- Pá vertical imóvel angularmente -->
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+  </g>
+
+  <!-- ==================== QUADRANTE 4: VÓRTICE POTENCIAL ==================== -->
+  <rect x="615" y="360" width="560" height="310" class="card"/>
+  <text x="640" y="393" class="title">4. Vórtice Potencial (Livre / Ralo)</text>
+  <text x="640" y="415" class="formula">u_θ = Γ / (2πr)  ⇒  ω_z = 0  (r &gt; 0)</text>
+
+  <rect x="1020" y="377" width="130" height="26" class="badge-irrot"/>
+  <text x="1085" y="394" class="tag-irrot" text-anchor="middle">IRROTACIONAL</text>
+
+  <!-- Órbitas circulares -->
+  <circle cx="870" cy="530" r="50" class="streamline"/>
+  <circle cx="870" cy="530" r="100" class="streamline"/>
+  <circle cx="870" cy="530" r="5" fill="#dc2626"/>
+  <text x="880" y="534" font-family="DejaVu Sans" font-size="11" fill="#dc2626" font-weight="700">r = 0</text>
+
+  <!-- Setas de velocidade tangencial: mais rápida dentro, mais lenta fora -->
+  <path d="M 870 480 A 50 50 0 0 0 820 530" class="stream-solid" stroke-width="3.5" marker-end="url(#arr-blue)"/>
+  <path d="M 870 430 A 100 100 0 0 0 770 530" class="stream-solid" stroke-width="2" marker-end="url(#arr-blue)"/>
+
+  <!-- Linhas guia verticais mostrando que a pá vermelha mantém rigidez angular absoluta -->
+  <line x1="870" y1="400" x2="870" y2="455" class="ref-line"/>
+  <line x1="770" y1="500" x2="770" y2="555" class="ref-line"/>
+
+  <!-- Posição 1 do paddle wheel (topo) -->
+  <g transform="translate(870, 430)">
+    <circle cx="0" cy="0" r="17" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+    <line x1="-14" y1="0" x2="14" y2="0" stroke="#059669" stroke-width="2.5"/>
+    <line x1="0" y1="-14" x2="0" y2="14" stroke="#059669" stroke-width="2.5"/>
+    <circle cx="0" cy="-14" r="3.5" fill="#dc2626"/> <!-- Pá aponta para cima -->
+    <circle cx="0" cy="0" r="3" fill="#0f172a"/>
+  </g>
+
+  <!-- Posição 2 do paddle wheel (oeste da órbita): PÁ VERMELHA CONTINUA RIGIDAMENTE PARA CIMA! -->
+  <g transform="translate(770, 530)">
+    <circle cx="0" cy="0" r="17" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+    <line x1="-14" y1="0" x2="14" y2="0" stroke="#059669" stroke-width="2.5"/>
+    <line x1="0" y1="-14" x2="0" y2="14" stroke="#059669" stroke-width="2.5"/>
+    <circle cx="0" cy="-14" r="3.5" fill="#dc2626"/> <!-- PÁ AINDA PARA CIMA! -->
+    <circle cx="0" cy="0" r="3" fill="#0f172a"/>
+  </g>
+</svg>
