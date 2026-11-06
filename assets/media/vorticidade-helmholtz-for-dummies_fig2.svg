@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="auto" viewBox="0 0 1100 420">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .card { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 12px; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 700; fill: #0f172a; }
+      .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #1e293b; }
+      .math { font-family: "DejaVu Sans", "Lucida Console", monospace, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; }
+      .guide { stroke: #94a3b8; stroke-dasharray: 4 4; stroke-width: 1.2; }
+    </style>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 1 L 7 4 L 0 7 z" fill="#0284c7"/>
+    </marker>
+    <marker id="arr-navy" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 1 L 7 4 L 0 7 z" fill="#0f172a"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="420" class="bg"/>
+
+  <!-- ================= PANEL 1: Camada de Cisalhamento (Espessura delta) ================= -->
+  <rect x="25" y="25" width="330" height="370" class="card"/>
+  <text x="45" y="60" class="title">1. Camada de Cisalhamento</text>
+
+  <!-- Linhas guia delimitando a espessura delta -->
+  <line x1="50" y1="140" x2="330" y2="140" class="guide"/>
+  <line x1="50" y1="260" x2="330" y2="260" class="guide"/>
+  
+  <!-- Cota de espessura delta -->
+  <line x1="315" y1="140" x2="315" y2="260" stroke="#475569" stroke-width="1.8"/>
+  <path d="M 311 144 L 315 140 L 319 144 M 311 256 L 315 260 L 319 256" stroke="#475569" stroke-width="1.8" fill="none"/>
+  <text x="328" y="205" class="math" fill="#0f172a">δ</text>
+
+  <!-- Perfil de velocidade contínuo u(y) -->
+  <!-- Fluxo superior rápido U1 -->
+  <line x1="70" y1="110" x2="260" y2="110" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <text x="270" y="115" class="math" fill="#0284c7">U₁</text>
+
+  <!-- Vetores na transição (espessura delta) -->
+  <line x1="70" y1="140" x2="245" y2="140" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+  <line x1="70" y1="170" x2="215" y2="170" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+  <line x1="70" y1="200" x2="175" y2="200" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+  <line x1="70" y1="230" x2="135" y2="230" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+  <line x1="70" y1="260" x2="105" y2="260" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+
+  <!-- Fluxo inferior mais lento U2 -->
+  <line x1="70" y1="290" x2="105" y2="290" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <text x="115" y="295" class="math" fill="#0284c7">U₂</text>
+
+  <!-- Curva suave do perfil u(y) conectando as pontas -->
+  <path d="M 245 140 C 210 170, 150 220, 105 260" stroke="#0284c7" stroke-width="1.8" stroke-dasharray="3 3" fill="none"/>
+
+  <!-- Rótulo inferior da espessura -->
+  <text x="190" y="355" class="label" text-anchor="middle" fill="#475569">Perfil contínuo u(y)</text>
+
+
+  <!-- ================= PANEL 2: Vortex Sheet (Limite delta -> 0) ================= -->
+  <rect x="385" y="25" width="330" height="370" class="card"/>
+  <text x="405" y="60" class="title">2. Vortex Sheet (δ → 0)</text>
+
+  <!-- Interface / Folha de Vorticidade -->
+  <line x1="410" y1="200" x2="690" y2="200" stroke="#0f172a" stroke-width="4"/>
+  <text x="550" y="190" class="label" text-anchor="middle" fill="#0f172a">Vortex Sheet</text>
+
+  <!-- Escoamento superior U1 -->
+  <line x1="430" y1="130" x2="650" y2="130" stroke="#0284c7" stroke-width="3" marker-end="url(#arr-blue)"/>
+  <line x1="430" y1="165" x2="650" y2="165" stroke="#0284c7" stroke-width="3" marker-end="url(#arr-blue)"/>
+  <text x="665" y="152" class="math" fill="#0284c7">U₁</text>
+
+  <!-- Escoamento inferior U2 -->
+  <line x1="430" y1="235" x2="530" y2="235" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+  <line x1="430" y1="270" x2="530" y2="270" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+  <text x="545" y="257" class="math" fill="#0284c7">U₂</text>
+
+  <!-- Rótulo do salto de velocidade -->
+  <text x="550" y="355" class="label" text-anchor="middle" fill="#475569">Salto de velocidade: γ = U₁ − U₂</text>
+
+
+  <!-- ================= PANEL 3: Roll-Up Kelvin-Helmholtz ================= -->
+  <rect x="745" y="25" width="330" height="370" class="card"/>
+  <text x="765" y="60" class="title">3. Roll-Up Kelvin–Helmholtz</text>
+
+  <!-- Ondulação e espiral contínua de Kelvin-Helmholtz -->
+  <!-- Onda de entrada suave que enrola no núcleo em espiral logarítmica / arquimediana -->
+  <path d="M 765 225 C 795 225, 815 170, 850 170 C 895 170, 920 250, 960 250 C 990 250, 1010 200, 1000 175 C 985 150, 940 160, 935 200 C 930 235, 965 240, 975 220 C 980 205, 970 195, 960 200" 
+        fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Setas de recirculação ao redor do billow -->
+  <path d="M 985 150 A 45 45 0 0 1 1025 210" fill="none" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <path d="M 945 270 A 45 45 0 0 1 905 210" fill="none" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+
+  <!-- Rótulo inferior -->
+  <text x="910" y="355" class="label" text-anchor="middle" fill="#475569">Enrolamento em vórtice coerente</text>
+</svg>
