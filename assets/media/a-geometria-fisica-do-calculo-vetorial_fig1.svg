@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="auto" viewBox="0 0 1100 520">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .card { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 12px; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #475569; }
+      .lbl-grad { font-family: "DejaVu Sans", "Lucida Console", monospace, sans-serif; font-size: 18px; font-weight: 700; fill: #0284c7; }
+      .lbl-p { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 15px; font-weight: 600; fill: #334155; }
+      .parcel-txt { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #475569; }
+    </style>
+    <marker id="arr-grad" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M 0 1 L 8 4.5 L 0 8 z" fill="#0284c7"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="520" class="bg"/>
+  <rect x="25" y="20" width="1050" height="475" class="card"/>
+
+  <!-- Título e legenda física concisa -->
+  <text x="50" y="58" class="title">Isóbaras e Gradiente de Pressão</text>
+  <text x="50" y="84" class="subtitle">O vetor gradiente ∇p é normal às isóbaras e aponta na direção de máximo crescimento da pressão</text>
+
+  <!-- Isóbaras curvas elegantes e bem espaçadas -->
+  <!-- p1 -->
+  <path d="M 120 120 C 160 220, 160 320, 120 420" stroke="#bae6fd" stroke-width="2.5" fill="none"/>
+  <text x="90" y="450" class="lbl-p">p₁ = 100 kPa</text>
+
+  <!-- p2 -->
+  <path d="M 280 120 C 330 220, 330 320, 280 420" stroke="#7dd3fc" stroke-width="3" fill="none"/>
+  <text x="250" y="450" class="lbl-p">p₂ = 105 kPa</text>
+
+  <!-- p3 (isóbara de referência onde o elemento está situado) -->
+  <path d="M 520 120 C 545 190, 545 210, 545 220" stroke="#38bdf8" stroke-width="3.5" fill="none"/>
+  <path d="M 545 320 C 545 330, 545 350, 520 420" stroke="#38bdf8" stroke-width="3.5" fill="none"/>
+  <!-- Linha tracejada suave passando pelo elemento para indicar alinhamento -->
+  <line x1="545" y1="220" x2="545" y2="320" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="515" y="450" class="lbl-p">p₃ = 112 kPa</text>
+
+  <!-- p4 -->
+  <path d="M 760 120 C 815 220, 815 320, 760 420" stroke="#0284c7" stroke-width="4" fill="none"/>
+  <text x="730" y="450" class="lbl-p">p₄ = 120 kPa</text>
+
+  <!-- p5 -->
+  <path d="M 940 120 C 990 220, 990 320, 940 420" stroke="#0369a1" stroke-width="4.5" fill="none"/>
+  <text x="910" y="450" class="lbl-p">p₅ = 130 kPa</text>
+
+  <!-- ELEMENTO DE FLUIDO AMPLO COM APENAS A SETA AZUL DO GRADIENTE -->
+  <g transform="translate(545, 270)">
+    <!-- Caixa do elemento de fluido (80x80 com cantos suaves) -->
+    <rect x="-42" y="-42" width="84" height="84" rx="8" fill="#ffffff" stroke="#0f172a" stroke-width="2.2"/>
+    <circle cx="0" cy="0" r="4" fill="#0f172a"/>
+    <text x="0" y="24" class="parcel-txt" text-anchor="middle">dm</text>
+
+    <!-- Vetor Gradiente de Pressão (apenas a seta azul apontando para maior pressão) -->
+    <line x1="42" y1="0" x2="185" y2="0" stroke="#0284c7" stroke-width="3.5" marker-end="url(#arr-grad)"/>
+    <text x="115" y="-14" class="lbl-grad" text-anchor="middle">∇p</text>
+  </g>
+</svg>

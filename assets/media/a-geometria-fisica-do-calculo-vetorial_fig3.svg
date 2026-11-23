@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="auto" viewBox="0 0 1150 420">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .card { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 12px; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 600; fill: #475569; }
+      .formula { font-family: "DejaVu Sans", "Lucida Console", monospace, sans-serif; font-size: 14px; font-weight: 700; fill: #0369a1; }
+      .math { font-family: "DejaVu Sans", "Lucida Console", monospace, sans-serif; font-size: 14px; font-weight: 700; fill: #0f172a; }
+      .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 600; fill: #475569; }
+    </style>
+    <marker id="arr-b3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 1 L 7 4 L 0 7 z" fill="#0284c7"/>
+    </marker>
+    <marker id="arr-r3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 1 L 7 4 L 0 7 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr-g3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 1 L 7 4 L 0 7 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <rect width="1150" height="420" class="bg"/>
+
+  <!-- ================= PANEL 1: Divergência ================= -->
+  <rect x="25" y="25" width="350" height="370" class="card"/>
+  <text x="45" y="60" class="title">1. Divergência (Dilatação)</text>
+  <text x="45" y="82" class="formula">∇ · u = (1/V) DV/Dt</text>
+
+  <g transform="translate(200, 225)">
+    <!-- Caixa expandida -->
+    <rect x="-60" y="-60" width="120" height="120" fill="#e0f2fe" stroke="#0284c7" stroke-width="2.2" rx="8"/>
+    <!-- Caixa original tracejada -->
+    <rect x="-38" y="-38" width="76" height="76" fill="#ffffff" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4 4" rx="4"/>
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+
+    <!-- 4 setas axiais de expansão volumétrica -->
+    <line x1="0" y1="-60" x2="0" y2="-95" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-b3)"/>
+    <line x1="0" y1="60" x2="0" y2="95" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-b3)"/>
+    <line x1="-60" y1="0" x2="-95" y2="0" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-b3)"/>
+    <line x1="60" y1="0" x2="95" y2="0" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr-b3)"/>
+  </g>
+  <text x="200" y="365" class="label" text-anchor="middle">Variação de volume sem giro</text>
+
+  <!-- ================= PANEL 2: Rotacional ================= -->
+  <rect x="400" y="25" width="350" height="370" class="card"/>
+  <text x="420" y="60" class="title">2. Rotacional (Rotação Rígida)</text>
+  <text x="420" y="82" class="formula">ω = ∇ × u = 2Ω</text>
+
+  <g transform="translate(575, 225)">
+    <!-- Quadrado original tracejado -->
+    <rect x="-42" y="-42" width="84" height="84" fill="#ffffff" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4 4" rx="4"/>
+    
+    <!-- Quadrado rotacionado como corpo rígido (ângulos permanecem 90°) -->
+    <g transform="rotate(-26)">
+      <rect x="-42" y="-42" width="84" height="84" fill="#fee2e2" stroke="#dc2626" stroke-width="2.2" rx="4"/>
+      <!-- Eixos materiais no interior mostrando ângulo de 90° preservado -->
+      <line x1="-34" y1="0" x2="34" y2="0" stroke="#dc2626" stroke-width="1.8"/>
+      <line x1="0" y1="-34" x2="0" y2="34" stroke="#dc2626" stroke-width="1.8"/>
+    </g>
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+
+    <!-- Seta de rotação angular com símbolo Omega -->
+    <path d="M 52 -18 A 58 58 0 0 1 22 56" fill="none" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arr-r3)"/>
+    <text x="50" y="52" class="math" fill="#dc2626">Ω</text>
+  </g>
+  <text x="575" y="365" class="label" text-anchor="middle">Giro do elemento sem deformação</text>
+
+  <!-- ================= PANEL 3: Taxa de Deformação ================= -->
+  <rect x="775" y="25" width="350" height="370" class="card"/>
+  <text x="795" y="60" class="title">3. Taxa de Deformação (Cisalhamento)</text>
+  <text x="795" y="82" class="formula">S_ij = ½(∂u_i/∂x_j + ∂u_j/∂x_i)</text>
+
+  <g transform="translate(915, 270)">
+    <!-- Quadrado original tracejado de referência (base alinhada na origem (0,0)) -->
+    <rect x="0" y="-84" width="84" height="84" fill="#ffffff" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4 4"/>
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+
+    <!-- Linha de referência vertical tracejada -->
+    <line x1="0" y1="0" x2="0" y2="-105" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+    <!-- Paralelogramo cisalhado: base [0, 84], topo deslizado para a direita por 34px -->
+    <polygon points="0,0 84,0 118,-84 34,-84" fill="#f0fdf4" stroke="#059669" stroke-width="2.2"/>
+
+    <!-- Arco do ângulo de cisalhamento Delta theta ampliado para raio 55px -->
+    <path d="M 0 -55 A 55 55 0 0 1 21 -51" fill="none" stroke="#059669" stroke-width="2"/>
+    <text x="-6" y="-62" class="math" fill="#059669">Δθ</text>
+
+    <!-- Seta de velocidade de cisalhamento no topo -->
+    <line x1="34" y1="-94" x2="118" y2="-94" stroke="#059669" stroke-width="2.2" marker-end="url(#arr-g3)"/>
+    <text x="76" y="-102" class="label" text-anchor="middle" fill="#059669">u(y)</text>
+  </g>
+  <text x="950" y="365" class="label" text-anchor="middle">Distorção angular: Δθ = 2 S₁₂ Δt</text>
+</svg>
